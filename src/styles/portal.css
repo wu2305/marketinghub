@@ -1,0 +1,17 @@
+@import "../../assets/css/base/foundation.css";
+@import "../../assets/css/base/scrollbars.css";
+@import "../../assets/css/base/theme.css";
+@import "../../assets/css/base/workspace.css";
+@import "../../assets/css/home/home.css";
+@import "../../assets/css/components/assistant-launcher.css";
+@import "../../assets/css/components/assistant-panel.css";
+@import "../../assets/css/knowledge/workspace.css";
+@import "../../assets/css/knowledge/types.css";
+@import "../../assets/css/knowledge/library.css";
+@import "../../assets/css/knowledge/navigation-overview.css";
+@import "../../assets/css/knowledge/business-term.css";
+@import "../../assets/css/knowledge/approach.css";
+@import "../../assets/css/knowledge/field-components.css";
+@import "../../assets/css/knowledge/shared-controls.css";
+@import "../../assets/css/knowledge/ai-interpreter-refresh.css";
+@import "../../assets/css/knowledge/ai-interpreter-overview.css";
