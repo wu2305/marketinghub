@@ -1,0 +1,15 @@
+{
+  "name": "Marketing Hub AI",
+  "install": "npm ci",
+  "terminals": [
+    {
+      "name": "preview:html",
+      "command": "npm run preview:html"
+    },
+    {
+      "name": "storybook",
+      "command": "npm run storybook"
+    }
+  ],
+  "ports": [4173, 6006]
+}
