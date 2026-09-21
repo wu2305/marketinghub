@@ -32,7 +32,7 @@ This is a cleaned, behavior-preserving baseline generated from `marketing-hub-ai
 The cleaned baseline was rendered at 1440px width across all canonical pages, all eight AI Interpreter types, and the supported knowledge creation states. The original and cleaned page screenshots were compared pixel by pixel. See the validation artifacts outside this deliverable when working in the Codex task workspace.
 ## Storybook
 
-The React Storybook in `src/` restates the portal chrome, home, AI Interpreter overview, and the Business Term / Analytical Model forms. It loads the existing stylesheets, so the class names and visual rules stay with the HTML demo.
+The React Storybook in `src/pages` hosts every HTML entry in this repository, including each Marketing Cockpit project and dashboard, each AI Interpreter type, each knowledge record, and each create or edit state those pages already support. A story loads the original document unchanged: its markup, stylesheets, fonts, images, and scripts. `src/styles/portal.css` imports every stylesheet under `assets/css`.
 
 ```bash
 npm install

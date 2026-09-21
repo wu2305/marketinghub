@@ -1,0 +1,42 @@
+import { documents } from "./documents.js";
+import { pageStory } from "./pageStory.jsx";
+import { PortalDocument } from "./PortalDocument.jsx";
+
+const byId = Object.fromEntries(documents.map((doc) => [doc.id, doc]));
+
+export default {
+  title: "Pages/Knowledge View",
+  component: PortalDocument,
+};
+
+export const Knowledge_View_Principles_Campaign_investment_decision_principles = pageStory(byId["Knowledge_View_Principles_Campaign_investment_decision_principles"]);
+export const Knowledge_View_Principles_Trusted_analysis_guardrails = pageStory(byId["Knowledge_View_Principles_Trusted_analysis_guardrails"]);
+export const Knowledge_View_Report_Context_City_Strategy_report_context = pageStory(byId["Knowledge_View_Report_Context_City_Strategy_report_context"]);
+export const Knowledge_View_Report_Context_4P_performance_context = pageStory(byId["Knowledge_View_Report_Context_4P_performance_context"]);
+export const Knowledge_View_Report_Context_Customer_journey_context = pageStory(byId["Knowledge_View_Report_Context_Customer_journey_context"]);
+export const Knowledge_View_Report_Context_ABO_campaign_quality_context = pageStory(byId["Knowledge_View_Report_Context_ABO_campaign_quality_context"]);
+export const Knowledge_View_Report_Context_Rednote_reporting_context = pageStory(byId["Knowledge_View_Report_Context_Rednote_reporting_context"]);
+export const Knowledge_View_Report_Context_OTT_and_OLV_measurement_context = pageStory(byId["Knowledge_View_Report_Context_OTT_and_OLV_measurement_context"]);
+export const Knowledge_View_Data_Model_Channel_data_model = pageStory(byId["Knowledge_View_Data_Model_Channel_data_model"]);
+export const Knowledge_View_Metric_Dictionary_Member_conversion = pageStory(byId["Knowledge_View_Metric_Dictionary_Member_conversion"]);
+export const Knowledge_View_Metric_Dictionary_Campaign_ROI = pageStory(byId["Knowledge_View_Metric_Dictionary_Campaign_ROI"]);
+export const Knowledge_View_Metric_Dictionary_Promotion_lift = pageStory(byId["Knowledge_View_Metric_Dictionary_Promotion_lift"]);
+export const Knowledge_View_Business_Term_GMV_Gross_Merchandise_Value = pageStory(byId["Knowledge_View_Business_Term_GMV_Gross_Merchandise_Value"]);
+export const Knowledge_View_Analytical_Model_Opportunity_scan_playbook = pageStory(byId["Knowledge_View_Analytical_Model_Opportunity_scan_playbook"]);
+export const Knowledge_View_Personal_Memory_City_strategy_preferences = pageStory(byId["Knowledge_View_Personal_Memory_City_strategy_preferences"]);
+export const Knowledge_View_Scenario_Reporting_Channel_Performance_Analysis = pageStory(byId["Knowledge_View_Scenario_Reporting_Channel_Performance_Analysis"]);
+export const Knowledge_View_Scenario_Reporting_Campaign_Review_Reporting = pageStory(byId["Knowledge_View_Scenario_Reporting_Campaign_Review_Reporting"]);
+export const Knowledge_View_Environmental_Questions_What_is_the_campaign_ROI_by_channel = pageStory(byId["Knowledge_View_Environmental_Questions_What_is_the_campaign_ROI_by_channel"]);
+export const Knowledge_View_Environmental_Questions_Which_channel_has_the_highest_conversion_rate = pageStory(byId["Knowledge_View_Environmental_Questions_Which_channel_has_the_highest_conversion_rate"]);
+export const Knowledge_View_Business_Domain_Campaign_Performance = pageStory(byId["Knowledge_View_Business_Domain_Campaign_Performance"]);
+export const Knowledge_View_Business_Domain_Customer_Engagement = pageStory(byId["Knowledge_View_Business_Domain_Customer_Engagement"]);
+export const Knowledge_View_Email_Reports_Weekly_Marketing_Performance = pageStory(byId["Knowledge_View_Email_Reports_Weekly_Marketing_Performance"]);
+export const Knowledge_View_Email_Reports_Campaign_Performance_Alert = pageStory(byId["Knowledge_View_Email_Reports_Campaign_Performance_Alert"]);
+export const Knowledge_View_Email_Reports_Monthly_Customer_Growth_Review = pageStory(byId["Knowledge_View_Email_Reports_Monthly_Customer_Growth_Review"]);
+export const Knowledge_View_Scenario_Reporting_Channel_Exception_Watch = pageStory(byId["Knowledge_View_Scenario_Reporting_Channel_Exception_Watch"]);
+export const Knowledge_View_Scenario_Reporting_City_Comparison_Analysis = pageStory(byId["Knowledge_View_Scenario_Reporting_City_Comparison_Analysis"]);
+export const Knowledge_View_Scenario_Reporting_Campaign_Anomaly_Detection = pageStory(byId["Knowledge_View_Scenario_Reporting_Campaign_Anomaly_Detection"]);
+export const Knowledge_View_Scenario_Reporting_Customer_Funnel_Optimization = pageStory(byId["Knowledge_View_Scenario_Reporting_Customer_Funnel_Optimization"]);
+export const Knowledge_View_Scenario_Reporting_Campaign_ROI_Forecasting = pageStory(byId["Knowledge_View_Scenario_Reporting_Campaign_ROI_Forecasting"]);
+export const Knowledge_View_Scenario_Reporting_Audience_Insight_Generation = pageStory(byId["Knowledge_View_Scenario_Reporting_Audience_Insight_Generation"]);
+export const Knowledge_View_Scenario_Reporting_Competitive_Media_Analysis = pageStory(byId["Knowledge_View_Scenario_Reporting_Competitive_Media_Analysis"]);

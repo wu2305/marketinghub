@@ -28,7 +28,13 @@ const preview = {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
       storySort: {
-        order: ["Foundations", "Components", "Pages", "Reference"],
+        order: [
+          "Foundations",
+          "Components",
+          "Pages",
+          ["Home", "Marketing Cockpit", "Self-Service Center", "AI Interpreter", "Knowledge Create", "Knowledge View", "Data Model", "Metric Dictionary", "RedNote Campaign Tool", "Governance"],
+          "Reference",
+        ],
       },
     },
   },
