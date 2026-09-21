@@ -1,0 +1,378 @@
+/* ===== Data Upload Form Page ===== */
+.data-upload-shell {
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 24px 0 80px;
+}
+
+.data-upload-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1a1d20;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.back-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.back-link:hover {
+  background: #f4f6f8;
+}
+
+.bulk-import-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid #c8d2d8;
+  border-radius: 4px;
+  background: #fff;
+  color: #1a1d20;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.bulk-import-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: #5b6470;
+}
+
+.bulk-import-btn:hover,
+.bulk-import-btn:focus-visible {
+  background: #fffbeb;
+  border-color: #daa860;
+  outline: 0;
+}
+
+.data-upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.data-upload-form-card {
+  padding: 32px 36px;
+  border: 1px solid var(--workspace-line-strong);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 28px;
+  row-gap: 18px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  width: 100%;
+}
+
+.form-field label {
+  color: #1c2328;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #c8d2d8;
+  border-radius: 4px;
+  background: #fff;
+  color: #1a1d20;
+  font-size: 13.5px;
+  font-family: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #daa860;
+  box-shadow: 0 0 0 3px rgba(218, 168, 96, 0.18);
+  outline: 0;
+}
+
+.form-field input::placeholder {
+  color: #8a93a5;
+  font-weight: 400;
+}
+
+.submit-btn {
+  align-self: flex-start;
+  width: auto;
+  min-width: 120px;
+  min-height: 40px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: #1a1d20;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submit-btn:hover,
+.submit-btn:focus-visible {
+  filter: brightness(0.92);
+  outline: 0;
+}
+
+/* ===== Bulk Import Modal ===== */
+.bulk-import-modal[hidden] {
+  display: none;
+}
+
+.bulk-import-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bulk-import-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.55);
+}
+
+.bulk-import-dialog {
+  position: relative;
+  width: min(560px, calc(100% - 64px));
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.bulk-import-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid #eef1f4;
+}
+
+.bulk-import-head h3 {
+  margin: 0;
+  color: #1c2328;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.bulk-import-close {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #5b6470;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.bulk-import-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bulk-import-close:hover {
+  background: #f4f6f8;
+  color: #1a1d20;
+}
+
+.bulk-import-body {
+  flex: 1;
+  overflow: auto;
+  padding: 22px 28px 26px;
+}
+
+.bulk-import-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  padding: 0;
+  list-style: none;
+}
+
+.bulk-import-steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #8a93a5;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bulk-import-steps li.active {
+  color: #9b7000;
+}
+
+.bulk-import-dot {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #eef1f4;
+  color: #5b6678;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.bulk-import-steps li.active .bulk-import-dot {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: #1a1d20;
+}
+
+.bulk-import-step-line {
+  width: 56px;
+  height: 1px;
+  background: #eef1f4;
+  margin: 0 -4px;
+}
+
+.bulk-import-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 36px 24px;
+  border: 1px dashed #c8d2d8;
+  border-radius: 6px;
+  background: #fafbfc;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.bulk-import-dropzone:hover {
+  border-color: #daa860;
+  background: #fffbeb;
+}
+
+.bulk-import-dropzone svg {
+  width: 36px;
+  height: 36px;
+  color: #5b6678;
+}
+
+.bulk-import-dropzone-title {
+  margin: 0;
+  color: #1c2328;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bulk-import-dropzone-hint {
+  margin: 0;
+  color: #8a93a5;
+  font-size: 12px;
+}
+
+.bulk-import-template-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8b6b1a;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bulk-import-template-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+.bulk-import-template-link:hover {
+  text-decoration: underline;
+}
+
+.bulk-import-tips {
+  border-top: 1px solid #eef1f4;
+  padding-top: 16px;
+}
+
+.bulk-import-tips h4 {
+  margin: 0 0 10px;
+  color: #1c2328;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+
+.bulk-import-tips ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #4a5260;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+.bulk-import-tips li {
+  margin-bottom: 2px;
+}
+
+@media (max-width: 900px) {
+  .data-upload-shell {
+    width: calc(100% - 40px);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

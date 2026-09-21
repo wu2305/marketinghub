@@ -1,0 +1,1507 @@
+{
+  "source": "D:/公司文件/Coach-AI/产品Demo/marketing-hub-ai-v20.10.05",
+  "target": "C:\\Users\\Admin\\.codex\\visualizations\\2026\\09\\09\\01a08638-90c1-7292-bf8d-3bc0b28eb22b\\marketing-hub-ai-v20.11",
+  "files": [
+    {
+      "original": "assets/.codebuddy/memory/2026-07-19.md",
+      "current": "assets/.codebuddy/memory/2026-07-19.md",
+      "originalHash": "8c4390d4f2a739cd6c097b16311ed1efac16fae60f60ac3658ef03905701be13"
+    },
+    {
+      "original": "assets/.codebuddy/memory/2026-07-20.md",
+      "current": "assets/.codebuddy/memory/2026-07-20.md",
+      "originalHash": "ab4e882169a9d60d208384a4303f71ddc65bb4987600e30c6e9bde1588bb5cf7"
+    },
+    {
+      "original": "assets/css/ai-v4.css",
+      "current": "assets/css/components/assistant-panel.css",
+      "originalHash": "65ff9bde4516553d109e1dde734e68c77ec9b2540942427b894ff7d78d6b77b6"
+    },
+    {
+      "original": "assets/css/approach-knowledge-v20.css",
+      "current": "assets/css/knowledge/approach.css",
+      "originalHash": "909b3789644cbe14eae1d049f6eae76d732968174fdf891a1ac193e8a474b9bf"
+    },
+    {
+      "original": "assets/css/business-term-v20.css",
+      "current": "assets/css/knowledge/business-term.css",
+      "originalHash": "a812c23acc5b715264593bf3d90e0b78c9d5f15a8840715590625bfff2094c9c"
+    },
+    {
+      "original": "assets/css/campaign.css",
+      "current": "assets/css/campaign/workspace.css",
+      "originalHash": "99beed0bcafffc6cb8fb8de90190171a5ddf784be9777e77519a69f5c776a367"
+    },
+    {
+      "original": "assets/css/data-model-overview-v20.css",
+      "current": "assets/css/knowledge/data-model-browser.css",
+      "originalHash": "8a6d5bed93c82c42dc1a76fddeaaafb8420e9303f4ce6b1e0a4fa295b14ba469"
+    },
+    {
+      "original": "assets/css/data-upload.css",
+      "current": "assets/css/self-service/upload.css",
+      "originalHash": "3facb149983bda1537bf9b0764d044d288eeed8ecbc07799a5bb3a365a895abd"
+    },
+    {
+      "original": "assets/css/email-reports-v20.css",
+      "current": "assets/css/knowledge/email-reports.css",
+      "originalHash": "97caf853647a9f5007b0b3f92408eaee39bc261b839c7e450dd444374dd4352f"
+    },
+    {
+      "original": "assets/css/feedback-quality.css",
+      "current": "assets/css/governance/feedback.css",
+      "originalHash": "0a2d25609498930ac3d5487f53c6ce170b5072b7d8398cfef8ab6e7ce35381e0"
+    },
+    {
+      "original": "assets/css/flexible-tabs.css",
+      "current": "assets/css/self-service/tabs.css",
+      "originalHash": "6888bf29f389cbf8087a338560040678a06ac4f6ea2b8a6430e9c8489f0946e2"
+    },
+    {
+      "original": "assets/css/flexible.css",
+      "current": "assets/css/self-service/workspace.css",
+      "originalHash": "095ffd99c371abf9c3fd6e22157c3e1b8fae27fa049839d08e0e55c954c342cf"
+    },
+    {
+      "original": "assets/css/global-ai.css",
+      "current": "assets/css/components/assistant-launcher.css",
+      "originalHash": "b70d7d84fa5d2d60bd0de05f8efcd7124dab33b5dc2e5617981e48a553ece583"
+    },
+    {
+      "original": "assets/css/home-v4.css",
+      "current": "assets/css/home/home.css",
+      "originalHash": "dcb1af6f03d9fbc5d27bef14a37515964469368140b126998a2f14e3f6c72b1a"
+    },
+    {
+      "original": "assets/css/knowledge-business-v20.css",
+      "current": "assets/css/knowledge/library.css",
+      "originalHash": "08b6514bb71190264491c91aed6dc46e88fd8cbb32da4f520c28c9b58a127b65"
+    },
+    {
+      "original": "assets/css/knowledge-field-mapping-v20.css",
+      "current": "assets/css/knowledge/field-components.css",
+      "originalHash": "ccb4e2c4dce98a2cca4a9e2d06ed4e8e5b13669b99bbac819beac81a7ce531dd"
+    },
+    {
+      "original": "assets/css/knowledge-overview-layout-v20.css",
+      "current": "assets/css/knowledge/navigation-overview.css",
+      "originalHash": "7b00f84aa149db39f679aabebdcdd15a0a878a4cac1cdd8027e8757914ea6d00"
+    },
+    {
+      "original": "assets/css/knowledge-v20.css",
+      "current": "assets/css/knowledge/types.css",
+      "originalHash": "7b71059efe24f98540b33a85f5dab539311743bae5f5798175fee31fbf67c388"
+    },
+    {
+      "original": "assets/css/knowledge.css",
+      "current": "assets/css/knowledge/workspace.css",
+      "originalHash": "a91a68fe3356401fc8d02a6da6f186d210ac4de9b335f3c4a04670badc44a61c"
+    },
+    {
+      "original": "assets/css/media-tracking-detail.css",
+      "current": "assets/css/self-service/media-tracking.css",
+      "originalHash": "75401f2f9e9e4138334f3cee90aa52dac67bc154df78610ae0053636693cf619"
+    },
+    {
+      "original": "assets/css/metric-dictionary-view-v20.css",
+      "current": "assets/css/knowledge/metric-view.css",
+      "originalHash": "5dd9779e4a8e828a839ad17ab84ffa8e1b3c885a656ea8648ba1e9cb4ec0ecc1"
+    },
+    {
+      "original": "assets/css/metric-dictionary.css",
+      "current": "assets/css/knowledge/metric-detail.css",
+      "originalHash": "7d75afca41b353e3ea369e4a8a9038822b690b74fc436a935c42e1d65af02992"
+    },
+    {
+      "original": "assets/css/personal-memory.css",
+      "current": "assets/css/governance/memory.css",
+      "originalHash": "78de25ea47414179cde1dee638939a4f6dbef0e92b99b5708b2b69dbeb8d704d"
+    },
+    {
+      "original": "assets/css/principles-cards-v20.css",
+      "current": "assets/css/knowledge/principles-library.css",
+      "originalHash": "e5eec9481b9a63d219f35d465c56a770f0befa906273267fcfe3259c4c26e777"
+    },
+    {
+      "original": "assets/css/principles-view-v20.css",
+      "current": "assets/css/knowledge/principles-view.css",
+      "originalHash": "8f17e1eaa310bc00d28a97d8270702cb9c7d70c37e9dc78c7e971fa45aacbbc9"
+    },
+    {
+      "original": "assets/css/report-context-drawer-v20.css",
+      "current": "assets/css/knowledge/report-context-drawer.css",
+      "originalHash": "28e12b43b1570d3d956cd9870acde35b8c84b289536573b6d50d2f596b1cfd95"
+    },
+    {
+      "original": "assets/css/report-context-v20.css",
+      "current": "assets/css/knowledge/report-context.css",
+      "originalHash": "ada1dbb4bbc0cc8ed1fecd8f0d588c7ad6156c2050719f5f7f3392f8ee7229df"
+    },
+    {
+      "original": "assets/css/reports-v4.css",
+      "current": "assets/css/reports/catalog.css",
+      "originalHash": "6c1e5f3d885490f869985b349039dbfdeff84991d01fd16f7f32b0aa7f588bba"
+    },
+    {
+      "original": "assets/css/reports.css",
+      "current": "assets/css/reports/report-core.css",
+      "originalHash": "b80c17fec4eb2a707e87b2d791c26c2c1cada07493a77841af008aacbb99bc76"
+    },
+    {
+      "original": "assets/css/review-center.css",
+      "current": "assets/css/governance/review.css",
+      "originalHash": "5c82d900b366055ba95d53cda56cc0ceed28e21f9dcf5d7cb34eaaeeb23d518e"
+    },
+    {
+      "original": "assets/css/scenario-detail.css",
+      "current": "assets/css/governance/skill-detail.css",
+      "originalHash": "4f042d55d2f6405729996d45c82ff0f85f2cb1b9e57ec32c117ca422c09a8d80"
+    },
+    {
+      "original": "assets/css/scenario-edit.css",
+      "current": "assets/css/governance/skill-editor.css",
+      "originalHash": "df90525f1f6e8b8124b1715d2ffa14725c84baab86fe10e82fe02a6470ec1195"
+    },
+    {
+      "original": "assets/css/scenario-library.css",
+      "current": "assets/css/governance/skills.css",
+      "originalHash": "6fed04f91c294e5632f2d279392189bd7120464809d9f4c1217d3f1c286ae0ae"
+    },
+    {
+      "original": "assets/css/scrollbars.css",
+      "current": "assets/css/base/scrollbars.css",
+      "originalHash": "77f710ed1d03df6f0788834e7150ae4de05dd6f0b708ac5f79c44f52dc36fe2a"
+    },
+    {
+      "original": "assets/css/styles.css",
+      "current": "assets/css/base/foundation.css",
+      "originalHash": "c9470903e0a725a45762a5f1f3f4fb552feec83c7822568a1597eda9f1b0ed55"
+    },
+    {
+      "original": "assets/css/theme-v4.css",
+      "current": "assets/css/base/theme.css",
+      "originalHash": "41371e2f2f3fd5f352292706013ab51fd57ee3da5d0e06f9e32bfe517866be36"
+    },
+    {
+      "original": "assets/css/universal-knowledge-rules-v20.css",
+      "current": "assets/css/knowledge/shared-controls.css",
+      "originalHash": "d595c3285bd3cf1db14e0adf6355c81c3f030cc7f5e11c2046c5c2f1f3f07dee"
+    },
+    {
+      "original": "assets/css/workspaces-v4.css",
+      "current": "assets/css/base/workspace.css",
+      "originalHash": "db2b845457b674d6afb599b3675922743eb8bb9709eff08024a9eafc566076b9"
+    },
+    {
+      "original": "assets/fonts/BentonModDisp-SemiboldIt.otf",
+      "current": "assets/fonts/BentonModDisp-SemiboldIt.otf",
+      "originalHash": "30583aa4dd4905bb3e498d364171dfaf14e0ee6c5e43a6b0c921c6f154b8badc"
+    },
+    {
+      "original": "assets/fonts/BentonModDisp-SemiboldItalic.woff2",
+      "current": "assets/fonts/BentonModDisp-SemiboldItalic.woff2",
+      "originalHash": "ecc42889032d5b7d08556f13208f407b2141b0a3dc4aaa6fcaaa26d87f6b4956"
+    },
+    {
+      "original": "assets/fonts/DIN2014-Bold.woff2",
+      "current": "assets/fonts/DIN2014-Bold.woff2",
+      "originalHash": "899c3cc189050810e4a75f61fb6bbcc645b6e459d32f66d2317d8a65ab1baa77"
+    },
+    {
+      "original": "assets/fonts/DIN2014-Light.woff2",
+      "current": "assets/fonts/DIN2014-Light.woff2",
+      "originalHash": "f9080073e24d6f424a3b3575fc24923ade4035e284262649d14e3a5d9b99957b"
+    },
+    {
+      "original": "assets/fonts/DIN2014-Regular.woff2",
+      "current": "assets/fonts/DIN2014-Regular.woff2",
+      "originalHash": "d3f1064c54ec3112c108156480b9c6a8aacf6c630789328698d9cefe48b0d66a"
+    },
+    {
+      "original": "assets/fonts/DPT45.otf",
+      "current": "assets/fonts/DPT45.otf",
+      "originalHash": "154a3ed33d20c719b85c25c6a246c92dc271067a069b13b837c44d3e21f5c1cf"
+    },
+    {
+      "original": "assets/fonts/DPT55.otf",
+      "current": "assets/fonts/DPT55.otf",
+      "originalHash": "72c32ebc6b0bfbdd15cbc76594c823a46ac56e87bce901e23cdd711b90c1a32d"
+    },
+    {
+      "original": "assets/images/business-explorer-hero.jpg",
+      "current": "assets/images/business-explorer-hero.jpg",
+      "originalHash": "ad494cd30c011dff981c1fd916d4881c2e71bf8bb1fa61b2b18e868d2c39fc0a"
+    },
+    {
+      "original": "assets/images/hero-bg-coach.jpg",
+      "current": "assets/images/hero-bg-coach.jpg",
+      "originalHash": "f96658b6ffe1485497a07761da65993eaed5743e830921723f4e473c911afe36"
+    },
+    {
+      "original": "assets/images/knowledge-hero.jpg",
+      "current": "assets/images/knowledge-hero.jpg",
+      "originalHash": "ea561d66592fd1ff563d64e48f0445df90965e938949a4190f4377b38326e1df"
+    },
+    {
+      "original": "assets/images/marketing-hub-hero-luxury.png",
+      "current": "assets/images/marketing-hub-hero-luxury.png",
+      "originalHash": "b6e2cf49a86564da268f1f37e33d4760172ac129d64c1e74bc5b459a5e92a3d0"
+    },
+    {
+      "original": "assets/images/project-abo-tabby.png",
+      "current": "assets/images/project-abo-tabby.png",
+      "originalHash": "9efebb165f69a26560f04feaded7596e3549e77ff473d98a186fc73e581bca49"
+    },
+    {
+      "original": "assets/images/project-city-tabby.png",
+      "current": "assets/images/project-city-tabby.png",
+      "originalHash": "fc11cb84627dd3ba53356203d25b9f35a0c00da1168c6c5652c8b25eebe6000c"
+    },
+    {
+      "original": "assets/images/project-customer-tabby.png",
+      "current": "assets/images/project-customer-tabby.png",
+      "originalHash": "71fb5a4a34f385ab2855f9e019ad8fc9b6e6ec45d5dd651d2ecf5a26c86198ac"
+    },
+    {
+      "original": "assets/images/project-fourp-tabby.png",
+      "current": "assets/images/project-fourp-tabby.png",
+      "originalHash": "86e5217003b43dde082aec4bb57d285b26ddbfe0f5b92c3b5467e71d4c5aec48"
+    },
+    {
+      "original": "assets/images/project-ottolv-tabby.png",
+      "current": "assets/images/project-ottolv-tabby.png",
+      "originalHash": "e4abf1a1cb0293c2d1a64eb3e1dc53790d0259e035dbaf19bc40bdeecd40397b"
+    },
+    {
+      "original": "assets/images/project-rednote-tabby.png",
+      "current": "assets/images/project-rednote-tabby.png",
+      "originalHash": "0a8d4a1477be9ba94e4de5f8f3578e9f2d8d12ecc07a589bb735aa499c4562a8"
+    },
+    {
+      "original": "assets/images/tapestry-logo.png",
+      "current": "assets/images/tapestry-logo.png",
+      "originalHash": "71f30c5b1b262d958e0d21c948554b754b7666deffdadf3a97fbbcad25a5d875"
+    },
+    {
+      "original": "assets/images/tapestry-logo.svg",
+      "current": "assets/images/tapestry-logo.svg",
+      "originalHash": "37cbd3bbc009699e7f5a03cf150614a1ab5e2d377193d9c7713bc70d3b7bde61"
+    },
+    {
+      "original": "assets/images/workspace-business-explorer.png",
+      "current": "assets/images/workspace-business-explorer.png",
+      "originalHash": "ed0ce00cf35ffec7def9af094b1ab4ad6717b60f205616a47376ca773c8f90fc"
+    },
+    {
+      "original": "assets/images/workspace-campaign-operations.png",
+      "current": "assets/images/workspace-campaign-operations.png",
+      "originalHash": "da575f18146e206bde3039a1e6c20f23e27b03885c693aef5af77e58781587f0"
+    },
+    {
+      "original": "assets/images/workspace-knowledge-center.png",
+      "current": "assets/images/workspace-knowledge-center.png",
+      "originalHash": "c597886e616e0f1746421e42e30ac51361c1d6f88bb6ffd5d28381364cc7e171"
+    },
+    {
+      "original": "assets/images/workspace-marketing-overview.png",
+      "current": "assets/images/workspace-marketing-overview.png",
+      "originalHash": "cb4eed823f9312c3e8f1ee86b02191e07f284bcca99a53dfbda82226d295404c"
+    },
+    {
+      "original": "assets/js/app.js",
+      "current": "assets/js/shared/portal.js",
+      "originalHash": "621f4982dd1d6c38c3830876a57ee066f620378510db17fc69fa381afc7383ab"
+    },
+    {
+      "original": "assets/js/approach-knowledge-form-v20.js",
+      "current": "assets/js/knowledge/approach-form.js",
+      "originalHash": "9fb536b12738bc1a6871742ff37a0e0546f1307c059675e521d56fc5e8d2ad96"
+    },
+    {
+      "original": "assets/js/approach-knowledge-view-v20.js",
+      "current": "assets/js/knowledge/approach-view.js",
+      "originalHash": "de03a89cbef4bdc13e65dbea7ccada665dd0dd49c2bf87133e0fd1af45fd5459"
+    },
+    {
+      "original": "assets/js/business-term-form-v20.js",
+      "current": "assets/js/knowledge/business-term-form.js",
+      "originalHash": "746fe52807cb5f7e37bf37f61b83b26c7dea83bd3d3ca890d99f141360cedbdb"
+    },
+    {
+      "original": "assets/js/business-term-overview-v20.js",
+      "current": "assets/js/knowledge/business-term-library.js",
+      "originalHash": "ee0655fa8cb4975d8e64ecfbd935e0b2e0d2d50cc03a7c7eec4bbabfed72282f"
+    },
+    {
+      "original": "assets/js/business-term-view-v20.js",
+      "current": "assets/js/knowledge/business-term-view.js",
+      "originalHash": "c737c06e023743f4ef38ae5874c3e1cc56232123f1bc63700ee09e4e77040cd8"
+    },
+    {
+      "original": "assets/js/campaign.js",
+      "current": "assets/js/campaign/workspace.js",
+      "originalHash": "874176bd9013210a937b0d5c1630e67c567b6818501b9eb755b177d6c9499f9c"
+    },
+    {
+      "original": "assets/js/data-model-overview-v20.js",
+      "current": "assets/js/knowledge/data-model-browser.js",
+      "originalHash": "0b56408017e0322e74c529bd44b4042c57f3c360b11afeb5860d047519a60acb"
+    },
+    {
+      "original": "assets/js/data-upload.js",
+      "current": "assets/js/self-service/upload.js",
+      "originalHash": "415d47e70b7f8a6263b08c80eeef26b64cf870e63826f86d0ed2e5ac6e4612ce"
+    },
+    {
+      "original": "assets/js/email-reports-overview-v20.js",
+      "current": "assets/js/knowledge/email-library.js",
+      "originalHash": "43c03058126f01b3a9b346b5ba9c5b2d90e6d683479683d0693853c5d85853c4"
+    },
+    {
+      "original": "assets/js/email-reports-view-v20.js",
+      "current": "assets/js/knowledge/email-view.js",
+      "originalHash": "e68ac10f5e471ac947d48619300e4105f106feb8512faa2e77515e918dc4d22d"
+    },
+    {
+      "original": "assets/js/feedback-data.js",
+      "current": "assets/js/data/feedback.js",
+      "originalHash": "18d2f55f4fb2df7a4972c9c83fe8e88b295da579c6216b0f6e11beac0425ee9d"
+    },
+    {
+      "original": "assets/js/feedback-quality.js",
+      "current": "assets/js/governance/feedback.js",
+      "originalHash": "7414c61f1380b6b0dc2ad7e463b2eab12ec8dc3fe7f420442af365cd3587b83e"
+    },
+    {
+      "original": "assets/js/flexible.js",
+      "current": "assets/js/self-service/workspace.js",
+      "originalHash": "9b9b93d2a2c1196cf8194d8ab4551d2f9980e3078091bd11a36d6dc098b309f4"
+    },
+    {
+      "original": "assets/js/knowledge-analysis-form-v20.js",
+      "current": "assets/js/knowledge/analytical-model-form.js",
+      "originalHash": "db58c3e163d85ef82576eb5143e1e0d8fd803925fbd48d0cc4d526d732e058fd"
+    },
+    {
+      "original": "assets/js/knowledge-create-navigation-v20.js",
+      "current": "assets/js/knowledge/create-navigation.js",
+      "originalHash": "0bdd7a95923cd1f83fbf650daff0f30dff29ec4993c8043dda9e56f6fa7e895d"
+    },
+    {
+      "original": "assets/js/knowledge-data.js",
+      "current": "assets/js/data/knowledge.js",
+      "originalHash": "0dc7f6052508db500e653450d2321f27282cb3000941d651de9659408b975ec3"
+    },
+    {
+      "original": "assets/js/knowledge-field-data-v20.js",
+      "current": "assets/js/data/knowledge-fields.js",
+      "originalHash": "0048a73479d4904119fb18b59209158c3b5dda5414ec28bd630cc1bf6adeb6b4"
+    },
+    {
+      "original": "assets/js/knowledge-field-list-v20.js",
+      "current": "assets/js/knowledge/field-library.js",
+      "originalHash": "f7941ed53f0d11279872270b15d58c272cc13beee090c64decdc2ec6db46445b"
+    },
+    {
+      "original": "assets/js/knowledge-field-view-route-v20.js",
+      "current": "assets/js/knowledge/detail-routing.js",
+      "originalHash": "d2330ea56f0a9fd37d01f355e721d21d3b8a962379ef9dddad7fb9b980944f3f"
+    },
+    {
+      "original": "assets/js/knowledge-v20-pages.js",
+      "current": "assets/js/knowledge/editor-runtime.js",
+      "originalHash": "701921a542f023c1f62eabe6cba01bb1435f148678666c14715b5ddd3e25b4ef"
+    },
+    {
+      "original": "assets/js/knowledge-v20.js",
+      "current": "assets/js/knowledge/types.js",
+      "originalHash": "9ff4e0e5065e6e61c9afd830a55ee94b4d8e8ff44d1b8c280ef7449b1b069d8b"
+    },
+    {
+      "original": "assets/js/knowledge.js",
+      "current": "assets/js/knowledge/workspace.js",
+      "originalHash": "ab758939e24504830e1b9e2bd4c1bea6a4a0f2e8400637e61fd287e5b5a270d1"
+    },
+    {
+      "original": "assets/js/metric-dictionary-view-v20.js",
+      "current": "assets/js/knowledge/metric-view.js",
+      "originalHash": "c1429304920bdb2695bcb0f9d0a501393e5248a09b85afa01446e403484aa23a"
+    },
+    {
+      "original": "assets/js/metric-dictionary.js",
+      "current": "assets/js/knowledge/metric-detail.js",
+      "originalHash": "360ddb6aab94d7e268280af98f9461ba33f2d0727eaf83942613deb36928bcf3"
+    },
+    {
+      "original": "assets/js/personal-memory-data.js",
+      "current": "assets/js/data/memories.js",
+      "originalHash": "0ca7a55561af6898e70028c7c274277292c2c47534921c796a1f16614f693622"
+    },
+    {
+      "original": "assets/js/personal-memory.js",
+      "current": "assets/js/governance/memory.js",
+      "originalHash": "74f0785bae2e55c52bc6cffc0193f3c3b31b620319fdc6e58d1873dd2cc9203d"
+    },
+    {
+      "original": "assets/js/principles-cards-v20.js",
+      "current": "assets/js/knowledge/principles-library.js",
+      "originalHash": "98bbaebe7e5ec36ebe0506803fd4b39db43ec6e6081f2ac3fb0d40bcaf3018fe"
+    },
+    {
+      "original": "assets/js/principles-view-v20.js",
+      "current": "assets/js/knowledge/principles-view.js",
+      "originalHash": "076c122b2bf915f455fff18d255f5cf3ce0c82cf6c2354fdc11b1c414e7e6da3"
+    },
+    {
+      "original": "assets/js/report-context-form-v20.js",
+      "current": "assets/js/knowledge/report-context-form.js",
+      "originalHash": "69030733eb11dbf02558ed346d894a2c4ba9ef93d33027122596ce977836f7d7"
+    },
+    {
+      "original": "assets/js/report-context-view-v20.js",
+      "current": "assets/js/knowledge/report-context-view.js",
+      "originalHash": "942c9fdabd19ad98a4dc15465902c489cc5a01044ca64625eed4b3dc0df60b4f"
+    },
+    {
+      "original": "assets/js/reports.js",
+      "current": "assets/js/reports/report-core.js",
+      "originalHash": "53d596e5eb2bc7e6bb0c37e04a053f5ed5607dda9759e52238ae396add973155"
+    },
+    {
+      "original": "assets/js/review-center.js",
+      "current": "assets/js/governance/review.js",
+      "originalHash": "ba76ae5244eb513d3015ca6e61cbaeaa8ea6d23650b4a1fba8226783d10d5467"
+    },
+    {
+      "original": "assets/js/review-data.js",
+      "current": "assets/js/data/reviews.js",
+      "originalHash": "a90d5ff3aaebbdd14bbc553ada27035311c85929da7cd422a2ee4b54610e6c24"
+    },
+    {
+      "original": "assets/js/scenario-detail.js",
+      "current": "assets/js/governance/skill-detail.js",
+      "originalHash": "03f11a1c4f89d44ed03bc04870e4fbb628611ba0b04652838637b81cf926f456"
+    },
+    {
+      "original": "assets/js/scenario-edit.js",
+      "current": "assets/js/governance/skill-editor.js",
+      "originalHash": "903aae2f0782a452ee9b52d2974218b90d5c7e93ac73422b4dfd0f95c7c562b9"
+    },
+    {
+      "original": "assets/js/scenario-library-data.js",
+      "current": "assets/js/data/skills.js",
+      "originalHash": "1d1815b9975725cd17464f59a2803fe101108d5a6f6358100ce4892483d6fe90"
+    },
+    {
+      "original": "assets/js/scenario-library.js",
+      "current": "assets/js/governance/skills.js",
+      "originalHash": "4efc31f2090da57ce5fbfe793bddf3218d1af24035e9bc58023727c207ebd227"
+    },
+    {
+      "original": "assets/js/scenario-report-overview-v20.js",
+      "current": "assets/js/knowledge/scenario-reports.js",
+      "originalHash": "aaae2648f1c71c76d0e6d7ffa7e7b8d774c7cae79663f16e26f0aaa6becd890c"
+    },
+    {
+      "original": "assets/js/scenario-reporting-form-v20.js",
+      "current": "assets/js/knowledge/scenario-report-form.js",
+      "originalHash": "8030be54840fb66ed72ddeb8994b8330f459882a94a437e69c6f7236614e47b9"
+    },
+    {
+      "original": "assets/js/universal-knowledge-rules-v20.js",
+      "current": "assets/js/knowledge/shared-controls.js",
+      "originalHash": "80d2d153d10d18675af2d29923c35d362d78ab1c86a4c42a8921e4706e893ed5"
+    },
+    {
+      "original": "assets/pages/campaign.html",
+      "current": "assets/pages/campaign.html",
+      "originalHash": "48dab06bf67527dacbd1ac7bb493ee2c39381a66e0765ae13e5624e976bf9551"
+    },
+    {
+      "original": "assets/pages/data-model.html",
+      "current": "assets/pages/data-model.html",
+      "originalHash": "84d809977a577ec77663b5d7d82fff8c0c48790448d84d0d44a3b2ea0fc606ab"
+    },
+    {
+      "original": "assets/pages/data-upload.html",
+      "current": "assets/pages/data-upload.html",
+      "originalHash": "a09df9b3104fa5b414ce15d2219f8af881aec61e7f9b2cb7d4232419e7a0edec"
+    },
+    {
+      "original": "assets/pages/feedback-quality.html",
+      "current": "assets/pages/feedback-quality.html",
+      "originalHash": "9af29c2c465da8d4d536eed62d0b4a4da3a512f3ba26ac77b397ef2584865972"
+    },
+    {
+      "original": "assets/pages/flexible.html",
+      "current": "assets/pages/flexible.html",
+      "originalHash": "1013ee43a907937f51dbf0fe438be1f61a1566fd82efd1f688c1da58bee57f21"
+    },
+    {
+      "original": "assets/pages/knowledge-create.html",
+      "current": "assets/pages/knowledge-create.html",
+      "originalHash": "18839540c8da6d26589dcb8a3b4c9f77e91161985c65a09be46a2395f8dc7365"
+    },
+    {
+      "original": "assets/pages/knowledge-view.html",
+      "current": "assets/pages/knowledge-view.html",
+      "originalHash": "55b17deb3fa924dbdce586655d45dfbf11d1712309d62cfcd277671a4b5e99aa"
+    },
+    {
+      "original": "assets/pages/knowledge.html",
+      "current": "assets/pages/knowledge.html",
+      "originalHash": "673759fbfd0a9820a09fbee0be8855e675b5d3f7c755b8ba070608f1f22f4fcb"
+    },
+    {
+      "original": "assets/pages/media-tracking-detail.html",
+      "current": "assets/pages/media-tracking-detail.html",
+      "originalHash": "f8a54e668f8dbb34c6c1d1cdffac78490f45c2f555ef5b9c03adb70a1e7a85e0"
+    },
+    {
+      "original": "assets/pages/metric-dictionary.html",
+      "current": "assets/pages/metric-dictionary.html",
+      "originalHash": "644cffd96b083cb8d20abe956fdf997c4c6b3ca2fbe2b4c611493c7911d6bd33"
+    },
+    {
+      "original": "assets/pages/personal-memory.html",
+      "current": "assets/pages/personal-memory.html",
+      "originalHash": "4f808a713b76222344e573d6fb600694921dfaef1f488fb935baf9201e6374ee"
+    },
+    {
+      "original": "assets/pages/reports.html",
+      "current": "assets/pages/reports.html",
+      "originalHash": "4daeefdfbafdcc1f9d22cba53c008c08068900af6f9716de8327f2305f45aa30"
+    },
+    {
+      "original": "assets/pages/review-center.html",
+      "current": "assets/pages/review-center.html",
+      "originalHash": "609c9cfbfca2eeb018515916a7698d6cbdfe34b6819636db05372be436ccec6b"
+    },
+    {
+      "original": "assets/pages/scenario-detail.html",
+      "current": "assets/pages/scenario-detail.html",
+      "originalHash": "3de16234ecbeef579e704120857b78c49ac6d233c5faf0a0e9fe07b1eccd4267"
+    },
+    {
+      "original": "assets/pages/scenario-edit.html",
+      "current": "assets/pages/scenario-edit.html",
+      "originalHash": "e63ce94b250526269ad0d845eaeb820679bdb6350772f2fb3fd6f119d98048d0"
+    },
+    {
+      "original": "assets/pages/scenario-library.html",
+      "current": "assets/pages/scenario-library.html",
+      "originalHash": "5f30f650fca1793bcaf718cedcee7c55dff58bd31f0b40503d54991726dbe2d9"
+    },
+    {
+      "original": "index.html",
+      "current": "index.html",
+      "originalHash": "04de70cd843445fe3e61afc78952adfc88df35870ddb4c09c20732cb355a21c8"
+    }
+  ],
+  "removed": [
+    {
+      "file": "(2).DS_Store",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": ".DS_Store",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": ".workbuddy/memory/2026-08-26 (2).md",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": ".workbuddy/memory/2026-08-26.md",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/(2).DS_Store",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/.codebuddy/memory/2026-07-19 (2).md",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/.codebuddy/memory/2026-07-20 (2).md",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/.DS_Store",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/css/ai-v4 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/approach-knowledge-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/business-term-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/campaign (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/data-model (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/data-model-overview-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/data-model.css",
+      "reason": "no references from canonical HTML/CSS/JS"
+    },
+    {
+      "file": "assets/css/data-upload (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/email-reports-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/feedback-quality (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/flexible (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/flexible-tabs (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/global-ai (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/home-v4 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-business-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-field-mapping-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-overview-layout-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-v20-pages (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/knowledge-v20-pages.css",
+      "reason": "no references from canonical HTML/CSS/JS"
+    },
+    {
+      "file": "assets/css/media-tracking-detail (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/metric-dictionary (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/metric-dictionary-view-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/personal-memory (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/principles-cards-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/principles-view-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/report-context-drawer-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/report-context-v20 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/reports (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/reports-v4 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/review-center (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/scenario-detail (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/scenario-edit (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/scenario-library (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/scrollbars (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/styles (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/theme-v4 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/css/workspaces-v4 (2).css",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/BentonModDisp-SemiboldIt (2).otf",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/BentonModDisp-SemiboldItalic (2).woff2",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/DIN2014-Bold (2).woff2",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/DIN2014-Light (2).woff2",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/DIN2014-Regular (2).woff2",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/DPT45 (2).otf",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/fonts/DPT55 (2).otf",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/business-explorer-hero (2).jpg",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/hero-bg-coach (2).jpg",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/knowledge-hero (2).jpg",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/marketing-hub-hero-luxury (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-abo-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-city-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-customer-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-fourp-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-ottolv-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/project-rednote-tabby (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/tapestry-logo (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/tapestry-logo (2).svg",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/workspace-business-explorer (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/workspace-campaign-operations (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/workspace-knowledge-center (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/images/workspace-marketing-overview (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/app (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/approach-knowledge-form-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/approach-knowledge-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/business-term-form-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/business-term-overview-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/business-term-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/campaign (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/data-model-overview-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/data-upload (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/email-reports-overview-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/email-reports-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/feedback-data (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/feedback-quality (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/flexible (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-analysis-form-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-data (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-field-data-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-field-list-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-field-view-route-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/knowledge-v20-pages (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/metric-dictionary (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/metric-dictionary-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/personal-memory (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/personal-memory-data (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/principles-cards-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/principles-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/report-context-drawer-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/report-context-drawer-v20.js",
+      "reason": "no references from canonical HTML/CSS/JS"
+    },
+    {
+      "file": "assets/js/report-context-view-v20 (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/reports (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/review-center (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/review-data (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/scenario-detail (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/scenario-edit (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/scenario-library (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/js/scenario-library-data (2).js",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/page-dump.html",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/pages/knowledge (2).html",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-autoclick (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-autoclick.png",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/screenshot-debug (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-debug.png",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/screenshot-debug2 (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-debug2.png",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/screenshot-debug3 (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-debug3.png",
+      "reason": "editor/debug artifact"
+    },
+    {
+      "file": "assets/screenshot-initial (2).png",
+      "reason": "duplicate-name backup (not an entry resource)"
+    },
+    {
+      "file": "assets/screenshot-initial.png",
+      "reason": "editor/debug artifact"
+    }
+  ],
+  "css": {
+    "removedDeclarations": 360,
+    "removedRules": 37,
+    "removedComments": 6,
+    "details": [
+      {
+        "file": "assets/css/ai-v4.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/approach-knowledge-v20.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/business-term-v20.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/campaign.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/data-model-overview-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/data-upload.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/email-reports-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/feedback-quality.css",
+        "removedDeclarations": 4
+      },
+      {
+        "file": "assets/css/flexible-tabs.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/flexible.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/global-ai.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/home-v4.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/knowledge-business-v20.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/knowledge-field-mapping-v20.css",
+        "removedDeclarations": 8
+      },
+      {
+        "file": "assets/css/knowledge-overview-layout-v20.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/knowledge-v20.css",
+        "removedDeclarations": 35
+      },
+      {
+        "file": "assets/css/knowledge.css",
+        "removedDeclarations": 16
+      },
+      {
+        "file": "assets/css/media-tracking-detail.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/metric-dictionary-view-v20.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/metric-dictionary.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/personal-memory.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/principles-cards-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/principles-view-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/report-context-drawer-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/report-context-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/reports-v4.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/reports.css",
+        "removedDeclarations": 76
+      },
+      {
+        "file": "assets/css/review-center.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/scenario-detail.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/scenario-edit.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/scenario-library.css",
+        "removedDeclarations": 1
+      },
+      {
+        "file": "assets/css/scrollbars.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/styles.css",
+        "removedDeclarations": 205
+      },
+      {
+        "file": "assets/css/theme-v4.css",
+        "removedDeclarations": 9
+      },
+      {
+        "file": "assets/css/universal-knowledge-rules-v20.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/workspaces-v4.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/campaign-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/data-model-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/data-upload-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/feedback-quality-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/flexible-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/knowledge-view-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/metric-dictionary-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/reports-inline-1.css",
+        "removedDeclarations": 0
+      },
+      {
+        "file": "assets/css/pages/reports-inline-2.css",
+        "removedDeclarations": 0
+      }
+    ]
+  },
+  "inline": [
+    {
+      "page": "assets/pages/campaign.html",
+      "extracted": "assets/css/pages/campaign-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/data-model.html",
+      "extracted": "assets/css/pages/data-model-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/data-model.html",
+      "extracted": "assets/js/pages/data-model-inline-1.js",
+      "kind": "js"
+    },
+    {
+      "page": "assets/pages/data-upload.html",
+      "extracted": "assets/css/pages/data-upload-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/feedback-quality.html",
+      "extracted": "assets/css/pages/feedback-quality-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/flexible.html",
+      "extracted": "assets/css/pages/flexible-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/knowledge-view.html",
+      "extracted": "assets/css/pages/knowledge-view-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/media-tracking-detail.html",
+      "extracted": "assets/js/pages/media-tracking-detail-inline-1.js",
+      "kind": "js"
+    },
+    {
+      "page": "assets/pages/metric-dictionary.html",
+      "extracted": "assets/css/pages/metric-dictionary-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/reports.html",
+      "extracted": "assets/css/pages/reports-inline-1.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/reports.html",
+      "extracted": "assets/css/pages/reports-inline-2.css",
+      "kind": "css"
+    },
+    {
+      "page": "assets/pages/reports.html",
+      "extracted": "assets/js/pages/reports-inline-1.js",
+      "kind": "js"
+    }
+  ],
+  "scripts": [
+    {
+      "file": "assets/js/shared/portal.js",
+      "topLevelStatements": 137
+    },
+    {
+      "file": "assets/js/knowledge/approach-form.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/approach-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/business-term-form.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/business-term-library.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/business-term-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/campaign/workspace.js",
+      "topLevelStatements": 32
+    },
+    {
+      "file": "assets/js/knowledge/data-model-browser.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/self-service/upload.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/email-library.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/email-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/data/feedback.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/governance/feedback.js",
+      "topLevelStatements": 35
+    },
+    {
+      "file": "assets/js/self-service/workspace.js",
+      "topLevelStatements": 22
+    },
+    {
+      "file": "assets/js/knowledge/analytical-model-form.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/create-navigation.js",
+      "topLevelStatements": 2
+    },
+    {
+      "file": "assets/js/data/knowledge.js",
+      "topLevelStatements": 2
+    },
+    {
+      "file": "assets/js/data/knowledge-fields.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/field-library.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/detail-routing.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/editor-runtime.js",
+      "topLevelStatements": 24
+    },
+    {
+      "file": "assets/js/knowledge/types.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/workspace.js",
+      "topLevelStatements": 297
+    },
+    {
+      "file": "assets/js/knowledge/metric-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/metric-detail.js",
+      "topLevelStatements": 34
+    },
+    {
+      "file": "assets/js/data/memories.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/governance/memory.js",
+      "topLevelStatements": 47
+    },
+    {
+      "file": "assets/js/knowledge/principles-library.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/principles-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/report-context-form.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/report-context-view.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/reports/report-core.js",
+      "topLevelStatements": 77
+    },
+    {
+      "file": "assets/js/governance/review.js",
+      "topLevelStatements": 72
+    },
+    {
+      "file": "assets/js/data/reviews.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/governance/skill-detail.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/governance/skill-editor.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/data/skills.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/governance/skills.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/scenario-reports.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/scenario-report-form.js",
+      "topLevelStatements": 1
+    },
+    {
+      "file": "assets/js/knowledge/shared-controls.js",
+      "topLevelStatements": 1
+    }
+  ],
+  "htmlRepairs": [
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (358:5)",
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (306:5)",
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (205:5)",
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (254:7)",
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (332:5)",
+    "Unexpected closing tag \"main\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (295:3)",
+    "Unexpected closing tag \"div\". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags (284:5)"
+  ]
+}

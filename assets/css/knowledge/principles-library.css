@@ -1,0 +1,208 @@
+.principles-card-grid {
+  display: block;
+  padding: 18px;
+  background: #f7f8f9;
+}
+
+.principles-card-grid[hidden] {
+  display: none;
+}
+
+.principles-list-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.principle-list-item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid #dde3e7;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(25, 31, 36, 0.03);
+  position: relative;
+  cursor: default;
+}
+
+.principle-list-number {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #f4ede0;
+  color: #9a661a;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.principle-list-copy {
+  min-width: 0;
+}
+
+.principle-list-titleline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.principle-title-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.principle-type-badge {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef1f3;
+  color: #5e6872;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.principle-global-badge {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f8edda;
+  color: #9a661a;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.principle-list-titleline h3 {
+  margin: 0;
+  color: #20252a;
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 800;
+  letter-spacing: 0;
+  min-width: 0;
+}
+
+.principle-list-copy p {
+  margin: 0;
+  color: #4d5963;
+  font-size: 13px;
+  line-height: 1.75;
+  font-weight: 500;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.principle-description:not(.is-expanded) {
+  display: block;
+  max-height: 3.5em;
+  overflow: hidden;
+  padding-right: 64px;
+}
+
+.principle-description.is-expanded {
+  display: block;
+  max-height: none;
+  overflow: visible;
+  padding-right: 64px;
+}
+
+.principle-description-wrap {
+  position: relative;
+  min-width: 0;
+}
+
+.principle-description-toggle {
+  position: absolute;
+  right: 16px;
+  bottom: 0;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #956318;
+  font: inherit;
+  cursor: pointer;
+}
+
+.principle-description-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.principle-description-toggle:hover {
+  color: #71480d;
+}
+
+.principle-description-toggle:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid rgba(185, 130, 52, 0.35);
+  outline-offset: 2px;
+}
+
+.principle-description-toggle[hidden] {
+  display: none;
+}
+
+.principle-list-copy p::-webkit-scrollbar {
+  width: 8px;
+}
+
+.principle-list-copy p::-webkit-scrollbar-track {
+  background: #f4f1ea;
+  border-radius: 999px;
+}
+
+.principle-list-copy p::-webkit-scrollbar-thumb {
+  background: #d5a64b;
+  border-radius: 999px;
+}
+
+.principles-empty {
+  padding: 28px;
+  border: 1px dashed #d8dfe4;
+  border-radius: 8px;
+  background: #fff;
+  color: #6f7a83;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Principles renders its own empty result state above the shared asset shell. */
+.knowledge-main[data-active-type="Principles"] #emptyState {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  .principles-card-grid {
+    padding: 12px;
+  }
+
+  .principle-list-item {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px;
+  }
+
+  .principle-list-titleline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

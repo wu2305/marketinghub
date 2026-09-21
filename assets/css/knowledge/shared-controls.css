@@ -1,0 +1,696 @@
+/* Shared knowledge-library controls: use the Scenario Reporting control scale. */
+.fm-tools {
+  position: relative;
+  z-index: 20;
+  overflow: visible;
+}
+
+.fm-tools .fm-filter details,
+.business-multi-filter,
+.scenario-report-filter-bar .scenario-report-filter {
+  position: relative;
+}
+
+.fm-tools .fm-filter details[open],
+.business-multi-filter[open] {
+  z-index: 120;
+}
+
+.fm-tools .fm-filter details > summary,
+.business-multi-filter summary,
+.scenario-report-filter-bar .scenario-report-filter select,
+.fm-search,
+.scenario-report-filter-bar .scenario-report-search {
+  height: 32px;
+  min-height: 32px;
+  box-sizing: border-box;
+}
+
+.fm-tools .fm-filter details > summary,
+.business-multi-filter summary {
+  display: flex;
+  align-items: center;
+}
+
+.fm-search-field {
+  position: relative;
+  width: 280px;
+  max-width: 100%;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.fm-search-field > svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translateY(-50%);
+  color: #8b949d;
+  pointer-events: none;
+}
+
+.fm-search-field .fm-search {
+  width: 100%;
+  height: 32px;
+  min-height: 32px;
+  box-sizing: border-box;
+  padding: 0 12px 0 32px;
+  border: 1px solid #d8e0e6;
+  border-radius: 6px;
+  background: #fff;
+  color: #3f4c55;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.fm-search-field .fm-search::placeholder {
+  color: #8b949d;
+}
+
+.fm-search-field .fm-search:focus {
+  border-color: #daa860;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(218, 168, 96, 0.15);
+}
+
+.fm-options,
+.business-multi-filter > div {
+  z-index: 200;
+}
+
+#fmLibrary,
+#businessTermOverview,
+#scenarioReportOverview {
+  overflow: visible;
+}
+
+.fm-drawer-foot .fm-open-dashboard {
+  border-color: #d6a447;
+  background: #f4c766;
+  color: #1c2630;
+  font-weight: 700;
+}
+
+.fm-drawer-foot .fm-open-dashboard:hover {
+  border-color: #bd8624;
+  background: #ecc05c;
+}
+
+/* Business Term overview */
+#businessKnowledgeLibrary.bt-overview-active > .library-toolbar {
+  display: none !important;
+}
+
+#businessTermOverview .bt-overview-tools {
+  display: flex;
+  align-items: end;
+  gap: 18px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #e2e8ee;
+  background: #fff;
+}
+
+#businessTermOverview .bt-overview-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  width: 310px;
+  min-width: 250px;
+  margin-left: auto;
+  padding: 0 10px;
+  border: 1px solid #d8e0e6;
+  border-radius: 6px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+#businessTermOverview .bt-overview-search svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: #7b8794;
+  stroke-width: 1.7;
+}
+
+#businessTermOverview .bt-overview-search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #3f4c55;
+  font: inherit;
+  font-size: 11px;
+}
+
+.fm-draft-badge {
+  display: inline-flex;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  background: #f6ede0;
+  color: #a76412;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: super;
+}
+
+@media (max-width: 900px) {
+  #businessTermOverview .bt-overview-tools {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+  #businessTermOverview .bt-overview-search {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .fm-search-field {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Principles is search-only: its generic filters must never reappear. */
+body[data-knowledge-type="Principles"] #statusMultiFilter,
+body[data-knowledge-type="Principles"] #subjectDomainFilter {
+  display: none !important;
+}
+
+.report-context-edit-page .v20-form-card {
+  max-width: 780px;
+}
+.rc-edit-overview {
+  display: grid;
+  gap: 18px;
+}
+.rc-edit-thumbnail {
+  overflow: hidden;
+  min-height: 140px;
+  border-radius: 10px;
+  background: #f2f5f7;
+}
+.rc-edit-thumbnail img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+.rc-edit-description-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+.rc-edit-description-head h2 {
+  margin: 4px 0 0;
+  color: #20272e;
+  font-size: 22px;
+}
+.rc-edit-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.rc-edit-actions .fm-icon-action {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+.rc-version-history {
+  min-height: 32px;
+}
+.rc-description-input {
+  min-height: 132px;
+  padding: 14px;
+  border: 1px solid #d5dee7;
+  border-radius: 9px;
+  background: #f3f5f7;
+  color: #7b8794;
+  font: inherit;
+  line-height: 1.6;
+  resize: vertical;
+}
+.rc-description-input:not(:disabled) {
+  background: #fff;
+  color: #28333d;
+}
+.rc-description-input:disabled {
+  cursor: not-allowed;
+}
+.rc-description-hint {
+  margin: -8px 0 0;
+  color: #778493;
+  font-size: 12px;
+}
+.rc-edit-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 3px;
+}
+.rc-edit-meta > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.rc-edit-meta > div > span:first-child {
+  color: #697789;
+  font-size: 11px;
+  font-weight: 700;
+}
+.rc-edit-readonly {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid #e4e9ee;
+}
+.rc-edit-readonly h3 {
+  margin: 0 0 10px;
+  color: #27313c;
+  font-size: 14px;
+}
+.rc-edit-readonly h3:not(:first-child) {
+  margin-top: 22px;
+}
+.rc-edit-readonly p {
+  margin: 0;
+  color: #697789;
+  line-height: 1.7;
+}
+.rc-history-list {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+.rc-history-list article {
+  padding: 12px;
+  border: 1px solid #e0e6eb;
+  border-radius: 8px;
+}
+.rc-history-list strong,
+.rc-history-list span {
+  display: block;
+}
+.rc-history-list span {
+  margin-top: 3px;
+  color: #788493;
+  font-size: 12px;
+}
+.rc-history-list p {
+  margin: 9px 0 0;
+  color: #53606c;
+  line-height: 1.55;
+}
+
+/* Report Context editing stays inside the same detail drawer. */
+.fm-report-context .rc-edit-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.fm-report-context .rc-edit-label-actions {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+}
+.fm-report-context .rc-edit-label-actions .fm-icon-action {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+.fm-report-context .rc-edit-label-actions .fm-button:not(.fm-icon-action) {
+  min-height: 30px;
+  padding: 5px 9px;
+  font-size: 11px;
+}
+.fm-report-context .rc-drawer-description-input {
+  display: block;
+  width: 100%;
+  min-height: 102px;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #d7e0e8;
+  border-radius: 8px;
+  background: #f2f4f6;
+  color: #7a8795;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.65;
+  resize: vertical;
+}
+.fm-report-context .rc-drawer-description-input:not(:disabled) {
+  background: #fff;
+  color: #28343e;
+}
+.fm-report-context .rc-drawer-description-input:disabled {
+  cursor: not-allowed;
+}
+.rc-description-history-dialog {
+  width: min(560px, calc(100vw - 32px));
+}
+.rc-description-history-dialog header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+}
+.rc-description-history-dialog header small {
+  color: #a96c16;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.rc-description-history-dialog header h3 {
+  margin: 5px 0 0;
+}
+.rc-description-history-dialog .rc-history-list {
+  max-height: min(48vh, 420px);
+  overflow: auto;
+}
+.rc-description-history-dialog .rc-history-list article {
+  padding: 13px;
+  border: 1px solid #e0e6eb;
+  border-radius: 8px;
+}
+.rc-description-history-dialog .rc-history-list time {
+  display: block;
+  margin-top: 3px;
+  color: #788493;
+  font-size: 12px;
+}
+.rc-description-history-dialog .rc-history-list p {
+  margin: 9px 0 0;
+  color: #53606c;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+/* Permission-restricted actions look disabled but remain discoverable by click. */
+.fm-icon-action.is-action-disabled {
+  border-color: #e3e8ed;
+  background: #f5f7f8;
+  color: #aeb8c1;
+  opacity: 0.78;
+  cursor: not-allowed;
+}
+.fm-icon-action.is-action-disabled:hover {
+  border-color: #e3e8ed;
+  background: #f5f7f8;
+  color: #aeb8c1;
+}
+
+/* Required indicators are consistent across Business Term and Analytical Model forms. */
+.fm-editor .unified-required {
+  color: #c93636;
+  font-style: normal;
+}
+
+/* Scenario Reporting: use the drawer header as the single source of title context. */
+#knowledgeDetail.scenario-report-detail-mode .detail-drawer-head > div {
+  display: grid;
+  align-items: start;
+  gap: 5px;
+}
+#knowledgeDetail.scenario-report-detail-mode .detail-drawer-head > div > span {
+  grid-row: 1;
+}
+#knowledgeDetail.scenario-report-detail-mode .detail-drawer-head > div > .scenario-title-line {
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-title-line > strong {
+  min-width: 0;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-title-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 22px;
+  padding: 5px 10px 5px 9px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #f1f2f3;
+  color: #8b8f94;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: none;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-title-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #929292;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-title-status[data-status="enabled"] {
+  background: #fff4df;
+  color: #8c5622;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-title-status[data-status="enabled"]::before {
+  background: #c17d22;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-head-actions {
+  display: grid;
+  justify-items: end;
+  gap: 7px;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-head-actions .detail-close {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  font-size: 19px;
+  line-height: 1;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-header-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: #edf1f5;
+  color: #607080;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: none;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-header-status[data-flow-status="Published"] {
+  background: #e7f6ed;
+  color: #0f9f5d;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-header-status[data-flow-status="Queued"] {
+  background: #f6efe4;
+  color: #a16616;
+}
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail {
+  margin-top: 0;
+}
+
+/* Unified overview search and filter sizing across knowledge pages. */
+.knowledge-v4 .fm-search-field,
+.knowledge-v4 .fm-search-field .fm-search,
+.knowledge-v4 .search-field,
+.knowledge-v4 .scenario-report-search,
+.knowledge-v4 .bt-overview-search,
+.knowledge-v4 .dm-domain-search,
+.knowledge-v4 .dm-domain-search input,
+.knowledge-v4 input[type="search"].fm-search,
+.knowledge-v4 input[data-bt-search] {
+  width: 180px !important;
+  max-width: 180px !important;
+  flex: 0 0 180px;
+}
+
+.knowledge-v4 .fm-filter > span,
+.knowledge-v4 .bt-overview-filter > span {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.knowledge-v4 .fm-tools .fm-filter details,
+.knowledge-v4 .bt-overview-filter details,
+.knowledge-v4 .business-multi-filter {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+}
+
+.knowledge-v4 .fm-tools .fm-filter details > summary,
+.knowledge-v4 .bt-overview-filter details > summary,
+.knowledge-v4 .business-multi-filter summary {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+/* Final precise overrides for special overview search controls. */
+.knowledge-v4 .dm-domain-search,
+.knowledge-v4 .dm-domain-search input,
+.knowledge-main[data-active-type="Business Term"] .bt-overview-search,
+.knowledge-main[data-active-type="Business Term"] .bt-overview-search input[data-bt-search] {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+  flex-basis: 180px !important;
+  box-sizing: border-box;
+}
+
+
+/* Final requested overview filter typography. */
+.knowledge-v4 .fm-options label,
+.knowledge-v4 .bt-overview-filter .fm-options label,
+.knowledge-v4 .business-multi-filter > div label,
+.knowledge-v4 .scenario-report-filter-bar option,
+.knowledge-v4 .metric-filter-box option {
+  font-size: 10px !important;
+}
+
+
+
+/* Smaller overview filter checkboxes. */
+.knowledge-v4 .fm-options input[type="checkbox"],
+.knowledge-v4 .business-multi-filter input[type="checkbox"],
+.knowledge-v4 .bt-overview-filter input[type="checkbox"] {
+  width: 9px !important;
+  height: 9px !important;
+  min-width: 9px !important;
+  margin: 0 5px 0 0;
+}
+
+/* Overview search placeholder typography. */
+.knowledge-v4 .fm-search-field .fm-search::placeholder,
+.knowledge-v4 .search-field input::placeholder,
+.knowledge-v4 .scenario-report-search::placeholder,
+.knowledge-v4 .bt-overview-search input::placeholder,
+.knowledge-v4 .dm-domain-search input::placeholder,
+.knowledge-v4 input[data-bt-search]::placeholder {
+  font-size: 10px !important;
+}
+
+
+/* Final unified overview search and filter controls across all knowledge pages. */
+.knowledge-v4 .fm-search-field,
+.knowledge-v4 .fm-search-field .fm-search,
+.knowledge-v4 .search-field,
+.knowledge-v4 .search-field input,
+.knowledge-v4 .library-search,
+.knowledge-v4 .library-search input,
+.knowledge-v4 .scenario-report-search,
+.knowledge-v4 .bt-overview-search,
+.knowledge-v4 .bt-overview-search input,
+.knowledge-v4 .dm-domain-search,
+.knowledge-v4 .dm-domain-search input,
+.knowledge-v4 input[type="search"].fm-search,
+.knowledge-v4 input[data-bt-search] {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+  flex: 0 0 180px !important;
+  box-sizing: border-box !important;
+}
+
+.knowledge-v4 .fm-search,
+.knowledge-v4 .fm-search-field .fm-search,
+.knowledge-v4 .search-field input,
+.knowledge-v4 .library-search input,
+.knowledge-v4 .scenario-report-search,
+.knowledge-v4 .bt-overview-search input,
+.knowledge-v4 .dm-domain-search input,
+.knowledge-v4 input[data-bt-search] {
+  height: 32px !important;
+  min-height: 32px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+.knowledge-v4 .fm-search::placeholder,
+.knowledge-v4 .fm-search-field .fm-search::placeholder,
+.knowledge-v4 .search-field input::placeholder,
+.knowledge-v4 .library-search input::placeholder,
+.knowledge-v4 .scenario-report-search::placeholder,
+.knowledge-v4 .bt-overview-search input::placeholder,
+.knowledge-v4 .dm-domain-search input::placeholder,
+.knowledge-v4 input[data-bt-search]::placeholder {
+  font-size: 10px !important;
+}
+
+.knowledge-v4 .fm-filter > span,
+.knowledge-v4 .bt-overview-filter > span,
+.knowledge-v4 .scenario-report-filter-bar .scenario-report-filter > span,
+.knowledge-v4 .metric-filter-box > span,
+.knowledge-v4 .business-filter-field > span,
+.knowledge-v4 .type-filter > span,
+.knowledge-v4 .stage-filter > span,
+.knowledge-v4 .source-filter > span,
+.knowledge-v4 .status-display-filter > span,
+.knowledge-v4 .ai-check-filter > span {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+}
+
+.knowledge-v4 .fm-tools .fm-filter details,
+.knowledge-v4 .bt-overview-filter details,
+.knowledge-v4 .business-multi-filter,
+.knowledge-v4 .scenario-report-filter-bar .scenario-report-filter select,
+.knowledge-v4 .metric-filter-box select {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  flex: 0 0 130px !important;
+  box-sizing: border-box !important;
+}
+
+.knowledge-v4 .fm-tools .fm-filter details > summary,
+.knowledge-v4 .bt-overview-filter details > summary,
+.knowledge-v4 .business-multi-filter summary,
+.knowledge-v4 .scenario-report-filter-bar .scenario-report-filter select,
+.knowledge-v4 .metric-filter-box select {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+  box-sizing: border-box !important;
+}
+
+.knowledge-v4 .fm-options label,
+.knowledge-v4 .bt-overview-filter .fm-options label,
+.knowledge-v4 .business-multi-filter > div label,
+.knowledge-v4 .scenario-report-filter-bar option,
+.knowledge-v4 .metric-filter-box option {
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.knowledge-v4 .fm-options input[type="checkbox"],
+.knowledge-v4 .business-multi-filter input[type="checkbox"],
+.knowledge-v4 .bt-overview-filter input[type="checkbox"] {
+  width: 9px !important;
+  height: 9px !important;
+  min-width: 9px !important;
+  flex: 0 0 9px !important;
+}

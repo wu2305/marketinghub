@@ -1,0 +1,548 @@
+/* ===== Tabs ===== */
+.section-label {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.section-label-kicker {
+  margin: 0 0 4px;
+  color: #5b6678;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.section-label-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.category-toggles:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #5b6470;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.category-pill:hover {
+  background: #eef1f4;
+}
+
+.category-pill.active {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: #000000;
+}
+
+.category-pill:focus-visible {
+  outline: 2px solid #daa860;
+  outline-offset: 2px;
+}
+
+.flexible-tablist {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 0 4px;
+  border-bottom: 1px solid #d2d8de;
+  background: transparent;
+}
+
+.flexible-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: #5b6470;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.flexible-tab:hover {
+  color: #1c2227;
+}
+
+.flexible-tab.active {
+  color: #1c2227;
+  border-bottom-color: #daa860;
+}
+
+.flexible-tab:focus-visible {
+  outline: 2px solid #daa860;
+  outline-offset: 2px;
+}
+
+/* ===== Panels ===== */
+.flexible-panel {
+  display: block;
+}
+
+.flexible-panel[hidden] {
+  display: none;
+}
+
+/* ===== Self-Service Analysis — Report Card Grid ===== */
+.report-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.report-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 24px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #ffffff 100%) padding-box,
+    linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%) border-box;
+  min-height: 108px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.18s ease;
+}
+
+.report-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.report-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+.report-card-body h3 {
+  margin: 0;
+  color: #1c2328;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.report-card-body p {
+  margin: 0;
+  color: var(--workspace-copy);
+  font-size: 13.5px;
+  line-height: 1.55;
+  max-width: 528px;
+}
+
+.report-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.report-card-actions .primary-action {
+  width: 140px;
+  border-radius: 3px;
+}
+
+/* ===== Data Upload — Upload Card Grid ===== */
+.upload-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  max-width: 712px;
+}
+
+.upload-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 24px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #ffffff 100%) padding-box,
+    linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%) border-box;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.18s ease;
+}
+
+.upload-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.upload-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.upload-card-body h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #1c2328;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.history-icon {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #5b6470;
+  cursor: pointer;
+  transition: color 0.18s ease;
+}
+
+.history-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.history-icon:hover,
+.history-icon:focus-visible {
+  color: #1a1d20;
+  outline: 0;
+}
+
+.upload-card-body p {
+  margin: 0;
+  color: var(--workspace-copy);
+  font-size: 13.5px;
+  line-height: 1.55;
+  max-width: 528px;
+}
+
+.upload-card-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.upload-card-actions .primary-action,
+.upload-card-actions .secondary-action {
+  width: 170px;
+  border-radius: 3px;
+}
+
+.secondary-action {
+  background: #fff;
+  border: 1px solid #c8d2d8;
+  color: #1a1d20;
+  border-radius: 3px;
+}
+
+.secondary-action:hover,
+.secondary-action:focus-visible {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  border-color: transparent;
+  color: #1a1d20;
+  filter: brightness(0.92);
+  outline: 0;
+}
+
+/* ===== Upload History Modal ===== */
+.upload-history-modal[hidden] {
+  display: none;
+}
+
+.upload-history-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-history-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.55);
+}
+
+.upload-history-dialog {
+  position: relative;
+  width: min(800px, calc(100% - 64px));
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.upload-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 0;
+}
+
+.upload-history-head h3 {
+  margin: 0;
+  color: #1c2328;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.upload-history-close {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #5b6470;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.upload-history-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.upload-history-close:hover {
+  background: #f4f6f8;
+  color: #1a1d20;
+}
+
+.upload-history-body {
+  flex: 1;
+  overflow: auto;
+  padding: 2px 18px 14px;
+}
+
+.upload-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  color: #1a1d20;
+}
+
+.upload-history-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #5b6678;
+  background: #f7f9fa;
+  padding: 10px 14px;
+  border-bottom: 0;
+}
+
+.upload-history-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef1f4;
+  vertical-align: middle;
+}
+
+.upload-history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.upload-history-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.upload-history-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #1c2328;
+  font-weight: 600;
+}
+
+.upload-history-file svg {
+  width: 16px;
+  height: 16px;
+  color: #5b6678;
+  flex-shrink: 0;
+}
+
+.upload-history-uploader,
+.upload-history-time {
+  color: #4a5260;
+}
+
+.upload-history-empty {
+  text-align: center;
+  padding: 36px 18px;
+  color: #8a93a5;
+  font-size: 14px;
+}
+
+.history-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #c8d2d8;
+  border-radius: 3px;
+  background: #fff;
+  color: #1a1d20;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.history-download-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.history-download-btn:hover,
+.history-download-btn:focus-visible,
+.history-preview-btn:hover,
+.history-preview-btn:focus-visible {
+  background: #fffbeb;
+  border-color: #daa860;
+  color: #1a1d20;
+  outline: 0;
+}
+
+.history-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.history-preview-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid #c8d2d8;
+  border-radius: 3px;
+  background: #fff;
+  color: #1a1d20;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.history-preview-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .flexible-shell {
+    width: calc(100% - 40px);
+  }
+
+  .section-label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .flexible-tablist {
+    gap: 18px;
+  }
+
+  .report-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .upload-card,
+  .report-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .upload-card-actions,
+  .report-card-actions {
+    align-self: stretch;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .report-card-actions .primary-action,
+  .upload-card-actions .primary-action,
+  .upload-card-actions .secondary-action {
+    width: auto;
+    flex: 1;
+  }
+}

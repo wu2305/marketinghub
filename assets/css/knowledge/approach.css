@@ -1,0 +1,380 @@
+.approach-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  color: #7a8493;
+  font-size: 14px;
+  line-height: 24px;
+}
+.approach-breadcrumb a {
+  color: #414b66;
+  text-decoration: none;
+  font-weight: 700;
+}
+.approach-breadcrumb a:hover {
+  text-decoration: underline;
+}
+.approach-form-card {
+  overflow: visible;
+}
+.approach-form {
+  padding: 28px;
+}
+.approach-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.approach-form-scenario {
+  display: grid;
+}
+.approach-section {
+  border: 1px solid #e1e6ec;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+.approach-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid #edf1f4;
+  background: #fff;
+}
+.approach-section-head span {
+  display: block;
+  color: #9a6d22;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.approach-section-head strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  color: #20262d;
+}
+.approach-section-head small {
+  display: block;
+  margin-top: 4px;
+  color: #7c8790;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.approach-section-body {
+  padding: 18px;
+}
+.approach-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #344054;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.approach-field.full {
+  grid-column: 1/-1;
+}
+.approach-field input,
+.approach-field select,
+.approach-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 13px 14px;
+  color: #273346;
+  font: 400 15px/1.45 inherit;
+  text-transform: none;
+}
+.approach-field textarea {
+  min-height: 132px;
+  resize: vertical;
+}
+.approach-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 48px;
+  padding: 9px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+}
+.approach-related span {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 18px;
+  background: #f5ead8;
+  color: #65471e;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: none;
+}
+.approach-readonly {
+  min-height: 42px;
+  box-sizing: border-box;
+  padding: 11px 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  background: #f6f7f8;
+  color: #687487;
+  font: 400 14px/1.5 inherit;
+  text-transform: none;
+}
+.approach-readonly .bt-tag {
+  margin: 2px 6px 2px 0;
+}
+.approach-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 20px 28px;
+  border-top: 1px solid #e1e6ec;
+}
+.approach-view .approach-readonly {
+  background: #f4f6f8;
+}
+.approach-view .approach-field input,
+.approach-view .approach-field select,
+.approach-view .approach-field textarea,
+.approach-view .approach-related,
+.approach-view .approach-footer button {
+  cursor: not-allowed !important;
+  user-select: none;
+  pointer-events: none;
+}
+.approach-view .approach-field input,
+.approach-view .approach-field select,
+.approach-view .approach-field textarea {
+  background: #f4f6f8;
+  color: #687487;
+}
+.approach-view .approach-footer button {
+  opacity: 0.55;
+}
+.approach-page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.approach-page-head h1 {
+  margin: 0;
+  color: #101828;
+  font-size: 32px;
+}
+.approach-page-head .v20-status {
+  margin-bottom: 4px;
+}
+@media (max-width: 800px) {
+  .approach-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .approach-field.full {
+    grid-column: auto;
+  }
+}
+.approach-form-scenario {
+  gap: 14px;
+  padding: 22px;
+}
+
+.approach-form-scenario .approach-form-grid {
+  gap: 14px;
+}
+
+.approach-form-scenario .approach-section {
+  border-radius: 10px;
+}
+
+.approach-form-scenario .approach-section-head {
+  padding: 12px 16px;
+}
+
+.approach-form-scenario .approach-section-head small {
+  display: none;
+}
+
+.approach-form-scenario .approach-section-head strong {
+  font-size: 14px;
+}
+
+.approach-form-scenario .approach-section-body {
+  padding: 14px 16px 16px;
+}
+
+.approach-form-scenario .approach-field input,
+.approach-form-scenario .approach-field select,
+.approach-form-scenario .approach-field textarea {
+  min-height: 40px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.approach-form-scenario .approach-field textarea {
+  min-height: 88px;
+}
+
+.approach-form-scenario .approach-field label,
+.approach-form-scenario .approach-field span {
+  line-height: 1.2;
+}
+
+.approach-form-scenario .v20-multi-display {
+  min-height: 40px;
+  padding: 6px 10px;
+  gap: 6px;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.approach-form-scenario .v20-multi-display span {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #eef1f6;
+  color: #273346;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.approach-form-scenario .v20-multi-display b {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.approach-form-scenario .v20-multi-display em {
+  font-size: 12px;
+}
+
+.approach-form-scenario .v20-multi-menu {
+  max-height: 220px;
+  padding: 6px;
+}
+
+.approach-form-scenario .v20-multi-menu label {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #3a4658;
+}
+
+.approach-form-scenario .v20-multi-menu input {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  margin-top: 2px;
+  accent-color: #2c83df;
+}
+
+.approach-form-scenario .v20-multi-menu label:hover {
+  background: #f4f7fb;
+  border-radius: 6px;
+}
+.approach-footer > :first-child button#cancelBtn {
+  display: inline-flex !important;
+}
+
+.unified-knowledge-create .scenario-report-cancel {
+  display: inline-flex !important;
+}
+
+.unified-knowledge-create .scenario-report-footer {
+  justify-content: flex-start;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+/* Shared create-page presentation for Business Term, Scenario Reporting and Analytical Model. */
+.unified-knowledge-create .v20-page-head {
+  align-items: flex-end;
+}
+
+.unified-knowledge-create .v20-page-head .v20-status {
+  margin-bottom: 4px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: #eef0f5;
+  color: #20232a;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.unified-knowledge-create .approach-breadcrumb,
+.unified-knowledge-create .bt-breadcrumb {
+  margin-bottom: 18px !important;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.unified-knowledge-create .unified-required {
+  margin-left: 3px;
+  color: #b77c2c;
+  font-style: normal;
+}
+
+.unified-knowledge-create .v20-required {
+  display: none !important;
+}
+
+.unified-knowledge-create .approach-form,
+.unified-knowledge-create .v20-scenario-report-form,
+.unified-knowledge-create .bt-business-term-panel {
+  padding: 2px 0 0;
+}
+
+.unified-knowledge-create .approach-form-grid,
+.unified-knowledge-create .v20-grid,
+.unified-knowledge-create .bt-business-term-grid {
+  gap: 18px 20px;
+}
+
+.unified-knowledge-create .approach-field,
+.unified-knowledge-create .v20-field,
+.unified-knowledge-create .bt-field {
+  gap: 8px;
+  color: #344054;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.unified-knowledge-create .approach-field input,
+.unified-knowledge-create .approach-field select,
+.unified-knowledge-create .approach-field textarea,
+.unified-knowledge-create .v20-field input:not([type="checkbox"]),
+.unified-knowledge-create .v20-field select,
+.unified-knowledge-create .v20-field textarea,
+.unified-knowledge-create .bt-field input,
+.unified-knowledge-create .bt-field select,
+.unified-knowledge-create .bt-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 8px;
+  background: #fff;
+  color: #273346;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+}

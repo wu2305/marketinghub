@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry Marketing Portal | Metric Dictionary</title>
+    <link rel="stylesheet" href="../css/base/foundation.css" />
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+    <link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/knowledge/metric-detail.css" />
+    <link rel="stylesheet" href="../css/pages/metric-dictionary-inline-1.css" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-ai-model-placeholder" />
+</head>
+  <body>
+    <header class="workspace-header">
+      <a class="brand" href="../../index.html" aria-label="Tapestry Marketing Portal home"
+        ><img src="../images/tapestry-logo.png" alt="Tapestry"
+      /></a>
+      <nav aria-label="Workspace navigation">
+        <a href="../../index.html">Home</a>
+        <a href="reports.html">Marketing Cockpit</a>
+        <a href="flexible.html">Self-Service Center</a>
+        <a href="knowledge.html">AI Interpreter</a>
+        <a href="campaign.html">RedNote Campaign Tool</a>
+      </nav>
+</header>
+
+    <button
+      class="global-ai-launcher"
+      type="button"
+      data-ai-mode="analysis"
+      aria-label="AI Interpreter about metrics"
+    >
+      <span class="global-ai-orb" aria-hidden="true">AI</span>
+      <span class="global-ai-label">AI Interpreter</span>
+    </button>
+
+    <main class="metric-page">
+      <!-- Page Header -->
+      <header class="metric-page-header">
+        <div class="metric-header-content">
+          <div class="metric-header-breadcrumb">
+            <a href="knowledge.html">AI Interpreter</a>
+            <span>/</span>
+            <a href="knowledge.html?type=Metric+Dictionary">Metric Dictionary</a>
+            <span>/</span>
+            <strong id="metricTitle">Member conversion</strong>
+          </div>
+          <h1 id="metricName">Member conversion</h1>
+          <p class="metric-header-desc" id="metricDesc"
+            >Share of identified member visits that result in a qualified transaction within the
+            governed conversion window.</p
+          >
+        </div>
+        <div class="metric-header-actions">
+          <span class="metric-status-badge" id="metricStatus" data-status="Published"
+            >Published</span
+          >
+          <button class="metric-action-btn secondary" type="button" id="editMetricBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit Metric
+          </button>
+          <button class="metric-action-btn primary" type="button" id="addDerivedMetricBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Derived Metric
+          </button>
+        </div>
+</header>
+
+      <!-- AI Metric Banner -->
+      <section class="metric-ai-banner">
+        <div class="metric-ai-banner-content">
+          <div class="metric-ai-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <div class="metric-ai-info">
+            <div class="metric-ai-title">
+              <strong>AI Metric Assistant</strong>
+              <span class="metric-ai-beta">BETA</span>
+            </div>
+            <p
+              >Generate metric definitions, formulas, and business context through AI assistant.
+              Results will sync to the metric configuration area below.</p
+            >
+          </div>
+        </div>
+        <button class="metric-ai-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+          Smart Definition
+        </button>
+      </section>
+
+      <!-- Main Content: Sidebar + Detail -->
+      <div class="metric-layout">
+        <!-- Left Sidebar: Metric List -->
+        <aside class="metric-sidebar">
+          <div class="metric-sidebar-search">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="search" placeholder="Search metric name or description..." />
+          </div>
+          <div class="metric-sidebar-tabs">
+            <button class="metric-tab active" type="button" data-category="basic"
+              >Basic · <span id="basicCount">0</span></button
+            >
+            <button class="metric-tab" type="button" data-category="derived"
+              >Derived · <span id="derivedCount">0</span></button
+            >
+          </div>
+          <div class="metric-list" id="metricList">
+            <!-- Metric items populated by JS -->
+          </div>
+          <div class="metric-sidebar-footer">
+            <div class="metric-data-source">
+              <span class="metric-ds-label">Data Source</span>
+              <div class="metric-ds-select">
+                <span class="metric-ds-name">Marketing DW</span>
+                <span class="metric-ds-status enabled">Enabled</span>
+              </div>
+            </div>
+            <div class="metric-sync-status">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M23 4v6h-6M1 20v-6h6" />
+                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+              </svg>
+              <span>Synced</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Content: Metric Detail -->
+        <div class="metric-detail">
+          <!-- Detail Header -->
+          <header class="metric-detail-header">
+            <div class="metric-detail-tabs">
+              <button class="metric-detail-tab active" type="button" data-tab="definition"
+                >Definition</button
+              >
+              <button class="metric-detail-tab" type="button" data-tab="formula"
+                >Formula · <span id="formulaCount">1</span></button
+              >
+              <button class="metric-detail-tab" type="button" data-tab="dimensions"
+                >Dimensions · <span id="dimensionCount">3</span></button
+              >
+            </div>
+            <button class="metric-preview-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              Preview Data
+            </button>
+</header>
+
+          <!-- Definition Tab -->
+          <div class="metric-tab-content active" id="definitionTab">
+            <div class="metric-def-grid">
+              <div class="metric-def-card full-width">
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Metric Name</span>
+                  <div class="metric-def-input-wrap">
+                    <input
+                      type="text"
+                      class="metric-def-input"
+                      id="metricNameInput"
+                      value="Member conversion"
+                    />
+                  </div>
+                </div>
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Business Definition</span>
+                  <div class="metric-def-input-wrap">
+                    <textarea class="metric-def-textarea" id="metricDefinition" rows="3">
+Share of identified member visits that result in a qualified transaction within the governed conversion window.</textarea
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="metric-def-card">
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Category</span>
+                  <div class="metric-def-input-wrap">
+                    <select class="metric-def-select" id="metricCategory">
+                      <option selected>Conversion</option>
+                      <option>Traffic</option>
+                      <option>Revenue</option>
+                      <option>Engagement</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Owner</span>
+                  <div class="metric-def-input-wrap">
+                    <input
+                      type="text"
+                      class="metric-def-input"
+                      id="metricOwner"
+                      value="CRM Analytics"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="metric-def-card">
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Unit</span>
+                  <div class="metric-def-input-wrap">
+                    <select class="metric-def-select" id="metricUnit">
+                      <option selected>Percentage (%)</option>
+                      <option>Count</option>
+                      <option>Currency</option>
+                      <option>Ratio</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Precision</span>
+                  <div class="metric-def-input-wrap">
+                    <select class="metric-def-select" id="metricPrecision">
+                      <option selected>2 decimals</option>
+                      <option>0 decimals</option>
+                      <option>1 decimal</option>
+                      <option>3 decimals</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="metric-def-card full-width">
+                <div class="metric-def-row">
+                  <span class="metric-def-label">Synonyms</span>
+                  <div class="metric-synonyms" id="metricSynonyms">
+                    <span class="metric-synonym-tag">Member Purchase Rate <b>&times;</b></span>
+                    <span class="metric-synonym-tag">Conversion Rate <b>&times;</b></span>
+                    <span class="metric-synonym-tag">Member CR <b>&times;</b></span>
+                    <button class="metric-add-synonym" type="button">+</button>
+                  </div>
+                </div>
+                <p class="metric-def-hint"
+                  >Multiple business aliases can be filled for this metric</p
+                >
+              </div>
+              <div class="metric-def-card full-width">
+                <div class="metric-def-row dm-toggle-row">
+                  <div class="dm-toggle-info">
+                    <span class="metric-def-label">Participate in Q&A</span>
+                    <p class="metric-def-hint"
+                      >When disabled, this metric will not participate in automatic Q&A</p
+                    >
+                  </div>
+                  <label class="metric-toggle">
+                    <input type="checkbox" checked id="metricQaToggle" />
+                    <span class="metric-toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formula Tab -->
+          <div class="metric-tab-content" id="formulaTab">
+            <div class="metric-formula-grid">
+              <div class="metric-formula-card">
+                <div class="metric-formula-header">
+                  <span class="metric-formula-label">Formula</span>
+                  <button class="metric-formula-edit-btn" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                    Edit Formula
+                  </button>
+                </div>
+                <div class="metric-formula-box">
+                  <code>qualified_transactions / identified_member_visits</code>
+                </div>
+                <div class="metric-formula-desc">
+                  <p>Numerator: Count of qualified transactions within the conversion window</p>
+                  <p>Denominator: Count of identified member visits</p>
+                </div>
+              </div>
+              <div class="metric-formula-card">
+                <div class="metric-formula-header">
+                  <span class="metric-formula-label">Data Sources</span>
+                </div>
+                <div class="metric-source-list">
+                  <div class="metric-source-item">
+                    <span class="metric-source-name">fact_transactions</span>
+                    <span class="metric-source-field">qualified_transactions</span>
+                  </div>
+                  <div class="metric-source-item">
+                    <span class="metric-source-name">fact_visits</span>
+                    <span class="metric-source-field">identified_member_visits</span>
+                  </div>
+                </div>
+              </div>
+              <div class="metric-formula-card">
+                <div class="metric-formula-header">
+                  <span class="metric-formula-label">Aggregation</span>
+                </div>
+                <div class="metric-agg-list">
+                  <div class="metric-agg-item">
+                    <span class="metric-agg-label">Default</span>
+                    <span class="metric-agg-value">SUM(numerator) / SUM(denominator)</span>
+                  </div>
+                  <div class="metric-agg-item">
+                    <span class="metric-agg-label">By Day</span>
+                    <span class="metric-agg-value">AVG(daily_conversion)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dimensions Tab -->
+          <div class="metric-tab-content" id="dimensionsTab">
+            <div class="metric-dim-grid">
+              <div class="metric-dim-card">
+                <div class="metric-dim-header">
+                  <span class="metric-dim-label">Available Dimensions</span>
+                  <span class="metric-dim-count">3 dimensions</span>
+                </div>
+                <div class="metric-dim-list">
+                  <div class="metric-dim-item">
+                    <div class="metric-dim-info">
+                      <strong>Channel</strong>
+                      <span>dim_channel.channel_name</span>
+                    </div>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="metric-dim-item">
+                    <div class="metric-dim-info">
+                      <strong>Region</strong>
+                      <span>dim_region.region_name</span>
+                    </div>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="metric-dim-item">
+                    <div class="metric-dim-info">
+                      <strong>Date</strong>
+                      <span>dim_date.date_key</span>
+                    </div>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="metric-dim-card">
+                <div class="metric-dim-header">
+                  <span class="metric-dim-label">Time Granularity</span>
+                </div>
+                <div class="metric-time-list">
+                  <div class="metric-time-item">
+                    <span>Daily</span>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="metric-time-item">
+                    <span>Weekly</span>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="metric-time-item">
+                    <span>Monthly</span>
+                    <label class="metric-dim-toggle">
+                      <input type="checkbox" checked />
+                      <span class="metric-dim-toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Add Derived Metric Panel -->
+    <div class="derived-scrim" id="derivedScrim" hidden></div>
+    <aside
+      class="derived-metric-panel"
+      id="derivedMetricPanel"
+      aria-hidden="true"
+      aria-label="Add derived metric"
+    >
+      <header class="derived-panel-head">
+        <div>
+          <h2>Add Derived Metric</h2>
+          <p>Create a derived metric based on existing basic metrics.</p>
+        </div>
+        <button
+          class="derived-panel-close"
+          id="derivedPanelClose"
+          type="button"
+          aria-label="Close panel"
+          >&#215;</button
+        >
+</header>
+
+      <div class="derived-panel-body">
+        <form class="derived-form" id="derivedMetricForm" novalidate>
+          <div class="derived-field">
+            <label for="derivedBusinessDomain">Business Domain</label>
+            <select id="derivedBusinessDomain" class="derived-select">
+              <option value="">Select a business domain</option>
+              <option value="Manufacturing Production · Retail Operations Demo"
+                >Manufacturing Production · Retail Operations Demo</option
+              >
+              <option value="Digital Nerve">Digital Nerve</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Sales">Sales</option>
+            </select>
+          </div>
+
+          <div class="derived-field-row">
+            <div class="derived-field">
+              <label for="derivedMetricName">Metric Name</label>
+              <input
+                id="derivedMetricName"
+                type="text"
+                placeholder="Enter metric name..."
+                required
+              />
+            </div>
+            <div class="derived-field">
+              <label for="derivedUnit">Unit</label>
+              <input id="derivedUnit" type="text" placeholder="e.g. yuan, %, unit" />
+            </div>
+          </div>
+
+          <div class="derived-field">
+            <label>Formula Builder</label>
+            <div class="derived-formula-builder" id="derivedFormulaBuilder">
+              <!-- Formula display area -->
+              <div class="derived-formula-display" id="derivedFormulaDisplay">
+                <span class="derived-formula-placeholder"
+                  >Click a metric or operator to build your formula...</span
+                >
+              </div>
+              <!-- Operator toolbar -->
+              <div class="derived-formula-toolbar">
+                <button type="button" class="derived-formula-op" data-op="+" title="Add">+</button>
+                <button type="button" class="derived-formula-op" data-op="-" title="Subtract"
+                  >-</button
+                >
+                <button type="button" class="derived-formula-op" data-op="*" title="Multiply"
+                  >&times;</button
+                >
+                <button type="button" class="derived-formula-op" data-op="/" title="Divide"
+                  >&divide;</button
+                >
+                <button
+                  type="button"
+                  class="derived-formula-op"
+                  data-op="("
+                  title="Open Parenthesis"
+                  >(</button
+                >
+                <button
+                  type="button"
+                  class="derived-formula-op"
+                  data-op=")"
+                  title="Close Parenthesis"
+                  >)</button
+                >
+                <button
+                  type="button"
+                  class="derived-formula-op derived-formula-op-const"
+                  data-op="const"
+                  title="Add Constant"
+                  >123</button
+                >
+                <button
+                  type="button"
+                  class="derived-formula-op derived-formula-op-clear"
+                  data-op="clear"
+                  title="Clear All"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                      d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
+                    />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="derived-formula-op derived-formula-op-back"
+                  data-op="backspace"
+                  title="Backspace"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z" />
+                    <path d="M18 9l-6 6M12 9l6 6" />
+                  </svg>
+                </button>
+              </div>
+              <!-- Hidden textarea for form submission -->
+              <textarea id="derivedFormula" rows="2" hidden></textarea>
+            </div>
+            <p class="derived-hint"
+              >Build formula by clicking basic metrics from the right panel and using operators
+              above.</p
+            >
+          </div>
+
+          <div class="derived-field">
+            <label for="derivedDescription">Description</label>
+            <textarea
+              id="derivedDescription"
+              rows="3"
+              placeholder="Describe the metric purpose and calculation logic..."
+            ></textarea>
+          </div>
+
+          <div class="derived-field">
+            <label for="derivedSynonyms">Synonyms</label>
+            <input id="derivedSynonyms" type="text" placeholder="Comma separated" />
+          </div>
+
+          <div class="derived-field derived-toggle-row">
+            <div>
+              <span class="derived-label">Enable Metric</span>
+              <p class="derived-hint">When disabled, this metric will not be available for use</p>
+            </div>
+            <label class="derived-switch">
+              <input type="checkbox" id="derivedEnableToggle" checked />
+              <span class="derived-switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="derived-field">
+            <div class="derived-test-run">
+              <div class="derived-test-info">
+                <strong>Test Run</strong>
+                <p class="derived-hint"
+                  >Test will execute the formula and return a single aggregated result.</p
+                >
+              </div>
+              <button type="button" class="derived-test-btn" id="derivedTestBtn">Test</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Referenceable Basic Metrics -->
+        <div class="derived-ref-panel">
+          <h3 class="derived-ref-title">Referenceable Basic Metrics</h3>
+          <div class="derived-ref-list" id="derivedRefList">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <footer class="derived-panel-footer">
+        <button type="button" class="derived-btn cancel" id="derivedCancelBtn">Cancel</button>
+        <button type="button" class="derived-btn save" id="derivedSaveBtn">Save</button>
+      </footer>
+    </aside>
+
+    <script src="../js/data/knowledge.js"></script>
+    <script src="../js/knowledge/metric-detail.js"></script>
+    <script src="../js/shared/assistant-panel-lite.js?v=20260917-v201601-ai-sidebar"></script>
+    <script src="../js/shared/assistant-skill-menu.js?v=20260918-menu-hover"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+:root {
+  --scrollbar-size-page: 9px;
+  --scrollbar-size-panel: 7px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: rgba(118, 120, 117, 0.52);
+  --scrollbar-thumb-hover: rgba(153, 155, 151, 0.72);
+  --scrollbar-thumb-active: rgba(178, 180, 175, 0.84);
+}
+
+html,
+* {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+/* Light work surfaces use a darker, quieter neutral. */
+:where(
+  .assistant-main,
+  .assistant-alerts,
+  .query-canvas,
+  .platform-workflow,
+  .category-nav,
+  .asset-list,
+  .knowledge-detail
+) {
+  --scrollbar-thumb: rgba(67, 70, 69, 0.34);
+  --scrollbar-thumb-hover: rgba(52, 55, 54, 0.56);
+  --scrollbar-thumb-active: rgba(38, 41, 40, 0.68);
+}
+
+/* Dark overlays and report surfaces stay visible without turning white. */
+:where(.mega-menu, .assistant-modal, .ai-start, .ai-answer) {
+  --scrollbar-thumb: rgba(148, 150, 146, 0.38);
+  --scrollbar-thumb-hover: rgba(178, 180, 175, 0.58);
+  --scrollbar-thumb-active: rgba(199, 201, 196, 0.72);
+}
+
+@supports selector(::-webkit-scrollbar) {
+  html,
+  * {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+
+  html::-webkit-scrollbar {
+    width: var(--scrollbar-size-page);
+    height: var(--scrollbar-size-page);
+  }
+
+  *::-webkit-scrollbar {
+    width: var(--scrollbar-size-panel);
+    height: var(--scrollbar-size-panel);
+  }
+
+  html::-webkit-scrollbar-track,
+  *::-webkit-scrollbar-track,
+  html::-webkit-scrollbar-track-piece,
+  *::-webkit-scrollbar-track-piece {
+    background: var(--scrollbar-track);
+  }
+
+  html::-webkit-scrollbar-thumb,
+  *::-webkit-scrollbar-thumb {
+    min-width: 38px;
+    min-height: 38px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--scrollbar-thumb);
+    background-clip: padding-box;
+  }
+
+  html::-webkit-scrollbar-thumb:hover,
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+    background-clip: padding-box;
+  }
+
+  html::-webkit-scrollbar-thumb:active,
+  *::-webkit-scrollbar-thumb:active {
+    background: var(--scrollbar-thumb-active);
+    background-clip: padding-box;
+  }
+
+  html::-webkit-scrollbar-corner,
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  html::-webkit-scrollbar-button,
+  *::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}

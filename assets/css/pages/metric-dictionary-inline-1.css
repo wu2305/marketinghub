@@ -1,0 +1,4 @@
+/* Derived panel body scroll fix */
+.derived-panel-body {
+  overflow-y: auto;
+}

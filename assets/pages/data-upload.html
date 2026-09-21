@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry Marketing Portal | Upload Data</title>
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+<link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/self-service/workspace.css" />
+    <link rel="stylesheet" href="../css/self-service/upload.css" />
+    <link rel="stylesheet" href="../css/pages/data-upload-inline-1.css" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-ai-model-placeholder" />
+</head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Marketing Portal navigation">
+        <a href="../../index.html" class="brand-mark" aria-label="Tapestry Marketing Portal home">
+          <img src="../images/tapestry-logo.png" alt="Tapestry" />
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-link">Home</a>
+          <a href="reports.html" class="nav-link">Marketing Cockpit</a>
+          <a href="flexible.html" class="nav-link" aria-current="page">Self-Service Center</a>
+          <a href="knowledge.html" class="nav-link">AI Interpreter</a>
+          <a href="campaign.html" class="nav-link">RedNote Campaign Tool</a>
+        </div>
+      </nav>
+</header>
+
+    <header class="workspace-page-hero flexible-page-hero">
+      <img src="../images/business-explorer-hero.jpg?v=2" alt="" />
+      <div class="workspace-page-hero-copy">
+        <p class="eyebrow">FLEXIBLE ANALYSIS</p>
+        <h1>Self-Service Center</h1>
+        <p
+          >Explore business performance with flexible views, filters and comparisons, and upload
+          datasets to the data lake.</p
+        >
+      </div>
+</header>
+
+    <main class="data-upload-shell">
+      <div class="data-upload-toolbar">
+        <a class="back-link" href="flexible.html?tab=upload">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+          <span>Back</span>
+        </a>
+        <button type="button" class="bulk-import-btn" id="bulkImportBtn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+          <span>Template Import</span>
+        </button>
+      </div>
+
+      <form class="data-upload-form" id="dataUploadForm">
+        <div class="data-upload-form-card">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="field-year">Year</label>
+              <input
+                type="text"
+                id="field-year"
+                name="year"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-year-period">Year Period</label>
+              <input
+                type="text"
+                id="field-year-period"
+                name="year-period"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-quarter">Quarter</label>
+              <input
+                type="text"
+                id="field-quarter"
+                name="quarter"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-year-week">Year Week</label>
+              <input
+                type="text"
+                id="field-year-week"
+                name="year-week"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-channel">Channel</label>
+              <input
+                type="text"
+                id="field-channel"
+                name="channel"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-channel-group">Channel Group</label>
+              <input
+                type="text"
+                id="field-channel-group"
+                name="channel-group"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-location">Location</label>
+              <input
+                type="text"
+                id="field-location"
+                name="location"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-door">Door</label>
+              <input
+                type="text"
+                id="field-door"
+                name="door"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-sales">Sales</label>
+              <input
+                type="text"
+                id="field-sales"
+                name="sales"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-sales-ly">Sales LY</label>
+              <input
+                type="text"
+                id="field-sales-ly"
+                name="sales-ly"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-traffic">Traffic</label>
+              <input
+                type="text"
+                id="field-traffic"
+                name="traffic"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-traffic-ly">Traffic LY</label>
+              <input
+                type="text"
+                id="field-traffic-ly"
+                name="traffic-ly"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="field-trans">Trans</label>
+              <input
+                type="text"
+                id="field-trans"
+                name="trans"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="field-trans-ly">Trans LY</label>
+              <input
+                type="text"
+                id="field-trans-ly"
+                name="trans-ly"
+                placeholder="Enter"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit</button>
+      </form>
+    </main>
+
+    <div
+      class="bulk-import-modal"
+      id="bulkImportModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bulkImportTitle"
+      hidden
+    >
+      <div class="bulk-import-backdrop" data-close></div>
+      <div class="bulk-import-dialog">
+        <header class="bulk-import-head">
+          <h3 id="bulkImportTitle">Template Import</h3>
+          <button class="bulk-import-close" type="button" data-close aria-label="Close">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+</header>
+        <div class="bulk-import-body">
+          <div class="bulk-import-dropzone" id="bulkImportDropzone">
+            <input type="file" id="bulkImportFile" accept=".xlsx,.xls" hidden />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="12" y1="18" x2="12" y2="12" />
+              <polyline points="9 15 12 12 15 15" />
+            </svg>
+            <p class="bulk-import-dropzone-title">Click or drag a file to upload here</p>
+            <p class="bulk-import-dropzone-hint">Supports .xlsx and .xls files only</p>
+          </div>
+
+          <a class="bulk-import-template-link" href="#" download>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Download template</span>
+          </a>
+
+          <div class="bulk-import-tips">
+            <h4>Tips</h4>
+            <ul>
+              <li>Use the template format; header row cannot be empty or merged cells.</li>
+              <li>Only .xlsx and .xls files are supported.</li>
+              <li
+                >File size up to 50&nbsp;MB, rows up to 500,000 and columns up to 150. If exceeded,
+                split into batches.</li
+              >
+              <li>Image fields must be imported as file path strings.</li>
+              <li>Chrome browser is recommended for upload.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/self-service/upload.js"></script>
+  </body>
+</html>

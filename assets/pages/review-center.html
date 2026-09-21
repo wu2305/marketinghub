@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry Marketing Portal | Review Center</title>
+    <link rel="stylesheet" href="../css/base/foundation.css" />
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+    <link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/knowledge/workspace.css" />
+    <link rel="stylesheet" href="../css/governance/review.css" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-ai-model-placeholder" />
+</head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Marketing Portal navigation">
+        <a href="../../index.html" class="brand-mark" aria-label="Tapestry Marketing Portal home">
+          <img src="../images/tapestry-logo.png" alt="Tapestry" />
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-link">Home</a>
+          <a href="reports.html" class="nav-link">Marketing Cockpit</a>
+          <a href="flexible.html" class="nav-link">Self-Service Center</a>
+          <a href="knowledge.html" class="nav-link" aria-current="page">AI Interpreter</a>
+          <a href="campaign.html" class="nav-link">RedNote Campaign Tool</a>
+        </div>
+      </nav>
+</header>
+
+    <main class="home-v4 review-center-v4">
+      <section
+        class="home-command-center review-center-command-center"
+        aria-labelledby="reviewTitle"
+      >
+        <div class="home-command-hero" aria-hidden="true">
+          <img src="../images/knowledge-hero.jpg?v=8" alt="" />
+          <div class="home-command-hero-overlay"></div>
+        </div>
+        <div class="home-command-layout">
+          <div class="home-command-copy">
+            <p class="eyebrow">KNOWLEDGE MANAGEMENT</p>
+            <h1 id="reviewTitle">Review Center</h1>
+            <p>Review and approve knowledge assets before they are published for AI use.</p>
+          </div>
+          <section class="home-metrics" aria-label="Review Center summary">
+            <div class="home-signal-grid">
+              <article class="home-signal">
+                <div class="home-signal-body">
+                  <span>PENDING REVIEW</span>
+                  <strong id="pendingCount">12</strong>
+                  <small>assets awaiting your approval</small>
+                </div>
+              </article>
+              <article class="home-signal">
+                <div class="home-signal-body">
+                  <span>APPROVED THIS WEEK</span>
+                  <strong id="approvedCount">8</strong>
+                  <small>assets published recently</small>
+                </div>
+              </article>
+              <article class="home-signal">
+                <div class="home-signal-body">
+                  <span>REJECTED THIS WEEK</span>
+                  <strong id="rejectedCount">3</strong>
+                  <small>assets sent back for revision</small>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <div class="home-v4-inner">
+        <div class="knowledge-layout">
+          <aside class="knowledge-sidebar" aria-label="Knowledge navigation">
+            <nav class="sidebar-nav" aria-label="Knowledge categories">
+              <a href="knowledge.html" class="sidebar-item" type="button" aria-pressed="false">
+                <span class="sidebar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
+                </span>
+                <span class="sidebar-label">Knowledge Management</span>
+              </a>
+              <a
+                href="review-center.html"
+                class="sidebar-item active"
+                type="button"
+                aria-pressed="true"
+              >
+                <span class="sidebar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </span>
+                <span class="sidebar-label">Review Center</span>
+              </a>
+              <a
+                href="scenario-library.html"
+                class="sidebar-item"
+                type="button"
+                aria-pressed="false"
+              >
+                <span class="sidebar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                </span>
+                <span class="sidebar-label">Skill Library</span>
+              </a>
+              <a
+                href="personal-memory.html"
+                class="sidebar-item"
+                type="button"
+                aria-pressed="false"
+                hidden
+              >
+                <span class="sidebar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                </span>
+                <span class="sidebar-label">Personal Memory</span>
+              </a>
+              <a
+                href="feedback-quality.html"
+                class="sidebar-item"
+                type="button"
+                aria-pressed="false"
+              >
+                <span class="sidebar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path
+                      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    />
+                  </svg>
+                </span>
+                <span class="sidebar-label">Feedback &amp; Quality</span>
+              </a>
+            </nav>
+          </aside>
+
+          <div class="knowledge-main">
+            <section class="review-tabs" aria-label="Review tabs">
+              <div class="review-tab-list" role="tablist">
+                <button
+                  class="review-tab active"
+                  role="tab"
+                  aria-selected="true"
+                  data-tab="pending"
+                  id="tab-pending"
+                >
+                  <span class="review-tab-label">Pending Review</span>
+                  <span class="review-tab-count" id="pendingTabCount">12</span>
+                </button>
+                <button
+                  class="review-tab"
+                  role="tab"
+                  aria-selected="false"
+                  data-tab="approved"
+                  id="tab-approved"
+                >
+                  <span class="review-tab-label">Approved</span>
+                  <span class="review-tab-count" id="approvedTabCount">28</span>
+                </button>
+              </div>
+            </section>
+
+            <section class="knowledge-library" aria-labelledby="libraryTitle">
+              <header class="library-toolbar review-toolbar">
+                <div class="library-search-actions">
+                  <label class="search-field library-search">
+                    <span class="sr-only">Search review items</span>
+                    <svg
+                      class="search-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      aria-hidden="true"
+                    >
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="M21 21l-4.35-4.35" />
+                    </svg>
+                    <input
+                      id="reviewSearch"
+                      type="search"
+                      placeholder="Search review items..."
+                      autocomplete="off"
+                    />
+                  </label>
+                  <div class="library-actions">
+                    <strong class="result-count" id="reviewResultCount">0 items</strong>
+                    <label class="type-filter">
+                      <span>Type</span>
+                      <select id="reviewTypeFilter">
+                        <option value="all">All types</option>
+                        <option value="Principles">Principles</option>
+                        <option value="Report Context">Report Context</option>
+                        <option value="Data Model">Data Model</option>
+                        <option value="Metric Dictionary">Metric Dictionary</option>
+                        <option value="Business Term">Business Term</option>
+                        <option value="Analytical Model">Analytical Model</option>
+                      </select>
+                    </label>
+                    <label class="stage-filter">
+                      <span>Submitted</span>
+                      <select id="reviewTimeFilter">
+                        <option value="all">All time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This week</option>
+                        <option value="month">This month</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+</header>
+
+              <div class="asset-table-head review-table-head" aria-hidden="true">
+                <span>Knowledge Title</span>
+                <span>Type</span>
+                <span>Submitted By</span>
+                <span>Submitted</span>
+                <span>Status</span>
+                <span>AI Check</span>
+                <span>Actions</span>
+              </div>
+              <div
+                class="asset-list"
+                id="reviewAssetList"
+                role="listbox"
+                aria-label="Review items"
+              ></div>
+              <div class="empty-state" id="reviewEmptyState" hidden>
+                <strong>No matching items</strong>
+                <span>Change the tab, filter, or search.</span>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <button
+      class="global-ai-launcher"
+      type="button"
+      data-ai-mode="analysis"
+      aria-label="AI Interpreter about the active report"
+    >
+      <span class="global-ai-orb" aria-hidden="true">AI</span>
+      <span class="global-ai-label">AI Interpreter</span>
+    </button>
+
+    <!-- Review Detail Panel -->
+    <div class="review-detail-scrim" id="reviewDetailScrim" hidden></div>
+    <aside
+      class="review-detail-panel"
+      id="reviewDetailPanel"
+      aria-hidden="true"
+      aria-label="Review item details"
+    >
+      <header class="review-detail-head">
+        <div>
+          <span>REVIEW ITEM</span>
+          <strong id="reviewDetailTitle">Asset details</strong>
+        </div>
+        <button
+          class="review-detail-close"
+          id="reviewDetailClose"
+          type="button"
+          aria-label="Close review details"
+          >&#215;</button
+        >
+</header>
+
+      <div class="review-detail-body" id="reviewDetailBody">
+        <div class="review-detail-content" id="reviewDetailContent">
+          <header class="review-detail-header">
+            <div class="review-detail-type-line">
+              <span id="reviewDetailType">Principles</span>
+              <small id="reviewDetailSource">Shared</small>
+            </div>
+            <h2 id="reviewDetailItemTitle">Campaign investment decision principles</h2>
+            <p class="review-detail-summary" id="reviewDetailSummary"></p>
+</header>
+
+          <dl class="review-detail-meta">
+            <div><dt>Submitted By</dt><dd id="reviewDetailSubmitter"></dd></div>
+            <div><dt>Submitted</dt><dd id="reviewDetailSubmitted"></dd></div>
+            <div><dt>Status</dt><dd id="reviewDetailStatus"></dd></div>
+            <div><dt>AI Check</dt><dd id="reviewDetailAiCheck"></dd></div>
+          </dl>
+
+          <section class="review-detail-warning" id="reviewDetailWarning" hidden>
+            <div class="review-detail-warning-head">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+              <strong>Warning</strong>
+            </div>
+            <p class="review-detail-warning-text" id="reviewDetailWarningText"></p>
+          </section>
+
+          <section class="review-detail-section" id="reviewDetailAiSection" hidden>
+            <h3>AI Suggestions</h3>
+            <ul id="reviewDetailAiSuggestions"></ul>
+          </section>
+
+          <div class="review-detail-actions" id="reviewDetailActions">
+            <!-- Dynamic approve/reject buttons -->
+          </div>
+        </div>
+
+        <div class="review-detail-empty" id="reviewDetailEmpty" hidden>
+          <span>No item selected</span>
+          <strong>Choose an item from the list.</strong>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Reject Panel -->
+    <div class="reject-scrim" id="rejectScrim" hidden></div>
+    <aside class="reject-panel" id="rejectPanel" aria-label="Reject review item">
+      <div class="reject-panel-head">
+        <div>
+          <span>Reject Review</span>
+          <strong id="rejectPanelTitle">Reject Item</strong>
+        </div>
+        <button
+          class="reject-close"
+          type="button"
+          id="rejectCloseBtn"
+          aria-label="Close reject panel"
+          >&times;</button
+        >
+      </div>
+      <div class="reject-panel-body">
+        <div class="reject-ai-section" id="rejectAiSection">
+          <div class="reject-ai-header">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="18"
+              height="18"
+            >
+              <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+              <path d="M12 8v4M12 16h.01" />
+            </svg>
+            <span>AI Suggestion</span>
+          </div>
+          <div class="reject-ai-content" id="rejectAiContent"></div>
+        </div>
+        <div class="reject-reason-section">
+          <label class="reject-reason-label" for="rejectReasonInput">Rejection Reason</label>
+          <textarea
+            id="rejectReasonInput"
+            class="reject-reason-input"
+            rows="5"
+            placeholder="Describe why this item is being rejected..."
+          ></textarea>
+        </div>
+        <div class="reject-actions">
+          <button class="reject-cancel-btn" type="button" id="rejectCancelBtn">Cancel</button>
+          <button class="reject-confirm-btn" type="button" id="rejectConfirmBtn">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="14"
+              height="14"
+            >
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+            Confirm Reject
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Risk Warning Modal -->
+    <div class="risk-modal-scrim" id="riskModalScrim" hidden></div>
+    <div
+      class="risk-modal"
+      id="riskModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="riskModalTitle"
+      hidden
+    >
+      <div class="risk-modal-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+          />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </div>
+      <h3 id="riskModalTitle">Risk Warning</h3>
+      <p id="riskModalMessage"
+        >This item has an AI Warning. Approving it may introduce inaccurate or incomplete data into
+        the knowledge base. Are you sure you want to proceed?</p
+      >
+      <div class="risk-modal-actions">
+        <button class="risk-modal-cancel" type="button" id="riskModalCancel">Cancel</button>
+        <button class="risk-modal-confirm" type="button" id="riskModalConfirm"
+          >Approve Anyway</button
+        >
+      </div>
+    </div>
+
+    <script src="../js/data/reviews.js"></script>
+    <script src="../js/governance/review.js"></script>
+    <script src="../js/shared/assistant-panel-lite.js?v=20260917-v201601-ai-sidebar"></script>
+    <script src="../js/shared/assistant-skill-menu.js?v=20260918-menu-hover"></script>
+</body>
+</html>

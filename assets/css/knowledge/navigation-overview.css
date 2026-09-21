@@ -1,0 +1,352 @@
+/* Overview layout, compact cards and collapsible Knowledge Management navigation. */
+.business-knowledge-nav {
+  margin: 0;
+  padding: 0;
+  border: 0 !important;
+}
+
+.business-knowledge-nav-title {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #5d6872;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: normal;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.business-knowledge-nav-title:hover,
+.business-knowledge-nav-title:focus-visible {
+  background: #f0f2f4;
+  color: #1c2328;
+  outline: 0;
+}
+
+.business-knowledge-nav-title > span:nth-child(2) {
+  flex: 1;
+}
+
+.business-nav-chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform 160ms ease;
+}
+
+.business-knowledge-nav.is-open .business-nav-chevron {
+  transform: rotate(180deg);
+}
+
+.business-type-nav {
+  display: none;
+  padding-top: 4px;
+}
+
+.business-knowledge-nav.is-open .business-type-nav {
+  display: grid;
+}
+
+.business-overview-page .knowledge-type-stats {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+.business-overview-page .v20-type-card {
+  display: grid !important;
+  grid-template-columns: 34px 1fr !important;
+  grid-template-rows: auto auto auto !important;
+  min-height: 112px !important;
+  padding: 14px 34px 13px 14px !important;
+  border: 1px solid #e0e3e6 !important;
+  border-top: 1px solid #e0e3e6 !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  box-shadow: 0 1px 2px rgba(27, 34, 40, 0.02) !important;
+}
+
+.business-overview-page .v20-type-card:hover {
+  transform: translateY(-1px);
+  border-color: #c9ced3 !important;
+  box-shadow: 0 7px 18px rgba(31, 39, 47, 0.07) !important;
+}
+
+.business-overview-page .v20-type-icon {
+  grid-row: 1 / 3;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 6px !important;
+}
+
+.business-overview-page .v20-type-icon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.business-overview-page .v20-type-card strong {
+  font-size: 23px !important;
+}
+
+.business-overview-page .v20-type-card small {
+  margin-top: 2px !important;
+  font-size: 11px !important;
+}
+
+.business-overview-page .v20-type-card em {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  font-size: 10px;
+}
+
+.business-overview-page .v20-card-arrow {
+  right: 12px;
+  bottom: 10px;
+  font-size: 15px;
+}
+
+.business-overview-page .knowledge-library,
+.business-overview-page .library-search-top {
+  display: none !important;
+}
+
+.business-type-page .knowledge-type-stats,
+.business-type-page .business-my-tasks {
+  display: none !important;
+}
+
+.business-type-page .knowledge-stats-row {
+  min-height: 42px;
+  justify-content: flex-end;
+  margin-bottom: 14px !important;
+}
+
+.business-type-page .library-search-top {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  width: 300px !important;
+  margin: 0 !important;
+}
+
+.business-type-page .knowledge-library {
+  display: block !important;
+}
+
+.business-my-tasks {
+  margin-top: 22px;
+}
+
+.business-my-tasks h3 {
+  margin: 0 0 10px;
+  color: #1d2227;
+  font-size: 17px;
+}
+
+.business-my-tasks > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.business-my-tasks a {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 13px;
+  border: 1px solid #dfe3e7;
+  border-radius: 7px;
+  background: #fff;
+  color: #323a42;
+  text-decoration: none;
+}
+
+.business-my-tasks a:hover {
+  border-color: #c7cdd3;
+  box-shadow: 0 6px 16px rgba(35, 43, 52, 0.06);
+}
+
+.business-task-icon {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  color: #386ca4;
+}
+
+.business-task-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.business-task-warning {
+  color: #c9871f;
+}
+
+.business-my-tasks a > span:nth-child(2) {
+  font-size: 12px;
+}
+
+.business-my-tasks strong {
+  margin-left: auto;
+  font-size: 18px;
+}
+
+.business-my-tasks b {
+  color: #68727b;
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.business-overview-page .business-overview-head {
+  margin-bottom: 16px;
+}
+
+.business-type-page .business-overview-head {
+  margin-bottom: 8px;
+}
+
+@media (max-width: 1380px) {
+  .business-overview-page .knowledge-type-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .business-overview-page .knowledge-type-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .business-my-tasks > div {
+    grid-template-columns: 1fr;
+  }
+}
+
+#businessKnowledgeLibrary[hidden] {
+  display: none !important;
+}
+
+.business-type-page .knowledge-stats-row {
+  display: none !important;
+}
+
+.library-create {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.library-create .library-search-top {
+  width: 300px !important;
+  margin: 0 !important;
+}
+
+.dm-synonym-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dm-synonym-tags span {
+  display: inline-flex;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #eef1f3;
+  color: #4e5962;
+  font-size: 10px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.business-type-page #assetList[hidden],
+.business-type-page .asset-table-head[hidden] {
+  display: none !important;
+}
+
+.knowledge-main[data-active-type="Principles"] .asset-table-head,
+.knowledge-main[data-active-type="Principles"] #assetList {
+  display: none !important;
+}
+
+.knowledge-main[data-active-type="Principles"] #principlesCardGrid {
+  display: grid !important;
+}
+
+.knowledge-main:not([data-active-type="Principles"]) #principlesCardGrid {
+  display: none !important;
+}
+
+.knowledge-main[data-active-type="Principles"] .knowledge-library .library-toolbar {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.knowledge-main[data-active-type="Principles"] .library-create {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.knowledge-main[data-active-type="Principles"] .library-search-top {
+  width: 180px !important;
+  max-width: 180px !important;
+  min-width: 180px !important;
+  height: 32px !important;
+  margin-left: auto !important;
+}
+
+.knowledge-main[data-active-type="Principles"] .library-search-top input#knowledgeSearch {
+  height: 32px !important;
+  font-size: 12px !important;
+}
+
+.knowledge-main[data-active-type="Principles"] .library-search-top input#knowledgeSearch::placeholder {
+  font-size: 10px !important;
+}
+
+.knowledge-main[data-active-type="Principles"] .library-create {
+  justify-content: flex-end;
+}
+
+.principle-card-actions button {
+  min-height: 26px !important;
+  padding: 5px 8px !important;
+  border-radius: 6px !important;
+  font-size: 10px !important;
+  line-height: 14px !important;
+}
+
+/* Keep the knowledge sidebar beside the content while the main shell still fits. */
+@media (min-width: 901px) and (max-width: 1100px) {
+  .knowledge-layout {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .knowledge-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar-nav {
+    display: grid;
+    gap: 2px;
+  }
+
+  .sidebar-item {
+    padding: 12px 16px;
+  }
+}

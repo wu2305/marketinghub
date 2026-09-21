@@ -1,0 +1,38 @@
+.v20-page > .v20-shell > .v20-view-title-breadcrumb {
+  display: none !important;
+}
+.principles-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 24px;
+  margin: 0 0 18px;
+  color: #667386;
+  font-size: 14px;
+  line-height: 24px;
+}
+.principles-breadcrumb a {
+  color: #414b66;
+  text-decoration: none;
+  font-weight: 700;
+}
+.principles-breadcrumb a:hover {
+  color: #171b35;
+  text-decoration: underline;
+}
+.principles-breadcrumb span,
+.principles-breadcrumb b {
+  color: #7d8796;
+  font-weight: 500;
+}
+.principles-field input[readonly],
+.principles-field textarea[readonly],
+.principles-readonly-box,
+.principles-switch-row {
+  cursor: not-allowed !important;
+  user-select: none !important;
+}
+.principles-field input[readonly],
+.principles-field textarea[readonly] {
+  caret-color: transparent;
+}

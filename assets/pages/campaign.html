@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en"
+  ><head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry Marketing Portal | RedNote Campaign Tool</title>
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+<link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/campaign/workspace.css" />
+    <link rel="stylesheet" href="../css/pages/campaign-inline-1.css" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-ai-model-placeholder" />
+</head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Marketing Portal navigation">
+        <a href="../../index.html" class="brand-mark" aria-label="Tapestry Marketing Portal home">
+          <img src="../images/tapestry-logo.png" alt="Tapestry" />
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-link">Home</a>
+          <a href="reports.html" class="nav-link">Marketing Cockpit</a>
+          <a href="flexible.html" class="nav-link">Self-Service Center</a>
+          <a href="knowledge.html" class="nav-link">AI Interpreter</a>
+          <a href="campaign.html" class="nav-link" aria-current="page">RedNote Campaign Tool</a>
+        </div>
+      </nav>
+</header>
+
+    <div class="campaign-shell">
+      <aside class="campaign-rail" aria-label="RedNote Campaign Tool navigation">
+        <header class="campaign-rail-head">
+          <p>CAMPAIGN EXECUTION</p>
+          <h1>Trading Desk</h1>
+          <span>Media operations, automation, and optimization in one workspace.</span>
+</header>
+
+        <nav class="campaign-nav" aria-label="Trading Desk views">
+          <button
+            class="campaign-nav-item active"
+            type="button"
+            data-view-target="overview"
+            aria-current="page"
+          >
+            <span class="nav-index">01</span>
+            <span><strong>Overview</strong><small>Live campaign pulse</small></span>
+          </button>
+          <button class="campaign-nav-item" type="button" data-view-target="execution">
+            <span class="nav-index">02</span>
+            <span><strong>Execution</strong><small>Launch and optimize</small></span>
+          </button>
+          <button class="campaign-nav-item" type="button" data-view-target="assets">
+            <span class="nav-index">03</span>
+            <span><strong>Assets</strong><small>Creative library</small></span>
+          </button>
+          <button class="campaign-nav-item" type="button" data-view-target="analytics">
+            <span class="nav-index">04</span>
+            <span><strong>Analytics</strong><small>Efficiency signals</small></span>
+          </button>
+          <button class="campaign-nav-item" type="button" data-view-target="accounts">
+            <span class="nav-index">05</span>
+            <span><strong>Accounts</strong><small>Media binding</small></span>
+          </button>
+        </nav>
+      </aside>
+
+      <main class="campaign-main">
+        <section
+          class="campaign-view active"
+          data-campaign-view="overview"
+          aria-labelledby="overviewTitle"
+        >
+          <header class="view-heading">
+            <div>
+              <p class="eyebrow">CAMPAIGN WORKSPACE / OVERVIEW</p>
+              <h2 id="overviewTitle">Overview Dashboard</h2>
+              <p
+                >Monitor automated media operations across accounts, plans, units, and creative
+                assets.</p
+              >
+            </div>
+            <div class="channel-tabs" role="tablist" aria-label="Channel view">
+              <button
+                class="active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                data-channel="Rednote"
+                >Rednote</button
+              >
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-disabled="true"
+                data-channel="Douyin"
+                title="Douyin data is not configured in this prototype"
+                disabled=""
+                >Douyin</button
+              >
+            </div>
+</header>
+
+          <div class="metric-grid" aria-label="Trading Desk metrics">
+            <article class="metric-card"
+              ><span>Automated actions</span><strong>83</strong
+              ><small>Current workspace</small></article
+            >
+            <article class="metric-card"
+              ><span>Active accounts</span><strong>5</strong><small>Authorized</small></article
+            >
+            <article class="metric-card"
+              ><span>Plans</span><strong>341</strong><small>Generated</small></article
+            >
+            <article class="metric-card"
+              ><span>Units</span><strong>343</strong><small>In operation</small></article
+            >
+            <article class="metric-card"
+              ><span>Creatives</span><strong>7,017</strong><small>In library</small></article
+            >
+          </div>
+
+          <div class="overview-grid">
+            <section class="workspace-panel">
+              <header class="panel-heading">
+                <div><span>DISTRIBUTION</span><h3>Promotion Type Distribution</h3></div>
+                <small>Plans</small>
+</header>
+              <div class="progress-list">
+                <div
+                  ><span>Feed promotion</span><strong>282</strong><i><b style="width: 86%"></b></i
+                ></div>
+                <div
+                  ><span>Search promotion</span><strong>43</strong><i><b style="width: 24%"></b></i
+                ></div>
+                <div
+                  ><span>Video feed promotion</span><strong>0</strong
+                  ><i><b style="width: 0%"></b></i
+                ></div>
+                <div
+                  ><span>Full-site promotion</span><strong>16</strong
+                  ><i><b style="width: 10%"></b></i
+                ></div>
+              </div>
+            </section>
+
+            <section class="workspace-panel objective-panel">
+              <header class="panel-heading">
+                <div><span>OBJECTIVE MIX</span><h3>Marketing Objective Distribution</h3></div>
+                <small>Plans</small>
+</header>
+              <div class="column-chart" aria-label="Marketing objective distribution chart">
+                <div style="--height: 88%"
+                  ><strong>329</strong><i></i><span>Product seeding</span></div
+                >
+                <div style="--height: 11%"
+                  ><strong>9</strong><i></i><span>Direct seeding</span></div
+                >
+                <div style="--height: 7%"><strong>3</strong><i></i><span>Lead capture</span></div>
+              </div>
+            </section>
+          </div>
+
+          <section class="workspace-panel table-panel">
+            <header class="table-heading">
+              <div><span>ACCOUNT OPERATIONS</span><h3>Account Operation Details</h3></div>
+              <form class="table-tools" id="accountSearchForm" role="search">
+                <label
+                  ><span class="sr-only">Search sub-account</span
+                  ><input
+                    id="accountSearch"
+                    type="search"
+                    placeholder="Search sub-account"
+                    autocomplete="off"
+                /></label>
+                <button type="submit">Filter</button>
+                <button class="secondary" id="accountReset" type="button">Reset</button>
+              </form>
+</header>
+            <div class="table-wrap">
+              <table class="data-table" id="accountTable">
+                <thead
+                  ><tr
+                    ><th>Account Name</th><th>Feed</th><th>Search</th><th>Video Feed</th
+                    ><th>Full-site</th><th>Total Plans</th></tr
+                  ></thead
+                >
+                <tbody>
+                  <tr
+                    ><td>Coach_XHS_01</td><td>82</td><td>13</td><td>0</td><td>4</td><td>99</td></tr
+                  >
+                  <tr><td>Coach_XHS_02</td><td>61</td><td>9</td><td>0</td><td>3</td><td>73</td></tr>
+                  <tr><td>Coach_XHS_03</td><td>54</td><td>8</td><td>0</td><td>2</td><td>64</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-result" id="accountTableResult">3 accounts shown</p>
+          </section>
+        </section>
+
+        <section
+          class="campaign-view"
+          data-campaign-view="execution"
+          aria-labelledby="executionTitle"
+          hidden=""
+        >
+          <header class="view-heading">
+            <div>
+              <p class="eyebrow">CAMPAIGN WORKSPACE / EXECUTION</p>
+              <h2 id="executionTitle">RedNote Campaign Tool</h2>
+              <p
+                >Centralize media account operations, bulk plan creation, budget pacing, and
+                campaign action publishing to reduce platform switching.</p
+              >
+            </div>
+            <button class="primary-action" type="button" data-open-task=""
+              >Create Campaign Task</button
+            >
+</header>
+
+          <div class="execution-summary" aria-label="Execution status">
+            <div
+              ><span>Awaiting confirmation</span><strong>341</strong
+              ><small>generated plans</small></div
+            >
+            <div
+              ><span>Budget watch</span><strong>2</strong><small>cities near threshold</small></div
+            >
+            <div><span>Under review</span><strong>3</strong><small>anomalous plans</small></div>
+          </div>
+
+          <div class="execution-grid">
+            <section class="workspace-panel">
+              <header class="panel-heading">
+                <div><span>AUTOMATION</span><h3>Automation Task Queue</h3></div>
+                <small id="taskQueueCount">3 active tasks</small>
+</header>
+              <div class="task-list" id="taskQueueList">
+                <article
+                  ><span class="task-status pending">Pending</span
+                  ><div
+                    ><strong>Rednote bulk plan creation</strong
+                    ><p>341 plans generated and awaiting final publishing confirmation</p></div
+                  ></article
+                >
+                <article
+                  ><span class="task-status watch">Watch</span
+                  ><div
+                    ><strong>Budget pacing calibration</strong
+                    ><p
+                      >Shanghai and Beijing budgets are near the upper threshold; reduce by 8%</p
+                    ></div
+                  ></article
+                >
+                <article
+                  ><span class="task-status review">Review</span
+                  ><div
+                    ><strong>Anomalous plan pause</strong
+                    ><p>3 plans have no conversions for two days and are under review</p></div
+                  ></article
+                >
+              </div>
+            </section>
+
+            <section class="workspace-panel">
+              <header class="panel-heading">
+                <div><span>ACTION HISTORY</span><h3>Campaign Action Log</h3></div>
+                <small>Recent actions</small>
+</header>
+              <div class="table-wrap compact-table">
+                <table class="data-table">
+                  <thead
+                    ><tr><th>Action</th><th>Platform</th><th>Object</th><th>Status</th></tr></thead
+                  >
+                  <tbody id="actionLogBody">
+                    <tr
+                      ><td>Bulk create plans</td><td>Rednote</td><td>Coach_XHS_01</td
+                      ><td><span class="inline-status pending">Pending confirmation</span></td></tr
+                    >
+                    <tr
+                      ><td>Adjust daily budget</td><td>Rednote</td><td>23 units</td
+                      ><td><span class="inline-status success">Success</span></td></tr
+                    >
+                    <tr
+                      ><td>Sync plan status</td><td>Douyin</td><td>12 plans</td
+                      ><td><span class="inline-status syncing">Syncing</span></td></tr
+                    >
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section
+          class="campaign-view"
+          data-campaign-view="assets"
+          aria-labelledby="assetsTitle"
+          hidden=""
+        >
+          <header class="view-heading">
+            <div>
+              <p class="eyebrow">CAMPAIGN WORKSPACE / ASSETS</p>
+              <h2 id="assetsTitle">Creative Assets</h2>
+              <p
+                >Manage creative review status, channel readiness, and creative performance so
+                operators can quickly identify reusable or replaceable assets.</p
+              >
+            </div>
+            <span class="feature-badge">7,017 creatives</span>
+</header>
+
+          <section class="workspace-panel asset-panel">
+            <header class="panel-heading">
+              <div><span>CREATIVE LIBRARY</span><h3>Creative Status Dashboard</h3></div>
+              <small>Channel readiness</small>
+</header>
+            <div class="table-wrap">
+              <table class="data-table asset-table">
+                <thead
+                  ><tr
+                    ><th>Creative Group</th><th>Channel</th><th>Ready</th><th>In Review</th
+                    ><th>Replace</th></tr
+                  ></thead
+                >
+                <tbody>
+                  <tr
+                    ><td
+                      ><strong>Tabby 26SS seeding assets</strong><small>Product seeding</small></td
+                    ><td>Rednote</td><td><span class="count-good">128</span></td
+                    ><td>14</td><td><span class="count-alert">6</span></td></tr
+                  >
+                  <tr
+                    ><td><strong>City limited campaign</strong><small>City activation</small></td
+                    ><td>Douyin</td><td><span class="count-good">72</span></td
+                    ><td>8</td><td><span class="count-alert">3</span></td></tr
+                  >
+                  <tr
+                    ><td><strong>Member conversion assets</strong><small>Conversion</small></td
+                    ><td>Rednote</td><td><span class="count-good">43</span></td
+                    ><td>2</td><td><span class="count-alert">1</span></td></tr
+                  >
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section
+          class="campaign-view"
+          data-campaign-view="analytics"
+          aria-labelledby="analyticsTitle"
+          hidden=""
+        >
+          <header class="view-heading">
+            <div>
+              <p class="eyebrow">CAMPAIGN WORKSPACE / ANALYTICS</p>
+              <h2 id="analyticsTitle">Analytics Center</h2>
+              <p
+                >Analyze execution efficiency, account performance, plan quality, and creative
+                performance to support the next automation cycle.</p
+              >
+            </div>
+            <span class="health-status"><i aria-hidden="true"></i> Insights ready</span>
+</header>
+
+          <div class="analytics-grid">
+            <section class="workspace-panel efficiency-panel">
+              <header class="panel-heading">
+                <div><span>HUMAN EFFICIENCY</span><h3>Efficiency Lift</h3></div>
+                <small>Current cycle</small>
+</header>
+              <div class="efficiency-metrics">
+                <div><span>Time saved</span><strong>42h</strong></div>
+                <div><span>Automated actions</span><strong>83</strong></div>
+                <div><span>Anomaly blocks</span><strong>9</strong></div>
+              </div>
+            </section>
+
+            <section class="workspace-panel recommendation-panel">
+              <header class="panel-heading">
+                <div><span>NEXT BEST ACTIONS</span><h3>Optimization Recommendations</h3></div>
+                <small>2 recommendations</small>
+</header>
+              <div class="recommendation-list">
+                <article
+                  ><span>01</span
+                  ><div
+                    ><strong>Budget reallocation</strong
+                    ><p>Move Chengdu search budget to Shanghai feed promotion</p></div
+                  ></article
+                >
+                <article
+                  ><span>02</span
+                  ><div
+                    ><strong>Creative replacement</strong
+                    ><p>Replace 3 low-engagement creatives with high-save-rate versions</p></div
+                  ></article
+                >
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section
+          class="campaign-view"
+          data-campaign-view="accounts"
+          aria-labelledby="accountsTitle"
+          hidden=""
+        >
+          <header class="view-heading">
+            <div>
+              <p class="eyebrow">CAMPAIGN WORKSPACE / ACCOUNT BINDING</p>
+              <h2 id="accountsTitle">Account Binding</h2>
+              <p
+                >Manage media account authorization, token status, and publishing permissions with
+                traceable account boundaries.</p
+              >
+            </div>
+            <button
+              class="primary-action"
+              type="button"
+              data-demo-action="Account binding flow opened"
+              >Bind New Account</button
+            >
+</header>
+
+          <section class="workspace-panel account-panel">
+            <header class="panel-heading">
+              <div><span>OAUTH / API</span><h3>Media Account Status</h3></div>
+              <small>Authorization health</small>
+</header>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead
+                  ><tr
+                    ><th>Account</th><th>Platform</th><th>Auth Status</th><th>Last Sync</th
+                    ><th>Action Permission</th></tr
+                  ></thead
+                >
+                <tbody>
+                  <tr
+                    ><td><strong>Coach_XHS_01</strong></td
+                    ><td>Rednote</td><td><span class="inline-status success">Token valid</span></td
+                    ><td>2026-05-29 10:00</td><td>Allowed</td></tr
+                  >
+                  <tr
+                    ><td><strong>Coach_XHS_02</strong></td
+                    ><td>Rednote</td><td><span class="inline-status success">Token valid</span></td
+                    ><td>2026-05-29 10:00</td><td>Allowed</td></tr
+                  >
+                  <tr
+                    ><td><strong>Coach_DY_01</strong></td
+                    ><td>Douyin</td
+                    ><td><span class="inline-status pending">Renewal required</span></td
+                    ><td>2026-05-28 18:20</td
+                    ><td><span class="inline-status paused">Paused</span></td></tr
+                  >
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <button class="global-ai-launcher" id="aiEntry" type="button" aria-label="Open AI assistant">
+      <span class="global-ai-orb" aria-hidden="true">AI</span>
+      <span class="global-ai-label">AI Interpreter</span>
+    </button>
+
+    <section
+      class="assistant-panel"
+      id="assistantPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assistantTitle"
+      hidden=""
+    >
+      <div class="panel-backdrop" data-close=""></div>
+      <div class="assistant-modal" tabindex="-1">
+        <header class="assistant-header">
+          <div class="assistant-identity">
+            <span class="assistant-mark" aria-hidden="true">AI</span>
+            <div>
+              <h2 id="assistantTitle">Ask AI Interpreter</h2>
+            </div>
+          </div>
+          <div class="assistant-header-actions">
+            <button
+              class="ai-workspace-icon"
+              type="button"
+              id="newSession"
+              aria-label="New session"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+            <button class="ai-workspace-icon" type="button" id="aiMaximize" aria-label="Maximize">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 9V5a1 1 0 0 1 1-1h4"></path>
+                <path d="M20 9V5a1 1 0 0 0-1-1h-4"></path>
+                <path d="M4 15v4a1 1 0 0 0 1 1h4"></path>
+                <path d="M20 15v4a1 1 0 0 1-1 1h-4"></path>
+              </svg>
+            </button>
+            <button class="ai-workspace-icon" type="button" id="aiHistory" aria-label="History">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                <path d="M3 3v5h5"></path>
+                <path d="M12 7v5l3 2"></path>
+              </svg>
+            </button>
+            <button class="close-btn" type="button" data-close="" aria-label="Close assistant"
+              >×</button
+            >
+          </div>
+</header>
+
+        <div class="assistant-main">
+          <div class="assistant-ask-stage">
+            <div class="ask-stage-hero">
+              <div class="ask-stage-headline">
+                <h3>Ask a question</h3>
+                <p>Your AI partner for every marketing task</p>
+              </div>
+              <div class="ask-scope-description" id="askScopeDescription"></div
+              ><div class="ask-stage-suggestions" id="askSuggestions">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+          </div>
+          <div class="answer-feed" id="answerFeed" hidden=""></div>
+        </div>
+
+        <section class="ask-zone" aria-label="Ask AI Interpreter AI">
+          <div class="ask-meta">
+            <div class="ask-scope" role="group" aria-label="Response scope">
+              <span>Scope</span>
+              <button
+                class="scope-option active"
+                type="button"
+                data-context="campaign"
+                aria-pressed="true"
+                >Campaigns</button
+              >
+              <button class="scope-option" type="button" data-context="report" aria-pressed="false"
+                >Dashboards</button
+              >
+              <button
+                class="scope-option"
+                type="button"
+                data-context="knowledge"
+                aria-pressed="false"
+                >Knowledge</button
+              >
+            </div>
+          </div>
+          <div class="ask-composer">
+            <div
+              class="query-canvas"
+              id="promptCanvas"
+              contenteditable="true"
+              role="textbox"
+              aria-multiline="true"
+              aria-label="Ask AI Interpreter AI"
+              data-placeholder="Type your question or upload Excel/CSV files for data analysis"
+            ></div>
+            <div class="composer-toolbar">
+              <div class="composer-actions">
+                <button
+                  class="composer-picker suggest-picker"
+                  type="button"
+                  id="suggestPicker"
+                  aria-label="Recommended questions"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"></path>
+                    <path
+                      d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8L16.5 18.5l1.8-.7L19 16z"
+                    ></path>
+                    <path
+                      d="M5 16l.5 1.3L6.8 17.8l-1.3.5L5 19.6l-.5-1.3L3.2 17.8l1.3-.5L5 16z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  class="upload-action"
+                  type="button"
+                  id="uploadFile"
+                  aria-label="Upload file"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <button class="composer-picker model-picker" type="button" id="modelPicker">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                      d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"
+                    ></path>
+                  </svg>
+                  <strong class="composer-picker-value">Data Model</strong>
+                </button>
+                <button class="composer-picker mode-picker" type="button" id="modePicker">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                  </svg>
+                  <strong class="composer-picker-value">Analytical Model</strong>
+                </button>
+              </div>
+              <button class="send-action" type="button" id="sendQuery" aria-label="Ask">
+                <span>ASK</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <dialog class="task-dialog" id="taskDialog" aria-labelledby="taskDialogTitle">
+      <form id="taskForm" method="dialog">
+        <header>
+          <div
+            ><span>CAMPAIGN EXECUTION</span><h2 id="taskDialogTitle">Create Campaign Task</h2></div
+          >
+          <button class="dialog-close" type="button" data-close-dialog="" aria-label="Close"
+            >×</button
+          >
+</header>
+        <p>Review the media action before it enters the automation queue.</p>
+        <div class="task-form-grid">
+          <label
+            ><span>Action</span
+            ><select name="action"
+              ><option>Bulk create plans</option
+              ><option>Adjust daily budget</option
+              ><option>Sync plan status</option></select
+            ></label
+          >
+          <label
+            ><span>Platform</span
+            ><select name="platform"
+              ><option>Rednote</option
+              ><option>Douyin</option></select
+            ></label
+          >
+          <label
+            ><span>Account</span
+            ><select name="account"
+              ><option>Coach_XHS_01</option
+              ><option>Coach_XHS_02</option
+              ><option>Coach_DY_01</option></select
+            ></label
+          >
+          <label><span>Object</span><input name="object" value="341 plans" /></label>
+        </div>
+        <div class="task-preview"
+          ><span>REVIEW STATE</span><strong>Pending confirmation</strong
+          ><small>No publishing action runs until final approval.</small></div
+        >
+        <footer
+          ><button class="secondary-action" type="button" data-close-dialog="">Cancel</button
+          ><button class="primary-action" type="submit" value="confirm"
+            >Add to Review Queue</button
+          ></footer
+        >
+      </form>
+    </dialog>
+
+    <div class="action-toast" id="actionToast" role="status" aria-live="polite" hidden=""></div>
+
+    <script src="../js/campaign/workspace.js"></script>
+    <script src="../js/shared/assistant-skill-menu.js?v=20260918-menu-hover"></script>
+</body
+></html>

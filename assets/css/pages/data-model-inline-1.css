@@ -1,0 +1,11 @@
+body {
+  background: #f6f7f8;
+}
+
+.data-model-page-shell {
+  padding: 18px 24px 28px;
+}
+
+.data-model-page-shell .data-model-overview {
+  min-height: calc(100vh - 104px);
+}

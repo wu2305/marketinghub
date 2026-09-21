@@ -1,0 +1,219 @@
+@font-face {
+  font-family: "BentonModDisplay";
+  src:
+    url("../../fonts/BentonModDisp-SemiboldItalic.woff2") format("woff2"),
+    url("../../fonts/BentonModDisp-SemiboldIt.otf") format("opentype");
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+}
+
+.flexible-shell {
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.flexible-page-hero img {
+  object-position: center 50%;
+}
+
+/* --- Self-Service Center hero: align with Marketing Cockpit --- */
+.flexible-page-hero {
+  padding: 0;
+  height: 260px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.flexible-page-hero::after {
+  display: none;
+}
+
+.flexible-page-hero img {
+  filter: none !important;
+}
+
+.flexible-page-hero .workspace-page-hero-copy {
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  max-width: none;
+}
+
+.flexible-page-hero h1 {
+  margin: 0;
+  font-size: 56px;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.flexible-page-hero h1::after {
+  width: 64px;
+  height: 8px;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+}
+
+.flexible-page-hero p:last-child {
+  font-size: 17px;
+  margin: 14px 0 0;
+  max-width: 480px;
+}
+
+.section-label {
+  display: flex;
+  align-items: start;
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.section-label > span {
+  display: none;
+}
+
+.section-label p {
+  margin: 0;
+  color: var(--workspace-faint);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.section-label h2 {
+  margin: 8px 0 0;
+  color: #1c2227;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 30px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.flexible-list {
+  display: grid;
+  gap: 14px;
+}
+
+.simple-data-row {
+  display: grid;
+  min-height: 132px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 28px;
+  padding: 24px 28px;
+  border: 1px solid var(--workspace-line-strong);
+  border-radius: 6px;
+  background: var(--workspace-surface);
+}
+
+.template-kicker {
+  margin: 0;
+  color: #425566;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.simple-data-row h3 {
+  margin: 4px 0 8px;
+  color: #1c2328;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.1;
+}
+
+.simple-data-row p:last-child {
+  max-width: 720px;
+  margin: 10px 0 0;
+  color: var(--workspace-copy);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.primary-action,
+.secondary-action {
+  display: inline-flex;
+  width: 150px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.primary-action {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: var(--workspace-ink);
+}
+
+.secondary-action {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: var(--workspace-ink);
+}
+
+.primary-action:hover,
+.primary-action:focus-visible,
+.upload-history-btn:hover,
+.upload-history-btn:focus-visible {
+  filter: brightness(0.92);
+}
+
+.data-upload-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.upload-history-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #c8d2d8;
+  border-radius: 4px;
+  background: #fff;
+  color: #1a1d20;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.upload-history-btn:hover,
+.upload-history-btn:focus-visible {
+  background: #fffbeb;
+  border-color: #daa860;
+  outline: 0;
+}
+.primary-action:focus-visible,
+.secondary-action:hover,
+.secondary-action:focus-visible {
+  border-color: transparent;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: var(--workspace-ink);
+  filter: brightness(0.92);
+}
+
+@media (max-width: 900px) {
+  .flexible-shell {
+    width: calc(100% - 40px);
+  }
+
+  .simple-data-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+}

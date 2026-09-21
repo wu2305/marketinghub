@@ -1,0 +1,78 @@
+/* Override header to match knowledge.html positioning (overlay on hero) */
+.feedback-quality-v4 .site-header {
+  position: fixed;
+  inset: 30px 0 auto;
+  z-index: 60;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  backdrop-filter: none;
+}
+.feedback-quality-v4 .primary-nav {
+  width: calc(100% - 88px);
+  min-height: 42px;
+  padding: 0;
+  margin: 0 auto;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  backdrop-filter: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.feedback-quality-v4 .brand-mark {
+  color: #fff;
+  font-family: var(--font-brand);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.feedback-quality-v4 .brand-mark img {
+  width: 150px;
+  filter: none;
+}
+.feedback-quality-v4 .nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 30px;
+}
+.feedback-quality-v4 .nav-link {
+  position: relative;
+  display: inline-grid;
+  min-height: 42px;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.feedback-quality-v4 .nav-link:hover,
+.feedback-quality-v4 .nav-link:focus-visible,
+.feedback-quality-v4 .nav-link[aria-current="page"] {
+  color: #fff;
+  outline: 0;
+}
+.feedback-quality-v4 .nav-link::after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 5px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  content: "";
+  transition: opacity 160ms ease;
+}
+.feedback-quality-v4 .nav-link:hover::after,
+.feedback-quality-v4 .nav-link:focus-visible::after,
+.feedback-quality-v4 .nav-link[aria-current="page"]::after {
+  opacity: 1;
+}
+/* Remove top padding so hero sits at top like knowledge.html */
+.feedback-quality-v4.home-v4 {
+  padding-top: 0;
+}

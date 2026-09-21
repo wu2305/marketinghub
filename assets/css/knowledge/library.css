@@ -1,0 +1,643 @@
+/* V20.02 business-facing Knowledge Overview additions. */
+.business-knowledge-nav {
+  margin: 4px 0 8px;
+  padding: 8px 0 10px;
+  border-top: 1px solid #e5e8eb;
+  border-bottom: 1px solid #e5e8eb;
+}
+.business-knowledge-nav-title {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 14px;
+  color: #20252a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.business-knowledge-nav-title .sidebar-icon {
+  width: 20px;
+  height: 20px;
+}
+.business-type-nav {
+  display: grid;
+  gap: 2px;
+  margin-top: 3px;
+}
+.business-type-nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 34px;
+  padding: 7px 11px 7px 26px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0 6px 6px 0;
+  background: transparent;
+  color: #65707a;
+  font: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+}
+.business-type-nav button svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+}
+.business-type-nav button:hover,
+.business-type-nav button.active {
+  border-left-color: #e6bc73;
+  background: #fff7e9;
+  color: #191d20;
+}
+.business-overview-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 4px 0 24px;
+}
+.business-overview-head p {
+  margin: 0 0 7px;
+  color: #b67b20;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.business-overview-head h2 {
+  margin: 0 0 5px;
+  color: #1b1f23;
+  font-size: 27px;
+}
+.business-overview-head > div > span {
+  color: #68727c;
+  font-size: 13px;
+}
+.business-overview-tasks {
+  display: flex;
+  gap: 10px;
+}
+.business-overview-tasks article {
+  min-width: 142px;
+  padding: 12px 14px;
+  border: 1px solid #dfe3e7;
+  border-radius: 8px;
+  background: #fff;
+}
+.business-overview-tasks span {
+  display: block;
+  color: #77818b;
+  font-size: 10px;
+}
+.business-overview-tasks strong {
+  display: block;
+  margin-top: 4px;
+  color: #202428;
+  font-size: 23px;
+}
+.knowledge-stats-row {
+  margin-top: 0 !important;
+}
+.knowledge-type-stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+.v20-type-card {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 42px 1fr !important;
+  grid-template-rows: auto auto auto !important;
+  min-height: 132px !important;
+  padding: 16px 42px 16px 16px !important;
+  border: 1px solid #dfe3e7 !important;
+  border-top: 3px solid var(--v20-type-color) !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition:
+    transform 0.16s,
+    box-shadow 0.16s,
+    border-color 0.16s !important;
+}
+.v20-type-card:hover,
+.v20-type-card.is-active {
+  transform: translateY(-2px);
+  border-color: #cdd3d9 !important;
+  box-shadow: 0 9px 22px rgba(35, 43, 52, 0.08) !important;
+}
+.v20-type-icon {
+  grid-row: 1/4;
+  display: grid !important;
+  width: 38px !important;
+  height: 38px !important;
+  place-items: center !important;
+  border-radius: 8px !important;
+  background: color-mix(in srgb, var(--v20-type-color) 12%, white) !important;
+  color: var(--v20-type-color) !important;
+}
+.v20-type-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.v20-type-card strong {
+  margin: 0 !important;
+  color: #171b1f !important;
+  font-size: 27px !important;
+  line-height: 1 !important;
+}
+.v20-type-card small {
+  margin-top: 6px !important;
+  color: #303840 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+.v20-type-card em {
+  margin-top: 4px;
+  color: #858d95;
+  font-size: 10px;
+  font-style: normal;
+  line-height: 1.35;
+}
+.v20-card-arrow {
+  position: absolute;
+  right: 15px;
+  bottom: 13px;
+  color: #555f68;
+  font-size: 17px;
+  transition: transform 0.16s;
+}
+.v20-type-card:hover .v20-card-arrow {
+  transform: translateX(3px);
+}
+.library-search-top {
+  top: -54px !important;
+}
+.knowledge-library {
+  overflow: visible !important;
+}
+.asset-table-head,
+.asset-row {
+  grid-template-columns: minmax(230px, 2fr) 120px 150px 120px 92px 74px 100px 150px !important;
+  min-width: 1036px;
+}
+.v20-actions {
+  justify-content: flex-end;
+}
+.v20-request-action {
+  height: 25px;
+  padding: 0 8px;
+  border: 1px solid #d9bd8b;
+  border-radius: 5px;
+  background: #fff8ec;
+  color: #795522;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.v20-request-action:hover {
+  border-color: #c48a2f;
+  background: #fff2d9;
+}
+.business-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  min-height: 58px;
+  padding: 11px 18px;
+  border-top: 1px solid #e5e8ec;
+  background: #fff;
+  color: #6d7781;
+  font-size: 11px;
+}
+.business-pagination > span {
+  margin-right: auto;
+}
+.business-pagination label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.business-pagination select {
+  height: 30px;
+  padding: 0 24px 0 8px;
+  border: 1px solid #d9dee3;
+  border-radius: 6px;
+  background: #fff;
+  color: #404850;
+}
+.business-pagination > div {
+  display: flex;
+  gap: 4px;
+}
+.business-pagination button {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  border: 1px solid #d9dee3;
+  border-radius: 6px;
+  background: #fff;
+  color: #4b555e;
+  cursor: pointer;
+}
+.business-pagination button.active {
+  border-color: #1d2023;
+  background: #1d2023;
+  color: #fff;
+}
+.business-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+@media (max-width: 1250px) {
+  .knowledge-type-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .business-overview-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .library-search-top {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    margin: 0 0 14px;
+  }
+}
+.knowledge-main[data-active-type="Scenario Reporting"] .library-toolbar,
+.knowledge-main[data-active-type="Scenario Reporting"] .asset-table-head,
+.knowledge-main[data-active-type="Scenario Reporting"] #assetList,
+.knowledge-main[data-active-type="Scenario Reporting"] #businessPagination,
+.knowledge-main[data-active-type="Scenario Reporting"] #emptyState {
+  display: none !important;
+}
+
+#scenarioReportOverview .bt-table-scenario td {
+  vertical-align: middle;
+}
+
+#scenarioReportOverview .bt-table-scenario td.bt-actions {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+#scenarioReportOverview .bt-table-scenario .bt-actions {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+#scenarioReportOverview .bt-table-scenario td.bt-definition {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.5;
+}
+
+#scenarioReportOverview .bt-table-scenario {
+  min-width: 1240px;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(1),
+#scenarioReportOverview .bt-table-scenario td:nth-child(1) {
+  width: 220px;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(2),
+#scenarioReportOverview .bt-table-scenario td:nth-child(2) {
+  width: 305px;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(3),
+#scenarioReportOverview .bt-table-scenario td:nth-child(3) {
+  width: 210px;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(4),
+#scenarioReportOverview .bt-table-scenario td:nth-child(4) {
+  width: 170px;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(5),
+#scenarioReportOverview .bt-table-scenario td:nth-child(5) {
+  width: 110px;
+  white-space: nowrap;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(6),
+#scenarioReportOverview .bt-table-scenario td:nth-child(6) {
+  width: 125px;
+  white-space: nowrap;
+}
+
+#scenarioReportOverview .bt-table-scenario th:nth-child(7),
+#scenarioReportOverview .bt-table-scenario td:nth-child(7) {
+  width: 100px;
+}
+
+#scenarioReportOverview .bt-table-scenario td:nth-child(7) .v20-actions {
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+#scenarioReportOverview .bt-table-scenario td:nth-child(7) .fm-actions {
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+#scenarioReportOverview .bt-actions .fm-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid #d7dee5;
+  border-radius: 6px;
+  background: #fff;
+  color: #303d4c;
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+#scenarioReportOverview .bt-actions .fm-button:hover {
+  background: #faf5ec;
+  border-color: #c38a3e;
+}
+
+#scenarioReportOverview .bt-table-scenario td:nth-child(5),
+#scenarioReportOverview .bt-table-scenario td:nth-child(6) {
+  vertical-align: middle;
+}
+
+:is(#scenarioReportOverview, #fmLibrary, .fm-analysis-drawer) .bt-flow-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+:is(#scenarioReportOverview, #fmLibrary, .fm-analysis-drawer)
+  .bt-flow-status[data-flow-status="Queued"] {
+  background: #f4efe6;
+  color: #8b5d20;
+}
+
+:is(#scenarioReportOverview, #fmLibrary, .fm-analysis-drawer)
+  .bt-flow-status[data-flow-status="In Development"] {
+  background: #e8f0ff;
+  color: #2855a7;
+}
+
+:is(#scenarioReportOverview, #fmLibrary, .fm-analysis-drawer)
+  .bt-flow-status[data-flow-status="Live"] {
+  background: #e9f6ee;
+  color: #2e7d4f;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail {
+  display: grid;
+  gap: 18px;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-header {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e8ecef;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-meta > div {
+  display: grid;
+  gap: 4px;
+  padding: 14px 14px 13px;
+  border: 1px solid #e4e8eb;
+  border-radius: 10px;
+  background: #fafbfc;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-meta dt {
+  color: #8b949d;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-meta dd {
+  margin: 0;
+  color: #1a1d20;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-section {
+  display: grid;
+  gap: 8px;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-section h3 {
+  margin: 0;
+  color: #20262d;
+  font-size: 13px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-section p {
+  margin: 0;
+  color: #5d6872;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-prewrap {
+  white-space: pre-wrap;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-section .bt-tags {
+  gap: 8px;
+}
+
+:is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-section .bt-tag {
+  background: #edf5f1;
+  color: #28785f;
+}
+
+@media (max-width: 1100px) {
+  :is(.knowledge-detail, .fm-analysis-drawer) .scenario-report-detail-meta {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fm-analysis-drawer .fm-drawer-body {
+  background: #fff;
+  padding: 24px;
+}
+.fm-analysis-drawer .scenario-report-section ol {
+  margin: 0;
+  padding-left: 20px;
+  color: #5d6872;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.fm-analysis-drawer .scenario-report-section li + li {
+  margin-top: 6px;
+}
+
+/* Consistent create and row actions for editable knowledge. */
+.knowledge-main[data-active-type="Business Term"] .library-create,
+.knowledge-main[data-active-type="Scenario Reporting"] .library-create {
+  display: none !important;
+}
+.business-overview-head:has(.fm-create-analysis:not([hidden])) {
+  flex-direction: row;
+  align-items: center;
+}
+.business-overview-head .fm-create-analysis {
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+#businessTermOverview .bt-actions .fm-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+#businessTermOverview .bt-actions .fm-icon-action,
+#scenarioReportOverview .bt-actions .fm-icon-action {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 5px;
+  border: 1px solid #d7dee5;
+  border-radius: 6px;
+  background: #fff;
+  color: #303d4c;
+}
+#businessTermOverview .bt-actions .fm-icon-action.danger,
+#scenarioReportOverview .bt-actions .fm-icon-action.danger {
+  color: #b24141;
+}
+#businessTermOverview .bt-actions .fm-icon-action svg,
+#scenarioReportOverview .bt-actions .fm-icon-action svg {
+  width: 15px;
+  height: 15px;
+}
+#businessTermOverview tr[data-bt-id] {
+  cursor: pointer;
+}
+#businessTermOverview tr[data-bt-id]:focus-visible {
+  outline: 2px solid #b77c2c;
+  outline-offset: -2px;
+}
+
+/* Keep the actions cell in the table formatting context. */
+#scenarioReportOverview .bt-table-scenario td.bt-actions {
+  display: table-cell;
+  height: auto;
+  vertical-align: middle;
+}
+#scenarioReportOverview .bt-table-scenario td.bt-actions > .fm-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Analytical Model drawer metadata: compact footer row. */
+.fm-analysis-drawer .scenario-report-detail > .scenario-report-detail-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 4px 0 0;
+  padding-top: 4px;
+}
+
+.fm-analysis-drawer .scenario-report-detail > .scenario-report-detail-meta > div {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fm-analysis-drawer .scenario-report-detail > .scenario-report-detail-meta dt,
+.fm-analysis-drawer .scenario-report-detail > .scenario-report-detail-meta dd {
+  margin: 0;
+  color: #8b949d;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.fm-analysis-drawer .scenario-report-detail > .scenario-report-detail-meta dt::after {
+  content: ":";
+}
+
+/* Scenario Reporting drawer metadata: align with Analytical Model footer style. */
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail > .scenario-report-detail-meta-footer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 4px 0 0;
+  padding-top: 4px;
+}
+
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail > .scenario-report-detail-meta-footer > div {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail > .scenario-report-detail-meta-footer dt,
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail > .scenario-report-detail-meta-footer dd {
+  margin: 0;
+  color: #8b949d;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-detail > .scenario-report-detail-meta-footer dt::after {
+  content: ":";
+}

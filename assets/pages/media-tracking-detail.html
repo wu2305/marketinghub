@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Media Tracking Detail | Tapestry Marketing Portal</title>
+    <link rel="stylesheet" href="../css/base/foundation.css" />
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+    <link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/self-service/workspace.css" />
+    <link rel="stylesheet" href="../css/self-service/media-tracking.css" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-ai-model-placeholder" />
+</head>
+  <body class="media-tracking-body">
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Marketing Portal navigation">
+        <a href="../../index.html" class="brand-mark" aria-label="Tapestry Marketing Portal home">
+          <img src="../images/tapestry-logo.png" alt="Tapestry" />
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-link">Home</a>
+          <a href="reports.html" class="nav-link">Marketing Cockpit</a>
+          <a href="flexible.html" class="nav-link active" aria-current="page"
+            >Self-Service Center</a
+          >
+          <a href="knowledge.html" class="nav-link">AI Interpreter</a>
+          <a href="campaign.html" class="nav-link">RedNote Campaign Tool</a>
+        </div>
+      </nav>
+</header>
+
+    <main class="media-tracking-shell">
+      <div class="media-tracking-top-bar">
+        <a
+          href="flexible.html"
+          class="media-tracking-back-top"
+          style="display:inline-flex;align-items:center;gap:6px;color:#1a1d20;font-size:14px;font-weight:600;text-decoration:none;"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            style="width:18px;height:18px;"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back
+        </a>
+      </div>
+
+      <header class="media-tracking-head">
+        <span class="media-tracking-eyebrow">MEDIA TRACKING DETAIL</span>
+        <h1>Media Tracking Detail</h1>
+</header>
+
+      <div class="media-tracking-tabs" role="tablist" aria-label="Period">
+        <button
+          class="media-tracking-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-period="daily"
+          >Daily</button
+        >
+        <button
+          class="media-tracking-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-period="weekly"
+          >Weekly</button
+        >
+        <button
+          class="media-tracking-tab active"
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-period="monthly"
+          >Monthly</button
+        >
+        <button
+          class="media-tracking-tab"
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-period="spot"
+          >Spot Info Mapping</button
+        >
+      </div>
+
+      <section class="media-tracking-filters" aria-label="Filters">
+        <label class="media-tracking-filter">
+          <span>fiscal_year <em>*</em></span>
+          <select>
+            <option>FY26</option>
+            <option>FY25</option>
+          </select>
+        </label>
+        <label class="media-tracking-filter">
+          <span>fiscal_period <em>*</em></span>
+          <select>
+            <option>P10</option>
+            <option>P09</option>
+            <option>P08</option>
+          </select>
+        </label>
+        <label class="media-tracking-filter">
+          <span>aggregation_level</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>ad_format_level</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>campaign_name <em>*</em></span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>region_info</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>region</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>channel_info</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>channel</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>partner_info</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>partner</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>platform_info</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>platform</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>spot_info</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+        <label class="media-tracking-filter">
+          <span>spot</span>
+          <select
+            ><option>Select options (multiple)</option></select
+          >
+        </label>
+      </section>
+
+      <p class="media-tracking-description">
+        <strong>Region Info</strong>: The marketplace dimension maps to market configuration
+        information; separate packages map back to the corresponding market configuration.
+        <strong>Channel Info</strong>: The marketplace dimension maps to volume-level OTT media
+        configuration; cross-channel settings map to the advertising strategy.
+        <strong>Partner Info</strong>: The marketplace dimension maps to individual-media
+        cross-configuration information; media objects correspond to market configuration objects.
+        <strong>Platform Info</strong>: The marketplace dimension maps to platform-level
+        configuration, organized by media. <strong>Aggregation Level</strong>: Uses Campaign / Media
+        / Platform granularity. Options include Select All, Brand A, Brand X, and Brand A+.
+        Dimension selection supports multiple selections, Select All, and Clear All. R items (for
+        example, Brand / Brand X) support multiple selections. BIG advertising links large-scale
+        placements with placement / Brand X settings (for example, 15–30, SOP, and L-X); placement
+        examples include five Brand, Platform, and Brand X items. BIO covers currency-denominated
+        entries in the table; one CTP slot is counted as one unit.
+      </p>
+
+      <section class="media-tracking-table-wrap" aria-label="Data table">
+        <header class="media-tracking-table-head">
+          <h2>Media Tracking Monthly Detail</h2>
+          <span class="media-tracking-count"
+            >42 fields displayed
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+              style="width:14px;height:14px;vertical-align:middle;"
+            >
+              <path d="M6 9l6 6 6-6" /></svg
+          ></span>
+</header>
+
+        <div class="media-tracking-table-scroll">
+          <table class="media-tracking-table">
+            <thead>
+              <tr>
+                <th>fiscal_year</th>
+                <th>fiscal_period</th>
+                <th>aggregation_level</th>
+                <th>ad_format_level</th>
+                <th>campaign_name</th>
+                <th>campaign_id</th>
+                <th>region_info</th>
+                <th>region</th>
+                <th>channel_info</th>
+                <th>channel</th>
+                <th>partner_info</th>
+                <th>partner</th>
+                <th>platform_info</th>
+                <th>platform</th>
+                <th>spot_info</th>
+                <th>spot</th>
+                <th>audien</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td>
+                <td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>1Ss</td><td>Feeds</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>1Ss</td><td>Feeds</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>15s15s1KOLs1K/V</td><td>Openings1Feeds</td
+                ><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>15s15s1KOLs1K/V</td><td>Openings1Feeds</td
+                ><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL1</td><td>Feeds</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL1</td><td>Feeds</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL2</td><td>Feeds</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL2</td><td>Feeds</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL3</td><td>Feeds</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KOL3</td><td>Feeds</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KV</td><td>Feeds</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect</td>
+                <td>2493188</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>MOB</td><td>KV</td><td>Feeds</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202604_FY26_Coach_Pilot_Campaign_c_cities_Ap_OTT_E-commerce Connect</td>
+                <td>4139494</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>OTT</td><td>15s</td><td>Opening</td><td>1805</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202604_FY26_Coach_Pilot_Campaign_c_cities_Ap_OTT_E-commerce Connect</td>
+                <td>4139494</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>OTT</td><td>15s</td><td>Opening</td><td>8440</td>
+              </tr>
+              <tr>
+                <td>FY26</td><td>P10</td><td>-</td><td>-</td>
+                <td>COACH_202604_FY26_Coach_Pilot_Campaign_c_cities_Ap_OTT_E-commerce Connect</td>
+                <td>4139494</td><td>General Market</td><td>China Region</td><td>Single Channel</td
+                ><td>DISLPLAY</td> <td>Qiang Media</td><td>Yuqingchan Media</td
+                ><td>Single Operation</td><td>OTT</td><td>15s30s</td><td>Opening</td><td>1805</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <button class="global-ai-launcher" type="button" aria-label="Open AI assistant">
+      <span class="global-ai-orb" aria-hidden="true">AI</span>
+      <span class="global-ai-label">AI Interpreter</span>
+    </button>
+
+    <script src="../js/shared/portal.js?v=20260916-ai-sidebar-migrate-v2015"></script>
+    <script src="../js/pages/media-tracking-detail-inline-1.js"></script>
+    <script src="../js/shared/assistant-panel-lite.js?v=20260917-v201601-ai-sidebar"></script>
+    <script src="../js/shared/assistant-skill-menu.js?v=20260918-menu-hover"></script>
+</body>
+</html>

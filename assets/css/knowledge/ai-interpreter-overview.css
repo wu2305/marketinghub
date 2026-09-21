@@ -1,0 +1,3233 @@
+/* Figma-aligned AI Interpreter Overview — scoped so knowledge detail pages keep their behavior. */
+.knowledge-v4 .knowledge-command-center {
+  display: flex;
+  height: 260px !important;
+  min-height: 260px !important;
+  margin-top: 56px;
+  padding: 0;
+  align-items: center;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-hero {
+  height: 100% !important;
+  min-height: 260px !important;
+  overflow: hidden;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-hero img {
+  width: calc(100% + 40px) !important;
+  height: calc(100% + 28px) !important;
+  min-height: 260px !important;
+  max-width: none;
+  object-position: center 72%;
+  transform: translateX(-40px);
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(
+    90deg,
+    rgba(18, 15, 13, 0.99) 0%,
+    rgba(18, 15, 13, 0.88) 46%,
+    rgba(18, 15, 13, 0.32) 70%
+  );
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-layout {
+  display: flex !important;
+  height: 100%;
+  width: min(1500px, calc(100% - 88px)) !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  align-items: center !important;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+}
+
+.knowledge-v4 .knowledge-hero-stats {
+  display: grid;
+  position: relative;
+  flex: 0 1 480px;
+  grid-template-columns: repeat(2, minmax(190px, 1fr));
+  gap: 12px;
+  align-items: center;
+}
+
+.knowledge-v4 .knowledge-hero-stat {
+  display: grid;
+  min-height: 76px;
+  box-sizing: border-box;
+  align-content: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid rgba(242, 209, 133, 0.2);
+  border-radius: 8px;
+  background: rgba(89, 59, 43, 0.5);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  color: #fff;
+}
+
+.knowledge-v4 .knowledge-hero-stat > span,
+.knowledge-v4 .knowledge-hero-stat small {
+  display: block;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.04em;
+}
+
+/* Contextual management rules for the knowledge types with editable assets. */
+.knowledge-v4 .knowledge-management-rules {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 7px);
+  right: 0;
+}
+.knowledge-v4 .knowledge-management-rules-trigger {
+  display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: help;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+}
+.knowledge-v4 .knowledge-management-rules-trigger:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.knowledge-v4 .knowledge-management-rules-tooltip {
+  position: absolute;
+  top: auto;
+  bottom: 25px;
+  right: 0;
+  display: none;
+  width: max-content;
+  max-width: min(520px, calc(100vw - 40px));
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 28px rgba(22, 18, 10, 0.18);
+  backdrop-filter: blur(20px) saturate(125%);
+  -webkit-backdrop-filter: blur(20px) saturate(125%);
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 10px;
+  line-height: 1.25;
+  white-space: normal;
+}
+.knowledge-v4 .knowledge-management-rules-tooltip::before {
+  position: absolute;
+  top: auto;
+  bottom: -6px;
+  right: 7px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.32);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.16);
+  content: "";
+  transform: rotate(45deg);
+}
+.knowledge-v4 .knowledge-management-rules-tooltip ol {
+  margin: 0;
+  padding-left: 18px;
+}
+.knowledge-v4 .knowledge-management-rules-tooltip h3 {
+  margin: 0 0 7px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.knowledge-v4 .knowledge-management-rules-tooltip li + li {
+  margin-top: 4px;
+}
+.knowledge-v4 .knowledge-management-rules:hover .knowledge-management-rules-tooltip,
+.knowledge-v4 .knowledge-management-rules:focus-within .knowledge-management-rules-tooltip {
+  display: block;
+}
+
+/* The rules card intentionally extends below the hero; keep it above the toolbar. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-command-center {
+  overflow: visible !important;
+  z-index: 10;
+}
+
+.knowledge-v4 .knowledge-hero-stat > span {
+  text-transform: uppercase;
+}
+
+.knowledge-v4 .knowledge-hero-stat strong {
+  display: block;
+  margin: 0;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.knowledge-v4 .knowledge-hero-stat small {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: normal;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-copy .eyebrow {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 10px;
+  letter-spacing: normal;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-copy h1 {
+  margin: 0 !important;
+  font-size: 56px !important;
+  line-height: 1 !important;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-copy h1::after {
+  display: block !important;
+  width: 64px !important;
+  height: 8px !important;
+  margin: 16px 0 0 !important;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%) !important;
+  clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%) !important;
+}
+
+.knowledge-v4 .knowledge-command-center .home-command-copy > p:last-of-type {
+  max-width: 480px;
+  margin: 14px 0 0 !important;
+  color: rgba(255, 255, 255, 0.84) !important;
+  font-size: 17px !important;
+  line-height: 1.5 !important;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+}
+
+.knowledge-v4 .knowledge-hero-accent {
+  display: none;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .sidebar-manage-badge,
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .sidebar-manage-badge {
+  margin-left: auto;
+  color: #b97a1b;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .home-v4-inner {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-layout {
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .knowledge-layout {
+  min-height: 656px;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .knowledge-sidebar {
+  min-height: 656px;
+  padding: 24px 18px 40px;
+  border: 0;
+  border-right: 1px solid #e6e1d8;
+  border-radius: 0;
+  background: #f9f7f5;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-sidebar-brand {
+  margin-bottom: 18px;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button {
+  min-height: 43px;
+  border-radius: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav:hover,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav:focus-visible,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav.active,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button:hover,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button:focus-visible,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button.active {
+  background: rgba(176, 141, 87, 0.08) !important;
+  color: #1f1e1c !important;
+  font-weight: 500 !important;
+  outline: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav:hover::before,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav:focus-visible::before,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav.active::before,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button:hover::before,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button:focus-visible::before,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3px;
+  background: #b08d57;
+  border-radius: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessOverviewNav::after,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .business-type-nav button::after {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .business-knowledge-nav {
+  margin-right: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .sidebar-count,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .sidebar-type-count {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-sidebar {
+  top: auto;
+  border-radius: 0;
+}
+
+/* Knowledge detail pages: keep the navigation rail continuous below the site header,
+   then scale the hero into the remaining content column at its original ratio. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-command-center {
+  width: calc(100% - 240px);
+  height: 170px !important;
+  min-height: 170px !important;
+  margin-left: 240px;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-hero {
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-hero
+  img {
+  height: calc(100% + 22px) !important;
+  min-height: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-copy
+  .eyebrow {
+  font-size: 8px;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-copy
+  h1 {
+  font-size: 45px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-copy
+  h1::after {
+  width: 51px !important;
+  height: 6px !important;
+  margin-top: 13px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-command-center
+  .home-command-copy
+  > p:last-of-type {
+  max-width: 384px;
+  margin-top: 11px !important;
+  font-size: 14px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .home-v4-inner {
+  position: relative;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-layout {
+  background: #fcfaf8;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-sidebar {
+  position: fixed !important;
+  z-index: 2;
+  top: 56px !important;
+  bottom: 0;
+  left: 0;
+  width: 240px;
+  height: auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-main.business-type-page {
+  grid-column: 2;
+  background: #fcfaf8;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .knowledge-main {
+  min-width: 0;
+  min-height: 656px;
+  padding: 28px 0 42px 34px;
+  background: #fcfaf8;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .business-overview-head {
+  display: none;
+}
+
+.knowledge-v4 .overview-discovery {
+  display: block;
+}
+
+.knowledge-v4 .business-type-page .overview-discovery {
+  display: none;
+}
+
+.knowledge-v4 .overview-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.knowledge-v4 .overview-global-search {
+  display: flex;
+  min-width: 0;
+  height: 44px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 13px 0 18px;
+  border: 1px solid #d9bd91;
+  border-radius: 14px;
+  background: #fff;
+  color: #6f665d;
+  box-shadow: 0 8px 24px rgba(116, 78, 31, 0.08);
+  cursor: text;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.knowledge-v4 .overview-global-search:focus-within {
+  border-color: #b98234;
+  box-shadow: 0 0 0 3px rgba(185, 130, 52, 0.13), 0 10px 26px rgba(116, 78, 31, 0.1);
+}
+
+.knowledge-v4 .overview-global-search svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  stroke-width: 1.8;
+}
+
+.knowledge-v4 .overview-global-search input {
+  min-width: 0;
+  height: 100%;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #292724;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.knowledge-v4 .overview-global-search input::placeholder {
+  color: #77716b;
+  opacity: 1;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-main.business-type-page
+  .library-search-top.overview-global-search {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  flex: 0 0 300px !important;
+  margin: 0 0 0 auto !important;
+  padding: 0 13px 0 18px !important;
+  border: 1px solid #d9bd91 !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 24px rgba(116, 78, 31, 0.08) !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .knowledge-main.business-type-page
+  .library-search-top.overview-global-search:focus-within {
+  border-color: #b98234 !important;
+  box-shadow: 0 0 0 3px rgba(185, 130, 52, 0.13), 0 10px 26px rgba(116, 78, 31, 0.1) !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .library-search-top.overview-global-search
+  .search-icon {
+  position: static !important;
+  width: 20px !important;
+  height: 20px !important;
+  flex: 0 0 20px !important;
+  transform: none !important;
+  color: #6f665d !important;
+  stroke-width: 1.8;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .library-search-top.overview-global-search
+  input#knowledgeSearch {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #292724 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page)
+  .library-search-top.overview-global-search
+  input#knowledgeSearch::placeholder {
+  color: #77716b !important;
+  font-size: 12px !important;
+  opacity: 1;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"]
+  #businessKnowledgeLibrary
+  > .library-toolbar {
+  justify-content: flex-start !important;
+  padding-left: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"]
+  #businessKnowledgeLibrary
+  > .library-toolbar
+  > .library-search-actions {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"]
+  #businessKnowledgeLibrary
+  > .library-toolbar
+  > .library-create {
+  justify-content: flex-start !important;
+  margin-left: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"]
+  .library-search-top.overview-global-search {
+  margin: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"]
+  #principlesCardGrid {
+  padding: 0 18px 18px 0 !important;
+  background: transparent !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter {
+  --principles-filter-padding: 13px;
+  display: flex;
+  position: relative;
+  z-index: 30;
+  width: 220px;
+  min-width: 220px;
+  height: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 9px;
+  padding: 0 var(--principles-filter-padding);
+  border: 1px solid #e4e0d9;
+  border-radius: 12px;
+  background: #fff;
+  color: #383634;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter[hidden] {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  > span {
+  flex: 0 0 auto;
+  color: #969188;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  details {
+  position: static;
+  min-width: 0;
+  height: 42px;
+  flex: 1 1 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  summary {
+  display: flex;
+  height: 42px;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 18px 0 0;
+  border: 0;
+  background: transparent;
+  color: #383634;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  list-style: none;
+  cursor: pointer;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  summary::-webkit-details-marker {
+  display: none;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(var(--principles-filter-padding) + 2px);
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter:has(details[open])::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  .fm-options {
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  min-width: 260px;
+  max-height: 300px;
+  overflow-y: auto;
+  border-color: #e4e0d9;
+  border-radius: 10px;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  .fm-options
+  label {
+  position: relative;
+  min-height: 34px;
+  box-sizing: border-box;
+  color: #4a4743;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  .fm-options
+  input[type="checkbox"] {
+  position: absolute;
+  width: 1px !important;
+  height: 1px !important;
+  min-width: 1px !important;
+  margin: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(50%);
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .principles-category-filter
+  .fm-options
+  label:has(input:checked) {
+  background: #f7f2e8;
+  color: #84611f;
+}
+
+.knowledge-v4 .overview-ask-ai {
+  display: inline-flex;
+  min-width: 142px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 22px;
+  border: 1px solid #bb7b28;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d89b43 0%, #a96618 100%);
+  color: #fff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(153, 92, 20, 0.2);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+.knowledge-v4 .overview-ask-ai svg {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+}
+
+.knowledge-v4 .overview-ask-ai:hover {
+  filter: brightness(1.04);
+  transform: translateY(-1px);
+  box-shadow: 0 11px 24px rgba(153, 92, 20, 0.24);
+}
+
+.knowledge-v4 .overview-ask-ai:focus-visible {
+  outline: 3px solid rgba(185, 130, 52, 0.24);
+  outline-offset: 2px;
+}
+
+.knowledge-v4 .overview-ask-ai:active {
+  transform: translateY(0);
+}
+
+.knowledge-v4 .overview-search-status {
+  min-height: 18px;
+  margin: 4px 0 0;
+  color: #7b7771;
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.knowledge-v4 .overview-discovery .home-metrics {
+  margin-top: 0;
+}
+
+.knowledge-v4 .overview-discovery .home-signal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid #e6e1d8;
+  border-bottom: 1px solid #e6e1d8;
+}
+
+.knowledge-v4 .overview-discovery .home-signal {
+  min-width: 0;
+  padding: 16px 18px;
+  border-right: 1px solid #e6e1d8;
+  background: #fcfaf8;
+}
+
+.knowledge-v4 .overview-discovery .home-signal:last-child {
+  border-right: 0;
+}
+
+.knowledge-v4 .overview-discovery .home-signal-body {
+  display: grid;
+  gap: 2px;
+}
+
+.knowledge-v4 .overview-discovery .home-signal-body span {
+  color: #87827a;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.knowledge-v4 .overview-discovery .home-signal-body strong {
+  color: #171717;
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.knowledge-v4 .overview-discovery .home-signal-body small {
+  color: #77736d;
+  font-size: 11px;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) .knowledge-stats-row {
+  min-height: 0;
+  margin: 8px 0 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 26px minmax(0, 1fr) auto !important;
+  grid-template-rows: auto auto 1fr !important;
+  gap: 7px 9px !important;
+  min-height: 120px !important;
+  align-content: start !important;
+  padding: 16px !important;
+  border: 1px solid #e6e1d8 !important;
+  border-radius: 5px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+/* Type detail pages use the command hero as their page header. */
+body:has(
+  .knowledge-v4 .knowledge-main:is(
+    [data-active-type="Principles"],
+    [data-active-type="Report Context"],
+    [data-active-type="Data Model"],
+    [data-active-type="Metric Dictionary"],
+    [data-active-type="Business Term"],
+    [data-active-type="Analytical Model"],
+    [data-active-type="Scenario Reporting"],
+    [data-active-type="Email Reports"]
+  )
+)
+  .business-overview-head {
+  display: none !important;
+}
+
+/* Keep the Principles controls flush with the hero edge. */
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Principles"])
+  .knowledge-main[data-active-type="Principles"] {
+  padding-top: 0 !important;
+}
+
+/* Report Context uses the same flush toolbar placement as Principles. */
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Report Context"])
+  .knowledge-main[data-active-type="Report Context"] {
+  padding-top: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Metric Dictionary"])
+  .knowledge-main[data-active-type="Metric Dictionary"] {
+  padding-top: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Business Term"])
+  .knowledge-main[data-active-type="Business Term"] {
+  padding-top: 0 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Analytical Model"])
+  .knowledge-main[data-active-type="Analytical Model"],
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Scenario Reporting"])
+  .knowledge-main[data-active-type="Scenario Reporting"],
+body:has(.knowledge-v4 .knowledge-main[data-active-type="Email Reports"])
+  .knowledge-main[data-active-type="Email Reports"] {
+  padding-top: 0 !important;
+}
+
+/* Secondary knowledge libraries use three columns at desktop width. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-card-wrap,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-card-wrap,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* The compact third column keeps the email report title independent of its tag. */
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card {
+  grid-template-columns: minmax(0, 1fr) !important;
+  min-height: 168px;
+  padding: 16px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-domain {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-titleline {
+  display: block;
+  padding-right: 112px;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card h3 {
+  max-width: 100%;
+}
+
+/* Three-column cards retain their text column; long values truncate naturally. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card h3,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card h3 {
+  max-width: 100%;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-description,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card p {
+  max-width: 100%;
+}
+
+@media (max-width: 980px) {
+  body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+    #scenarioReportOverview .scenario-report-card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+    #scenarioReportOverview .scenario-report-card-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Report Context cards use a compact title row and only retain the Project field. */
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-title-row h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-title-row .fm-report-card-status {
+  position: static;
+  flex: 0 0 auto;
+  height: 24px;
+  min-height: 24px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta .bt-term-card-field {
+  margin-top: 12px;
+}
+
+/* Business Terms follows the three-column reference-card layout. */
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card {
+  min-height: 286px;
+  padding: 20px !important;
+  border-radius: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-pills .bt-scope-tags {
+  display: none;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card h3 {
+  max-width: calc(100% - 112px);
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card p,
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-synonyms {
+  width: 100%;
+  max-width: 100%;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-actions {
+  position: static;
+  margin-top: 10px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-actions .fm-actions {
+  justify-content: flex-end;
+}
+
+@media (max-width: 980px) {
+  body:has(.knowledge-main[data-active-type="Business Term"])
+    #businessTermOverview .bt-term-card-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body:has(.knowledge-main[data-active-type="Business Term"])
+    #businessTermOverview .bt-term-card-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Scenario Reporting reference-card hierarchy. */
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card {
+  position: relative;
+  display: block;
+  min-height: 294px;
+  padding: 20px !important;
+  border-radius: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-main {
+  display: block;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card h3,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card p,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-meta {
+  font-family: Arial, sans-serif;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card h3 {
+  max-width: calc(100% - 116px);
+  font-size: 20px !important;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card p {
+  max-width: 100%;
+  margin-top: 14px;
+  font-size: 16px !important;
+  line-height: 1.45;
+  -webkit-line-clamp: 2;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: 16px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-meta > span {
+  color: #99948a;
+  font-size: inherit !important;
+  font-weight: 600;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-meta > strong,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-meta > a {
+  min-width: 0;
+  overflow: hidden;
+  color: #403e3b;
+  font-size: inherit !important;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-process .bt-flow-status {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px !important;
+  line-height: 1.2;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-process .bt-flow-status[data-flow-status="Ready"] {
+  background: #e7f6ed;
+  color: #0f9f5d;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-process .bt-flow-status[data-flow-status="Building"] {
+  background: #fff2d8;
+  color: #9f6b24;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-process .bt-flow-status[data-flow-status="Queued"] {
+  background: #eef2f6;
+  color: #667085;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-pills {
+  top: 20px;
+  right: 20px;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-pills .fm-state {
+  min-height: 32px;
+  padding: 3px 14px;
+  border-radius: 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-card-actions {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+}
+
+/* Analytical Models uses the same field-first card composition. */
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card {
+  position: relative;
+  display: block;
+  min-height: 400px;
+  /* Bottom padding 14px (not 20px) so the action row sits 15px above the card
+     bottom edge — same rhythm as Scenario Reporting cards. */
+  padding: 20px 20px 14px !important;
+  border-radius: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card h3,
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-description,
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card h3 {
+  max-width: calc(100% - 118px);
+  font-size: 20px !important;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-description {
+  max-width: 100%;
+  margin-top: 14px;
+  font-size: 16px !important;
+  line-height: 1.45;
+  -webkit-line-clamp: 2;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills {
+  top: 20px;
+  right: 20px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-domains {
+  display: none;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills .fm-state {
+  min-height: 32px;
+  padding: 3px 14px;
+  border-radius: 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin-top: 16px;
+  font-size: 16px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta > div {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 10px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta > .fm-analysis-referenced {
+  grid-column: 1 / -1;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta span {
+  flex: 0 0 auto;
+  color: #99948a;
+  font-size: inherit !important;
+  font-weight: 600;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #403e3b;
+  font-size: inherit !important;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card-actions {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+}
+
+/* Email report cards use the field layout from the reference. */
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-card {
+  display: block;
+  min-height: 232px;
+  padding: 20px !important;
+  border-radius: 10px;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-titleline {
+  display: block;
+  padding: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-card h3 {
+  max-width: 100%;
+  font-size: 18px !important;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta > div > span:first-child {
+  flex: 0 0 78px;
+  color: #99948a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px !important;
+  font-weight: 400;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta strong {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #1d1c1b;
+  font-size: 16px !important;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-recipient-tags {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 6px;
+  overflow: hidden;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-recipients {
+  align-items: flex-start;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-recipient-tags span {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 5px 9px;
+  overflow: hidden;
+  background: #f4f1eb;
+  color: #2d2b29;
+  font-family: inherit;
+  font-size: 14px !important;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-domain {
+  display: none;
+}
+
+/* Email card type scale. */
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta > div > span:first-child {
+  font-size: 14px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta > div:first-child > strong {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-recipient-tags span {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-email-meta > div:last-child > strong {
+  font-size: 14px !important;
+  font-weight: 400;
+}
+
+/* Re-enable the existing shared pagination controls for Email Reports. */
+body:has(.knowledge-main[data-active-type="Email Reports"])
+  #fmLibrary .fm-pagination {
+  display: flex !important;
+  padding: 16px 0 0;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-pagination {
+  display: flex !important;
+  padding: 16px 0 0;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .fm-pagination,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .fm-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0 0;
+  color: #6c7785;
+  font-size: 12px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .fm-pagination > div,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .fm-pagination > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .fm-pagination select,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .fm-pagination select {
+  padding: 6px;
+  border: 1px solid #d7dee5;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* Shared add button for authorable knowledge libraries. */
+.knowledge-add-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-left: auto;
+  padding: 0 22px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #d99738, #b97012);
+  box-shadow: 0 8px 18px rgba(174, 105, 16, 0.18);
+  color: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.knowledge-add-button:hover,
+.knowledge-add-button:focus-visible {
+  background: linear-gradient(135deg, #e2a64c, #c47b1b);
+  color: #fff;
+}
+
+.knowledge-add-button > span {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-overview-tools,
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-tools,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+  #scenarioReportOverview .scenario-report-toolbar {
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 980px) {
+  body:has(.knowledge-main[data-active-type="Business Term"])
+    #businessTermOverview .bt-overview-tools,
+  body:has(.knowledge-main[data-active-type="Analytical Model"])
+    #fmLibrary .fm-tools,
+  body:has(.knowledge-main[data-active-type="Scenario Reporting"])
+    #scenarioReportOverview .scenario-report-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .knowledge-add-button {
+    min-height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+}
+
+/* Metric cards share the same compact information hierarchy as the reference card. */
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-card {
+  display: block;
+  min-height: 210px;
+  padding: 16px !important;
+  border-color: #e6e2db;
+  border-radius: 5px;
+  color: #343230;
+  font-family: inherit;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-card h3 {
+  display: -webkit-box;
+  max-width: calc(100% - 96px);
+  margin: 0;
+  overflow: hidden;
+  color: #1d1c1b;
+  font-family: inherit;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: #f7f1e5;
+  color: #b4872d;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status.is-disabled {
+  background: #f1f1ef;
+  color: #77736d;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-definition {
+  display: -webkit-box;
+  max-width: none;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: #403e3b;
+  font-size: 12px !important;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta {
+  display: grid;
+  grid-template-columns: minmax(0, .45fr) minmax(0, 1fr);
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-data-model {
+  grid-column: 1 / -1;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta > div {
+  display: flex;
+  gap: 7px;
+  min-width: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta dt,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms > span {
+  flex: 0 0 auto;
+  color: #99948a;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta dd {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #403e3b;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms > div {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow: hidden;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonym {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-width: 0;
+  max-width: none;
+  height: 24px;
+  box-sizing: border-box;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #f1efeb;
+  color: #403e3b;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Match the filtered-result count treatment used by the Business Terms library. */
+.fm-overview-countline {
+  margin: -4px 0 14px;
+  color: #6f6961;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.fm-overview-countline strong {
+  color: #4a4743;
+  font-weight: 600;
+}
+
+/* A Knowledge type page reports its totals in the hero, so the separate
+   "Showing X of Y" count line is dropped there. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .fm-overview-countline,
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .bt-overview-countline {
+  display: none !important;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-more {
+  flex: 0 0 auto;
+  max-width: none;
+  padding: 0 11px;
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (max-width: 1180px) {
+  body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* Report Context cards follow the knowledge-card hierarchy used in the detail reference. */
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card {
+  min-height: 210px;
+  padding: 16px !important;
+  border-color: #e6e2db;
+  border-radius: 5px;
+  font-family: inherit;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card h3 {
+  max-width: calc(100% - 102px);
+  font-family: inherit;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: normal;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card p,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card p {
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: #f7f1e5;
+  color: #b4872d;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-status.is-disabled {
+  background: #f1f1ef;
+  color: #77736d;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta dt {
+  color: #99948a;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta dd {
+  min-width: 0;
+  margin: 0;
+  color: #403e3b;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-scenarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-scenarios span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 3px 8px;
+  overflow: hidden;
+  border: 1px solid #e6cfae;
+  border-radius: 999px;
+  color: #976127;
+  font-family: inherit;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+/* Dense reference libraries remain legible with three cards per row on wide screens. */
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-card-wrap,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-card-wrap {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 980px) {
+  body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-card-wrap {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-card-wrap,
+  body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-card-wrap {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-count-pill {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 9px;
+  border: 1px solid #ead8ba;
+  border-radius: 999px;
+  background: #f7efe2;
+  color: #9a6518;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card.is-manageable {
+  border-top: 3px solid #e6e1d8 !important;
+  padding-top: 14px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:hover,
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: #e6e1d8 !important;
+  background: #fffaf3 !important;
+  box-shadow: 0 12px 26px rgba(31, 24, 18, 0.09) !important;
+  outline: 0;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:hover .v20-type-icon,
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:focus-visible .v20-type-icon {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card[hidden] {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-icon {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #8c641f !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card strong {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: center !important;
+  margin: 0 !important;
+  color: #171717 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card small {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  margin: 0 !important;
+  color: #77736d !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.35 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em {
+  grid-column: 1 / -1 !important;
+  grid-row: 3 !important;
+  align-self: end !important;
+  margin: 3px 0 0 !important;
+  color: #82530f !important;
+  font-size: 11px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card > em,
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card > em > span {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-card-arrow {
+  display: none !important;
+}
+
+/* Overview type cards: spacious editorial layout matching the reference dashboard. */
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card {
+  display: block !important;
+  min-height: 198px !important;
+  height: 198px !important;
+  padding: 0 28px !important;
+  overflow: hidden;
+  border-color: #e8e3db !important;
+  border-radius: 12px !important;
+  background: linear-gradient(145deg, #fff 0%, #fffdfa 100%) !important;
+  box-shadow: 0 5px 16px rgba(44, 35, 24, 0.045) !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card.is-manageable {
+  border-top-width: 1px !important;
+  padding-top: 20px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-icon {
+  display: none !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card strong {
+  position: absolute;
+  top: 26px;
+  left: 28px;
+  z-index: 1;
+  display: block;
+  margin: 0 !important;
+  color: #17202d !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-count-pill {
+  position: absolute;
+  top: 18px;
+  right: 28px;
+  z-index: 2;
+  min-height: 28px;
+  padding: 5px 13px;
+  border: 0;
+  background: #fbf2e4;
+  color: #b5640b;
+  font-size: 12px;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card small {
+  position: absolute;
+  top: 61px;
+  left: 28px;
+  z-index: 1;
+  display: block;
+  width: min(175px, calc(100% - 184px));
+  margin: 0 !important;
+  color: #69707b !important;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em {
+  position: absolute;
+  right: auto;
+  bottom: 16px;
+  left: 28px;
+  z-index: 1;
+  display: block;
+  width: 180px;
+  margin: 0 !important;
+  padding-top: 10px;
+  border-top: 1px solid #ece8e1;
+  color: #a95d08 !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em span {
+  margin-left: 3px;
+  font-size: 14px;
+  vertical-align: 0;
+}
+
+/* Soft category-specific artwork uses only CSS, so cards remain lightweight and responsive. */
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::after {
+  position: absolute;
+  right: -2px;
+  bottom: 3px;
+  z-index: 1;
+  width: 112px;
+  height: 112px;
+  border: 0;
+  border-radius: 0;
+  content: "";
+  opacity: 1;
+  background-image: url("../../images/knowledge-card-illustrations.png");
+  background-repeat: no-repeat;
+  background-size: 400% 200%;
+  filter: brightness(1.14) saturate(.55) contrast(.88) drop-shadow(4px 6px 9px rgba(97, 72, 38, .06));
+  opacity: .68;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::before {
+  position: absolute;
+  right: 6px;
+  bottom: 19px;
+  z-index: 0;
+  width: 94px;
+  height: 94px;
+  border-radius: 50%;
+  content: "";
+  background: radial-gradient(circle at 60% 38%, #fff9ed 0%, #f7e6c8 100%);
+  opacity: .55;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(1)::after {
+  background-position: 0 0;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(2)::after {
+  background-position: 33.333% 0;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(3)::after {
+  background-position: 66.667% 0;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(4)::after {
+  background-position: 100% 0;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(5)::after {
+  background-position: 0 100%;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(6)::after {
+  background-position: 33.333% 100%;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(7)::after {
+  background-position: 66.667% 100%;
+}
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(8)::after {
+  background-position: 100% 100%;
+}
+
+/* Dashboard reference alignment: give every overview card the same editorial
+   rhythm as the supplied 4K dashboard (copy left, artwork quietly anchored
+   to the lower-right). */
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card {
+  min-height: 0 !important;
+  height: 171px !important;
+  aspect-ratio: auto;
+  padding: 0 24px !important;
+  border-color: #ebe6de !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fffefa 100%) !important;
+  box-shadow: 0 8px 22px rgba(57, 43, 25, 0.045) !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card strong {
+  top: 30px;
+  left: 24px;
+  font-size: 18px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-count-pill {
+  top: 18px;
+  right: 8px;
+  height: 26px;
+  min-height: 26px;
+  box-sizing: border-box;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card small {
+  top: 62px;
+  left: 24px;
+  width: 60%;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em {
+  bottom: 20px;
+  left: 24px;
+  width: 178px;
+  padding-top: 11px;
+  border-top: 0;
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 66.666%;
+  height: 1px;
+  content: "";
+  background: #ece8e1;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats .v20-type-card em span {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::after {
+  right: 8px;
+  bottom: 8px;
+  width: 133px;
+  height: 133px;
+  filter: brightness(1.18) saturate(.48) contrast(.84) drop-shadow(5px 7px 12px rgba(97, 72, 38, .055));
+  opacity: .66;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::before {
+  right: 16px;
+  bottom: 22px;
+  width: 110px;
+  height: 110px;
+  opacity: .48;
+}
+
+/* Supplied artwork: each category uses its matching original PNG, rather than
+   the generated sprite used in the earlier iteration. */
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::after {
+  inset: 0;
+  z-index: 0;
+  width: auto;
+  height: auto;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  /* The card and source image share the same 323:207 ratio, so the original
+     artwork fills its matching card without distortion. */
+  background-size: 100% 100%;
+  filter: none;
+  opacity: 1;
+  pointer-events: none;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card::before {
+  display: none;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(1)::after { background-image: url("../../images/knowledge-card-icons/layer-1.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(2)::after { background-image: url("../../images/knowledge-card-icons/layer-2.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(3)::after { background-image: url("../../images/knowledge-card-icons/layer-3.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(4)::after { background-image: url("../../images/knowledge-card-icons/layer-4.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(5)::after { background-image: url("../../images/knowledge-card-icons/layer-5.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(6)::after { background-image: url("../../images/knowledge-card-icons/layer-6.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(7)::after { background-image: url("../../images/knowledge-card-icons/layer-7.png"); }
+body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card:nth-child(8)::after { background-image: url("../../images/knowledge-card-icons/layer-8.png"); }
+
+@media (max-width: 1180px) {
+  .knowledge-v4 .overview-search-row {
+    max-width: calc(100vw - 308px);
+  }
+
+  body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .knowledge-v4 .overview-search-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .knowledge-v4 .overview-ask-ai {
+    width: 100%;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knowledge-v4 .overview-global-search,
+  .knowledge-v4 .overview-ask-ai,
+  body:has(.knowledge-v4 .knowledge-main.business-overview-page) #knowledgeTypeStats > .v20-type-card {
+    transition: none !important;
+  }
+}
+
+/* Shared overview-card typography and truncation rules. */
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-card,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-report-card,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-analysis-card,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-email-card,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card {
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-card h3,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-report-card h3,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-analysis-card h3,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-email-card h3,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card h3,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card h3 {
+  display: block !important;
+  overflow: hidden;
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-definition,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-report-card p,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-analysis-description,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-email-card p,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card p,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card p {
+  display: -webkit-box !important;
+  overflow: hidden;
+  font-size: 14px !important;
+  line-height: 1.45 !important;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-meta > div {
+  height: 24px;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-meta dt,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-meta dd,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-synonyms > span,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-status,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-synonym {
+  font-size: 14px !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-meta dd,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-metric-synonyms > span,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-analysis-meta span,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-analysis-meta strong,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-email-meta span,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-email-meta strong,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-report-card-meta dt,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-report-card-meta dd,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-field > span,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > span,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > strong,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > a {
+  overflow: hidden;
+  font-size: 14px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Keep every knowledge-library search, filter, and add control on the same 44px rhythm. */
+.knowledge-v4 .overview-global-search,
+.knowledge-v4 #fmLibrary .fm-filter,
+.knowledge-v4 #businessTermOverview .bt-overview-filter,
+.knowledge-v4 #businessKnowledgeLibrary .business-filter-field,
+.knowledge-v4 #businessKnowledgeLibrary .principles-category-filter,
+.knowledge-v4 #scenarioReportOverview .scenario-report-filter,
+.knowledge-v4 .knowledge-add-button {
+  height: 44px !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+.knowledge-v4 #fmLibrary .fm-filter details,
+.knowledge-v4 #fmLibrary .fm-filter summary,
+.knowledge-v4 #businessTermOverview .bt-overview-filter details,
+.knowledge-v4 #businessTermOverview .bt-overview-filter summary,
+.knowledge-v4 #businessKnowledgeLibrary .business-filter-field details,
+.knowledge-v4 #businessKnowledgeLibrary .business-filter-field summary,
+.knowledge-v4 #businessKnowledgeLibrary .principles-category-filter details,
+.knowledge-v4 #businessKnowledgeLibrary .principles-category-filter summary {
+  height: 42px !important;
+  min-height: 42px !important;
+  box-sizing: border-box !important;
+}
+
+.knowledge-v4 #scenarioReportOverview .scenario-report-filter select {
+  height: 44px !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* Reuse the Home workspace card gutter beneath the AI Interpreter hero. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-main.business-type-page {
+  box-sizing: border-box;
+  padding: 20px 44px 42px;
+}
+
+@media (max-width: 1240px) {
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-main.business-type-page {
+    padding-right: 32px;
+    padding-left: 32px;
+  }
+}
+
+@media (max-width: 760px) {
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-main.business-type-page {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}
+
+/* Compact list and term cards without changing their horizontal rhythm. */
+body:has(.knowledge-main[data-active-type="Principles"])
+  #principlesCardGrid .principle-list-item {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-synonyms {
+  width: 100%;
+  max-width: 100%;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card .bt-tags {
+  flex: 1 1 0;
+  width: 0;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card .bt-tag {
+  flex: 0 0 auto;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"])
+  #businessTermOverview .bt-term-card-pills {
+  top: 10px;
+}
+
+/* Analytical Model cards use the Metric Dictionary's compact status and tag rhythm. */
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card-head {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-title-wrap {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card h3 {
+  max-width: none !important;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills {
+  position: static !important;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills .fm-state {
+  display: inline-flex;
+  min-height: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: #f7f1e5;
+  color: #b4872d;
+  font-family: inherit;
+  font-size: 14px !important;
+  font-weight: 700;
+  line-height: 1;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills .fm-state::before {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  background: currentColor;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-pills .fm-state.off {
+  background: #f1f1ef;
+  color: #77736d;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-meta > div {
+  height: 24px;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-referenced {
+  grid-column: auto;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-reference-tags {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+  overflow: hidden;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-reference-chip {
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #f1efeb;
+  color: #403e3b;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-reference-chip:first-child {
+  max-width: calc(100% - 42px);
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-reference-chip:only-child {
+  max-width: 100%;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"])
+  #fmLibrary .fm-analysis-card-actions {
+  position: static;
+  min-height: 24px;
+  /* 12px top margin keeps a small separation from the meta rows while the
+     reduced card bottom padding pins the row near the card's bottom edge. */
+  margin-top: 12px;
+  justify-content: flex-start;
+}
+
+/* Report Context card typography and status pill sizing. */
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-status {
+  width: 76px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  box-sizing: border-box;
+  justify-content: center;
+  padding: 0 !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-status i {
+  width: 6px !important;
+  height: 6px !important;
+  flex: 0 0 6px;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card p,
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta dt,
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta dd {
+  font-size: 12px !important;
+}
+
+/* Align all knowledge overview cards with the Report Context card language. */
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-card, .fm-analysis-card, .fm-email-card),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card {
+  background: #fff !important;
+  border: 1px solid #d8dfe5 !important;
+  box-shadow: 0 4px 14px rgba(25, 31, 37, 0.08) !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-card h3, .fm-analysis-card h3, .fm-email-card h3),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card h3,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card h3 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-definition, .fm-analysis-description, .fm-email-card p),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card p,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card p {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-meta dt, .fm-metric-meta dd, .fm-analysis-meta span, .fm-analysis-meta strong, .fm-email-meta span, .fm-email-meta strong),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-field > :is(span, strong),
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > :is(span, strong, a) {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-status, .fm-analysis-pills .fm-state, .fm-email-status),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-pills .fm-state,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card .fm-state {
+  width: 76px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  box-sizing: border-box;
+  padding: 0 !important;
+  border-radius: 5px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-status i, .fm-analysis-pills .fm-state::before, .fm-email-status i),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-pills .fm-state::before,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card .fm-state::before {
+  width: 6px !important;
+  height: 6px !important;
+  flex: 0 0 6px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-field,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-metric-card-actions, .fm-analysis-card-actions, .fm-email-card-actions),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-actions,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-actions {
+  margin-top: auto;
+}
+
+body:has(.knowledge-main[data-active-type="Principles"]) #principlesCardGrid .principle-list-item {
+  background: #fff !important;
+  border: 1px solid #d8dfe5 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(25, 31, 37, 0.08) !important;
+}
+
+/* Four reference libraries share the same card-corner treatment. */
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-card {
+  border-radius: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Principles"]) #principlesCardGrid .principle-list-titleline h3 {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Principles"]) #principlesCardGrid .principle-list-copy p {
+  font-size: 12px !important;
+}
+
+/* Final font normalization for the three cards that have legacy type-specific rules. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card {
+  font-family: inherit !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card h3,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card h3,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card h3 {
+  font-family: inherit !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-description,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card p,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card p {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card :is(.fm-analysis-meta, .fm-analysis-meta span, .fm-analysis-meta strong),
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card :is(.scenario-report-card-meta, .scenario-report-card-meta span, .scenario-report-card-meta strong, .scenario-report-card-meta a),
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-card :is(.fm-email-meta, .fm-email-meta span, .fm-email-meta strong) {
+  font-family: inherit !important;
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms > span,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms > div,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms .fm-metric-synonym {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-synonyms .bt-tags {
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: 0;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow: hidden;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-synonyms {
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  gap: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-synonyms .bt-tag {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > span:first-child,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > strong,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-recipient-tags span {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+/* Final field-label and capsule normalization across knowledge cards. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-meta > div > span,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > span:first-child,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-meta > span,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta dt,
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonyms > span,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-field > span {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #99948a !important;
+}
+
+body:has(.knowledge-main[data-active-type="Report Context"]) #fmLibrary .fm-report-card-meta dt {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #99948a !important;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-meta dd {
+  font-weight: 400 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-synonym {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > span:first-child {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > strong,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-recipient-tags span {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+}
+
+/* Keep Business Term metadata aligned with the content column, reserving the
+   bottom row for the creator and its adjacent actions. */
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card {
+  position: relative;
+  padding-bottom: 50px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta {
+  display: block !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta .bt-term-card-field {
+  margin-top: 12px;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta .bt-term-card-field:first-child {
+  position: absolute;
+  bottom: 14px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+  max-width: calc(100% - 118px);
+  margin: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-actions,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-actions.is-synonym-aligned {
+  position: absolute;
+  top: auto !important;
+  right: 16px;
+  bottom: 10px !important;
+  margin: 0 !important;
+}
+
+/* Analytical Model card metadata has discrete rows so its bottom actions do
+   not collide with referenced metrics at narrower card widths. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card {
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  /* The footer follows the referenced-metrics row in normal document flow. */
+  min-height: 0 !important;
+  padding-bottom: 20px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-meta > div {
+  display: flex;
+  height: 24px;
+  margin: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card-footer {
+  display: flex;
+  width: 100%;
+  min-height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 0;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-creator {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-creator strong {
+  min-width: 0;
+  overflow: hidden;
+  color: #403e3b;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-creator span {
+  flex: 0 0 auto;
+  color: #99948a;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-card-actions {
+  position: static;
+  flex: 0 0 auto;
+  min-height: 24px;
+  margin: 0 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  gap: 12px !important;
+  align-items: center;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-meta > div > span:first-child {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-recipient-tags {
+  grid-column: 2;
+  min-width: 0;
+}
+
+/* Status capsules on every knowledge type follow Report Context exactly. */
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-pills .fm-state,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-pills .fm-state,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-pills .fm-state {
+  display: inline-flex !important;
+  width: 76px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  box-sizing: border-box !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  padding: 0 !important;
+  border-radius: 5px !important;
+  background: #f7f1e5 !important;
+  color: #b4872d !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status.is-disabled,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-pills .fm-state.off,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-pills .fm-state.off,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-pills .fm-state.off {
+  background: #f1f1ef !important;
+  color: #77736d !important;
+}
+
+body:has(.knowledge-main[data-active-type="Metric Dictionary"]) #fmLibrary .fm-metric-status i,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-pills .fm-state::before,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-pills .fm-state::before,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-pills .fm-state::before {
+  width: 6px !important;
+  height: 6px !important;
+  flex: 0 0 6px !important;
+  border-radius: 50% !important;
+  background: currentColor !important;
+}
+
+/* Field capsules share the Analytical Model reference-chip specification. */
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-reference-chip,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-synonyms .bt-tag,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-recipient-tags span {
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  background: #f1efeb !important;
+  color: #403e3b !important;
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+}
+
+/* Shared knowledge toolbar sizing. */
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-filter,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-filter details,
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-filter summary,
+body:has(.knowledge-main[data-active-type]) #businessTermOverview .bt-overview-filter details,
+body:has(.knowledge-main[data-active-type]) #businessTermOverview .bt-overview-filter summary,
+body:has(.knowledge-main[data-active-type]) #scenarioReportOverview .scenario-report-filter {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+body:has(.knowledge-main[data-active-type]) #fmLibrary .fm-tools .overview-global-search,
+body:has(.knowledge-main[data-active-type]) #businessTermOverview .bt-overview-search,
+body:has(.knowledge-main[data-active-type]) #scenarioReportOverview .scenario-report-search {
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+  flex: 0 0 170px !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .knowledge-add-button,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .knowledge-add-button,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .knowledge-add-button {
+  width: auto !important;
+  min-width: 0 !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  gap: 6px !important;
+  padding: 0 15px !important;
+  border-radius: 9px !important;
+  background: linear-gradient(135deg, #e3ba6d, #cb8f2b) !important;
+  box-shadow: 0 3px 9px rgba(174, 105, 16, 0.14) !important;
+  font-family: "DIN 2014", Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .knowledge-add-button:hover,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .knowledge-add-button:hover,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .knowledge-add-button:hover,
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .knowledge-add-button:focus-visible,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .knowledge-add-button:focus-visible,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .knowledge-add-button:focus-visible {
+  background: linear-gradient(135deg, #ecc673, #d59a33) !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .knowledge-add-button > span,
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .knowledge-add-button > span,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .knowledge-add-button > span {
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-synonyms .bt-tag,
+body:has(.knowledge-main[data-active-type="Email Reports"]) #fmLibrary .fm-email-recipient-tags span {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 24px;
+  height: 24px;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  background: #f1efeb !important;
+  color: #403e3b !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  line-height: 1 !important;
+}
+
+body:has(.knowledge-main[data-active-type="Analytical Model"]) #fmLibrary .fm-analysis-reference-chip {
+  font-size: 12px !important;
+}
+
+/* Hero statistics belong to the Overview only. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-hero-stats {
+  display: grid !important;
+}
+
+@media (max-width: 1100px) {
+  .knowledge-v4 .knowledge-hero-stats {
+    flex-basis: 420px;
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .knowledge-v4 .knowledge-hero-stat {
+    min-height: 112px;
+    padding: 18px;
+  }
+}
+
+@media (max-width: 760px) {
+  .knowledge-v4 .knowledge-hero-stats {
+    display: none;
+  }
+}
+
+/* Keep the AI Interpreter workspace aligned with the shared Home page gutter. */
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .home-v4-inner {
+  width: min(1500px, calc(100% - 88px));
+  max-width: none;
+  margin: 0 auto;
+}
+
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-sidebar {
+  left: max(44px, calc((100vw - 1500px) / 2));
+}
+
+/* The sidebar and the content must derive from the SAME chassis.
+   The shared Home gutter is a 1500px box (see .home-v4-inner above) and the
+   sidebar (240px) + content (1260px) add up to exactly 1500px, so the content
+   simply starts where the sidebar ends. The previous rule centred a 1260px box
+   in the full viewport instead, i.e. two different chassis: past ~1590px the
+   sidebar overtook the content and covered the hero title. */
+body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-command-center {
+  width: min(1260px, calc(100% - 328px));
+  margin-left: max(284px, calc((100vw - 1500px) / 2 + 240px));
+}
+
+
+@media (max-width: 1240px) {
+  body:has(.knowledge-v4 .knowledge-main[data-active-type]) .home-v4-inner {
+    width: calc(100% - 64px);
+  }
+
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-sidebar {
+    left: 32px;
+  }
+
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-command-center {
+    width: calc(100% - 304px);
+    margin-left: 272px;
+  }
+
+}
+
+@media (max-width: 760px) {
+  body:has(.knowledge-v4 .knowledge-main[data-active-type]) .home-v4-inner {
+    width: calc(100% - 40px);
+  }
+
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-sidebar {
+    left: 20px;
+  }
+
+  body:has(.knowledge-v4 .knowledge-main.business-type-page) .knowledge-command-center {
+    width: calc(100% - 280px);
+    margin-left: 260px;
+  }
+
+}
+
+/* Match Home's cool-neutral workspace surface while keeping navigation distinct. */
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-layout,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main {
+  background: #f6f7f8;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-sidebar {
+  background: #ffffff;
+}
+
+/* Type overview shells use the same workspace canvas as the main Overview. */
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #fmLibrary,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessTermOverview,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #scenarioReportOverview,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) #businessKnowledgeLibrary {
+  background: #f6f7f8;
+}
+
+/* Scenario Reporting's list shell is a canvas, not an additional white panel. */
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .bt-table-wrap,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card-list {
+  background: #f6f7f8 !important;
+}
+
+/* Report Context drawer metadata is presented as three clear rows. */
+.fm-report-context .fm-rc-meta {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 12px !important;
+}
+
+.fm-report-context .fm-rc-meta > div {
+  width: 100%;
+}
+
+/* Drawer header status matches the overview status capsule. */
+#fmDrawerStatus {
+  display: inline-flex !important;
+  width: 76px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 !important;
+  border-radius: 5px !important;
+  background: #f7f1e5 !important;
+  color: #b4872d !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+}
+
+#fmDrawerStatus::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.scenario-drawer-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  margin-top: auto;
+  padding: 16px 20px;
+  border-top: 1px solid #e6e2db;
+  background: #fff;
+}
+
+.scenario-drawer-actions .fm-button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid #d8dfe5;
+  border-radius: 6px;
+  background: #fff;
+  color: #403e3b;
+  font: 500 12px/1 Arial, sans-serif;
+}
+
+.scenario-drawer-actions .fm-button:hover {
+  background: #f6f7f8;
+  border-color: #b8bfc7;
+}
+
+.scenario-drawer-actions {
+  gap: 16px;
+}
+
+.scenario-drawer-actions .fm-icon-button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #aeb9c5;
+}
+
+.scenario-drawer-actions .fm-icon-button:hover {
+  color: #b4872d;
+  background: transparent;
+}
+
+.scenario-drawer-actions .fm-icon-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* The scenario detail drawer shares the overview action controls and stays anchored below its scrollable content. */
+#knowledgeDetail.scenario-report-detail-mode {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#knowledgeDetail.scenario-report-detail-mode .detail-drawer-head,
+#knowledgeDetail.scenario-report-detail-mode .scenario-drawer-actions {
+  flex: 0 0 auto;
+}
+
+#knowledgeDetail.scenario-report-detail-mode .scenario-report-drawer-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.scenario-drawer-actions .fm-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scenario-drawer-actions .fm-button.fm-icon-action {
+  border-color: transparent !important;
+  background: transparent !important;
+  color: #c8892b !important;
+}
+
+.scenario-drawer-actions .fm-button.fm-icon-action svg {
+  stroke: #c8892b !important;
+}
+
+.scenario-drawer-actions .fm-button.fm-icon-action:hover:not(.is-action-disabled):not([aria-disabled="true"]),
+.scenario-drawer-actions .fm-button.fm-icon-action:focus-visible:not(.is-action-disabled):not([aria-disabled="true"]) {
+  background: #fff6e8 !important;
+  box-shadow: none !important;
+}
+
+.scenario-drawer-actions .fm-button.fm-icon-action.is-action-disabled,
+.scenario-drawer-actions .fm-button.fm-icon-action[aria-disabled="true"],
+.scenario-drawer-actions .fm-button.fm-icon-action:disabled {
+  color: #aeb7c1 !important;
+  cursor: not-allowed;
+}
+
+.scenario-drawer-actions .fm-button.fm-icon-action.is-action-disabled svg,
+.scenario-drawer-actions .fm-button.fm-icon-action[aria-disabled="true"] svg,
+.scenario-drawer-actions .fm-button.fm-icon-action:disabled svg {
+  stroke: #aeb7c1 !important;
+}
+
+/* Overview uses the full toolbar width for search; Ask AI is intentionally hidden. */
+.knowledge-v4 #overviewAskAi {
+  display: none !important;
+}
+
+.knowledge-v4 .overview-search-row,
+.knowledge-v4 .home-command-search {
+  width: 100% !important;
+}
+
+.knowledge-v4 .overview-search-row input,
+.knowledge-v4 .home-command-search input {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+}
+
+/* Keep knowledge navigation group labels compact and aligned on the overview page. */
+body:has(.knowledge-v4 .knowledge-main) .knowledge-sidebar-brand {
+  font-size: 12px !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main) .business-knowledge-nav-title {
+  margin-left: 0;
+  width: 100%;
+  font-size: 11px !important;
+}
+
+.knowledge-v4 .overview-search-row .overview-global-search {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+}
+
+/* Non-component layers share one neutral canvas; cards retain their own surfaces. */
+.knowledge-v4 {
+  --ai-bg: #f6f7f8;
+  background: #f6f7f8 !important;
+}
+
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .home-v4-inner,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-layout,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main.business-type-page,
+body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main.business-overview-page {
+  background: #f6f7f8 !important;
+}

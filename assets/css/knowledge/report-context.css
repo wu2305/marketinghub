@@ -1,0 +1,198 @@
+.business-filter-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.business-filter-field[hidden] {
+  display: none;
+}
+.business-filter-field > span {
+  flex: 0 0 auto;
+  color: #69747d;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.business-multi-filter {
+  position: relative;
+  min-width: 150px;
+  font-size: 12px;
+}
+.business-multi-filter summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 34px 0 12px;
+  border: 1px solid #d8dfe5;
+  border-radius: 7px;
+  background: #fff;
+  color: #46515a;
+  cursor: pointer;
+  list-style: none;
+}
+.business-multi-filter summary::-webkit-details-marker {
+  display: none;
+}
+.business-multi-filter summary:after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 1.7px solid #59656e;
+  border-bottom: 1.7px solid #59656e;
+  transform: translateY(-65%) rotate(45deg);
+}
+.business-multi-filter[open] summary {
+  border-color: #b88339;
+}
+.business-multi-filter[open] summary:after {
+  transform: translateY(-30%) rotate(225deg);
+}
+.business-multi-filter summary b {
+  max-width: 170px;
+  overflow: hidden;
+  color: #46515a;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.business-multi-filter > div {
+  position: absolute;
+  z-index: 60;
+  top: 41px;
+  left: 0;
+  min-width: 210px;
+  padding: 7px;
+  border: 1px solid #d8dfe5;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(25, 31, 37, 0.16);
+}
+.business-multi-filter > div label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 5px;
+  color: #46515a;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.business-multi-filter > div label:hover {
+  background: #f5f6f7;
+}
+.business-multi-filter input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #b88339;
+}
+.asset-table-head,
+.asset-row {
+  box-sizing: border-box !important;
+}
+.asset-actions {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  padding-right: 6px !important;
+}
+.asset-actions .v20-actions {
+  box-sizing: border-box;
+  max-width: 100%;
+  justify-content: flex-start !important;
+  overflow: hidden;
+}
+.v20-icon-action.v20-view {
+  border-color: #cfd6dc !important;
+  background: #fff !important;
+  color: #171b1f !important;
+}
+.v20-icon-action.v20-view:hover {
+  border-color: #1f252a !important;
+  background: #f5f6f7 !important;
+}
+.knowledge-library {
+  overflow-x: auto !important;
+  overflow-y: visible;
+}
+.library-toolbar {
+  min-width: 1052px;
+}
+.library-actions {
+  flex-wrap: wrap !important;
+}
+@media (max-width: 700px) {
+  .business-filter-field {
+    gap: 7px;
+  }
+  .business-multi-filter {
+    min-width: 142px;
+  }
+  .business-multi-filter summary {
+    padding-left: 10px;
+  }
+  .business-filter-field > span {
+    font-size: 9px;
+  }
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-filter-field > span {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter,
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter summary {
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  box-sizing: border-box;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter summary {
+  padding: 0 24px 0 8px !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter summary b {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter > div label {
+  font-size: 10px !important;
+  line-height: 1.25 !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .business-multi-filter input[type="checkbox"] {
+  width: 9px !important;
+  height: 9px !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .fm-search-field,
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .fm-search-field .fm-search {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  flex: 0 0 180px !important;
+  box-sizing: border-box;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .fm-search-field .fm-search {
+  font-size: 12px !important;
+}
+
+.knowledge-main[data-active-type="Report Context"] #fmLibrary .fm-tools .fm-search-field .fm-search::placeholder {
+  font-size: 10px !important;
+}

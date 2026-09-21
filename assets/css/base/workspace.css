@@ -1,0 +1,402 @@
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    url("../../fonts/DIN2014-Light.woff2") format("woff2"),
+    url("../../fonts/DPT45.otf") format("opentype");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    url("../../fonts/DIN2014-Regular.woff2") format("woff2"),
+    url("../../fonts/DPT55.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src: url("../../fonts/DIN2014-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+:root {
+  --font-ui: "DIN 2014", Arial, sans-serif;
+  --font-copy: "DIN 2014", Arial, sans-serif;
+  --font-heading: "DIN 2014", Arial, sans-serif;
+  --workspace-header-height: 56px;
+  --workspace-bg: #f3f5f7;
+  --workspace-surface: #ffffff;
+  --workspace-surface-soft: #f7f9fa;
+  --workspace-ink: #16191d;
+  --workspace-copy: #3f4852;
+  --workspace-muted: #68727c;
+  --workspace-faint: #8b949d;
+  --workspace-line: #dce1e6;
+  --workspace-line-strong: #c8d0d8;
+  --workspace-yellow: #e6bc73;
+  --workspace-red: #9b1230;
+  --workspace-teal: #2d7972;
+  --workspace-blue: #3f73a6;
+  --workspace-green: #34765b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 1180px;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--workspace-bg);
+  color: var(--workspace-ink);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-style: normal;
+  font-synthesis: none;
+  letter-spacing: 0;
+  line-height: 1.45;
+}
+
+button,
+input,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-style: normal;
+  letter-spacing: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.workspace-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  width: 100%;
+  height: 56px;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 44px;
+  border-bottom: 1px solid var(--workspace-line);
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: none;
+  color: var(--workspace-ink);
+  backdrop-filter: blur(16px);
+}
+
+.workspace-page-hero {
+  position: relative;
+  display: grid;
+  min-height: 238px;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 34px;
+  padding: 46px 52px;
+  border-radius: 0;
+  background: #1c2328;
+  color: #ffffff;
+}
+
+.workspace-page-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 52%;
+  filter: saturate(0.62) contrast(0.95) brightness(0.72);
+}
+
+.workspace-page-hero::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(14, 19, 24, 0.74),
+    rgba(14, 19, 24, 0.34) 58%,
+    rgba(14, 19, 24, 0.14)
+  );
+  content: "";
+}
+
+.workspace-page-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+}
+
+.workspace-page-hero .eyebrow {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.workspace-page-hero h1 {
+  margin: 8px 0 0;
+  color: #ffffff;
+  font-family: "BentonModDisplay", Georgia, serif;
+  font-size: 48px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.workspace-page-hero h1::after {
+  content: "";
+  display: block;
+  width: 58px;
+  height: 7px;
+  margin: 16px 0 0;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+}
+
+.workspace-page-hero p:last-child {
+  max-width: 560px;
+  margin: 15px 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.workspace-header .brand {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 36px;
+  align-items: center;
+}
+
+.workspace-header .brand img {
+  display: block;
+  width: 122px;
+  height: auto;
+  filter: none;
+}
+
+.workspace-header nav {
+  display: flex;
+  height: 56px;
+  align-items: center;
+  gap: 26px;
+}
+
+.workspace-header nav a {
+  position: relative;
+  display: grid;
+  height: 56px;
+  place-items: center;
+  border: 0;
+  color: #646b73;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.workspace-header nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  content: "";
+  opacity: 0;
+}
+
+.workspace-header nav a:hover,
+.workspace-header nav a:focus-visible,
+.workspace-header nav a[aria-current="page"] {
+  color: var(--workspace-ink);
+}
+
+.workspace-header nav a[aria-current="page"]::after {
+  opacity: 1;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--workspace-faint);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(63, 115, 166, 0.55);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Hero height override for all *-command-center pages */
+[class*="-command-center"] {
+  min-height: 430px !important;
+  height: 430px !important;
+}
+
+/* Force background image area to be visible at 320px+ */
+[class*="-command-center"] [class*="home-command-hero"] {
+  min-height: 430px !important;
+  height: 100% !important;
+}
+[class*="-command-center"] [class*="home-command-hero"] img {
+  min-height: 430px !important;
+  height: 100% !important;
+}
+
+/* Unified hero typography for all *-command-center pages (knowledge style) */
+[class*="-command-center"] .home-command-copy h1 {
+  margin: 8px 0 0 !important;
+  color: #ffffff !important;
+  font-family: "BentonModDisplay", Georgia, serif !important;
+  font-size: 56px !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35) !important;
+}
+[class*="-command-center"] .home-command-copy h1::after {
+  content: "" !important;
+  display: block !important;
+  width: 64px !important;
+  height: 8px !important;
+  margin: 16px 0 0 !important;
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%) !important;
+  clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%) !important;
+}
+[class*="-command-center"] .home-command-copy .eyebrow {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+[class*="-command-center"] .home-command-copy > p:last-of-type {
+  max-width: 480px !important;
+  margin: 14px 0 0 !important;
+  color: rgba(255, 255, 255, 0.84) !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+/* Hero text aligned with content area (sidebar width) */
+[class*="-command-center"] .home-command-layout {
+  width: calc(100% - 40px) !important;
+  margin-left: 44px !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  grid-template-columns: 1fr 800px !important;
+  align-items: center !important;
+  gap: 24px !important;
+}
+
+/* Unify hero metrics cards style across all *-command-center pages (like home page) */
+[class*="-command-center"] .home-metrics {
+  margin-right: 48px !important;
+}
+
+/* Make hero metric cards larger and grid wider */
+[class*="-command-center"] .home-signal-grid {
+  grid-template-columns: repeat(3, minmax(220px, 1fr)) !important;
+  gap: 16px !important;
+}
+[class*="-command-center"] .home-signal {
+  min-height: 100px !important;
+  padding: 14px 16px !important;
+}
+
+/* Stack metric card title/number/description on 3 separate rows */
+[class*="-command-center"] .home-signal-body {
+  display: grid !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  gap: 6px !important;
+}
+[class*="-command-center"] .home-signal-body span {
+  color: rgba(255, 255, 255, 0.75) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+}
+[class*="-command-center"] .home-signal-body strong {
+  color: #ffffff !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+[class*="-command-center"] .home-signal-body small {
+  color: rgba(255, 255, 255, 0.65) !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+/* Unify metric card style (Knowledge Management home page style) */
+[class*="-command-center"] .home-signal {
+  background: rgba(89, 59, 43, 0.5) !important;
+  border: 1px solid rgba(242, 209, 133, 0.2) !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+  padding: 16px 20px !important;
+}

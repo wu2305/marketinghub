@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en"
+  ><head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tapestry Marketing Portal | Reports</title>
+    <link rel="stylesheet" href="../css/base/foundation.css" />
+    <link rel="stylesheet" href="../css/reports/report-core.css?v=20260918-ai-workspace-flex" />
+    <link rel="stylesheet" href="../css/base/scrollbars.css" />
+    <link rel="stylesheet" href="../css/components/assistant-launcher.css?v=20260917-v201601-ai-sidebar" />
+    <link rel="stylesheet" href="../css/components/assistant-panel.css?v=20260917-hide-launcher-when-workspace-open" />
+    <link rel="stylesheet" href="../css/base/theme.css" />
+    <link rel="stylesheet" href="../css/base/workspace.css" />
+    <link rel="stylesheet" href="../css/reports/catalog.css?v=20260915-ai-history-popover" />
+    <link rel="stylesheet" href="../css/reports/city-invest-analysis.css?v=20260917-rich-card-fix" />
+    <link rel="stylesheet" href="../css/pages/reports-inline-1.css" />
+    <link rel="stylesheet" href="../css/pages/reports-inline-2.css?v=20260918-ai-workspace-flex" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="primary-nav" aria-label="Marketing Portal navigation">
+        <a href="../../index.html" class="brand-mark" aria-label="Tapestry Marketing Portal home">
+          <img src="../images/tapestry-logo.png" alt="Tapestry" />
+        </a>
+        <div class="nav-links">
+          <a href="../../index.html" class="nav-link">Home</a>
+          <a href="reports.html" class="nav-link" aria-current="page">Marketing Cockpit</a>
+          <a href="flexible.html" class="nav-link">Self-Service Center</a>
+          <a href="knowledge.html" class="nav-link">AI Interpreter</a>
+          <a href="campaign.html" class="nav-link">RedNote Campaign Tool</a>
+        </div>
+      </nav>
+    </header>
+
+    <button
+      class="global-ai-launcher"
+      id="aiEntry"
+      type="button"
+      data-ai-mode="analysis"
+      aria-controls="aiWorkspace"
+      aria-label="AI Interpreter about the active report"
+    >
+      <span class="global-ai-orb" aria-hidden="true">AI</span>
+      <span class="global-ai-label">AI Interpreter</span>
+    </button>
+
+    <header class="workspace-page-hero reports-page-hero">
+      <img src="../images/project-city-tabby.png" alt="" />
+      <div class="workspace-page-hero-copy">
+        <p class="eyebrow">PERFORMANCE TRACKING</p>
+        <h1>Marketing Cockpit</h1>
+        <p>Stay connected to the business trends, performance and metrics that matter most.</p>
+      </div>
+    </header>
+
+    <main class="reports-shell">
+      <section class="catalog-view" id="catalogView">
+        <header class="catalog-heading catalog-heading-compact">
+          <label class="report-search">
+            <input
+              id="reportSearch"
+              type="search"
+              aria-label="Search dashboards"
+              placeholder="Search dashboards"
+              autocomplete="off"
+            />
+          </label>
+        </header>
+
+        <div class="report-directory">
+          <div class="category-directory" id="categoryDirectory"></div>
+
+          <section
+            class="project-directory"
+            id="projectDirectory"
+            hidden=""
+            aria-labelledby="projectDirectoryTitle"
+          >
+            <a class="project-directory-back" href="reports.html"
+              ><span aria-hidden="true">←</span> All report projects</a
+            >
+            <header class="project-directory-intro">
+              <img id="projectDirectoryImage" src="../images/project-city-tabby.png" alt="" />
+              <div class="project-directory-copy">
+                <div class="project-directory-topline">
+                  <span id="projectDirectoryKicker">CONSUMER INSIGHT / CITY STRATEGY</span>
+                </div>
+                <h2 id="projectDirectoryTitle">City Strategy</h2>
+                <p id="projectDirectoryDescription"></p>
+                <div class="project-directory-meta">
+                  <span id="projectDirectoryCount">2 reports</span>
+                  <span id="projectDirectoryUpdated">Data updated: 2026-05-28</span>
+                </div>
+              </div>
+            </header>
+
+            <div class="project-report-heading">
+              <div>
+                <span>REPORTS IN THIS PROJECT</span>
+                <h2>Available reports</h2>
+              </div>
+              <strong id="projectReportCount">2 reports</strong>
+            </div>
+            <div class="project-report-list" id="reportCatalog"></div>
+          </section>
+        </div>
+        <div class="empty-state" id="reportEmpty" hidden="">
+          <strong>No matching reports.</strong>
+          <span>Try another report or project name.</span>
+        </div>
+      </section>
+
+      <section class="report-view" id="reportView" hidden="">
+        <div class="view-toolbar">
+          <button class="back-button" type="button" data-back-catalog=""
+            ><span aria-hidden="true">←</span> Reports</button
+          >
+          <div class="toolbar-actions">
+            <a class="quiet-action" id="fullKnowledgeLink" href="#reportKnowledge"
+              >Related Knowledge</a
+            >
+            <button class="primary-action" type="button" data-ai-mode="analysis"
+              >AI Interpreter</button
+            >
+          </div>
+        </div>
+
+        <header class="report-identity">
+          <div class="report-title-block">
+            <div class="identity-line">
+              <span id="reportCategory">D2C Insight</span>
+              <span class="status-indicator"><i></i><b id="reportStatus">Ready</b></span>
+            </div>
+            <h1 id="reportTitle">Invest City Strategy Analysis</h1>
+            <p id="reportDescription"></p>
+          </div>
+          <dl class="report-meta">
+            <div><dt>Owner</dt><dd id="reportOwner"></dd></div>
+            <div><dt>Cadence</dt><dd id="reportCadence"></dd></div>
+            <div><dt>Updated</dt><dd id="reportUpdated"></dd></div>
+          </dl>
+        </header>
+
+        <div class="report-overview-grid">
+          <section class="report-preview-stage">
+            <div class="preview-stage-head">
+              <div>
+                <span>REPORT PREVIEW</span>
+                <strong>Decision view</strong>
+              </div>
+              <button class="open-live-button" type="button" data-open-live=""
+                >Open live report <span aria-hidden="true">↗</span></button
+              >
+            </div>
+            <div id="reportPreview"></div>
+            <div class="preview-context-strip" id="previewContextStrip"></div>
+          </section>
+
+          <aside class="report-introduction" aria-labelledby="reportIntroductionTitle">
+            <header>
+              <span class="section-label">REPORT INTRODUCTION</span>
+              <h2 id="reportIntroductionTitle">Decision context</h2>
+            </header>
+            <p id="reportPurpose"></p>
+          </aside>
+        </div>
+
+        <section class="knowledge-section" id="reportKnowledge">
+          <header class="section-heading">
+            <div>
+              <p class="eyebrow">REPORT KNOWLEDGE</p>
+              <h2>Everything behind this report.</h2>
+              <p
+                >Definitions, lineage, business language, and proven analysis paths connected to
+                this exact view.</p
+              >
+            </div>
+            <a id="viewAllKnowledge" href="knowledge.html"
+              >Explore full AI Interpreter <span aria-hidden="true">→</span></a
+            >
+          </header>
+
+          <div
+            class="relationship-map"
+            id="relationshipMap"
+            aria-label="Report knowledge relationship"
+          ></div>
+          <nav
+            class="knowledge-filters"
+            id="knowledgeFilters"
+            aria-label="Connected knowledge categories"
+          ></nav>
+          <div class="connected-knowledge" id="connectedKnowledge"></div>
+        </section>
+      </section>
+
+      <section class="live-view" id="liveView" hidden="">
+        <div class="view-toolbar">
+          <button class="back-button" type="button" data-back-report=""
+            ><span aria-hidden="true">←</span> Report library</button
+          >
+        </div>
+
+        <header class="live-heading">
+          <div>
+            <p class="eyebrow" id="liveKicker">CITY STRATEGY / LIVE REPORT</p>
+            <h1 id="liveTitle">Invest City Strategy Analysis</h1>
+          </div>
+        </header>
+
+        <div class="live-panel active" id="live-panel-overview"></div>
+      </section>
+    </main>
+
+    <div class="details-scrim" id="detailsScrim" hidden=""></div>
+    <aside
+      class="report-details-drawer"
+      id="reportDetailsDrawer"
+      aria-hidden="true"
+      aria-labelledby="detailsTitle"
+    >
+      <header class="details-drawer-head">
+        <div>
+          <span>REPORT DETAILS</span>
+          <strong id="detailsProjectLabel">City Strategy</strong>
+        </div>
+        <div class="details-drawer-head-actions">
+          <button
+            class="details-fullscreen"
+            type="button"
+            id="detailsFullscreen"
+            aria-label="Toggle fullscreen"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 9V5a1 1 0 0 1 1-1h4"></path>
+              <path d="M20 9V5a1 1 0 0 0-1-1h-4"></path>
+              <path d="M4 15v4a1 1 0 0 0 1 1h4"></path>
+              <path d="M20 15v4a1 1 0 0 1-1 1h-4"></path>
+            </svg>
+          </button>
+          <button
+            class="details-close"
+            type="button"
+            data-close-details=""
+            aria-label="Close report details"
+            >×</button
+          >
+        </div>
+      </header>
+      <div class="details-drawer-body">
+        <div class="details-thumbnail"
+          ><img id="detailsThumbnail" src="../images/project-city-tabby.png" alt=""
+        /></div>
+        <p class="details-hierarchy" id="detailsHierarchy"></p>
+        <h2 id="detailsTitle">Invest City Strategy Analysis</h2>
+        <p class="details-explanation" id="detailsExplanation"></p>
+        <dl class="details-meta" id="detailsMeta"></dl>
+
+        <section class="details-section">
+          <header><span>PRINCIPLES</span></header>
+          <div class="details-assets" id="detailsPrinciples">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=principles&amp;asset=city-strategy-context"
+              >City Strategy report context</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=principles&amp;asset=campaign-roi"
+              >Campaign ROI shared guardrails</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header><span>REPORT CONTEXT</span></header>
+          <div class="details-assets" id="detailsReportContext">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=context&amp;asset=city-report-context"
+              >City Strategy report context</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=context&amp;asset=city-performance-model"
+              >City performance model</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=context&amp;asset=invested-city"
+              >Invested city definition</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header><span>DATA MODEL</span></header>
+          <div class="details-assets" id="detailsDataModel">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=models&amp;asset=city-performance-model"
+              >City performance model</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=models&amp;asset=commerce-performance-model"
+              >Commerce performance model</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=models&amp;asset=member-conversion"
+              >Member conversion model</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header><span>METRICS</span></header>
+          <div class="details-assets" id="detailsMetrics">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=metrics&amp;asset=qualified-reach-rate"
+              >Qualified reach rate</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=metrics&amp;asset=quality-reach"
+              >Quality reach</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=metrics&amp;asset=analysis-guardrails"
+              >Analysis guardrails</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header><span>BUSINESS TERMS</span></header>
+          <div class="details-assets" id="detailsBusinessTerms">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=terms&amp;asset=investment-principles"
+              >Investment principles</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=terms&amp;asset=weekly-city-readout"
+              >Weekly city readout</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header><span>ANALYTICAL MODEL</span></header>
+          <div class="details-assets" id="detailsPlaybooks">
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=playbooks&amp;asset=funnel-drop-review"
+              >Funnel drop review</a
+            >
+            <a
+              class="details-asset details-asset-pill"
+              href="knowledge.html?report=city&amp;category=playbooks&amp;asset=campaign-anomaly-review"
+              >Campaign anomaly review</a
+            >
+          </div>
+        </section>
+
+        <section class="details-section">
+          <header>
+            <span>AI ANALYSIS SCENARIOS</span>
+            <button class="details-view-more" type="button" id="scenariosViewMore"
+              >view more</button
+            >
+          </header>
+          <ol class="details-scenarios" id="detailsScenarios"></ol>
+        </section>
+      </div>
+      <footer class="details-drawer-footer">
+        <a
+          class="primary-action"
+          id="detailsOpenReport"
+          href="reports.html?project=city&amp;dashboard=0&amp;view=live"
+          >Open Dashboard <span aria-hidden="true">→</span></a
+        >
+      </footer>
+    </aside>
+    <section
+      class="assistant-panel"
+      id="assistantPanel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="assistantTitle"
+      hidden=""
+    >
+      <div class="panel-backdrop" data-close=""></div>
+      <div class="assistant-modal" tabindex="-1">
+        <header class="assistant-header">
+          <div class="assistant-identity">
+            <span class="assistant-mark" aria-hidden="true">AI</span>
+            <div>
+              <h2 id="assistantTitle">Ask AI Interpreter</h2>
+            </div>
+          </div>
+          <div class="assistant-header-actions">
+            <button
+              class="ai-workspace-icon"
+              type="button"
+              id="newSession"
+              aria-label="New session"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+            <button class="ai-workspace-icon" type="button" id="aiMaximize" aria-label="Maximize">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 9V5a1 1 0 0 1 1-1h4"></path>
+                <path d="M20 9V5a1 1 0 0 0-1-1h-4"></path>
+                <path d="M4 15v4a1 1 0 0 0 1 1h4"></path>
+                <path d="M20 15v4a1 1 0 0 1-1 1h-4"></path>
+              </svg>
+            </button>
+            <button class="ai-workspace-icon" type="button" id="aiHistory" aria-label="History">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                <path d="M3 3v5h5"></path>
+                <path d="M12 7v5l3 2"></path>
+              </svg>
+            </button>
+            <button class="close-btn" type="button" data-close="" aria-label="Close assistant"
+              >×</button
+            >
+          </div>
+        </header>
+
+        <div class="assistant-main">
+          <div class="assistant-ask-stage">
+            <div class="ask-stage-hero">
+              <div class="ask-stage-headline">
+                <h3>Ask a question</h3>
+                <p>Your AI partner for every marketing task</p>
+              </div>
+              <div class="ask-scope-description" id="askScopeDescription"></div
+              ><div class="ask-stage-suggestions" id="askSuggestions">
+                <!-- Filled by JS -->
+              </div>
+            </div>
+          </div>
+          <div class="answer-feed" id="answerFeed" hidden=""></div>
+        </div>
+
+        <section class="ask-zone" aria-label="Ask AI Interpreter AI">
+          <div class="ask-meta">
+            <div class="ask-scope" role="group" aria-label="Response scope">
+              <span>Scope</span>
+              <button
+                class="scope-option active"
+                type="button"
+                data-context="report"
+                aria-pressed="true"
+                >Dashboards</button
+              >
+              <button
+                class="scope-option"
+                type="button"
+                data-context="campaign"
+                aria-pressed="false"
+                >Campaigns</button
+              >
+              <button
+                class="scope-option"
+                type="button"
+                data-context="knowledge"
+                aria-pressed="false"
+                >Knowledge</button
+              >
+            </div>
+          </div>
+          <div class="ask-composer">
+            <div
+              class="query-canvas"
+              id="promptCanvas"
+              contenteditable="true"
+              role="textbox"
+              aria-multiline="true"
+              aria-label="Ask AI Interpreter AI"
+              data-placeholder="Type your question or upload Excel/CSV files for data analysis"
+            ></div>
+            <div class="composer-toolbar">
+              <div class="composer-actions">
+                <button
+                  class="composer-picker suggest-picker"
+                  type="button"
+                  id="suggestPicker"
+                  aria-label="Recommended questions"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z"></path>
+                    <path
+                      d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8L16.5 18.5l1.8-.7L19 16z"
+                    ></path>
+                    <path
+                      d="M5 16l.5 1.3L6.8 17.8l-1.3.5L5 19.6l-.5-1.3L3.2 17.8l1.3-.5L5 16z"
+                    ></path>
+                  </svg>
+                </button>
+                <button
+                  class="upload-action"
+                  type="button"
+                  id="uploadFile"
+                  aria-label="Upload file"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <button class="composer-picker model-picker" type="button" id="modelPicker">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                      d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"
+                    ></path>
+                  </svg>
+                  <strong class="composer-picker-value">Data Model</strong>
+                </button>
+                <button class="composer-picker mode-picker" type="button" id="modePicker">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                  </svg>
+                  <strong class="composer-picker-value">Analytical Model</strong>
+                </button>
+              </div>
+              <button class="send-action" type="button" id="sendQuery" aria-label="Ask">
+                <span>ASK</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <div class="ai-scrim" id="aiScrim" hidden=""></div>
+    <aside
+      class="ai-workspace"
+      id="aiWorkspace"
+      aria-hidden="true"
+      aria-label="Report AI workspace"
+    >
+      <header class="ai-workspace-head">
+        <div>
+          <span>REPORT COPILOT</span>
+          <h2 id="aiWorkspaceTitle">Data Analysis Assistant</h2>
+        </div>
+        <div class="ai-workspace-head-actions">
+          <button
+            class="ai-workspace-icon"
+            type="button"
+            id="aiNewSession"
+            aria-label="New session"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <button class="ai-workspace-icon" type="button" id="aiMaximize" aria-label="Maximize">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M4 9V5a1 1 0 0 1 1-1h4"></path>
+              <path d="M20 9V5a1 1 0 0 0-1-1h-4"></path>
+              <path d="M4 15v4a1 1 0 0 0 1 1h4"></path>
+              <path d="M20 15v4a1 1 0 0 1-1 1h-4"></path>
+            </svg>
+          </button>
+          <button class="ai-workspace-icon" type="button" id="aiHistory" aria-label="History">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+              <path d="M3 3v5h5"></path>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+          </button>
+          <button class="ai-close" type="button" data-close-ai="" aria-label="Close AI workspace"
+            >×</button
+          >
+        </div>
+      </header>
+
+      <div class="ai-answer-context-tools" aria-label="Report context shortcuts">
+        <button type="button" data-ai-context-panel="summary">AI summary</button>
+        <button type="button" data-ai-context-panel="scenarios">Scenario reports</button>
+      </div>
+
+      <section class="ai-context-section ai-summary-drawer" aria-labelledby="aiOverviewTitle">
+        <div
+          class="ai-section-heading collapsible"
+          data-collapse-target="aiSummaryWrap"
+        >
+          <span>01</span>
+          <div><h3 id="aiOverviewTitle">AI summary</h3></div>
+          <button
+            class="collapse-toggle"
+            type="button"
+            aria-expanded="true"
+            aria-controls="aiSummaryWrap"
+            aria-label="Toggle AI summary"
+          >
+            <i>›</i>
+          </button>
+        </div>
+        <div class="collapsible-content" id="aiSummaryWrap">
+          <div class="ai-context-card">
+            <div class="ai-context-head">
+              <span>Invest City Strategy Quick Summary</span>
+              <i>Context loaded</i>
+            </div>
+            <div class="ai-context-summary">
+              <p
+                >Invest cities deliver <span class="metric-positive">10%</span> daily traffic uplift,
+                driving <span class="metric-positive">1%</span> daily sales growth and
+                <span class="metric-positive">1%</span> AUR improvement.</p
+              >
+              <p
+                >Key gaps: CR <span class="metric-negative">(-9%)</span>, SV
+                <span class="metric-negative">(-7%)</span>, new customer ratio
+                <span class="metric-negative">(-2%)</span> and UPT
+                <span class="metric-negative">(-1%)</span> all decline, revealing conversion and
+                basket-size weaknesses.</p
+              >
+              <p>Should prioritize conversion optimization to fully monetize traffic gains.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ai-start" id="aiStart">
+        <div
+          class="ai-recommendation-head ai-section-heading collapsible"
+          data-collapse-target="aiRecommendationsWrap"
+        >
+          <span>02</span>
+          <div><h3 id="aiRecommendationLabel">Scenario reports</h3></div>
+          <button id="aiRecommendationNote" class="view-more-btn" type="button">view more</button>
+        </div>
+        <div class="collapsible-content" id="aiRecommendationsWrap">
+          <div class="ai-recommendations" id="aiRecommendations"></div>
+          <p class="ai-period-hint" id="aiPeriodHint"></p>
+        </div>
+      </section>
+
+      <section class="ai-answer" id="aiAnswer" hidden="" aria-live="polite">
+        <button class="answer-back" type="button" data-ai-back=""
+          ><span aria-hidden="true">←</span> Suggested questions</button
+        >
+        <div class="ai-answer-context-dock" id="aiAnswerContextDock"></div>
+        <span class="answer-label">CONTEXTUAL ANSWER</span>
+        <h3 id="aiAnswerTitle"></h3>
+        <p id="aiAnswerSummary"></p>
+        <div class="answer-findings" id="aiAnswerFindings"></div>
+        <div class="answer-sources" id="aiAnswerSources"></div>
+        <div class="ai-chat-thread" id="aiChatThread"></div>
+        <div class="answer-feedback" id="aiAnswerFeedback">
+          <span>Was this answer helpful?</span>
+          <div>
+            <button type="button" data-ai-feedback="helpful" aria-pressed="false">Helpful</button>
+            <button type="button" data-ai-feedback="not-helpful" aria-pressed="false"
+              >Not helpful</button
+            >
+          </div>
+          <small id="aiFeedbackStatus" hidden="">Feedback recorded.</small>
+        </div>
+      </section>
+
+      <form class="ai-command" id="aiCommandForm">
+        <p class="ai-command-hint"
+          >Type your question directly or start with a preset analysis below.</p
+        >
+        <div>
+          <textarea
+            id="aiCommandInput"
+            rows="2"
+            placeholder="Choose a preset or ask your own question..."
+            required=""
+          ></textarea>
+          <div class="ai-command-footer">
+            <div class="ai-command-actions">
+              <button
+                class="upload-action"
+                type="button"
+                id="aiCmdUpload"
+                aria-label="Choose AI skill"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  aria-hidden="true"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
+              <div class="upload-popup" id="aiCmdUploadPopup" hidden="">
+                <button class="upload-popup-item" type="button" data-source="business">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"
+                    ></path>
+                  </svg>
+                  Upload
+                </button>
+                <button class="upload-popup-item" type="button" data-source="personal">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="8" r="4"></circle>
+                    <path d="M4 21a8 8 0 0 1 16 0"></path>
+                  </svg>
+                  Analytical Model
+                </button>
+              </div>
+              <button
+                class="send-action"
+                type="submit"
+                id="aiCmdSend"
+                aria-label="Send question"
+                disabled=""
+              >
+                <span>ASK</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </aside>
+
+    <script src="../js/data/knowledge.js"></script>
+    <script src="../js/reports/report-core.js?v=20260918-report-ai-menu-hover"></script>
+    <script src="../js/pages/reports-inline-1.js"></script>
+    <script src="../js/shared/assistant-skill-menu.js?v=20260918-menu-hover"></script> </body
+></html>
