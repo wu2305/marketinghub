@@ -43,6 +43,8 @@ npm run storybook
 - Original pages: [http://127.0.0.1:4173](http://127.0.0.1:4173)
 - Storybook: [http://127.0.0.1:6006](http://127.0.0.1:6006)
 
+Working rules, verification steps, and the long-term plan are in `AGENTS.md`. Current status and backlog are in `handover/README.md`.
+
 Stories are grouped as Foundations, Atoms, Molecules, Organisms, and Pages. Page stories compose the components for Home, Marketing Cockpit, Self-Service Center, AI Interpreter, and RedNote Campaign Tool. Handover notes are in `handover/`.
 
 ## v20.11.01 AI Interpreter refresh
