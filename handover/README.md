@@ -22,7 +22,10 @@
 ```bash
 node scripts/check-fidelity.mjs
 python3 scripts/compare_fidelity.py /tmp/portal-fidelity
+python3 scripts/ablation.py
 ```
+
+消融结果在 `handover/ablation.md`。替换消融把一个组件退回原始标记，去除消融测量删掉该组件后丢失的元素和词。
 
 ## 环境
 

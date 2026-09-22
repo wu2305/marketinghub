@@ -149,10 +149,15 @@ def freeze(node, file_dir):
     }
 
 
+SKIP_MATCHERS = set()
+
+
 def transform(node, file_dir):
     if isinstance(node, str):
         return {"kind": "text", "value": node}
     for matcher in MATCHERS:
+        if matcher.__name__ in SKIP_MATCHERS:
+            continue
         hit = matcher(node, file_dir)
         if hit:
             return hit
@@ -389,6 +394,8 @@ def match_workspace_card(node, file_dir):
 
 
 def match_workspace_grid(node, file_dir):
+    if "match_workspace_card" in SKIP_MATCHERS:
+        return None
     if node["tag"] != "div" or classes(node) != {"workspace-card-grid"}:
         return None
     cards = []
@@ -466,6 +473,8 @@ def match_command_hero(node, file_dir):
         grid = significant(metrics)
         if len(grid) != 1 or "home-signal-grid" not in classes(grid[0]):
             return None
+        if "match_signal" in SKIP_MATCHERS:
+            return None
         signals = []
         for card in significant(grid[0]):
             matched = match_signal(card, file_dir)
@@ -474,6 +483,8 @@ def match_command_hero(node, file_dir):
             signals.append(matched["props"])
     elif metrics["tag"] == "div" and "knowledge-hero-stats" in classes(metrics):
         stats_label = metrics["attrs"].get("aria-label", "")
+        if "match_hero_stat" in SKIP_MATCHERS:
+            return None
         stats = []
         for card in significant(metrics):
             matched = match_hero_stat(card, file_dir)
@@ -743,6 +754,8 @@ def match_sidebar(node, file_dir):
 
 
 def match_page_head(node, file_dir):
+    if "match_status_badge" in SKIP_MATCHERS or "match_breadcrumb" in SKIP_MATCHERS:
+        return None
     if node["tag"] != "header" or classes(node) != {"v20-page-head"}:
         return None
     kids = significant(node)
@@ -897,6 +910,13 @@ def body_of(root):
     raise SystemExit("body not found")
 
 
+def compose_body(path, file_dir):
+    root, errors = parse_html(path.read_text(encoding="utf-8"))
+    body = strip_skipped(body_of(root))
+    tree = [transform(child, file_dir) for child in body["children"]]
+    return tree, body["attrs"].get("class", ""), errors
+
+
 def documents():
     yield ("home", ROOT / "index.html", "")
     pages = ROOT / "assets" / "pages"
@@ -908,11 +928,9 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     manifest = []
     for doc_id, path, file_dir in documents():
-        root, errors = parse_html(path.read_text(encoding="utf-8"))
+        tree, body_class, errors = compose_body(path, file_dir)
         if errors:
             print(f"{doc_id} parser notes: {errors[:6]}")
-        body = strip_skipped(body_of(root))
-        tree = [transform(child, file_dir) for child in body["children"]]
         target = OUT / f"{doc_id}.json"
         target.write_text(json.dumps(tree, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         counts = {}
@@ -923,7 +941,7 @@ def main():
             {
                 "id": doc_id,
                 "title": path.stem.replace("-", " ").title() if doc_id != "home" else "Home",
-                "bodyClass": body["attrs"].get("class", ""),
+                "bodyClass": body_class,
                 "reference": reference,
                 "source": str(path.relative_to(ROOT)),
                 "components": counts,

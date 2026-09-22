@@ -46,6 +46,11 @@ export function Node({ node }) {
       const complex = (node.children || []).some((child) => child && child.kind !== "text");
       if (!complex) return <option {...props}>{textFrom(node.children)}</option>;
     }
+    if (node.tag === "textarea") {
+      const text = textFrom(node.children);
+      delete props.value;
+      return <textarea {...props} {...(String(text).trim() ? { defaultValue: text } : {})} />;
+    }
     if (node.tag === "select") applySelectedDefault(props, node.children);
     return (
       <Tag {...props}>

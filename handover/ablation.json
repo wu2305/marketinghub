@@ -1,0 +1,423 @@
+{
+  "documents": 17,
+  "baseline": "17 documents match the original HTML",
+  "substitution": [
+    {
+      "component": "WorkspaceHeader",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "SiteHeader",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "CommandHero",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "WorkspaceGrid",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "WorkspaceCard",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "SectionHeading",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "AssistantPanel",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "LibraryToolbar",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "KnowledgeSidebar",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "PageHead",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "AiLauncher",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Signal",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "HeroStat",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "SearchField",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "SidebarItem",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Breadcrumb",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "StatusBadge",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "AddButton",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Suggestion",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "ScopeOption",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Button",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Link",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "TextInput",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "TextArea",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    },
+    {
+      "component": "Select",
+      "mode": "回退原文",
+      "pagesDiffer": "0",
+      "note": "17 个文档仍与原文一致"
+    }
+  ],
+  "removal": [
+    {
+      "component": "WorkspaceHeader",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 9,
+      "tokenLoss": 10,
+      "sample": "Home Marketing Cockpit Self-Service Center AI Interpreter RedNote"
+    },
+    {
+      "component": "SiteHeader",
+      "instances": 16,
+      "pages": 16,
+      "elementLoss": 158,
+      "tokenLoss": 155,
+      "sample": "Home Marketing Cockpit Self-Service Center AI Interpreter RedNote"
+    },
+    {
+      "component": "CommandHero",
+      "instances": 7,
+      "pages": 7,
+      "elementLoss": 179,
+      "tokenLoss": 249,
+      "sample": "Marketing Portal Your daily workspace for for campaign"
+    },
+    {
+      "component": "WorkspaceGrid",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 73,
+      "tokenLoss": 75,
+      "sample": "Marketing Cockpit Self-Service Center AI AI Interpreter RedNote"
+    },
+    {
+      "component": "WorkspaceCard",
+      "instances": 0,
+      "pages": 0,
+      "elementLoss": 0,
+      "tokenLoss": 0,
+      "sample": "只存在于父组件属性中，见属性槽消融"
+    },
+    {
+      "component": "SectionHeading",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 5,
+      "tokenLoss": 16,
+      "sample": "knowledge WORKSPACES Enter the the work that matters"
+    },
+    {
+      "component": "AssistantPanel",
+      "instances": 6,
+      "pages": 6,
+      "elementLoss": 417,
+      "tokenLoss": 167,
+      "sample": "AI AI AI Interpreter Your for across the"
+    },
+    {
+      "component": "LibraryToolbar",
+      "instances": 3,
+      "pages": 3,
+      "elementLoss": 115,
+      "tokenLoss": 90,
+      "sample": "Feedback feedback records month All All Thumbs Thumbs"
+    },
+    {
+      "component": "KnowledgeSidebar",
+      "instances": 7,
+      "pages": 7,
+      "elementLoss": 217,
+      "tokenLoss": 83,
+      "sample": "Center Feedback & Quality Knowledge Management Review Skill"
+    },
+    {
+      "component": "PageHead",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 12,
+      "tokenLoss": 22,
+      "sample": "AI Interpreter / / Knowledge Knowledge Knowledge Management"
+    },
+    {
+      "component": "AiLauncher",
+      "instances": 13,
+      "pages": 13,
+      "elementLoss": 39,
+      "tokenLoss": 39,
+      "sample": "AI AI Interpreter AI AI Interpreter AI AI"
+    },
+    {
+      "component": "Signal",
+      "instances": 0,
+      "pages": 0,
+      "elementLoss": 0,
+      "tokenLoss": 0,
+      "sample": "只存在于父组件属性中，见属性槽消融"
+    },
+    {
+      "component": "HeroStat",
+      "instances": 0,
+      "pages": 0,
+      "elementLoss": 0,
+      "tokenLoss": 0,
+      "sample": "只存在于父组件属性中，见属性槽消融"
+    },
+    {
+      "component": "SearchField",
+      "instances": 5,
+      "pages": 5,
+      "elementLoss": 26,
+      "tokenLoss": 9,
+      "sample": "feedback Search knowledge Search Search review items scenarios"
+    },
+    {
+      "component": "SidebarItem",
+      "instances": 35,
+      "pages": 7,
+      "elementLoss": 199,
+      "tokenLoss": 77,
+      "sample": "Center Feedback & Quality Knowledge Management Review Skill"
+    },
+    {
+      "component": "Breadcrumb",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 6,
+      "tokenLoss": 8,
+      "sample": "AI Interpreter / / Knowledge Knowledge Management Details"
+    },
+    {
+      "component": "StatusBadge",
+      "instances": 0,
+      "pages": 0,
+      "elementLoss": 0,
+      "tokenLoss": 0,
+      "sample": "只存在于父组件属性中，见属性槽消融"
+    },
+    {
+      "component": "AddButton",
+      "instances": 1,
+      "pages": 1,
+      "elementLoss": 4,
+      "tokenLoss": 3,
+      "sample": "Knowledge New Create"
+    },
+    {
+      "component": "Suggestion",
+      "instances": 3,
+      "pages": 1,
+      "elementLoss": 3,
+      "tokenLoss": 16,
+      "sample": "across the task What's ROI trend my active"
+    },
+    {
+      "component": "ScopeOption",
+      "instances": 21,
+      "pages": 6,
+      "elementLoss": 21,
+      "tokenLoss": 21,
+      "sample": "Knowledge Campaigns All Dashboards Campaigns Dashboards Knowledge Knowledge"
+    },
+    {
+      "component": "Button",
+      "instances": 260,
+      "pages": 16,
+      "elementLoss": 654,
+      "tokenLoss": 483,
+      "sample": "AI for for for for for campaign and"
+    },
+    {
+      "component": "Link",
+      "instances": 40,
+      "pages": 9,
+      "elementLoss": 111,
+      "tokenLoss": 131,
+      "sample": "Back Download template upload data data data Open"
+    },
+    {
+      "component": "TextInput",
+      "instances": 70,
+      "pages": 8,
+      "elementLoss": 70,
+      "tokenLoss": 0,
+      "sample": "—"
+    },
+    {
+      "component": "TextArea",
+      "instances": 22,
+      "pages": 8,
+      "elementLoss": 22,
+      "tokenLoss": 66,
+      "sample": "conversion Share of identified member visits that result"
+    },
+    {
+      "component": "Select",
+      "instances": 41,
+      "pages": 10,
+      "elementLoss": 183,
+      "tokenLoss": 277,
+      "sample": "Rednote Douyin Coach_XHS_01 Coach_XHS_02 plan budget plans Bulk"
+    }
+  ],
+  "layers": [
+    {
+      "layer": "Atoms",
+      "present": "Button、Link、TextInput、TextArea、Select、Suggestion、ScopeOption",
+      "pages": 16,
+      "elementLoss": 1064,
+      "tokenLoss": 994
+    },
+    {
+      "layer": "Molecules",
+      "present": "SearchField、SidebarItem、Breadcrumb、SectionHeading、AddButton",
+      "pages": 10,
+      "elementLoss": 240,
+      "tokenLoss": 113
+    },
+    {
+      "layer": "Organisms",
+      "present": "SiteHeader、WorkspaceHeader、CommandHero、WorkspaceGrid、KnowledgeSidebar、LibraryToolbar、PageHead、AiLauncher、AssistantPanel",
+      "pages": 17,
+      "elementLoss": 1219,
+      "tokenLoss": 890
+    }
+  ],
+  "slots": [
+    {
+      "component": "Signal",
+      "parent": "CommandHero",
+      "prop": "signals",
+      "pages": 6,
+      "tokenLoss": 128,
+      "sample": "for knowledge in REPORT CENTER CENTER 12 governed"
+    },
+    {
+      "component": "HeroStat",
+      "parent": "CommandHero",
+      "prop": "stats",
+      "pages": 1,
+      "tokenLoss": 16,
+      "sample": "AI Published Knowledge 2,368 governed assets assets ready"
+    },
+    {
+      "component": "WorkspaceCard",
+      "parent": "WorkspaceGrid",
+      "prop": "cards",
+      "pages": 1,
+      "tokenLoss": 75,
+      "sample": "Marketing Cockpit Self-Service Center AI AI Interpreter RedNote"
+    },
+    {
+      "component": "StatusBadge",
+      "parent": "PageHead",
+      "prop": "status",
+      "pages": 1,
+      "tokenLoss": 1,
+      "sample": "Draft"
+    },
+    {
+      "component": "Breadcrumb",
+      "parent": "PageHead",
+      "prop": "breadcrumb",
+      "pages": 1,
+      "tokenLoss": 9,
+      "sample": "AI Interpreter / / Knowledge Knowledge Management Create"
+    }
+  ]
+}
