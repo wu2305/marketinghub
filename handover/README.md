@@ -17,6 +17,13 @@
 
 `src/styles/portal.css` 引入 `assets/css` 下的全部样式表。
 
+可复用组件在 `src/assembled/ui.jsx`，Storybook 分组为 Atoms、Molecules、Organisms。`src/assembled/trees` 用这些组件拼回每一个 HTML 正文。对照方式见 `handover/component-plan.md`。结构对比：
+
+```bash
+node scripts/check-fidelity.mjs
+python3 scripts/compare_fidelity.py /tmp/portal-fidelity
+```
+
 ## 环境
 
 ```bash
