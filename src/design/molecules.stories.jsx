@@ -8,6 +8,7 @@ import {
   ProgressList,
   ScopeOption,
   SearchField,
+  searchIconPositions,
   SectionHeading,
   SidebarItem,
   Suggestion,
@@ -24,7 +25,7 @@ export const Search = {
   argTypes: {
     variant: { control: "inline-radio", options: ["field", "plain"] },
     size: { control: "inline-radio", options: ["sm", "md", "lg"] },
-    icon: { control: "inline-radio", options: ["start", "end", "none"] },
+    icon: { control: "inline-radio", options: searchIconPositions },
     onChange: { action: "onChange" },
   },
   render: (args) => (

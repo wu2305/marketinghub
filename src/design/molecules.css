@@ -21,9 +21,19 @@
   padding-left: 36px;
 }
 
-.mh-search--end .mh-search__icon {
+.mh-search--end .mh-search__icon,
+.mh-search--end .mh-search__mark {
   right: 14px;
   left: auto;
+}
+
+.mh-search__mark {
+  position: absolute;
+  top: 10px;
+  color: var(--mh-muted);
+  font-size: 21px;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .mh-search--end .mh-input {

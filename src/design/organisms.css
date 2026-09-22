@@ -424,6 +424,11 @@
   font-size: 10px;
 }
 
+.mh-project-card__arrow {
+  font-style: normal;
+  font-weight: 700;
+}
+
 .mh-action-card {
   display: flex;
   align-items: center;

@@ -149,6 +149,9 @@ export function ProjectCard({ title, kicker, description, image, updated, action
           <span>{updated}</span>
           <Button variant="gold" size="sm" onClick={() => onOpen?.({ title })}>
             {actionLabel}
+            <span className="mh-project-card__arrow" aria-hidden="true">
+              →
+            </span>
           </Button>
         </div>
       </div>

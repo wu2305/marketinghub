@@ -4,6 +4,8 @@ import { Button, Select, TextArea, TextInput } from "./atoms.jsx";
 import { cx } from "./cx.js";
 import { Icon } from "./icons.jsx";
 
+export const searchIconPositions = ["start", "end", "none"];
+
 export function SearchField({
   label = "Search",
   name,
@@ -17,7 +19,13 @@ export function SearchField({
   return (
     <label className={cx("mh-search", variant === "plain" && "mh-search--plain", icon === "end" && "mh-search--end", icon === "none" && "mh-search--bare")}>
       <span className="mh-sr">{label}</span>
-      {icon === "none" ? null : <Icon name="search" className="mh-search__icon" />}
+      {icon === "none" ? null : icon === "end" ? (
+        <span className="mh-search__mark" aria-hidden="true">
+          ⌕
+        </span>
+      ) : (
+        <Icon name="search" className="mh-search__icon" />
+      )}
       <TextInput name={name} type="search" size={size} value={value} placeholder={placeholder} label={label} onChange={onChange} />
     </label>
   );
