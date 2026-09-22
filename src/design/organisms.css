@@ -58,6 +58,7 @@
   border: 0;
   background: transparent;
   color: #60666d;
+  text-decoration: none;
   font-family: var(--mh-font);
   font-size: 12.5px;
   font-weight: 700;

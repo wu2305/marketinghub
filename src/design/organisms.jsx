@@ -45,15 +45,15 @@ export function Header({
         </a>
         <div className="mh-header__links">
           {items.map((item) => (
-            <button
+            <a
               key={item.id}
               className={cx("mh-header__link", item.id === current && "is-current")}
-              type="button"
+              href={item.href}
               aria-current={item.id === current ? "page" : undefined}
               onClick={() => onNavigate?.({ id: item.id, href: item.href, label: item.label })}
             >
               {item.label}
-            </button>
+            </a>
           ))}
         </div>
       </nav>
@@ -69,10 +69,13 @@ export function Hero({
   height = 260,
   variant = "banner",
   scrim = "banner",
+  titleId,
   children,
 }) {
+  const generatedTitleId = React.useId();
+  const headingId = titleId || generatedTitleId;
   return (
-    <section className={cx("mh-hero", `mh-hero--${variant}`)} style={{ height, minHeight: height }} aria-labelledby="mh-hero-title">
+    <section className={cx("mh-hero", `mh-hero--${variant}`)} style={{ height, minHeight: height }} aria-labelledby={headingId}>
       <div className="mh-hero__media" aria-hidden="true">
         {image ? <img src={image} alt="" /> : null}
         {scrim !== "none" ? <div className={cx("mh-hero__scrim", `mh-hero__scrim--${scrim}`)} /> : null}
@@ -80,7 +83,7 @@ export function Hero({
       <div className="mh-hero__layout">
         <div className="mh-hero__copy">
           {eyebrow ? <p className="mh-hero__eyebrow">{eyebrow}</p> : null}
-          <h1 id="mh-hero-title">{title}</h1>
+          <h1 id={headingId}>{title}</h1>
           {description ? <p>{description}</p> : null}
         </div>
         {children ? <div className="mh-hero__aside">{children}</div> : null}
