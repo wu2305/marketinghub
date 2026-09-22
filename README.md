@@ -30,6 +30,21 @@ This is a cleaned, behavior-preserving baseline generated from `marketing-hub-ai
 ## Validation
 
 The cleaned baseline was rendered at 1440px width across all canonical pages, all eight AI Interpreter types, and the supported knowledge creation states. The original and cleaned page screenshots were compared pixel by pixel. See the validation artifacts outside this deliverable when working in the Codex task workspace.
+## Storybook
+
+The React Storybook in `src/design` is the design system. Components take semantic props and children. The static HTML under `index.html` and `assets/pages` remains the visual reference and is not the component runtime.
+
+```bash
+npm install
+npm run preview:html
+npm run storybook
+```
+
+- Original pages: [http://127.0.0.1:4173](http://127.0.0.1:4173)
+- Storybook: [http://127.0.0.1:6006](http://127.0.0.1:6006)
+
+Stories are grouped as Foundations, Atoms, Molecules, Organisms, and Pages. Page stories compose the components for Home, Marketing Cockpit, Self-Service Center, AI Interpreter, and RedNote Campaign Tool. Handover notes are in `handover/`.
+
 ## v20.11.01 AI Interpreter refresh
 
 This version is copied from `marketing-hub-ai-v20.11` and adds a scoped AI Interpreter visual refresh in `assets/css/knowledge/ai-interpreter-refresh.css`. The refresh aligns the module with the shared DIN typography, grey-white workspace, black/gold action language, compact cards, restrained table styling, and consistent 6-8px control radius used by the rest of the demo.

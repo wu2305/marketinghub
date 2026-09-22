@@ -1,0 +1,93 @@
+@font-face {
+  font-family: "BentonModDisplay";
+  src:
+    url("../../assets/fonts/BentonModDisp-SemiboldItalic.woff2") format("woff2"),
+    url("../../assets/fonts/BentonModDisp-SemiboldIt.otf") format("opentype");
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    url("../../assets/fonts/DIN2014-Light.woff2") format("woff2"),
+    url("../../assets/fonts/DPT45.otf") format("opentype");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src:
+    url("../../assets/fonts/DIN2014-Regular.woff2") format("woff2"),
+    url("../../assets/fonts/DPT55.otf") format("opentype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DIN 2014";
+  src: url("../../assets/fonts/DIN2014-Bold.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:root {
+  --mh-font: "DIN 2014", Arial, sans-serif;
+  --mh-display: "BentonModDisplay", Georgia, serif;
+  --mh-bg: #f4f6f8;
+  --mh-bg-soft: #f7f9fa;
+  --mh-surface: #ffffff;
+  --mh-ink: #16191d;
+  --mh-copy: #3f4852;
+  --mh-muted: #68727c;
+  --mh-faint: #8b949d;
+  --mh-line: #dce1e6;
+  --mh-line-strong: #c8d0d8;
+  --mh-gold: #e6bc73;
+  --mh-gold-deep: #a66f27;
+  --mh-gold-text: #986525;
+  --mh-green: #34765b;
+  --mh-red: #9b1230;
+  --mh-blue: #3f73a6;
+  --mh-amber: #9a7229;
+  --mh-header: 56px;
+}
+
+.mh-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
