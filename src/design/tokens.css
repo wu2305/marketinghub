@@ -79,6 +79,14 @@ a {
   --mh-blue: #3f73a6;
   --mh-amber: #9a7229;
   --mh-header: 56px;
+  --mh-kicker: #b8b4ae;
+  --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
+  --mh-disabled-bg: #e8ebee;
+  --mh-disabled-line: #d0d4d8;
+  --mh-disabled-ink: #8a949e;
+  --mh-index-line: #d8c76f;
+  --mh-index-bg: #fff9df;
+  --mh-index-ink: #6c5800;
 }
 
 .mh-sr {

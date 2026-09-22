@@ -58,6 +58,7 @@
   border: 0;
   background: transparent;
   color: #60666d;
+  text-decoration: none;
   font-family: var(--mh-font);
   font-size: 12.5px;
   font-weight: 700;
@@ -424,6 +425,11 @@
   font-size: 10px;
 }
 
+.mh-project-card__arrow {
+  font-style: normal;
+  font-weight: 700;
+}
+
 .mh-action-card {
   display: flex;
   align-items: center;
@@ -487,17 +493,20 @@
 }
 
 .mh-sidebar__group {
-  margin: 4px 0 8px;
-  padding: 8px 0 10px;
-  border-top: 1px solid #e5e8eb;
+  margin: 8px 0 2px;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--mh-line);
 }
 
 .mh-sidebar__title {
-  padding: 9px 14px;
-  color: #20252a;
+  padding: 0 0 8px;
+  color: var(--mh-kicker);
   font-family: var(--mh-font);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .mh-type-grid {
@@ -770,14 +779,44 @@
 .mh-assistant--drawer .mh-assistant__dialog {
   top: 0;
   right: 0;
+  bottom: 0;
   left: auto;
   width: min(40vw, calc(100vw - 80px));
+  max-width: calc(100vw - 80px);
   height: 100vh;
+  min-height: 0;
   max-height: none;
   border: 0;
   border-left: 1px solid #bcc5ce;
   border-radius: 0;
+  box-shadow: var(--mh-drawer-shadow);
   transform: none;
+}
+
+.mh-assistant--drawer .mh-assistant__stage {
+  justify-items: center;
+  align-content: center;
+  gap: 24px;
+  padding: 0 32px;
+  text-align: center;
+}
+
+.mh-assistant--drawer .mh-assistant__stage h3 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.mh-assistant--drawer .mh-assistant__stage p {
+  margin: 10px 0 0;
+  color: var(--mh-copy);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.mh-assistant--drawer .mh-assistant__suggestions {
+  justify-content: center;
+  gap: 10px;
 }
 
 .mh-assistant__header,
@@ -874,6 +913,14 @@
   background: #f7f8fa;
 }
 
+.mh-assistant--drawer .mh-assistant__ask {
+  background: var(--mh-surface);
+}
+
+.mh-assistant__scope-reserve {
+  min-height: 32px;
+}
+
 .mh-assistant__scopes {
   display: flex;
   align-items: center;
@@ -898,13 +945,26 @@
 }
 
 .mh-assistant__box .mh-textarea {
+  height: 44px;
   min-height: 44px;
-  padding: 6px 4px;
+  padding: 6px 0 4px;
   border: 0;
   border-radius: 0;
   box-shadow: none;
   resize: none;
   font-size: 14px;
+}
+
+.mh-assistant__tools .mh-button {
+  min-width: 62px;
+  border-radius: 5px;
+}
+
+.mh-assistant__tools .mh-button:disabled {
+  border-color: var(--mh-disabled-line);
+  background: var(--mh-disabled-bg);
+  color: var(--mh-disabled-ink);
+  opacity: 1;
 }
 
 .mh-assistant__tools {

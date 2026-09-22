@@ -19,6 +19,8 @@ import {
 
 const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("/assets/images/knowledge-card-icons/layer-${index}.png")`);
 
+export const assistantPlacements = ["modal", "drawer"];
+
 export function Header({
   logo = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry" },
   items = [],
@@ -43,15 +45,15 @@ export function Header({
         </a>
         <div className="mh-header__links">
           {items.map((item) => (
-            <button
+            <a
               key={item.id}
               className={cx("mh-header__link", item.id === current && "is-current")}
-              type="button"
+              href={item.href}
               aria-current={item.id === current ? "page" : undefined}
               onClick={() => onNavigate?.({ id: item.id, href: item.href, label: item.label })}
             >
               {item.label}
-            </button>
+            </a>
           ))}
         </div>
       </nav>
@@ -67,10 +69,13 @@ export function Hero({
   height = 260,
   variant = "banner",
   scrim = "banner",
+  titleId,
   children,
 }) {
+  const generatedTitleId = React.useId();
+  const headingId = titleId || generatedTitleId;
   return (
-    <section className={cx("mh-hero", `mh-hero--${variant}`)} style={{ height, minHeight: height }} aria-labelledby="mh-hero-title">
+    <section className={cx("mh-hero", `mh-hero--${variant}`)} style={{ height, minHeight: height }} aria-labelledby={headingId}>
       <div className="mh-hero__media" aria-hidden="true">
         {image ? <img src={image} alt="" /> : null}
         {scrim !== "none" ? <div className={cx("mh-hero__scrim", `mh-hero__scrim--${scrim}`)} /> : null}
@@ -78,7 +83,7 @@ export function Hero({
       <div className="mh-hero__layout">
         <div className="mh-hero__copy">
           {eyebrow ? <p className="mh-hero__eyebrow">{eyebrow}</p> : null}
-          <h1 id="mh-hero-title">{title}</h1>
+          <h1 id={headingId}>{title}</h1>
           {description ? <p>{description}</p> : null}
         </div>
         {children ? <div className="mh-hero__aside">{children}</div> : null}
@@ -147,6 +152,9 @@ export function ProjectCard({ title, kicker, description, image, updated, action
           <span>{updated}</span>
           <Button variant="gold" size="sm" onClick={() => onOpen?.({ title })}>
             {actionLabel}
+            <span className="mh-project-card__arrow" aria-hidden="true">
+              →
+            </span>
           </Button>
         </div>
       </div>
@@ -314,6 +322,7 @@ export function AssistantPanel({
   scopes = [],
   scope,
   showScopes = false,
+  showPicks = true,
   prompt = "",
   model = "Data Model",
   mode = "Analytical Model",
@@ -378,14 +387,16 @@ export function AssistantPanel({
                 <ScopeOption key={item} label={item} pressed={item === scope} onChange={() => onScopeChange?.({ scope: item })} />
               ))}
             </div>
+          ) : placement === "drawer" ? (
+            <div className="mh-assistant__scope-reserve" aria-hidden="true" />
           ) : null}
           <div className="mh-assistant__box">
-            <TextArea label="Ask AI Interpreter" rows={2} value={prompt} placeholder="Type your question or upload Excel/CSV files for data analysis" onChange={onPromptChange} />
+            <TextArea label="Ask AI Interpreter" rows={1} value={prompt} placeholder="Type your question or upload Excel/CSV files for data analysis" onChange={onPromptChange} />
             <div className="mh-assistant__tools">
-              <span className="mh-assistant__pick">{model}</span>
-              <span className="mh-assistant__pick">{mode}</span>
+              {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
+              {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span style={{ marginLeft: "auto" }}>
-                <Button variant="gold" size="sm" type="submit">
+                <Button variant="gold" size="sm" type="submit" disabled={!String(prompt).trim()}>
                   ASK
                 </Button>
               </span>

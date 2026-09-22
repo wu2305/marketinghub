@@ -66,6 +66,11 @@ export const ASSISTANT = {
     "Campaigns near budget threshold",
     "Automation task queue overview",
   ],
+  homeSuggestions: [
+    "Analyze this Excel data and generate a summary",
+    "Top insights across all data this week",
+    "Weekly activity summary",
+  ],
   scopes: ["All", "Campaigns", "Dashboards", "Knowledge"],
   model: "Data Model",
   mode: "Analytical Model",
@@ -196,6 +201,11 @@ export const SELF_SERVICE = {
   ],
 };
 
+// Totals are typeMeta[].stats.total from assets/js/knowledge/types.js.
+function knowledgeCount(total, singular, plural) {
+  return `${total} ${total === 1 ? singular : plural}`;
+}
+
 export const INTERPRETER = {
   hero: {
     image: "/assets/images/knowledge-hero.jpg",
@@ -212,31 +222,36 @@ export const INTERPRETER = {
     title: "Knowledge Overview",
     description: "Explore the knowledge available to AI Interpreter.",
   },
-  overview: { id: "overview", label: "Overview", active: true },
+  overview: {
+    id: "overview",
+    label: "Overview",
+    active: true,
+    icon: "M3 11.5 12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6",
+  },
   groups: [
     {
       title: "Knowledge · 8 types",
       items: [
-        { id: "principles", label: "Principles" },
-        { id: "context", label: "Report Context" },
-        { id: "model", label: "Data Models" },
-        { id: "metrics", label: "Metric Dictionary" },
-        { id: "terms", label: "Business Terms", badge: "Manage" },
-        { id: "analytical", label: "Analytical Models", badge: "Manage" },
-        { id: "scenario", label: "Scenario Reports", badge: "Manage" },
-        { id: "email", label: "Email Reports" },
+        { id: "principles", label: "Principles", icon: "M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" },
+        { id: "context", label: "Report Context", icon: "M4 4h12l4 4v12H4V4zM16 4v4h4" },
+        { id: "model", label: "Data Models", icon: "M3 7h18M3 12h18M3 17h18" },
+        { id: "metrics", label: "Metric Dictionary", icon: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" },
+        { id: "terms", label: "Business Terms", badge: "Manage", icon: "M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z" },
+        { id: "analytical", label: "Analytical Models", badge: "Manage", icon: "M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" },
+        { id: "scenario", label: "Scenario Reports", badge: "Manage", icon: "M5 3h10l4 4v14H5zM15 3v5h5M8 12h8M8 16h8" },
+        { id: "email", label: "Email Reports", icon: "M3 5h18v14H3zM3 6l9 7 9-7" },
       ],
     },
   ],
   types: [
-    { id: "principles", title: "Principles", count: "10 principles", summary: "AI response rules and governing principles.", action: "View principles" },
-    { id: "context", title: "Report Context", count: "6 contexts", summary: "Report interpretation and business context.", action: "View contexts" },
-    { id: "model", title: "Data Models", count: "3 models", summary: "Entities, attributes, and relationships.", action: "View models" },
-    { id: "metrics", title: "Metric Dictionary", count: "3 metrics", summary: "Governed metric definitions and calculations.", action: "View metrics" },
-    { id: "terms", title: "Business Terms", count: "6 terms", summary: "Definitions and synonyms for business term.", action: "View terms" },
-    { id: "analytical", title: "Analytical Models", count: "1 model", summary: "Reusable analysis frameworks and methods.", action: "View models" },
-    { id: "scenario", title: "Scenario Reports", count: "3 scenarios", summary: "Governed reporting scenarios and templates.", action: "View scenarios" },
-    { id: "email", title: "Email Reports", count: "3 reports", summary: "Scheduled insights and distributions.", action: "View reports" },
+    { id: "principles", title: "Principles", total: 10, count: knowledgeCount(10, "principle", "principles"), summary: "AI response rules and governing principles.", action: "View principles" },
+    { id: "context", title: "Report Context", total: 6, count: knowledgeCount(6, "context", "contexts"), summary: "Report interpretation and business context.", action: "View contexts" },
+    { id: "model", title: "Data Models", total: 3, count: knowledgeCount(3, "model", "models"), summary: "Entities, attributes, and relationships.", action: "View models" },
+    { id: "metrics", title: "Metric Dictionary", total: 3, count: knowledgeCount(3, "metric", "metrics"), summary: "Governed metric definitions and calculations.", action: "View metrics" },
+    { id: "terms", title: "Business Terms", total: 6, count: knowledgeCount(6, "term", "terms"), summary: "Definitions and synonyms for business term.", action: "Manage terms" },
+    { id: "analytical", title: "Analytical Models", total: 1, count: knowledgeCount(1, "model", "models"), summary: "Reusable analysis frameworks and methods.", action: "Manage models" },
+    { id: "scenario", title: "Scenario Reports", total: 3, count: knowledgeCount(3, "scenario", "scenarios"), summary: "Governed reporting scenarios and templates.", action: "Manage scenarios" },
+    { id: "email", title: "Email Reports", total: 3, count: knowledgeCount(3, "report", "reports"), summary: "Scheduled insights and distributions.", action: "View reports" },
   ],
   assets: [
     { id: "investment-principles", title: "Campaign investment decision principles", summary: "Shared guardrails for evaluating investment pressure and conversion efficiency.", type: "Principles", owner: "Sarah Chen", status: "Published" },
@@ -291,9 +306,107 @@ export const CAMPAIGN = {
     { key: "full", header: "Full-site" },
     { key: "total", header: "Total Plans" },
   ],
-  accounts: [
+  accountRows: [
     { id: "1", name: "Coach_XHS_01", feed: "82", search: "13", video: "0", full: "4", total: "99" },
     { id: "2", name: "Coach_XHS_02", feed: "61", search: "9", video: "0", full: "3", total: "73" },
     { id: "3", name: "Coach_XHS_03", feed: "54", search: "8", video: "0", full: "2", total: "64" },
+  ],
+  headings: {
+    overview: {
+      eyebrow: "Campaign workspace / Overview",
+      title: "Overview Dashboard",
+      description: "Monitor automated media operations across accounts, plans, units, and creative assets.",
+    },
+    execution: {
+      eyebrow: "Campaign workspace / Execution",
+      title: "RedNote Campaign Tool",
+      description: "Centralize media account operations, bulk plan creation, budget pacing, and campaign action publishing to reduce platform switching.",
+      action: "Create Campaign Task",
+    },
+    assets: {
+      eyebrow: "Campaign workspace / Assets",
+      title: "Creative Assets",
+      description: "Manage creative review status, channel readiness, and creative performance so operators can quickly identify reusable or replaceable assets.",
+      badge: "7,017 creatives",
+    },
+    analytics: {
+      eyebrow: "Campaign workspace / Analytics",
+      title: "Analytics Center",
+      description: "Analyze execution efficiency, account performance, plan quality, and creative performance to support the next automation cycle.",
+      status: "Insights ready",
+    },
+    accounts: {
+      eyebrow: "Campaign workspace / Account binding",
+      title: "Account Binding",
+      description: "Manage media account authorization, token status, and publishing permissions with traceable account boundaries.",
+      action: "Bind New Account",
+    },
+  },
+  panels: {
+    distribution: { eyebrow: "Distribution", title: "Promotion Type Distribution", meta: "Plans" },
+    objectives: { eyebrow: "Objective mix", title: "Marketing Objective Distribution", meta: "Plans" },
+    accountOperations: { eyebrow: "Account operations", title: "Account Operation Details" },
+    queue: { eyebrow: "Automation", title: "Automation Task Queue", meta: "3 active tasks" },
+    log: { eyebrow: "Action history", title: "Campaign Action Log", meta: "Recent actions" },
+    creatives: { eyebrow: "Creative library", title: "Creative Status Dashboard", meta: "Channel readiness" },
+    efficiency: { eyebrow: "Human efficiency", title: "Efficiency Lift", meta: "Current cycle" },
+    recommendations: { eyebrow: "Next best actions", title: "Optimization Recommendations", meta: "2 recommendations" },
+    accounts: { eyebrow: "OAuth / API", title: "Media Account Status", meta: "Authorization health" },
+  },
+  executionSummary: [
+    { label: "Awaiting confirmation", value: "341", caption: "generated plans" },
+    { label: "Budget watch", value: "2", caption: "cities near threshold" },
+    { label: "Under review", value: "3", caption: "anomalous plans" },
+  ],
+  taskQueue: [
+    { status: "Pending", title: "Rednote bulk plan creation", detail: "341 plans generated and awaiting final publishing confirmation" },
+    { status: "Watch", title: "Budget pacing calibration", detail: "Shanghai and Beijing budgets are near the upper threshold; reduce by 8%" },
+    { status: "Review", title: "Anomalous plan pause", detail: "3 plans have no conversions for two days and are under review" },
+  ],
+  actionLog: {
+    columns: [
+      { key: "action", header: "Action" },
+      { key: "platform", header: "Platform" },
+      { key: "object", header: "Object" },
+      { key: "status", header: "Status" },
+    ],
+    rows: [
+      { id: "a", action: "Bulk create plans", platform: "Rednote", object: "Coach_XHS_01", status: "Pending", statusLabel: "Pending confirmation" },
+      { id: "b", action: "Adjust daily budget", platform: "Rednote", object: "23 units", status: "Success", statusLabel: "Success" },
+      { id: "c", action: "Sync plan status", platform: "Douyin", object: "12 plans", status: "Syncing", statusLabel: "Syncing" },
+    ],
+  },
+  creativeColumns: [
+    { key: "group", header: "Creative Group" },
+    { key: "channel", header: "Channel" },
+    { key: "ready", header: "Ready" },
+    { key: "review", header: "In Review" },
+    { key: "replace", header: "Replace" },
+  ],
+  creatives: [
+    { id: "1", group: "Tabby 26SS seeding assets", subtitle: "Product seeding", channel: "Rednote", ready: "128", review: "14", replace: "6" },
+    { id: "2", group: "City limited campaign", subtitle: "City activation", channel: "Douyin", ready: "72", review: "8", replace: "3" },
+    { id: "3", group: "Member conversion assets", subtitle: "Conversion", channel: "Rednote", ready: "43", review: "2", replace: "1" },
+  ],
+  efficiency: [
+    { label: "Time saved", value: "42h" },
+    { label: "Automated actions", value: "83" },
+    { label: "Anomaly blocks", value: "9" },
+  ],
+  recommendations: [
+    { index: "01", title: "Budget reallocation", detail: "Move Chengdu search budget to Shanghai feed promotion" },
+    { index: "02", title: "Creative replacement", detail: "Replace 3 low-engagement creatives with high-save-rate versions" },
+  ],
+  bindingColumns: [
+    { key: "account", header: "Account" },
+    { key: "platform", header: "Platform" },
+    { key: "auth", header: "Auth Status" },
+    { key: "sync", header: "Last Sync" },
+    { key: "permission", header: "Action Permission" },
+  ],
+  accounts: [
+    { id: "1", account: "Coach_XHS_01", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
+    { id: "2", account: "Coach_XHS_02", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
+    { id: "3", account: "Coach_DY_01", platform: "Douyin", authStatus: "Pending", authLabel: "Renewal required", sync: "2026-05-28 18:20", permission: "Paused", permissionStatus: "Paused" },
   ],
 };

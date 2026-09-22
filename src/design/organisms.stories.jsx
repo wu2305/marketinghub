@@ -4,6 +4,7 @@ import {
   ActionCard,
   AssistantLauncher,
   AssistantPanel,
+  assistantPlacements,
   BusinessTermForm,
   CampaignRail,
   Header,
@@ -130,7 +131,7 @@ export const AskPanel = {
   name: "Assistant panel",
   args: { open: true, placement: "modal", showScopes: true, scope: "All", prompt: "" },
   argTypes: {
-    placement: { control: "inline-radio", options: ["modal", "drawer"] },
+    placement: { control: "inline-radio", options: assistantPlacements },
     showScopes: { control: "boolean" },
     scope: { control: "select", options: ASSISTANT.scopes },
     onClose: { action: "onClose" },

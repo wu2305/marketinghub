@@ -1,5 +1,8 @@
 import React from "react";
+import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE } from "./content.js";
 import { AiInterpreterPage, CampaignPage, HomePage, MarketingCockpitPage, SelfServicePage } from "./pages.jsx";
+
+const shell = { logo: LOGO, navigation: NAV };
 
 export default {
   title: "Pages",
@@ -14,7 +17,16 @@ function useSynced(value) {
 
 export const Home = {
   name: "Home",
-  args: { assistantOpen: false, prompt: "", scope: "All" },
+  args: {
+    assistantOpen: false,
+    prompt: "",
+    scope: "All",
+    ...shell,
+    hero: HOME.hero,
+    heading: HOME.heading,
+    cards: HOME.cards,
+    assistant: ASSISTANT,
+  },
   argTypes: {
     scope: { control: "select", options: ["All", "Campaigns", "Dashboards", "Knowledge"] },
     onNavigate: { action: "onNavigate" },
@@ -32,6 +44,7 @@ export const Home = {
     const [scope, setScope] = useSynced(args.scope);
     return (
       <HomePage
+        {...args}
         assistantOpen={open}
         prompt={prompt}
         scope={scope}
@@ -65,7 +78,7 @@ export const Home = {
 
 export const MarketingCockpit = {
   name: "Marketing Cockpit",
-  args: { query: "" },
+  args: { query: "", ...shell, hero: COCKPIT.hero, groups: COCKPIT.groups },
   argTypes: {
     onNavigate: { action: "onNavigate" },
     onOpen: { action: "onOpen" },
@@ -75,6 +88,7 @@ export const MarketingCockpit = {
     const [query, setQuery] = useSynced(args.query);
     return (
       <MarketingCockpitPage
+        {...args}
         query={query}
         onNavigate={args.onNavigate}
         onOpen={args.onOpen}
@@ -89,7 +103,16 @@ export const MarketingCockpit = {
 
 export const SelfService = {
   name: "Self-Service Center",
-  args: { tab: "analysis", category: "all" },
+  args: {
+    tab: "analysis",
+    category: "all",
+    ...shell,
+    hero: SELF_SERVICE.hero,
+    tabs: SELF_SERVICE.tabs,
+    filters: SELF_SERVICE.filters,
+    reports: SELF_SERVICE.reports,
+    uploads: SELF_SERVICE.uploads,
+  },
   argTypes: {
     tab: { control: "inline-radio", options: ["analysis", "upload"] },
     category: { control: "inline-radio", options: ["all", "dg", "dc"] },
@@ -103,6 +126,7 @@ export const SelfService = {
     const [category, setCategory] = useSynced(args.category);
     return (
       <SelfServicePage
+        {...args}
         tab={tab}
         category={category}
         onNavigate={args.onNavigate}
@@ -123,7 +147,17 @@ export const SelfService = {
 
 export const Interpreter = {
   name: "AI Interpreter",
-  args: { activeType: "overview", query: "", status: "All statuses" },
+  args: {
+    activeType: "overview",
+    query: "",
+    status: "All statuses",
+    ...shell,
+    hero: INTERPRETER.hero,
+    overviewItem: INTERPRETER.overview,
+    groups: INTERPRETER.groups,
+    types: INTERPRETER.types,
+    assets: INTERPRETER.assets,
+  },
   argTypes: {
     activeType: {
       control: "select",
@@ -143,6 +177,7 @@ export const Interpreter = {
     const [status, setStatus] = useSynced(args.status);
     return (
       <AiInterpreterPage
+        {...args}
         activeType={activeType}
         query={query}
         status={status}
@@ -168,7 +203,33 @@ export const Interpreter = {
 
 export const Campaign = {
   name: "RedNote Campaign Tool",
-  args: { section: "overview", channel: "rednote", query: "", assistantOpen: false, prompt: "" },
+  args: {
+    section: "overview",
+    channel: "rednote",
+    query: "",
+    assistantOpen: false,
+    prompt: "",
+    ...shell,
+    assistant: ASSISTANT,
+    rail: CAMPAIGN.rail,
+    channels: CAMPAIGN.channels,
+    metrics: CAMPAIGN.metrics,
+    distribution: CAMPAIGN.distribution,
+    objectives: CAMPAIGN.objectives,
+    accountColumns: CAMPAIGN.accountColumns,
+    accountRows: CAMPAIGN.accountRows,
+    headings: CAMPAIGN.headings,
+    panels: CAMPAIGN.panels,
+    executionSummary: CAMPAIGN.executionSummary,
+    taskQueue: CAMPAIGN.taskQueue,
+    actionLog: CAMPAIGN.actionLog,
+    creativeColumns: CAMPAIGN.creativeColumns,
+    creatives: CAMPAIGN.creatives,
+    efficiency: CAMPAIGN.efficiency,
+    recommendations: CAMPAIGN.recommendations,
+    bindingColumns: CAMPAIGN.bindingColumns,
+    accounts: CAMPAIGN.accounts,
+  },
   argTypes: {
     section: { control: "select", options: ["overview", "execution", "assets", "analytics", "accounts"] },
     channel: { control: "inline-radio", options: ["rednote", "douyin"] },
@@ -190,6 +251,7 @@ export const Campaign = {
     const [prompt, setPrompt] = useSynced(args.prompt);
     return (
       <CampaignPage
+        {...args}
         section={section}
         channel={channel}
         query={query}
