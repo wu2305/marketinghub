@@ -15,6 +15,7 @@ import {
   Signal,
   TypeStatCard,
   WorkspaceCard,
+  markupProps,
 } from "../assembled/ui.jsx";
 
 export default {
@@ -115,7 +116,7 @@ export const CreateKnowledge = {
   args: add,
   render: (args) => (
     <div style={{ padding: 24 }}>
-      <AddButton {...args} onClick={action("onClick")} />
+      <AddButton {...markupProps(args)} onClick={action("onClick")} />
     </div>
   ),
 };

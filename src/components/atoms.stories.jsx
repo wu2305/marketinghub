@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import { trees } from "../assembled/registry.js";
 import { findComponent } from "../assembled/find.js";
 import { withPortalActions } from "../assembled/story-actions.jsx";
-import { Button, Link, ScopeOption, Select, StatusBadge, Suggestion, TextArea, TextInput } from "../assembled/ui.jsx";
+import { Button, Link, ScopeOption, Select, StatusBadge, Suggestion, TextArea, TextInput, markupProps } from "../assembled/ui.jsx";
 
 export default {
   title: "Components/Atoms",
@@ -42,10 +42,9 @@ export const PrimaryButton = {
           type: "button",
           ...(args.disabled ? { disabled: "" } : {}),
         }}
+        nodes={[{ kind: "text", value: args.label }]}
         onClick={args.onClick || action("onClick")}
-      >
-        {[{ kind: "text", value: args.label }]}
-      </Button>
+      />
     </div>
   ),
 };
@@ -54,7 +53,7 @@ export const CreateSubmit = {
   name: "Create submit",
   render: () => (
     <div style={{ padding: 24 }}>
-      <Button {...button} onClick={action("onClick")} />
+      <Button {...markupProps(button)} onClick={action("onClick")} />
     </div>
   ),
 };
@@ -64,7 +63,7 @@ export const TextLink = {
   args: { ...(link || { attrs: { href: "/original/index.html" }, children: [{ kind: "text", value: "Home" }] }) },
   render: (args) => (
     <div style={{ padding: 24 }}>
-      <Link {...args} onNavigate={action("onNavigate")} />
+      <Link {...markupProps(args)} onNavigate={action("onNavigate")} />
     </div>
   ),
 };
@@ -84,7 +83,7 @@ export const Multiline = {
   args: area || { attrs: { rows: "6", placeholder: "Type or describe what you want to add..." }, children: [] },
   render: (args) => (
     <div style={{ padding: 24, maxWidth: 480 }}>
-      <TextArea {...args} onChange={action("onChange")} />
+      <TextArea {...markupProps(args)} onChange={action("onChange")} />
     </div>
   ),
 };
@@ -94,7 +93,7 @@ export const KnowledgeType = {
   args: select,
   render: (args) => (
     <div style={{ padding: 24 }}>
-      <Select {...args} onChange={action("onChange")} />
+      <Select {...markupProps(args)} onChange={action("onChange")} />
     </div>
   ),
 };

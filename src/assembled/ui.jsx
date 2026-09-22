@@ -3,10 +3,30 @@ import { usePortalActions } from "./actions.jsx";
 import { textFrom, toReactProps } from "./props.js";
 
 const VOID = new Set(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"]);
+const DROP_BLANK = new Set(["table", "thead", "tbody", "tfoot", "tr", "select"]);
 
-export function Nodes({ nodes }) {
-  if (!nodes) return null;
-  return nodes.map((node, index) => <Node key={index} node={node} />);
+export function markupProps(props = {}) {
+  if (!props || !Object.prototype.hasOwnProperty.call(props, "children")) return props || {};
+  const { children, ...rest } = props;
+  return { ...rest, nodes: children };
+}
+
+function optionValue(option) {
+  if (option.attrs && Object.prototype.hasOwnProperty.call(option.attrs, "value")) return option.attrs.value;
+  return textFrom(option.children);
+}
+
+function applySelectedDefault(props, nodes) {
+  if (Object.prototype.hasOwnProperty.call(props, "value") || Object.prototype.hasOwnProperty.call(props, "defaultValue")) return;
+  const selected = (nodes || []).filter((node) => node?.kind === "el" && node.tag === "option" && node.attrs && Object.prototype.hasOwnProperty.call(node.attrs, "selected")).at(-1);
+  if (selected) props.defaultValue = optionValue(selected);
+}
+
+export function Nodes({ nodes, parent }) {
+  if (!nodes?.length) return null;
+  const list = DROP_BLANK.has(parent) ? nodes.filter((node) => !(node?.kind === "text" && !String(node.value).trim())) : nodes;
+  if (!list.length) return null;
+  return list.map((node, index) => <Node key={index} node={node} />);
 }
 
 export function Node({ node }) {
@@ -15,15 +35,21 @@ export function Node({ node }) {
   if (node.kind === "comp") {
     const Component = COMPONENTS[node.name];
     if (!Component) return null;
-    return <Component {...node.props} />;
+    return <Component {...markupProps(node.props)} />;
   }
   if (node.kind === "el") {
     const Tag = node.tag;
     const props = toReactProps(node.attrs);
     if (VOID.has(node.tag)) return <Tag {...props} />;
+    if (node.tag === "option") {
+      delete props.selected;
+      const complex = (node.children || []).some((child) => child && child.kind !== "text");
+      if (!complex) return <option {...props}>{textFrom(node.children)}</option>;
+    }
+    if (node.tag === "select") applySelectedDefault(props, node.children);
     return (
       <Tag {...props}>
-        <Nodes nodes={node.children} />
+        <Nodes nodes={node.children} parent={node.tag} />
       </Tag>
     );
   }
@@ -34,26 +60,26 @@ function clickLabel(nodes) {
   return textFrom(nodes).replace(/\s+/g, " ").trim();
 }
 
-export function Button({ attrs = {}, children = [], onClick }) {
+export function Button({ attrs = {}, nodes = [], onClick }) {
   const actions = usePortalActions();
   return (
     <button
       {...toReactProps(attrs)}
       onClick={(event) => (onClick || actions.onClick)?.({ id: attrs.id || "", label: event.currentTarget.textContent.replace(/\s+/g, " ").trim() })}
     >
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} />
     </button>
   );
 }
 
-export function Link({ attrs = {}, children = [], onNavigate }) {
+export function Link({ attrs = {}, nodes = [], onNavigate }) {
   const actions = usePortalActions();
   return (
     <a
       {...toReactProps(attrs)}
-      onClick={() => (onNavigate || actions.onNavigate)?.({ href: attrs.href || "", label: clickLabel(children) })}
+      onClick={() => (onNavigate || actions.onNavigate)?.({ href: attrs.href || "", label: clickLabel(nodes) })}
     >
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} />
     </a>
   );
 }
@@ -79,11 +105,11 @@ export function TextInput({ attrs = {}, onChange }) {
   return <input {...props} {...(hasValue ? { defaultValue: value } : {})} onChange={report} />;
 }
 
-export function TextArea({ attrs = {}, children = [], onChange }) {
+export function TextArea({ attrs = {}, nodes = [], onChange }) {
   const actions = usePortalActions();
   const props = toReactProps(attrs);
   delete props.value;
-  const text = textFrom(children);
+  const text = textFrom(nodes);
   return (
     <textarea
       {...props}
@@ -93,16 +119,17 @@ export function TextArea({ attrs = {}, children = [], onChange }) {
   );
 }
 
-export function Select({ attrs = {}, children = [], onChange }) {
+export function Select({ attrs = {}, nodes = [], onChange }) {
   const actions = usePortalActions();
   const props = toReactProps(attrs);
   delete props.value;
+  applySelectedDefault(props, nodes);
   return (
     <select
       {...props}
       onChange={(event) => (onChange || actions.onChange)?.({ name: attrs.name || attrs.id || "", value: event.target.value })}
     >
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} parent="select" />
     </select>
   );
 }
@@ -219,15 +246,15 @@ export function Breadcrumb({ className, ariaLabel = "", items = [], onNavigate }
   );
 }
 
-export function AddButton({ attrs = {}, children = [], onClick }) {
+export function AddButton({ attrs = {}, nodes = [], onClick }) {
   const actions = usePortalActions();
   const Tag = Object.prototype.hasOwnProperty.call(attrs, "href") ? "a" : "button";
   return (
     <Tag
       {...toReactProps(attrs)}
-      onClick={() => (onClick || actions.onClick)?.({ href: attrs.href || "", label: clickLabel(children) })}
+      onClick={() => (onClick || actions.onClick)?.({ href: attrs.href || "", label: clickLabel(nodes) })}
     >
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} />
     </Tag>
   );
 }
@@ -404,20 +431,20 @@ export function CommandHero({
   );
 }
 
-export function KnowledgeSidebar({ ariaLabel = "", navLabel = "", children = [] }) {
+export function KnowledgeSidebar({ ariaLabel = "", navLabel = "", nodes = [] }) {
   return (
     <aside className="knowledge-sidebar" aria-label={ariaLabel || undefined}>
       <nav className="sidebar-nav" aria-label={navLabel || undefined}>
-        <Nodes nodes={children} />
+        <Nodes nodes={nodes} />
       </nav>
     </aside>
   );
 }
 
-export function LibraryToolbar({ attrs = {}, children = [] }) {
+export function LibraryToolbar({ attrs = {}, nodes = [] }) {
   return (
     <header {...toReactProps(attrs)}>
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} />
     </header>
   );
 }
@@ -448,10 +475,10 @@ export function AiLauncher({ attrs = {}, orb = "AI", label = "AI Interpreter", o
   );
 }
 
-export function AssistantPanel({ attrs = {}, children = [] }) {
+export function AssistantPanel({ attrs = {}, nodes = [] }) {
   return (
     <section {...toReactProps(attrs)}>
-      <Nodes nodes={children} />
+      <Nodes nodes={nodes} />
     </section>
   );
 }
@@ -651,9 +678,10 @@ export function AssetRow({
       <span className="asset-created">{created}</span>
       <span className="asset-actions">
         <div className="asset-actions-dropdown">
-          <button
+          <span
             className="asset-actions-btn"
-            type="button"
+            role="button"
+            tabIndex={0}
             aria-label="More actions"
             aria-haspopup="true"
             aria-expanded={menuOpen ? "true" : "false"}
@@ -661,24 +689,36 @@ export function AssetRow({
               event.stopPropagation();
               (onAction || actions.onClick)?.({ id, action: "menu", open: !menuOpen });
             }}
+            onKeyDown={(event) => {
+              if (event.key !== "Enter" && event.key !== " ") return;
+              event.preventDefault();
+              event.stopPropagation();
+              (onAction || actions.onClick)?.({ id, action: "menu", open: !menuOpen });
+            }}
           >
             <Node node={MENU_ICON} />
-          </button>
+          </span>
           <div className="asset-actions-menu" role="menu" aria-label="Asset actions" hidden={menuOpen ? undefined : true}>
             {["Edit", "Disable", "Delete", "View versions"].map((action) => (
-              <button
+              <span
                 key={action}
                 className="asset-menu-item"
-                type="button"
                 role="menuitem"
+                tabIndex={0}
                 data-action={action === "View versions" ? "versions" : action.toLowerCase()}
                 onClick={(event) => {
                   event.stopPropagation();
                   (onAction || actions.onClick)?.({ id, action: action === "View versions" ? "versions" : action.toLowerCase() });
                 }}
+                onKeyDown={(event) => {
+                  if (event.key !== "Enter" && event.key !== " ") return;
+                  event.preventDefault();
+                  event.stopPropagation();
+                  (onAction || actions.onClick)?.({ id, action: action === "View versions" ? "versions" : action.toLowerCase() });
+                }}
               >
                 <span className="asset-menu-label">{action}</span>
-              </button>
+              </span>
             ))}
           </div>
         </div>
