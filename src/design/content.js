@@ -201,6 +201,11 @@ export const SELF_SERVICE = {
   ],
 };
 
+// Totals are typeMeta[].stats.total from assets/js/knowledge/types.js.
+function knowledgeCount(total, singular, plural) {
+  return `${total} ${total === 1 ? singular : plural}`;
+}
+
 export const INTERPRETER = {
   hero: {
     image: "/assets/images/knowledge-hero.jpg",
@@ -239,14 +244,14 @@ export const INTERPRETER = {
     },
   ],
   types: [
-    { id: "principles", title: "Principles", count: "10 principles", summary: "AI response rules and governing principles.", action: "View principles" },
-    { id: "context", title: "Report Context", count: "6 contexts", summary: "Report interpretation and business context.", action: "View contexts" },
-    { id: "model", title: "Data Models", count: "3 models", summary: "Entities, attributes, and relationships.", action: "View models" },
-    { id: "metrics", title: "Metric Dictionary", count: "3 metrics", summary: "Governed metric definitions and calculations.", action: "View metrics" },
-    { id: "terms", title: "Business Terms", count: "6 terms", summary: "Definitions and synonyms for business term.", action: "View terms" },
-    { id: "analytical", title: "Analytical Models", count: "1 model", summary: "Reusable analysis frameworks and methods.", action: "View models" },
-    { id: "scenario", title: "Scenario Reports", count: "3 scenarios", summary: "Governed reporting scenarios and templates.", action: "View scenarios" },
-    { id: "email", title: "Email Reports", count: "3 reports", summary: "Scheduled insights and distributions.", action: "View reports" },
+    { id: "principles", title: "Principles", total: 10, count: knowledgeCount(10, "principle", "principles"), summary: "AI response rules and governing principles.", action: "View principles" },
+    { id: "context", title: "Report Context", total: 6, count: knowledgeCount(6, "context", "contexts"), summary: "Report interpretation and business context.", action: "View contexts" },
+    { id: "model", title: "Data Models", total: 3, count: knowledgeCount(3, "model", "models"), summary: "Entities, attributes, and relationships.", action: "View models" },
+    { id: "metrics", title: "Metric Dictionary", total: 3, count: knowledgeCount(3, "metric", "metrics"), summary: "Governed metric definitions and calculations.", action: "View metrics" },
+    { id: "terms", title: "Business Terms", total: 6, count: knowledgeCount(6, "term", "terms"), summary: "Definitions and synonyms for business term.", action: "Manage terms" },
+    { id: "analytical", title: "Analytical Models", total: 1, count: knowledgeCount(1, "model", "models"), summary: "Reusable analysis frameworks and methods.", action: "Manage models" },
+    { id: "scenario", title: "Scenario Reports", total: 3, count: knowledgeCount(3, "scenario", "scenarios"), summary: "Governed reporting scenarios and templates.", action: "Manage scenarios" },
+    { id: "email", title: "Email Reports", total: 3, count: knowledgeCount(3, "report", "reports"), summary: "Scheduled insights and distributions.", action: "View reports" },
   ],
   assets: [
     { id: "investment-principles", title: "Campaign investment decision principles", summary: "Shared guardrails for evaluating investment pressure and conversion efficiency.", type: "Principles", owner: "Sarah Chen", status: "Published" },
