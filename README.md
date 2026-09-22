@@ -32,7 +32,7 @@ This is a cleaned, behavior-preserving baseline generated from `marketing-hub-ai
 The cleaned baseline was rendered at 1440px width across all canonical pages, all eight AI Interpreter types, and the supported knowledge creation states. The original and cleaned page screenshots were compared pixel by pixel. See the validation artifacts outside this deliverable when working in the Codex task workspace.
 ## Storybook
 
-The React Storybook in `src/pages` hosts every HTML entry in this repository, including each Marketing Cockpit project and dashboard, each AI Interpreter type, each knowledge record, and each create or edit state those pages already support. A story loads the original document unchanged: its markup, stylesheets, fonts, images, and scripts. `src/styles/portal.css` imports every stylesheet under `assets/css`.
+The React Storybook in `src/design` is the design system. Components take semantic props and children. The static HTML under `index.html` and `assets/pages` remains the visual reference and is not the component runtime.
 
 ```bash
 npm install
@@ -43,9 +43,7 @@ npm run storybook
 - Original pages: [http://127.0.0.1:4173](http://127.0.0.1:4173)
 - Storybook: [http://127.0.0.1:6006](http://127.0.0.1:6006)
 
-In Storybook, open **Reference / Original HTML** to browse the static pages, or use the **Compare** toolbar item **Beside original HTML** on a page story. Handover notes are in `handover/`.
-
-Repeated interface parts live under **Components** as atoms, molecules, and organisms. **Assembled / Documents** builds each HTML page from those components. `node scripts/check-fidelity.mjs && python3 scripts/compare_fidelity.py /tmp/portal-fidelity` checks that the assembled markup matches the original documents.
+Stories are grouped as Foundations, Atoms, Molecules, Organisms, and Pages. Page stories compose the components for Home, Marketing Cockpit, Self-Service Center, AI Interpreter, and RedNote Campaign Tool. Handover notes are in `handover/`.
 
 ## v20.11.01 AI Interpreter refresh
 

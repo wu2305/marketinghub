@@ -1,22 +1,16 @@
-# 组件拆解与拼装计划
+# 设计系统组件
 
-目标：把门户 HTML 里重复的界面拆成 React 组件，放进 Storybook，并让拼装后的页面与原始 HTML 文档一致。
+组件接口是事实来源。原始 HTML 只用来对照布局、字体、颜色、间距和主要控件状态。
 
-## 对照规则
+## 接口
 
-- 组件的标签、class、文案、属性与原 HTML 相同。文本按浏览器规则合并空白后再比较。
-- 资源地址改写为 Storybook 可访问的路径：图片和字体走 `/assets/...`，页面链接走 `/original/...`。比较时对原始 HTML 做同样的改写。
-- 只忽略文档里的 `script` 与注释。其余节点，包括空列表、隐藏面板和对话框，都留在拼装结果里。
-- 脚本在运行后才插入的区块（资产行、类型统计、管理规则、Business Term / Analytical Model 表单）单独做成组件，并对照脚本文本中的模板。
-- 每个可交互组件把点击、输入、选择接到 Storybook Actions。
+- 原子控件接收内容 props，不接收原始 `class`、`attrs` 或 DOM 节点。
+- 页头、Hero、侧栏、工具条、助手面板和表单同样只接收文案、列表和回调。
+- `SiteHeader` 与工作区页头是同一个 `Header`。
+- 样式写在组件自己的 CSS 里，从现有样式表提取实际用到的字体、颜色和间距。组件不依赖 `knowledge-v4` 这类页面父级 class，也不整包引入 `assets/css`。
 
-## 实施顺序
+## 故事
 
-1. 原子：按钮、链接、输入、搜索框内部控件、状态徽标、建议问题、范围选项。
-2. 分子：指标、Hero 统计、搜索栏、侧栏项、面包屑、分区标题、工作区卡片、添加按钮。
-3. 组织：页头、首页/知识 Hero、工作区网格、知识侧栏、库工具条、页头信息、AI 启动器、助手面板。
-4. 用上述组件拼回 `index.html` 和 `assets/pages/*.html` 的正文。未能安全识别的片段保持原始节点，避免丢内容。
-5. 运行结构对比：渲染结果与原始正文不一致即修正组件。
-6. 在 Storybook 中查看首页拼装页，并和原始首页并排对照。
-
-结构对比已通过：17 个 HTML 文档的拼装结果与原始正文一致。
+1. Atoms、Molecules、Organisms 各自有 Controls。
+2. Pages 用这些组件拼出首页、Marketing Cockpit、Self-Service Center、AI Interpreter 和 RedNote Campaign Tool。
+3. 页面渲染树里没有原始 HTML 字符串，也没有 assembled JSON 节点。

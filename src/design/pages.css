@@ -1,0 +1,121 @@
+@import "./tokens.css";
+
+.mh-page {
+  min-height: 100vh;
+  background: var(--mh-bg);
+  color: var(--mh-ink);
+  font-family: var(--mh-font);
+}
+
+.mh-page--home {
+  background: #f6f7f8;
+}
+
+.mh-page__inset {
+  width: min(1440px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 20px 0 84px;
+}
+
+.mh-page__shell {
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 28px 0 80px;
+}
+
+.mh-page__search {
+  width: 360px;
+  margin-bottom: 28px;
+}
+
+.mh-page__inset .mh-heading {
+  margin-bottom: 18px;
+}
+
+.mh-page__cards {
+  display: grid;
+  gap: 16px;
+}
+
+.mh-page__cards--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mh-interpreter {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: stretch;
+  background: #fff;
+}
+
+.mh-interpreter__main {
+  min-width: 0;
+  padding: 28px 36px 64px;
+}
+
+.mh-interpreter__main .mh-heading {
+  margin: 2px 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--mh-line);
+}
+
+.mh-interpreter__main .mh-heading h2 {
+  font-family: var(--mh-font);
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.mh-interpreter__main .mh-heading__kicker {
+  margin-bottom: 6px;
+  color: var(--mh-gold-deep);
+  letter-spacing: 0.08em;
+}
+
+.mh-campaign {
+  display: grid;
+  width: min(1540px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 80px 0 92px;
+  grid-template-columns: 236px minmax(0, 1fr);
+  gap: 32px;
+}
+
+.mh-campaign__metrics {
+  display: grid;
+  margin-top: 16px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mh-campaign__split {
+  display: grid;
+  margin-top: 12px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+  gap: 12px;
+}
+
+.mh-campaign__table {
+  margin-top: 12px;
+}
+
+.mh-campaign__tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mh-campaign__tools .mh-search {
+  width: 190px;
+}
+
+.mh-campaign__tools .mh-input {
+  width: 190px;
+  height: 34px;
+}
+
+.mh-stack {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}

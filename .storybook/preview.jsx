@@ -1,43 +1,18 @@
-import "../src/styles/portal.css";
-import "../src/preview/compare.css";
-import { CompareDecorator } from "../src/preview/CompareFrame.jsx";
+import "../src/design/tokens.css";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {
-  decorators: [CompareDecorator],
-  initialGlobals: {
-    compare: "off",
-  },
-  globalTypes: {
-    compare: {
-      description: "Place the original HTML page beside this story",
-      toolbar: {
-        title: "Compare",
-        icon: "mirror",
-        items: [
-          { value: "off", title: "Component only" },
-          { value: "on", title: "Beside original HTML" },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
   parameters: {
-    layout: "fullscreen",
-    backgrounds: { disable: true },
-    controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
+    layout: "padded",
+    controls: { expanded: true, matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
       storySort: {
-        order: [
-          "Foundations",
-          "Components",
-          ["Atoms", "Molecules", "Organisms"],
-          "Assembled",
-          "Pages",
-          ["Home", "Marketing Cockpit", "Self-Service Center", "AI Interpreter", "Knowledge Create", "Knowledge View", "Data Model", "Metric Dictionary", "RedNote Campaign Tool", "Governance"],
-          "Reference",
-        ],
+        order: ["Foundations", "Atoms", "Molecules", "Organisms", "Pages"],
       },
+    },
+    backgrounds: {
+      default: "workspace",
+      values: [{ name: "workspace", value: "#f4f6f8" }],
     },
   },
 };
