@@ -1,16 +1,11 @@
-# 设计系统组件
+# 组件接口摘要
 
-组件接口是事实来源。原始 HTML 只用来对照布局、字体、颜色、间距和主要控件状态。
+完整规则见 `AGENTS.md` 第 3 节，状态与规划见 `handover/README.md`。本文件只保留摘要，不单独维护规划。
 
-## 接口
-
-- 原子控件接收内容 props，不接收原始 `class`、`attrs` 或 DOM 节点。
-- 页头、Hero、侧栏、工具条、助手面板和表单同样只接收文案、列表和回调。
-- `SiteHeader` 与工作区页头是同一个 `Header`。
-- 样式写在组件自己的 CSS 里，从现有样式表提取实际用到的字体、颜色和间距。组件不依赖 `knowledge-v4` 这类页面父级 class，也不整包引入 `assets/css`。
-
-## 故事
-
-1. Atoms、Molecules、Organisms 各自有 Controls。
-2. Pages 用这些组件拼出首页、Marketing Cockpit、Self-Service Center、AI Interpreter 和 RedNote Campaign Tool。
-3. 页面渲染树里没有原始 HTML 字符串，也没有 assembled JSON 节点。
+- 组件接口是事实来源。原始 HTML 只用来对照布局、字体、颜色、间距和主要控件状态。
+- 组件只接收内容 props、状态 props、`children` 与回调；不接收原始 `class`、`attrs`、DOM 节点或 HTML 字符串。
+- 枚举 props 导出常量并在 `argTypes` 引用。同一设计概念只有一个组件，形态用 `variant` / `tone` / `size` 区分。
+- 导航渲染为 `<a href>`，动作渲染为 `<button type="button">`。组件内不写死 `id`。
+- 样式随组件走，颜色与尺寸引用 `src/design/tokens.css`；不整包引入 `assets/css`，不依赖页面父级 class。
+- 页面组件通过 props 接收全部数据；`content.js` 只作故事默认 args。
+- Pages 故事渲染树只允许 `src/design` 内的组件；禁止 `PortalDocument`、原始 HTML 字符串、assembled JSON 节点。
