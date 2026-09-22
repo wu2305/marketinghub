@@ -47,7 +47,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 | 类别 | 事实 |
 |---|---|
 | 覆盖深度 | 提取只到每个页面的首屏。AI Interpreter 各类型视图（卡片网格、同义词标签、创建者筛选、编辑/删除/下线动作、分页、`!` 规则提示）、Analytical Model 表单、Scenario 编辑器、版本对比、Review Center、Feedback、Personal Memory、Metric Dictionary 公式构建器、Data Model 浏览器均无组件。 |
-| 视觉偏差 | Home 助手面板做成右侧抽屉，原始首页为居中弹窗。Cockpit 按钮缺 `→`，搜索图标不同。Interpreter 侧栏缺图标与分组条；可管理类型动作应为 Manage，现为 View；类型计数与原文不符。 |
+| 视觉偏差 | Cockpit 按钮缺 `→`，搜索图标不同。Interpreter 侧栏缺图标与分组条；可管理类型动作应为 Manage，现为 View；类型计数与原文不符。（Home 助手面板一项已撤销：`index.html` 的面板带 `home-ask-panel` class，`assets/css/home/home.css` 第 614 行起将其画成右侧全高抽屉，宽 `min(40vw, 100vw - 80px)`；原审核依据的“居中弹窗”来自 `assets/.codebuddy/memory` 的旧记录，不是当前渲染。核对视觉时以浏览器计算样式为准，不以 memory 文档为准。） |
 | 内容耦合 | Campaign 的 Execution / Assets / Analytics / Accounts 四个 section 的数据写死在 `pages.jsx`，页面组件不接收数据 props。 |
 | Token | `tokens.css` 21 个变量；`atoms.css` / `molecules.css` / `organisms.css` / `pages.css` 内仍有 171 处直接十六进制色值，金色渐变、危险色、深色 Hero 全部绕开 token。 |
 | 响应式 | 四个组件 CSS 中零条 `@media`。 |

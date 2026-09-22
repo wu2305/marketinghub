@@ -68,6 +68,9 @@ npm run storybook      # 127.0.0.1:6006
 来自 2026-09-22 审核，尚未排期或超出阶段 A–D 范围：
 
 - Interpreter 非 overview 状态与原始差异大：原始为卡片网格与逐卡动作，当前为单行通用表且 Actions 列为空。阶段 C 处理。
+- `Header` 导航项改为 `<a href>` 后，故事中点击会让 iframe 真跳到 `/home` 等不存在的路由。`onNavigate` 回调目前不带事件对象，故事层无法选择性 `preventDefault`。应给回调加 `event` 参数，由故事决定是否阻止默认行为，组件本身不阻止。
+- Home 助手抽屉与原始的残留差异（2026-09-22 复核 #8 时发现）：原始输入框左下有 `+` 附件按钮，故事没有；`Header` logo 链接仍无条件 `preventDefault`。
+- Campaign Accounts 表：原始账号名为粗体，`DataTable` 首列为常规字重。需要 `DataTable` 提供列级 `emphasis` 或首列强调选项，而不是在页面里加样式。
 - `StatusBadge` 的 tone 由字符串包含判断决定，需改为显式 `tone` prop 或映射表。
 - `content.js` 中 `href` 为 `/home`、`/cockpit` 等 Demo 中不存在的路由，需在决定路由方案后统一。
 - 页面故事内联 `style` 用作占位与间距（如 `<div style={{ height: 56 }} />`），需改为组件 CSS。
@@ -81,3 +84,4 @@ npm run storybook      # 127.0.0.1:6006
 | 2026-09-22 | PR #6 合入：语义组件设计系统替换 DOM 复刻方案 | Cloud Agent |
 | 2026-09-22 | 深度审核：实跑构建与 1440px 对照，确认 2.4 节缺口；建立 `AGENTS.md` 与本状态文件 | Cloud Agent |
 | 2026-09-22 | PR #8：阶段 A 六条收口（助手抽屉、Cockpit 箭头与搜索符、侧栏图标、Manage 文案与 typeMeta 计数、Campaign props、Header 链接与 Hero id） | Cloud Agent |
+| 2026-09-22 | 复核 #8：实跑构建（38 故事）与 1440px 对照（Home 助手打开、Interpreter overview、Campaign execution / accounts 对原始 `#execution` / `#accounts`），六条通过。撤销 `AGENTS.md` 2.4 中“首页助手为居中弹窗”的错误事实；新增第 4 节四条残留 | Cloud Agent |
