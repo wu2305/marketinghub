@@ -306,9 +306,107 @@ export const CAMPAIGN = {
     { key: "full", header: "Full-site" },
     { key: "total", header: "Total Plans" },
   ],
-  accounts: [
+  accountRows: [
     { id: "1", name: "Coach_XHS_01", feed: "82", search: "13", video: "0", full: "4", total: "99" },
     { id: "2", name: "Coach_XHS_02", feed: "61", search: "9", video: "0", full: "3", total: "73" },
     { id: "3", name: "Coach_XHS_03", feed: "54", search: "8", video: "0", full: "2", total: "64" },
+  ],
+  headings: {
+    overview: {
+      eyebrow: "Campaign workspace / Overview",
+      title: "Overview Dashboard",
+      description: "Monitor automated media operations across accounts, plans, units, and creative assets.",
+    },
+    execution: {
+      eyebrow: "Campaign workspace / Execution",
+      title: "RedNote Campaign Tool",
+      description: "Centralize media account operations, bulk plan creation, budget pacing, and campaign action publishing to reduce platform switching.",
+      action: "Create Campaign Task",
+    },
+    assets: {
+      eyebrow: "Campaign workspace / Assets",
+      title: "Creative Assets",
+      description: "Manage creative review status, channel readiness, and creative performance so operators can quickly identify reusable or replaceable assets.",
+      badge: "7,017 creatives",
+    },
+    analytics: {
+      eyebrow: "Campaign workspace / Analytics",
+      title: "Analytics Center",
+      description: "Analyze execution efficiency, account performance, plan quality, and creative performance to support the next automation cycle.",
+      status: "Insights ready",
+    },
+    accounts: {
+      eyebrow: "Campaign workspace / Account binding",
+      title: "Account Binding",
+      description: "Manage media account authorization, token status, and publishing permissions with traceable account boundaries.",
+      action: "Bind New Account",
+    },
+  },
+  panels: {
+    distribution: { eyebrow: "Distribution", title: "Promotion Type Distribution", meta: "Plans" },
+    objectives: { eyebrow: "Objective mix", title: "Marketing Objective Distribution", meta: "Plans" },
+    accountOperations: { eyebrow: "Account operations", title: "Account Operation Details" },
+    queue: { eyebrow: "Automation", title: "Automation Task Queue", meta: "3 active tasks" },
+    log: { eyebrow: "Action history", title: "Campaign Action Log", meta: "Recent actions" },
+    creatives: { eyebrow: "Creative library", title: "Creative Status Dashboard", meta: "Channel readiness" },
+    efficiency: { eyebrow: "Human efficiency", title: "Efficiency Lift", meta: "Current cycle" },
+    recommendations: { eyebrow: "Next best actions", title: "Optimization Recommendations", meta: "2 recommendations" },
+    accounts: { eyebrow: "OAuth / API", title: "Media Account Status", meta: "Authorization health" },
+  },
+  executionSummary: [
+    { label: "Awaiting confirmation", value: "341", caption: "generated plans" },
+    { label: "Budget watch", value: "2", caption: "cities near threshold" },
+    { label: "Under review", value: "3", caption: "anomalous plans" },
+  ],
+  taskQueue: [
+    { status: "Pending", title: "Rednote bulk plan creation", detail: "341 plans generated and awaiting final publishing confirmation" },
+    { status: "Watch", title: "Budget pacing calibration", detail: "Shanghai and Beijing budgets are near the upper threshold; reduce by 8%" },
+    { status: "Review", title: "Anomalous plan pause", detail: "3 plans have no conversions for two days and are under review" },
+  ],
+  actionLog: {
+    columns: [
+      { key: "action", header: "Action" },
+      { key: "platform", header: "Platform" },
+      { key: "object", header: "Object" },
+      { key: "status", header: "Status" },
+    ],
+    rows: [
+      { id: "a", action: "Bulk create plans", platform: "Rednote", object: "Coach_XHS_01", status: "Pending", statusLabel: "Pending confirmation" },
+      { id: "b", action: "Adjust daily budget", platform: "Rednote", object: "23 units", status: "Success", statusLabel: "Success" },
+      { id: "c", action: "Sync plan status", platform: "Douyin", object: "12 plans", status: "Syncing", statusLabel: "Syncing" },
+    ],
+  },
+  creativeColumns: [
+    { key: "group", header: "Creative Group" },
+    { key: "channel", header: "Channel" },
+    { key: "ready", header: "Ready" },
+    { key: "review", header: "In Review" },
+    { key: "replace", header: "Replace" },
+  ],
+  creatives: [
+    { id: "1", group: "Tabby 26SS seeding assets", subtitle: "Product seeding", channel: "Rednote", ready: "128", review: "14", replace: "6" },
+    { id: "2", group: "City limited campaign", subtitle: "City activation", channel: "Douyin", ready: "72", review: "8", replace: "3" },
+    { id: "3", group: "Member conversion assets", subtitle: "Conversion", channel: "Rednote", ready: "43", review: "2", replace: "1" },
+  ],
+  efficiency: [
+    { label: "Time saved", value: "42h" },
+    { label: "Automated actions", value: "83" },
+    { label: "Anomaly blocks", value: "9" },
+  ],
+  recommendations: [
+    { index: "01", title: "Budget reallocation", detail: "Move Chengdu search budget to Shanghai feed promotion" },
+    { index: "02", title: "Creative replacement", detail: "Replace 3 low-engagement creatives with high-save-rate versions" },
+  ],
+  bindingColumns: [
+    { key: "account", header: "Account" },
+    { key: "platform", header: "Platform" },
+    { key: "auth", header: "Auth Status" },
+    { key: "sync", header: "Last Sync" },
+    { key: "permission", header: "Action Permission" },
+  ],
+  accounts: [
+    { id: "1", account: "Coach_XHS_01", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
+    { id: "2", account: "Coach_XHS_02", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
+    { id: "3", account: "Coach_DY_01", platform: "Douyin", authStatus: "Pending", authLabel: "Renewal required", sync: "2026-05-28 18:20", permission: "Paused", permissionStatus: "Paused" },
   ],
 };

@@ -84,6 +84,9 @@ a {
   --mh-disabled-bg: #e8ebee;
   --mh-disabled-line: #d0d4d8;
   --mh-disabled-ink: #8a949e;
+  --mh-index-line: #d8c76f;
+  --mh-index-bg: #fff9df;
+  --mh-index-ink: #6c5800;
 }
 
 .mh-sr {
