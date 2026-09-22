@@ -59,8 +59,10 @@ export function HomePage({
         open={assistantOpen}
         placement="drawer"
         {...ASSISTANT}
+        suggestions={ASSISTANT.homeSuggestions}
         scope={scope}
-        showScopes
+        showScopes={false}
+        showPicks={false}
         prompt={prompt}
         onClose={onCloseAssistant}
         onPromptChange={onPromptChange}

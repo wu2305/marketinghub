@@ -19,6 +19,8 @@ import {
 
 const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("/assets/images/knowledge-card-icons/layer-${index}.png")`);
 
+export const assistantPlacements = ["modal", "drawer"];
+
 export function Header({
   logo = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry" },
   items = [],
@@ -314,6 +316,7 @@ export function AssistantPanel({
   scopes = [],
   scope,
   showScopes = false,
+  showPicks = true,
   prompt = "",
   model = "Data Model",
   mode = "Analytical Model",
@@ -378,14 +381,16 @@ export function AssistantPanel({
                 <ScopeOption key={item} label={item} pressed={item === scope} onChange={() => onScopeChange?.({ scope: item })} />
               ))}
             </div>
+          ) : placement === "drawer" ? (
+            <div className="mh-assistant__scope-reserve" aria-hidden="true" />
           ) : null}
           <div className="mh-assistant__box">
-            <TextArea label="Ask AI Interpreter" rows={2} value={prompt} placeholder="Type your question or upload Excel/CSV files for data analysis" onChange={onPromptChange} />
+            <TextArea label="Ask AI Interpreter" rows={1} value={prompt} placeholder="Type your question or upload Excel/CSV files for data analysis" onChange={onPromptChange} />
             <div className="mh-assistant__tools">
-              <span className="mh-assistant__pick">{model}</span>
-              <span className="mh-assistant__pick">{mode}</span>
+              {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
+              {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span style={{ marginLeft: "auto" }}>
-                <Button variant="gold" size="sm" type="submit">
+                <Button variant="gold" size="sm" type="submit" disabled={!String(prompt).trim()}>
                   ASK
                 </Button>
               </span>

@@ -66,6 +66,11 @@ export const ASSISTANT = {
     "Campaigns near budget threshold",
     "Automation task queue overview",
   ],
+  homeSuggestions: [
+    "Analyze this Excel data and generate a summary",
+    "Top insights across all data this week",
+    "Weekly activity summary",
+  ],
   scopes: ["All", "Campaigns", "Dashboards", "Knowledge"],
   model: "Data Model",
   mode: "Analytical Model",
