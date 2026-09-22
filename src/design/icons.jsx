@@ -1,3 +1,5 @@
+import React from "react";
+
 export function Icon({ name, className }) {
   const common = {
     viewBox: "0 0 24 24",

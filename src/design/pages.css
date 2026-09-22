@@ -5,10 +5,17 @@
   background: var(--mh-bg);
   color: var(--mh-ink);
   font-family: var(--mh-font);
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .mh-page--home {
+  padding-top: 72px;
   background: #f6f7f8;
+}
+
+.mh-page--home .mh-hero {
+  margin-top: -56px;
 }
 
 .mh-page__inset {
@@ -25,7 +32,18 @@
 
 .mh-page__search {
   width: 360px;
-  margin-bottom: 28px;
+  margin-bottom: 44px;
+}
+
+.mh-page__shell--self {
+  padding: 24px 0 40px;
+}
+
+.mh-self-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 26px;
 }
 
 .mh-page__inset .mh-heading {
@@ -43,14 +61,16 @@
 
 .mh-interpreter {
   display: grid;
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
   grid-template-columns: 240px minmax(0, 1fr);
   align-items: stretch;
-  background: #fff;
+  background: #f6f7f8;
 }
 
 .mh-interpreter__main {
   min-width: 0;
-  padding: 28px 36px 64px;
+  padding: 36px 36px 40px;
 }
 
 .mh-interpreter__main .mh-heading {
@@ -95,6 +115,10 @@
   gap: 12px;
 }
 
+.mh-campaign__split .mh-panel {
+  min-height: 281px;
+}
+
 .mh-campaign__table {
   margin-top: 12px;
 }
@@ -112,6 +136,7 @@
 .mh-campaign__tools .mh-input {
   width: 190px;
   height: 34px;
+  font-size: 11px;
 }
 
 .mh-stack {

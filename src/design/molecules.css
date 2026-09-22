@@ -21,6 +21,21 @@
   padding-left: 36px;
 }
 
+.mh-search--end .mh-search__icon {
+  right: 14px;
+  left: auto;
+}
+
+.mh-search--end .mh-input {
+  padding-right: 42px;
+  padding-left: 14px;
+}
+
+.mh-search--bare .mh-input {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 .mh-search--plain {
   display: flex;
   align-items: center;
@@ -84,6 +99,15 @@
 .mh-metric--glass .mh-metric__value {
   color: #fff;
   font-size: 32px;
+}
+
+.mh-metric--compact {
+  min-height: 76px;
+  padding: 12px 16px;
+}
+
+.mh-metric--compact .mh-metric__value {
+  font-size: 28px;
 }
 
 .mh-metric--card {
@@ -210,6 +234,7 @@
 
 .mh-view-heading {
   display: flex;
+  min-height: 104px;
   align-items: flex-end;
   justify-content: space-between;
   gap: 28px;
@@ -235,12 +260,46 @@
   line-height: 1.5;
 }
 
-.mh-view-heading__kicker {
+.mh-view-heading .mh-view-heading__kicker {
+  max-width: none;
   margin: 0;
   color: var(--mh-faint);
   font-size: 10px;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
+}
+
+.mh-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mh-pills__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #5b6470;
+  font-family: var(--mh-font);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mh-pills__item:hover,
+.mh-pills__item:focus-visible {
+  background: #eef1f4;
+}
+
+.mh-pills__item.is-active {
+  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: #000;
 }
 
 .mh-tabs {

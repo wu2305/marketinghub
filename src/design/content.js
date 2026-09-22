@@ -159,19 +159,30 @@ export const SELF_SERVICE = {
     { id: "analysis", label: "Self-Service Analysis" },
     { id: "upload", label: "Data Upload" },
   ],
+  filters: {
+    analysis: [
+      { id: "all", label: "All" },
+      { id: "dg", label: "DG" },
+      { id: "dc", label: "DC" },
+    ],
+    upload: [{ id: "all", label: "All" }],
+  },
   reports: [
     {
       title: "MZ Tracking Detail",
+      category: "dg",
       description: "Miaozhen OTV/OLV media monitoring self-analysis by Campaign, Media & Platform dimensions.",
       actionLabel: "Open data view",
     },
     {
       title: "ABO Tracking Detail",
+      category: "dc",
       description: "Self-analysis of ad placement and conversion data: TMALL, JD, Tiktok, Wechat.",
       actionLabel: "Open data view",
     },
     {
       title: "Rednote Tracking Detail",
+      category: "dg",
       description: "Self-analysis of Rednote Campaign & note placement and conversion data.",
       actionLabel: "Open data view",
     },

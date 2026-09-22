@@ -2,6 +2,7 @@ import {
   CategoryHeading,
   ColumnChart,
   DataTable,
+  FilterPills,
   FormField,
   MetricStat,
   ProgressList,
@@ -19,10 +20,11 @@ export default { title: "Molecules" };
 
 export const Search = {
   name: "Search field",
-  args: { label: "Search dashboards", placeholder: "Search dashboards", value: "", size: "lg", variant: "field" },
+  args: { label: "Search dashboards", placeholder: "Search dashboards", value: "", size: "lg", variant: "field", icon: "end" },
   argTypes: {
     variant: { control: "inline-radio", options: ["field", "plain"] },
     size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    icon: { control: "inline-radio", options: ["start", "end", "none"] },
     onChange: { action: "onChange" },
   },
   render: (args) => (
@@ -97,6 +99,26 @@ export const UnderlineTabs = {
       items={[
         { id: "analysis", label: "Self-Service Analysis" },
         { id: "upload", label: "Data Upload" },
+      ]}
+    />
+  ),
+};
+
+export const Pills = {
+  name: "Filter pills",
+  args: { value: "all" },
+  argTypes: {
+    value: { control: "inline-radio", options: ["all", "dg", "dc"] },
+    onChange: { action: "onChange" },
+  },
+  render: (args) => (
+    <FilterPills
+      {...args}
+      label="Filter reports"
+      items={[
+        { id: "all", label: "All" },
+        { id: "dg", label: "DG" },
+        { id: "dc", label: "DC" },
       ]}
     />
   ),

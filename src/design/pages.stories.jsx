@@ -89,23 +89,32 @@ export const MarketingCockpit = {
 
 export const SelfService = {
   name: "Self-Service Center",
-  args: { tab: "analysis" },
+  args: { tab: "analysis", category: "all" },
   argTypes: {
     tab: { control: "inline-radio", options: ["analysis", "upload"] },
+    category: { control: "inline-radio", options: ["all", "dg", "dc"] },
     onNavigate: { action: "onNavigate" },
     onTabChange: { action: "onTabChange" },
+    onCategoryChange: { action: "onCategoryChange" },
     onOpen: { action: "onOpen" },
   },
   render: function SelfServiceStory(args) {
     const [tab, setTab] = useSynced(args.tab);
+    const [category, setCategory] = useSynced(args.category);
     return (
       <SelfServicePage
         tab={tab}
+        category={category}
         onNavigate={args.onNavigate}
         onOpen={args.onOpen}
         onTabChange={(event) => {
           setTab(event.id);
+          setCategory("all");
           args.onTabChange?.(event);
+        }}
+        onCategoryChange={(event) => {
+          setCategory(event.id);
+          args.onCategoryChange?.(event);
         }}
       />
     );

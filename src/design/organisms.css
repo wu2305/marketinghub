@@ -54,6 +54,7 @@
   display: grid;
   height: 56px;
   place-items: center;
+  padding: 0;
   border: 0;
   background: transparent;
   color: #60666d;
@@ -155,8 +156,13 @@
   width: min(1440px, calc(100% - 88px));
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
+  gap: 40px;
   margin: 0 auto;
+}
+
+.mh-hero--home .mh-hero__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 480px;
 }
 
 .mh-hero--banner .mh-hero__layout,
@@ -168,17 +174,19 @@
   max-width: 560px;
 }
 
-.mh-hero__eyebrow {
+.mh-hero__copy .mh-hero__eyebrow {
   margin: 0;
   color: rgba(255, 255, 255, 0.7);
   font-family: var(--mh-font);
   font-size: 10px;
   font-weight: 700;
+  line-height: 12px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .mh-hero__copy h1 {
-  margin: 8px 0 0;
+  margin: 0;
   color: #fff;
   font-family: var(--mh-display);
   font-size: 56px;
@@ -437,10 +445,12 @@
   font-size: 24px;
   font-style: italic;
   font-weight: 600;
+  line-height: 1.1;
 }
 
 .mh-action-card p {
-  margin: 6px 0 0;
+  max-width: 528px;
+  margin: 0;
   color: var(--mh-copy);
   font-family: var(--mh-font);
   font-size: 13.5px;
@@ -448,7 +458,10 @@
 }
 
 .mh-action-card__copy {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 6px;
   min-width: 0;
 }
 
@@ -457,10 +470,10 @@
 }
 
 .mh-sidebar {
-  min-height: 100%;
+  min-height: 656px;
   padding: 24px 18px 40px;
   border-right: 1px solid #e6e1d8;
-  background: #f9f7f5;
+  background: #fff;
 }
 
 .mh-sidebar__brand {
@@ -489,7 +502,7 @@
 
 .mh-type-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -510,30 +523,19 @@
 }
 
 .mh-type-card::before {
-  position: absolute;
-  right: 6px;
-  bottom: 19px;
-  width: 94px;
-  height: 94px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 60% 38%, #fff9ed 0%, #f7e6c8 100%);
-  content: "";
-  opacity: 0.55;
+  display: none;
 }
 
 .mh-type-card::after {
   position: absolute;
-  right: -2px;
-  bottom: 3px;
-  width: 112px;
-  height: 112px;
-  background-image: url("../../assets/images/knowledge-card-illustrations.png");
+  inset: 0;
+  z-index: 0;
+  background-image: var(--mh-art);
   background-repeat: no-repeat;
-  background-position: var(--mh-art, 0 0);
-  background-size: 400% 200%;
+  background-position: right bottom;
+  background-size: 100% 100%;
   content: "";
-  filter: brightness(1.14) saturate(0.55) contrast(0.88);
-  opacity: 0.68;
+  pointer-events: none;
 }
 
 .mh-type-card strong,
@@ -927,7 +929,10 @@
 }
 
 .mh-rail {
+  position: sticky;
+  top: 80px;
   display: flex;
+  align-self: start;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid #d5dde3;
@@ -948,6 +953,7 @@
   font-family: var(--mh-font);
   font-size: 9px;
   font-weight: 700;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -1057,12 +1063,19 @@
   border-bottom: 1px solid var(--mh-line);
 }
 
+.mh-panel__head > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
 .mh-panel__head h3 {
-  margin: 3px 0 0;
+  margin: 0;
   color: var(--mh-ink);
   font-family: var(--mh-font);
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .mh-panel__head small {
@@ -1071,7 +1084,7 @@
   font-size: 9px;
 }
 
-.mh-panel__body {
+.mh-panel__body > .mh-progress {
   padding-top: 18px;
 }
 

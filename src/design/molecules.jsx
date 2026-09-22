@@ -11,20 +11,21 @@ export function SearchField({
   placeholder = "Search",
   size = "md",
   variant = "field",
+  icon = "start",
   onChange,
 }) {
   return (
-    <label className={cx("mh-search", variant === "plain" && "mh-search--plain")}>
+    <label className={cx("mh-search", variant === "plain" && "mh-search--plain", icon === "end" && "mh-search--end", icon === "none" && "mh-search--bare")}>
       <span className="mh-sr">{label}</span>
-      <Icon name="search" className="mh-search__icon" />
+      {icon === "none" ? null : <Icon name="search" className="mh-search__icon" />}
       <TextInput name={name} type="search" size={size} value={value} placeholder={placeholder} label={label} onChange={onChange} />
     </label>
   );
 }
 
-export function MetricStat({ label, value, caption, variant = "card", accent = "gold" }) {
+export function MetricStat({ label, value, caption, variant = "card", accent = "gold", compact = false }) {
   return (
-    <article className={cx("mh-metric", `mh-metric--${variant}`, variant === "card" && `mh-metric--${accent}`)}>
+    <article className={cx("mh-metric", `mh-metric--${variant}`, compact && "mh-metric--compact", variant === "card" && `mh-metric--${accent}`)}>
       <span className="mh-metric__label">{label}</span>
       <strong className="mh-metric__value">{value}</strong>
       {caption ? <small className="mh-metric__caption">{caption}</small> : null}
@@ -63,6 +64,24 @@ export function ViewHeading({ eyebrow, title, description, children }) {
       </div>
       {children}
     </header>
+  );
+}
+
+export function FilterPills({ label = "Filters", items = [], value, onChange }) {
+  return (
+    <div className="mh-pills" role="group" aria-label={label}>
+      {items.map((item) => (
+        <button
+          key={item.id}
+          className={cx("mh-pills__item", item.id === value && "is-active")}
+          type="button"
+          aria-pressed={item.id === value}
+          onClick={() => onChange?.({ id: item.id, label: item.label })}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
   );
 }
 

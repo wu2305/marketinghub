@@ -2,7 +2,7 @@ import React from "react";
 import "./pages.css";
 import { Button, StatusBadge } from "./atoms.jsx";
 import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE } from "./content.js";
-import { SearchField, SectionHeading, Tabs, ViewHeading } from "./molecules.jsx";
+import { FilterPills, SearchField, SectionHeading, Tabs, ViewHeading } from "./molecules.jsx";
 import {
   ActionCard,
   AssistantLauncher,
@@ -44,7 +44,7 @@ export function HomePage({
 }) {
   return (
     <Shell tone="home">
-      <Header logo={LOGO} items={NAV} current={current} tone="overlay" position="fixed" onNavigate={onNavigate} />
+      <Header logo={LOGO} items={NAV} current={current} position="fixed" onNavigate={onNavigate} />
       <Hero image={HOME.hero.image} title={HOME.hero.title} description={HOME.hero.description} height={300} variant="home" scrim="home">
         {HOME.hero.stats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" />
@@ -89,7 +89,7 @@ export function MarketingCockpitPage({ current = "cockpit", query = "", groups =
       <Hero {...COCKPIT.hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
         <div className="mh-page__search">
-          <SearchField label="Search dashboards" value={query} placeholder="Search dashboards" size="lg" onChange={onQueryChange} />
+          <SearchField label="Search dashboards" value={query} placeholder="Search dashboards" size="lg" icon="end" onChange={onQueryChange} />
         </div>
         <ProjectCatalog groups={visible} onOpen={onOpen} />
       </main>
@@ -98,16 +98,20 @@ export function MarketingCockpitPage({ current = "cockpit", query = "", groups =
   );
 }
 
-export function SelfServicePage({ current = "self-service", tab = "analysis", onNavigate, onTabChange, onOpen }) {
-  const items = tab === "upload" ? SELF_SERVICE.uploads : SELF_SERVICE.reports;
+export function SelfServicePage({ current = "self-service", tab = "analysis", category = "all", onNavigate, onTabChange, onCategoryChange, onOpen }) {
+  const source = tab === "upload" ? SELF_SERVICE.uploads : SELF_SERVICE.reports;
+  const items = source.filter((item) => category === "all" || item.category === category);
   return (
     <Shell>
       <Header logo={LOGO} items={NAV} current={current} position="fixed" onNavigate={onNavigate} />
       <div style={{ height: 56 }} />
       <Hero {...SELF_SERVICE.hero} height={260} variant="banner" scrim="none" />
-      <main className="mh-page__shell">
-        <Tabs label="Data view mode" items={SELF_SERVICE.tabs} value={tab} onChange={onTabChange} />
-        <div className={tab === "upload" ? "mh-page__cards" : "mh-page__cards mh-page__cards--two"} style={{ marginTop: 16 }}>
+      <main className="mh-page__shell mh-page__shell--self">
+        <div className="mh-self-tools">
+          <Tabs label="Data view mode" items={SELF_SERVICE.tabs} value={tab} onChange={onTabChange} />
+          <FilterPills label={tab === "upload" ? "Filter uploads" : "Filter reports"} items={SELF_SERVICE.filters[tab]} value={category} onChange={onCategoryChange} />
+        </div>
+        <div className={tab === "upload" ? "mh-page__cards" : "mh-page__cards mh-page__cards--two"}>
           {items.map((item) => (
             <ActionCard key={item.title} {...item} onOpen={onOpen} />
           ))}
@@ -144,7 +148,7 @@ export function AiInterpreterPage({
       <div style={{ height: 56 }} />
       <Hero {...INTERPRETER.hero} height={260} variant="knowledge" scrim="knowledge">
         {INTERPRETER.hero.stats.map((stat) => (
-          <MetricStat key={stat.label} {...stat} variant="glass" />
+          <MetricStat key={stat.label} {...stat} variant="glass" compact />
         ))}
       </Hero>
       <div className="mh-interpreter">
@@ -158,10 +162,7 @@ export function AiInterpreterPage({
         />
         <div className="mh-interpreter__main">
           {overview ? (
-            <>
-              <SectionHeading {...INTERPRETER.heading} />
-              <TypeGrid items={INTERPRETER.types} onSelect={onSelectType} />
-            </>
+            <TypeGrid items={INTERPRETER.types} onSelect={onSelectType} />
           ) : (
             <KnowledgeLibrary
               query={query}
@@ -241,7 +242,7 @@ export function CampaignPage({
                         onFilter?.({ query });
                       }}
                     >
-                      <SearchField label="Search sub-account" value={query} placeholder="Search sub-account" size="sm" onChange={onQueryChange} />
+                      <SearchField label="Search sub-account" value={query} placeholder="Search sub-account" size="sm" icon="none" onChange={onQueryChange} />
                       <Button variant="primary" size="sm" type="submit">
                         Filter
                       </Button>

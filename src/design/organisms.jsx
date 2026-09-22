@@ -17,7 +17,7 @@ import {
   Tabs,
 } from "./molecules.jsx";
 
-const ART = ["0 0", "33.333% 0", "66.667% 0", "100% 0", "0 100%", "33.333% 100%", "66.667% 100%", "100% 100%"];
+const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("/assets/images/knowledge-card-icons/layer-${index}.png")`);
 
 export function Header({
   logo = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry" },
