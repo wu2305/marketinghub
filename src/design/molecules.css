@@ -553,7 +553,7 @@
   width: 100%;
   min-height: 43px;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: 8px 12px;
   border: 0;
   background: transparent;
@@ -580,6 +580,12 @@
   width: 3px;
   background: #b08d57;
   content: "";
+}
+
+.mh-sidebar-item__icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
 }
 
 .mh-sidebar-item__label {

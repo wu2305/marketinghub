@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Icon({ name, className }) {
+export function Icon({ name, path, className }) {
   const common = {
     viewBox: "0 0 24 24",
     fill: "none",
@@ -11,6 +11,13 @@ export function Icon({ name, className }) {
     "aria-hidden": true,
     className,
   };
+  if (path) {
+    return (
+      <svg {...common} strokeWidth="1.6">
+        <path d={path} />
+      </svg>
+    );
+  }
   if (name === "search") {
     return (
       <svg {...common}>
