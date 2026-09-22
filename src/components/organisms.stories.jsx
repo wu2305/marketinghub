@@ -14,6 +14,7 @@ import {
   SiteHeader,
   WorkspaceGrid,
   WorkspaceHeader,
+  markupProps,
 } from "../assembled/ui.jsx";
 import { AnalyticalModelForm, BusinessTermForm } from "./forms.jsx";
 
@@ -94,7 +95,7 @@ export const InterpreterSidebar = {
   args: sidebar,
   render: (args) => (
     <div style={{ width: 280 }}>
-      <KnowledgeSidebar {...args} />
+      <KnowledgeSidebar {...markupProps(args)} />
     </div>
   ),
 };
@@ -104,7 +105,7 @@ export const KnowledgeToolbar = {
   args: toolbar,
   render: (args) => (
     <div className="knowledge-library" style={{ padding: 24 }}>
-      <LibraryToolbar {...args} />
+      <LibraryToolbar {...markupProps(args)} />
     </div>
   ),
 };
@@ -136,7 +137,7 @@ export const AskPanel = {
     const attrs = { ...assistant.attrs };
     if (args.open) delete attrs.hidden;
     else attrs.hidden = "";
-    return <AssistantPanel attrs={attrs} children={assistant.children} />;
+    return <AssistantPanel attrs={attrs} nodes={assistant.children} />;
   },
 };
 
