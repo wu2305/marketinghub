@@ -45,6 +45,8 @@ npm run storybook
 
 In Storybook, open **Reference / Original HTML** to browse the static pages, or use the **Compare** toolbar item **Beside original HTML** on a page story. Handover notes are in `handover/`.
 
+Repeated interface parts live under **Components** as atoms, molecules, and organisms. **Assembled / Documents** builds each HTML page from those components. `node scripts/check-fidelity.mjs && python3 scripts/compare_fidelity.py /tmp/portal-fidelity` checks that the assembled markup matches the original documents.
+
 ## v20.11.01 AI Interpreter refresh
 
 This version is copied from `marketing-hub-ai-v20.11` and adds a scoped AI Interpreter visual refresh in `assets/css/knowledge/ai-interpreter-refresh.css`. The refresh aligns the module with the shared DIN typography, grey-white workspace, black/gold action language, compact cards, restrained table styling, and consistent 6-8px control radius used by the rest of the demo.

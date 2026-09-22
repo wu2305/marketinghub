@@ -31,6 +31,8 @@ const preview = {
         order: [
           "Foundations",
           "Components",
+          ["Atoms", "Molecules", "Organisms"],
+          "Assembled",
           "Pages",
           ["Home", "Marketing Cockpit", "Self-Service Center", "AI Interpreter", "Knowledge Create", "Knowledge View", "Data Model", "Metric Dictionary", "RedNote Campaign Tool", "Governance"],
           "Reference",
