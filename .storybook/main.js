@@ -16,6 +16,18 @@ const config = {
   async viteFinal(config) {
     config.plugins = config.plugins || [];
     config.plugins.push(originalPagesPlugin(path.resolve(root, "..")));
+    config.server = {
+      ...config.server,
+      hmr: {
+        ...(typeof config.server?.hmr === "object" ? config.server.hmr : {}),
+        overlay: true,
+      },
+      watch: {
+        ...config.server?.watch,
+        usePolling: true,
+        interval: 200,
+      },
+    };
     return config;
   },
 };
