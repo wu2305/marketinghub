@@ -130,6 +130,7 @@ async function runSide(browser, name, spec, url, viewport) {
         });
       else if (step.wait) await page.waitForSelector(step.wait, { state: "visible", timeout: 8000 });
       else if (step.waitMs) await page.waitForTimeout(step.waitMs);
+      else if (step.eval) await page.evaluate(step.eval);
     }
     for (const exp of spec.expect || []) {
       try {

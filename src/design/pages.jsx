@@ -15,6 +15,9 @@ import {
   ModelFlowDialog,
   Panel,
   ProjectCatalog,
+  ProjectDirectory,
+  ReportDetailsDrawer,
+  ReportRow,
   SummaryStrip,
   TaskList,
   TypeGrid,
@@ -23,6 +26,16 @@ import {
 } from "./organisms.jsx";
 import { Icon } from "./icons.jsx";
 import { normalizeOptions, recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
+import {
+  REPORT_CATALOG_HREF,
+  liveReportHref,
+  pluralize,
+  projectCatalogHref,
+  projectSearchText,
+  reportContextHref,
+  reportSearchText,
+  resolveReportAssets,
+} from "./report-data.js";
 
 function Shell({ tone = "workspace", children }) {
   return <div className={`mh-page mh-page--${tone}`}>{children}</div>;
@@ -118,40 +131,201 @@ export function HomePage({
 }
 
 /**
- * Marketing Cockpit catalog page: search + project groups.
+ * Marketing Cockpit catalog: "all" mode lists category groups of project cards;
+ * a `project` id switches to the project directory with report rows. Search
+ * covers project fields plus linked knowledge titles, mirroring the original.
  * @param {object} props
  * @param {string} [props.current="cockpit"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
  * @param {string} [props.query=""] catalog search text
- * @param {Array<{ id: string, title: string, projects: Array<object> }>} [props.groups=[]]
+ * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
+ * @param {Object<string, object>} [props.projects={}] project records keyed by id
+ * @param {string} [props.project="all"] active catalog project id or "all"
+ * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
+ * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
+ * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
+ * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
+ * @param {string} [props.backHref=REPORT_CATALOG_HREF]
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
- * @param {(target: { title: string, id?: string }) => void} [props.onOpen]
+ * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
+ * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
+ * @param {(target: { project: string, index: number }) => void} [props.onOpenDetails]
+ * @param {(target: object) => void} [props.onCloseDetails]
+ * @param {(target: { href?: string }) => void} [props.onOpenLive]
+ * @param {object} [props.assistant={}] AssistantPanel props
+ * @param {boolean} [props.assistantOpen=false]
+ * @param {string} [props.prompt=""]
+ * @param {object} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
+ * @param {(target: object) => void} [props.onOpenAssistant]
+ * @param {(target: object) => void} [props.onCloseAssistant]
+ * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
+ * @param {(event: { value: string }) => void} [props.onSubmit]
  */
-export function MarketingCockpitPage({ current = "cockpit", logo, navigation = [], hero = {}, query = "", groups = [], onNavigate, onQueryChange, onOpen }) {
-  const visible = groups
-    .map((group) => ({
-      ...group,
-      projects: group.projects.filter((project) => {
-        const haystack = `${project.title} ${project.kicker} ${project.description}`.toLowerCase();
-        return !query || haystack.includes(query.toLowerCase());
-      }),
-    }))
-    .filter((group) => group.projects.length);
+export function MarketingCockpitPage({
+  current = "cockpit",
+  logo,
+  navigation = [],
+  hero = {},
+  query = "",
+  groups = [],
+  projects = {},
+  project = "all",
+  details = null,
+  detailsSections = [],
+  projectHref = projectCatalogHref,
+  liveHref = liveReportHref,
+  contextHref = reportContextHref,
+  backHref = REPORT_CATALOG_HREF,
+  onNavigate,
+  onQueryChange,
+  onOpenProject,
+  onOpenReport,
+  onOpenDetails,
+  onCloseDetails,
+  onOpenLive,
+  assistant = {},
+  assistantOpen = false,
+  prompt = "",
+  skillFlow,
+  onOpenAssistant,
+  onCloseAssistant,
+  onPromptChange,
+  onSubmit,
+}) {
+  const search = query.trim().toLowerCase();
+  const active = project !== "all" && projects[project] ? projects[project] : null;
+  let detailsTarget = null;
+  if (details && projects[details.project]) {
+    const detailProject = projects[details.project];
+    const detailReport = detailProject.reports[details.index];
+    if (detailReport) detailsTarget = { project: detailProject, report: detailReport };
+  }
   return (
-    <Shell>
+    <Shell tone="cockpit">
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
-        <div className="mh-page__search">
+        <header className="mh-page__search">
           <SearchField label="Search dashboards" value={query} placeholder="Search dashboards" size="lg" icon="end" onChange={onQueryChange} />
-        </div>
-        <ProjectCatalog groups={visible} onOpen={onOpen} />
+        </header>
+        {active ? (
+          <React.Fragment>
+            <ProjectDirectory
+              backHref={backHref}
+              image={active.image}
+              imageAlt={`${active.title} report preview`}
+              kicker={active.kicker}
+              title={active.title}
+              description={active.description}
+              countText={pluralize(active.reports.length, "dashboard")}
+              updated={active.sourceStrip[0] || "Update schedule available in project"}
+              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(project, active, report).includes(search)).length, "dashboard")}
+              onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: "All report projects" })}
+            >
+              {active.reports
+                .map((report, index) => ({ report, index }))
+                .filter((item) => !search || reportSearchText(project, active, item.report).includes(search))
+                .map((item) => (
+                  <ReportRow
+                    key={item.report.title}
+                    index={item.index}
+                    path={`${active.category} / ${active.title} / ${item.report.type}`}
+                    title={item.report.title}
+                    description={item.report.description}
+                    meta={[
+                      { label: "Owner", value: item.report.owner },
+                      { label: "Cadence", value: item.report.cadence },
+                      { label: "Updated", value: item.report.updated },
+                      { label: "Knowledge", value: pluralize(resolveReportAssets(project, item.report).length, "asset") },
+                    ]}
+                    href={liveHref(project, item.index)}
+                    detailsHref={contextHref(project, item.report)}
+                    onOpen={() => onOpenReport?.({ project, index: item.index, href: liveHref(project, item.index) })}
+                    onDetails={() => onOpenDetails?.({ project, index: item.index, href: contextHref(project, item.report) })}
+                  />
+                ))}
+            </ProjectDirectory>
+            {active.reports.filter((report) => !search || reportSearchText(project, active, report).includes(search)).length === 0 ? (
+              <div className="mh-empty-state">
+                <strong>No matching reports.</strong>
+                <span>Try another report or project name.</span>
+              </div>
+            ) : null}
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <ProjectCatalog
+              groups={groups
+                .filter((group) => group.id !== "all")
+                .map((group) => ({
+                  id: group.id,
+                  title: group.label || group.title,
+                  projects: Object.keys(projects)
+                    .filter((key) => projects[key].group === group.id)
+                    .filter((key) => !search || projectSearchText(key, projects[key]).includes(search))
+                    .map((key) => ({
+                      id: key,
+                      title: projects[key].title,
+                      kicker: projects[key].kicker,
+                      description: projects[key].description,
+                      image: projects[key].image,
+                      updated: projects[key].sourceStrip[0] || "Update schedule available in project",
+                      href: projectHref(key),
+                    })),
+                }))
+                .filter((group) => group.projects.length)}
+              onOpen={(target) => onOpenProject?.({ id: target.id, href: projectHref(target.id) })}
+            />
+            {groups
+              .filter((group) => group.id !== "all")
+              .every((group) => !Object.keys(projects).some((key) => projects[key].group === group.id && (!search || projectSearchText(key, projects[key]).includes(search)))) ? (
+              <div className="mh-empty-state">
+                <strong>No matching reports.</strong>
+                <span>Try another report or project name.</span>
+              </div>
+            ) : null}
+          </React.Fragment>
+        )}
       </main>
-      <AssistantLauncher onOpen={() => onNavigate?.({ id: "assistant", label: "AI Interpreter" })} />
+      <ReportDetailsDrawer
+        open={Boolean(detailsTarget)}
+        projectLabel={detailsTarget ? detailsTarget.project.title : undefined}
+        image={detailsTarget ? detailsTarget.project.image : undefined}
+        imageAlt={detailsTarget ? `${detailsTarget.project.title} report preview` : undefined}
+        hierarchy={detailsTarget ? `${detailsTarget.project.category} / ${detailsTarget.project.title} / ${detailsTarget.report.type}` : undefined}
+        title={detailsTarget ? detailsTarget.report.title : ""}
+        explanation={detailsTarget ? detailsTarget.report.description : undefined}
+        meta={
+          detailsTarget
+            ? [
+                { label: "Owner", value: detailsTarget.report.owner },
+                { label: "Cadence", value: detailsTarget.report.cadence },
+                { label: "Updated", value: detailsTarget.report.updated },
+              ]
+            : []
+        }
+        sections={detailsSections}
+        scenarios={detailsTarget ? (detailsTarget.report.recommendations || []).map((item) => ({ title: item.title, meta: item.meta })) : []}
+        liveHref={details ? liveHref(details.project, details.index) : undefined}
+        resetKey={details ? `${details.project}:${details.index}` : undefined}
+        onClose={onCloseDetails}
+        onOpenLive={onOpenLive}
+      />
+      <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
+      <AssistantPanel
+        open={assistantOpen}
+        placement="drawer"
+        {...assistant}
+        prompt={prompt}
+        onClose={onCloseAssistant}
+        onPromptChange={onPromptChange}
+        onSubmit={onSubmit}
+      />
+      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );
 }

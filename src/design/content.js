@@ -1,3 +1,5 @@
+import { DETAILS_ASSET_SECTIONS, REPORT_GROUPS, REPORT_PROJECTS } from "./report-data.js";
+
 export const NAV = [
   { id: "home", label: "Home", href: "/index.html" },
   { id: "cockpit", label: "Marketing Cockpit", href: "/assets/pages/reports.html" },
@@ -176,6 +178,32 @@ export function buildAssistantAnswer(query, context = "personalized") {
   };
 }
 
+/**
+ * Reports-page shared assistant (`reports-inline-1.js` `createMainAnswer`):
+ * the compact card — recommendation + "Sources used" spans + feedback — with
+ * the original keyword matrix. Answers append to the feed.
+ */
+export function buildReportAssistantAnswer(query) {
+  const q = String(query || "").toLowerCase();
+  let body =
+    "Connect campaign intent, current performance, governed definitions, and prior learnings to separate the strongest signal from data-quality noise before recommending the next move.";
+  let sources = ["Campaign context", "Performance reports", "Business knowledge"];
+  if (/execution|launch|brief|audience|campaign plan/i.test(q)) {
+    body =
+      "Start with the campaign objective and target audience, define each channel role, assign owners, and agree on launch-readiness checks. Connect tracking metrics and reporting baseline before activation begins.";
+    sources = ["Campaign brief", "Audience context", "Measurement plan"];
+  } else if (/optimize|next best|prior campaign|learnings/i.test(q)) {
+    body =
+      "Compare the largest movement across channel, city, and audience. Validate freshness and metric definitions, weigh against prior learnings. Output: one prioritized action, expected impact, and evidence.";
+    sources = ["City performance", "Campaign history", "Governed metrics"];
+  } else if (/roi|budget|threshold|alert/i.test(q)) {
+    body =
+      "Cross-check budget pacing against performance thresholds across active campaigns. Flag any campaign exceeding 80% spend before midpoint, and surface the underlying metric trends driving the alert.";
+    sources = ["Budget reports", "Campaign ROI", "Performance alerts"];
+  }
+  return { query, variant: "compact", body, sources };
+}
+
 export const COCKPIT = {
   hero: {
     image: "/assets/images/project-city-tabby.png",
@@ -183,74 +211,28 @@ export const COCKPIT = {
     title: "Marketing Cockpit",
     description: "Stay connected to the business trends, performance and metrics that matter most.",
   },
-  groups: [
-    {
-      id: "consumer",
-      title: "D2C Insight",
-      projects: [
-        {
-          id: "city",
-          title: "City Strategy",
-          kicker: "Consumer / City Strategy",
-          description: "Tracks post-campaign business impact for core pilot cities, using sales, CR, traffic, and related metrics across executive, city, and channel analysis.",
-          image: "/assets/images/project-city-tabby.png",
-          updated: "Data updated: 2026-05-28",
-        },
-        {
-          id: "fourp",
-          title: "4P Report",
-          kicker: "Consumer / 4P Report",
-          description: "Analyzes current business performance across Place, Product, People, and Price to help teams identify regional, product, audience, and pricing opportunities.",
-          image: "/assets/images/project-fourp-tabby.png",
-          updated: "Data updated: 2026-05-29",
-        },
-        {
-          id: "customer",
-          title: "Customer Daily Tracking",
-          kicker: "Consumer / Customer Daily Tracking",
-          description: "Daily tracking of consumer-related data across traffic, member behavior, conversion intake, and key fluctuations.",
-          image: "/assets/images/project-customer-tabby.png",
-          updated: "Data updated: Yesterday 24:00",
-        },
-      ],
-    },
-    {
-      id: "dc",
-      title: "DC Media Performance",
-      projects: [
-        {
-          id: "abo",
-          title: "ABO",
-          kicker: "DC Media Performance / ABO",
-          description: "Tracks online e-commerce platform campaigns and performance across Tmall, JD, Douyin, and Rednote, covering traffic, conversion, and business intake.",
-          image: "/assets/images/project-abo-tabby.png",
-          updated: "Tmall data: 2026-05-28",
-        },
-      ],
-    },
-    {
-      id: "dg",
-      title: "DG Media Tracking",
-      projects: [
-        {
-          id: "rednote",
-          title: "Rednote Tracking",
-          kicker: "DG Media Tracking / Rednote",
-          description: "Analyzes Rednote post-campaign performance across note performance, core TA audiences, brand keywords, interactions, impressions, and clicks.",
-          image: "/assets/images/project-rednote-tabby.png",
-          updated: "Data updated: 2026-05-29 10:00",
-        },
-        {
-          id: "ottolv",
-          title: "OTT/OLV Media Data Tracking",
-          kicker: "DG Media Tracking / OTT OLV",
-          description: "Tracks OTT/OLV media data returned by Miaozhen tracking, focusing on impressions, clicks, reach, frequency, and related media metrics.",
-          image: "/assets/images/project-ottolv-tabby.png",
-          updated: "Data updated: 2026-05-28",
-        },
-      ],
-    },
-  ],
+  groups: REPORT_GROUPS.filter((group) => group.id !== "all"),
+  projects: REPORT_PROJECTS,
+  detailsSections: DETAILS_ASSET_SECTIONS,
+  // reports-inline-1.js scopeSuggestions.report — the hidden scope row defaults
+  // to Dashboards, so these are the suggestions the catalog panel renders.
+  assistant: {
+    title: "Ask AI Interpreter",
+    headline: "Ask a question",
+    description: "Your AI partner for every marketing task",
+    suggestions: [
+      { label: "ROI trend across active campaigns", prompt: "Show me the ROI trend across my active campaigns this quarter." },
+      { label: "Campaigns near budget threshold", prompt: "Which campaigns are near budget threshold and need attention?" },
+      { label: "Compare city performance", prompt: "Compare city performance across invest and non-invest cities." },
+    ],
+    // assistant-skill-menu.js #aiRecentHistoryPopup — strong title + prompt span
+    historyTitle: "Recent Chats",
+    history: [
+      { title: "Campaign ROI decline", label: "Why did campaign ROI decline last week?", prompt: "Why did campaign ROI decline last week?" },
+      { title: "Conversion drop", label: "Analyze conversion drop by customer segment.", prompt: "Analyze conversion drop by customer segment." },
+      { title: "Data quality issues", label: "Summarize metrics with data quality issues.", prompt: "Summarize metrics with data quality issues." },
+    ],
+  },
 };
 
 export const SELF_SERVICE = {

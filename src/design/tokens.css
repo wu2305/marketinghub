@@ -151,6 +151,36 @@ a {
   --mh-search-placeholder: #8e959d;
   --mh-scrim-mid: rgba(31, 41, 55, 0.42);
   --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
+
+  /* reports catalog palette (assets/css/reports/catalog.css) */
+  --mh-reports-bg: #f3f5f7;
+  --mh-reports-surface-soft: #f7f8fa;
+  --mh-reports-ink: #17191c;
+  --mh-reports-copy: #46505b;
+  --mh-reports-muted: #737d88;
+  --mh-reports-blue: #315f88;
+  --mh-reports-blue-soft: #edf4fa;
+  --mh-reports-green: #39745b;
+  --mh-reports-shadow: 0 18px 48px rgba(34, 45, 58, 0.12);
+  --mh-reports-card-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  --mh-reports-card-shadow-hover: 0 16px 34px rgba(34, 45, 58, 0.09);
+  --mh-reports-row-shadow: 0 6px 18px rgba(34, 45, 58, 0.035);
+  --mh-reports-row-shadow-hover: 0 10px 26px rgba(34, 45, 58, 0.065);
+  --mh-reports-card-edge: linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%);
+  --mh-reports-gold-btn: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  --mh-reports-badge-bg: #fef8e1;
+  --mh-reports-badge-ink: #7a5c3a;
+  --mh-reports-pill-bg: #fff8db;
+  --mh-reports-pill-ink: #8a5a00;
+  --mh-reports-pill-hover-bg: #faeed4;
+  --mh-reports-pill-hover-ink: #6f4900;
+  --mh-reports-hover-line: #daa860;
+  --mh-reports-title-hover: #916732;
+  --mh-reports-scrim: rgba(28, 36, 44, 0.28);
+  --mh-reports-thumb-bg: #e9edf1;
+  --mh-reports-footer-bg: #fbfcfd;
+  --mh-reports-media-bg: #dfe4e8;
+  --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
 }
 
 .mh-sr {

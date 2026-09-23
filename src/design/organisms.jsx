@@ -175,38 +175,39 @@ export function WorkspaceGrid({ cards = [], onOpen, onNavigate }) {
 }
 
 /**
- * Cockpit project card with image opener and action button.
+ * Cockpit project card with image, title and "View Dashboards" links.
  * @param {object} props
  * @param {string} props.title
- * @param {string} [props.kicker]
+ * @param {string} [props.kicker] uppercase breadcrumb above the title
  * @param {string} [props.description]
  * @param {string} [props.image]
- * @param {string} [props.updated]
+ * @param {string} [props.updated] freshness text in the footer
+ * @param {string} [props.href] project catalog link target for all three links
  * @param {string} [props.actionLabel="View Dashboards"]
- * @param {(target: { title: string, id?: string }) => void} [props.onOpen]
+ * @param {(target: { title: string, href?: string, part: string }) => void} [props.onOpen]
  */
-export function ProjectCard({ title, kicker, description, image, updated, actionLabel = "View Dashboards", onOpen }) {
+export function ProjectCard({ title, kicker, description, image, updated, href, actionLabel = "View Dashboards", onOpen }) {
+  const open = (part) => () => onOpen?.({ title, href, part });
   return (
     <article className="mh-project-card">
-      <button className="mh-project-card__image" type="button" aria-label={`View ${title} reports`} onClick={() => onOpen?.({ title })}>
+      <a className="mh-project-card__image" href={href || "#"} aria-label={`View ${title} reports`} onClick={open("image")}>
         <img src={image} alt="" />
-      </button>
+      </a>
       <div className="mh-project-card__body">
-        <span className="mh-project-card__kicker">{kicker}</span>
+        <div className="mh-project-card__topline">
+          <span>{kicker}</span>
+        </div>
         <h3>
-          <button className="mh-project-card__title" type="button" onClick={() => onOpen?.({ title })}>
+          <a href={href || "#"} onClick={open("title")}>
             {title}
-          </button>
+          </a>
         </h3>
         <p>{description}</p>
         <div className="mh-project-card__footer">
           <span>{updated}</span>
-          <Button variant="gold" size="sm" onClick={() => onOpen?.({ title })}>
-            {actionLabel}
-            <span className="mh-project-card__arrow" aria-hidden="true">
-              →
-            </span>
-          </Button>
+          <a className="mh-project-card__cta" href={href || "#"} onClick={open("action")}>
+            {actionLabel} <i aria-hidden="true">→</i>
+          </a>
         </div>
       </div>
     </article>
@@ -223,8 +224,8 @@ export function ProjectCatalog({ groups = [], onOpen }) {
   return (
     <div className="mh-catalog">
       {groups.map((group) => (
-        <section key={group.id} className="mh-catalog__group">
-          <CategoryHeading title={group.title} />
+        <section key={group.id} className="mh-catalog__group" aria-labelledby={`mh-category-${group.id}`}>
+          <CategoryHeading title={group.title} id={`mh-category-${group.id}`} />
           <div className="mh-project-grid">
             {group.projects.map((project) => (
               <ProjectCard key={project.id} {...project} onOpen={(event) => onOpen?.({ ...event, id: project.id })} />
@@ -233,6 +234,289 @@ export function ProjectCatalog({ groups = [], onOpen }) {
         </section>
       ))}
     </div>
+  );
+}
+
+/**
+ * Catalog report row: index, breadcrumb path, linked title, meta list and actions.
+ * @param {object} props
+ * @param {number} props.index zero-based report index, displayed as REPORT 01…
+ * @param {string} [props.path] "Category / Project / Type" breadcrumb
+ * @param {string} props.title
+ * @param {string} [props.description]
+ * @param {Array<{ label: string, value: React.ReactNode }>} [props.meta=[]] Owner/Cadence/Updated/Knowledge cells
+ * @param {string} [props.detailsLabel="Knowledge"]
+ * @param {string} [props.openLabel="Open Dashboard"]
+ * @param {string} [props.href] live-report link target
+ * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
+ * @param {string} [props.detailsHref] knowledge-context link target
+ * @param {(target: { title: string, href?: string }) => void} [props.onDetails]
+ */
+export function ReportRow({ index, path, title, description, meta = [], detailsLabel = "Knowledge", openLabel = "Open Dashboard", href, detailsHref, onOpen, onDetails }) {
+  return (
+    <article className="mh-report-row">
+      <div className="mh-report-row__index">
+        <span>REPORT</span>
+        <strong>{String(index + 1).padStart(2, "0")}</strong>
+      </div>
+      <div className="mh-report-row__main">
+        <span className="mh-report-row__path">{path}</span>
+        <h3>
+          <a href={href || "#"} onClick={() => onOpen?.({ title, href })}>
+            {title}
+          </a>
+        </h3>
+        <p>{description}</p>
+      </div>
+      <dl className="mh-report-row__meta">
+        {meta.map((item) => (
+          <div key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="mh-report-row__actions">
+        <a className="mh-report-row__details" href={detailsHref || "#"} aria-label={`Open knowledge for ${title}`} onClick={() => onDetails?.({ title, href: detailsHref })}>
+          {detailsLabel}
+        </a>
+        <a className="mh-report-row__open" href={href || "#"} onClick={() => onOpen?.({ title, href })}>
+          {openLabel} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </article>
+  );
+}
+
+/**
+ * Project catalog mode: back link, project intro header and report list.
+ * @param {object} props
+ * @param {string} [props.backHref] "all projects" link target
+ * @param {string} [props.backLabel="All report projects"]
+ * @param {string} [props.image]
+ * @param {string} [props.imageAlt]
+ * @param {string} [props.kicker]
+ * @param {string} props.title
+ * @param {string} [props.description]
+ * @param {string} [props.countText] e.g. "2 dashboards"
+ * @param {string} [props.updated]
+ * @param {string} [props.listEyebrow="REPORTS IN THIS PROJECT"]
+ * @param {string} [props.listTitle="Available reports"]
+ * @param {string} [props.listCountText]
+ * @param {(target: { href?: string }) => void} [props.onBack]
+ * @param {React.ReactNode} [props.children] ReportRow elements
+ */
+export function ProjectDirectory({
+  backHref,
+  backLabel = "All report projects",
+  image,
+  imageAlt,
+  kicker,
+  title,
+  description,
+  countText,
+  updated,
+  listEyebrow = "REPORTS IN THIS PROJECT",
+  listTitle = "Available reports",
+  listCountText,
+  onBack,
+  children,
+}) {
+  const titleId = React.useId();
+  return (
+    <section className="mh-project-directory" aria-labelledby={titleId}>
+      <a className="mh-project-directory__back" href={backHref || "#"} onClick={() => onBack?.({ href: backHref })}>
+        <span aria-hidden="true">←</span> {backLabel}
+      </a>
+      <header className="mh-project-directory__intro">
+        <img src={image} alt={imageAlt || ""} />
+        <div className="mh-project-directory__copy">
+          <div className="mh-project-directory__topline">
+            <span>{kicker}</span>
+          </div>
+          <h2 id={titleId}>{title}</h2>
+          <p>{description}</p>
+          <div className="mh-project-directory__meta">
+            <span className="mh-project-directory__count">{countText}</span>
+            <span>{updated}</span>
+          </div>
+        </div>
+      </header>
+      <div className="mh-report-list__heading">
+        <div>
+          <span>{listEyebrow}</span>
+          <h2>{listTitle}</h2>
+        </div>
+        <strong>{listCountText}</strong>
+      </div>
+      <div className="mh-report-list">{children}</div>
+    </section>
+  );
+}
+
+/**
+ * Report details drawer: right-side panel with thumbnail, meta, knowledge pills
+ * and the report's AI analysis scenarios. Internal state (fullscreen, selected
+ * scenario, view-more expansion) resets per `resetKey`.
+ * @param {object} props
+ * @param {boolean} [props.open=false]
+ * @param {string} [props.eyebrow="REPORT DETAILS"]
+ * @param {string} [props.projectLabel]
+ * @param {string} [props.image]
+ * @param {string} [props.imageAlt]
+ * @param {string} [props.hierarchy] "Category / Project / Type"
+ * @param {string} props.title
+ * @param {string} [props.explanation]
+ * @param {Array<{ label: string, value: React.ReactNode }>} [props.meta=[]]
+ * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.sections=[]]
+ * @param {Array<{ title: string, meta?: string }>} [props.scenarios=[]] first 3 shown until view-more
+ * @param {string} [props.viewMoreLabel="view more"]
+ * @param {string} [props.liveHref] footer "Open Dashboard" link target
+ * @param {string} [props.liveLabel="Open Dashboard"]
+ * @param {string|number} [props.resetKey] change to reset scenario/fullscreen state
+ * @param {(target: object) => void} [props.onClose]
+ * @param {(target: { href?: string }) => void} [props.onOpenLive]
+ */
+export function ReportDetailsDrawer({
+  open = false,
+  eyebrow = "REPORT DETAILS",
+  projectLabel,
+  image,
+  imageAlt,
+  hierarchy,
+  title,
+  explanation,
+  meta = [],
+  sections = [],
+  scenarios = [],
+  viewMoreLabel = "view more",
+  liveHref,
+  liveLabel = "Open Dashboard",
+  resetKey,
+  onClose,
+  onOpenLive,
+}) {
+  const titleId = React.useId();
+  const closeRef = React.useRef(null);
+  const [fullscreen, setFullscreen] = React.useState(false);
+  const [activeScenario, setActiveScenario] = React.useState(null);
+  const [showAll, setShowAll] = React.useState(false);
+  React.useEffect(() => {
+    setFullscreen(false);
+    setActiveScenario(null);
+    setShowAll(false);
+  }, [resetKey]);
+  React.useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.activeElement;
+    closeRef.current?.focus();
+    document.body.classList.add("dialog-open");
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose?.({});
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.classList.remove("dialog-open");
+      document.removeEventListener("keydown", onKey);
+      if (previous && previous.isConnected) previous.focus();
+    };
+  }, [open, resetKey]);
+  if (!open) return null;
+  return (
+    <React.Fragment>
+      <div className="mh-details-scrim" onClick={() => onClose?.({})} />
+      <aside className={cx("mh-details", fullscreen && "is-fullscreen")} aria-labelledby={titleId}>
+        <header className="mh-details__head">
+          <div>
+            <span>{eyebrow}</span>
+            <strong>{projectLabel}</strong>
+          </div>
+          <div className="mh-details__actions">
+            <button
+              className="mh-details__fullscreen"
+              type="button"
+              aria-label="Toggle fullscreen"
+              onClick={() => setFullscreen((value) => !value)}
+            >
+              <Icon name="expand" />
+            </button>
+            <button ref={closeRef} className="mh-details__close" type="button" aria-label="Close report details" onClick={() => onClose?.({})}>
+              ×
+            </button>
+          </div>
+        </header>
+        <div className="mh-details__body">
+          <div className="mh-details__thumbnail">
+            <img src={image} alt={imageAlt || ""} />
+          </div>
+          <p className="mh-details__hierarchy">{hierarchy}</p>
+          <h2 id={titleId}>{title}</h2>
+          <p className="mh-details__explanation">{explanation}</p>
+          <dl className="mh-details__meta">
+            {meta.map((item) => (
+              <div key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {sections.map((section) => (
+            <section className="mh-details__section" key={section.label}>
+              <header>
+                <span>{section.label}</span>
+              </header>
+              <div className="mh-details__assets">
+                {(section.pills || []).map((pill) => (
+                  <a className="mh-details__pill" key={pill.href} href={pill.href}>
+                    {pill.label}
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+          {scenarios.length ? (
+            <section className="mh-details__section">
+              <header>
+                <span>AI ANALYSIS SCENARIOS</span>
+                <button
+                  className="mh-details__view-more"
+                  type="button"
+                  onClick={() => setShowAll(true)}
+                  disabled={showAll}
+                >
+                  {viewMoreLabel}
+                </button>
+              </header>
+              <ol className={cx("mh-details__scenarios", showAll && "is-expanded")}>
+                {scenarios.map((scenario, index) => (
+                  <li
+                    key={scenario.title}
+                    className={cx(index >= 3 && "mh-details__scenario-extra", index === activeScenario && "is-active")}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setActiveScenario(index)}
+                      aria-pressed={index === activeScenario}
+                    >
+                      <span>{`0${index + 1}`}</span>
+                      <span className="mh-details__scenario-copy">
+                        <strong>{scenario.title}</strong>
+                        <small>{scenario.meta}</small>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ) : null}
+        </div>
+        <footer className="mh-details__footer">
+          <a className="mh-details__live" href={liveHref || "#"} onClick={() => onOpenLive?.({ href: liveHref })}>
+            {liveLabel} <span aria-hidden="true">→</span>
+          </a>
+        </footer>
+      </aside>
+    </React.Fragment>
   );
 }
 
@@ -572,6 +856,45 @@ function AssistantAnswer({ answer, onFeedback }) {
       </div>
     );
   }
+  const feedbackRow = (
+    <div className="mh-assistant__feedback">
+      <button type="button" aria-pressed={feedback === "helpful"} onClick={() => pick("helpful")}>
+        <Icon name="thumb-up" />
+        <span>Helpful</span>
+      </button>
+      <button type="button" aria-pressed={feedback === "not-helpful"} onClick={() => pick("not-helpful")}>
+        <Icon name="thumb-down" />
+        <span>Not helpful</span>
+      </button>
+      <button type="button" aria-label="Copy answer" onClick={copy}>
+        <Icon name="copy" />
+        <span>{copied ? "Copied!" : "Copy"}</span>
+      </button>
+    </div>
+  );
+  if (answer.variant === "compact") {
+    return (
+      <div className="mh-assistant__entry">
+        <div className="mh-assistant__query">
+          <span className="mh-assistant__bubble">{answer.query}</span>
+        </div>
+        <article className="mh-assistant__answer" ref={cardRef}>
+          <p>{answer.body}</p>
+          {answer.sources?.length ? (
+            <div className="mh-assistant__sources-row" aria-label="Sources">
+              <span>Sources used</span>
+              <div>
+                {answer.sources.map((source) => (
+                  <span key={source}>{source}</span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {feedbackRow}
+        </article>
+      </div>
+    );
+  }
   return (
     <div className="mh-assistant__entry">
       <div className="mh-assistant__query">
@@ -604,20 +927,7 @@ function AssistantAnswer({ answer, onFeedback }) {
             )}
           </div>
         ) : null}
-        <div className="mh-assistant__feedback">
-          <button type="button" aria-pressed={feedback === "helpful"} onClick={() => pick("helpful")}>
-            <Icon name="thumb-up" />
-            <span>Helpful</span>
-          </button>
-          <button type="button" aria-pressed={feedback === "not-helpful"} onClick={() => pick("not-helpful")}>
-            <Icon name="thumb-down" />
-            <span>Not helpful</span>
-          </button>
-          <button type="button" aria-label="Copy answer" onClick={copy}>
-            <Icon name="copy" />
-            <span>{copied ? "Copied!" : "Copy"}</span>
-          </button>
-        </div>
+        {feedbackRow}
       </article>
     </div>
   );
@@ -654,6 +964,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
  * @param {{ id?: string, type: string, title: string }} [props.selectedSkill] chip shown inside the composer when a skill is selected
  * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
+ * @param {boolean} [props.hideStageOnAnswers=false] true mirrors the reports panel where the ask stage hides once the feed has entries
  * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -690,6 +1001,7 @@ export function AssistantPanel({
   skillMenu,
   selectedSkill,
   enterToSubmit = true,
+  hideStageOnAnswers = false,
   onAttach,
   onSelectSkill,
   onClearSkill,
@@ -842,25 +1154,27 @@ export function AssistantPanel({
           </div>
         </header>
         <div className="mh-assistant__main" ref={mainRef}>
-          <div className="mh-assistant__stage">
-            <div>
-              <h3>{headline}</h3>
-              <p>{description}</p>
+          {hideStageOnAnswers && answers.length ? null : (
+            <div className="mh-assistant__stage">
+              <div>
+                <h3>{headline}</h3>
+                <p>{description}</p>
+              </div>
+              <div className="mh-assistant__suggestions">
+                {suggestions.map((item) => {
+                  const suggestion = typeof item === "string" ? { label: item, prompt: item } : item;
+                  return (
+                    <Suggestion key={suggestion.label} onSelect={() => {
+                      onSuggestion?.({ prompt: suggestion.prompt });
+                      promptRef.current?.focus();
+                    }}>
+                      {suggestion.label}
+                    </Suggestion>
+                  );
+                })}
+              </div>
             </div>
-            <div className="mh-assistant__suggestions">
-              {suggestions.map((item) => {
-                const suggestion = typeof item === "string" ? { label: item, prompt: item } : item;
-                return (
-                  <Suggestion key={suggestion.label} onSelect={() => {
-                    onSuggestion?.({ prompt: suggestion.prompt });
-                    promptRef.current?.focus();
-                  }}>
-                    {suggestion.label}
-                  </Suggestion>
-                );
-              })}
-            </div>
-          </div>
+          )}
           {answers.length ? (
             <div className="mh-assistant__feed">
               {answers.map((answer, index) => (

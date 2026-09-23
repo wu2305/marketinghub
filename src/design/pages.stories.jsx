@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft } from "./content.js";
+import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
@@ -106,24 +106,169 @@ export const Home = {
 
 export const MarketingCockpit = {
   name: "Marketing Cockpit",
-  args: { query: "", ...shell, hero: COCKPIT.hero, groups: COCKPIT.groups },
+  args: {
+    query: "",
+    project: "all",
+    details: null,
+    assistantOpen: false,
+    prompt: "",
+    ...shell,
+    hero: COCKPIT.hero,
+    groups: COCKPIT.groups,
+    projects: COCKPIT.projects,
+    detailsSections: COCKPIT.detailsSections,
+    assistant: { ...COCKPIT.assistant, showScopes: false, showPicks: false, hideStageOnAnswers: true, enterToSubmit: false, skillMenu: ASSISTANT_SKILL_MENU },
+  },
   argTypes: {
+    project: { control: "select", options: ["all", "city", "fourp", "customer", "abo", "rednote", "ottolv"] },
     onNavigate: { action: "onNavigate" },
-    onOpen: { action: "onOpen" },
     onQueryChange: { action: "onQueryChange" },
+    onOpenProject: { action: "onOpenProject" },
+    onOpenReport: { action: "onOpenReport" },
+    onOpenDetails: { action: "onOpenDetails" },
+    onCloseDetails: { action: "onCloseDetails" },
+    onOpenLive: { action: "onOpenLive" },
+    onOpenAssistant: { action: "onOpenAssistant" },
+    onCloseAssistant: { action: "onCloseAssistant" },
+    onPromptChange: { action: "onPromptChange" },
+    onSubmit: { action: "onSubmit" },
+    onSuggestion: { action: "onSuggestion" },
+    onNewSession: { action: "onNewSession" },
+    onMaximize: { action: "onMaximize" },
+    onHistory: { action: "onHistory" },
+    onHistorySelect: { action: "onHistorySelect" },
+    onFeedback: { action: "onFeedback" },
+    onAttach: { action: "onAttach" },
+    onSelectSkill: { action: "onSelectSkill" },
+    onClearSkill: { action: "onClearSkill" },
+    onSkillAction: { action: "onSkillAction" },
+    onFlowSave: { action: "onFlowSave" },
+    onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function CockpitStory(args) {
     const [query, setQuery] = useSynced(args.query);
+    const [project, setProject] = useSynced(args.project);
+    const [details, setDetails] = useSynced(args.details);
+    const [open, setOpen] = useSynced(args.assistantOpen);
+    const [prompt, setPrompt] = useSynced(args.prompt);
+    const [answers, setAnswers] = React.useState([]);
+    const [skill, setSkill] = React.useState(null);
+    const [flow, setFlow] = React.useState(null);
+    const submitAnswer = (text) => {
+      const trimmed = String(text || "").trim();
+      if (!trimmed) return;
+      setAnswers((current) => [...current, buildReportAssistantAnswer(trimmed)]);
+      setPrompt("");
+    };
     return (
       <MarketingCockpitPage
         {...args}
+        assistant={{
+          ...args.assistant,
+          answers,
+          selectedSkill: skill,
+          onSuggestion: (event) => {
+            submitAnswer(event.prompt);
+            args.onSuggestion?.(event);
+          },
+          onNewSession: () => {
+            setAnswers([]);
+            setPrompt("");
+            args.onNewSession?.();
+          },
+          onMaximize: args.onMaximize,
+          onHistory: args.onHistory,
+          onHistorySelect: (event) => {
+            setPrompt(event.prompt);
+            args.onHistorySelect?.(event);
+          },
+          onFeedback: args.onFeedback,
+          onAttach: args.onAttach,
+          onSelectSkill: (event) => {
+            setSkill({ id: event.id, type: event.type, title: event.title });
+            args.onSelectSkill?.(event);
+          },
+          onClearSkill: () => {
+            setSkill(null);
+            args.onClearSkill?.();
+          },
+          onSkillAction: ({ action }) => {
+            args.onSkillAction?.({ action });
+            setFlow({
+              step: action === "history" ? "history" : "manual",
+              threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+              rule: "",
+              draft: {},
+            });
+          },
+        }}
+        assistantOpen={open}
+        prompt={prompt}
+        skillFlow={
+          flow
+            ? {
+                step: flow.step,
+                threads: flow.threads,
+                rule: flow.rule,
+                draft: flow.draft,
+                sections: MODEL_FLOW.sections,
+                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
+                  setFlow((current) => ({
+                    ...current,
+                    threads: current.threads.map((thread, ti) =>
+                      ti === threadIndex
+                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                        : thread,
+                    ),
+                  })),
+                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
+                onGenerate: ({ messages, rule }) =>
+                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
+                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
+                onClose: () => setFlow(null),
+                onSave: ({ values }) => args.onFlowSave?.(values),
+                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+              }
+            : undefined
+        }
         query={query}
-        onNavigate={args.onNavigate}
-        onOpen={args.onOpen}
+        project={project}
+        details={details}
+        onOpenAssistant={() => {
+          setOpen(true);
+          args.onOpenAssistant?.();
+        }}
+        onCloseAssistant={() => {
+          setOpen(false);
+          args.onCloseAssistant?.();
+        }}
+        onPromptChange={(event) => {
+          setPrompt(event.value);
+          args.onPromptChange?.(event);
+        }}
+        onSubmit={(event) => {
+          submitAnswer(event.prompt);
+          args.onSubmit?.(event);
+        }}
+        onNavigate={(target) => {
+          if (target.id === "cockpit-all") setProject("all");
+          args.onNavigate?.(target);
+        }}
         onQueryChange={(event) => {
           setQuery(event.value);
           args.onQueryChange?.(event);
         }}
+        onOpenProject={(target) => {
+          setProject(target.id);
+          args.onOpenProject?.(target);
+        }}
+        onOpenReport={args.onOpenReport}
+        onOpenDetails={args.onOpenDetails}
+        onCloseDetails={(event) => {
+          setDetails(null);
+          args.onCloseDetails?.(event);
+        }}
+        onOpenLive={args.onOpenLive}
       />
     );
   },

@@ -22,6 +22,7 @@ import {
   Panel,
   ProjectCard,
   ProjectCatalog,
+  ReportDetailsDrawer,
   SummaryStrip,
   TaskList,
   TypeCard,
@@ -81,13 +82,22 @@ export const Workspace = {
   ),
 };
 
+const cityProject = COCKPIT.projects.city;
+
 export const Project = {
   name: "Project card",
-  args: { title: COCKPIT.groups[0].projects[0].title, description: COCKPIT.groups[0].projects[0].description },
+  args: { title: cityProject.title, description: cityProject.description },
   argTypes: { onOpen: { action: "onOpen" } },
   render: (args) => (
     <div style={{ width: 360 }}>
-      <ProjectCard {...COCKPIT.groups[0].projects[0]} {...args} />
+      <ProjectCard
+        title={cityProject.title}
+        kicker={cityProject.kicker}
+        image={cityProject.image}
+        updated={cityProject.sourceStrip[0]}
+        href="/assets/pages/reports.html?project=city"
+        {...args}
+      />
     </div>
   ),
 };
@@ -418,9 +428,56 @@ export const WorkspaceCards = {
 
 export const Catalog = {
   name: "Project catalog",
-  args: { groups: COCKPIT.groups },
+  args: {
+    groups: COCKPIT.groups.map((group) => ({
+      id: group.id,
+      title: group.label,
+      projects: Object.keys(COCKPIT.projects)
+        .filter((key) => COCKPIT.projects[key].group === group.id)
+        .map((key) => ({
+          id: key,
+          title: COCKPIT.projects[key].title,
+          kicker: COCKPIT.projects[key].kicker,
+          description: COCKPIT.projects[key].description,
+          image: COCKPIT.projects[key].image,
+          updated: COCKPIT.projects[key].sourceStrip[0],
+          href: "/assets/pages/reports.html?project=" + key,
+        })),
+    })),
+  },
   argTypes: { onOpen: { action: "onOpen" } },
   render: (args) => <ProjectCatalog {...args} />,
+};
+
+export const ReportDetails = {
+  name: "Report details drawer",
+  args: { open: true },
+  argTypes: { onClose: { action: "onClose" }, onOpenLive: { action: "onOpenLive" } },
+  render: (args) => {
+    const report = COCKPIT.projects.city.reports[0];
+    return (
+      <div style={{ minHeight: 480, background: "#f3f5f7" }}>
+        <ReportDetailsDrawer
+          {...args}
+          projectLabel={COCKPIT.projects.city.title}
+          image={COCKPIT.projects.city.image}
+          imageAlt="City Strategy report preview"
+          hierarchy={`${COCKPIT.projects.city.category} / ${COCKPIT.projects.city.title} / ${report.type}`}
+          title={report.title}
+          explanation={report.description}
+          meta={[
+            { label: "Owner", value: report.owner },
+            { label: "Cadence", value: report.cadence },
+            { label: "Updated", value: report.updated },
+          ]}
+          sections={COCKPIT.detailsSections}
+          scenarios={report.recommendations.map((item) => ({ title: item.title, meta: item.meta }))}
+          liveHref="/assets/pages/reports.html?project=city&dashboard=0&view=live"
+          resetKey="city:0"
+        />
+      </div>
+    );
+  },
 };
 
 export const Toolbar = {

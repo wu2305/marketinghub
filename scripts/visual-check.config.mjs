@@ -58,8 +58,234 @@ export default [
   },
   {
     id: "p02-cockpit",
-    original: { url: "/assets/pages/reports.html", expect: [{ sel: "#catalogView" }, { sel: ".workspace-page-hero" }] },
-    story: { id: "pages--marketing-cockpit", expect: [{ sel: ".mh-catalog" }, { sel: ".mh-project-card" }] },
+    original: {
+      url: "/assets/pages/reports.html",
+      expect: [
+        { sel: ".reports-page-hero", text: "Marketing Cockpit" },
+        { sel: ".report-category-heading h2", text: "D2C Insight" },
+        { sel: ".report-project-card", text: "City Strategy" },
+        { sel: ".report-project-card:has-text('OTT/OLV')", text: "OTT/OLV Media Data Tracking" },
+        { sel: "#reportSearch" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      expect: [
+        { sel: ".mh-hero", text: "Marketing Cockpit" },
+        { sel: ".mh-category h2", text: "D2C Insight" },
+        { sel: ".mh-project-card", text: "City Strategy" },
+        { sel: ".mh-project-card:has-text('OTT/OLV')", text: "OTT/OLV Media Data Tracking" },
+        { sel: ".mh-search input" },
+      ],
+    },
+  },
+  {
+    id: "p02-cockpit-project",
+    original: {
+      url: "/assets/pages/reports.html?project=city",
+      expect: [
+        { sel: "#projectDirectory:not([hidden])" },
+        { sel: "#projectDirectoryTitle", text: "City Strategy" },
+        { sel: "#projectDirectoryCount", text: "2 dashboards" },
+        { sel: "#projectReportCount", text: "2 dashboards" },
+        { sel: ".project-report-row", text: "Invest City Strategy Analysis" },
+        { sel: ".project-report-row", text: "2 assets" },
+        { sel: "#categoryDirectory", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city" },
+      expect: [
+        { sel: ".mh-project-directory" },
+        { sel: ".mh-project-directory h2", text: "City Strategy" },
+        { sel: ".mh-project-directory__count", text: "2 dashboards" },
+        { sel: ".mh-report-list__heading strong", text: "2 dashboards" },
+        { sel: ".mh-report-row", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-report-row", text: "2 assets" },
+        { sel: ".mh-catalog", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p02-cockpit-search",
+    original: {
+      url: "/assets/pages/reports.html",
+      actions: [{ fill: ["#reportSearch", "ott"] }],
+      expect: [
+        { sel: ".report-project-card", text: "OTT/OLV Media Data Tracking" },
+        { sel: ".report-project-card:has-text('City Strategy')", state: "detached" },
+        { sel: "#reportEmpty", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      actions: [{ fill: [".mh-search input", "ott"] }],
+      expect: [
+        { sel: ".mh-project-card", text: "OTT/OLV Media Data Tracking" },
+        { sel: ".mh-project-card:has-text('City Strategy')", state: "detached" },
+        { sel: ".mh-empty-state", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p02-cockpit-search-empty",
+    original: {
+      url: "/assets/pages/reports.html",
+      actions: [{ fill: ["#reportSearch", "zzz-nomatch"] }],
+      expect: [
+        { sel: "#reportEmpty:not([hidden])", text: "No matching reports." },
+        { sel: ".report-project-card", state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      actions: [{ fill: [".mh-search input", "zzz-nomatch"] }],
+      expect: [
+        { sel: ".mh-empty-state", text: "No matching reports." },
+        { sel: ".mh-project-card", state: "detached" },
+      ],
+    },
+  },
+  {
+    // The report-details drawer exists in the original markup but openDetails()
+    // has no caller — the row's Knowledge button navigates to knowledge.html.
+    // The eval step invokes the original's own unwired function.
+    id: "p02-cockpit-details",
+    original: {
+      url: "/assets/pages/reports.html?project=city",
+      actions: [
+        { eval: "openDetails('city', 0)" },
+        { wait: ".report-details-drawer.open" },
+      ],
+      expect: [
+        { sel: "#detailsHierarchy", text: "D2C INSIGHT / CITY STRATEGY / INVESTMENT IMPACT ANALYSIS" },
+        { sel: "#detailsMeta", text: "Weekly" },
+        { sel: "#detailsPrinciples", text: "City Strategy report context" },
+        { sel: "#detailsScenarios li", text: "Holistic analysis" },
+        { sel: ".details-scenarios .scenario-extra", state: "hidden" },
+        { sel: "#detailsScrim:not([hidden])" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", details: { project: "city", index: 0 } },
+      actions: [{ wait: ".mh-details" }],
+      expect: [
+        { sel: ".mh-details__hierarchy", text: "D2C INSIGHT / CITY STRATEGY / INVESTMENT IMPACT ANALYSIS" },
+        { sel: ".mh-details__meta", text: "Weekly" },
+        { sel: ".mh-details__assets", text: "City Strategy report context" },
+        { sel: ".mh-details__scenarios li", text: "Holistic analysis" },
+        { sel: ".mh-details__scenario-extra", state: "hidden" },
+        { sel: ".mh-details-scrim" },
+      ],
+    },
+  },
+  {
+    id: "p02-cockpit-details-more",
+    original: {
+      url: "/assets/pages/reports.html?project=city",
+      actions: [
+        { eval: "openDetails('city', 0)" },
+        { wait: ".report-details-drawer.open" },
+        { click: "#scenariosViewMore" },
+        { click: ".details-scenarios li >> nth=1" },
+      ],
+      expect: [
+        { sel: ".details-scenarios.show-all" },
+        { sel: ".details-scenarios .scenario-extra:has-text('Product mix analysis')" },
+        { sel: ".details-scenarios li.active", text: "City comparison analysis" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", details: { project: "city", index: 0 } },
+      actions: [
+        { wait: ".mh-details" },
+        { click: ".mh-details__view-more" },
+        { click: ".mh-details__scenarios li >> nth=1" },
+      ],
+      expect: [
+        { sel: ".mh-details__scenarios.is-expanded" },
+        { sel: ".mh-details__scenario-extra:has-text('Product mix analysis')" },
+        { sel: ".mh-details__scenarios li.is-active", text: "City comparison analysis" },
+      ],
+    },
+  },
+  {
+    id: "p02-cockpit-details-fullscreen",
+    original: {
+      url: "/assets/pages/reports.html?project=city",
+      actions: [
+        { eval: "openDetails('city', 0)" },
+        { wait: ".report-details-drawer.open" },
+        { click: "#detailsFullscreen" },
+      ],
+      expect: [{ sel: ".report-details-drawer.fullscreen" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", details: { project: "city", index: 0 } },
+      actions: [
+        { wait: ".mh-details" },
+        { click: "button[aria-label='Toggle fullscreen']" },
+      ],
+      expect: [{ sel: ".mh-details.is-fullscreen" }],
+    },
+  },
+  {
+    id: "p02-cockpit-details-escape",
+    original: {
+      url: "/assets/pages/reports.html?project=city",
+      actions: [
+        { eval: "openDetails('city', 0)" },
+        { wait: ".report-details-drawer.open" },
+        { press: ["body", "Escape"] },
+      ],
+      expect: [{ sel: ".report-details-drawer.open", state: "detached" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", details: { project: "city", index: 0 } },
+      actions: [
+        { wait: ".mh-details" },
+        { press: ["body", "Escape"] },
+      ],
+      expect: [{ sel: ".mh-details", state: "detached" }],
+    },
+  },
+  {
+    id: "p02-cockpit-assistant",
+    original: {
+      url: "/assets/pages/reports.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: ".ask-suggestion" },
+        { wait: "#answerFeed .answer-card" },
+      ],
+      expect: [
+        { sel: "#assistantPanel", text: "Ask AI Interpreter" },
+        { sel: "#answerFeed", text: "Sources used" },
+        { sel: ".assistant-ask-stage", state: "hidden" },
+        { sel: ".ask-scope", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: ".mh-assistant__suggestions button" },
+        { wait: ".mh-assistant__feed .mh-assistant__answer" },
+      ],
+      expect: [
+        { sel: ".mh-assistant", text: "Ask AI Interpreter" },
+        { sel: ".mh-assistant", text: "Sources used" },
+        { sel: ".mh-assistant__stage", state: "detached" },
+        { sel: ".mh-assistant__scopes", state: "detached" },
+      ],
+    },
   },
   {
     id: "p03-self-service",
