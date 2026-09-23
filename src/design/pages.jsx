@@ -1,21 +1,17 @@
 import React from "react";
 import "./pages.css";
 import { Button, StatusBadge } from "./atoms.jsx";
-import { FilterPills, SearchField, SectionHeading, Tabs, ViewHeading } from "./molecules.jsx";
+import { ColumnChart, DataTable, FilterPills, MetricStat, ProgressList, SearchField, SectionHeading, Tabs, ViewHeading } from "./molecules.jsx";
 import {
   ActionCard,
   AssistantLauncher,
   AssistantPanel,
   CampaignRail,
-  ColumnChart,
-  DataTable,
   Header,
   Hero,
   KnowledgeLibrary,
   KnowledgeSidebar,
-  MetricStat,
   Panel,
-  ProgressList,
   ProjectCatalog,
   SummaryStrip,
   TaskList,
@@ -27,6 +23,28 @@ function Shell({ tone = "workspace", children }) {
   return <div className={`mh-page mh-page--${tone}`}>{children}</div>;
 }
 
+/**
+ * Home page: header, hero with stats, workspace grid, assistant drawer.
+ * @param {object} props
+ * @param {string} [props.current="home"] active nav id
+ * @param {{ src: string, alt?: string, href?: string }} props.logo
+ * @param {Array<{ id: string, label: string, href: string }>} [props.navigation=[]]
+ * @param {{ image?: string, eyebrow?: string, title: React.ReactNode, description?: React.ReactNode, stats?: Array<object> }} [props.hero]
+ * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid
+ * @param {Array<object>} [props.cards=[]] WorkspaceCard props
+ * @param {object} [props.assistant={}] AssistantPanel props
+ * @param {boolean} [props.assistantOpen=false]
+ * @param {string} [props.prompt=""]
+ * @param {string} [props.scope="All"]
+ * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
+ * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
+ * @param {() => void} [props.onOpenAssistant]
+ * @param {() => void} [props.onCloseAssistant]
+ * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
+ * @param {(event: object) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSuggestion]
+ * @param {(event: { scope: string }) => void} [props.onScopeChange]
+ */
 export function HomePage({
   current = "home",
   logo,
@@ -79,6 +97,19 @@ export function HomePage({
   );
 }
 
+/**
+ * Marketing Cockpit catalog page: search + project groups.
+ * @param {object} props
+ * @param {string} [props.current="cockpit"]
+ * @param {object} props.logo
+ * @param {Array<object>} [props.navigation=[]]
+ * @param {object} [props.hero={}] Hero props
+ * @param {string} [props.query=""] catalog search text
+ * @param {Array<{ id: string, title: string, projects: Array<object> }>} [props.groups=[]]
+ * @param {(target: object) => void} [props.onNavigate]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
+ * @param {(target: { title: string, id?: string }) => void} [props.onOpen]
+ */
 export function MarketingCockpitPage({ current = "cockpit", logo, navigation = [], hero = {}, query = "", groups = [], onNavigate, onQueryChange, onOpen }) {
   const visible = groups
     .map((group) => ({
@@ -105,6 +136,24 @@ export function MarketingCockpitPage({ current = "cockpit", logo, navigation = [
   );
 }
 
+/**
+ * Self-Service Center: analysis/upload tabs, category pills, entry cards.
+ * @param {object} props
+ * @param {string} [props.current="self-service"]
+ * @param {object} props.logo
+ * @param {Array<object>} [props.navigation=[]]
+ * @param {object} [props.hero={}] Hero props
+ * @param {Array<{ id: string, label: string }>} [props.tabs=[]]
+ * @param {{ analysis?: Array<object>, upload?: Array<object> }} [props.filters={}] pills per tab id
+ * @param {Array<object>} [props.reports=[]] ActionCard props for the analysis tab
+ * @param {Array<object>} [props.uploads=[]] ActionCard props for the upload tab
+ * @param {"analysis"|"upload"} [props.tab="analysis"]
+ * @param {string} [props.category="all"]
+ * @param {(target: object) => void} [props.onNavigate]
+ * @param {(event: { id: string, label: string }) => void} [props.onTabChange]
+ * @param {(event: { id: string, label: string }) => void} [props.onCategoryChange]
+ * @param {(target: { title: string }) => void} [props.onOpen]
+ */
 export function SelfServicePage({
   current = "self-service",
   logo,
@@ -165,6 +214,29 @@ function recordMatchesFilter(record, filter, value) {
   return recordFieldValues(record, field).includes(expected);
 }
 
+/**
+ * AI Interpreter knowledge workspace: sidebar type navigation, type overview
+ * grid, and the generic per-type library list (transition implementation —
+ * original per-type views are card/table grids, see handover §2.3 P07).
+ * @param {object} props
+ * @param {string} [props.current="interpreter"]
+ * @param {object} props.logo
+ * @param {Array<object>} [props.navigation=[]]
+ * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
+ * @param {{ id: string, label: string, icon?: string }} [props.overviewItem]
+ * @param {string} [props.sidebarTitle]
+ * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, statusFilters)
+ * @param {Array<object>} [props.records=[]] sampled records; each row links to a type via `typeId`
+ * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
+ * @param {string} [props.query=""]
+ * @param {Object<string, string>} [props.filterValues={}]
+ * @param {(target: object) => void} [props.onNavigate]
+ * @param {(event: { id: string, label: string }) => void} [props.onSelectType]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
+ * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
+ * @param {(event: { typeId: string, title: string }) => void} [props.onCreate]
+ * @param {(row: object) => void} [props.onSelectAsset]
+ */
 export function AiInterpreterPage({
   current = "interpreter",
   logo,
@@ -251,6 +323,51 @@ export function AiInterpreterPage({
   );
 }
 
+/**
+ * RedNote Campaign Tool: rail-navigated sections (overview, execution, assets,
+ * analytics, accounts) plus the assistant drawer. All section data arrives via
+ * props; the original switches sections via location.hash.
+ * @param {object} props
+ * @param {string} [props.current="campaign"]
+ * @param {object} props.logo
+ * @param {Array<object>} [props.navigation=[]]
+ * @param {object} [props.assistant={}] AssistantPanel props
+ * @param {object} [props.rail={ items: [] }] CampaignRail props
+ * @param {Array<{ id: string, label: string }>} [props.channels=[]] overview channel tabs
+ * @param {Array<object>} [props.metrics=[]] overview MetricStat props
+ * @param {Array<object>} [props.distribution=[]] ProgressList items
+ * @param {Array<object>} [props.objectives=[]] ProgressList items
+ * @param {Array<object>} [props.accountColumns=[]] DataTable columns
+ * @param {Array<object>} [props.accountRows=[]] DataTable rows
+ * @param {Object<string, { eyebrow?: string, title?: string, description?: string }>} [props.headings={}] per-section headings
+ * @param {Object<string, object>} [props.panels={}] per-section panel copy
+ * @param {Array<object>} [props.executionSummary=[]] SummaryStrip items
+ * @param {Array<object>} [props.taskQueue=[]] TaskList items
+ * @param {{ columns: Array<object>, rows: Array<object> }} [props.actionLog]
+ * @param {Array<object>} [props.creativeColumns=[]]
+ * @param {Array<object>} [props.creatives=[]]
+ * @param {Array<object>} [props.efficiency=[]] ProgressList items
+ * @param {Array<object>} [props.recommendations=[]] recommendation card contents
+ * @param {Array<object>} [props.bindingColumns=[]]
+ * @param {Array<object>} [props.accounts=[]]
+ * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
+ * @param {"rednote"|"douyin"} [props.channel="rednote"]
+ * @param {string} [props.query=""] account search text
+ * @param {(target: object) => void} [props.onNavigate]
+ * @param {(event: { id: string, label: string }) => void} [props.onSectionChange]
+ * @param {(event: { id: string, label: string }) => void} [props.onChannelChange]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
+ * @param {() => void} [props.onFilter]
+ * @param {() => void} [props.onReset]
+ * @param {() => void} [props.onCreateTask]
+ * @param {() => void} [props.onBindAccount]
+ * @param {boolean} [props.assistantOpen=false]
+ * @param {string} [props.prompt=""]
+ * @param {() => void} [props.onOpenAssistant]
+ * @param {() => void} [props.onCloseAssistant]
+ * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
+ * @param {(event: object) => void} [props.onSubmit]
+ */
 export function CampaignPage({
   current = "campaign",
   logo,

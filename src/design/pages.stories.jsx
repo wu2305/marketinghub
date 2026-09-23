@@ -6,6 +6,7 @@ const shell = { logo: LOGO, navigation: NAV };
 
 export default {
   title: "Pages",
+  tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
 };
 

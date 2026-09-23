@@ -1,7 +1,9 @@
+import React from "react";
 import {
   CategoryHeading,
   ColumnChart,
   DataTable,
+  FilterActions,
   FilterPills,
   FormField,
   MetricStat,
@@ -17,7 +19,7 @@ import {
 } from "./molecules.jsx";
 import { Button } from "./atoms.jsx";
 
-export default { title: "Molecules" };
+export default { title: "Molecules", tags: ["autodocs"] };
 
 export const Search = {
   name: "Search field",
@@ -218,4 +220,14 @@ export const NavItem = {
       <SidebarItem {...args} badge={args.badge || undefined} />
     </div>
   ),
+};
+
+export const FilterButtons = {
+  name: "Filter actions",
+  args: { submitLabel: "Filter", resetLabel: "Reset" },
+  argTypes: {
+    onSubmit: { action: "onSubmit" },
+    onReset: { action: "onReset" },
+  },
+  render: (args) => <FilterActions {...args} />,
 };

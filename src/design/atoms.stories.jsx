@@ -2,6 +2,7 @@ import { Button, Link, Select, StatusBadge, TextArea, TextInput, buttonVariants,
 
 export default {
   title: "Atoms",
+  tags: ["autodocs"],
 };
 
 export const Primary = {

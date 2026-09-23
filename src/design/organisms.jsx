@@ -21,6 +21,16 @@ const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("/assets/images/knowled
 
 export const assistantPlacements = ["modal", "drawer"];
 
+/**
+ * Global site header with logo and top navigation.
+ * @param {object} props
+ * @param {{ src: string, alt?: string, href?: string }} [props.logo]
+ * @param {Array<{ id: string, label: string, href: string }>} [props.items=[]]
+ * @param {string} [props.current] id of the active nav item
+ * @param {"solid"|"home"} [props.tone="solid"] home tone overlays the hero
+ * @param {"sticky"|"fixed"} [props.position="sticky"]
+ * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
+ */
 export function Header({
   logo = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry" },
   items = [],
@@ -34,12 +44,9 @@ export function Header({
       <nav className="mh-header__bar" aria-label="Marketing Portal navigation">
         <a
           className="mh-header__logo"
-          href={logo.href || "/home"}
+          href={logo.href || "/index.html"}
           aria-label="Tapestry Marketing Portal home"
-          onClick={(event) => {
-            event.preventDefault();
-            onNavigate?.({ id: "home", href: logo.href || "/home", label: "Home" });
-          }}
+          onClick={() => onNavigate?.({ id: "home", href: logo.href || "/index.html", label: "Home" })}
         >
           <img src={logo.src} alt={logo.alt || "Tapestry"} />
         </a>
@@ -61,6 +68,19 @@ export function Header({
   );
 }
 
+/**
+ * Image hero with title, description and optional aside content (stats, ask bar).
+ * @param {object} props
+ * @param {string} [props.image] background image URL
+ * @param {string} [props.eyebrow]
+ * @param {React.ReactNode} props.title
+ * @param {React.ReactNode} [props.description]
+ * @param {number} [props.height=260]
+ * @param {"banner"|"home"} [props.variant="banner"]
+ * @param {"banner"|"home"|"none"} [props.scrim="banner"]
+ * @param {string} [props.titleId] defaults to a generated useId
+ * @param {React.ReactNode} [props.children] renders in the hero aside
+ */
 export function Hero({
   image,
   eyebrow,
@@ -92,7 +112,18 @@ export function Hero({
   );
 }
 
-export function WorkspaceCard({ title, description, image, links = [], onOpen, onNavigate }) {
+/**
+ * Home workspace card: image, description, capability links, full-card opener.
+ * @param {object} props
+ * @param {string} props.title
+ * @param {string} [props.href] card open target; renders the full-card `<a>` link
+ * @param {string} props.description
+ * @param {string} props.image
+ * @param {Array<{ id: string, label: string, href: string }>} [props.links=[]]
+ * @param {(target: { title: string, href?: string }) => void} [props.onOpen] card-level open action
+ * @param {(target: { id: string, href: string, label: string }) => void} [props.onNavigate] capability links
+ */
+export function WorkspaceCard({ title, href, description, image, links = [], onOpen, onNavigate }) {
   return (
     <article className="mh-workspace-card">
       <div className="mh-workspace-card__image">
@@ -104,26 +135,30 @@ export function WorkspaceCard({ title, description, image, links = [], onOpen, o
         {links.length ? (
           <div className="mh-workspace-card__links">
             {links.map((link) => (
-              <button key={link.label} type="button" onClick={() => onNavigate?.({ id: link.id, href: link.href, label: link.label })}>
+              <a key={link.label} href={link.href} onClick={() => onNavigate?.({ id: link.id, href: link.href, label: link.label })}>
                 {link.label}
-              </button>
+              </a>
             ))}
           </div>
         ) : null}
       </div>
       <a
         className="mh-workspace-card__open"
-        href={title}
+        href={href || "#"}
         aria-label={`Open ${title}`}
-        onClick={(event) => {
-          event.preventDefault();
-          onOpen?.({ title });
-        }}
+        onClick={() => onOpen?.({ title, href })}
       />
     </article>
   );
 }
 
+/**
+ * Grid of WorkspaceCard.
+ * @param {object} props
+ * @param {Array<object>} [props.cards=[]] WorkspaceCard props per card
+ * @param {(target: { title: string }) => void} [props.onOpen]
+ * @param {(target: { id: string, href: string, label: string }) => void} [props.onNavigate]
+ */
 export function WorkspaceGrid({ cards = [], onOpen, onNavigate }) {
   return (
     <div className="mh-workspace-grid">
@@ -134,6 +169,17 @@ export function WorkspaceGrid({ cards = [], onOpen, onNavigate }) {
   );
 }
 
+/**
+ * Cockpit project card with image opener and action button.
+ * @param {object} props
+ * @param {string} props.title
+ * @param {string} [props.kicker]
+ * @param {string} [props.description]
+ * @param {string} [props.image]
+ * @param {string} [props.updated]
+ * @param {string} [props.actionLabel="View Dashboards"]
+ * @param {(target: { title: string, id?: string }) => void} [props.onOpen]
+ */
 export function ProjectCard({ title, kicker, description, image, updated, actionLabel = "View Dashboards", onOpen }) {
   return (
     <article className="mh-project-card">
@@ -162,6 +208,12 @@ export function ProjectCard({ title, kicker, description, image, updated, action
   );
 }
 
+/**
+ * Cockpit catalog: category groups of ProjectCard.
+ * @param {object} props
+ * @param {Array<{ id: string, title: string, projects: Array<object> }>} [props.groups=[]]
+ * @param {(target: { title: string, id?: string }) => void} [props.onOpen]
+ */
 export function ProjectCatalog({ groups = [], onOpen }) {
   return (
     <div className="mh-catalog">
@@ -179,6 +231,14 @@ export function ProjectCatalog({ groups = [], onOpen }) {
   );
 }
 
+/**
+ * Self-Service entry card with a single action.
+ * @param {object} props
+ * @param {string} props.title
+ * @param {string} [props.description]
+ * @param {string} [props.actionLabel]
+ * @param {(target: { title: string }) => void} [props.onOpen]
+ */
 export function ActionCard({ title, description, actionLabel, onOpen }) {
   return (
     <article className="mh-action-card">
@@ -193,6 +253,16 @@ export function ActionCard({ title, description, actionLabel, onOpen }) {
   );
 }
 
+/**
+ * AI Interpreter sidebar: brand, overview entry, and the 8-type navigation.
+ * @param {object} props
+ * @param {string} [props.brand="AI Interpreter"]
+ * @param {{ id: string, label: string, icon?: string }} [props.overview]
+ * @param {string} [props.title] group label, e.g. "Knowledge · 8 types"
+ * @param {Array<{ id: string, title: string, icon?: string, manageable?: boolean, stats?: { total: number } }>} [props.types=[]]
+ * @param {string} [props.activeId] id of the selected type or "overview"
+ * @param {(event: { id: string, label: string }) => void} [props.onSelect]
+ */
 export function KnowledgeSidebar({ brand = "AI Interpreter", overview, title, types = [], activeId, onSelect }) {
   return (
     <aside className="mh-sidebar" aria-label="Knowledge navigation">
@@ -220,6 +290,19 @@ export function KnowledgeSidebar({ brand = "AI Interpreter", overview, title, ty
   );
 }
 
+/**
+ * Knowledge-type card in the overview grid. `manageable` flips read-only vs
+ * manage styling; `art` picks one of 8 baked background images (0–7).
+ * @param {object} props
+ * @param {string} props.title
+ * @param {React.ReactNode} props.count preformatted count label, e.g. "10 principles"
+ * @param {string} props.summary
+ * @param {string} props.action action line, e.g. "Manage terms"
+ * @param {boolean} [props.manageable=false]
+ * @param {number} [props.art=0]
+ * @param {boolean} [props.active=false]
+ * @param {(event: { title: string }) => void} [props.onSelect]
+ */
 export function TypeCard({ title, count, summary, action, manageable = false, art = 0, active = false, onSelect }) {
   return (
     <button
@@ -243,6 +326,13 @@ function formatTypeCount(stats) {
   return `${total} ${total === 1 ? units[0] : units[1]}`;
 }
 
+/**
+ * Overview grid of TypeCard for the eight knowledge types.
+ * @param {object} props
+ * @param {Array<object>} [props.items=[]] type entries (id, title, summary, action, manageable, stats)
+ * @param {string} [props.activeId]
+ * @param {(event: { id: string, title: string }) => void} [props.onSelect]
+ */
 export function TypeGrid({ items = [], activeId, onSelect }) {
   return (
     <div className="mh-type-grid">
@@ -263,6 +353,17 @@ export function TypeGrid({ items = [], activeId, onSelect }) {
   );
 }
 
+/**
+ * Toolbar above the knowledge list: per-type filters, search, create action.
+ * @param {object} props
+ * @param {string} [props.query]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
+ * @param {Array<{ id: string, label: string, allLabel?: string, options?: Array<{ id: string, label: string }> }>} [props.filters=[]]
+ * @param {Object<string, string>} [props.filterValues={}] selected option id per filter id
+ * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
+ * @param {string} [props.createLabel] when omitted the create button is not rendered
+ * @param {() => void} [props.onCreate]
+ */
 export function LibraryToolbar({ query, onQueryChange, filters = [], filterValues = {}, onFilterChange, createLabel, onCreate }) {
   return (
     <div className="mh-toolbar">
@@ -303,6 +404,20 @@ export function LibraryToolbar({ query, onQueryChange, filters = [], filterValue
 const STAGE_LABELS = { draft: "Draft", "under-review": "Under Review", queued: "Queued", building: "Building", published: "Published" };
 const AVAILABILITY_LABELS = { enabled: "Enabled", disabled: "Disabled" };
 
+/**
+ * Single row in the generic knowledge list (transition component — the
+ * per-type original views are card/table grids, see handover §2.3 P07).
+ * @param {object} props
+ * @param {string} props.title
+ * @param {string} [props.summary]
+ * @param {string} [props.badge] leading kind chip, e.g. "Synonym"
+ * @param {string} [props.typeLabel]
+ * @param {string} [props.owner]
+ * @param {"draft"|"under-review"|"queued"|"building"|"published"} [props.stage] process stage
+ * @param {"enabled"|"disabled"} [props.availability] AI availability
+ * @param {boolean} [props.active=false]
+ * @param {(event: { title: string }) => void} [props.onSelect]
+ */
 export function AssetRow({ title, summary, badge, typeLabel, owner, stage, availability, active = false, onSelect }) {
   return (
     <button className={cx("mh-asset", active && "is-active")} type="button" onClick={() => onSelect?.({ title })}>
@@ -321,6 +436,22 @@ export function AssetRow({ title, summary, badge, typeLabel, owner, stage, avail
   );
 }
 
+/**
+ * Generic knowledge list (transition component for the eight type views).
+ * `type` drives the toolbar filters and the create entry; `manageable` types
+ * get the create button, read-only types do not.
+ * @param {object} props
+ * @param {{ id: string, title: string, manageable?: boolean, createLabel?: string, statusFilters?: Array<object> }} props.type
+ * @param {string} [props.query]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
+ * @param {Object<string, string>} [props.filterValues={}]
+ * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
+ * @param {Array<object>} [props.rows=[]] AssetRow props plus id/typeLabel
+ * @param {(event: { typeId: string, title: string }) => void} [props.onCreate]
+ * @param {(row: object) => void} [props.onSelect]
+ * @param {string} [props.emptyTitle="No knowledge assets"]
+ * @param {string} [props.emptyMessage]
+ */
 export function KnowledgeLibrary({ type, query, onQueryChange, filterValues = {}, onFilterChange, rows = [], onCreate, onSelect, emptyTitle = "No knowledge assets", emptyMessage }) {
   const createLabel = type?.manageable ? type.createLabel || `Create ${type.title}` : undefined;
   return (
@@ -360,6 +491,12 @@ export function KnowledgeLibrary({ type, query, onQueryChange, filterValues = {}
   );
 }
 
+/**
+ * Floating corner button that opens the assistant panel.
+ * @param {object} props
+ * @param {string} [props.label="AI Interpreter"]
+ * @param {() => void} [props.onOpen]
+ */
 export function AssistantLauncher({ label = "AI Interpreter", onOpen }) {
   return (
     <button className="mh-launcher" type="button" aria-label="Open AI assistant" onClick={onOpen}>
@@ -369,6 +506,33 @@ export function AssistantLauncher({ label = "AI Interpreter", onOpen }) {
   );
 }
 
+/**
+ * Assistant dialog. `placement="drawer"` renders the right-edge full-height
+ * variant used on Home; "modal" is the centered variant. Renders nothing when
+ * `open` is false.
+ * @param {object} props
+ * @param {boolean} [props.open=false]
+ * @param {typeof assistantPlacements[number]} [props.placement="modal"]
+ * @param {string} [props.title="Ask AI Interpreter"]
+ * @param {string} [props.headline="Ask a question"]
+ * @param {string} [props.description]
+ * @param {Array<string>} [props.suggestions=[]]
+ * @param {Array<string>} [props.scopes=[]]
+ * @param {string} [props.scope] selected scope label
+ * @param {boolean} [props.showScopes=false]
+ * @param {boolean} [props.showPicks=true] show model/mode pick chips
+ * @param {string} [props.prompt=""]
+ * @param {string} [props.model="Data Model"]
+ * @param {string} [props.mode="Analytical Model"]
+ * @param {() => void} [props.onClose]
+ * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
+ * @param {(event: { prompt: string, scope?: string, model: string, mode: string }) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSuggestion]
+ * @param {(event: { scope: string }) => void} [props.onScopeChange]
+ * @param {() => void} [props.onNewSession]
+ * @param {() => void} [props.onMaximize]
+ * @param {() => void} [props.onHistory]
+ */
 export function AssistantPanel({
   open = false,
   placement = "modal",
@@ -465,6 +629,16 @@ export function AssistantPanel({
   );
 }
 
+/**
+ * RedNote Campaign Tool left rail: numbered view navigation.
+ * @param {object} props
+ * @param {string} [props.eyebrow]
+ * @param {string} [props.title]
+ * @param {string} [props.description]
+ * @param {Array<{ id: string, label: string, index: string, caption?: string }>} [props.items=[]]
+ * @param {string} [props.current] active item id
+ * @param {(event: { id: string, label: string }) => void} [props.onSelect]
+ */
 export function CampaignRail({ eyebrow, title, description, items = [], current, onSelect }) {
   return (
     <aside className="mh-rail" aria-label="RedNote Campaign Tool navigation">
@@ -494,6 +668,15 @@ export function CampaignRail({ eyebrow, title, description, items = [], current,
   );
 }
 
+/**
+ * Bordered section panel with heading and optional actions slot.
+ * @param {object} props
+ * @param {string} [props.eyebrow]
+ * @param {React.ReactNode} props.title
+ * @param {React.ReactNode} [props.meta] small trailing text in the header
+ * @param {React.ReactNode} [props.actions] trailing header actions; overrides meta
+ * @param {React.ReactNode} [props.children]
+ */
 export function Panel({ eyebrow, title, meta, actions, children }) {
   return (
     <section className="mh-panel">
@@ -509,6 +692,11 @@ export function Panel({ eyebrow, title, meta, actions, children }) {
   );
 }
 
+/**
+ * Horizontal execution-status strip (label / caption / value cells).
+ * @param {object} props
+ * @param {Array<{ label: string, caption?: string, value: React.ReactNode }>} [props.items=[]]
+ */
 export function SummaryStrip({ items = [] }) {
   return (
     <div className="mh-summary" aria-label="Execution status">
@@ -523,6 +711,11 @@ export function SummaryStrip({ items = [] }) {
   );
 }
 
+/**
+ * Task queue rows with an outline StatusBadge.
+ * @param {object} props
+ * @param {Array<{ title: string, detail?: string, status: string }>} [props.items=[]]
+ */
 export function TaskList({ items = [] }) {
   return (
     <div>
@@ -541,6 +734,21 @@ export function TaskList({ items = [] }) {
   );
 }
 
+/**
+ * Business Term create/edit form (Title, Term Type, Description, Synonyms).
+ * `invalid` turns on required-field error styling; callers pass it after a
+ * failed submit so empty required fields are marked.
+ * @param {object} props
+ * @param {string} [props.title=""]
+ * @param {"Business Term"|"Global Synonym"} [props.kind="Business Term"]
+ * @param {string} [props.description=""]
+ * @param {string} [props.synonyms=""]
+ * @param {boolean} [props.invalid=false]
+ * @param {(event: { name: string, value: string }) => void} [props.onChange]
+ * @param {() => void} [props.onCancel]
+ * @param {(values: { title: string, kind: string, description: string, synonyms: string }) => void} [props.onSave]
+ * @param {(values: { title: string, kind: string, description: string, synonyms: string }) => void} [props.onSubmit]
+ */
 export function BusinessTermForm({
   title = "",
   kind = "Business Term",
@@ -602,4 +810,3 @@ export function BusinessTermForm({
   );
 }
 
-export { MetricStat, ProgressList, ColumnChart, DataTable, Tabs, SearchField };

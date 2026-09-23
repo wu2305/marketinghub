@@ -1,12 +1,12 @@
 export const NAV = [
-  { id: "home", label: "Home", href: "/home" },
-  { id: "cockpit", label: "Marketing Cockpit", href: "/cockpit" },
-  { id: "self-service", label: "Self-Service Center", href: "/self-service" },
-  { id: "interpreter", label: "AI Interpreter", href: "/interpreter" },
-  { id: "campaign", label: "RedNote Campaign Tool", href: "/campaign" },
+  { id: "home", label: "Home", href: "/index.html" },
+  { id: "cockpit", label: "Marketing Cockpit", href: "/assets/pages/reports.html" },
+  { id: "self-service", label: "Self-Service Center", href: "/assets/pages/flexible.html" },
+  { id: "interpreter", label: "AI Interpreter", href: "/assets/pages/knowledge.html" },
+  { id: "campaign", label: "RedNote Campaign Tool", href: "/assets/pages/campaign.html" },
 ];
 
-export const LOGO = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry", href: "/home" };
+export const LOGO = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry", href: "/index.html" };
 
 export const HOME = {
   hero: {
@@ -28,28 +28,32 @@ export const HOME = {
   cards: [
     {
       title: "Marketing Cockpit",
+      href: "/assets/pages/reports.html",
       description: "Centralized view for tracking all marketing initiatives' performance and evolving business trends.",
       image: "/assets/images/workspace-marketing-overview.png",
       links: [
-        { id: "dg", label: "DG Data Insight", href: "/cockpit/rednote" },
-        { id: "dc", label: "DC Data Insight", href: "/cockpit/abo" },
-        { id: "d2c", label: "D2C Insight", href: "/cockpit/customer" },
+        { id: "dg", label: "DG Data Insight", href: "/assets/pages/reports.html?project=rednote" },
+        { id: "dc", label: "DC Data Insight", href: "/assets/pages/reports.html?project=abo" },
+        { id: "d2c", label: "D2C Insight", href: "/assets/pages/reports.html?project=customer" },
       ],
     },
     {
       title: "Self-Service Center",
+      href: "/assets/pages/flexible.html",
       description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
       image: "/assets/images/workspace-business-explorer.png",
       links: [],
     },
     {
       title: "AI Interpreter",
+      href: "/assets/pages/knowledge.html",
       description: "Empower business teams to create, manage and evolve trusted knowledge for consistent AI experiences.",
       image: "/assets/images/workspace-knowledge-center.png",
-      links: [{ id: "knowledge", label: "Knowledge Management", href: "/interpreter" }],
+      links: [{ id: "knowledge", label: "Knowledge Management", href: "/assets/pages/knowledge.html" }],
     },
     {
       title: "RedNote Campaign Tool",
+      href: "/assets/pages/campaign.html",
       description: "Plan, launch and manage every campaign from one connected workspace.",
       image: "/assets/images/workspace-campaign-operations.png",
       links: [],

@@ -10,9 +10,9 @@
 |---|---|
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 38（Foundations 1、Atoms 6、Molecules 14、Organisms 12、Pages 5） |
+| 故事数 | 47（Foundations 1、Atoms 6、Molecules 15、Organisms 20、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），9 条行为测试通过（2026-09-23） |
-| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，38 stories、0 docs） |
+| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，52 entries：47 stories、5 docs） |
 | 最近视觉对照 | 2026-09-23，1440px：故事截图含八类型/overview/unknown；现存原始截图仅 overview/Principles/Business Term/Scenario。全八类配对及非默认筛选截图未齐；Principles 配对仍有显著布局与数据差异。产物 `/tmp/mh-visual/*.png` |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
@@ -31,8 +31,8 @@ npm test               # vitest 行为测试
 
 | 阶段 | 条目 | 状态 | PR |
 |---|---|---|---|
-| M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 未开始 | 本次仅预置里程碑与入口种子台账，未完成全量运行时盘点 |
-| M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 已有构建与 9 条测试，其他仍缺；a9542f7 为已有证据 |
+| M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
+| M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。仍缺：token 化、@media、独立宿主、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | #6/#8 有部分组件，尚未全量验收 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | a9542f7 改善类型接口，未完成专用视图提取 |
@@ -77,6 +77,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 组件清单也放本节：组件名、公共或私有、层级、原始使用位置、变体、输入/输出、故事、验证状态。以独立意义、稳定复用边界决定拆分；不要求每个 DOM 标签成为组件。
 
 #### M0 首轮盘点（2026-09-23，脚本/CSS 加载序与 DOM/JS 面已核对；逐项行为细节随实现继续核实）
+
+**对抗性复核限定**：以下源码存在项不是全部已验证可达功能。首页助手打开后，#modelPicker/#modePicker/#suggestPicker/#attachPicker/#platformGuideTrigger 实测均隐藏（CSS display:none!important）。实现前区分当前可达、待查路径、被覆盖的历史残留，不能将四个 picker 和引导直接列为必建子组件。保留此首轮清单作为线索，不将它作为完成的运行时盘点。
 
 **共享运行时**（不是组件，是参照行为来源）：
 - `shared/portal.js`（1374L）：完整助手——开关/最大化、modePicker、modelPicker、suggestPicker、attachPicker、uploadDialog（含 uploadHistoryPopup/Clear 确认）、platformGuide 气泡、homeHistoryPopup、reports 级联菜单、问答流。用于 P01、P05、P13。
@@ -163,10 +165,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M0 首轮盘点完成（2.3 逐页台账）。M1 第一条对照路径已落地：`scripts/visual-check.mjs` + `visual-check.config.mjs`（sirv 双静态服务 + Playwright Chromium，串行、隔离上下文、expect/动作/404/pageerror 判失败，产物 `/tmp/mh-visual/index.html`）。
-- **下一步**：M1 收尾——`src/design/index.js` 公共导出、全故事 autodocs、props 类型声明；随后 M2 Home 全量（picker/history/upload/platform-guide）或按依赖取 P07 专用视图。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → visual-check 提交），未合入 main。
-- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 38 stories；`node scripts/visual-check.mjs` 10/10 PASS（首轮 10 场景：5 页默认态 + home-assistant / self-service-upload / campaign-accounts / interpreter-overview / business-term / scenario）。注意 PASS 仅表示加载与预期控件成立，视觉差异仍需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
-- **未提交改动**：scripts/ 与台账更新随 visual-check 提交入库。`.commandcode/` 为工具产物不入库。
+- **当前目标**：M1 最小闭环本轮推进：新增 `src/design/index.js` 公共出口；atoms/molecules/organisms/pages 全导出组件补 JSDoc props 声明；五个故事文件启用 `tags: ["autodocs"]`；补齐 FilterActions、WorkspaceGrid、ProjectCatalog、LibraryToolbar、AssetRow、Panel、SummaryStrip、TaskList、TypeGrid 共 9 个缺失组件故事；Library 故事改为受控回写（query/filterValues 驱动选项与行过滤）；`FormField` 补 `className` 透传；`content.js` 导航/卡片 href 改为真实 Demo 路径（`/index.html`、`/assets/pages/*.html`、`?project=`）；Header logo 与 `Link` 去掉无条件 `preventDefault`；`WorkspaceCard` `href={title}` bug 修复为真实 `href` prop，能力链接改回 `<a>`。
+- **下一步**：M1 余项——页面故事内联 `style` 占位改组件 CSS、色值 token 化（169 处）、有机体/页面 `@media` 与 `:focus-visible`、独立 React 宿主验证（M7 前置，可提前）；随后 M2 Home 全量（picker/history/upload/platform-guide）。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → 888177a → 本批 M1 提交），未合入 main。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 52 entries（47 stories、5 docs）；`node scripts/visual-check.mjs` 10/10 PASS（首轮 10 场景：5 页默认态 + home-assistant / self-service-upload / campaign-accounts / interpreter-overview / business-term / scenario）。注意 PASS 仅表示加载与预期控件成立，视觉差异仍需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
+- **未提交改动**：本批 M1 文件（index.js、四个 .jsx JSDoc/接口修复、五个 .stories.jsx、content.js href、organisms.css 链接选择器、台账）随提交入库。`.commandcode/` 为工具产物不入库。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -214,7 +216,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Home `AssistantPanel` | 保持右侧全高抽屉（1440px 宽 576px），不是 680px 居中弹窗 | 当前 `.home-ask-panel` 计算样式即该抽屉；2026-09-23 已修正 `AGENTS.md` 2.4 的旧判断 | #8 |
 | Interpreter TypeCard 计数 | Data Models 为 3、Business Terms 为 6、Scenario Reports 为 3；原始页 `renderStats` 显示 1 / 1 / 2 | `AGENTS.md` 3.3：原文不一致时以 `typeMeta[].stats.total` 为准 | #8 |
 | Campaign 指标标签 | `MetricStat` 标签为大写，原始 Overview 指标为句首大写 | 共享组件既有样式，本阶段不改 `MetricStat` | #8 |
-| `Header` logo | logo 链接仍 `preventDefault`；导航项已不再无条件阻止默认跳转 | 遗留导航缺口，后续仍须按组件语义规则修复 | #8 |
+| ~~`Header` logo~~ | ~~logo 链接仍 `preventDefault`~~ | 已修复：logo、Link、WorkspaceCard 均不再无条件阻止默认跳转，href 指向真实 Demo 路径 | devin/interpreter-type-contract |
 | Interpreter 侧栏/卡片计数 | 侧栏条目与 TypeCard 显示 `typeMeta.stats.total`（3 models / 3 scenarios）；原 sidebar `countForType` 数 `demoAssets` 实数（1 model / 2 scenarios） | `AGENTS.md` 3.3：计数以 `typeMeta` 为准；`demoAssets` 与 `typeMeta` 冲突属原文自身不一致 | devin/interpreter-type-contract |
 | Interpreter 创建按钮文案 | 使用 `Add X`（`Add Business Term` / `Add Analytical Model` / `Add Scenario Reporting`）；通用 `types.js` 为 `Create X`，生效专用视图为 `Add X` | 以后加载的专用视图为准（业务覆盖规则）；原文 `Add Scenario reporting` 小写 r 属笔误，已规范化 | devin/interpreter-type-contract |
 | Interpreter 未知类型 | 原 `?type=` 非法值回退 `all` 显示概览；本实现改为显式 Unknown 空态，不渲染任何记录 | 防止非法类型意外展示全量记录的实现选择；用户并未禁止回退概览，此差异须在最终参照验收中重新评估 | devin/interpreter-type-contract |
@@ -225,8 +227,13 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 来自 2026-09-23 代码审查（细项见 AGENTS.md 2.4），尚待处理：
 
+- 888177a 对抗性检查：把 accounts 场景的故事参数故意换成 overview，脚本仍 PASS；.mh-campaign 等外壳选择器不能证明正确状态。证据 /tmp/mh-adversarial-wrong-state（临时脚本 /tmp/mh-adversarial-check.mjs，未改仓库配置）。原始页为 Accounts，故事截图为 Overview Dashboard。须添加场景特有文案/选中状态/内容与排除错误区块的断言，并区分加载/交互/视觉三种结论。
+- M0 把默认及 CSS 强制隐藏的旧 picker 列入 Home 待重建范围；已核验节点存在但不可见，尚需查实际可达路径，不能直接恢复旧界面。证据 /tmp/mh-adversarial-home。
+- 盘点仍缺细粒度状态 ID、实际故事/验证场景映射和组件跨页复用表；页级描述不能构成可计数的完成分母。接续点原称 M0 完成只代表静态扫描，非里程碑验收完成。
+- ~~审核时未提交 JSDoc 中 MetricStat 声明 banner/bronze，但 CSS 无对应变体，且遗漏已有 green/amber/blue/red；注释不能代替接口核对。~~ 已修复：JSDoc 改为 variant card|glass、accent gold|green|amber|blue|red，与 CSS 一致。
+
 - a9542f7 复核：Principles 仍采用旧知识资产而非当前生效 globalPrinciples；Data Model 混用资产、模型源、domain，部分说明与 Published/Enabled 状态缺对应来源；“24 条全部真实抽样”尚不成立。
-- Library 独立故事受控值不回写、rows 不响应搜索/筛选，动态 Creator/Data Model 选项也未在该故事中生成；页面测试不能证明该故事可操作。
+- ~~Library 独立故事受控值不回写、rows 不响应搜索/筛选，动态 Creator/Data Model 选项也未在该故事中生成；页面测试不能证明该故事可操作。~~ 已修复：Library 故事以 useSynced 维护 query/filterValues，按类型动态生成筛选选项并实际过滤行。Input/Area/Dropdown/Search/Tabs/Pills/Field/Scope 等其余受控故事的回写仍缺。
 - Business Term 原始状态/创建者筛选为多选，现为单选；原始搜索覆盖 synonyms/scope/creator，现仅 title/summary。需修正或明确列为未完成行为，不能把视觉形态差异作为行为差异的替代说明。
 - 原始截图缺五个类型及非默认筛选态；Principles 截图显示 Hero/侧栏布局与内容仍不同。一次性脚本吞掉 goto 异常，截图生成不能作为验收通过证据。
 
@@ -242,7 +249,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 - Interpreter 非 overview 状态与原始差异大：原始为卡片网格与逐卡动作，当前为通用行表（Process/AI Status），缺少专用结构与逐卡动作。M4/M5 处理。
 - `StatusBadge` 的 tone 由字符串包含判断决定，需改为显式 `tone` prop 或映射表。
-- `content.js` 中 `href` 为 `/home`、`/cockpit` 等 Demo 中不存在的路由，需在决定路由方案后统一。
+- ~~`content.js` 中 `href` 为 `/home`、`/cockpit` 等 Demo 中不存在的路由，需在决定路由方案后统一。~~ 已修复：全部改为真实 Demo 路径（`/index.html`、`/assets/pages/*.html`、`reports.html?project=`）；独立宿主接入时由集成方替换 NAV。
 - 页面故事内联 `style` 用作占位与间距（如 `<div style={{ height: 56 }} />`），需改为组件 CSS。
 - 已有 9 条 Interpreter 行为测试；无 lint，尚无自动视觉验收脚本。
 - 分支 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）建在已删除的 `src/assembled` 与 `scripts/compose_portal.py` 上，与 `main` 互斥，应关闭。
@@ -259,3 +266,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | `devin/interpreter-type-contract`：INTERPRETER 数据契约重构（typeMeta key 作 typeId、manageable/createLabel/statusFilters/stats、24 条真实抽样记录、stage+availability 双维度）；KnowledgeSidebar/TypeCard/LibraryToolbar/AssetRow/KnowledgeLibrary/AiInterpreterPage 契约更新；新增 vitest+RTL 行为测试 9 条；构建 38 stories；1440px 截图对照 `/tmp/mh-visual/` | Devin |
 | 2026-09-23 | 复核 a9542f7：npm test 9/9；检查现存截图和脚本，纠正全八类对照声明；记录样例来源、Library 故事、筛选/搜索行为缺口，将组合条目标回进行中。未修改组件代码 | Codex |
 | 2026-09-23 | 用户确认全量重建与奥卡姆剃刀目标；同步 AGENTS 目标和 M0–M7 规划，预置 17 页种子台账、接续协议与长程执行 prompt；旧阶段保留为历史，未新增实现/验收完成声明 | Codex |
+| 2026-09-23 | 对抗性复核 888177a：单测 9/9；实测错误 Accounts 故事状态仍 PASS、Home 五个盘点节点隐藏；记录验收判据与盘点偏差，M0 标记进行中。Browser 插件不可用，使用本地 Playwright Chromium；未改组件或覆盖其他模型正在写入的 JSDoc | Codex |
+| 2026-09-23 | M1 批：`src/design/index.js` 公共出口；全组件 JSDoc props；五故事文件 autodocs；补 9 个缺失组件故事（47 stories/5 docs）；Library 故事受控回写；FormField className；content.js 真实 href；Link/logo/WorkspaceCard 去无条件 preventDefault、WorkspaceCard href bug 修复、卡片能力链接改 `<a>`。npm test 9/9、build 通过 | Devin |

@@ -291,7 +291,7 @@
   margin-top: 10px;
 }
 
-.mh-workspace-card__links button {
+.mh-workspace-card__links a {
   position: relative;
   z-index: 2;
   padding: 4px 10px;
@@ -303,6 +303,7 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .mh-workspace-card__open {

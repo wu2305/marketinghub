@@ -2,6 +2,7 @@ import React from "react";
 import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV } from "./content.js";
 import {
   ActionCard,
+  AssetRow,
   AssistantLauncher,
   AssistantPanel,
   assistantPlacements,
@@ -11,13 +12,26 @@ import {
   Hero,
   KnowledgeLibrary,
   KnowledgeSidebar,
-  MetricStat,
+  LibraryToolbar,
+  Panel,
   ProjectCard,
+  ProjectCatalog,
+  SummaryStrip,
+  TaskList,
   TypeCard,
+  TypeGrid,
   WorkspaceCard,
+  WorkspaceGrid,
 } from "./organisms.jsx";
+import { MetricStat } from "./molecules.jsx";
 
-export default { title: "Organisms" };
+export default { title: "Organisms", tags: ["autodocs"] };
+
+function useSynced(value) {
+  const [state, setState] = React.useState(value);
+  React.useEffect(() => setState(value), [value]);
+  return [state, setState];
+}
 
 export const PortalHeader = {
   name: "Header",
@@ -122,19 +136,55 @@ export const Library = {
   },
   render: function LibraryStory(args) {
     const type = INTERPRETER.types.find((item) => item.id === args.typeId);
+    const [query, setQuery] = useSynced(args.query);
+    const [filterValues, setFilterValues] = useSynced(args.filterValues);
+    const typeRecords = INTERPRETER.records.filter((record) => record.typeId === args.typeId);
+    const filters = (type?.statusFilters || []).map((filter) => ({
+      ...filter,
+      options:
+        filter.options ||
+        [...new Set(typeRecords.flatMap((record) => record[filter.id] ?? []))].map((value) => ({ id: value, label: value })),
+    }));
+    const rows = typeRecords.filter((record) => {
+      const queryMatch = !query || `${record.title} ${record.summary}`.toLowerCase().includes(query.toLowerCase());
+      const filterMatch = filters.every((filter) => {
+        const selected = filterValues[filter.id];
+        if (!selected) return true;
+        const field = (filter.options || []).find((option) => option.id === selected)?.field || filter.id;
+        const values = record[field];
+        return (Array.isArray(values) ? values : [values]).includes(selected);
+      });
+      return queryMatch && filterMatch;
+    });
     return (
       <KnowledgeLibrary
-        type={type}
-        query={args.query}
-        filterValues={args.filterValues}
-        rows={INTERPRETER.records.filter((record) => record.typeId === args.typeId)}
-        onQueryChange={args.onQueryChange}
-        onFilterChange={args.onFilterChange}
+        type={{ ...type, statusFilters: filters }}
+        query={query}
+        filterValues={filterValues}
+        rows={rows}
+        onQueryChange={(event) => {
+          setQuery(event.value);
+          args.onQueryChange?.(event);
+        }}
+        onFilterChange={(event) => {
+          setFilterValues((values) => ({ ...values, [event.id]: event.value }));
+          args.onFilterChange?.(event);
+        }}
         onCreate={args.onCreate}
         onSelect={args.onSelect}
       />
     );
   },
+};
+
+export const TypeOverview = {
+  name: "Type grid",
+  args: { activeId: "overview" },
+  argTypes: {
+    activeId: { control: "select", options: ["overview", ...INTERPRETER.types.map((type) => type.id)] },
+    onSelect: { action: "onSelect" },
+  },
+  render: (args) => <TypeGrid items={INTERPRETER.types} {...args} />,
 };
 
 export const Launcher = {
@@ -189,4 +239,87 @@ export const TermForm = {
     onSubmit: { action: "onSubmit" },
   },
   render: (args) => <BusinessTermForm {...args} />,
+};
+
+export const WorkspaceCards = {
+  name: "Workspace grid",
+  argTypes: {
+    onOpen: { action: "onOpen" },
+    onNavigate: { action: "onNavigate" },
+  },
+  render: (args) => <WorkspaceGrid cards={HOME.cards} {...args} />,
+};
+
+export const Catalog = {
+  name: "Project catalog",
+  args: { groups: COCKPIT.groups },
+  argTypes: { onOpen: { action: "onOpen" } },
+  render: (args) => <ProjectCatalog {...args} />,
+};
+
+export const Toolbar = {
+  name: "Library toolbar",
+  args: { typeId: "Business Term", query: "", filterValues: {} },
+  argTypes: {
+    typeId: { control: "select", options: INTERPRETER.types.map((type) => type.id) },
+    onQueryChange: { action: "onQueryChange" },
+    onFilterChange: { action: "onFilterChange" },
+    onCreate: { action: "onCreate" },
+  },
+  render: function ToolbarStory(args) {
+    const type = INTERPRETER.types.find((item) => item.id === args.typeId);
+    const [query, setQuery] = useSynced(args.query);
+    const [filterValues, setFilterValues] = useSynced(args.filterValues);
+    return (
+      <LibraryToolbar
+        filters={type?.statusFilters || []}
+        filterValues={filterValues}
+        query={query}
+        createLabel={type?.manageable ? type.createLabel : undefined}
+        onQueryChange={(event) => {
+          setQuery(event.value);
+          args.onQueryChange?.(event);
+        }}
+        onFilterChange={(event) => {
+          setFilterValues((values) => ({ ...values, [event.id]: event.value }));
+          args.onFilterChange?.(event);
+        }}
+        onCreate={args.onCreate}
+      />
+    );
+  },
+};
+
+export const Asset = {
+  name: "Asset row",
+  args: {
+    ...INTERPRETER.records.find((record) => record.typeId === "Business Term"),
+    active: false,
+  },
+  argTypes: {
+    stage: { control: "select", options: ["draft", "under-review", "queued", "building", "published"] },
+    availability: { control: "inline-radio", options: ["enabled", "disabled"] },
+    onSelect: { action: "onSelect" },
+  },
+  render: (args) => <AssetRow {...args} />,
+};
+
+export const SectionPanel = {
+  name: "Panel",
+  args: { eyebrow: "Trading Desk", title: "Account Operation Details", meta: "3 accounts shown" },
+  render: (args) => (
+    <Panel {...args}>
+      <p style={{ margin: 0 }}>Panel body content — tables, lists, or charts render here.</p>
+    </Panel>
+  ),
+};
+
+export const ExecutionSummary = {
+  name: "Summary strip",
+  render: () => <SummaryStrip items={CAMPAIGN.executionSummary} />,
+};
+
+export const Queue = {
+  name: "Task list",
+  render: () => <TaskList items={CAMPAIGN.taskQueue} />,
 };

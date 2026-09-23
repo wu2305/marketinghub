@@ -11,7 +11,7 @@ const colors = [
   ["Red", "var(--mh-red)"],
 ];
 
-export default { title: "Foundations" };
+export default { title: "Foundations", tags: ["autodocs"] };
 
 export const Tokens = {
   name: "Color and type",

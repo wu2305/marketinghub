@@ -6,6 +6,18 @@ import { Icon } from "./icons.jsx";
 
 export const searchIconPositions = ["start", "end", "none"];
 
+/**
+ * Labeled search input with an icon that can lead, trail, or be omitted.
+ * @param {object} props
+ * @param {string} [props.label="Search"] accessible label
+ * @param {string} [props.name]
+ * @param {string} [props.value] pass to control the field
+ * @param {string} [props.placeholder="Search"]
+ * @param {"sm"|"md"|"lg"} [props.size="md"]
+ * @param {"field"|"plain"} [props.variant="field"]
+ * @param {typeof searchIconPositions[number]} [props.icon="start"]
+ * @param {(event: { name: string, value: string }) => void} [props.onChange]
+ */
 export function SearchField({
   label = "Search",
   name,
@@ -31,6 +43,16 @@ export function SearchField({
   );
 }
 
+/**
+ * Label + value KPI block used in heroes and dashboards.
+ * @param {object} props
+ * @param {string} props.label
+ * @param {React.ReactNode} props.value
+ * @param {string} [props.caption]
+ * @param {"card"|"glass"} [props.variant="card"] glass sits on hero imagery
+ * @param {"gold"|"green"|"amber"|"blue"|"red"} [props.accent="gold"] only applies to card variant
+ * @param {boolean} [props.compact=false]
+ */
 export function MetricStat({ label, value, caption, variant = "card", accent = "gold", compact = false }) {
   return (
     <article className={cx("mh-metric", `mh-metric--${variant}`, compact && "mh-metric--compact", variant === "card" && `mh-metric--${accent}`)}>
@@ -41,6 +63,14 @@ export function MetricStat({ label, value, caption, variant = "card", accent = "
   );
 }
 
+/**
+ * Section heading with optional eyebrow and trailing description.
+ * @param {object} props
+ * @param {string} [props.eyebrow]
+ * @param {React.ReactNode} props.title
+ * @param {React.ReactNode} [props.description]
+ * @param {"h1"|"h2"|"h3"} [props.as="h2"] heading level element
+ */
 export function SectionHeading({ eyebrow, title, description, as = "h2" }) {
   const Title = as;
   return (
@@ -54,6 +84,11 @@ export function SectionHeading({ eyebrow, title, description, as = "h2" }) {
   );
 }
 
+/**
+ * Mid-page category heading (h2).
+ * @param {object} props
+ * @param {React.ReactNode} props.title
+ */
 export function CategoryHeading({ title }) {
   return (
     <header className="mh-category">
@@ -62,6 +97,14 @@ export function CategoryHeading({ title }) {
   );
 }
 
+/**
+ * In-page view heading; `children` render as trailing actions (e.g. Tabs).
+ * @param {object} props
+ * @param {string} [props.eyebrow]
+ * @param {React.ReactNode} props.title
+ * @param {React.ReactNode} [props.description]
+ * @param {React.ReactNode} [props.children]
+ */
 export function ViewHeading({ eyebrow, title, description, children }) {
   return (
     <header className="mh-view-heading">
@@ -75,6 +118,14 @@ export function ViewHeading({ eyebrow, title, description, children }) {
   );
 }
 
+/**
+ * Single-select pill filter group.
+ * @param {object} props
+ * @param {string} [props.label="Filters"] group aria-label
+ * @param {Array<{ id: string, label: string }>} [props.items=[]]
+ * @param {string} [props.value] id of the active pill
+ * @param {(event: { id: string, label: string }) => void} [props.onChange]
+ */
 export function FilterPills({ label = "Filters", items = [], value, onChange }) {
   return (
     <div className="mh-pills" role="group" aria-label={label}>
@@ -93,6 +144,15 @@ export function FilterPills({ label = "Filters", items = [], value, onChange }) 
   );
 }
 
+/**
+ * Tab strip (role=tablist). Items may be disabled.
+ * @param {object} props
+ * @param {string} props.label tablist aria-label
+ * @param {Array<{ id: string, label: string, disabled?: boolean }>} [props.items=[]]
+ * @param {string} [props.value] id of the selected tab
+ * @param {"underline"|"segmented"} [props.variant="underline"]
+ * @param {(event: { id: string, label: string }) => void} [props.onChange]
+ */
 export function Tabs({ label, items = [], value, variant = "underline", onChange }) {
   return (
     <div className={cx("mh-tabs", variant === "segmented" && "mh-tabs--segmented")} role="tablist" aria-label={label}>
@@ -113,6 +173,22 @@ export function Tabs({ label, items = [], value, variant = "underline", onChange
   );
 }
 
+/**
+ * Labelled form control wrapping TextInput / TextArea / Select.
+ * @param {object} props
+ * @param {string} props.label
+ * @param {string} [props.name]
+ * @param {"text"|"textarea"|"select"} [props.control="text"]
+ * @param {boolean} [props.required=false] renders the required marker
+ * @param {boolean} [props.invalid=false]
+ * @param {string} [props.hint]
+ * @param {string} [props.value] pass to control the field
+ * @param {string} [props.placeholder]
+ * @param {Array<{ id?: string, value?: string, label: string } | string>} [props.options] select only
+ * @param {number} [props.rows] textarea only
+ * @param {string} [props.className] extra class on the field wrapper
+ * @param {(event: { name: string, value: string }) => void} [props.onChange]
+ */
 export function FormField({
   label,
   name,
@@ -124,10 +200,11 @@ export function FormField({
   placeholder,
   options,
   rows,
+  className,
   onChange,
 }) {
   return (
-    <label className={cx("mh-field", invalid && "is-invalid")}>
+    <label className={cx("mh-field", className, invalid && "is-invalid")}>
       <span>
         {label}
         {required ? <i className="mh-field__required"> *</i> : null}
@@ -144,6 +221,12 @@ export function FormField({
   );
 }
 
+/**
+ * Clickable suggested prompt chip.
+ * @param {object} props
+ * @param {React.ReactNode} props.children suggestion text
+ * @param {(event: { label: React.ReactNode }) => void} [props.onSelect]
+ */
 export function Suggestion({ children, onSelect }) {
   return (
     <button className="mh-suggestion" type="button" onClick={() => onSelect?.({ label: children })}>
@@ -152,6 +235,13 @@ export function Suggestion({ children, onSelect }) {
   );
 }
 
+/**
+ * Toggleable scope option inside the assistant ask box.
+ * @param {object} props
+ * @param {string} props.label
+ * @param {boolean} [props.pressed=false]
+ * @param {(event: { label: string, pressed: boolean }) => void} [props.onChange]
+ */
 export function ScopeOption({ label, pressed = false, onChange }) {
   return (
     <button
@@ -165,6 +255,11 @@ export function ScopeOption({ label, pressed = false, onChange }) {
   );
 }
 
+/**
+ * Label / value / bar rows for distribution summaries.
+ * @param {object} props
+ * @param {Array<{ label: string, value: React.ReactNode, percent: number }>} [props.items=[]]
+ */
 export function ProgressList({ items = [] }) {
   return (
     <div className="mh-progress">
@@ -181,6 +276,12 @@ export function ProgressList({ items = [] }) {
   );
 }
 
+/**
+ * CSS-only column chart; `height` is a 0–100 percentage.
+ * @param {object} props
+ * @param {string} [props.label="Chart"] aria-label
+ * @param {Array<{ label: string, value: React.ReactNode, height: number }>} [props.items=[]]
+ */
 export function ColumnChart({ label = "Chart", items = [] }) {
   return (
     <div className="mh-columns" aria-label={label}>
@@ -195,6 +296,15 @@ export function ColumnChart({ label = "Chart", items = [] }) {
   );
 }
 
+/**
+ * Simple data table. `columns[].key` indexes into each row object;
+ * `columns[].header` is the displayed heading.
+ * @param {object} props
+ * @param {Array<{ key: string, header: React.ReactNode }>} [props.columns=[]]
+ * @param {Array<{ id?: string|number, [key: string]: React.ReactNode }>} [props.rows=[]]
+ * @param {React.ReactNode} [props.caption] note under the table
+ * @param {(row: object) => void} [props.onRowClick] makes rows clickable
+ */
 export function DataTable({ columns = [], rows = [], caption, onRowClick }) {
   return (
     <div className="mh-table-wrap">
@@ -221,6 +331,16 @@ export function DataTable({ columns = [], rows = [], caption, onRowClick }) {
   );
 }
 
+/**
+ * Sidebar navigation entry with optional icon, badge, and count.
+ * @param {object} props
+ * @param {string} props.label
+ * @param {string} [props.icon] SVG path data
+ * @param {boolean} [props.active=false]
+ * @param {React.ReactNode} [props.badge]
+ * @param {number} [props.count]
+ * @param {(event: { label: string }) => void} [props.onSelect]
+ */
 export function SidebarItem({ label, icon, active = false, badge, count, onSelect }) {
   return (
     <button
@@ -238,6 +358,14 @@ export function SidebarItem({ label, icon, active = false, badge, count, onSelec
   );
 }
 
+/**
+ * Filter / Reset button pair for filter toolbars.
+ * @param {object} props
+ * @param {() => void} [props.onSubmit]
+ * @param {() => void} [props.onReset]
+ * @param {string} [props.submitLabel="Filter"]
+ * @param {string} [props.resetLabel="Reset"]
+ */
 export function FilterActions({ onSubmit, onReset, submitLabel = "Filter", resetLabel = "Reset" }) {
   return (
     <>
