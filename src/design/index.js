@@ -23,6 +23,7 @@ export {
   DataTable,
   SidebarItem,
   FilterActions,
+  FileDropzone,
   Toast,
   searchIconPositions,
   metricStatVariants,
@@ -58,7 +59,7 @@ export {
   heroVariants,
   heroScrims,
 } from "./organisms.jsx";
-export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage } from "./pages.jsx";
+export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage } from "./pages.jsx";
 export { Icon } from "./icons.jsx";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
 export * as demoContent from "./content.js";

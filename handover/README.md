@@ -10,9 +10,9 @@
 |---|---|
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 51（Foundations 1、Atoms 7、Molecules 16、Organisms 22、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
+| 故事数 | 53（Foundations 1、Atoms 7、Molecules 17、Organisms 22、Pages 6）+ 5 autodocs 页；全部导出组件均有独立故事 |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），9 条行为测试通过（2026-09-23） |
-| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，56 entries：51 stories、5 docs） |
+| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，58 entries：53 stories、5 docs） |
 | 最近视觉对照 | 2026-09-23，1440px：故事截图含八类型/overview/unknown；现存原始截图仅 overview/Principles/Business Term/Scenario。全八类配对及非默认筛选截图未齐；Principles 配对仍有显著布局与数据差异。产物 `/tmp/mh-visual/*.png` |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
@@ -51,7 +51,7 @@ npm test               # vitest 行为测试
 | P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 进行中 |
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中 |
 | P03 | assets/pages/flexible.html | Self-Service 页签、筛选、数据视图入口及状态 | M3 | 进行中 |
-| P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 未开始 |
+| P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 未开始 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中 |
@@ -105,8 +105,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 现状：tab/筛选/卡片链接/历史弹窗已重建并配对验证（p03-upload-history）；uploadHistoryModal 由 Modal+UploadHistory 有机体承接（rows/open/onPreview/onDownload）。剩余：共享工作区助手深度流。
 
 **P04 data-upload.html** — 脚本仅 self-service/upload.js(89L)；无助手脚本。
-- 视图：14 个 field-* 输入的表单、Submit、bulkImportModal + bulkImportDropzone（dragover/drop）、bulkImportFile。
-- 现状：无故事、无组件。候选：UploadForm、BulkImportModal（拖拽/选择/反馈）。
+- 视图：14 个输入的表单、Submit、bulkImportModal + bulkImportDropzone（dragover/drop）、bulkImportFile。
+- 现状：已重建为 `DataUploadPage` 页面组合 + `FileDropzone` 分子：Back 链接（`flexible.html?tab=upload`）、Template Import 按钮、14 字段表单（FormField/TextInput，FormData 收集具名值）、Submit 提交态（disabled + "Submitted"，宿主 1500ms 恢复）；bulk import 由共享 Modal 承接（scrim/Escape/×关闭、body 锁滚动）、FileDropzone（点击开文件选择、dragover/drop 高亮、accept=.xlsx,.xls、选中后 hint 显示 `Selected: <name>`）、Download template 链接、5 条 Tips。注意：原始 field id 为 `field-*`、input name 无 `field-` 前缀，React 版仅按 name 建立字段契约。已配对 3 个场景（p04-data-upload 提交瞬态、p04-data-upload-import 弹窗内容、p04-data-upload-close Escape 关闭）。原始 `.bulk-import-steps` CSS 在本页无对应 DOM，未重建。
 
 **P05 media-tracking-detail.html** — 脚本 portal.js + inline-1(11L) + lite panel + skill-menu；CSS self-service/media-tracking。
 - 视图：Daily|Weekly|Monthly 粒度切换、Spot Info Mapping 按钮、静态报表表格/图表区。
@@ -167,10 +167,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M3 P03 Self-Service 可达态补全本轮完成——ActionCard 增 `href`（真实 `<a>`，复用 gold button 样式）与 `history` 图标（仅 uploads 项）；新 `UploadHistory` 有机体（Modal 组合：File Name/Uploader/Upload Time 表 + Preview/Download + 空态，800×420 面板）；SelfServicePage 增 uploadHistory/onOpenHistory/onPreviewFile/onDownloadFile；content.js 补模块 history 行与真实卡片链接；新图标 file/eye/download。死代码已登记（analysisWorkbench/downloadData 等节点不存在于 flexible.html；channel-mix/campaign-spend 历史数据无对应卡片）。
-- **下一步**：M3 推进中——P06 剩余 channel tabs 内容差异核对与共享工作区助手；下一独立条目建议：P04 data-upload 表单+bulkImportModal，或 P05 media-tracking-detail 粒度切换，或 P02 reports 脊柱。M1 余项并行欠账：内联 `style` 占位、色值 token 化、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ ebb598a → 85f4564 → 本批 P03 提交），未合入 main。
-- **未提交改动**：本批 P03 文件（ActionCard/UploadHistory、SelfServicePage、content.js、icons、organisms.css、两个故事、visual-check 场景、台账）随提交入库。`.commandcode/` 为工具产物不入库。
-- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 56 entries（51 stories、5 docs）；`node scripts/visual-check.mjs` 12/12 PASS——新增 p03-upload-history 配对（history-icon→模块行表+文件名断言+空态否定）。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
+- **当前目标**：M3 P04 data-upload 本轮完成——`FileDropzone` 分子与 `DataUploadPage` 页面组合重建表单/提交瞬态/bulkImport 弹窗（含 dropzone、template 链接、Tips）；三对 visual-check 场景全过。死代码登记：原始 `.bulk-import-steps` CSS 无 DOM 对应未重建；P04 无助手脚本（无 aiEntry/assistantPanel）。
+- **下一步**：M3 推进中——P04 data-upload 已重建并配对验证（见 P04 台账行）；下一独立条目建议：P05 media-tracking-detail 粒度切换，或 P02 reports 脊柱，或 P06 channel tabs 内容差异核对与共享工作区助手（P02/P03/P05/P07 复用）。M1 余项并行欠账：内联 `style` 占位、色值 token 化、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ ebb598a → 85f4564 → 9a8f3e8 → 本批 P04 提交），未合入 main。
+- **未提交改动**：本批 P04 文件（FileDropzone/DataUploadPage、content.js DATA_UPLOAD、icons、pages.css/molecules.css、两个故事文件、visual-check 三场景、台账）随提交入库。`.commandcode/` 为工具产物不入库。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 58 entries（53 stories、5 docs）；`node scripts/visual-check.mjs` 15/15 PASS——本批新增 p04-data-upload（表单+提交瞬态 "Submitted"）、p04-data-upload-import（弹窗/拖拽区/模板链接/Tips 文案）、p04-data-upload-close（Escape→hidden/detached）三对。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -273,3 +273,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | M2 Home 助手：AssistantPanel 答案流/历史 popover/expanded/焦点+Escape；buildAssistantAnswer 本地化 createAnswer 矩阵；TextArea forwardRef；新 tokens 与图标；Home 故事全受控流。复核修复：encArg 按 SB 8.6 解析器重写并改为响铃失败、console warning 入报告、弱断言加文本/detached、台账 D1/D2/D3/D6/D7/D9 更正、Header overlay 接线、枚举常量与 normalizeOptions/记录助手导出、Icon 故事。npm test 9/9、build 53 entries、visual-check 10/10 | Devin |
 | 2026-09-23 | M3 P06：Modal 有机体 + Toast 分子；CampaignPage taskDialog/toast/onSubmitTask 接口与表单重建；FormField defaultValue；故事全受控（3s toast、Bind Account toast）；visual-check 新增 p06-campaign-task-dialog 配对。npm test 9/9、build 55 entries（50 stories）、visual-check 11/11 | Devin |
 | 2026-09-23 | M3 P03：ActionCard 增 href（真实 `<a>`）与 history 图标；新 UploadHistory 有机体（Modal 组合，File/Uploader/Time 表 + Preview/Download + 空态）；SelfServicePage uploadHistory/onOpenHistory/onPreviewFile/onDownloadFile；新图标 file/eye/download；story 受控历史弹窗；p03-upload-history 配对场景。登记 workspace.js 死代码（analysisWorkbench 等节点不存在）与不可达 moduleHistory 模块。npm test 9/9、build 56 entries、visual-check 12/12 | Devin |
+| 2026-09-23 | M3 P04：`FileDropzone` 分子（点击/拖拽/dropzone 高亮/选中文件提示）与 `DataUploadPage` 页面组合（back 链接、Template Import 工具栏、14 字段表单、Submit 1500ms 瞬态、Modal 承接 bulkImport 弹窗 + template 链接 + Tips）；新图标 upload/file-upload/arrow-left；DATA_UPLOAD 内容与受控故事；index.js 公共出口。原始 `.bulk-import-steps` 样式无 DOM 对应，未重建。npm test 9/9、build 58 entries（53 stories）、visual-check 15/15 | Devin |

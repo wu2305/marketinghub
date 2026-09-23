@@ -3,6 +3,7 @@ import {
   CategoryHeading,
   ColumnChart,
   DataTable,
+  FileDropzone,
   FilterActions,
   FilterPills,
   FormField,
@@ -243,4 +244,33 @@ export const StatusToast = {
       <Toast {...args} />
     </>
   ),
+};
+
+export const Dropzone = {
+  name: "File dropzone",
+  args: {
+    title: "Click or drag a file to upload here",
+    hint: "Supports .xlsx and .xls files only",
+    selectedPrefix: "Selected:",
+    accept: ".xlsx,.xls",
+  },
+  argTypes: {
+    fileName: { control: "text" },
+    onSelect: { action: "onSelect" },
+  },
+  render: function DropzoneStory(args) {
+    const [fileName, setFileName] = React.useState(args.fileName);
+    return (
+      <div style={{ padding: 24, maxWidth: 480 }}>
+        <FileDropzone
+          {...args}
+          fileName={fileName}
+          onSelect={(file) => {
+            setFileName(file.name);
+            args.onSelect?.(file);
+          }}
+        />
+      </div>
+    );
+  },
 };

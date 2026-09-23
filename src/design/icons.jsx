@@ -116,6 +116,33 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "upload") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+        <polyline points="17 8 12 3 7 8" />
+        <line x1="12" y1="3" x2="12" y2="15" />
+      </svg>
+    );
+  }
+  if (name === "file-upload") {
+    return (
+      <svg {...common} strokeWidth="1.6">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="12" y1="18" x2="12" y2="12" />
+        <polyline points="9 15 12 12 15 15" />
+      </svg>
+    );
+  }
+  if (name === "arrow-left") {
+    return (
+      <svg {...common} strokeWidth="2">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    );
+  }
   if (name === "copy") {
     return (
       <svg {...common} strokeWidth="1.8">

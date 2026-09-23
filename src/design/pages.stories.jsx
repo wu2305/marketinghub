@@ -1,6 +1,6 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE, buildAssistantAnswer } from "./content.js";
-import { AiInterpreterPage, CampaignPage, HomePage, MarketingCockpitPage, SelfServicePage } from "./pages.jsx";
+import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE, buildAssistantAnswer } from "./content.js";
+import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, SelfServicePage } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
 
@@ -355,6 +355,66 @@ export const Campaign = {
         onCloseAssistant={() => setOpen(false)}
         onPromptChange={(event) => setPrompt(event.value)}
         onSubmit={args.onSubmit}
+      />
+    );
+  },
+};
+
+export const DataUpload = {
+  name: "Data Upload",
+  args: {
+    ...shell,
+    hero: SELF_SERVICE.hero,
+    toolbar: DATA_UPLOAD.toolbar,
+    fields: DATA_UPLOAD.fields,
+    bulkImport: DATA_UPLOAD.bulkImport,
+    submitLabel: "Submit",
+    submittingLabel: "Submitted",
+    submitting: false,
+    bulkImportOpen: false,
+    selectedFile: undefined,
+  },
+  argTypes: {
+    submitting: { control: "boolean" },
+    bulkImportOpen: { control: "boolean" },
+    onNavigate: { action: "onNavigate" },
+    onOpenImport: { action: "onOpenImport" },
+    onCloseImport: { action: "onCloseImport" },
+    onSelectFile: { action: "onSelectFile" },
+    onDownloadTemplate: { action: "onDownloadTemplate" },
+    onSubmitForm: { action: "onSubmitForm" },
+  },
+  render: function DataUploadStory(args) {
+    const [importOpen, setImportOpen] = useSynced(args.bulkImportOpen);
+    const [submitting, setSubmitting] = useSynced(args.submitting);
+    const [selectedFile, setSelectedFile] = React.useState(args.selectedFile);
+    const submitTimer = React.useRef(null);
+    return (
+      <DataUploadPage
+        {...args}
+        bulkImportOpen={importOpen}
+        submitting={submitting}
+        selectedFile={selectedFile}
+        onNavigate={args.onNavigate}
+        onOpenImport={() => {
+          setImportOpen(true);
+          args.onOpenImport?.();
+        }}
+        onCloseImport={() => {
+          setImportOpen(false);
+          args.onCloseImport?.();
+        }}
+        onSelectFile={(file) => {
+          setSelectedFile(file.name);
+          args.onSelectFile?.(file);
+        }}
+        onDownloadTemplate={args.onDownloadTemplate}
+        onSubmitForm={(values) => {
+          clearTimeout(submitTimer.current);
+          setSubmitting(true);
+          submitTimer.current = setTimeout(() => setSubmitting(false), 1500);
+          args.onSubmitForm?.(values);
+        }}
       />
     );
   },

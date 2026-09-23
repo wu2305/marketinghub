@@ -978,3 +978,43 @@ export const CAMPAIGN = {
     { id: "3", account: "Coach_DY_01", platform: "Douyin", authStatus: "Pending", authLabel: "Renewal required", sync: "2026-05-28 18:20", permission: "Paused", permissionStatus: "Paused" },
   ],
 };
+
+export const DATA_UPLOAD = {
+  toolbar: {
+    backHref: "/assets/pages/flexible.html?tab=upload",
+    backLabel: "Back",
+    importLabel: "Template Import",
+  },
+  fields: [
+    { name: "year", label: "Year" },
+    { name: "year-period", label: "Year Period" },
+    { name: "quarter", label: "Quarter" },
+    { name: "year-week", label: "Year Week" },
+    { name: "channel", label: "Channel" },
+    { name: "channel-group", label: "Channel Group" },
+    { name: "location", label: "Location" },
+    { name: "door", label: "Door" },
+    { name: "sales", label: "Sales" },
+    { name: "sales-ly", label: "Sales LY" },
+    { name: "traffic", label: "Traffic" },
+    { name: "traffic-ly", label: "Traffic LY" },
+    { name: "trans", label: "Trans" },
+    { name: "trans-ly", label: "Trans LY" },
+  ],
+  bulkImport: {
+    title: "Template Import",
+    dropzoneTitle: "Click or drag a file to upload here",
+    dropzoneHint: "Supports .xlsx and .xls files only",
+    selectedPrefix: "Selected:",
+    accept: ".xlsx,.xls",
+    templateLabel: "Download template",
+    tipsTitle: "Tips",
+    tips: [
+      "Use the template format; header row cannot be empty or merged cells.",
+      "Only .xlsx and .xls files are supported.",
+      "File size up to 50 MB, rows up to 500,000 and columns up to 150. If exceeded, split into batches.",
+      "Image fields must be imported as file path strings.",
+      "Chrome browser is recommended for upload.",
+    ],
+  },
+};
