@@ -138,6 +138,7 @@ export const SelfService = {
     filters: SELF_SERVICE.filters,
     reports: SELF_SERVICE.reports,
     uploads: SELF_SERVICE.uploads,
+    uploadHistory: SELF_SERVICE.uploadHistory,
   },
   argTypes: {
     tab: { control: "inline-radio", options: ["analysis", "upload"] },
@@ -146,17 +147,33 @@ export const SelfService = {
     onTabChange: { action: "onTabChange" },
     onCategoryChange: { action: "onCategoryChange" },
     onOpen: { action: "onOpen" },
+    onOpenHistory: { action: "onOpenHistory" },
+    onCloseHistory: { action: "onCloseHistory" },
+    onPreviewFile: { action: "onPreviewFile" },
+    onDownloadFile: { action: "onDownloadFile" },
   },
   render: function SelfServiceStory(args) {
     const [tab, setTab] = useSynced(args.tab);
     const [category, setCategory] = useSynced(args.category);
+    const [history, setHistory] = React.useState({ open: false, rows: [] });
     return (
       <SelfServicePage
         {...args}
         tab={tab}
         category={category}
+        uploadHistory={{ ...args.uploadHistory, ...history }}
         onNavigate={args.onNavigate}
         onOpen={args.onOpen}
+        onOpenHistory={({ item }) => {
+          setHistory({ open: true, rows: item.history || [] });
+          args.onOpenHistory?.({ item });
+        }}
+        onCloseHistory={() => {
+          setHistory((current) => ({ ...current, open: false }));
+          args.onCloseHistory?.();
+        }}
+        onPreviewFile={args.onPreviewFile}
+        onDownloadFile={args.onDownloadFile}
         onTabChange={(event) => {
           setTab(event.id);
           setCategory("all");

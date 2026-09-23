@@ -278,27 +278,44 @@ export const SELF_SERVICE = {
       category: "dg",
       description: "Miaozhen OTV/OLV media monitoring self-analysis by Campaign, Media & Platform dimensions.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
     },
     {
       title: "ABO Tracking Detail",
       category: "dc",
       description: "Self-analysis of ad placement and conversion data: TMALL, JD, Tiktok, Wechat.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
     },
     {
       title: "Rednote Tracking Detail",
       category: "dg",
       description: "Self-analysis of Rednote Campaign & note placement and conversion data.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
     },
   ],
   uploads: [
     {
       title: "Finance Pilot City",
+      category: "fin",
+      module: "store-performance",
       description: "Upload finance pilot city data covering budgets, expenses and KPIs across business lines and reporting periods.",
       actionLabel: "Open upload module",
+      href: "/assets/pages/data-upload.html",
+      history: [
+        { file: "finance_pilot_city_2026Q3.xlsx", uploader: "Wang Chen", time: "2 days ago", size: "248 KB" },
+        { file: "finance_pilot_city_metrics_sept_v2.xlsx", uploader: "Liu Yang", time: "5 days ago", size: "186 KB" },
+        { file: "finance_pilot_city_daily_2026W38.xlsx", uploader: "Zhang Wei", time: "1 week ago", size: "92 KB" },
+        { file: "Finance_Pilot_City_Sales_0525.xlsx", uploader: "Sarah Lin", time: "2 weeks ago", size: "312 KB" },
+        { file: "finance_pilot_city_weekly_template.xlsx", uploader: "System", time: "3 weeks ago", size: "48 KB" },
+      ],
     },
   ],
+  uploadHistory: {
+    title: "Upload History",
+    emptyMessage: "No upload history yet for this module.",
+  },
 };
 
 // Knowledge type ids are the typeMeta[].key values from assets/js/knowledge/types.js —

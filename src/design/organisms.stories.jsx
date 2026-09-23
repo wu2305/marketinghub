@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV } from "./content.js";
+import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE } from "./content.js";
 import {
   ActionCard,
   AssetRow,
@@ -23,6 +23,7 @@ import {
   TaskList,
   TypeCard,
   TypeGrid,
+  UploadHistory,
   WorkspaceCard,
   WorkspaceGrid,
 } from "./organisms.jsx";
@@ -90,9 +91,49 @@ export const Project = {
 
 export const ReportAction = {
   name: "Action card",
-  args: { title: "MZ Tracking Detail", description: "Miaozhen OTV/OLV media monitoring self-analysis.", actionLabel: "Open data view" },
-  argTypes: { onOpen: { action: "onOpen" } },
+  args: {
+    title: "MZ Tracking Detail",
+    description: "Miaozhen OTV/OLV media monitoring self-analysis.",
+    actionLabel: "Open data view",
+    href: "/assets/pages/media-tracking-detail.html",
+    history: undefined,
+  },
+  argTypes: {
+    onOpen: { action: "onOpen" },
+    onShowHistory: { action: "onShowHistory" },
+  },
   render: (args) => <ActionCard {...args} />,
+};
+
+export const UploadHistoryDialog = {
+  name: "Upload history",
+  args: {
+    open: true,
+    title: SELF_SERVICE.uploadHistory.title,
+    rows: SELF_SERVICE.uploads[0].history,
+    emptyMessage: SELF_SERVICE.uploadHistory.emptyMessage,
+  },
+  argTypes: {
+    open: { control: "boolean" },
+    onClose: { action: "onClose" },
+    onPreview: { action: "onPreview" },
+    onDownload: { action: "onDownload" },
+  },
+  parameters: { layout: "fullscreen" },
+  render: function UploadHistoryStory(args) {
+    const [open, setOpen] = React.useState(args.open);
+    React.useEffect(() => setOpen(args.open), [args.open]);
+    return (
+      <UploadHistory
+        {...args}
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          args.onClose?.();
+        }}
+      />
+    );
+  },
 };
 
 export const Sidebar = {

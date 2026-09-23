@@ -51,6 +51,7 @@ export {
   TaskList,
   BusinessTermForm,
   Modal,
+  UploadHistory,
   assistantPlacements,
   headerTones,
   headerPositions,

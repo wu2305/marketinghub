@@ -79,6 +79,34 @@ export default [
     },
   },
   {
+    id: "p03-upload-history",
+    original: {
+      url: "/assets/pages/flexible.html?tab=upload",
+      actions: [
+        { click: ".upload-card .history-icon" },
+        { wait: "#uploadHistoryModal:not([hidden])" },
+      ],
+      expect: [
+        { sel: "#uploadHistoryRows", text: "finance_pilot_city_2026Q3.xlsx" },
+        { sel: "#uploadHistoryModal", text: "Upload History" },
+        { sel: "#uploadHistoryEmpty", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--self-service",
+      args: { tab: "upload" },
+      actions: [
+        { click: ".mh-action-card__history" },
+        { wait: ".mh-modal .mh-upload-history__table" },
+      ],
+      expect: [
+        { sel: ".mh-upload-history", text: "finance_pilot_city_2026Q3.xlsx" },
+        { sel: ".mh-upload-history", text: "Upload History" },
+        { sel: ".mh-upload-history__empty", state: "detached" },
+      ],
+    },
+  },
+  {
     id: "p06-campaign",
     original: { url: "/assets/pages/campaign.html", expect: [{ sel: ".campaign-rail" }, { sel: "#overviewTitle" }] },
     story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign" }, { sel: ".mh-rail" }] },

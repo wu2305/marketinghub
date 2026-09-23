@@ -241,18 +241,39 @@ export function ProjectCatalog({ groups = [], onOpen }) {
  * @param {string} props.title
  * @param {string} [props.description]
  * @param {string} [props.actionLabel]
- * @param {(target: { title: string }) => void} [props.onOpen]
+ * @param {string} [props.href] navigation target; renders a real link instead of a button
+ * @param {Array<object>} [props.history] upload-history rows; truthy shows the history affordance
+ * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
+ * @param {(target: { title: string }) => void} [props.onShowHistory]
  */
-export function ActionCard({ title, description, actionLabel, onOpen }) {
+export function ActionCard({ title, description, actionLabel, href, history, onOpen, onShowHistory }) {
   return (
     <article className="mh-action-card">
       <div className="mh-action-card__copy">
-        <h3>{title}</h3>
+        <h3>
+          {title}
+          {history ? (
+            <button
+              className="mh-action-card__history"
+              type="button"
+              aria-label="View upload history"
+              onClick={() => onShowHistory?.({ title })}
+            >
+              <Icon name="history" />
+            </button>
+          ) : null}
+        </h3>
         <p>{description}</p>
       </div>
-      <Button variant="gold" size="md" onClick={() => onOpen?.({ title })}>
-        {actionLabel}
-      </Button>
+      {href ? (
+        <a className="mh-button mh-button--gold mh-button--md" href={href} onClick={() => onOpen?.({ title, href })}>
+          {actionLabel}
+        </a>
+      ) : (
+        <Button variant="gold" size="md" onClick={() => onOpen?.({ title })}>
+          {actionLabel}
+        </Button>
+      )}
     </article>
   );
 }
@@ -1068,5 +1089,74 @@ export function Modal({ open = false, eyebrow, title, children, className, close
         {children}
       </div>
     </div>
+  );
+}
+
+/**
+ * Upload-history dialog: table of file/uploader/time rows with per-row
+ * Preview and Download actions, or an empty-state message. Built on Modal.
+ * @param {object} props
+ * @param {boolean} [props.open=false]
+ * @param {string} [props.title="Upload History"]
+ * @param {Array<{ id?: string, file: string, uploader: string, time: string }>} [props.rows=[]]
+ * @param {string} [props.emptyMessage="No upload history yet for this module."]
+ * @param {() => void} [props.onClose]
+ * @param {(row: object) => void} [props.onPreview]
+ * @param {(row: object) => void} [props.onDownload]
+ */
+export function UploadHistory({
+  open = false,
+  title = "Upload History",
+  rows = [],
+  emptyMessage = "No upload history yet for this module.",
+  onClose,
+  onPreview,
+  onDownload,
+}) {
+  return (
+    <Modal open={open} title={title} className="mh-upload-history" onClose={onClose}>
+      <div className="mh-upload-history__body">
+        {rows.length ? (
+          <table className="mh-upload-history__table">
+            <thead>
+              <tr>
+                <th scope="col">File Name</th>
+                <th scope="col">Uploader</th>
+                <th scope="col">Upload Time</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, index) => (
+                <tr key={row.id || index}>
+                  <td>
+                    <span className="mh-upload-history__file">
+                      <Icon name="file" />
+                      <span>{row.file}</span>
+                    </span>
+                  </td>
+                  <td className="mh-upload-history__uploader">{row.uploader}</td>
+                  <td className="mh-upload-history__time">{row.time}</td>
+                  <td>
+                    <span className="mh-upload-history__actions">
+                      <button type="button" className="mh-upload-history__btn" onClick={() => onPreview?.(row)}>
+                        <Icon name="eye" />
+                        <span>Preview</span>
+                      </button>
+                      <button type="button" className="mh-upload-history__btn" onClick={() => onDownload?.(row)}>
+                        <Icon name="download" />
+                        <span>Download</span>
+                      </button>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="mh-upload-history__empty">{emptyMessage}</div>
+        )}
+      </div>
+    </Modal>
   );
 }
