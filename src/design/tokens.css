@@ -91,6 +91,16 @@ a {
   --mh-bubble-to: #daa860;
   --mh-info: #2f6ea6;
   --mh-popover-shadow: 0 16px 40px rgba(24, 33, 42, 0.18);
+  --mh-scrim: rgba(31, 41, 55, 0.3);
+  --mh-modal-shadow: 0 28px 80px rgba(31, 41, 55, 0.2);
+  --mh-toast-bg: #20262c;
+  --mh-toast-shadow: 0 14px 40px rgba(31, 41, 55, 0.22);
+  --mh-warn-bg: #fff9df;
+  --mh-warn-line: #e5d58b;
+  --mh-warn-accent: #e6bc73;
+  --mh-warn-note: #776f4b;
+  --mh-focus-ring: rgba(63, 115, 166, 0.1);
+  --mh-line-hover: #929da7;
 }
 
 .mh-sr {

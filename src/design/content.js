@@ -930,6 +930,31 @@ export const CAMPAIGN = {
     { key: "sync", header: "Last Sync" },
     { key: "permission", header: "Action Permission" },
   ],
+  taskDialog: {
+    eyebrow: "Campaign execution",
+    title: "Create Campaign Task",
+    description: "Review the media action before it enters the automation queue.",
+    fields: {
+      actionLabel: "Action",
+      actions: ["Bulk create plans", "Adjust daily budget", "Sync plan status"],
+      platformLabel: "Platform",
+      platforms: ["Rednote", "Douyin"],
+      accountLabel: "Account",
+      accounts: ["Coach_XHS_01", "Coach_XHS_02", "Coach_DY_01"],
+    },
+    object: { label: "Object", value: "341 plans" },
+    preview: {
+      eyebrow: "Review state",
+      state: "Pending confirmation",
+      note: "No publishing action runs until final approval.",
+    },
+    cancelLabel: "Cancel",
+    submitLabel: "Add to Review Queue",
+  },
+  toasts: {
+    taskSubmitted: "Campaign task added to the review queue.",
+    bindAccount: "Account binding flow opened",
+  },
   accounts: [
     { id: "1", account: "Coach_XHS_01", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
     { id: "2", account: "Coach_XHS_02", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },

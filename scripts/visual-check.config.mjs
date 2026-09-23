@@ -84,6 +84,36 @@ export default [
     story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign" }, { sel: ".mh-rail" }] },
   },
   {
+    id: "p06-campaign-task-dialog",
+    original: {
+      url: "/assets/pages/campaign.html#execution",
+      actions: [
+        { click: "[data-open-task]" },
+        { wait: "#taskDialog[open]" },
+        { click: "#taskForm button[type='submit']" },
+        { wait: "#actionToast:not([hidden])" },
+      ],
+      expect: [
+        { sel: "#actionToast", text: "Campaign task added to the review queue." },
+        { sel: "#taskDialog[open]", state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { section: "execution" },
+      actions: [
+        { click: ".mh-view-heading .mh-button--primary" },
+        { wait: ".mh-modal .mh-task-dialog__preview" },
+        { click: ".mh-task-dialog__footer .mh-button--primary" },
+        { wait: ".mh-toast:not([hidden])" },
+      ],
+      expect: [
+        { sel: ".mh-toast", text: "Campaign task added to the review queue." },
+        { sel: ".mh-modal", state: "detached" },
+      ],
+    },
+  },
+  {
     id: "p06-campaign-accounts",
     original: {
       url: "/assets/pages/campaign.html#accounts",

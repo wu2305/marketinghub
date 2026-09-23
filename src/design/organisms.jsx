@@ -1008,3 +1008,65 @@ export function BusinessTermForm({
   );
 }
 
+
+/**
+ * Centered modal dialog: dimmed scrim, framed panel with eyebrow/title and a
+ * close button, arbitrary `children` body. Closes on scrim click and Escape,
+ * locks body scroll (`dialog-open` class, matching the static demo), focuses
+ * the panel on open and restores focus on close.
+ * @param {object} props
+ * @param {boolean} [props.open=false]
+ * @param {string} [props.eyebrow]
+ * @param {string} [props.title]
+ * @param {React.ReactNode} [props.children]
+ * @param {string} [props.className] extra class on the dialog panel
+ * @param {string} [props.closeLabel="Close"]
+ * @param {string} [props.titleId] defaults to a generated useId
+ * @param {() => void} [props.onClose]
+ */
+export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, onClose }) {
+  const generatedTitleId = React.useId();
+  const dialogRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!open) return undefined;
+    const previous = document.activeElement;
+    document.body.classList.add("dialog-open");
+    dialogRef.current?.focus();
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.classList.remove("dialog-open");
+      document.removeEventListener("keydown", onKey);
+      if (previous && typeof previous.focus === "function") previous.focus();
+    };
+  }, [open, onClose]);
+  if (!open) return null;
+  return (
+    <div className="mh-modal">
+      <div className="mh-modal__scrim" onClick={onClose} />
+      <div
+        className={cx("mh-modal__dialog", className)}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId || generatedTitleId}
+        tabIndex={-1}
+        ref={dialogRef}
+      >
+        <header className="mh-modal__header">
+          <div className="mh-modal__heading">
+            {eyebrow ? <span className="mh-modal__eyebrow">{eyebrow}</span> : null}
+            <h2 className="mh-modal__title" id={titleId || generatedTitleId}>
+              {title}
+            </h2>
+          </div>
+          <button type="button" className="mh-modal__close" aria-label={closeLabel} onClick={onClose}>
+            ×
+          </button>
+        </header>
+        {children}
+      </div>
+    </div>
+  );
+}

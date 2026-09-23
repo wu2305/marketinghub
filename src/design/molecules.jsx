@@ -186,6 +186,7 @@ export function Tabs({ label, items = [], value, variant = "underline", onChange
  * @param {boolean} [props.invalid=false]
  * @param {string} [props.hint]
  * @param {string} [props.value] pass to control the field
+ * @param {string} [props.defaultValue] initial uncontrolled value
  * @param {string} [props.placeholder]
  * @param {Array<{ id?: string, value?: string, label: string } | string>} [props.options] select only
  * @param {number} [props.rows] textarea only
@@ -200,6 +201,7 @@ export function FormField({
   invalid = false,
   hint,
   value,
+  defaultValue,
   placeholder,
   options,
   rows,
@@ -213,11 +215,11 @@ export function FormField({
         {required ? <i className="mh-field__required"> *</i> : null}
       </span>
       {control === "textarea" ? (
-        <TextArea name={name} value={value} placeholder={placeholder} rows={rows} invalid={invalid} onChange={onChange} />
+        <TextArea name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} rows={rows} invalid={invalid} onChange={onChange} />
       ) : control === "select" ? (
-        <Select name={name} value={value} options={options} placeholder={placeholder} invalid={invalid} onChange={onChange} />
+        <Select name={name} value={value} defaultValue={defaultValue} options={options} placeholder={placeholder} invalid={invalid} onChange={onChange} />
       ) : (
-        <TextInput name={name} value={value} placeholder={placeholder} invalid={invalid} onChange={onChange} />
+        <TextInput name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} invalid={invalid} onChange={onChange} />
       )}
       {hint ? <small className="mh-field__hint">{hint}</small> : null}
     </label>
@@ -379,5 +381,21 @@ export function FilterActions({ onSubmit, onReset, submitLabel = "Filter", reset
         {resetLabel}
       </Button>
     </>
+  );
+}
+
+/**
+ * Transient status toast pinned to the lower-right viewport. Always mounted
+ * so the aria-live region exists before `message` changes; the host owns
+ * the auto-dismiss timer (the static demo hides it after ~3s).
+ * @param {object} props
+ * @param {string} [props.message=""]
+ * @param {boolean} [props.open=false]
+ */
+export function Toast({ message = "", open = false }) {
+  return (
+    <div className="mh-toast" role="status" aria-live="polite" hidden={!open}>
+      {message}
+    </div>
   );
 }

@@ -255,10 +255,14 @@ export const Campaign = {
     recommendations: CAMPAIGN.recommendations,
     bindingColumns: CAMPAIGN.bindingColumns,
     accounts: CAMPAIGN.accounts,
+    taskDialog: CAMPAIGN.taskDialog,
+    taskDialogOpen: false,
+    toast: { open: false, message: "" },
   },
   argTypes: {
     section: { control: "select", options: ["overview", "execution", "assets", "analytics", "accounts"] },
     channel: { control: "inline-radio", options: ["rednote", "douyin"] },
+    taskDialogOpen: { control: "boolean" },
     onNavigate: { action: "onNavigate" },
     onSectionChange: { action: "onSectionChange" },
     onChannelChange: { action: "onChannelChange" },
@@ -267,6 +271,8 @@ export const Campaign = {
     onReset: { action: "onReset" },
     onCreateTask: { action: "onCreateTask" },
     onBindAccount: { action: "onBindAccount" },
+    onCloseTask: { action: "onCloseTask" },
+    onSubmitTask: { action: "onSubmitTask" },
     onSubmit: { action: "onSubmit" },
   },
   render: function CampaignStory(args) {
@@ -275,6 +281,14 @@ export const Campaign = {
     const [query, setQuery] = useSynced(args.query);
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
+    const [taskOpen, setTaskOpen] = useSynced(args.taskDialogOpen);
+    const [toast, setToast] = React.useState(args.toast || { open: false, message: "" });
+    const toastTimer = React.useRef(null);
+    const showToast = (message) => {
+      clearTimeout(toastTimer.current);
+      setToast({ open: true, message });
+      toastTimer.current = setTimeout(() => setToast((current) => ({ ...current, open: false })), 3000);
+    };
     return (
       <CampaignPage
         {...args}
@@ -301,8 +315,25 @@ export const Campaign = {
           setQuery("");
           args.onReset?.();
         }}
-        onCreateTask={args.onCreateTask}
-        onBindAccount={args.onBindAccount}
+        taskDialogOpen={taskOpen}
+        toast={toast}
+        onCreateTask={() => {
+          setTaskOpen(true);
+          args.onCreateTask?.();
+        }}
+        onBindAccount={() => {
+          showToast(CAMPAIGN.toasts.bindAccount);
+          args.onBindAccount?.();
+        }}
+        onCloseTask={() => {
+          setTaskOpen(false);
+          args.onCloseTask?.();
+        }}
+        onSubmitTask={(event) => {
+          setTaskOpen(false);
+          showToast(CAMPAIGN.toasts.taskSubmitted);
+          args.onSubmitTask?.(event);
+        }}
         onOpenAssistant={() => setOpen(true)}
         onCloseAssistant={() => setOpen(false)}
         onPromptChange={(event) => setPrompt(event.value)}

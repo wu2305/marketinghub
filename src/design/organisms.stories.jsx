@@ -15,6 +15,7 @@ import {
   KnowledgeLibrary,
   KnowledgeSidebar,
   LibraryToolbar,
+  Modal,
   Panel,
   ProjectCard,
   ProjectCatalog,
@@ -25,6 +26,7 @@ import {
   WorkspaceCard,
   WorkspaceGrid,
 } from "./organisms.jsx";
+import { Button } from "./atoms.jsx";
 import { MetricStat } from "./molecules.jsx";
 import { recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
 
@@ -320,4 +322,41 @@ export const ExecutionSummary = {
 export const Queue = {
   name: "Task list",
   render: () => <TaskList items={CAMPAIGN.taskQueue} />,
+};
+
+export const DialogModal = {
+  name: "Modal",
+  args: {
+    open: false,
+    eyebrow: "Campaign execution",
+    title: "Create Campaign Task",
+    closeLabel: "Close",
+  },
+  argTypes: {
+    open: { control: "boolean" },
+    onClose: { action: "onClose" },
+  },
+  render: function ModalStory(args) {
+    const [open, setOpen] = React.useState(args.open);
+    React.useEffect(() => setOpen(args.open), [args.open]);
+    return (
+      <>
+        <p>
+          <Button variant="primary" onClick={() => setOpen(true)}>
+            Open modal
+          </Button>
+        </p>
+        <Modal
+          {...args}
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            args.onClose?.();
+          }}
+        >
+          <p style={{ marginTop: 9 }}>Modal body content — forms, previews, and footers render here.</p>
+        </Modal>
+      </>
+    );
+  },
 };

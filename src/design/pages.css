@@ -213,3 +213,54 @@
   font-size: 10px;
   line-height: 1.4;
 }
+
+.mh-task-dialog__form {
+  display: block;
+}
+
+.mh-task-dialog__intro {
+  margin-top: 9px;
+  color: var(--mh-muted);
+  font-size: 11px;
+}
+
+.mh-task-dialog__grid {
+  display: grid;
+  margin-top: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mh-task-dialog__preview {
+  display: grid;
+  gap: 3px;
+  margin-top: 16px;
+  padding: 12px 13px;
+  border: 1px solid var(--mh-warn-line);
+  border-left: 3px solid var(--mh-warn-accent);
+  background: var(--mh-warn-bg);
+}
+
+.mh-task-dialog__preview > span {
+  color: var(--mh-index-ink);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.mh-task-dialog__preview strong {
+  color: var(--mh-ink);
+  font-size: 11px;
+}
+
+.mh-task-dialog__preview small {
+  color: var(--mh-warn-note);
+  font-size: 9px;
+}
+
+.mh-task-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}

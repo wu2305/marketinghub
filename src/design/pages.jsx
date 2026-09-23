@@ -1,7 +1,7 @@
 import React from "react";
 import "./pages.css";
 import { Button, StatusBadge } from "./atoms.jsx";
-import { ColumnChart, DataTable, FilterPills, MetricStat, ProgressList, SearchField, SectionHeading, Tabs, ViewHeading } from "./molecules.jsx";
+import { ColumnChart, DataTable, FilterPills, FormField, MetricStat, ProgressList, SearchField, SectionHeading, Tabs, Toast, ViewHeading } from "./molecules.jsx";
 import {
   ActionCard,
   AssistantLauncher,
@@ -11,6 +11,7 @@ import {
   Hero,
   KnowledgeLibrary,
   KnowledgeSidebar,
+  Modal,
   Panel,
   ProjectCatalog,
   SummaryStrip,
@@ -344,6 +345,9 @@ export function AiInterpreterPage({
  * @param {Array<object>} [props.recommendations=[]] recommendation card contents
  * @param {Array<object>} [props.bindingColumns=[]]
  * @param {Array<object>} [props.accounts=[]]
+ * @param {object} [props.taskDialog={}] Create Campaign Task dialog copy: eyebrow, title, description, fields {actions, platforms, accounts}, object {label, value}, preview {eyebrow, state, note}, cancelLabel, submitLabel
+ * @param {boolean} [props.taskDialogOpen=false]
+ * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
  * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
  * @param {"rednote"|"douyin"} [props.channel="rednote"]
  * @param {string} [props.query=""] account search text
@@ -355,6 +359,8 @@ export function AiInterpreterPage({
  * @param {() => void} [props.onReset]
  * @param {() => void} [props.onCreateTask]
  * @param {() => void} [props.onBindAccount]
+ * @param {() => void} [props.onCloseTask]
+ * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask]
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
  * @param {() => void} [props.onOpenAssistant]
@@ -385,6 +391,9 @@ export function CampaignPage({
   recommendations = [],
   bindingColumns = [],
   accounts = [],
+  taskDialog = {},
+  taskDialogOpen = false,
+  toast = {},
   section = "overview",
   channel = "rednote",
   query = "",
@@ -396,6 +405,8 @@ export function CampaignPage({
   onReset,
   onCreateTask,
   onBindAccount,
+  onCloseTask,
+  onSubmitTask,
   assistantOpen = false,
   prompt = "",
   onOpenAssistant,
@@ -567,6 +578,49 @@ export function CampaignPage({
       </div>
       {assistantOpen ? null : <AssistantLauncher onOpen={onOpenAssistant} />}
       <AssistantPanel open={assistantOpen} {...assistant} prompt={prompt} onClose={onCloseAssistant} onPromptChange={onPromptChange} onSubmit={onSubmit} />
+      <Modal
+        open={taskDialogOpen}
+        eyebrow={taskDialog.eyebrow}
+        title={taskDialog.title}
+        className="mh-task-dialog"
+        onClose={onCloseTask}
+      >
+        <form
+          className="mh-task-dialog__form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            onSubmitTask?.({
+              action: data.get("action") || "",
+              platform: data.get("platform") || "",
+              account: data.get("account") || "",
+              object: data.get("object") || "",
+            });
+          }}
+        >
+          <p className="mh-task-dialog__intro">{taskDialog.description}</p>
+          <div className="mh-task-dialog__grid">
+            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} />
+            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} />
+            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} />
+            <FormField label={taskDialog.object?.label || "Object"} name="object" defaultValue={taskDialog.object?.value || ""} />
+          </div>
+          <div className="mh-task-dialog__preview">
+            <span>{taskDialog.preview?.eyebrow}</span>
+            <strong>{taskDialog.preview?.state}</strong>
+            <small>{taskDialog.preview?.note}</small>
+          </div>
+          <footer className="mh-task-dialog__footer">
+            <Button variant="secondary" onClick={onCloseTask}>
+              {taskDialog.cancelLabel || "Cancel"}
+            </Button>
+            <Button variant="primary" type="submit">
+              {taskDialog.submitLabel || "Add to Review Queue"}
+            </Button>
+          </footer>
+        </form>
+      </Modal>
+      <Toast open={toast.open} message={toast.message} />
     </Shell>
   );
 }

@@ -15,6 +15,7 @@ import {
   SidebarItem,
   Suggestion,
   Tabs,
+  Toast,
   ViewHeading,
 } from "./molecules.jsx";
 import { Button } from "./atoms.jsx";
@@ -230,4 +231,16 @@ export const FilterButtons = {
     onReset: { action: "onReset" },
   },
   render: (args) => <FilterActions {...args} />,
+};
+
+export const StatusToast = {
+  name: "Toast",
+  args: { message: "Campaign task added to the review queue.", open: true },
+  argTypes: { open: { control: "boolean" } },
+  render: (args) => (
+    <>
+      <p>Toast is pinned to the lower-right viewport regardless of this text.</p>
+      <Toast {...args} />
+    </>
+  ),
 };

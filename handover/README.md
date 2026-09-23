@@ -10,9 +10,9 @@
 |---|---|
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 48（Foundations 1、Atoms 7、Molecules 15、Organisms 20、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
+| 故事数 | 50（Foundations 1、Atoms 7、Molecules 16、Organisms 21、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），9 条行为测试通过（2026-09-23） |
-| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，53 entries：48 stories、5 docs） |
+| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，55 entries：50 stories、5 docs） |
 | 最近视觉对照 | 2026-09-23，1440px：故事截图含八类型/overview/unknown；现存原始截图仅 overview/Principles/Business Term/Scenario。全八类配对及非默认筛选截图未齐；Principles 配对仍有显著布局与数据差异。产物 `/tmp/mh-visual/*.png` |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
@@ -113,7 +113,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 **P06 campaign.html** — 脚本 campaign/workspace.js + skill-menu；location.hash 切视图。
 - 视图：5 section（overviewTitle/accountsTitle/analyticsTitle/assetsTitle/executionTitle）、accountSearch + 平台 pills（Rednote/Douyin）+ Filter/Reset → accountTable/accountTableResult、taskDialog+taskForm（Create Campaign Task）、Bind New Account、taskQueueList/Count、actionLogBody、actionToast。
-- 现状：`pages--campaign` 仅首屏；hash 视图切换、任务弹窗、绑定、筛选、toast 未演示。
+- 现状：五 section 均重建（section prop）；任务弹窗+toast+绑定 toast 已实现并配对验证（p06-campaign-task-dialog）；channel tabs 为受控 prop。剩余：channel 切换后 overview 内容差异（原始 data-channel 切换的内容项核对）、共享工作区助手深度流（scope/picker/skill-menu，跨页共用）。
 
 **P07 knowledge.html** — 脚本 data/knowledge.js + knowledge-fields.js + workspace.js(2787L) + types.js(998L) + 内嵌 `#dataModelSources` JSON + data-model-browser.js(1447L) + principles-library + business-term-library + scenario-reports(1124L) + email-library + field-library(962L) + shared-controls + skill-menu；20+ CSS。
 - URL：`?type=<8 类>`、`?report=city&category=…&asset=…`、`?detail=`；storage `pendingRestorations`。`?status=changes-required|submitted` 链接存在于 `business-my-tasks` 容器内，但该容器 `hidden` + `display:none` 且无任何脚本读取 `status`——死标记，不列为可达状态。
@@ -166,10 +166,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M2 Home 助手可达状态本轮完成——AssistantPanel 增加答案流（query bubble + answer card + sources + actions + Helpful/Not helpful/Copy→Copied!）、homeMaximize 抽屉↔居中弹窗（mh-assistant--expanded）、history popover（item 填充 prompt、外点/Escape 关闭、×关闭）、Escape 关面板、打开聚焦 textarea、关闭还原焦点、新答案滚到底；content.js 增加 `buildAssistantAnswer`（portal.js createAnswer 矩阵的确定性本地实现）与 11 条 history/personalized 建议；Home 故事接全受控流。对抗性复核修复同步入库：encArg 重写为 SB 8.6 真实格式（对象 dot-key、数组 bracket、非法字符直接抛错）、收集 console warning、弱断言场景加强（upload/campaign-accounts/interpreter 增加文本与 detached 否定断言）、台账事实性更正（lite/skill-menu 覆盖页、?status 死标记、aiRecommendations id、P11 重定向、行数口径）；JSDoc 更正（Header tone 为 solid|overlay 且 HomePage 已接线 overlay、Hero 补 knowledge、StatusBadge 补齐 token）、枚举常量导出（headerTones/headerPositions/heroVariants/heroScrims/metricStatVariants/metricStatAccents/tabsVariants）、normalizeOptions 与 record 过滤助手入公共出口、Icon 补故事、TextLink 真实 href。
-- **下一步**：M2 余项——Home 页内其余可达面（如 capability `data-ai-entry` 入口在 P01 无挂载、platform guide 属工作区页）已核完；进入 M3 Cockpit/Self-Service/Campaign 或按依赖先做 M4 P07 专用视图。M1 余项并行欠账：页面故事内联 `style` 占位、色值 token 化（169 处）、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → 888177a → 18d43ec → 本批 M2 提交），未合入 main。
-- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 53 entries（48 stories、5 docs）；`node scripts/visual-check.mjs` 10/10 PASS——p01-home-assistant 现为全交互配对流（开抽屉→建议填词→ASK→答案卡→历史 popover→选历史项→最大化），并含否定断言（home 无 scope pills、历史 popover 选择后关闭）；upload/accounts/interpreter 场景加文本与 detached 断言。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
-- **未提交改动**：本批 M2/复核文件（organisms.jsx 助手扩展与枚举常量、atoms.jsx forwardRef+StatusBadge JSDoc、molecules.jsx 常量、cx.js 记录助手、index.js 导出、content.js 助手数据+clean 注释、pages.jsx overlay header/回调转发、五个 stories、organisms.css 新样式、tokens.css 新变量、visual-check.mjs/config 强化、台账更正）随提交入库。`.commandcode/` 为工具产物不入库。
+- **当前目标**：M3 P06 Campaign 可达态补全本轮完成——新增 `Modal` 有机体（scrim 点击/Escape 关闭、dialog-open 滚锁、焦点进出还原、useId aria-labelledby）与 `Toast` 分子（role=status aria-live 常驻挂载）；CampaignPage 增加 taskDialog/taskDialogOpen/onCloseTask/onSubmitTask/toast 接口，表单字段（Action/Platform/Account/Object）与 review-state 预览按原文重建，FormField 补 defaultValue 透传；故事侧全受控（创建→提交→3s toast 自动消隐，Bind Account→toast）。content.js 增加 CAMPAIGN.taskDialog 与 CAMPAIGN.toasts。
+- **下一步**：M3 推进中——P06 Campaign 已补 taskDialog（Create Campaign Task→review queue toast）、actionToast、Bind Account toast；P06 剩余缺口为 channel tabs 内容与共享工作区助手（scope/picker/skill-menu，P02/P03/P05/P07 共用）。下一独立条目建议：P03 flexible+data-upload 上传流，或 P02 reports 目录→详情抽屉→live dashboard 脊柱（AI workspace 单独成项）。M1 余项并行欠账：页面故事内联 `style` 占位、色值 token 化（约 169 处存量）、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ 18d43ec → ebb598a → 本批 M3 提交），未合入 main。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 55 entries（50 stories、5 docs）；`node scripts/visual-check.mjs` 11/11 PASS——新增 p06-campaign-task-dialog 配对（原始 `#execution`→data-open-task→native dialog→submit→toast；故事侧 section=execution→Create Campaign Task→Modal→submit→toast，含 modal detached 否定断言）。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
+- **未提交改动**：本批 M3 文件（Modal/Toast 组件与样式、CampaignPage 接口与表单、FormField defaultValue、content.js 任务对话/Toast 文案、两个组件故事、visual-check 新场景、tokens、台账）随提交入库。`.commandcode/` 为工具产物不入库。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -270,3 +270,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | 对抗性复核 888177a：单测 9/9；实测错误 Accounts 故事状态仍 PASS、Home 五个盘点节点隐藏；记录验收判据与盘点偏差，M0 标记进行中。Browser 插件不可用，使用本地 Playwright Chromium；未改组件或覆盖其他模型正在写入的 JSDoc | Codex |
 | 2026-09-23 | M1 批：`src/design/index.js` 公共出口；全组件 JSDoc props；五故事文件 autodocs；补 9 个缺失组件故事（47 stories/5 docs）；Library 故事受控回写；FormField className；content.js 真实 href；Link/logo/WorkspaceCard 去无条件 preventDefault、WorkspaceCard href bug 修复、卡片能力链接改 `<a>`。npm test 9/9、build 通过 | Devin |
 | 2026-09-23 | M2 Home 助手：AssistantPanel 答案流/历史 popover/expanded/焦点+Escape；buildAssistantAnswer 本地化 createAnswer 矩阵；TextArea forwardRef；新 tokens 与图标；Home 故事全受控流。复核修复：encArg 按 SB 8.6 解析器重写并改为响铃失败、console warning 入报告、弱断言加文本/detached、台账 D1/D2/D3/D6/D7/D9 更正、Header overlay 接线、枚举常量与 normalizeOptions/记录助手导出、Icon 故事。npm test 9/9、build 53 entries、visual-check 10/10 | Devin |
+| 2026-09-23 | M3 P06：Modal 有机体 + Toast 分子；CampaignPage taskDialog/toast/onSubmitTask 接口与表单重建；FormField defaultValue；故事全受控（3s toast、Bind Account toast）；visual-check 新增 p06-campaign-task-dialog 配对。npm test 9/9、build 55 entries（50 stories）、visual-check 11/11 | Devin |
