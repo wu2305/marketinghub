@@ -1,4 +1,5 @@
 import { Button, Link, Select, StatusBadge, TextArea, TextInput, buttonVariants, controlSizes } from "./atoms.jsx";
+import { Icon } from "./icons.jsx";
 
 export default {
   title: "Atoms",
@@ -25,7 +26,7 @@ export const Primary = {
 
 export const TextLink = {
   name: "Link",
-  args: { href: "/reports", children: "Explore full AI Interpreter" },
+  args: { href: "/assets/pages/knowledge.html", children: "Explore full AI Interpreter" },
   argTypes: {
     href: { control: "text" },
     children: { control: "text" },
@@ -102,4 +103,21 @@ export const Badge = {
     children: { control: "text" },
   },
   render: (args) => <StatusBadge {...args} />,
+};
+
+export const Glyph = {
+  name: "Icon",
+  args: { name: "search" },
+  argTypes: {
+    name: {
+      control: "select",
+      options: ["search", "plus", "home", "history", "expand", "spark", "layers", "thumb-up", "thumb-down", "copy"],
+    },
+    path: { control: "text" },
+  },
+  render: (args) => (
+    <span style={{ display: "inline-flex", width: 24, height: 24 }}>
+      <Icon {...args} />
+    </span>
+  ),
 };

@@ -213,7 +213,7 @@ export const Accounts = {
 
 export const NavItem = {
   name: "Sidebar item",
-  args: { label: "Overview", active: true, badge: "", count: "35" },
+  args: { label: "Overview", active: true, badge: "", count: 35 },
   argTypes: { onSelect: { action: "onSelect" } },
   render: (args) => (
     <div style={{ width: 240, background: "#f9f7f5" }}>

@@ -87,6 +87,10 @@ a {
   --mh-index-line: #d8c76f;
   --mh-index-bg: #fff9df;
   --mh-index-ink: #6c5800;
+  --mh-bubble-from: #f2d185;
+  --mh-bubble-to: #daa860;
+  --mh-info: #2f6ea6;
+  --mh-popover-shadow: 0 16px 40px rgba(24, 33, 42, 0.18);
 }
 
 .mh-sr {

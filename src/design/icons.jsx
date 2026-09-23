@@ -77,5 +77,27 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "thumb-up") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+      </svg>
+    );
+  }
+  if (name === "thumb-down") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10zM17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" />
+      </svg>
+    );
+  }
+  if (name === "copy") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <rect x="9" y="9" width="13" height="13" rx="2" />
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+      </svg>
+    );
+  }
   return null;
 }

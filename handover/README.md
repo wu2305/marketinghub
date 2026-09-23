@@ -10,9 +10,9 @@
 |---|---|
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 47（Foundations 1、Atoms 6、Molecules 15、Organisms 20、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
+| 故事数 | 48（Foundations 1、Atoms 7、Molecules 15、Organisms 20、Pages 5）+ 5 autodocs 页；全部导出组件均有独立故事 |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），9 条行为测试通过（2026-09-23） |
-| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，52 entries：47 stories、5 docs） |
+| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，53 entries：48 stories、5 docs） |
 | 最近视觉对照 | 2026-09-23，1440px：故事截图含八类型/overview/unknown；现存原始截图仅 overview/Principles/Business Term/Scenario。全八类配对及非默认筛选截图未齐；Principles 配对仍有显著布局与数据差异。产物 `/tmp/mh-visual/*.png` |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
@@ -33,7 +33,7 @@ npm test               # vitest 行为测试
 |---|---|---|---|
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。仍缺：token 化、@media、独立宿主、键盘验证 |
-| M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | #6/#8 有部分组件，尚未全量验收 |
+| M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现并配对验证（答案流/历史/最大化/焦点/Escape）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | a9542f7 改善类型接口，未完成专用视图提取 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
@@ -81,20 +81,20 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 **对抗性复核限定**：以下源码存在项不是全部已验证可达功能。首页助手打开后，#modelPicker/#modePicker/#suggestPicker/#attachPicker/#platformGuideTrigger 实测均隐藏（CSS display:none!important）。实现前区分当前可达、待查路径、被覆盖的历史残留，不能将四个 picker 和引导直接列为必建子组件。保留此首轮清单作为线索，不将它作为完成的运行时盘点。
 
 **共享运行时**（不是组件，是参照行为来源）：
-- `shared/portal.js`（1374L）：完整助手——开关/最大化、modePicker、modelPicker、suggestPicker、attachPicker、uploadDialog（含 uploadHistoryPopup/Clear 确认）、platformGuide 气泡、homeHistoryPopup、reports 级联菜单、问答流。用于 P01、P05、P13。
-- `shared/assistant-panel-lite.js`（136L）：简版助手（open/close/reset/submit/maximize）。用于 P10–P12、P14–P17。
-- `shared/assistant-skill-menu.js`（887L）：助手技能菜单——分类悬停预览、详情、历史对话、Manual/Generated Model 表单弹窗（validateModelDialog）。除 P04 外全站挂载。
-- 公共外壳：所有页共用顶部导航（Home/Cockpit/Self-Service/AI Interpreter/RedNote）；治理四页 + knowledge 页另有二级侧栏导航（Knowledge/Review Center/Skill Library/Personal Memory/Feedback & Quality）。
+- `shared/portal.js`（1373L）：完整助手——开关/最大化、modePicker、modelPicker、suggestPicker、attachPicker、uploadDialog（含 uploadHistoryPopup/Clear 确认）、platformGuide 气泡、homeHistoryPopup、reports 级联菜单、问答流。用于 P01、P05、P13。
+- `shared/assistant-panel-lite.js`（135L）：简版助手（open/close/reset/submit/maximize）。用于 P10、P12、P14–P17；P04 与 P11 无任何助手脚本/标记。
+- `shared/assistant-skill-menu.js`（886L）：助手技能菜单——分类悬停预览、详情、历史对话、Manual/Generated Model 表单弹窗（validateModelDialog）。未挂载于 P04、P08、P09、P11（四页均无 aiEntry/assistantPanel 标记）。
+- 公共外壳：所有页共用顶部导航（Home/Cockpit/Self-Service/AI Interpreter/RedNote）；七页另有二级侧栏导航（Knowledge/Review Center/Skill Library/Personal Memory/Feedback & Quality）：P07 knowledge、P12–P14 治理页、P15 Skill Library、P16 Skill Detail、P17 Skill Edit。
 
 **P01 index.html** — 脚本 portal.js + assistant-skill-menu.js；CSS home.css + assistant-panel.css。
 - 视图：Header 导航、Home Hero、4 工作台卡（→reports/flexible/knowledge/campaign.html）、3 项目卡（→reports.html?project=rednote|abo|customer）。
-- 交互态：助手抽屉（建议问题、mode/model/suggest/attach 四种 picker、发送→答案流）；homeHistoryPopup；uploadDialog（AI Auto-fill/Save、历史 popup、Clear 确认）；platformGuideTrigger 气泡。
-- 现状：`pages--home` 故事仅首屏+assistantOpen；上传弹窗、历史、平台引导、picker 未建。
-- 组件候选：SiteHeader(已有)、WorkspaceCard(已有)、ProjectCard(已有)、AssistantPanel(已有，缺 picker/history/upload 子组件)、PlatformGuidePopover、HistoryPopup、UploadDialog。
+- 交互态（运行时核验后修正）：助手抽屉——建议 chips（openAssistant 重渲染为 personalized 组）、发送→answerFeed 答案卡（bubble + card + sources + actions + Helpful/Not helpful/Copy→Copied!）、homeMaximize（抽屉↔居中弹窗 is-ai-expanded）、homeHistoryPopup（11 条 history item 填充 composer，外点/Escape/×关闭）、newSession 清空、Escape/背景关闭、打开时聚焦 composer 并隐藏 #aiEntry、关闭还原焦点；`?ask=<context>` 打开并切换建议组。Home 上被 CSS 强制隐藏、不可达：platformGuideTrigger、ask-scope、四个 picker（suggest/attach/model/mode）、#uploadPopup；uploadDialog/uploadHistoryPopup 仅能从 popup 进入，故 Home 上同样不可达（DOM 残留，不建）。
+- 现状：助手抽屉全流已实现（答案流/历史/最大化/焦点/Escape）；`?ask=` 由宿主路由等价物承接，故事侧以 scope/建议 props 表达。
+- 组件候选：SiteHeader(已有)、WorkspaceCard(已有)、ProjectCard(已有)、AssistantPanel(已扩展：answers feed/history popover/expanded/focus+Escape)、HistoryPopover(并入 AssistantPanel)。PlatformGuide/UploadDialog/UploadHistoryPopup 属于工作区页（P02/P07 等），不在 Home 重建。
 
 **P02 reports.html** — 脚本 data/knowledge.js + report-core.js(4512L) + reports-inline-1.js + skill-menu；CSS report-core/catalog/city-invest-analysis/inline-1/inline-2。
 - URL：`?project=rednote|abo|customer|city`、`?dashboard=N`。
-- 视图：catalogView（目录→项目→报表，knowledgeFilters）；报表详情抽屉（details*：meta/hierarchy/metrics/business-terms/data-model/principles/context/scenarios/playbooks/thumbnail + detailsOpenReport）；liveView 报表页内 dashboard（liveTitle/liveKicker/live-panel-overview，city 项目有专用分析）；aiWorkspace（aiStart 初始、aiCommandForm 提问、aiChatThread 流、aiAnswer{Summary,Findings,Sources,Recommendations,Feedback}、aiCmdUpload+popup、aiHistory、aiPeriodHint、aiScrim、aiMaximize）。
+- 视图：catalogView（目录→项目→报表，knowledgeFilters）；报表详情抽屉（details*：meta/hierarchy/metrics/business-terms/data-model/principles/context/scenarios/playbooks/thumbnail + detailsOpenReport）；liveView 报表页内 dashboard（liveTitle/liveKicker/live-panel-overview，city 项目有专用分析）；aiWorkspace（aiStart 初始、aiCommandForm 提问、aiChatThread 流、aiAnswer{Summary,Findings,Sources} + aiRecommendations + aiFeedback、aiCmdUpload+popup、aiHistory、aiPeriodHint、aiScrim、aiMaximize）。
 - 现状：`pages--marketing-cockpit` 仅目录首屏。详情抽屉、live dashboard、AI workspace 全缺。
 - 组件候选：ReportCatalog、ReportDetailsDrawer、LiveReportView(dashboard 图表)、AiWorkspace( cockpit 内嵌，非侧栏助手 )。
 
@@ -116,7 +116,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 现状：`pages--campaign` 仅首屏；hash 视图切换、任务弹窗、绑定、筛选、toast 未演示。
 
 **P07 knowledge.html** — 脚本 data/knowledge.js + knowledge-fields.js + workspace.js(2787L) + types.js(998L) + 内嵌 `#dataModelSources` JSON + data-model-browser.js(1447L) + principles-library + business-term-library + scenario-reports(1124L) + email-library + field-library(962L) + shared-controls + skill-menu；20+ CSS。
-- URL：`?type=<8 类>`、`?status=changes-required|submitted`、`?report=city&category=…&asset=…`、`?detail=`；storage `pendingRestorations`。
+- URL：`?type=<8 类>`、`?report=city&category=…&asset=…`、`?detail=`；storage `pendingRestorations`。`?status=changes-required|submitted` 链接存在于 `business-my-tasks` 容器内，但该容器 `hidden` + `display:none` 且无任何脚本读取 `status`——死标记，不列为可达状态。
 - 视图：overview（businessOverviewNav 8 类、hero stats、管理规则 `!` 提示）；八类型专用视图由后加载库渲染——Principles 卡片+类目筛选、Report Context 卡、Data Model 浏览器（域列表/图谱缩放/表抽屉/预览弹窗）、Metric 列表、Business Term 卡+多选筛选+分页、Analytical Model、Scenario 卡+分页+逐卡动作+详情、Email 10 列表；覆盖层：detailScrim 抽屉、editPanel（editAiReviewView/editApprovalView/footer）、versionPanel、createPanel（多步：表单→AI Review→Confirm Scope→Submit，含 data-model tabs、derived 公式构建器、Test）。
 - 现状：`pages--interpreter` 有 overview + 通用行表（过渡实现）+ Unknown 空态；八类专用视图与全部覆盖层未提取。
 - 组件候选：KnowledgeSidebar(有)、TypeCard(有)、OverviewHero、PrincipleCard+类目筛选、ReportContextCard、DataModelBrowser(域/图/抽屉/预览)、MetricList、BusinessTermCardGrid(多选筛选/分页/synonym clamp)、ScenarioCard+分页+Detail、EmailTable、DetailDrawer、EditPanel(AI review/approval)、VersionPanel、CreateWizard(按类型分步表单+AI Review+Confirm Scope)。
@@ -133,7 +133,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 视图：metricList（Basic·N / Derived·N）、detail 区、3 tabs（definition/formula/dimensions）、addDerivedMetricBtn → derivedMetricPanel（公式构建器 + -×÷()123、Test、Save）、editMetricBtn。
 - 现状：无故事。公式构建器与 P07 create 面板内的 createDerived* 同源，应共用组件。
 
-**P11 data-model.html** — 脚本 inline-1(8L) + data-model-browser.js。
+**P11 data-model.html** — 脚本 inline-1(7L) + data-model-browser.js；无 assistant/skill-menu。
+- 行为：`?type` 缺省时 inline-1 执行 `location.replace` 重定向到 `data-model.html?type=Data%20Model`——URL 重写须登记为可达行为。
 - 视图：独立 Data Model 浏览器（#dataModelOverview + businessKnowledgeLibrary 容器全由 JS 渲染）。
 - 现状：无故事。与 P07 内嵌浏览器同组件。
 
@@ -165,10 +166,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M1 最小闭环本轮推进：新增 `src/design/index.js` 公共出口；atoms/molecules/organisms/pages 全导出组件补 JSDoc props 声明；五个故事文件启用 `tags: ["autodocs"]`；补齐 FilterActions、WorkspaceGrid、ProjectCatalog、LibraryToolbar、AssetRow、Panel、SummaryStrip、TaskList、TypeGrid 共 9 个缺失组件故事；Library 故事改为受控回写（query/filterValues 驱动选项与行过滤）；`FormField` 补 `className` 透传；`content.js` 导航/卡片 href 改为真实 Demo 路径（`/index.html`、`/assets/pages/*.html`、`?project=`）；Header logo 与 `Link` 去掉无条件 `preventDefault`；`WorkspaceCard` `href={title}` bug 修复为真实 `href` prop，能力链接改回 `<a>`。
-- **下一步**：M1 余项——页面故事内联 `style` 占位改组件 CSS、色值 token 化（169 处）、有机体/页面 `@media` 与 `:focus-visible`、独立 React 宿主验证（M7 前置，可提前）；随后 M2 Home 全量（picker/history/upload/platform-guide）。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → 888177a → 本批 M1 提交），未合入 main。
-- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 52 entries（47 stories、5 docs）；`node scripts/visual-check.mjs` 10/10 PASS（首轮 10 场景：5 页默认态 + home-assistant / self-service-upload / campaign-accounts / interpreter-overview / business-term / scenario）。注意 PASS 仅表示加载与预期控件成立，视觉差异仍需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
-- **未提交改动**：本批 M1 文件（index.js、四个 .jsx JSDoc/接口修复、五个 .stories.jsx、content.js href、organisms.css 链接选择器、台账）随提交入库。`.commandcode/` 为工具产物不入库。
+- **当前目标**：M2 Home 助手可达状态本轮完成——AssistantPanel 增加答案流（query bubble + answer card + sources + actions + Helpful/Not helpful/Copy→Copied!）、homeMaximize 抽屉↔居中弹窗（mh-assistant--expanded）、history popover（item 填充 prompt、外点/Escape 关闭、×关闭）、Escape 关面板、打开聚焦 textarea、关闭还原焦点、新答案滚到底；content.js 增加 `buildAssistantAnswer`（portal.js createAnswer 矩阵的确定性本地实现）与 11 条 history/personalized 建议；Home 故事接全受控流。对抗性复核修复同步入库：encArg 重写为 SB 8.6 真实格式（对象 dot-key、数组 bracket、非法字符直接抛错）、收集 console warning、弱断言场景加强（upload/campaign-accounts/interpreter 增加文本与 detached 否定断言）、台账事实性更正（lite/skill-menu 覆盖页、?status 死标记、aiRecommendations id、P11 重定向、行数口径）；JSDoc 更正（Header tone 为 solid|overlay 且 HomePage 已接线 overlay、Hero 补 knowledge、StatusBadge 补齐 token）、枚举常量导出（headerTones/headerPositions/heroVariants/heroScrims/metricStatVariants/metricStatAccents/tabsVariants）、normalizeOptions 与 record 过滤助手入公共出口、Icon 补故事、TextLink 真实 href。
+- **下一步**：M2 余项——Home 页内其余可达面（如 capability `data-ai-entry` 入口在 P01 无挂载、platform guide 属工作区页）已核完；进入 M3 Cockpit/Self-Service/Campaign 或按依赖先做 M4 P07 专用视图。M1 余项并行欠账：页面故事内联 `style` 占位、色值 token 化（169 处）、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → 888177a → 18d43ec → 本批 M2 提交），未合入 main。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 53 entries（48 stories、5 docs）；`node scripts/visual-check.mjs` 10/10 PASS——p01-home-assistant 现为全交互配对流（开抽屉→建议填词→ASK→答案卡→历史 popover→选历史项→最大化），并含否定断言（home 无 scope pills、历史 popover 选择后关闭）；upload/accounts/interpreter 场景加文本与 detached 断言。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
+- **未提交改动**：本批 M2/复核文件（organisms.jsx 助手扩展与枚举常量、atoms.jsx forwardRef+StatusBadge JSDoc、molecules.jsx 常量、cx.js 记录助手、index.js 导出、content.js 助手数据+clean 注释、pages.jsx overlay header/回调转发、五个 stories、organisms.css 新样式、tokens.css 新变量、visual-check.mjs/config 强化、台账更正）随提交入库。`.commandcode/` 为工具产物不入库。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -268,3 +269,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | 用户确认全量重建与奥卡姆剃刀目标；同步 AGENTS 目标和 M0–M7 规划，预置 17 页种子台账、接续协议与长程执行 prompt；旧阶段保留为历史，未新增实现/验收完成声明 | Codex |
 | 2026-09-23 | 对抗性复核 888177a：单测 9/9；实测错误 Accounts 故事状态仍 PASS、Home 五个盘点节点隐藏；记录验收判据与盘点偏差，M0 标记进行中。Browser 插件不可用，使用本地 Playwright Chromium；未改组件或覆盖其他模型正在写入的 JSDoc | Codex |
 | 2026-09-23 | M1 批：`src/design/index.js` 公共出口；全组件 JSDoc props；五故事文件 autodocs；补 9 个缺失组件故事（47 stories/5 docs）；Library 故事受控回写；FormField className；content.js 真实 href；Link/logo/WorkspaceCard 去无条件 preventDefault、WorkspaceCard href bug 修复、卡片能力链接改 `<a>`。npm test 9/9、build 通过 | Devin |
+| 2026-09-23 | M2 Home 助手：AssistantPanel 答案流/历史 popover/expanded/焦点+Escape；buildAssistantAnswer 本地化 createAnswer 矩阵；TextArea forwardRef；新 tokens 与图标；Home 故事全受控流。复核修复：encArg 按 SB 8.6 解析器重写并改为响铃失败、console warning 入报告、弱断言加文本/detached、台账 D1/D2/D3/D6/D7/D9 更正、Header overlay 接线、枚举常量与 normalizeOptions/记录助手导出、Icon 故事。npm test 9/9、build 53 entries、visual-check 10/10 | Devin |

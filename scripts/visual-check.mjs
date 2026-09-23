@@ -56,18 +56,38 @@ function serve(dir, port, label) {
   });
 }
 
-/** Encode Storybook `args=` URL param (custom notation: strings plain, others `!`-prefixed). */
-function encArg(value) {
-  if (typeof value === "string") return encodeURIComponent(value);
-  if (typeof value === "number" || typeof value === "boolean" || value === null) return `!${value}`;
-  if (Array.isArray(value)) return `![${value.map(encArg).join(",")}]`;
-  if (typeof value === "object") return `!(${Object.entries(value).map(([k, v]) => `${k}:${encArg(v)}`).join(",")})`;
-  return encodeURIComponent(String(value));
+/**
+ * Flatten a scenario `args` object into Storybook 8.6 `args=` key:value pairs.
+ * Verified against @storybook/core preview-api parseArgsParam: scalars are
+ * plain (numbers auto-coerce), booleans/null/undefined are `!`-prefixed,
+ * objects flatten to `obj.key:value`, arrays to `arr[0]:value`. Plain-string
+ * args must match /^[a-zA-Z0-9 _-]*$/ or Storybook silently drops them —
+ * so this throws instead of producing a scenario that passes on defaults.
+ */
+function argPairs(key, value) {
+  if (value === undefined) return [[key, "!undefined"]];
+  if (value === null) return [[key, "!null"]];
+  if (typeof value === "boolean") return [[key, `!${value}`]];
+  if (typeof value === "number") return [[key, String(value)]];
+  if (typeof value === "string") {
+    if (!/^[a-zA-Z0-9 _-]*$/.test(value)) {
+      throw new Error(`arg "${key}" contains characters Storybook URL args reject: ${JSON.stringify(value)}`);
+    }
+    return [[key, encodeURIComponent(value)]];
+  }
+  if (Array.isArray(value)) return value.flatMap((v, i) => argPairs(`${key}[${i}]`, v));
+  if (typeof value === "object") {
+    return Object.entries(value).flatMap(([k, v]) => {
+      if (!/^[a-zA-Z0-9 _-]*$/.test(k)) throw new Error(`arg "${key}.${k}" has an unsafe key`);
+      return argPairs(`${key}.${k}`, v);
+    });
+  }
+  throw new Error(`unsupported arg type for "${key}": ${typeof value}`);
 }
 
 function storyUrl(spec) {
   const argString = spec.args
-    ? `&args=${Object.entries(spec.args).map(([k, v]) => `${k}:${encArg(v)}`).join(";")}`
+    ? `&args=${Object.entries(spec.args).flatMap(([k, v]) => argPairs(k, v)).map(([k, v]) => `${k}:${v}`).join(";")}`
     : "";
   return `http://127.0.0.1:${STORY_PORT}/iframe.html?viewMode=story&id=${spec.id}${argString}`;
 }
@@ -89,7 +109,7 @@ async function runSide(browser, name, spec, url, viewport) {
     if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
   });
   page.on("console", (m) => {
-    if (m.type() === "error") warnings.push(`console.error: ${m.text()}`);
+    if (m.type() === "error" || m.type() === "warning") warnings.push(`console.${m.type()}: ${m.text()}`);
   });
   let shot = null;
   try {

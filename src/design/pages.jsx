@@ -18,6 +18,7 @@ import {
   TypeGrid,
   WorkspaceGrid,
 } from "./organisms.jsx";
+import { recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
 
 function Shell({ tone = "workspace", children }) {
   return <div className={`mh-page mh-page--${tone}`}>{children}</div>;
@@ -44,6 +45,10 @@ function Shell({ tone = "workspace", children }) {
  * @param {(event: object) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  * @param {(event: { scope: string }) => void} [props.onScopeChange]
+ * @param {() => void} [props.onNewSession]
+ * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
+ * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
+ * @param {(event: { query: string, feedback: string|null }) => void} [props.onFeedback]
  */
 export function HomePage({
   current = "home",
@@ -64,10 +69,14 @@ export function HomePage({
   onSubmit,
   onSuggestion,
   onScopeChange,
+  onNewSession,
+  onMaximize,
+  onHistorySelect,
+  onFeedback,
 }) {
   return (
     <Shell tone="home">
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} position="fixed" tone="overlay" onNavigate={onNavigate} />
       <Hero image={hero.image} title={hero.title} description={hero.description} height={300} variant="home" scrim="home">
         {hero.stats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" />
@@ -92,6 +101,10 @@ export function HomePage({
         onSubmit={onSubmit}
         onSuggestion={onSuggestion}
         onScopeChange={onScopeChange}
+        onNewSession={onNewSession}
+        onMaximize={onMaximize}
+        onHistorySelect={onHistorySelect}
+        onFeedback={onFeedback}
       />
     </Shell>
   );
@@ -193,26 +206,7 @@ export function SelfServicePage({
   );
 }
 
-function recordFieldValues(record, field) {
-  const value = record[field];
-  if (value === undefined || value === null) return [];
-  return Array.isArray(value) ? value : [value];
-}
 
-function uniqueFilterOptions(records, field) {
-  const seen = new Set();
-  for (const record of records) {
-    for (const value of recordFieldValues(record, field)) seen.add(value);
-  }
-  return [...seen].sort().map((value) => ({ id: value, label: value }));
-}
-
-function recordMatchesFilter(record, filter, value) {
-  const option = (filter.options || []).find((item) => item.id === value);
-  const field = option?.field || filter.id;
-  const expected = option?.id ?? value;
-  return recordFieldValues(record, field).includes(expected);
-}
 
 /**
  * AI Interpreter knowledge workspace: sidebar type navigation, type overview

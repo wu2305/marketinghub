@@ -116,9 +116,10 @@ export function TextInput({
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
  * @param {string} [props.label] accessible label (visually hidden)
+ * @param {React.Ref<HTMLTextAreaElement>} [props.ref] forwarded to the textarea
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
  */
-export function TextArea({
+export const TextArea = React.forwardRef(function TextArea({
   name,
   value,
   defaultValue = "",
@@ -128,12 +129,13 @@ export function TextArea({
   invalid = false,
   label,
   onChange,
-}) {
+}, ref) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue);
   const controlled = value !== undefined;
   const current = controlled ? value : uncontrolled;
   return (
     <textarea
+      ref={ref}
       className={cx("mh-textarea", invalid && "is-invalid")}
       name={name}
       rows={rows}
@@ -148,7 +150,7 @@ export function TextArea({
       }}
     />
   );
-}
+});
 
 /**
  * Native select. `options` accept `{ id|value, label }` or plain strings.
@@ -204,9 +206,12 @@ export function Select({
 }
 
 /**
- * Status pill. `status` is the label; tone is derived from known status tokens
- * (published/success/enabled → success; review/syncing/building → review;
- * pending/queued → pending; paused/danger/disabled → paused; else draft).
+ * Status pill. `status` is the label; tone is derived by substring/token
+ * matching — contains "publish" or equals success/token-valid/enabled →
+ * success; contains "review" or equals syncing/building → review; contains
+ * "pending" or equals watch/queued → pending; contains "pause" or equals
+ * danger/disabled → paused; else draft. Note: matching is substring-based,
+ * so e.g. "Unpublished" still maps to success.
  * @param {object} props
  * @param {string} [props.status="draft"]
  * @param {boolean} [props.outline=false]

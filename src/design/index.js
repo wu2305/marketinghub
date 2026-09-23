@@ -24,6 +24,9 @@ export {
   SidebarItem,
   FilterActions,
   searchIconPositions,
+  metricStatVariants,
+  metricStatAccents,
+  tabsVariants,
 } from "./molecules.jsx";
 export {
   Header,
@@ -47,8 +50,12 @@ export {
   TaskList,
   BusinessTermForm,
   assistantPlacements,
+  headerTones,
+  headerPositions,
+  heroVariants,
+  heroScrims,
 } from "./organisms.jsx";
 export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage } from "./pages.jsx";
 export { Icon } from "./icons.jsx";
-export { cx } from "./cx.js";
+export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
 export * as demoContent from "./content.js";

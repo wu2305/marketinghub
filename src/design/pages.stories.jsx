@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE } from "./content.js";
+import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE, buildAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, HomePage, MarketingCockpitPage, SelfServicePage } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
@@ -38,14 +38,21 @@ export const Home = {
     onSuggestion: { action: "onSuggestion" },
     onScopeChange: { action: "onScopeChange" },
     onPromptChange: { action: "onPromptChange" },
+    onNewSession: { action: "onNewSession" },
+    onMaximize: { action: "onMaximize" },
+    onHistorySelect: { action: "onHistorySelect" },
+    onFeedback: { action: "onFeedback" },
   },
   render: function HomeStory(args) {
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
     const [scope, setScope] = useSynced(args.scope);
+    const [answers, setAnswers] = React.useState([]);
+    const scopeContexts = { All: "personalized", Campaigns: "campaign", Dashboards: "report", Knowledge: "knowledge" };
     return (
       <HomePage
         {...args}
+        assistant={{ ...args.assistant, answers }}
         assistantOpen={open}
         prompt={prompt}
         scope={scope}
@@ -71,7 +78,25 @@ export const Home = {
           setScope(event.scope);
           args.onScopeChange?.(event);
         }}
-        onSubmit={args.onSubmit}
+        onSubmit={(event) => {
+          const text = String(event.prompt || "").trim();
+          if (text) {
+            setAnswers((items) => [...items, buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
+            setPrompt("");
+          }
+          args.onSubmit?.(event);
+        }}
+        onNewSession={() => {
+          setAnswers([]);
+          setPrompt("");
+          args.onNewSession?.();
+        }}
+        onMaximize={args.onMaximize}
+        onHistorySelect={(event) => {
+          setPrompt(event.prompt);
+          args.onHistorySelect?.(event);
+        }}
+        onFeedback={args.onFeedback}
       />
     );
   },

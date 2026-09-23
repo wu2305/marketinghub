@@ -18,13 +18,42 @@ export default [
     id: "p01-home-assistant",
     original: {
       url: "/index.html",
-      actions: [{ click: "#aiEntry" }],
-      expect: [{ sel: "#assistantPanel" }, { sel: "#promptCanvas" }],
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: ".ask-suggestion" },
+        { click: "#sendQuery" },
+        { wait: "#answerFeed .answer-card" },
+        { click: "#homeHistory" },
+        { wait: "#homeHistoryPopup:not([hidden])" },
+        { click: ".home-history-item" },
+        { click: "#homeMaximize" },
+      ],
+      expect: [
+        { sel: "#assistantPanel.is-ai-expanded" },
+        { sel: "#answerFeed .answer-card", text: "Recommended next move." },
+        { sel: "#homeHistoryPopup", state: "hidden" },
+        { sel: ".ask-scope", state: "hidden" },
+      ],
     },
     story: {
       id: "pages--home",
       args: { assistantOpen: true },
-      expect: [{ sel: ".mh-assistant--drawer" }, { sel: ".mh-assistant__ask" }],
+      actions: [
+        { click: ".mh-assistant__suggestions button" },
+        { click: ".mh-assistant__tools .mh-button" },
+        { wait: ".mh-assistant__feed .mh-assistant__answer" },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-assistant__history-pop" },
+        { click: ".mh-assistant__history-item" },
+        { click: "button[aria-label='Maximize']" },
+      ],
+      expect: [
+        { sel: ".mh-assistant--expanded" },
+        { sel: ".mh-assistant__answer", text: "Recommended next move." },
+        { sel: ".mh-assistant__history-pop", state: "detached" },
+        { sel: ".mh-assistant__scopes", state: "detached" },
+      ],
     },
   },
   {
@@ -40,7 +69,14 @@ export default [
   {
     id: "p03-self-service-upload",
     original: { url: "/assets/pages/flexible.html?tab=upload", expect: [{ sel: "#data-upload-panel" }, { sel: ".upload-card-grid" }] },
-    story: { id: "pages--self-service", args: { tab: "upload" }, expect: [{ sel: ".mh-self-tools" }, { sel: ".mh-action-card" }] },
+    story: {
+      id: "pages--self-service",
+      args: { tab: "upload" },
+      expect: [
+        { sel: ".mh-page__cards", text: "Finance Pilot City" },
+        { sel: ".mh-page__cards--two", state: "detached" },
+      ],
+    },
   },
   {
     id: "p06-campaign",
@@ -53,7 +89,14 @@ export default [
       url: "/assets/pages/campaign.html#accounts",
       expect: [{ sel: "#accountsTitle" }, { sel: ".campaign-view.active .data-table" }],
     },
-    story: { id: "pages--campaign", args: { section: "accounts" }, expect: [{ sel: ".mh-campaign" }] },
+    story: {
+      id: "pages--campaign",
+      args: { section: "accounts" },
+      expect: [
+        { sel: ".mh-campaign", text: "Account Binding" },
+        { sel: ".mh-campaign .mh-table" },
+      ],
+    },
   },
   {
     id: "p07-interpreter-overview",
@@ -63,11 +106,19 @@ export default [
   {
     id: "p07-interpreter-business-term",
     original: { url: "/assets/pages/knowledge.html?type=Business%20Term", expect: [{ sel: ".bt-term-card" }] },
-    story: { id: "pages--interpreter", args: { activeType: "Business Term" }, expect: [{ sel: ".mh-library" }, { sel: ".mh-asset" }] },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Business Term" },
+      expect: [{ sel: ".mh-library", text: "GMV (Gross Merchandise Value)" }, { sel: ".mh-asset" }],
+    },
   },
   {
     id: "p07-interpreter-scenario",
     original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card" }] },
-    story: { id: "pages--interpreter", args: { activeType: "Scenario Reporting" }, expect: [{ sel: ".mh-library" }] },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Scenario Reporting" },
+      expect: [{ sel: ".mh-library", text: "Channel Performance Analysis" }, { sel: ".mh-asset" }],
+    },
   },
 ];

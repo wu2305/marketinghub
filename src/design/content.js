@@ -70,15 +70,111 @@ export const ASSISTANT = {
     "Campaigns near budget threshold",
     "Automation task queue overview",
   ],
+  // portal.js renderSuggestions("personalized") — the set shown when the Home
+  // drawer opens; the HTML fallback chips are replaced on openAssistant().
   homeSuggestions: [
-    "Analyze this Excel data and generate a summary",
-    "Top insights across all data this week",
-    "Weekly activity summary",
+    {
+      label: "Analyze this Excel data and generate a summary",
+      prompt: "Analyze this Excel data and generate a performance summary report.",
+    },
+    {
+      label: "Top insights across all data this week",
+      prompt: "What are the top 3 insights across all my marketing data this week?",
+    },
+    {
+      label: "Weekly activity summary",
+      prompt: "Summarize campaign, report, and knowledge activity for the last 7 days.",
+    },
+  ],
+  // index.html #homeHistoryList — label text is the visible chip, prompt the
+  // full query written into the composer on select.
+  historyCount: "(121)",
+  history: [
+    { label: "What's the ROI trend across my active campaigns this quarter?", prompt: "What's the ROI trend across my active campaigns this quarter?" },
+    { label: "Compare channel performance for the last 3 campaigns", prompt: "Compare channel performance for the last 3 campaigns and identify top performers." },
+    { label: "Analyze this Excel data and generate a performance summary", prompt: "Analyze this Excel data and generate a performance summary report." },
+    { label: "Which cities have the highest growth potential?", prompt: "Which cities in my portfolio have the highest growth potential?" },
+    { label: "Summarize the latest campaign performance and anomalies", prompt: "Summarize the latest campaign performance metrics and anomalies." },
+    { label: "Which metrics should I track for the loyalty program?", prompt: "Which metrics should I track for the loyalty program?" },
+    { label: "How does the attribution model work for multi-touch…", prompt: "How does the attribution model work for multi-touch campaigns?" },
+    { label: "What is the best time to send promotional emails?", prompt: "What is the best time to send promotional emails?" },
+    { label: "Can you explain the ROAS calculation for the new…", prompt: "Can you explain the ROAS calculation for the new campaign?" },
+    { label: "How do I segment customers by LTV?", prompt: "How do I segment customers by LTV?" },
+    { label: "What is the average order value for the handbag…", prompt: "What is the average order value for the handbag category?" },
   ],
   scopes: ["All", "Campaigns", "Dashboards", "Knowledge"],
   model: "Data Model",
   mode: "Analytical Model",
 };
+
+/**
+ * Deterministic stand-in for portal.js createAnswer(): maps a prompt plus the
+ * selected scope context to the canned recommendation/sources/actions the
+ * original demo renders. Local demo data only — no real AI call.
+ */
+export function buildAssistantAnswer(query, context = "personalized") {
+  const lowerQuery = String(query || "").toLowerCase();
+  let body =
+    "I would connect campaign intent, current performance, governed definitions, and prior learnings, then separate the strongest signal from data-quality noise before recommending the next move.";
+  let sources = ["Campaign context", "Performance reports", "Business knowledge"];
+  let primary = { label: "Open performance", href: "/assets/pages/reports.html" };
+
+  if (["execution", "launch", "brief", "audience", "campaign plan"].some((term) => lowerQuery.includes(term))) {
+    body =
+      "Start with the campaign objective and target audience, define each channel's role, assign owners, and agree on launch-readiness checks. I would then connect the tracking metrics and reporting baseline before activation begins.";
+    sources = ["Campaign brief", "Audience context", "Measurement plan"];
+    primary = { label: "Open performance baseline", href: "/assets/pages/reports.html" };
+  } else if (["optimize", "optimization", "next best action", "prior campaign", "learnings"].some((term) => lowerQuery.includes(term))) {
+    body =
+      "Compare the largest movement across channel, city, and audience, validate freshness and metric definitions, then weigh the finding against prior campaign learnings. The output should be one prioritized action, its expected impact, and the evidence behind it.";
+    sources = ["Campaign performance", "Metric Dictionary", "Prior learnings"];
+  } else if (lowerQuery.includes("roi")) {
+    body =
+      "ABO Campaign Quality Watch is the right starting point. Break ROI by platform and city, then compare spend pressure, conversion efficiency, and audience quality before explaining the movement and recommending an action.";
+    sources = ["ABO Campaign Quality Watch", "Campaign ROI", "Audience model"];
+  } else if (lowerQuery.includes("metric") || lowerQuery.includes("definition") || lowerQuery.includes("conversion")) {
+    body =
+      "Start with the governed definition and formula, then verify the source model, refresh cadence, owner, and every report that uses the metric before interpreting its movement.";
+    sources = ["Metric Dictionary", "Customer model", "Linked reports"];
+    primary = { label: "Open knowledge", href: "/assets/pages/knowledge.html?category=metrics" };
+  } else if (lowerQuery.includes("model") || lowerQuery.includes("freshness") || lowerQuery.includes("lineage")) {
+    body =
+      "Trace the source lineage, data grain, refresh state, and known quality notes first. Then identify which report conclusions are reliable and where context is still missing.";
+    sources = ["Data Models", "Quality notes", "Linked reports"];
+    primary = { label: "Open knowledge", href: "/assets/pages/knowledge.html?category=models" };
+  } else if (lowerQuery.includes("city")) {
+    body =
+      "Use City Strategy to compare invested and non-invested cities, isolate the largest week-over-week movement, and separate real business change from missing or delayed source data.";
+    sources = ["City Strategy", "City investment", "Business context"];
+  } else if (context === "report") {
+    body =
+      "Start with the largest movement in the selected report, verify freshness and metric definitions, then compare the strongest city, channel, and audience contributors before choosing the next action.";
+    sources = ["Governed reports", "Metric definitions", "Refresh status"];
+  } else if (context === "knowledge") {
+    body =
+      "Start with the governed business definition, then connect the related metric formula, source model, refresh cadence, owner, and linked reports before applying it to a decision.";
+    sources = ["Business terms", "Metric Dictionary", "Data Models"];
+    primary = { label: "Open knowledge", href: "/assets/pages/knowledge.html" };
+  } else if (context === "campaign") {
+    body =
+      "I would organize this as a campaign workflow: objective and audience first, activation readiness second, live performance signals third, and one evidence-backed optimization action at the end.";
+    sources = ["Campaign workflow", "Performance signals", "Optimization knowledge"];
+  } else if (context === "memory") {
+    body =
+      "I would combine your saved campaign principles and recent review notes with the live report context, then show where your usual decision pattern agrees or conflicts with the current signal.";
+    sources = ["My Memory", "Review notes", "Live report context"];
+    primary = { label: "Open memory", href: "/assets/pages/knowledge.html?category=memory" };
+  }
+
+  return {
+    query,
+    kicker: "Connected campaign view",
+    title: "Recommended next move.",
+    body,
+    sources,
+    actions: [primary, { label: "Compare movement" }, { label: "Save learning" }],
+  };
+}
 
 export const COCKPIT = {
   hero: {
@@ -380,16 +476,6 @@ export const INTERPRETER = {
       statusFilters: [availabilityFilter()],
     },
   ],
-  // Sampled records only — overview totals live on types[].stats, so rows below
-  // intentionally cover fewer entries than stats.total. Sources:
-  //   Principles       types.js globalPrinciples
-  //   Report Context   knowledge.js marketingKnowledgeAssets
-  //   Data Model       data-model-browser.js / knowledge.html dataModelSources
-  //   Metric Dictionary knowledge.js metric assets (field-library.js view)
-  //   Business Term    business-term-library.js seed terms/synonyms
-  //   Analytical Model field-library.js normalized playbook
-  //   Scenario Reporting scenario-reports.js base scenarios
-  //   Email Reports    email-library.js demoAssets
   // Sampled records only — overview totals live on types[].stats, so rows below
   // intentionally cover fewer entries than stats.total. Field names mirror the
   // source payloads; `stage` is the workflow/process dimension and

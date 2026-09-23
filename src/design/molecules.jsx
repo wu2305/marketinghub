@@ -5,6 +5,9 @@ import { cx } from "./cx.js";
 import { Icon } from "./icons.jsx";
 
 export const searchIconPositions = ["start", "end", "none"];
+export const metricStatVariants = ["card", "glass"];
+export const metricStatAccents = ["gold", "green", "amber", "blue", "red"];
+export const tabsVariants = ["underline", "segmented"];
 
 /**
  * Labeled search input with an icon that can lead, trail, or be omitted.
@@ -49,8 +52,8 @@ export function SearchField({
  * @param {string} props.label
  * @param {React.ReactNode} props.value
  * @param {string} [props.caption]
- * @param {"card"|"glass"} [props.variant="card"] glass sits on hero imagery
- * @param {"gold"|"green"|"amber"|"blue"|"red"} [props.accent="gold"] only applies to card variant
+ * @param {typeof metricStatVariants[number]} [props.variant="card"] glass sits on hero imagery
+ * @param {typeof metricStatAccents[number]} [props.accent="gold"] only applies to card variant
  * @param {boolean} [props.compact=false]
  */
 export function MetricStat({ label, value, caption, variant = "card", accent = "gold", compact = false }) {
@@ -150,7 +153,7 @@ export function FilterPills({ label = "Filters", items = [], value, onChange }) 
  * @param {string} props.label tablist aria-label
  * @param {Array<{ id: string, label: string, disabled?: boolean }>} [props.items=[]]
  * @param {string} [props.value] id of the selected tab
- * @param {"underline"|"segmented"} [props.variant="underline"]
+ * @param {typeof tabsVariants[number]} [props.variant="underline"]
  * @param {(event: { id: string, label: string }) => void} [props.onChange]
  */
 export function Tabs({ label, items = [], value, variant = "underline", onChange }) {

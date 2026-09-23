@@ -6,6 +6,8 @@ import {
   AssistantLauncher,
   AssistantPanel,
   assistantPlacements,
+  headerPositions,
+  headerTones,
   BusinessTermForm,
   CampaignRail,
   Header,
@@ -24,6 +26,7 @@ import {
   WorkspaceGrid,
 } from "./organisms.jsx";
 import { MetricStat } from "./molecules.jsx";
+import { recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
 
 export default { title: "Organisms", tags: ["autodocs"] };
 
@@ -38,8 +41,8 @@ export const PortalHeader = {
   args: { current: "home", tone: "solid", position: "sticky" },
   argTypes: {
     current: { control: "select", options: NAV.map((item) => item.id) },
-    tone: { control: "inline-radio", options: ["solid", "overlay"] },
-    position: { control: "inline-radio", options: ["sticky", "fixed"] },
+    tone: { control: "inline-radio", options: headerTones },
+    position: { control: "inline-radio", options: headerPositions },
     onNavigate: { action: "onNavigate" },
   },
   render: (args) => (
@@ -141,18 +144,13 @@ export const Library = {
     const typeRecords = INTERPRETER.records.filter((record) => record.typeId === args.typeId);
     const filters = (type?.statusFilters || []).map((filter) => ({
       ...filter,
-      options:
-        filter.options ||
-        [...new Set(typeRecords.flatMap((record) => record[filter.id] ?? []))].map((value) => ({ id: value, label: value })),
+      options: filter.options || uniqueFilterOptions(typeRecords, filter.id),
     }));
     const rows = typeRecords.filter((record) => {
       const queryMatch = !query || `${record.title} ${record.summary}`.toLowerCase().includes(query.toLowerCase());
       const filterMatch = filters.every((filter) => {
         const selected = filterValues[filter.id];
-        if (!selected) return true;
-        const field = (filter.options || []).find((option) => option.id === selected)?.field || filter.id;
-        const values = record[field];
-        return (Array.isArray(values) ? values : [values]).includes(selected);
+        return !selected || recordMatchesFilter(record, filter, selected);
       });
       return queryMatch && filterMatch;
     });
