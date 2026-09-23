@@ -4,9 +4,12 @@
 
 ## 1. 仓库目标
 
-从 `index.html` 与 `assets/pages/*.html` 这套静态 HTML 设计 Demo 中，提取一套可复用的 React Storybook 设计系统。
+从 `index.html` 与 `assets/pages/*.html` 这套静态 HTML 设计 Demo 中，全量重建 React 界面与既有前端交互，并按奥卡姆剃刀原则提取最小必要的可复用组件体系，形成各层级 Storybook 档案。
 
-- 组件接口是事实来源。原始 HTML 只作为视觉与交互参照。
+2026-09-23 用户澄清：全量覆盖与克制抽象同时成立。目标不是局部样板、仅五页首屏、通用列表替代原有视图，也不是另建知识管理产品。全部页面、页内视图、区块、弹窗/抽屉、表单及可达交互状态都在范围内；原始 Demo 的后端/AI 模拟行为通过确定性本地故事状态演示。
+
+- 原始页面的实际生效视觉与交互是重建验收依据；提取后的组件接口是使用与组合的事实来源，不能反过来用现有接口删减参照物能力。
+- 奥卡姆剃刀约束实现复杂度，不删减覆盖范围：同构结构与行为共享，真实差异保留专用组合；不逐标签拆组件、不预建万能渲染器、不以组件数量多或少为目标。
 - 原始 HTML 不是运行时，不是组件 props，也不是验收时逐标签对比的对象。
 - 一个新页面必须能只 `import` 组件来搭建，不复制原始 HTML、不复制任何中间 JSON。
 
@@ -43,6 +46,8 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 五个页面故事（Home、Marketing Cockpit、Self-Service Center、AI Interpreter、RedNote Campaign Tool）在 1440px 下首屏与原始页面基本一致。
 
 ### 2.4 2026-09-23 审核确认的缺口
+
+增量复核（a9542f7）：稳定类型标识、未知类型空态、只读创建入口、双维状态已修正，npm test 9/9 复跑通过。下表部分条目为修复前历史事实，当前状态以 handover 为准。新发现：Principles 示例未取实际生效的 globalPrinciples；Data Model 混用资产/模型源/domain 且补写原文不存在的说明和状态；Library 独立故事仍不回写输入或执行筛选；多选筛选被单选取代，搜索缺同义词/范围/创建者。现存原始截图只有 overview、Principles、Business Term、Scenario，不能支持八类型完整对照结论；实际 Principles 对照仍有 Hero/侧栏布局和数据内容差异。
 
 本次基于本地 `main`（2555d8a，含 #8）静态代码审查，并运行 `npm run build-storybook -- --disable-telemetry`：构建通过，38 stories、0 docs。未重跑浏览器截图、Controls 全枚举或全交互验收；2026-09-22 的截图结论保留为历史记录。
 
@@ -108,54 +113,33 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 对照脚本落地为 `scripts/visual-check.mjs` 后，以脚本输出替代第 2、3 步的手工操作；脚本产出保存到 `/tmp`，不入库。
 
-## 5. 长期规划
+## 5. 长期规划（2026-09-23 全量重建里程碑）
 
-按顺序推进。每个阶段的完成标准写在此处，进度写在 `handover/README.md`。
+本节取代旧 A–E 的机械串行安排；旧进度保留作历史证据，不自动等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 handover/README.md 维护。执行指令模板见 handover/execution-prompt.md。
 
-### 阶段 A — 收口现有五个页面（首屏一致 → 状态一致）
+- **M0 全量盘点与参照基线**：核对 17 个 HTML 及 URL 参数、hash、脚本加载和覆盖关系；列出所有页内视图/状态/动作、组件候选与来源冲突。每个入口有台账，未知细节显式待查；完成首轮后即开始实现，后续随发现补充，不无限审查。
+- **M1 最小工程底座与公共基础**：可重复构建/交互验证/视觉对照、公共导出、props 声明与 autodocs、token/样式隔离、资源与导航约定、可操作的故事。先建立后续实施所需的最小闭环，其余基础组件随真实页面需求提取；不等待一个预想中的完整框架才开始页面工作。
+- **M2 全站外壳与 Home**：提取 Header、导航、Hero/布局、入口卡、助手公共组件及全部实际变体；由组件组合完整首页，恢复原始可达助手交互与导航演示。兼容 Interpreter 的侧栏与 Hero 布局，不用一种壳强套所有页面。
+- **M3 Cockpit / Self-Service / Campaign 全量重建**：reports、flexible、data-upload、media-tracking-detail、campaign；覆盖报表详情、页内 dashboard、上传流程、Campaign 五区及弹窗/助手等原始可达状态。页内多视图不能按一个 HTML 折算为一项已完成。
+- **M4 AI Interpreter 八类视图**：knowledge.html 概览及 Principles、Report Context、Data Model、Metric Dictionary、Business Term、Analytical Model、Scenario Reporting、Email Reports 的真实视图。提取所需卡片、列表/表格、筛选、标签、动作、分页和提示；保留各类型真实差异，替换通用占位列表。先完成一种类型的分层提取与组合对照，再推广共性，直至八类全部完成。
+- **M5 知识表单与详情工具**：knowledge-create、knowledge-view、metric-dictionary、data-model 及页内抽屉/版本对比/公式构建/浏览器。各适用类型的创建/编辑/只读、字段关联、必填与动作规则均完整；可用性与发布/处理阶段只在原始界面需要时分别表达，不扩建业务系统。
+- **M6 治理与 Scenario**：review-center、feedback-quality、personal-memory、scenario-library/detail/edit 的全量界面与演示交互，复用此前已提取组件。
+- **M7 全量收敛与复用交付**：17 页及台账子状态全部验收，补齐跨页组合、响应式/键盘、资源和故事文档；建立不依赖 Storybook 配置的独立 React 宿主例子，并用不同内容/布局组合组件验证复用；本地构建/导出与 CI 可执行，不以真实发布或外部部署作为完成前提。
 
-- 已由 #8 修正旧审核视觉条目；保留已确认的 Home 抽屉与 typeMeta 计数取舍。
-- 补现有入口导航与交互状态验收记录；区分“回调已触发”和“流程已演示完成”。
-- 修复 Interpreter 显示标题参与类型匹配、未知类型回退全量数据、只读类型创建入口与示例数据覆盖缺失；以稳定标识和明确能力表达现有 Demo 行为。
-- Campaign 四个 section 的数据改为 props，`content.js` 提供默认值。
-- `Header` 导航改为 `<a>`；`Hero` 去掉写死 id。
-- 完成标准：五个页面故事的所有交互状态与原始页面对应状态对照通过，并登记有意差异。
+### 每个里程碑的共同完成标准
 
-### 阶段 B — 工程基线
+1. 有明确原始页面/状态/动作来源及组件映射；没有把遗漏功能登记为永久有意差异来抵消缺口。
+2. 使用 React 组件组合完整界面；组件拥有独立语义接口、所需状态故事、可操作 Controls/Actions 和文档。允许内部私有子组件，不为满足层级命名制造无意义包装。
+3. 对受影响组件与页面完成构建、实际故事交互验证和配对视觉对照；默认态、相关非默认态、长页下部/覆盖层均纳入证据。截图脚本须校验页面加载与预期状态，不能吞异常后报通过。
+4. 本地状态演示原始前端流程，不依赖 assets/js 或生产服务；组件接入新宿主无需复制原始页面、原始业务脚本或中间 DOM 数据。
+5. handover 登记准确的状态与证据；受阻项保持未完成并继续独立工作。一个样板、若干截图、故事数量或测试通过不能替代全量验收。
 
-- 补 `tags: ["autodocs"]`、props 类型声明、`src/design/index.js`；盘点导出组件与独立故事覆盖。
-- 统一导航、具名回调、稳定类型标识与显式状态 tone；隔离全局 reset，补表单校验和键盘交互的针对性验证。
-- 组件 CSS 色值全部 token 化。
-- 每个有机体与页面补 `@media` 断点与 `:focus-visible`。
-- 落地 `scripts/visual-check.mjs`（按第 4 节步骤自动截图并输出并排图）；在 handover 中维护页面/状态/动作/故事/验证的覆盖清单，不能仅以故事总数验收。
-- 对照须固定 URL、viewport、storage 初态与交互步骤；校验受控故事状态回写，增加不依赖 Storybook 配置的宿主组合验证与静态资源检查。
-- 完成标准：`rg '#[0-9a-fA-F]{3,8}' src/design/*.css` 只命中 `tokens.css`；每个 `.stories.jsx` 含 autodocs；脚本可一键产出全部页面对照图。
-
-### 阶段 C — AI Interpreter 深度提取
-
-按原始 Demo 的信息密度从高到低：
-
-1. 类型视图：卡片网格（同义词标签、状态、创建者、动作按钮）、创建者筛选、分页、`!` 管理规则提示、按类型切换的 Hero。
-2. 表单：`AnalyticalModelForm`、Scenario Report 表单、必填校验与 Save / Submit 状态规则（见 v22 文档第 2、3 节）。
-3. 详情抽屉、版本对比、Metric Dictionary 公式构建器、Data Model 浏览器。
-- 完成标准：`knowledge.html` 八种类型的列表态有页面故事；三种可管理类型各覆盖适用的创建/编辑、校验、保存/提交与禁用条件，只读类型不误给创建入口。发布/处理状态与 AI 可用性分开表达，保留类型专属字段与关联；行为断言与视觉对照均通过。
-
-### 阶段 D — 治理与自助模块
-
-- Review Center、Feedback & Quality、Personal Memory、Scenario Library / Detail / Edit。
-- Self-Service 的数据视图、上传页、Media Tracking Detail。
-- Marketing Cockpit 的报表详情与 Copilot 面板。
-- 完成标准：17 个原始 HTML 各有对应页面故事，并按 handover 覆盖清单完成适用的页内状态和主要动作；仅有入口截图不算完成。
-
-### 阶段 E — 交付形态
-
-- 决定发布形态（npm 包或 monorepo 子包），补 `package.json` 的 `exports` 与构建产物。
-- Storybook 静态站点接入 CI，视觉对照脚本在 PR 中运行。
+顺序：M0 → M1 最小闭环 → M2 → M3 → M4 → M5 → M6 → M7。已证明共性可提前提取，遇依赖可调整局部顺序并记录原因；不得把全量任务缩减为首个里程碑。每个提交/PR仍只包含一个可独立验收的条目。
 
 ## 6. 分支与 PR 规则
 
 - 从最新 `origin/main` 开分支。不在 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 及其派生分支上开发。
-- 每个 PR 只推进一个阶段内的一个可独立验收的条目。PR 描述必须包含：改动的组件列表、对照截图（或脚本输出路径）、有意差异登记。
+- 每个 PR 只推进一个里程碑内的一个可独立验收的条目。PR 描述必须包含：改动的组件列表、对照截图（或脚本输出路径）、有意差异登记。
 - PR 合并后，同一 PR 内更新 `handover/README.md` 的状态表与维护日志。禁止只改代码不改 handover。
 - 不修改 `index.html`、`assets/**` 中的原始 Demo，除非是修复参照物本身的明显错误，且需在 PR 中单列说明。
 
