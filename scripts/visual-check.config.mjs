@@ -484,6 +484,250 @@ export default [
     },
   },
   {
+    /* `?view=live` without a dashboard param must NOT open the live view —
+       the original gates on `query.get("dashboard") !== null` and renders
+       the project catalog instead. */
+    id: "p02-live-gate",
+    original: {
+      url: "/assets/pages/reports.html?project=fourp&view=live",
+      expect: [
+        { sel: ".project-report-row", text: "4P Executive Overview" },
+        { sel: "#liveTitle", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "fourp", view: "live" },
+      expect: [
+        { sel: ".mh-report-row", text: "4P Executive Overview" },
+        { sel: ".mh-live", state: "hidden" },
+      ],
+    },
+  },
+  {
+    /* Out-of-range dashboard index falls back to report 0
+       (`reports[i] ? i : 0`), not the last report. */
+    id: "p02-live-oob",
+    original: {
+      url: "/assets/pages/reports.html?project=fourp&dashboard=9&view=live",
+      expect: [{ sel: "#liveTitle", text: "4P Executive Overview" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "fourp", view: "live", dashboard: 9 },
+      expect: [{ sel: ".mh-live-heading h1", text: "4P Executive Overview" }],
+    },
+  },
+  {
+    /* city dashboard=1 is the generic LiveOverview (six-city embed only at index 0). */
+    id: "p02-live-city-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveKicker", text: "CITY STRATEGY / LIVE REPORT" },
+        { sel: "#liveTitle", text: "City Analysis Dashboard" },
+        { sel: ".live-kpi strong", text: "¥86.4M" },
+        { sel: ".live-rank-row b", text: "84" },
+        { sel: ".sixcity-embed", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading .mh-eyebrow", text: "CITY STRATEGY / LIVE REPORT" },
+        { sel: ".mh-live-heading h1", text: "City Analysis Dashboard" },
+        { sel: ".mh-live-kpi strong", text: "¥86.4M" },
+        { sel: ".mh-live-rank b", text: "84" },
+        { sel: ".mh-sixcity", state: "hidden" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-fourp-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=fourp&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveKicker", text: "4P REPORT / LIVE REPORT" },
+        { sel: "#liveTitle", text: "Promotion Lift Analysis" },
+        { sel: ".live-kpi strong", text: "+14.2%" },
+        { sel: ".live-rank-row b", text: "81" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "fourp", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading .mh-eyebrow", text: "4P REPORT / LIVE REPORT" },
+        { sel: ".mh-live-heading h1", text: "Promotion Lift Analysis" },
+        { sel: ".mh-live-kpi strong", text: "+14.2%" },
+        { sel: ".mh-live-rank b", text: "81" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-customer-d0",
+    original: {
+      url: "/assets/pages/reports.html?project=customer&dashboard=0&view=live",
+      expect: [
+        { sel: "#liveKicker", text: "CUSTOMER DAILY TRACKING / LIVE REPORT" },
+        { sel: "#liveTitle", text: "Customer Daily Pulse" },
+        { sel: ".live-kpi strong", text: "684K" },
+        { sel: ".live-rank-row b", text: "58" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "customer", view: "live", dashboard: 0 },
+      expect: [
+        { sel: ".mh-live-heading .mh-eyebrow", text: "CUSTOMER DAILY TRACKING / LIVE REPORT" },
+        { sel: ".mh-live-heading h1", text: "Customer Daily Pulse" },
+        { sel: ".mh-live-kpi strong", text: "684K" },
+        { sel: ".mh-live-rank b", text: "58" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-customer-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=customer&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Customer Funnel Watch" },
+        { sel: ".live-kpi strong", text: "64.8%" },
+        { sel: ".live-rank-row b", text: "94" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "customer", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Customer Funnel Watch" },
+        { sel: ".mh-live-kpi strong", text: "64.8%" },
+        { sel: ".mh-live-rank b", text: "94" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-abo-d0",
+    original: {
+      url: "/assets/pages/reports.html?project=abo&dashboard=0&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Audience Build Overview" },
+        { sel: ".live-kpi strong", text: "18.4M" },
+        { sel: ".live-rank-row b", text: "88" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "abo", view: "live", dashboard: 0 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Audience Build Overview" },
+        { sel: ".mh-live-kpi strong", text: "18.4M" },
+        { sel: ".mh-live-rank b", text: "88" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-abo-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=abo&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Campaign Quality Watch" },
+        { sel: ".live-kpi strong", text: "¥12.6M" },
+        { sel: ".live-rank-row b", text: "82" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "abo", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Campaign Quality Watch" },
+        { sel: ".mh-live-kpi strong", text: "¥12.6M" },
+        { sel: ".mh-live-rank b", text: "82" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-rednote-d0",
+    original: {
+      url: "/assets/pages/reports.html?project=rednote&dashboard=0&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Rednote Media Tracking" },
+        { sel: ".live-kpi strong", text: "142M" },
+        { sel: ".live-rank-row b", text: "58" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "rednote", view: "live", dashboard: 0 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Rednote Media Tracking" },
+        { sel: ".mh-live-kpi strong", text: "142M" },
+        { sel: ".mh-live-rank b", text: "58" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-rednote-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=rednote&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Creative Quality Monitor" },
+        { sel: ".live-kpi strong", text: "286" },
+        { sel: ".live-rank-row b", text: "82" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "rednote", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Creative Quality Monitor" },
+        { sel: ".mh-live-kpi strong", text: "286" },
+        { sel: ".mh-live-rank b", text: "82" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-ottolv-d0",
+    original: {
+      url: "/assets/pages/reports.html?project=ottolv&dashboard=0&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "OTT / OLV Exposure Tracking" },
+        { sel: ".live-kpi strong", text: "386M" },
+        { sel: ".live-rank-row b", text: "86" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "ottolv", view: "live", dashboard: 0 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "OTT / OLV Exposure Tracking" },
+        { sel: ".mh-live-kpi strong", text: "386M" },
+        { sel: ".mh-live-rank b", text: "86" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-ottolv-d1",
+    original: {
+      url: "/assets/pages/reports.html?project=ottolv&dashboard=1&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Source Integrity Monitor" },
+        { sel: ".live-kpi strong", text: "11 / 12" },
+        { sel: ".live-rank-row b", text: "94" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "ottolv", view: "live", dashboard: 1 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Source Integrity Monitor" },
+        { sel: ".mh-live-kpi strong", text: "11 / 12" },
+        { sel: ".mh-live-rank b", text: "94" },
+      ],
+    },
+  },
+  {
     /* Report Copilot workspace (aiWorkspace) — drawer opens over the live view. */
     id: "p02-copilot-open",
     original: {

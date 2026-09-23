@@ -151,7 +151,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Object<string, object>} [props.projects={}] project records keyed by id
  * @param {string} [props.project="all"] active catalog project id or "all"
  * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view
- * @param {number} [props.dashboard=0] live report index within the active project
+ * @param {number|null} [props.dashboard=null] live report index; required to enter live view
  * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
@@ -187,7 +187,7 @@ export function MarketingCockpitPage({
   projects = {},
   project = "all",
   view = "catalog",
-  dashboard = 0,
+  dashboard = null,
   details = null,
   detailsSections = [],
   projectHref = projectCatalogHref,
@@ -219,9 +219,13 @@ export function MarketingCockpitPage({
   const projectKeys = Object.keys(projects);
   const liveKey = projects[project] ? project : projectKeys[0];
   const liveProject = projects[liveKey];
-  const liveIndex = liveProject ? Math.min(Math.max(dashboard | 0, 0), liveProject.reports.length - 1) : 0;
+  /* Original: `reports[activeReportIndex] ? activeReportIndex : 0` — an
+     out-of-range index falls back to 0, and the live view only opens when the
+     `dashboard` param is present (`?view=live` alone renders the catalog). */
+  const liveIndexNum = Number(dashboard);
+  const liveIndex = liveProject && liveProject.reports[liveIndexNum] ? liveIndexNum : 0;
   const liveReport = liveProject ? liveProject.reports[liveIndex] : null;
-  const isLive = view === "live" && Boolean(liveProject && liveReport);
+  const isLive = view === "live" && dashboard !== null && dashboard !== undefined && Boolean(liveProject && liveReport);
   let detailsTarget = null;
   if (details && projects[details.project]) {
     const detailProject = projects[details.project];

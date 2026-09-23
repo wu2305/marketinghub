@@ -111,7 +111,6 @@ export const MarketingCockpit = {
     query: "",
     project: "all",
     view: "catalog",
-    dashboard: 0,
     details: null,
     assistantOpen: false,
     workspaceOpen: false,
@@ -188,7 +187,7 @@ export const MarketingCockpit = {
     };
     const liveKey = COCKPIT.projects[project] ? project : Object.keys(COCKPIT.projects)[0];
     const liveProject = COCKPIT.projects[liveKey];
-    const liveIndex = Math.min(Math.max(Number(dashboard) || 0, 0), liveProject.reports.length - 1);
+    const liveIndex = liveProject.reports[Number(dashboard)] ? Number(dashboard) : 0;
     const liveReport = liveProject.reports[liveIndex];
     const wsProfile = copilotProfile(liveKey, liveIndex);
     const wsAsk = ({ question }) => {
