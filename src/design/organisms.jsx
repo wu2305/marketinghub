@@ -888,15 +888,15 @@ function AssistantAnswer({ answer, onFeedback }) {
   }
   const feedbackRow = (
     <div className="mh-assistant__feedback">
-      <button type="button" aria-pressed={feedback === "helpful"} onClick={() => pick("helpful")}>
+      <button type="button" data-kind="helpful" aria-pressed={feedback === "helpful"} onClick={() => pick("helpful")}>
         <Icon name="thumb-up" />
         <span>Helpful</span>
       </button>
-      <button type="button" aria-pressed={feedback === "not-helpful"} onClick={() => pick("not-helpful")}>
+      <button type="button" data-kind="not-helpful" aria-pressed={feedback === "not-helpful"} onClick={() => pick("not-helpful")}>
         <Icon name="thumb-down" />
         <span>Not helpful</span>
       </button>
-      <button type="button" aria-label="Copy answer" onClick={copy}>
+      <button type="button" data-kind="copy" aria-label="Copy answer" onClick={copy}>
         <Icon name="copy" />
         <span>{copied ? "Copied!" : "Copy"}</span>
       </button>
@@ -2420,6 +2420,10 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
   const ticks = new Set(scPickTicks(labels.length));
   const grid = [0, 1, 2, 3].map((g) => min + ((max - min) * g) / 3);
   const points = (arr) => arr.map((v, i) => X(i).toFixed(1) + "," + Y(v).toFixed(1)).join(" ");
+  React.useEffect(() => {
+    setHover(null);
+  }, [data, endIdx]);
+  const hi = hover ? Math.min(hover.index, labels.length - 1) : 0;
   React.useLayoutEffect(() => {
     if (hover && tipRef.current) {
       const width = tipRef.current.offsetWidth;
@@ -2491,26 +2495,26 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
         {hover ? (
           <g>
             <line
-              x1={X(hover.index).toFixed(1)}
+              x1={X(hi).toFixed(1)}
               y1={SC_PAD_T}
-              x2={X(hover.index).toFixed(1)}
+              x2={X(hi).toFixed(1)}
               y2={SC_CHART_H - SC_PAD_B}
               stroke="#9aa0a8"
               strokeWidth="1"
               strokeDasharray="3 2"
             />
-            <circle cx={X(hover.index).toFixed(1)} cy={Y(t[hover.index]).toFixed(1)} r="3.2" fill="#333" stroke="#fff" strokeWidth="1" />
-            <circle cx={X(hover.index).toFixed(1)} cy={Y(n[hover.index]).toFixed(1)} r="3.2" fill="#c9a876" stroke="#fff" strokeWidth="1" />
+            <circle cx={X(hi).toFixed(1)} cy={Y(t[hi]).toFixed(1)} r="3.2" fill="#333" stroke="#fff" strokeWidth="1" />
+            <circle cx={X(hi).toFixed(1)} cy={Y(n[hi]).toFixed(1)} r="3.2" fill="#c9a876" stroke="#fff" strokeWidth="1" />
           </g>
         ) : null}
       </svg>
       {hover ? (
         <div className="mh-sc-tip" ref={tipRef} style={{ left: tipLeft, top: hover.y }}>
-          <b>{labels[hover.index]}</b>
+          <b>{labels[hi]}</b>
           <br />
-          <span>● {totalLabel}: {t[hover.index].toFixed(decimals)}</span>
+          <span>● {totalLabel}: {t[hi].toFixed(decimals)}</span>
           <br />
-          <span>● Non-Invest: {n[hover.index].toFixed(decimals)}</span>
+          <span>● Non-Invest: {n[hi].toFixed(decimals)}</span>
         </div>
       ) : null}
     </div>

@@ -115,6 +115,15 @@ a {
   --mh-ink-field: #1c2328;
   --mh-icon-slate: #5b6470;
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
+  /* global AI launcher (assistant-launcher.css) */
+  --mh-launcher-line: #303840;
+  --mh-launcher-bg: #20262c;
+  --mh-launcher-bg-hover: #171c21;
+  --mh-launcher-aura: rgba(218, 168, 96, 0.2);
+  --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
+  --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
+  --mh-launcher-focus: rgba(63, 115, 166, 0.52);
+  --mh-launcher-orb-ink: #111111;
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: #171b1f;
   --mh-copy-ai: #4f5963;
@@ -133,6 +142,15 @@ a {
   --mh-line-soft: #e1e7ec;
   --mh-line-tab: #e5e7eb;
   --mh-line-faintest: #f0f2f4;
+  /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
+  --mh-ai-feedback-line: #edf0f3;
+  --mh-ai-chip-line: #d8dde2;
+  --mh-ai-chip-copy: #5d6872;
+  --mh-ai-chip-hover-line: #b5bcc4;
+  --mh-ai-chip-pos: #2e7d32;
+  --mh-ai-chip-pos-bg: #e8f5e9;
+  --mh-ai-chip-neg: #c62828;
+  --mh-ai-chip-neg-bg: #ffebee;
   --mh-bg-faint: #f9fafb;
   --mh-field-line: #cfd6db;
   /* skill menu / model-flow dialog */
@@ -154,6 +172,7 @@ a {
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-reports-bg: #f3f5f7;
+  --mh-reports-line: #dce1e6;
   --mh-reports-surface-soft: #f7f8fa;
   --mh-reports-ink: #17191c;
   --mh-reports-copy: #46505b;
@@ -185,6 +204,8 @@ a {
   --mh-live-toolbar-bg: rgba(244, 246, 248, 0.96);
   --mh-live-line: #dfe3e8;
   --mh-live-inkline: #2a2925;
+  --mh-live-chart-bg: #f7f7f7;
+  --mh-live-back-hover: #141414;
   --mh-live-bar: #d8d4c9;
   --mh-live-bar-alt: #79a991;
   --mh-live-faint: #74726c;
@@ -203,6 +224,7 @@ a {
   --mh-sc-static-ink: #6b7280;
   --mh-sc-row-hover: #f3f5f8;
   --mh-sc-head-line: #eeeeee;
+  --mh-sc-link: #185fa5;
   --mh-sc-pos: #00a06b;
   --mh-sc-neg: #e34d59;
   --mh-sc-noninvest: #c9a876;

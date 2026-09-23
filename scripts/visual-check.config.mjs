@@ -446,6 +446,44 @@ export default [
     },
   },
   {
+    /* Regression: hovering a late index then shrinking the period must not crash
+       on a stale hover.index (React state outlives the shortened data arrays). */
+    id: "p02-live-city-hover-shrink",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { hover: ".sc-chart:first-child svg" },
+        { waitMs: 200 },
+        { click: "#sc-endCtrl" },
+        { wait: "#sc-endCtrl.sc-open .sc-panel" },
+        { click: "#sc-endCtrl .sc-prow:has-text('FY25 P11')" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: "#sc-endCtrl .sc-fval-txt", text: "FY25 P11" },
+        { sel: ".sc-chart svg" },
+        { sel: ".sc-tip", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { hover: ".mh-sc-chart:first-of-type svg" },
+        { waitMs: 200 },
+        { click: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('Invest Period End')) .mh-sc-fval" },
+        { wait: ".mh-sc-fval.is-open .mh-sc-panel" },
+        { click: ".mh-sc-fval.is-open .mh-sc-prow:has-text('FY25 P11')" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('Invest Period End')) .mh-sc-fval__txt", text: "FY25 P11" },
+        { sel: ".mh-sc-chart svg" },
+        { sel: ".mh-sc-tip", state: "hidden" },
+      ],
+    },
+  },
+  {
     /* Report Copilot workspace (aiWorkspace) — drawer opens over the live view. */
     id: "p02-copilot-open",
     original: {
