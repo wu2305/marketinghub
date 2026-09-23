@@ -40,6 +40,7 @@ export const Home = {
     onPromptChange: { action: "onPromptChange" },
     onNewSession: { action: "onNewSession" },
     onMaximize: { action: "onMaximize" },
+    onHistory: { action: "onHistory" },
     onHistorySelect: { action: "onHistorySelect" },
     onFeedback: { action: "onFeedback" },
   },
@@ -81,7 +82,7 @@ export const Home = {
         onSubmit={(event) => {
           const text = String(event.prompt || "").trim();
           if (text) {
-            setAnswers((items) => [...items, buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
+            setAnswers([buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
             setPrompt("");
           }
           args.onSubmit?.(event);
@@ -92,6 +93,7 @@ export const Home = {
           args.onNewSession?.();
         }}
         onMaximize={args.onMaximize}
+        onHistory={args.onHistory}
         onHistorySelect={(event) => {
           setPrompt(event.prompt);
           args.onHistorySelect?.(event);
@@ -299,12 +301,13 @@ export const Campaign = {
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
     const [taskOpen, setTaskOpen] = useSynced(args.taskDialogOpen);
-    const [toast, setToast] = React.useState(args.toast || { open: false, message: "" });
+    const [toast, setToast] = useSynced(args.toast || { open: false, message: "" });
     const toastTimer = React.useRef(null);
+    React.useEffect(() => () => clearTimeout(toastTimer.current), []);
     const showToast = (message) => {
       clearTimeout(toastTimer.current);
       setToast({ open: true, message });
-      toastTimer.current = setTimeout(() => setToast((current) => ({ ...current, open: false })), 3000);
+      toastTimer.current = setTimeout(() => setToast((current) => ({ ...current, open: false })), 2600);
     };
     return (
       <CampaignPage

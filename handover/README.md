@@ -33,7 +33,7 @@ npm test               # vitest 行为测试
 |---|---|---|---|
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。仍缺：token 化、@media、独立宿主、键盘验证 |
-| M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现并配对验证（答案流/历史/最大化/焦点/Escape）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
+| M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | a9542f7 改善类型接口，未完成专用视图提取 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
@@ -88,7 +88,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 **P01 index.html** — 脚本 portal.js + assistant-skill-menu.js；CSS home.css + assistant-panel.css。
 - 视图：Header 导航、Home Hero、4 工作台卡（→reports/flexible/knowledge/campaign.html）、3 项目卡（→reports.html?project=rednote|abo|customer）。
-- 交互态（运行时核验后修正）：助手抽屉——建议 chips（openAssistant 重渲染为 personalized 组）、发送→answerFeed 答案卡（bubble + card + sources + actions + Helpful/Not helpful/Copy→Copied!）、homeMaximize（抽屉↔居中弹窗 is-ai-expanded）、homeHistoryPopup（11 条 history item 填充 composer，外点/Escape/×关闭）、newSession 清空、Escape/背景关闭、打开时聚焦 composer 并隐藏 #aiEntry、关闭还原焦点；`?ask=<context>` 打开并切换建议组。Home 上被 CSS 强制隐藏、不可达：platformGuideTrigger、ask-scope、四个 picker（suggest/attach/model/mode）、#uploadPopup；uploadDialog/uploadHistoryPopup 仅能从 popup 进入，故 Home 上同样不可达（DOM 残留，不建）。
+- 交互态（运行时核验后修正）：助手抽屉——建议 chips（openAssistant 重渲染为 personalized 组）、发送→answerFeed 答案卡（bubble + card + sources + actions + Helpful/Not helpful/Copy→Copied!）、homeMaximize（抽屉↔居中弹窗 is-ai-expanded）、homeHistoryPopup（11 条 history item 填充 composer，外点/Escape 关闭；原始无 ×——`#homeHistoryPopupClose` 为 null、`.home-history-popup-close` CSS 为死代码，React 版 × 属有意差异）、newSession 清空、Escape/背景关闭、打开时聚焦 composer 并隐藏 #aiEntry、关闭还原焦点；`?ask=<context>` 打开并切换建议组。Home 上被 CSS 强制隐藏、不可达：platformGuideTrigger、ask-scope、四个 picker（suggest/attach/model/mode）、#uploadPopup；uploadDialog/uploadHistoryPopup 仅能从 popup 进入，故 Home 上同样不可达（DOM 残留，不建）。
 - 现状：助手抽屉全流已实现（答案流/历史/最大化/焦点/Escape）；`?ask=` 由宿主路由等价物承接，故事侧以 scope/建议 props 表达。
 - 组件候选：SiteHeader(已有)、WorkspaceCard(已有)、ProjectCard(已有)、AssistantPanel(已扩展：answers feed/history popover/expanded/focus+Escape)、HistoryPopover(并入 AssistantPanel)。PlatformGuide/UploadDialog/UploadHistoryPopup 属于工作区页（P02/P07 等），不在 Home 重建。
 
@@ -224,6 +224,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Interpreter 未知类型 | 原 `?type=` 非法值回退 `all` 显示概览；本实现改为显式 Unknown 空态，不渲染任何记录 | 防止非法类型意外展示全量记录的实现选择；用户并未禁止回退概览，此差异须在最终参照验收中重新评估 | devin/interpreter-type-contract |
 | Interpreter 列表形态 | 类型页为通用行表（Title/Type/Creator/Process/AI Status 双状态列）；原专用视图为卡片网格、专属列（Email 10 列、BT 同义词卡、Scenario 卡 + 分页 + 逐卡动作） | 本轮只修数据契约与动作入口；逐类型视图属阶段 C | devin/interpreter-type-contract |
 | Interpreter Hero | 选中类型时 Hero 标题/描述/统计切换为该类型（对齐原文逐类型 hero） | types.js 注释确认每类型有独立 hero statistics | devin/interpreter-type-contract |
+| Home 助手历史弹窗 | React 版 popover 含 × 关闭按钮且锚定在抽屉内按钮下方；原始 `#homeHistoryPopup` 无关闭按钮（CSS 为死代码）、`position:fixed` 位于按钮左侧 | × 仅为可达性便利；锚定差异为组合方式差异，不做像素级复刻 | devin/interpreter-type-contract |
+| Modal 表单值 | React Modal 关闭即卸载，重开时字段回 `defaultValue`；原生 `<dialog>` 仅隐藏，编辑值保留 | 受控组件生命周期差异；原始无提交后重开校验流程，登记不改架构 | devin/interpreter-type-contract |
 
 ## 4. 已知缺口
 
@@ -274,3 +276,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | M3 P06：Modal 有机体 + Toast 分子；CampaignPage taskDialog/toast/onSubmitTask 接口与表单重建；FormField defaultValue；故事全受控（3s toast、Bind Account toast）；visual-check 新增 p06-campaign-task-dialog 配对。npm test 9/9、build 55 entries（50 stories）、visual-check 11/11 | Devin |
 | 2026-09-23 | M3 P03：ActionCard 增 href（真实 `<a>`）与 history 图标；新 UploadHistory 有机体（Modal 组合，File/Uploader/Time 表 + Preview/Download + 空态）；SelfServicePage uploadHistory/onOpenHistory/onPreviewFile/onDownloadFile；新图标 file/eye/download；story 受控历史弹窗；p03-upload-history 配对场景。登记 workspace.js 死代码（analysisWorkbench 等节点不存在）与不可达 moduleHistory 模块。npm test 9/9、build 56 entries、visual-check 12/12 | Devin |
 | 2026-09-23 | M3 P04：`FileDropzone` 分子（点击/拖拽/dropzone 高亮/选中文件提示）与 `DataUploadPage` 页面组合（back 链接、Template Import 工具栏、14 字段表单、Submit 1500ms 瞬态、Modal 承接 bulkImport 弹窗 + template 链接 + Tips）；新图标 upload/file-upload/arrow-left；DATA_UPLOAD 内容与受控故事；index.js 公共出口。原始 `.bulk-import-steps` 样式无 DOM 对应，未重建。npm test 9/9、build 58 entries（53 stories）、visual-check 15/15 | Devin |
+| 2026-09-23 | 对抗性复核修复批（ebb598a + 85f4564）：AssistantPanel 补 Enter 提交（Shift+Enter 换行）、单次 Escape 同时关 popover 与面板（原始双监听器同帧触发）、关闭时重置 expanded/historyOpen、body 锁滚动、焦点还原加 isConnected 防护；建议/历史项/newSession 回填后聚焦 composer；答案 Copy 改为整卡 innerText 且仅 clipboard 成功才显示 Copied!（timer 卸载清理）；Home/Campaign 助手 launcher 常挂载（原始 #aiEntry 常驻）；feed 由追加改为整批替换（原始 `answerFeed.innerHTML=""`）；HomePage 补 onHistory 透传。Modal/Toast 批：任务弹窗三个 select 补 defaultValue（原 selectedIndex=-1 空面 + FormData null）、preview eyebrow 改 faint+uppercase、弹窗字段样式按 task-form-grid 原始度量覆盖（9px label/38px/11px/蓝色焦点环，新 token --mh-focus-blue）、Modal/AssistantPanel onClose 改 ref 防不稳定回调焦点抖动、Modal 补 Tab 焦点圈禁、z-index 140 高于 toast 120、toast 动画 5px/2600ms、账号计数补单复数（account/accounts shown）、故事 toast useSynced+timer 清理、Modal 故事去内联样式。已知差异登记：弹窗关闭后表单值不保留（原生 `<dialog>` 保留 DOM；React 卸载重建，登记而非改架构）。npm test 9/9、visual-check 15/15 | Devin |

@@ -50,6 +50,7 @@ function Shell({ tone = "workspace", children }) {
  * @param {(event: { scope: string }) => void} [props.onScopeChange]
  * @param {() => void} [props.onNewSession]
  * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
+ * @param {(event: { open: boolean }) => void} [props.onHistory]
  * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
  * @param {(event: { query: string, feedback: string|null }) => void} [props.onFeedback]
  */
@@ -74,6 +75,7 @@ export function HomePage({
   onScopeChange,
   onNewSession,
   onMaximize,
+  onHistory,
   onHistorySelect,
   onFeedback,
 }) {
@@ -89,7 +91,7 @@ export function HomePage({
         <SectionHeading {...heading} />
         <WorkspaceGrid cards={cards} onOpen={onOpen} onNavigate={onNavigate} />
       </div>
-      {assistantOpen ? null : <AssistantLauncher onOpen={onOpenAssistant} />}
+      <AssistantLauncher onOpen={onOpenAssistant} />
       <AssistantPanel
         open={assistantOpen}
         placement="drawer"
@@ -106,6 +108,7 @@ export function HomePage({
         onScopeChange={onScopeChange}
         onNewSession={onNewSession}
         onMaximize={onMaximize}
+        onHistory={onHistory}
         onHistorySelect={onHistorySelect}
         onFeedback={onFeedback}
       />
@@ -521,7 +524,7 @@ export function CampaignPage({
                     </form>
                   }
                 >
-                  <DataTable columns={accountColumns} rows={visibleAccounts} caption={`${visibleAccounts.length} accounts shown`} />
+                  <DataTable columns={accountColumns} rows={visibleAccounts} caption={`${visibleAccounts.length} ${visibleAccounts.length === 1 ? "account" : "accounts"} shown`} />
                 </Panel>
               </div>
             </>
@@ -602,7 +605,7 @@ export function CampaignPage({
           ) : null}
         </main>
       </div>
-      {assistantOpen ? null : <AssistantLauncher onOpen={onOpenAssistant} />}
+      <AssistantLauncher onOpen={onOpenAssistant} />
       <AssistantPanel open={assistantOpen} {...assistant} prompt={prompt} onClose={onCloseAssistant} onPromptChange={onPromptChange} onSubmit={onSubmit} />
       <Modal
         open={taskDialogOpen}
@@ -626,9 +629,9 @@ export function CampaignPage({
         >
           <p className="mh-task-dialog__intro">{taskDialog.description}</p>
           <div className="mh-task-dialog__grid">
-            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} />
-            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} />
-            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} />
+            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} defaultValue={taskDialog.fields?.actions?.[0]} />
+            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} defaultValue={taskDialog.fields?.platforms?.[0]} />
+            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} defaultValue={taskDialog.fields?.accounts?.[0]} />
             <FormField label={taskDialog.object?.label || "Object"} name="object" defaultValue={taskDialog.object?.value || ""} />
           </div>
           <div className="mh-task-dialog__preview">

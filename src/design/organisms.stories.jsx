@@ -395,7 +395,7 @@ export const DialogModal = {
             args.onClose?.();
           }}
         >
-          <p style={{ marginTop: 9 }}>Modal body content — forms, previews, and footers render here.</p>
+          <p>Modal body content — forms, previews, and footers render here.</p>
         </Modal>
       </>
     );

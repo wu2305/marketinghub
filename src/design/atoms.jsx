@@ -118,6 +118,7 @@ export function TextInput({
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {React.Ref<HTMLTextAreaElement>} [props.ref] forwarded to the textarea
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
+ * @param {(event: React.KeyboardEvent<HTMLTextAreaElement>) => void} [props.onKeyDown]
  */
 export const TextArea = React.forwardRef(function TextArea({
   name,
@@ -129,6 +130,7 @@ export const TextArea = React.forwardRef(function TextArea({
   invalid = false,
   label,
   onChange,
+  onKeyDown,
 }, ref) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue);
   const controlled = value !== undefined;
@@ -144,6 +146,7 @@ export const TextArea = React.forwardRef(function TextArea({
       disabled={disabled}
       aria-invalid={invalid || undefined}
       aria-label={label}
+      onKeyDown={onKeyDown}
       onChange={(event) => {
         if (!controlled) setUncontrolled(event.target.value);
         onChange?.({ name: name || "", value: event.target.value });

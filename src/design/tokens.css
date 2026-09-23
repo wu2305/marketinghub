@@ -99,6 +99,7 @@ a {
   --mh-warn-line: #e5d58b;
   --mh-warn-accent: #e6bc73;
   --mh-warn-note: #776f4b;
+  --mh-focus-blue: #8da7c0;
   --mh-focus-ring: rgba(63, 115, 166, 0.1);
   --mh-line-hover: #929da7;
 }

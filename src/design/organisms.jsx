@@ -541,16 +541,22 @@ export function AssistantLauncher({ label = "AI Interpreter", onOpen }) {
 function AssistantAnswer({ answer, onFeedback }) {
   const [feedback, setFeedback] = React.useState(null);
   const [copied, setCopied] = React.useState(false);
+  const cardRef = React.useRef(null);
+  const copyTimer = React.useRef(null);
+  React.useEffect(() => () => window.clearTimeout(copyTimer.current), []);
   const pick = (kind) => {
     const next = feedback === kind ? null : kind;
     setFeedback(next);
     onFeedback?.({ query: answer.query, feedback: next });
   };
   const copy = () => {
-    const text = [answer.query, answer.title, answer.body].filter(Boolean).join("\n");
-    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).catch(() => {});
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1500);
+    const text = cardRef.current?.innerText ?? [answer.query, answer.title, answer.body].filter(Boolean).join("\n");
+    if (!navigator.clipboard?.writeText) return;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      window.clearTimeout(copyTimer.current);
+      copyTimer.current = window.setTimeout(() => setCopied(false), 1500);
+    }).catch(() => {});
     onFeedback?.({ query: answer.query, feedback: "copy" });
   };
   return (
@@ -558,7 +564,7 @@ function AssistantAnswer({ answer, onFeedback }) {
       <div className="mh-assistant__query">
         <span className="mh-assistant__bubble">{answer.query}</span>
       </div>
-      <article className="mh-assistant__answer">
+      <article className="mh-assistant__answer" ref={cardRef}>
         <div className="mh-assistant__answer-head">
           <span>{answer.kicker}</span>
           <small>{answer.sources?.length || 0} grounded sources</small>
@@ -674,14 +680,22 @@ export function AssistantPanel({
   const [historyOpen, setHistoryOpen] = React.useState(false);
   const mainRef = React.useRef(null);
   const promptRef = React.useRef(null);
+  const onCloseRef = React.useRef(onClose);
+  onCloseRef.current = onClose;
 
   React.useEffect(() => {
-    if (!open) return undefined;
+    if (!open) {
+      setExpanded(false);
+      setHistoryOpen(false);
+      return undefined;
+    }
     const previous = document.activeElement;
+    document.body.classList.add("dialog-open");
     const timer = window.setTimeout(() => promptRef.current?.focus(), 80);
     return () => {
       window.clearTimeout(timer);
-      if (previous instanceof HTMLElement) previous.focus();
+      document.body.classList.remove("dialog-open");
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
     };
   }, [open]);
 
@@ -689,12 +703,12 @@ export function AssistantPanel({
     if (!open) return undefined;
     const onKeydown = (event) => {
       if (event.key !== "Escape") return;
-      if (historyOpen) setHistoryOpen(false);
-      else onClose?.();
+      setHistoryOpen(false);
+      onCloseRef.current?.();
     };
     document.addEventListener("keydown", onKeydown);
     return () => document.removeEventListener("keydown", onKeydown);
-  }, [open, historyOpen, onClose]);
+  }, [open]);
 
   React.useEffect(() => {
     if (!historyOpen) return undefined;
@@ -727,7 +741,15 @@ export function AssistantPanel({
             <h2>{title}</h2>
           </div>
           <div className="mh-assistant__actions">
-            <button className="mh-assistant__icon" type="button" aria-label="New session" onClick={onNewSession}>
+            <button
+              className="mh-assistant__icon"
+              type="button"
+              aria-label="New session"
+              onClick={() => {
+                onNewSession?.();
+                promptRef.current?.focus();
+              }}
+            >
               <Icon name="plus" />
             </button>
             <button
@@ -774,6 +796,7 @@ export function AssistantPanel({
                         onClick={() => {
                           setHistoryOpen(false);
                           onHistorySelect?.({ label: item.label, prompt: item.prompt });
+                          promptRef.current?.focus();
                         }}
                       >
                         {item.label}
@@ -798,7 +821,10 @@ export function AssistantPanel({
               {suggestions.map((item) => {
                 const suggestion = typeof item === "string" ? { label: item, prompt: item } : item;
                 return (
-                  <Suggestion key={suggestion.label} onSelect={() => onSuggestion?.({ prompt: suggestion.prompt })}>
+                  <Suggestion key={suggestion.label} onSelect={() => {
+                    onSuggestion?.({ prompt: suggestion.prompt });
+                    promptRef.current?.focus();
+                  }}>
                     {suggestion.label}
                   </Suggestion>
                 );
@@ -831,7 +857,20 @@ export function AssistantPanel({
             <div className="mh-assistant__scope-reserve" aria-hidden="true" />
           ) : null}
           <div className="mh-assistant__box">
-            <TextArea label="Ask AI Interpreter" rows={1} value={prompt} placeholder="Type your question or upload Excel/CSV files for data analysis" onChange={onPromptChange} ref={promptRef} />
+            <TextArea
+              label="Ask AI Interpreter"
+              rows={1}
+              value={prompt}
+              placeholder="Type your question or upload Excel/CSV files for data analysis"
+              onChange={onPromptChange}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  if (String(prompt).trim()) event.currentTarget.form?.requestSubmit();
+                }
+              }}
+              ref={promptRef}
+            />
             <div className="mh-assistant__tools">
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
@@ -1048,21 +1087,41 @@ export function BusinessTermForm({
 export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, onClose }) {
   const generatedTitleId = React.useId();
   const dialogRef = React.useRef(null);
+  const onCloseRef = React.useRef(onClose);
+  onCloseRef.current = onClose;
   React.useEffect(() => {
     if (!open) return undefined;
     const previous = document.activeElement;
     document.body.classList.add("dialog-open");
     dialogRef.current?.focus();
     const onKey = (event) => {
-      if (event.key === "Escape") onClose?.();
+      if (event.key === "Escape") {
+        onCloseRef.current?.();
+        return;
+      }
+      if (event.key === "Tab" && dialogRef.current) {
+        const focusables = dialogRef.current.querySelectorAll(
+          "a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex='-1'])",
+        );
+        if (!focusables.length) {
+          event.preventDefault();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (event.shiftKey ? document.activeElement === first || !dialogRef.current.contains(document.activeElement) : document.activeElement === last) {
+          event.preventDefault();
+          (event.shiftKey ? last : first).focus();
+        }
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => {
       document.body.classList.remove("dialog-open");
       document.removeEventListener("keydown", onKey);
-      if (previous && typeof previous.focus === "function") previous.focus();
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
     };
-  }, [open, onClose]);
+  }, [open]);
   if (!open) return null;
   return (
     <div className="mh-modal">

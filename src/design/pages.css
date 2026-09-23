@@ -231,6 +231,25 @@
   gap: 12px;
 }
 
+.mh-task-dialog__grid .mh-field > span {
+  color: var(--mh-muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.mh-task-dialog__grid .mh-input,
+.mh-task-dialog__grid .mh-select {
+  height: 38px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.mh-task-dialog__grid .mh-input:focus,
+.mh-task-dialog__grid .mh-select:focus {
+  border-color: var(--mh-focus-blue);
+  box-shadow: 0 0 0 3px var(--mh-focus-ring);
+}
+
 .mh-task-dialog__preview {
   display: grid;
   gap: 3px;
@@ -242,10 +261,10 @@
 }
 
 .mh-task-dialog__preview > span {
-  color: var(--mh-index-ink);
+  color: var(--mh-faint);
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .mh-task-dialog__preview strong {
