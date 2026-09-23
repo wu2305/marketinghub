@@ -62,9 +62,9 @@ npm test               # vitest 行为测试
 | P12 | assets/pages/review-center.html | 审核列表、筛选、详情、决策反馈等实际状态 | M6 | 未开始 |
 | P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 未开始 |
 | P14 | assets/pages/personal-memory.html | 记忆列表与管理状态 | M6 | 未开始 |
-| P15 | assets/pages/scenario-library.html | Scenario 列表、筛选与入口 | M6 | 未开始 |
-| P16 | assets/pages/scenario-detail.html | Scenario 完整详情和可达操作 | M6 | 未开始 |
-| P17 | assets/pages/scenario-edit.html | Scenario 编辑、校验、保存等实际行为 | M6 | 未开始 |
+| P15 | assets/pages/scenario-library.html | 实为 Skill Library（h1/title 均 Skill Library）：列表、筛选、详情面板、内联编辑 | M6 | 未开始 |
+| P16 | assets/pages/scenario-detail.html | Skill 详情：hero + 6 页签 + preview | M6 | 未开始 |
+| P17 | assets/pages/scenario-edit.html | Skill 编辑表单、校验、preview、Submit for Review | M6 | 未开始 |
 
 ### 2.3 细分台账与证据记录格式
 
@@ -72,16 +72,101 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 状态 ID | 页面/URL/生效来源 | 区块、初态与操作→预期结果 | 组件/层级与共用位置 | story ID/参数 | 行为与视觉证据 | 状态/缺口 |
 |---|---|---|---|---|---|---|
-| 待 M0 展开 | 必须含实际生效脚本/CSS，不能仅凭文件名 | 标明 query/hash/storage 种子；适用的默认/非默认/空/错误/禁用/覆盖层/窄屏状态 | 新建/复用/组合的理由；专用差异不强行统一 | 可直接复现 | 命令、结果、截图路径、对照结论；不能只写“截图完成” | 未开始/进行中/完成 |
+| 见下方逐页台账 | 必须含实际生效脚本/CSS，不能仅凭文件名 | 标明 query/hash/storage 种子；适用的默认/非默认/空/错误/禁用/覆盖层/窄屏状态 | 新建/复用/组合的理由；专用差异不强行统一 | 可直接复现 | 命令、结果、截图路径、对照结论；不能只写“截图完成” | 未开始/进行中/完成 |
 
 组件清单也放本节：组件名、公共或私有、层级、原始使用位置、变体、输入/输出、故事、验证状态。以独立意义、稳定复用边界决定拆分；不要求每个 DOM 标签成为组件。
 
+#### M0 首轮盘点（2026-09-23，脚本/CSS 加载序与 DOM/JS 面已核对；逐项行为细节随实现继续核实）
+
+**共享运行时**（不是组件，是参照行为来源）：
+- `shared/portal.js`（1374L）：完整助手——开关/最大化、modePicker、modelPicker、suggestPicker、attachPicker、uploadDialog（含 uploadHistoryPopup/Clear 确认）、platformGuide 气泡、homeHistoryPopup、reports 级联菜单、问答流。用于 P01、P05、P13。
+- `shared/assistant-panel-lite.js`（136L）：简版助手（open/close/reset/submit/maximize）。用于 P10–P12、P14–P17。
+- `shared/assistant-skill-menu.js`（887L）：助手技能菜单——分类悬停预览、详情、历史对话、Manual/Generated Model 表单弹窗（validateModelDialog）。除 P04 外全站挂载。
+- 公共外壳：所有页共用顶部导航（Home/Cockpit/Self-Service/AI Interpreter/RedNote）；治理四页 + knowledge 页另有二级侧栏导航（Knowledge/Review Center/Skill Library/Personal Memory/Feedback & Quality）。
+
+**P01 index.html** — 脚本 portal.js + assistant-skill-menu.js；CSS home.css + assistant-panel.css。
+- 视图：Header 导航、Home Hero、4 工作台卡（→reports/flexible/knowledge/campaign.html）、3 项目卡（→reports.html?project=rednote|abo|customer）。
+- 交互态：助手抽屉（建议问题、mode/model/suggest/attach 四种 picker、发送→答案流）；homeHistoryPopup；uploadDialog（AI Auto-fill/Save、历史 popup、Clear 确认）；platformGuideTrigger 气泡。
+- 现状：`pages--home` 故事仅首屏+assistantOpen；上传弹窗、历史、平台引导、picker 未建。
+- 组件候选：SiteHeader(已有)、WorkspaceCard(已有)、ProjectCard(已有)、AssistantPanel(已有，缺 picker/history/upload 子组件)、PlatformGuidePopover、HistoryPopup、UploadDialog。
+
+**P02 reports.html** — 脚本 data/knowledge.js + report-core.js(4512L) + reports-inline-1.js + skill-menu；CSS report-core/catalog/city-invest-analysis/inline-1/inline-2。
+- URL：`?project=rednote|abo|customer|city`、`?dashboard=N`。
+- 视图：catalogView（目录→项目→报表，knowledgeFilters）；报表详情抽屉（details*：meta/hierarchy/metrics/business-terms/data-model/principles/context/scenarios/playbooks/thumbnail + detailsOpenReport）；liveView 报表页内 dashboard（liveTitle/liveKicker/live-panel-overview，city 项目有专用分析）；aiWorkspace（aiStart 初始、aiCommandForm 提问、aiChatThread 流、aiAnswer{Summary,Findings,Sources,Recommendations,Feedback}、aiCmdUpload+popup、aiHistory、aiPeriodHint、aiScrim、aiMaximize）。
+- 现状：`pages--marketing-cockpit` 仅目录首屏。详情抽屉、live dashboard、AI workspace 全缺。
+- 组件候选：ReportCatalog、ReportDetailsDrawer、LiveReportView(dashboard 图表)、AiWorkspace( cockpit 内嵌，非侧栏助手 )。
+
+**P03 flexible.html** — 脚本 self-service/workspace.js + skill-menu；CSS self-service/workspace+tabs。
+- URL `?tab=upload`；tabs：tab-self-service/tab-data-upload → self-service-panel/data-upload-panel。
+- 交互：categoryToggles（All|DG|DC 筛选卡片）、卡片→media-tracking-detail/data-upload、uploadHistoryModal（uploadHistoryRows/Empty）、助手（workspace.js 版，mode/model/suggest picker + sendQuery）。
+- 现状：`pages--self-service` 仅首屏；tab 切换、筛选、历史弹窗未演示。
+
+**P04 data-upload.html** — 脚本仅 self-service/upload.js(89L)；无助手脚本。
+- 视图：14 个 field-* 输入的表单、Submit、bulkImportModal + bulkImportDropzone（dragover/drop）、bulkImportFile。
+- 现状：无故事、无组件。候选：UploadForm、BulkImportModal（拖拽/选择/反馈）。
+
+**P05 media-tracking-detail.html** — 脚本 portal.js + inline-1(11L) + lite panel + skill-menu；CSS self-service/media-tracking。
+- 视图：Daily|Weekly|Monthly 粒度切换、Spot Info Mapping 按钮、静态报表表格/图表区。
+- 现状：无故事。粒度切换与映射动作待提取。
+
+**P06 campaign.html** — 脚本 campaign/workspace.js + skill-menu；location.hash 切视图。
+- 视图：5 section（overviewTitle/accountsTitle/analyticsTitle/assetsTitle/executionTitle）、accountSearch + 平台 pills（Rednote/Douyin）+ Filter/Reset → accountTable/accountTableResult、taskDialog+taskForm（Create Campaign Task）、Bind New Account、taskQueueList/Count、actionLogBody、actionToast。
+- 现状：`pages--campaign` 仅首屏；hash 视图切换、任务弹窗、绑定、筛选、toast 未演示。
+
+**P07 knowledge.html** — 脚本 data/knowledge.js + knowledge-fields.js + workspace.js(2787L) + types.js(998L) + 内嵌 `#dataModelSources` JSON + data-model-browser.js(1447L) + principles-library + business-term-library + scenario-reports(1124L) + email-library + field-library(962L) + shared-controls + skill-menu；20+ CSS。
+- URL：`?type=<8 类>`、`?status=changes-required|submitted`、`?report=city&category=…&asset=…`、`?detail=`；storage `pendingRestorations`。
+- 视图：overview（businessOverviewNav 8 类、hero stats、管理规则 `!` 提示）；八类型专用视图由后加载库渲染——Principles 卡片+类目筛选、Report Context 卡、Data Model 浏览器（域列表/图谱缩放/表抽屉/预览弹窗）、Metric 列表、Business Term 卡+多选筛选+分页、Analytical Model、Scenario 卡+分页+逐卡动作+详情、Email 10 列表；覆盖层：detailScrim 抽屉、editPanel（editAiReviewView/editApprovalView/footer）、versionPanel、createPanel（多步：表单→AI Review→Confirm Scope→Submit，含 data-model tabs、derived 公式构建器、Test）。
+- 现状：`pages--interpreter` 有 overview + 通用行表（过渡实现）+ Unknown 空态；八类专用视图与全部覆盖层未提取。
+- 组件候选：KnowledgeSidebar(有)、TypeCard(有)、OverviewHero、PrincipleCard+类目筛选、ReportContextCard、DataModelBrowser(域/图/抽屉/预览)、MetricList、BusinessTermCardGrid(多选筛选/分页/synonym clamp)、ScenarioCard+分页+Detail、EmailTable、DetailDrawer、EditPanel(AI review/approval)、VersionPanel、CreateWizard(按类型分步表单+AI Review+Confirm Scope)。
+
+**P08 knowledge-create.html** — 脚本 editor-runtime(1144L) + business-term-form + approach-form + analytical-model-form + scenario-report-form(724L) + report-context-form + create-navigation。
+- 视图：knowledgeType 选择 → typeFields 按类型挂表单；Save/Submit；resultDialog。校验必填、scope 多选、tags、公式锁等。
+- 现状：无故事。BusinessTermForm 已有雏形未接入。
+
+**P09 knowledge-view.html** — 脚本 editor-runtime + 6 个 *-view.js + detail-routing。
+- 视图：按 ?id/type 路由到 per-type 详情（principles 版本 chips、report-context 反馈、metric 公式 palette、business-term scopeTags、email、approach）。
+- 现状：无故事。
+
+**P10 metric-dictionary.html** — 脚本 metric-detail.js(540L) + lite panel + skill-menu。
+- 视图：metricList（Basic·N / Derived·N）、detail 区、3 tabs（definition/formula/dimensions）、addDerivedMetricBtn → derivedMetricPanel（公式构建器 + -×÷()123、Test、Save）、editMetricBtn。
+- 现状：无故事。公式构建器与 P07 create 面板内的 createDerived* 同源，应共用组件。
+
+**P11 data-model.html** — 脚本 inline-1(8L) + data-model-browser.js。
+- 视图：独立 Data Model 浏览器（#dataModelOverview + businessKnowledgeLibrary 容器全由 JS 渲染）。
+- 现状：无故事。与 P07 内嵌浏览器同组件。
+
+**P12 review-center.html** — 脚本 data/reviews.js + governance/review.js + lite panel + skill-menu。
+- 视图：pending/approved tabs+计数、search/type/time 筛选、reviewAssetList、详情面板（AI check/suggestions/warning/source/submitter）、Approve→riskModal(Approve Anyway)、Reject→rejectPanel(reason)；storage pendingRestorations 与 P07 联动。
+- 现状：无故事。
+
+**P13 feedback-quality.html** — 脚本 data/feedback.js + portal.js + governance/feedback.js + skill-menu。
+- 视图：all/thumbs-up/thumbs-down tabs+计数、search/type/time 筛选、feedbackList、详情面板（question/answer/reason/operation-time）。
+- 现状：无故事。
+
+**P14 personal-memory.html** — 脚本 data/memories.js + governance/memory.js + lite panel + skill-menu。
+- 视图：类目 tabs（All/Analysis Preference/Data Interpretation/Presentation Preference/Others）+计数、memoryList 卡片下拉（edit/delete）、详情面板、create panel（AI Auto-fill、Category、Save）、编辑态、删除确认、memoryAiBanner。
+- 现状：无故事。
+
+**P15 scenario-library.html** — 实为 **Skill Library**（title/h1 均为 Skill Library）；脚本 data/skills.js + governance/skills.js + lite panel + skill-menu。
+- 视图：scenarioList + search + statusFilter、detail 面板（input/output/logic/when/boundary/tags/version/usage/review-status + Edit/Delete/Use）、内联 scenarioEditView（5×AI Auto-fill + preview + Submit for Review）、createNewScenarioBtn。
+- 现状：无故事。注意：文件名为 scenario-* 但内容是 AI Skill，与 P07 Scenario Reporting 不是同一实体。
+
+**P16 scenario-detail.html** — Skill 详情；脚本 skill-detail.js(99L)，大部分静态。
+- 视图：hero（status/version/likeRate/meta）、6 tabs（content/related/ai-check/usage/version/activity）、previewToggle。
+- 现状：无故事。
+
+**P17 scenario-edit.html** — Skill 编辑；脚本 skill-editor.js(128L)。
+- 视图：表单（name/owner/purpose/scope/logic/when/input/output/attachments/report link）、preview、2×AI Auto-fill、Submit for Review。
+- 现状：无故事。
+
+**待核实项**（首轮未能从静态扫描确定，实现时以运行为准）：各 picker 的实际选项来源；report-core 各 dashboard 渲染条件与 `?dashboard=` 取值域；knowledge.html 内嵌 createPanel 与 P08 独立页的职责边界（可能同流不同壳）；scenario-reports 的 storage 键清单；portal.js 与 lite 面板的差异是否仅为功能裁剪。
+
 ### 2.4 接续点
 
-- **当前目标**：从纠正任务方向后的全量盘点开始，保留 a9542f7 有效修复；优先补真实来源和运行时覆盖证据，不继续把八类视图扩写成万能列表。
-- **下一步**：读取当前 diff/分支与执行 prompt；完成 P01–P17 一级盘点并展开已发现的子视图/状态；建立第一条可重复的原始页/故事对照路径，然后继续真实页面提取。
-- **已有验证**：9 条 Interpreter 测试曾复跑通过；构建 38 stories/0 docs 为历史基线，开始工作时重新确认。完整视觉验收尚未完成。
-- **未提交改动**：本次任务仅修改 AGENTS.md、handover/README.md，并新增 handover/execution-prompt.md；连同此前未提交审核改动均须保留，不擅自 reset/stash 丢弃。
+- **当前目标**：M0 首轮盘点完成（2.3 逐页台账）。M1 第一条对照路径已落地：`scripts/visual-check.mjs` + `visual-check.config.mjs`（sirv 双静态服务 + Playwright Chromium，串行、隔离上下文、expect/动作/404/pageerror 判失败，产物 `/tmp/mh-visual/index.html`）。
+- **下一步**：M1 收尾——`src/design/index.js` 公共导出、全故事 autodocs、props 类型声明；随后 M2 Home 全量（picker/history/upload/platform-guide）或按依赖取 P07 专用视图。工作分支 `devin/interpreter-type-contract`（a9542f7 → abe4f96 → visual-check 提交），未合入 main。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 38 stories；`node scripts/visual-check.mjs` 10/10 PASS（首轮 10 场景：5 页默认态 + home-assistant / self-service-upload / campaign-accounts / interpreter-overview / business-term / scenario）。注意 PASS 仅表示加载与预期控件成立，视觉差异仍需逐对人眼评估——已见差异：sidebar 计数口径（typeMeta vs demoAssets，已登记）、story 侧栏显示计数而原始不显示。
+- **未提交改动**：scripts/ 与台账更新随 visual-check 提交入库。`.commandcode/` 为工具产物不入库。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 

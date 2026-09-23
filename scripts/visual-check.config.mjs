@@ -1,0 +1,73 @@
+/**
+ * Scenario config for scripts/visual-check.mjs.
+ *
+ * Each scenario pairs one original demo page state (repo-root URL, optional
+ * seeded localStorage / actions) with one Storybook story state (iframe id +
+ * args). `expect` entries must be visible before screenshots; missing ones fail
+ * the scenario. Only describe URLs, actions and expectations — no DOM dumps.
+ */
+export const BASELINE = { width: 1440, height: 1400 };
+
+export default [
+  {
+    id: "p01-home",
+    original: { url: "/index.html", expect: [{ sel: ".home-command-hero" }, { sel: ".workspace-card" }] },
+    story: { id: "pages--home", expect: [{ sel: ".mh-hero--home" }, { sel: ".mh-workspace-card" }] },
+  },
+  {
+    id: "p01-home-assistant",
+    original: {
+      url: "/index.html",
+      actions: [{ click: "#aiEntry" }],
+      expect: [{ sel: "#assistantPanel" }, { sel: "#promptCanvas" }],
+    },
+    story: {
+      id: "pages--home",
+      args: { assistantOpen: true },
+      expect: [{ sel: ".mh-assistant--drawer" }, { sel: ".mh-assistant__ask" }],
+    },
+  },
+  {
+    id: "p02-cockpit",
+    original: { url: "/assets/pages/reports.html", expect: [{ sel: "#catalogView" }, { sel: ".workspace-page-hero" }] },
+    story: { id: "pages--marketing-cockpit", expect: [{ sel: ".mh-catalog" }, { sel: ".mh-project-card" }] },
+  },
+  {
+    id: "p03-self-service",
+    original: { url: "/assets/pages/flexible.html", expect: [{ sel: "#tab-self-service" }, { sel: ".report-card" }] },
+    story: { id: "pages--self-service", expect: [{ sel: ".mh-self-tools" }, { sel: ".mh-action-card" }] },
+  },
+  {
+    id: "p03-self-service-upload",
+    original: { url: "/assets/pages/flexible.html?tab=upload", expect: [{ sel: "#data-upload-panel" }, { sel: ".upload-card-grid" }] },
+    story: { id: "pages--self-service", args: { tab: "upload" }, expect: [{ sel: ".mh-self-tools" }, { sel: ".mh-action-card" }] },
+  },
+  {
+    id: "p06-campaign",
+    original: { url: "/assets/pages/campaign.html", expect: [{ sel: ".campaign-rail" }, { sel: "#overviewTitle" }] },
+    story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign" }, { sel: ".mh-rail" }] },
+  },
+  {
+    id: "p06-campaign-accounts",
+    original: {
+      url: "/assets/pages/campaign.html#accounts",
+      expect: [{ sel: "#accountsTitle" }, { sel: ".campaign-view.active .data-table" }],
+    },
+    story: { id: "pages--campaign", args: { section: "accounts" }, expect: [{ sel: ".mh-campaign" }] },
+  },
+  {
+    id: "p07-interpreter-overview",
+    original: { url: "/assets/pages/knowledge.html", expect: [{ sel: ".v20-type-card" }, { sel: "#businessTypeNav button" }] },
+    story: { id: "pages--interpreter", expect: [{ sel: ".mh-type-grid" }, { sel: ".mh-sidebar" }] },
+  },
+  {
+    id: "p07-interpreter-business-term",
+    original: { url: "/assets/pages/knowledge.html?type=Business%20Term", expect: [{ sel: ".bt-term-card" }] },
+    story: { id: "pages--interpreter", args: { activeType: "Business Term" }, expect: [{ sel: ".mh-library" }, { sel: ".mh-asset" }] },
+  },
+  {
+    id: "p07-interpreter-scenario",
+    original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card" }] },
+    story: { id: "pages--interpreter", args: { activeType: "Scenario Reporting" }, expect: [{ sel: ".mh-library" }] },
+  },
+];
