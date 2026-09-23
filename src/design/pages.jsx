@@ -211,7 +211,7 @@ export function SelfServicePage({
           <Tabs label="Data view mode" items={tabs} value={tab} onChange={onTabChange} />
           <FilterPills label={tab === "upload" ? "Filter uploads" : "Filter reports"} items={filters[tab] || []} value={category} onChange={onCategoryChange} />
         </div>
-        <div className={tab === "upload" ? "mh-page__cards" : "mh-page__cards mh-page__cards--two"}>
+        <div className={tab === "upload" ? "mh-page__cards mh-page__cards--upload" : "mh-page__cards mh-page__cards--two"}>
           {items.map((item) => (
             <ActionCard
               key={item.title}
@@ -737,7 +737,7 @@ export function DataUploadPage({
           </Button>
         </form>
       </main>
-      <Modal open={bulkImportOpen} title={bulkImport.title} className="mh-bulk-import" onClose={onCloseImport}>
+      <Modal open={bulkImportOpen} title={bulkImport.title} className="mh-bulk-import" variant="sheet" onClose={onCloseImport}>
         <div className="mh-bulk-import__body">
           <FileDropzone
             title={bulkImport.dropzoneTitle}

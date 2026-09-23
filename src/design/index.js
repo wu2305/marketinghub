@@ -58,6 +58,7 @@ export {
   headerPositions,
   heroVariants,
   heroScrims,
+  modalVariants,
 } from "./organisms.jsx";
 export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage } from "./pages.jsx";
 export { Icon } from "./icons.jsx";

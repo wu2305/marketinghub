@@ -643,7 +643,7 @@
   align-items: center;
   gap: 8px;
   padding: 36px 24px;
-  border: 1px dashed var(--mh-line-strong);
+  border: 1px dashed var(--mh-control-line);
   border-radius: 6px;
   background: var(--mh-bg-soft);
   cursor: pointer;
@@ -654,7 +654,7 @@
 .mh-dropzone.is-dragover,
 .mh-dropzone:focus-visible {
   border-color: var(--mh-bubble-to);
-  background: var(--mh-warn-bg);
+  background: var(--mh-hover-warm);
   outline: 0;
 }
 

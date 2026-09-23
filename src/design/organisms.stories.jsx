@@ -16,6 +16,7 @@ import {
   KnowledgeSidebar,
   LibraryToolbar,
   Modal,
+  modalVariants,
   Panel,
   ProjectCard,
   ProjectCatalog,
@@ -375,6 +376,7 @@ export const DialogModal = {
   },
   argTypes: {
     open: { control: "boolean" },
+    variant: { control: "inline-radio", options: modalVariants },
     onClose: { action: "onClose" },
   },
   render: function ModalStory(args) {

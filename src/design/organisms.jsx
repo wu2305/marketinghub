@@ -24,6 +24,7 @@ export const headerTones = ["solid", "overlay"];
 export const headerPositions = ["sticky", "fixed"];
 export const heroVariants = ["banner", "home", "knowledge"];
 export const heroScrims = ["banner", "home", "knowledge", "none"];
+export const modalVariants = ["modal", "sheet"];
 
 /**
  * Global site header with logo and top navigation.
@@ -1082,9 +1083,10 @@ export function BusinessTermForm({
  * @param {string} [props.className] extra class on the dialog panel
  * @param {string} [props.closeLabel="Close"]
  * @param {string} [props.titleId] defaults to a generated useId
+ * @param {"modal"|"sheet"} [props.variant="modal"] "sheet" is the borderless radius-8 chrome with deep scrim used by the Self-Service dialogs
  * @param {() => void} [props.onClose]
  */
-export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, onClose }) {
+export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, variant = "modal", onClose }) {
   const generatedTitleId = React.useId();
   const dialogRef = React.useRef(null);
   const onCloseRef = React.useRef(onClose);
@@ -1124,7 +1126,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
   }, [open]);
   if (!open) return null;
   return (
-    <div className="mh-modal">
+    <div className={cx("mh-modal", variant === "sheet" && "mh-modal--sheet")}>
       <div className="mh-modal__scrim" onClick={onClose} />
       <div
         className={cx("mh-modal__dialog", className)}
@@ -1173,7 +1175,7 @@ export function UploadHistory({
   onDownload,
 }) {
   return (
-    <Modal open={open} title={title} className="mh-upload-history" onClose={onClose}>
+    <Modal open={open} title={title} className="mh-upload-history" variant="sheet" onClose={onClose}>
       <div className="mh-upload-history__body">
         {rows.length ? (
           <table className="mh-upload-history__table">
@@ -1198,11 +1200,11 @@ export function UploadHistory({
                   <td className="mh-upload-history__time">{row.time}</td>
                   <td>
                     <span className="mh-upload-history__actions">
-                      <button type="button" className="mh-upload-history__btn" onClick={() => onPreview?.(row)}>
+                      <button type="button" className="mh-upload-history__btn" aria-label={`Preview ${row.file}`} onClick={() => onPreview?.(row)}>
                         <Icon name="eye" />
                         <span>Preview</span>
                       </button>
-                      <button type="button" className="mh-upload-history__btn" onClick={() => onDownload?.(row)}>
+                      <button type="button" className="mh-upload-history__btn" aria-label={`Download ${row.file}`} onClick={() => onDownload?.(row)}>
                         <Icon name="download" />
                         <span>Download</span>
                       </button>

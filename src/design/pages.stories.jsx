@@ -156,14 +156,15 @@ export const SelfService = {
   },
   render: function SelfServiceStory(args) {
     const [tab, setTab] = useSynced(args.tab);
-    const [category, setCategory] = useSynced(args.category);
-    const [history, setHistory] = React.useState({ open: false, rows: [] });
+    const [categories, setCategories] = React.useState({ analysis: args.category, upload: "all" });
+    const [history, setHistory] = React.useState(null);
+    const uploadHistory = { ...args.uploadHistory, ...(history || {}) };
     return (
       <SelfServicePage
         {...args}
         tab={tab}
-        category={category}
-        uploadHistory={{ ...args.uploadHistory, ...history }}
+        category={categories[tab] || "all"}
+        uploadHistory={uploadHistory}
         onNavigate={args.onNavigate}
         onOpen={args.onOpen}
         onOpenHistory={({ item }) => {
@@ -171,18 +172,17 @@ export const SelfService = {
           args.onOpenHistory?.({ item });
         }}
         onCloseHistory={() => {
-          setHistory((current) => ({ ...current, open: false }));
+          setHistory((current) => ({ ...(current || {}), open: false }));
           args.onCloseHistory?.();
         }}
         onPreviewFile={args.onPreviewFile}
         onDownloadFile={args.onDownloadFile}
         onTabChange={(event) => {
           setTab(event.id);
-          setCategory("all");
           args.onTabChange?.(event);
         }}
         onCategoryChange={(event) => {
-          setCategory(event.id);
+          setCategories((current) => ({ ...current, [tab]: event.id }));
           args.onCategoryChange?.(event);
         }}
       />

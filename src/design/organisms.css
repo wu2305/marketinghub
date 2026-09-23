@@ -443,6 +443,11 @@
     linear-gradient(#fff, #fff) padding-box,
     linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%) border-box;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.18s ease;
+}
+
+.mh-action-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
 }
 
 .mh-action-card h3 {
@@ -1687,19 +1692,55 @@ body.dialog-open {
   overflow: hidden;
 }
 
+.mh-modal--sheet .mh-modal__scrim {
+  background: var(--mh-scrim-deep);
+  backdrop-filter: none;
+}
+
+.mh-modal--sheet .mh-modal__dialog {
+  border: 0;
+  border-radius: 8px;
+  box-shadow: var(--mh-modal-shadow-soft);
+}
+
+.mh-modal--sheet .mh-modal__header {
+  align-items: center;
+}
+
+.mh-modal--sheet .mh-modal__title {
+  font-family: var(--mh-display);
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.mh-modal--sheet .mh-modal__close {
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--mh-muted);
+}
+
+.mh-modal--sheet .mh-modal__close:hover,
+.mh-modal--sheet .mh-modal__close:focus-visible {
+  background: var(--mh-bg-soft);
+  color: var(--mh-ink);
+}
+
 .mh-action-card__history {
   display: inline-flex;
   width: 22px;
   height: 22px;
   align-items: center;
   justify-content: center;
-  margin-left: 6px;
+  margin-left: 10px;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--mh-muted);
   cursor: pointer;
   vertical-align: middle;
+  transition: color 0.18s ease;
 }
 
 .mh-action-card__history svg {
@@ -1723,12 +1764,7 @@ body.dialog-open {
 }
 
 .mh-upload-history .mh-modal__header {
-  padding: 14px 18px 0;
-}
-
-.mh-upload-history .mh-modal__title {
-  font-size: 22px;
-  font-style: italic;
+  padding: 14px 18px;
 }
 
 .mh-upload-history__body {
@@ -1751,7 +1787,7 @@ body.dialog-open {
   padding: 10px 14px;
   border-bottom: 0;
   background: var(--mh-bg-soft);
-  color: var(--mh-muted);
+  color: var(--mh-slate);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.2px;
@@ -1761,12 +1797,16 @@ body.dialog-open {
 
 .mh-upload-history__table tbody td {
   padding: 12px 14px;
-  border-bottom: 1px solid var(--mh-line);
+  border-bottom: 1px solid var(--mh-line-faint);
   vertical-align: middle;
 }
 
 .mh-upload-history__table tbody tr:last-child td {
   border-bottom: 0;
+}
+
+.mh-upload-history__table tbody tr:hover {
+  background: var(--mh-row-hover);
 }
 
 .mh-upload-history__file {
@@ -1780,13 +1820,13 @@ body.dialog-open {
 .mh-upload-history__file svg {
   width: 16px;
   height: 16px;
-  color: var(--mh-muted);
+  color: var(--mh-slate);
   flex-shrink: 0;
 }
 
 .mh-upload-history__uploader,
 .mh-upload-history__time {
-  color: var(--mh-copy);
+  color: var(--mh-subtle);
 }
 
 .mh-upload-history__empty {
@@ -1794,7 +1834,7 @@ body.dialog-open {
   display: grid;
   place-items: center;
   padding: 36px 18px;
-  color: var(--mh-faint);
+  color: var(--mh-empty);
   font-size: 14px;
 }
 
@@ -1809,7 +1849,7 @@ body.dialog-open {
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border: 1px solid var(--mh-line-strong);
+  border: 1px solid var(--mh-control-line);
   border-radius: 3px;
   background: var(--mh-surface);
   color: var(--mh-ink);
@@ -1825,7 +1865,7 @@ body.dialog-open {
 
 .mh-upload-history__btn:hover,
 .mh-upload-history__btn:focus-visible {
-  background: var(--mh-warn-bg);
+  background: var(--mh-hover-warm);
   border-color: var(--mh-bubble-to);
   color: var(--mh-ink);
   outline: 0;
