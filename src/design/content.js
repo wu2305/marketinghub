@@ -1137,6 +1137,240 @@ export const MEDIA_TRACKING = {
   },
 };
 
+/**
+ * "+" composer menu contract (assistant-skill-menu.js). On pages without
+ * knowledge.js the Analytical Model list falls back to these three records.
+ */
+export const ASSISTANT_SKILL_MENU = {
+  attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
+  categories: [
+    { id: "upload", label: "Upload File", icon: "upload" },
+    { id: "model", label: "Analytical Model", icon: "spokes" },
+  ],
+  searchPlaceholder: "Search Analytical Model",
+  emptyLabel: "No matching skills",
+  items: [
+    { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "Use this interpretation logic" },
+    { id: "roi-diagnosis", title: "ROI diagnosis model", note: "Analyze ROI movement and drivers" },
+    { id: "conversion-drop", title: "Conversion drop analysis", note: "Find conversion pressure and likely reasons" },
+  ],
+  historyLabel: "Add from Chat History",
+  manualLabel: "Create Analytical Model Manually",
+};
+
+/**
+ * "Generate Analytical Model" flow: chat-log selection step plus the generated
+ * and manual model forms. `threads` mirrors the demo's replayable chat history;
+ * `sections` describe the model form fields in order.
+ */
+export const MODEL_FLOW = {
+  historyTitle: "Generate Analytical Model",
+  historySubtitle: "Select conversations and describe the generation rule for the analysis logic.",
+  selectLabel: "1 · Select Conversations",
+  ruleLabel: "2 · Generation Rule",
+  optionalLabel: "optional",
+  rulePlaceholder:
+    "Describe how AI should distill the analysis logic, for example: focus on the channel dimension and keep only the driver with the strongest evidence.",
+  emptyError: "Select at least one message to continue.",
+  generatedTitle: "New Analytical Model",
+  generatedSubtitle: "Generated from selected conversations and your generation rule.",
+  generatedSubtitlePlain: "Generated from selected conversations.",
+  generatedNotice: "Submit will publish this knowledge immediately.",
+  manualTitle: "Create Analytical Model Manually",
+  manualSubtitle: "Draft the model fields and publish it to the knowledge base.",
+  cancelLabel: "Cancel",
+  generateLabel: "Generate",
+  backLabel: "← Back",
+  saveLabel: "Save",
+  submitLabel: "Submit",
+  savedLabel: "Saved",
+  publishedLabel: "Published",
+  threads: [
+    {
+      title: "Campaign ROI decline",
+      messages: [
+        {
+          role: "user",
+          text: "Why did campaign ROI drop last week after we shifted media budget to short-video channels?",
+          checked: true,
+        },
+        {
+          role: "ai",
+          label: "Connected campaign view",
+          title: "Recommended next move.",
+          text: "Compare invested versus non-invested channels, isolate the largest week-over-week movement, and separate real business change from delayed source data.",
+          sources: ["Campaign Performance", "Channel spend", "Refresh status"],
+          checked: true,
+        },
+      ],
+    },
+    {
+      title: "Conversion drop by segment",
+      messages: [
+        {
+          role: "user",
+          text: "Conversion fell mainly in new customer segments. Where should we investigate first?",
+          checked: true,
+        },
+        {
+          role: "ai",
+          label: "Connected campaign view",
+          title: "Segment pressure is concentrated.",
+          text: "Start with the new-customer cohort, verify freshness and metric definitions, then compare the strongest city and channel contributors before acting.",
+          sources: ["Customer Conversion", "Qualified traffic", "Data quality notes"],
+          checked: true,
+        },
+      ],
+    },
+    {
+      title: "Report interpretation",
+      messages: [
+        {
+          role: "user",
+          text: "Compare city performance across traffic, sales, CR, AUR and UPT before scaling investment.",
+          checked: false,
+        },
+        {
+          role: "ai",
+          label: "Connected report view",
+          title: "Optimize conversion before scaling.",
+          text: "Prioritize the invested cities where traffic uplift did not convert, then re-check spend efficiency before scaling budget.",
+          sources: ["City Strategy", "Governed reports"],
+          checked: false,
+        },
+      ],
+    },
+  ],
+  sections: [
+    {
+      title: "Basic Information",
+      fields: [
+        { key: "name", label: "Name", required: true, placeholder: "Enter analytical model name" },
+        { key: "description", label: "Description", textarea: true, placeholder: "Describe what this model helps interpret" },
+        { key: "trigger", label: "Trigger When", required: true, textarea: true, placeholder: "Describe when AI should use this model" },
+      ],
+    },
+    {
+      title: "Metrics",
+      fields: [
+        { key: "domain", label: "Business Domain", placeholder: "Campaign Performance; Customer Conversion" },
+        { key: "metrics", label: "Referenced Metrics", placeholder: "ROI; Conversion Rate; Spend" },
+      ],
+    },
+    {
+      title: "Structure & Guidance",
+      fields: [
+        { key: "structure", label: "Structure & Guidance", required: true, textarea: true, tall: true, placeholder: "Write the step-by-step interpretation logic" },
+      ],
+    },
+    {
+      title: "Constraints",
+      fields: [
+        { key: "constraints", label: "Prohibited Analysis Directions", textarea: true, placeholder: "Add limits, warnings, or blocked analysis directions" },
+      ],
+    },
+  ],
+  generatedDefaults: {
+    name: "ROI movement diagnosis model",
+    trigger:
+      "Use when users ask why a marketing metric changed and need one interpretation result grounded in available evidence.",
+    domain: "Campaign Performance; Customer Conversion",
+    metrics: "Campaign ROI; Conversion Rate; Spend",
+    constraints:
+      "Do not infer causality from correlation. Do not analyze dimensions without supporting data. Do not generate charts or a full report; return one concise analysis result.",
+  },
+};
+
+/* Keyword mapping shared by the two generation helpers below. */
+function modelRuleDimensions(rule) {
+  const text = String(rule || "").trim().toLowerCase();
+  const has = (words) => words.some((word) => text.includes(word));
+  const dimensions = [];
+  if (has(["channel", "media", "platform", "site"])) dimensions.push("channels");
+  if (has(["city", "cities", "market", "region", "store"])) dimensions.push("cities");
+  if (has(["segment", "customer", "member", "audience"])) dimensions.push("customer segments");
+  if (has(["time", "week", "month", "trend", "period", "quarter"])) dimensions.push("time periods");
+  return { text, has, dimensions };
+}
+
+/**
+ * Deterministic local simulation of the demo's "AI generates the analysis
+ * logic" step (assistant-skill-menu.js buildAnalysisLogic): the generation rule
+ * is mapped to concrete steps by keyword so the output visibly follows it.
+ */
+export function buildModelLogic(rule) {
+  const { has, dimensions } = modelRuleDimensions(rule);
+  const scope = dimensions.length
+    ? "across " + dimensions.join(" and ")
+    : "across channels, customer segments, and time periods";
+  const driver = has(["rank", "priorit", "top", "most impactful", "biggest"])
+    ? "Rank the candidate drivers by business impact and keep only the strongest one."
+    : has(["driver", "root cause", "reason", "why", "cause", "factor"])
+      ? "Isolate the driver with the strongest supporting evidence."
+      : "Identify the most likely drivers with supporting evidence.";
+  const output = has(["concise", "brief", "short", "one conclusion", "one result"])
+    ? "Return one conclusion and a recommended next action."
+    : "Return the key findings and a recommended next action.";
+  return [
+    "1. Define the business question, the measurement window, and the metric to explain.",
+    "2. Compare metric movement " + scope + ".",
+    "3. " + driver,
+    "4. " + output,
+  ].join("\n");
+}
+
+/**
+ * Deterministic local simulation of the demo's generated Description
+ * (assistant-skill-menu.js buildDescription): topics come from the ticked
+ * questions and the method wording comes from the generation rule.
+ */
+export function buildModelDescription(messages, rule) {
+  const questions = messages.filter((message) => message.role === "user").map((message) => message.text);
+  const scope = (questions.length ? questions : messages.map((message) => message.text)).join(" ").toLowerCase();
+  const topics = [];
+  if (/\broi\b|budget|media spend/.test(scope)) topics.push("campaign ROI");
+  if (/conversion/.test(scope)) topics.push("conversion");
+  if (/\bcit(y|ies)\b/.test(scope)) topics.push("city performance");
+  if (!topics.length) topics.push("marketing performance");
+  const topicPhrase = topics.length > 1 ? topics.slice(0, -1).join(", ") + " and " + topics[topics.length - 1] : topics[0];
+  const { has, dimensions } = modelRuleDimensions(rule);
+  const dimensionPhrase = dimensions.join(" and ");
+  const ranked = has(["rank", "priorit", "top", "most impactful", "biggest"]);
+  const goal =
+    "Clarify what drove the movement in " +
+    topicPhrase +
+    ", so the marketing team can decide the next optimization step.";
+  const method = dimensionPhrase
+    ? ranked
+      ? "Ranks " + dimensionPhrase + " by business impact and returns one conclusion."
+      : "Compares " + dimensionPhrase + " to isolate the strongest driver and support one next action."
+    : "Expected insight is the primary driver with supporting evidence.";
+  const conversations = new Set(messages.map((message) => message.threadIndex)).size;
+  return (
+    goal +
+    " " +
+    method +
+    "\n\nSource: " +
+    conversations +
+    " conversation" +
+    (conversations === 1 ? "" : "s") +
+    " · " +
+    messages.length +
+    " message" +
+    (messages.length === 1 ? "" : "s") +
+    "."
+  );
+}
+
+/** Draft field values for the generated model form (step "generated"). */
+export function buildModelDraft(messages, rule) {
+  return {
+    ...MODEL_FLOW.generatedDefaults,
+    description: buildModelDescription(messages, rule),
+    structure: buildModelLogic(rule),
+  };
+}
+
 export const LITE_ASSISTANT = {
   title: "Ask AI Interpreter",
   historyTitle: "Recent Chats",
@@ -1145,13 +1379,12 @@ export const LITE_ASSISTANT = {
     "City investment strategy knowledge",
     "Metrics with data quality issues",
   ],
-  scopes: ["Knowledge"],
-  scope: "Knowledge",
   history: [
-    { id: "media", label: "Summarize the latest media tracking performance.", prompt: "Summarize the latest media tracking performance." },
-    { id: "quality", label: "Find channels with data quality issues.", prompt: "Find channels with data quality issues." },
-    { id: "roi", label: "Explain the Attributed ROI movement.", prompt: "Explain the Attributed ROI movement." },
+    { id: "media", title: "Media tracking summary", label: "Summarize the latest media tracking performance.", prompt: "Summarize the latest media tracking performance." },
+    { id: "quality", title: "Data quality issues", label: "Find channels with data quality issues.", prompt: "Find channels with data quality issues." },
+    { id: "roi", title: "Attributed ROI", label: "Explain the Attributed ROI movement.", prompt: "Explain the Attributed ROI movement." },
   ],
+  skillMenu: ASSISTANT_SKILL_MENU,
 };
 
 /** Lite-panel answer shape: a single card line, no bubble/sources/actions. */

@@ -168,7 +168,7 @@ export const TextArea = React.forwardRef(function TextArea({
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.defaultValue=""]
  * @param {Array<{ id?: string, value?: string, label: string } | string>} [props.options=[]]
- * @param {string} [props.placeholder] renders a leading empty option
+ * @param {string} [props.placeholder] renders a leading placeholder option (implicit value = its text, matching the demo markup)
  * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
@@ -207,7 +207,7 @@ export function Select({
         onChange?.({ name: name || "", value: event.target.value });
       }}
     >
-      {placeholder ? <option value="">{placeholder}</option> : null}
+      {placeholder ? <option>{placeholder}</option> : null}
       {items.map((item) => (
         <option key={item.value} value={item.value}>
           {item.label}

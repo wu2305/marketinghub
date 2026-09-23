@@ -115,6 +115,42 @@ a {
   --mh-ink-field: #1c2328;
   --mh-icon-slate: #5b6470;
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
+  /* assistant surface scale (assistant-panel.css --ai-*) */
+  --mh-ink-ai: #171b1f;
+  --mh-copy-ai: #4f5963;
+  --mh-muted-ai: #717b85;
+  --mh-line-ai: #dce1e6;
+  --mh-line-strong-ai: #bcc5ce;
+  --mh-fill-hover: #f2f3f4;
+  --mh-fill-soft: #f4f4f4;
+  --mh-surface-ai: #f7f8fa;
+  /* media tracking page palette */
+  --mh-page-bg: #f6f7f8;
+  --mh-eyebrow: #8a5a00;
+  --mh-required: #c0392b;
+  --mh-muted-strong: #6a747c;
+  --mh-subtle-ai: #4b5563;
+  --mh-line-soft: #e1e7ec;
+  --mh-line-tab: #e5e7eb;
+  --mh-line-faintest: #f0f2f4;
+  --mh-bg-faint: #f9fafb;
+  --mh-field-line: #cfd6db;
+  /* skill menu / model-flow dialog */
+  --mh-danger: #d8222a;
+  --mh-danger-ring: rgba(216, 34, 42, 0.1);
+  --mh-gold-rule: #b28c2d;
+  --mh-gold-faint: rgba(178, 140, 45, 0.07);
+  --mh-gold-ring: rgba(178, 140, 45, 0.14);
+  --mh-chip-line: #e1c48f;
+  --mh-chip-bg: #fff8eb;
+  --mh-chip-ink: #3b2b14;
+  --mh-chip-icon: #6f5a35;
+  --mh-chip-hover: rgba(93, 68, 30, 0.12);
+  --mh-tooltip: #262626;
+  --mh-placeholder: #a8afb8;
+  --mh-search-placeholder: #8e959d;
+  --mh-scrim-mid: rgba(31, 41, 55, 0.42);
+  --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
 }
 
 .mh-sr {

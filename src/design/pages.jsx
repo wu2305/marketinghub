@@ -12,6 +12,7 @@ import {
   KnowledgeLibrary,
   KnowledgeSidebar,
   Modal,
+  ModelFlowDialog,
   Panel,
   ProjectCatalog,
   SummaryStrip,
@@ -142,7 +143,7 @@ export function MarketingCockpitPage({ current = "cockpit", logo, navigation = [
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
-      <div style={{ height: 56 }} />
+      <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
         <div className="mh-page__search">
@@ -204,7 +205,7 @@ export function SelfServicePage({
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
-      <div style={{ height: 56 }} />
+      <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-page__shell mh-page__shell--self">
         <div className="mh-self-tools">
@@ -306,7 +307,7 @@ export function AiInterpreterPage({
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
-      <div style={{ height: 56 }} />
+      <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...heroProps} height={260} variant="knowledge" scrim="knowledge">
         {heroStats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" compact />
@@ -703,7 +704,7 @@ export function DataUploadPage({
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
-      <div style={{ height: 56 }} />
+      <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-upload">
         <div className="mh-upload__toolbar">
@@ -782,9 +783,10 @@ export function DataUploadPage({
  * @param {Array<{ name: string, label: string, required?: boolean, options?: Array<string|object>, placeholder?: string, defaultValue?: string }>} [props.filters=[]]
  * @param {Array<{ term: string, text: string }>} [props.notes=[]]
  * @param {{ title?: string, count?: string, columns?: Array<{ key: string, header: string }>, rows?: Array<object> }} [props.table={}]
- * @param {object} [props.assistant={}] AssistantPanel props (lite variant)
+ * @param {object} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
+ * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]
@@ -797,7 +799,10 @@ export function DataUploadPage({
  * @param {(event: object) => void} [props.onMaximize]
  * @param {(event: object) => void} [props.onHistory]
  * @param {(event: object) => void} [props.onHistorySelect]
- * @param {() => void} [props.onSkill]
+ * @param {(event: { names: string[] }) => void} [props.onAttach]
+ * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
+ * @param {() => void} [props.onClearSkill]
+ * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction]
  */
 export function MediaTrackingDetailPage({
   current = "self-service",
@@ -813,6 +818,7 @@ export function MediaTrackingDetailPage({
   assistant = {},
   assistantOpen = false,
   prompt = "",
+  skillFlow,
   onNavigate,
   onPeriodChange,
   onFilterChange,
@@ -825,12 +831,14 @@ export function MediaTrackingDetailPage({
   onMaximize,
   onHistory,
   onHistorySelect,
-  onSkill,
+  onAttach,
+  onSelectSkill,
+  onClearSkill,
+  onSkillAction,
 }) {
   return (
-    <Shell>
+    <Shell tone="tracking">
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
-      <div style={{ height: 56 }} />
       <main className="mh-tracking">
         <div className="mh-tracking__topbar">
           <a className="mh-tracking__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref })}>
@@ -900,6 +908,7 @@ export function MediaTrackingDetailPage({
       <AssistantPanel
         open={assistantOpen}
         placement="drawer"
+        enterToSubmit={false}
         {...assistant}
         prompt={prompt}
         onClose={onCloseAssistant}
@@ -910,8 +919,12 @@ export function MediaTrackingDetailPage({
         onMaximize={onMaximize}
         onHistory={onHistory}
         onHistorySelect={onHistorySelect}
-        onSkill={onSkill}
+        onAttach={onAttach}
+        onSelectSkill={onSelectSkill}
+        onClearSkill={onClearSkill}
+        onSkillAction={onSkillAction}
       />
+      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );
 }

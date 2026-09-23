@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE } from "./content.js";
+import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MODEL_FLOW, NAV, SELF_SERVICE, buildLiteAssistantAnswer, buildModelDraft } from "./content.js";
 import {
   ActionCard,
   AssetRow,
@@ -17,6 +17,8 @@ import {
   LibraryToolbar,
   Modal,
   modalVariants,
+  ModelFlowDialog,
+  modelFlowSteps,
   Panel,
   ProjectCard,
   ProjectCatalog,
@@ -254,6 +256,128 @@ export const AskPanel = {
   },
   parameters: { layout: "fullscreen" },
   render: (args) => <AssistantPanel {...ASSISTANT} {...args} />,
+};
+
+export const LiteAskPanel = {
+  name: "Assistant panel (lite)",
+  args: { open: true },
+  argTypes: {
+    open: { control: "boolean" },
+    onClose: { action: "onClose" },
+    onSubmit: { action: "onSubmit" },
+    onAttach: { action: "onAttach" },
+    onSelectSkill: { action: "onSelectSkill" },
+    onClearSkill: { action: "onClearSkill" },
+    onSkillAction: { action: "onSkillAction" },
+  },
+  parameters: { layout: "fullscreen" },
+  render: function LiteAskPanelStory(args) {
+    const [open, setOpen] = React.useState(args.open);
+    React.useEffect(() => setOpen(args.open), [args.open]);
+    const [prompt, setPrompt] = React.useState("");
+    const [answers, setAnswers] = React.useState([]);
+    const [skill, setSkill] = React.useState(null);
+    return (
+      <AssistantPanel
+        {...LITE_ASSISTANT}
+        {...args}
+        open={open}
+        placement="drawer"
+        showPicks={false}
+        enterToSubmit={false}
+        prompt={prompt}
+        answers={answers}
+        selectedSkill={skill}
+        onClose={() => {
+          setOpen(false);
+          args.onClose?.();
+        }}
+        onPromptChange={(event) => setPrompt(event.value)}
+        onSuggestion={(event) => setPrompt(event.prompt)}
+        onHistorySelect={(event) => setPrompt(event.prompt)}
+        onNewSession={() => {
+          setAnswers([]);
+          setPrompt("");
+        }}
+        onSubmit={(event) => {
+          const text = String(event.prompt || "").trim();
+          if (text) {
+            setAnswers([buildLiteAssistantAnswer(text)]);
+            setPrompt("");
+          }
+          args.onSubmit?.(event);
+        }}
+        onAttach={args.onAttach}
+        onSelectSkill={(event) => {
+          setSkill(event);
+          args.onSelectSkill?.(event);
+        }}
+        onClearSkill={() => {
+          setSkill(null);
+          args.onClearSkill?.();
+        }}
+        onSkillAction={args.onSkillAction}
+      />
+    );
+  },
+};
+
+export const ModelFlow = {
+  name: "Model flow dialog",
+  args: { step: "history" },
+  argTypes: {
+    step: { control: "inline-radio", options: modelFlowSteps },
+    onToggleMessage: { action: "onToggleMessage" },
+    onRuleChange: { action: "onRuleChange" },
+    onGenerate: { action: "onGenerate" },
+    onBack: { action: "onBack" },
+    onClose: { action: "onClose" },
+    onSave: { action: "onSave" },
+    onSubmit: { action: "onSubmit" },
+  },
+  parameters: { layout: "fullscreen" },
+  render: function ModelFlowStory(args) {
+    const [step, setStep] = React.useState(args.step);
+    React.useEffect(() => setStep(args.step), [args.step]);
+    const [threads, setThreads] = React.useState(MODEL_FLOW.threads);
+    const [rule, setRule] = React.useState("");
+    const [draft, setDraft] = React.useState({});
+    return (
+      <ModelFlowDialog
+        step={step}
+        threads={threads}
+        rule={rule}
+        draft={draft}
+        sections={MODEL_FLOW.sections}
+        onToggleMessage={({ threadIndex, messageIndex, checked }) => {
+          setThreads((current) =>
+            current.map((thread, ti) =>
+              ti === threadIndex
+                ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                : thread,
+            ),
+          );
+          args.onToggleMessage?.({ threadIndex, messageIndex, checked });
+        }}
+        onRuleChange={({ value }) => {
+          setRule(value);
+          args.onRuleChange?.({ value });
+        }}
+        onGenerate={(event) => {
+          setDraft(buildModelDraft(event.messages, event.rule));
+          setStep("generated");
+          args.onGenerate?.(event);
+        }}
+        onBack={() => {
+          setStep("history");
+          args.onBack?.();
+        }}
+        onClose={() => args.onClose?.()}
+        onSave={args.onSave}
+        onSubmit={args.onSubmit}
+      />
+    );
+  },
 };
 
 export const TradingRail = {

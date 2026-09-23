@@ -158,5 +158,37 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "chat") {
+    return (
+      <svg {...common}>
+        <path d="M4 5.5h16v10H8l-4 3.5V5.5Z" />
+        <path d="M8 9h8M8 12h6" />
+      </svg>
+    );
+  }
+  if (name === "pen") {
+    return (
+      <svg {...common}>
+        <path d="M4 20h4l11-11-4-4L4 16v4Z" />
+        <path d="M13.5 6.5l4 4" />
+      </svg>
+    );
+  }
+  if (name === "pin") {
+    return (
+      <svg {...common} strokeWidth="2">
+        <path d="M15 4l5 5" />
+        <path d="M14 5l-7 7v4h4l7-7" />
+        <path d="M9 15l-5 5" />
+      </svg>
+    );
+  }
+  if (name === "spokes") {
+    return (
+      <svg {...common}>
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" />
+      </svg>
+    );
+  }
   return null;
 }

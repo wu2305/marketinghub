@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer } from "./content.js";
+import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
@@ -435,7 +435,7 @@ export const MediaTrackingDetail = {
     filters: MEDIA_TRACKING.filters,
     notes: MEDIA_TRACKING.notes,
     table: MEDIA_TRACKING.table,
-    assistant: { ...LITE_ASSISTANT, showScopes: true, showPicks: false },
+    assistant: { ...LITE_ASSISTANT, showScopes: false, showPicks: false },
     assistantOpen: false,
     prompt: "",
   },
@@ -453,20 +453,54 @@ export const MediaTrackingDetail = {
     onMaximize: { action: "onMaximize" },
     onHistory: { action: "onHistory" },
     onHistorySelect: { action: "onHistorySelect" },
-    onSkill: { action: "onSkill" },
+    onAttach: { action: "onAttach" },
+    onSelectSkill: { action: "onSelectSkill" },
+    onClearSkill: { action: "onClearSkill" },
+    onSkillAction: { action: "onSkillAction" },
+    onFlowSave: { action: "onFlowSave" },
+    onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function MediaTrackingStory(args) {
     const [period, setPeriod] = useSynced(args.period);
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
     const [answers, setAnswers] = React.useState([]);
+    const [skill, setSkill] = React.useState(null);
+    const [flow, setFlow] = React.useState(null);
     return (
       <MediaTrackingDetailPage
         {...args}
         period={period}
-        assistant={{ ...args.assistant, answers }}
+        assistant={{ ...args.assistant, answers, selectedSkill: skill }}
         assistantOpen={open}
         prompt={prompt}
+        skillFlow={
+          flow
+            ? {
+                step: flow.step,
+                threads: flow.threads,
+                rule: flow.rule,
+                draft: flow.draft,
+                sections: MODEL_FLOW.sections,
+                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
+                  setFlow((current) => ({
+                    ...current,
+                    threads: current.threads.map((thread, ti) =>
+                      ti === threadIndex
+                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                        : thread,
+                    ),
+                  })),
+                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
+                onGenerate: ({ messages, rule }) =>
+                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
+                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
+                onClose: () => setFlow(null),
+                onSave: ({ values }) => args.onFlowSave?.(values),
+                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+              }
+            : undefined
+        }
         onNavigate={args.onNavigate}
         onPeriodChange={(event) => {
           setPeriod(event.id);
@@ -508,7 +542,24 @@ export const MediaTrackingDetail = {
           setPrompt(event.prompt);
           args.onHistorySelect?.(event);
         }}
-        onSkill={args.onSkill}
+        onAttach={args.onAttach}
+        onSelectSkill={(event) => {
+          setSkill({ id: event.id, type: event.type, title: event.title });
+          args.onSelectSkill?.(event);
+        }}
+        onClearSkill={() => {
+          setSkill(null);
+          args.onClearSkill?.();
+        }}
+        onSkillAction={({ action }) => {
+          args.onSkillAction?.({ action });
+          setFlow({
+            step: action === "history" ? "history" : "manual",
+            threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+            rule: "",
+            draft: {},
+          });
+        }}
       />
     );
   },

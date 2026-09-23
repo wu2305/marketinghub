@@ -259,6 +259,8 @@ export default [
       expect: [
         { sel: "#assistantPanel", text: "Ask AI Interpreter" },
         { sel: "#answerFeed", text: "I will use the AI Interpreter knowledge context to answer:" },
+        { sel: ".ask-scope", state: "hidden" },
+        { sel: ".global-ai-launcher", state: "hidden" },
       ],
     },
     story: {
@@ -273,6 +275,241 @@ export default [
       expect: [
         { sel: ".mh-assistant", text: "Ask AI Interpreter" },
         { sel: ".mh-assistant__answer--simple", text: "I will use the AI Interpreter knowledge context to answer:" },
+        { sel: ".mh-assistant__scopes", state: "detached" },
+        { sel: ".mh-assistant__scope-reserve" },
+        { sel: ".mh-launcher", state: "hidden" },
+      ],
+    },
+  },
+  {
+    id: "p05-assistant-history",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: "#aiHistory" },
+        { wait: "#aiRecentHistoryPopup:not([hidden])" },
+        { click: ".ai-recent-chat" },
+      ],
+      expect: [
+        { sel: "#aiRecentHistoryPopup", state: "hidden" },
+        { sel: "#promptCanvas", text: "Summarize the latest media tracking performance." },
+        { sel: "#sendQuery:not([disabled])" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-assistant__history-pop" },
+        { click: ".mh-assistant__history-item" },
+      ],
+      expect: [
+        { sel: ".mh-assistant__history-pop", state: "detached" },
+        { sel: ".mh-assistant__send .mh-button:not([disabled])" },
+      ],
+    },
+  },
+  {
+    id: "p05-assistant-maximize",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: "#aiMaximize" },
+      ],
+      expect: [
+        { sel: "#assistantPanel.is-ai-expanded" },
+        { sel: "#aiMaximize[aria-label='Restore']" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: "button[aria-label='Maximize']" },
+      ],
+      expect: [
+        { sel: ".mh-assistant--expanded" },
+        { sel: "button[aria-label='Restore']" },
+      ],
+    },
+  },
+  {
+    id: "p05-assistant-new-session",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { fill: ["#promptCanvas", "Summarize the latest media tracking performance."] },
+        { click: "#sendQuery" },
+        { wait: "#answerFeed .answer-card" },
+        { click: "#aiNewSession" },
+      ],
+      expect: [{ sel: "#answerFeed .answer-card", state: "detached" }],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { fill: [".mh-assistant__box textarea", "Summarize the latest media tracking performance."] },
+        { click: ".mh-assistant__send .mh-button" },
+        { wait: ".mh-assistant__answer--simple" },
+        { click: "button[aria-label='New session']" },
+      ],
+      expect: [{ sel: ".mh-assistant__answer", state: "detached" }],
+    },
+  },
+  {
+    id: "p05-assistant-escape",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { press: ["body", "Escape"] },
+      ],
+      expect: [
+        { sel: "#assistantPanel", state: "hidden" },
+        { sel: ".global-ai-launcher" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { press: ["body", "Escape"] },
+      ],
+      expect: [
+        { sel: ".mh-assistant", state: "detached" },
+        { sel: ".mh-launcher" },
+      ],
+    },
+  },
+  {
+    id: "p05-skill-menu",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: ".ai-skill-option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".ai-skill-chip:not([hidden])", text: "Analytical Model: ROI diagnosis model" },
+        { sel: "#aiSkillMenu", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
+        { sel: ".mh-skill", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p05-skill-history",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-ai-skill-action='history']" },
+        { wait: "#aiHistoryGenerateDialog" },
+        { click: "[data-ai-generate-model]" },
+        { wait: "#aiGeneratedModelDialog" },
+        { click: "[data-ai-back-to-history]" },
+        { wait: "#aiHistoryGenerateDialog:not([hidden])" },
+        { click: "#aiHistoryGenerateDialog footer [data-ai-flow-close]" },
+      ],
+      expect: [
+        { sel: "#aiHistoryGenerateDialog", state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action >> nth=0" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__card--form" },
+        { click: ".mh-flow__back" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--secondary" },
+      ],
+      expect: [
+        { sel: ".mh-flow", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p05-skill-manual",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-ai-skill-action='manual']" },
+        { wait: "#aiGeneratedModelDialog" },
+        { click: "#aiGeneratedModelDialog [data-ai-submit-model]" },
+        { wait: "#aiGeneratedModelDialog .field-error" },
+      ],
+      expect: [
+        { sel: "#aiGeneratedModelDialog .field-error", text: "Name is required." },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action >> nth=1" },
+        { wait: ".mh-flow__card--form" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__field-error" },
+      ],
+      expect: [
+        { sel: ".mh-flow__field-error", text: "Name is required." },
       ],
     },
   },

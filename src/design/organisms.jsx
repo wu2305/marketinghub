@@ -651,10 +651,16 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
  * @param {string} [props.historyTitle="Recent"]
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"
- * @param {() => void} [props.onSkill] renders the composer "+" skill-menu trigger when provided
+ * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
+ * @param {{ id?: string, type: string, title: string }} [props.selectedSkill] chip shown inside the composer when a skill is selected
+ * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
+ * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
+ * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
+ * @param {() => void} [props.onClearSkill]
+ * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction] model-creation menu entries
  * @param {() => void} [props.onClose]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string, scope?: string, model: string, mode: string }) => void} [props.onSubmit]
+ * @param {(event: { prompt: string, scope?: string, model?: string, mode?: string }) => void} [props.onSubmit] model/mode are sent only when `showPicks` is on
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  * @param {(event: { scope: string }) => void} [props.onScopeChange]
  * @param {() => void} [props.onNewSession]
@@ -681,7 +687,13 @@ export function AssistantPanel({
   history = [],
   historyTitle = "Recent",
   historyCount,
-  onSkill,
+  skillMenu,
+  selectedSkill,
+  enterToSubmit = true,
+  onAttach,
+  onSelectSkill,
+  onClearSkill,
+  onSkillAction,
   onClose,
   onPromptChange,
   onSubmit,
@@ -693,6 +705,7 @@ export function AssistantPanel({
   onHistorySelect,
   onFeedback,
 }) {
+  const titleId = React.useId();
   const [expanded, setExpanded] = React.useState(false);
   const [historyOpen, setHistoryOpen] = React.useState(false);
   const mainRef = React.useRef(null);
@@ -746,16 +759,14 @@ export function AssistantPanel({
   return (
     <section
       className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", expanded && "mh-assistant--expanded")}
-      role="dialog"
-      aria-modal="true"
       aria-label={title}
     >
       <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={onClose} />
-      <div className="mh-assistant__dialog">
+      <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <header className="mh-assistant__header">
           <div className="mh-assistant__identity">
             <span className="mh-assistant__mark">AI</span>
-            <h2>{title}</h2>
+            <h2 id={titleId}>{title}</h2>
           </div>
           <div className="mh-assistant__actions">
             <button
@@ -817,7 +828,8 @@ export function AssistantPanel({
                           promptRef.current?.focus();
                         }}
                       >
-                        {item.label}
+                        <strong>{item.title ?? item.label}</strong>
+                        <span>{item.label}</span>
                       </button>
                     ))}
                   </div>
@@ -861,7 +873,11 @@ export function AssistantPanel({
           className="mh-assistant__ask"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit?.({ prompt, scope, model, mode });
+            onSubmit?.({
+              prompt,
+              ...(showScopes ? { scope } : {}),
+              ...(showPicks ? { model, mode } : {}),
+            });
           }}
         >
           {showScopes ? (
@@ -875,6 +891,23 @@ export function AssistantPanel({
             <div className="mh-assistant__scope-reserve" aria-hidden="true" />
           ) : null}
           <div className="mh-assistant__box">
+            {selectedSkill ? (
+              <span className="mh-assistant__chip">
+                <span>
+                  {selectedSkill.type}: {selectedSkill.title}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Clear selected skill"
+                  onClick={() => {
+                    onClearSkill?.();
+                    promptRef.current?.focus();
+                  }}
+                >
+                  ×
+                </button>
+              </span>
+            ) : null}
             <TextArea
               label="Ask AI Interpreter"
               rows={1}
@@ -882,7 +915,7 @@ export function AssistantPanel({
               placeholder="Type your question or upload Excel/CSV files for data analysis"
               onChange={onPromptChange}
               onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
+                if (enterToSubmit && event.key === "Enter" && !event.shiftKey) {
                   event.preventDefault();
                   if (String(prompt).trim()) event.currentTarget.form?.requestSubmit();
                 }
@@ -890,10 +923,15 @@ export function AssistantPanel({
               ref={promptRef}
             />
             <div className="mh-assistant__tools">
-              {onSkill ? (
-                <button className="mh-assistant__skill" type="button" aria-label="Choose AI skill" onClick={onSkill}>
-                  <Icon name="plus" />
-                </button>
+              {skillMenu ? (
+                <SkillMenu
+                  config={skillMenu}
+                  selectedSkill={selectedSkill}
+                  composerRef={promptRef}
+                  onAttach={onAttach}
+                  onSelectSkill={onSelectSkill}
+                  onAction={onSkillAction}
+                />
               ) : null}
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
@@ -907,6 +945,579 @@ export function AssistantPanel({
         </form>
       </div>
     </section>
+  );
+}
+
+const SKILL_HOVER_CLOSE_MS = 120;
+
+/**
+ * The composer "+" menu: an Upload File shortcut plus the Analytical Model
+ * picker with search, selection chip support and the two model-creation
+ * entries. Mirrors assistant-skill-menu.js: hover previews the detail pane
+ * without moving focus, click pins it open, keyboard focus moves into the
+ * search field, and leaving the menu unpinned closes the detail after a
+ * short delay. Escape or an outside click closes the whole menu.
+ * @param {object} props
+ * @param {object} props.config `{ attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
+ * @param {{ id?: string, type: string, title: string }} [props.selectedSkill]
+ * @param {React.RefObject<HTMLElement>} [props.composerRef] composer input refocused after selection
+ * @param {(event: { names: string[] }) => void} [props.onAttach]
+ * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
+ * @param {(event: { action: "history"|"manual" }) => void} [props.onAction]
+ */
+function SkillMenu({ config, selectedSkill, composerRef, onAttach, onSelectSkill, onAction }) {
+  const [open, setOpen] = React.useState(false);
+  const [detail, setDetail] = React.useState(null);
+  const [pinned, setPinned] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [focusNonce, setFocusNonce] = React.useState(0);
+  const rootRef = React.useRef(null);
+  const fileRef = React.useRef(null);
+  const searchRef = React.useRef(null);
+  const hoverTimer = React.useRef(null);
+
+  React.useEffect(() => () => window.clearTimeout(hoverTimer.current), []);
+
+  React.useEffect(() => {
+    if (focusNonce && searchRef.current) {
+      searchRef.current.focus();
+      searchRef.current.setSelectionRange(searchRef.current.value.length, searchRef.current.value.length);
+    }
+  }, [focusNonce, detail]);
+
+  const closeMenu = React.useCallback(() => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+    setOpen(false);
+    setDetail(null);
+    setPinned(false);
+    setQuery("");
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return undefined;
+    const onDocClick = (event) => {
+      if (!rootRef.current?.contains(event.target)) closeMenu();
+    };
+    const onDocKey = (event) => {
+      if (event.key === "Escape") closeMenu();
+    };
+    document.addEventListener("click", onDocClick);
+    document.addEventListener("keydown", onDocKey);
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onDocKey);
+    };
+  }, [open, closeMenu]);
+
+  const collapseDetail = () => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+    setPinned(false);
+    setDetail(null);
+    setQuery("");
+  };
+
+  const openDetail = (focus) => {
+    setDetail("model");
+    setQuery("");
+    if (focus) setFocusNonce((nonce) => nonce + 1);
+  };
+
+  const clickCategory = (category) => {
+    if (category.id === "upload") {
+      fileRef.current?.click();
+      closeMenu();
+      return;
+    }
+    if (detail === "model" && pinned) {
+      collapseDetail();
+      return;
+    }
+    openDetail(true);
+    setPinned(true);
+  };
+
+  const hoverCategory = (category) => {
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = null;
+    if (category.id === detail || category.id === "upload") return;
+    setPinned(false);
+    setDetail("model");
+    setQuery("");
+  };
+
+  const focusCategory = (category) => {
+    if (category.id === "upload") return;
+    if (detail === "model") setFocusNonce((nonce) => nonce + 1);
+    else openDetail(true);
+  };
+
+  const scheduleDetailClose = () => {
+    if (pinned) return;
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => {
+      hoverTimer.current = null;
+      collapseDetail();
+    }, SKILL_HOVER_CLOSE_MS);
+  };
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const items = (config.items || []).filter((item) => {
+    const haystack = `${item.title} ${item.note}`.toLowerCase();
+    return !normalizedQuery || haystack.includes(normalizedQuery);
+  });
+
+  return (
+    <div className="mh-skillbox" ref={rootRef}>
+      <button
+        className="mh-assistant__skill"
+        type="button"
+        aria-label="Choose AI skill"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => (open ? closeMenu() : setOpen(true))}
+      >
+        <Icon name="plus" />
+      </button>
+      <input
+        ref={fileRef}
+        className="mh-skillbox__file"
+        type="file"
+        multiple
+        hidden
+        accept={config.attachAccept}
+        tabIndex={-1}
+        onChange={(event) => {
+          const names = Array.from(event.target.files || []).map((file) => file.name);
+          if (names.length) onAttach?.({ names });
+          event.target.value = "";
+        }}
+      />
+      {open ? (
+        <div
+          className="mh-skill"
+          role="menu"
+          aria-label="AI skills"
+          onMouseEnter={() => {
+            window.clearTimeout(hoverTimer.current);
+            hoverTimer.current = null;
+          }}
+          onMouseLeave={scheduleDetailClose}
+        >
+          <div className="mh-skill__categories">
+            {(config.categories || []).map((category) => (
+              <button
+                key={category.id}
+                className={cx("mh-skill__category", detail === category.id && "is-active")}
+                type="button"
+                role="menuitem"
+                onClick={() => clickCategory(category)}
+                onMouseEnter={() => hoverCategory(category)}
+                onFocus={() => focusCategory(category)}
+              >
+                <span className="mh-skill__category-main">
+                  <span className="mh-skill__category-icon" aria-hidden="true">
+                    <Icon name={category.icon} />
+                  </span>
+                  <span>{category.label}</span>
+                </span>
+                <span aria-hidden="true">›</span>
+              </button>
+            ))}
+          </div>
+          {detail === "model" ? (
+            <div className="mh-skill__detail">
+              <div className="mh-skill__search-row">
+                <label className="mh-skill__search">
+                  <Icon name="search" />
+                  <input
+                    ref={searchRef}
+                    type="search"
+                    value={query}
+                    placeholder={config.searchPlaceholder}
+                    aria-label={config.searchPlaceholder}
+                    onChange={(event) => setQuery(event.target.value)}
+                  />
+                </label>
+              </div>
+              <div className="mh-skill__list">
+                {items.length ? (
+                  items.map((item) => (
+                    <button
+                      key={item.id || item.title}
+                      className={cx(
+                        "mh-skill__option",
+                        selectedSkill && selectedSkill.title === item.title && "is-selected",
+                      )}
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        onSelectSkill?.({ id: item.id, type: "Analytical Model", title: item.title });
+                        closeMenu();
+                        composerRef?.current?.focus();
+                      }}
+                    >
+                      <span className="mh-skill__option-head">
+                        <strong>{item.title}</strong>
+                        <span className="mh-skill__pin" aria-hidden="true">
+                          <Icon name="pin" />
+                        </span>
+                      </span>
+                      <small>{item.note}</small>
+                    </button>
+                  ))
+                ) : (
+                  <div className="mh-skill__empty">{config.emptyLabel}</div>
+                )}
+              </div>
+              <div className="mh-skill__footer">
+                <button
+                  className="mh-skill__action"
+                  type="button"
+                  onClick={() => {
+                    closeMenu();
+                    onAction?.({ action: "history" });
+                  }}
+                >
+                  <span className="mh-skill__action-label">
+                    <Icon name="chat" />
+                    <span>{config.historyLabel}</span>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
+                <button
+                  className="mh-skill__action"
+                  type="button"
+                  onClick={() => {
+                    closeMenu();
+                    onAction?.({ action: "manual" });
+                  }}
+                >
+                  <span className="mh-skill__action-label">
+                    <Icon name="pen" />
+                    <span>{config.manualLabel}</span>
+                  </span>
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export const modelFlowSteps = ["history", "generated", "manual"];
+
+const MODEL_FLOW_LABELS = {
+  historyTitle: "Generate Analytical Model",
+  historySubtitle: "Select conversations and describe the generation rule for the analysis logic.",
+  selectLabel: "1 · Select Conversations",
+  ruleLabel: "2 · Generation Rule",
+  optionalLabel: "optional",
+  rulePlaceholder:
+    "Describe how AI should distill the analysis logic, for example: focus on the channel dimension and keep only the driver with the strongest evidence.",
+  emptyError: "Select at least one message to continue.",
+  generatedTitle: "New Analytical Model",
+  generatedSubtitle: "Generated from selected conversations and your generation rule.",
+  generatedSubtitlePlain: "Generated from selected conversations.",
+  generatedNotice: "Submit will publish this knowledge immediately.",
+  manualTitle: "Create Analytical Model Manually",
+  manualSubtitle: "Draft the model fields and publish it to the knowledge base.",
+  cancelLabel: "Cancel",
+  generateLabel: "Generate",
+  backLabel: "← Back",
+  saveLabel: "Save",
+  submitLabel: "Submit",
+  savedLabel: "Saved",
+  publishedLabel: "Published",
+};
+
+const MODEL_FLOW_SECTIONS = [
+  {
+    title: "Basic Information",
+    fields: [
+      { key: "name", label: "Name", required: true, placeholder: "Enter analytical model name" },
+      { key: "description", label: "Description", textarea: true, placeholder: "Describe what this model helps interpret" },
+      { key: "trigger", label: "Trigger When", required: true, textarea: true, placeholder: "Describe when AI should use this model" },
+    ],
+  },
+  {
+    title: "Metrics",
+    fields: [
+      { key: "domain", label: "Business Domain", placeholder: "Campaign Performance; Customer Conversion" },
+      { key: "metrics", label: "Referenced Metrics", placeholder: "ROI; Conversion Rate; Spend" },
+    ],
+  },
+  {
+    title: "Structure & Guidance",
+    fields: [
+      { key: "structure", label: "Structure & Guidance", required: true, textarea: true, tall: true, placeholder: "Write the step-by-step interpretation logic" },
+    ],
+  },
+  {
+    title: "Constraints",
+    fields: [
+      { key: "constraints", label: "Prohibited Analysis Directions", textarea: true, placeholder: "Add limits, warnings, or blocked analysis directions" },
+    ],
+  },
+];
+
+/**
+ * "Generate Analytical Model" flow dialog reached from the skill menu.
+ * `step="history"` replays chat threads with per-message checkboxes and a
+ * generation-rule textarea; Generate requires at least one ticked message.
+ * `step="generated"` shows the drafted model form (Back returns to the history
+ * step with ticks and rule preserved); `step="manual"` shows the same form
+ * empty. Save/Submit validate required fields, then flash Saved/Published and
+ * close after ~450ms — matching the demo's deterministic simulation.
+ * @param {object} props
+ * @param {typeof modelFlowSteps[number]} [props.step] falsy renders nothing
+ * @param {Array<{ title: string, messages: Array<{ role: "user"|"ai", text: string, label?: string, title?: string, sources?: string[], checked?: boolean }> }>} [props.threads=[]]
+ * @param {string} [props.rule=""] persisted generation rule (survives Back)
+ * @param {object} [props.draft={}] field values for generated/manual steps, keyed by field key
+ * @param {Array<{ title: string, fields: Array<{ key: string, label: string, required?: boolean, textarea?: boolean, tall?: boolean, placeholder?: string }> }>} [props.sections]
+ * @param {object} [props.labels={}] copy overrides merged over the demo strings
+ * @param {(event: { threadIndex: number, messageIndex: number, checked: boolean }) => void} [props.onToggleMessage]
+ * @param {(event: { value: string }) => void} [props.onRuleChange]
+ * @param {(event: { messages: Array<object>, rule: string }) => void} [props.onGenerate]
+ * @param {() => void} [props.onBack]
+ * @param {() => void} [props.onClose]
+ * @param {(event: { values: object }) => void} [props.onSave]
+ * @param {(event: { values: object }) => void} [props.onSubmit]
+ */
+export function ModelFlowDialog({
+  step,
+  threads = [],
+  rule = "",
+  draft = {},
+  sections = MODEL_FLOW_SECTIONS,
+  labels = {},
+  onToggleMessage,
+  onRuleChange,
+  onGenerate,
+  onBack,
+  onClose,
+  onSave,
+  onSubmit,
+}) {
+  const copy = { ...MODEL_FLOW_LABELS, ...labels };
+  const titleId = React.useId();
+  const formRef = React.useRef(null);
+  const ruleRef = React.useRef(null);
+  const doneTimer = React.useRef(null);
+  const [error, setError] = React.useState(false);
+  const [invalid, setInvalid] = React.useState({});
+  const [done, setDone] = React.useState(null);
+  React.useEffect(() => () => window.clearTimeout(doneTimer.current), []);
+
+  if (!step) return null;
+  const isHistory = step === "history";
+  const isGenerated = step === "generated";
+
+  const selectedCount = threads.reduce((sum, thread) => sum + thread.messages.filter((message) => message.checked).length, 0);
+  const totalCount = threads.reduce((sum, thread) => sum + thread.messages.length, 0);
+
+  const generate = () => {
+    const messages = [];
+    threads.forEach((thread, threadIndex) =>
+      thread.messages.forEach((message, messageIndex) => {
+        if (message.checked) {
+          messages.push({
+            threadIndex,
+            messageIndex,
+            role: message.role,
+            title: message.title || "",
+            text: message.text,
+            conversation: thread.title,
+          });
+        }
+      }),
+    );
+    if (!messages.length) {
+      setError(true);
+      return;
+    }
+    setError(false);
+    onGenerate?.({ messages, rule: ruleRef.current?.value || "" });
+  };
+
+  const finish = (kind) => {
+    const values = Object.fromEntries(new FormData(formRef.current).entries());
+    const missing = {};
+    sections.forEach((section) =>
+      section.fields.forEach((field) => {
+        if (field.required && !String(values[field.key] || "").trim()) missing[field.key] = `${field.label} is required.`;
+      }),
+    );
+    setInvalid(missing);
+    if (Object.keys(missing).length) {
+      formRef.current?.querySelector(".is-invalid")?.focus();
+      return;
+    }
+    (kind === "save" ? onSave : onSubmit)?.({ values });
+    setDone(kind);
+    window.clearTimeout(doneTimer.current);
+    doneTimer.current = window.setTimeout(() => onClose?.(), 450);
+  };
+
+  const title = isHistory ? copy.historyTitle : isGenerated ? copy.generatedTitle : copy.manualTitle;
+  const subtitle = isHistory
+    ? copy.historySubtitle
+    : isGenerated
+      ? `${rule.trim() ? copy.generatedSubtitle : copy.generatedSubtitlePlain} ${copy.generatedNotice}`
+      : copy.manualSubtitle;
+
+  return (
+    <div className="mh-flow">
+      <div
+        className={cx("mh-flow__card", isHistory ? "mh-flow__card--history" : "mh-flow__card--form")}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
+        <header className="mh-flow__head">
+          <div>
+            <strong id={titleId}>{title}</strong>
+            <span>{subtitle}</span>
+          </div>
+          <button type="button" aria-label="Close" onClick={onClose}>
+            ×
+          </button>
+        </header>
+        {isHistory ? (
+          <div className="mh-flow__body">
+            <section className="mh-flow__block">
+              <div className="mh-flow__block-head">
+                <span>{copy.selectLabel}</span>
+                <span className="mh-flow__count">
+                  Selected {selectedCount} / {totalCount} messages
+                </span>
+              </div>
+              <div className="mh-flow__thread">
+                {threads.map((thread, threadIndex) =>
+                  thread.messages.map((message, messageIndex) => (
+                    <label
+                      key={`${threadIndex}-${messageIndex}`}
+                      className={cx("mh-flow__msg", message.checked && "is-selected")}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={Boolean(message.checked)}
+                        onChange={(event) => {
+                          if (event.target.checked) setError(false);
+                          onToggleMessage?.({ threadIndex, messageIndex, checked: event.target.checked });
+                        }}
+                      />
+                      {message.role === "user" ? (
+                        <span className="mh-flow__bubble">{message.text}</span>
+                      ) : (
+                        <span className="mh-flow__answer">
+                          <span className="mh-flow__answer-head">
+                            {message.label} · {message.sources?.length || 0} grounded sources
+                          </span>
+                          <strong>{message.title}</strong>
+                          <small>{message.text}</small>
+                          {message.sources?.length ? (
+                            <span className="mh-flow__sources">
+                              {message.sources.map((source) => (
+                                <span key={source}>{source}</span>
+                              ))}
+                            </span>
+                          ) : null}
+                        </span>
+                      )}
+                    </label>
+                  )),
+                )}
+              </div>
+              <p className="mh-flow__error" hidden={!error}>
+                {copy.emptyError}
+              </p>
+            </section>
+            <section className="mh-flow__block">
+              <div className="mh-flow__block-head">
+                <span>{copy.ruleLabel}</span>
+                <span className="mh-flow__optional">{copy.optionalLabel}</span>
+              </div>
+              <textarea
+                ref={ruleRef}
+                className="mh-flow__rule"
+                rows={3}
+                defaultValue={rule}
+                placeholder={copy.rulePlaceholder}
+                onChange={(event) => onRuleChange?.({ value: event.target.value })}
+              />
+            </section>
+          </div>
+        ) : (
+          <form className="mh-flow__form" ref={formRef} onSubmit={(event) => event.preventDefault()}>
+            {sections.map((section) => (
+              <section key={section.title} className="mh-flow__section">
+                <h4>{section.title}</h4>
+                {section.fields.map((field) => {
+                  const Tag = field.textarea ? "textarea" : "input";
+                  return (
+                    <label key={field.key} className="mh-flow__field">
+                      <span className="mh-flow__field-label">
+                        {field.label}
+                        {field.required ? (
+                          <span className="mh-flow__required" aria-hidden="true">
+                            *
+                          </span>
+                        ) : null}
+                      </span>
+                      <Tag
+                        name={field.key}
+                        defaultValue={draft[field.key] ?? ""}
+                        placeholder={field.placeholder}
+                        className={cx(invalid[field.key] && "is-invalid", field.tall && "mh-flow__tall")}
+                        onChange={() => {
+                          if (invalid[field.key]) {
+                            setInvalid((previous) => {
+                              const next = { ...previous };
+                              delete next[field.key];
+                              return next;
+                            });
+                          }
+                        }}
+                      />
+                      {invalid[field.key] ? <span className="mh-flow__field-error">{invalid[field.key]}</span> : null}
+                    </label>
+                  );
+                })}
+              </section>
+            ))}
+          </form>
+        )}
+        <footer className="mh-flow__foot">
+          {isGenerated ? (
+            <button type="button" className="mh-flow__btn mh-flow__btn--secondary mh-flow__back" onClick={onBack}>
+              {copy.backLabel}
+            </button>
+          ) : null}
+          <button type="button" className="mh-flow__btn mh-flow__btn--secondary" onClick={onClose}>
+            {copy.cancelLabel}
+          </button>
+          {isHistory ? (
+            <button type="button" className="mh-flow__btn mh-flow__btn--primary" onClick={generate}>
+              {copy.generateLabel}
+            </button>
+          ) : (
+            <>
+              <button type="button" className="mh-flow__btn mh-flow__btn--secondary" onClick={() => finish("save")}>
+                {done === "save" ? copy.savedLabel : copy.saveLabel}
+              </button>
+              <button type="button" className="mh-flow__btn mh-flow__btn--primary" onClick={() => finish("submit")}>
+                {done === "submit" ? copy.publishedLabel : copy.submitLabel}
+              </button>
+            </>
+          )}
+        </footer>
+      </div>
+    </div>
   );
 }
 

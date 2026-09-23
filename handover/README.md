@@ -52,7 +52,7 @@ npm test               # vitest 行为测试
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中 |
 | P03 | assets/pages/flexible.html | Self-Service 页签、筛选、数据视图入口及状态 | M3 | 进行中 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
-| P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（18/18）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡完成 |
+| P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
@@ -110,7 +110,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 **P05 media-tracking-detail.html** — 脚本 portal.js + inline-1(11L) + lite panel + skill-menu；CSS self-service/media-tracking。
 - 视图：Daily|Weekly|Monthly 粒度切换、Spot Info Mapping 按钮、静态报表表格/图表区。
-- 现状：无故事。粒度切换与映射动作待提取。
+- 现状：`MediaTrackingDetailPage` 已重建——四 tab、15 筛选（3 required）、5 条说明、42 字段长表、lite 助手（drawer/Recent Chats/新会话/最大化/Escape+backdrop 关闭/launcher hidden、scope 区按原始 CSS 隐藏、Enter 不提交=换行）；"+" 技能菜单经 `SkillMenu`+`ModelFlowDialog` 重建（Upload 触发隐藏 file input；Analytical Model 详情搜索/选中芯片/置顶提示；Add from Chat History→6 消息勾选→Generate→生成表单（Back 保留勾选与规则）；Create Manually→空表单；Save/Submit 必填校验+Saved/Published 450ms 关闭）。10 个配对场景全过。原始死 CSS 未重建：`.ai-skill-create`、`.ai-skill-manage`、`.ai-history-item/.ai-history-list/.ai-history-conversation*/.ai-history-clear`（无生产方）。
 
 **P06 campaign.html** — 脚本 campaign/workspace.js + skill-menu；location.hash 切视图。
 - 视图：5 section（overviewTitle/accountsTitle/analyticsTitle/assetsTitle/executionTitle）、accountSearch + 平台 pills（Rednote/Douyin）+ Filter/Reset → accountTable/accountTableResult、taskDialog+taskForm（Create Campaign Task）、Bind New Account、taskQueueList/Count、actionLogBody、actionToast。
@@ -167,10 +167,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M3 P05 media-tracking-detail 本轮完成——`MediaTrackingDetailPage` 重建四粒度 tab（Daily/Weekly/Monthly/Spot Info Mapping）、15 项筛选栅格（3 required）、5 条维度说明、42 字段长表（1800px 横向滚动 + 600px 粘性表头 + 行 hover）、lite 助手（drawer 面板、Recent Chats、scope 区、技能按钮、simple 答案卡、launcher hidden 态）；三对 visual-check 场景全过。
-- **下一步**：M3 推进中——P05 已重建并配对验证；下一独立条目建议：P02 reports 脊柱（目录/project/dashboard/详情多视图，需拆分验收），或 P06 channel tabs 内容差异核对，或 P07 Interpreter 非默认筛选与八类型配对补全。M1 余项并行欠账：内联 `style` 占位、色值 token 化、`@media`/`:focus-visible`、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ ebb598a → 85f4564 → 9a8f3e8 → 5639a58 → 52560bc → e2071c9 → 本批 P05 提交），未合入 main。
-- **未提交改动**：本批 P05 文件（MediaTrackingDetailPage、content.js MEDIA_TRACKING/LITE_ASSISTANT/buildLiteAssistantAnswer、AssistantLauncher hidden、AssistantPanel simple/historyTitle/onSkill、chevron-down 图标、pages.css、pages.stories、visual-check 三场景、台账）随提交入库。`.commandcode/` 为工具产物不入库。
-- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 59 entries（54 stories、5 docs）；`node scripts/visual-check.mjs` 18/18 PASS——本批新增 p05-media-tracking（头/Monthly 激活/42 字段计数/表数据/说明文案）、p05-media-tracking-tab（Daily 切换 active）、p05-media-tracking-assistant（launcher→Ask AI Interpreter→输入→ASK→simple 答案卡）。注意 PASS 仍只表示加载与预期控件成立，视觉差异需逐对人眼评估；P05 lite 助手与完整版 portal.js 的差异（无 modePicker/modelPicker/upload、答案卡单行 simple）按原始 lite 脚本重建，expanded 最大化态在 lite 中为居中放大已由 AssistantPanel expanded 覆盖。
+- **当前目标**：M3 P05 技能菜单与 Generate Model 流本轮完成——`AssistantPanel` 扩展 `skillMenu`/`selectedSkill`/`enterToSubmit`/`onAttach`/`onSelectSkill`/`onClearSkill`/`onSkillAction`/`onFeedback`，新增导出 `ModelFlowDialog`+`modelFlowSteps`（history→generate→manual 三段、勾选校验、Back 保留草稿、必填校验、确定性 `buildModelDraft`/`buildModelLogic`/`buildModelDescription`）；P05 lite 助手按原始补齐 scope 隐藏（`.mh-assistant__scope-reserve` 保位）、`historyTitle="Recent Chats"`、Enter 不提交、backdrop/Escape 关闭、工具行只留 new-session；页面 Back 改白底 pill、`height:56` 内联占位改 `.mh-page__offset`、P05 导航 active 标记与追踪页配色按原始 CSS 精化。
+- **下一步**：M3 推进中——P05 全部可达状态已重建并配对验证（含 619659b 复核项：菜单非死代码、补全 Upload/Analytical Model/搜索/芯片/三段流）；下一独立条目为 P02 reports 脊柱（目录/project/dashboard/详情多视图，需拆分验收，已抽取六项目与逐报表 description/owner/cadence/updated/knowledgeIds 合同），或 P06 channel tabs 内容差异核对、P07 Interpreter 非默认筛选与八类型配对补全。M1 余项并行欠账：色值 token 化余量、`@media`/`:focus-visible` 覆盖、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ ebb598a → 85f4564 → 9a8f3e8 → 5639a58 → 52560bc → e2071c9 → 619659b → 本批提交），未合入 main。
+- **未提交改动**：本批文件（tokens.css、icons.jsx、content.js 的 ASSISTANT_SKILL_MENU/MODEL_FLOW/LITE_ASSISTANT/build*、organisms.jsx/.css 的 AssistantPanel 扩展+ModelFlowDialog+SkillMenu、pages.jsx/.css、atoms.jsx Select 占位、stories、index.js 导出、visual-check 七场景、台账）随提交入库。`.commandcode/` 为工具产物不入库。
+- **已有验证**：2026-09-23 `npm test` 9/9；`build-storybook` 61 entries（56 stories、5 docs）；`node scripts/visual-check.mjs` 26/26 PASS（全套件回归，含共享 AssistantPanel 改动对 P01 场景的回归）。P05 十场景：p05-media-tracking/-tab/-assistant、p05-assistant-history（弹层+标题格式 `1. title`）、-maximize（居中放大+还原）、-new-session（清草稿/答案/芯片/菜单）、-escape（Escape 关闭）、p05-skill-menu（菜单/分类/搜索/选中芯片/置顶提示/关闭）、p05-skill-history（勾选→Generate→模型表单→Back 保留状态）、p05-skill-manual（手动表单×关→重开→Submit 必填校验）。人工比对截图：芯片、手动表单校验、页面偏移与原始一致。注意 lite 助手与 portal.js 完整版差异（无 modePicker/modelPicker/upload、simple 答案卡）按原始 lite 脚本为准；P05 无图表区（原始 HTML 即无 canvas/SVG）。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -228,6 +228,9 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Modal 表单值 | React Modal 关闭即卸载，重开时字段回 `defaultValue`；原生 `<dialog>` 仅隐藏，编辑值保留 | 受控组件生命周期差异；原始无提交后重开校验流程，登记不改架构 | devin/interpreter-type-contract |
 | P04 FileDropzone | React 版给 file input 加 `stopPropagation`，点击 dropzone 可正常打开文件选择器；原始 upload.js 同款嵌套结构存在递归调用（`fileInput.click()` 冒泡回 dropzone 处理器）为参照缺陷 | 不逐 bug 复刻参照物；点击崩溃属明确缺陷 | devin/interpreter-type-contract |
 | P04 FileDropzone drop | React 版 drop 即触发 `onSelect` 并显示 "Selected: <file>"；原始 `fileInput.files = dataTransfer.files` 不派发 change，提示不更新（仅文件选择器路径更新） | React 行为更符合原始意图；差异登记 | devin/interpreter-type-contract |
+| P05 导航 active | React `current="self-service"` 渲染导航下划线激活态；原始 media-tracking 页 CSS 无激活下划线（flexible 页才有） | 保留语义激活态；下划线是共享 Header 的既有渲染，不逐页关断 | devin/interpreter-type-contract |
+| AssistantPanel backdrop | React 面板打开恒渲染 backdrop；原始仅 P05 有 `.ai-assistant-backdrop` 节点（P03/P06 等页无 scrim） | 单一组件一处渲染；接入 P03/P06 助手时按页核验 scrim 取舍 | devin/interpreter-type-contract |
+| AssistantPanel 菜单态 | React 关闭即卸载，重开后技能菜单/选中芯片复位；原始仅隐藏面板，隐藏期间菜单 DOM 状态保留 | 受控组件生命周期差异；原始无可达的“关后保留菜单再复用”验收路径，登记不改架构 | devin/interpreter-type-contract |
 
 ## 4. 已知缺口
 
@@ -249,14 +252,14 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 原始 Scenario 的 types.js 旧状态与后加载专用脚本不同；本轮已按 scenario-reports.js 生效口径落数据（Draft/Queued/Building/Published + ai_interpreter_enabled 独立）。草稿/删除的界面状态与演示交互尚未完整重建；无需把原 localStorage 机制迁入组件。
 
 - BusinessTermForm 必填校验缺失；TermForm 故事未同步受控输入；未接入页面创建流程。
-- 助手模态焦点/Escape、Tabs 方向键、表格行键盘操作缺失。
+- 助手焦点管理/Escape 已补齐（打开聚焦 composer、关闭还原焦点、Escape/backdrop 关闭）；仍缺：Tabs 方向键、DataTable 行键盘入口、ModelFlowDialog 焦点圈定（原始亦无关闭热键）。
 - tokens.css 包含全局 reset；组件接口仍有 DOM event 透传、部分页面文案硬编码；Interpreter 已改用稳定 `typeId`（显示标题不再充当类型标识）。
 - 缺少页面/状态/动作/故事/验证覆盖清单；仅有五个入口故事不能视为 17 页及其交互提取完成。
 
 - Interpreter 非 overview 状态与原始差异大：原始为卡片网格与逐卡动作，当前为通用行表（Process/AI Status），缺少专用结构与逐卡动作。M4/M5 处理。
 - `StatusBadge` 的 tone 由字符串包含判断决定，需改为显式 `tone` prop 或映射表。
 - ~~`content.js` 中 `href` 为 `/home`、`/cockpit` 等 Demo 中不存在的路由，需在决定路由方案后统一。~~ 已修复：全部改为真实 Demo 路径（`/index.html`、`/assets/pages/*.html`、`reports.html?project=`）；独立宿主接入时由集成方替换 NAV。
-- 页面故事内联 `style` 用作占位与间距（如 `<div style={{ height: 56 }} />`），需改为组件 CSS。
+- ~~页面故事内联 `style` 用作占位与间距（如 `<div style={{ height: 56 }} />`），需改为组件 CSS。~~ 已修复：页面故事改用 `.mh-page__offset` 类；其余内联仅限组织物故事的布局容器。
 - 已有 9 条 Interpreter 行为测试；无 lint，尚无自动视觉验收脚本。
 - 分支 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）建在已删除的 `src/assembled` 与 `scripts/compose_portal.py` 上，与 `main` 互斥，应关闭。
 
@@ -280,5 +283,6 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-23 | M3 P04：`FileDropzone` 分子（点击/拖拽/dropzone 高亮/选中文件提示）与 `DataUploadPage` 页面组合（back 链接、Template Import 工具栏、14 字段表单、Submit 1500ms 瞬态、Modal 承接 bulkImport 弹窗 + template 链接 + Tips）；新图标 upload/file-upload/arrow-left；DATA_UPLOAD 内容与受控故事；index.js 公共出口。原始 `.bulk-import-steps` 样式无 DOM 对应，未重建。npm test 9/9、build 58 entries（53 stories）、visual-check 15/15 | Devin |
 | 2026-09-23 | 对抗性复核修复批（ebb598a + 85f4564）：AssistantPanel 补 Enter 提交（Shift+Enter 换行）、单次 Escape 同时关 popover 与面板（原始双监听器同帧触发）、关闭时重置 expanded/historyOpen、body 锁滚动、焦点还原加 isConnected 防护；建议/历史项/newSession 回填后聚焦 composer；答案 Copy 改为整卡 innerText 且仅 clipboard 成功才显示 Copied!（timer 卸载清理）；Home/Campaign 助手 launcher 常挂载（原始 #aiEntry 常驻）；feed 由追加改为整批替换（原始 `answerFeed.innerHTML=""`）；HomePage 补 onHistory 透传。Modal/Toast 批：任务弹窗三个 select 补 defaultValue（原 selectedIndex=-1 空面 + FormData null）、preview eyebrow 改 faint+uppercase、弹窗字段样式按 task-form-grid 原始度量覆盖（9px label/38px/11px/蓝色焦点环，新 token --mh-focus-blue）、Modal/AssistantPanel onClose 改 ref 防不稳定回调焦点抖动、Modal 补 Tab 焦点圈禁、z-index 140 高于 toast 120、toast 动画 5px/2600ms、账号计数补单复数（account/accounts shown）、故事 toast useSynced+timer 清理、Modal 故事去内联样式。已知差异登记：弹窗关闭后表单值不保留（原生 `<dialog>` 保留 DOM；React 卸载重建，登记而非改架构）。npm test 9/9、visual-check 15/15 | Devin |
 | 2026-09-23 | P03 对抗复核修复（b4558cc4）：Modal 增 `variant="sheet"`（self-service 弹窗族 chrome：深 scrim 无 blur、无 border、radius 8、soft shadow、方形无边框 close、display 字体 italic 标题，新 `modalVariants` 导出），UploadHistory/bulkImport 接入并去重标题覆盖；上传卡栅格 `mh-page__cards--upload`（max-width 712、padding 16/24、copy gap 10、action 170px）、`.mh-action-card` hover 阴影+过渡、history 图标间距 10px；UploadHistory 行 hover、aria-label 带文件名、色彩改精确 token（新 --mh-scrim-deep/--mh-modal-shadow-soft/--mh-line-faint/--mh-row-hover/--mh-hover-warm/--mh-subtle/--mh-slate/--mh-empty/--mh-control-line）；dropzone 边框/悬停色同步精确 token；故事改 per-tab 类别状态（原始各面板 pill 独立）与 uploadHistory args 可生效。npm test 9/9、visual-check 15/15 | Devin |
-| 2026-09-23 | M3 P05：`MediaTrackingDetailPage`（back 链接、eyebrow/标题、四粒度 Tabs aria-selected、15 项筛选栅格含 3 个 required 星标、5 条维度说明 term 加粗、42 字段表格 title/count+chevron、min-width 1800 横滚、600px 粘性 thead、行 hover）；`AssistantLauncher` 增 `hidden` prop（[hidden] display:none，launcher 常挂载）；`AssistantPanel` 增 `historyTitle`、可选 `onSkill` 技能按钮、`answer.simple` 单行答案卡变体、历史计数条件渲染；lite 助手 scope 区经故事 args 注入 Knowledge。内容契约 MEDIA_TRACKING（周期/筛选/说明/列/15 行真实数据）+ LITE_ASSISTANT + buildLiteAssistantAnswer；新图标 chevron-down。原始死代码/差异：tab 切换仅改 active（各粒度表数据同源渲染）；inline 脚本仅 11L 切换逻辑；skill-menu 脚本绑定不存在的节点（无实际菜单 DOM）登记为死代码。npm test 9/9、build 59 entries（54 stories）、visual-check 18/18 | Devin |
+| 2026-09-23 | M3 P05：`MediaTrackingDetailPage`（back 链接、eyebrow/标题、四粒度 Tabs aria-selected、15 项筛选栅格含 3 个 required 星标、5 条维度说明 term 加粗、42 字段表格 title/count+chevron、min-width 1800 横滚、600px 粘性 thead、行 hover）；`AssistantLauncher` 增 `hidden` prop（[hidden] display:none，launcher 常挂载）；`AssistantPanel` 增 `historyTitle`、可选 `onSkill` 技能按钮、`answer.simple` 单行答案卡变体、历史计数条件渲染。内容契约 MEDIA_TRACKING（周期/筛选/说明/列/15 行真实数据）+ LITE_ASSISTANT + buildLiteAssistantAnswer；新图标 chevron-down。原始死代码/差异：tab 切换仅改 active（各粒度表数据同源渲染）；inline 脚本仅 11L 切换逻辑；~~skill-menu 登记为死代码~~（本轮初判错误，619659b 复核纠正：lite 面板会先建挂载节点，菜单实际可达，已于下一行批次补全）。npm test 9/9、build 59 entries（54 stories）、visual-check 18/18 | Devin |
 | 2026-09-23 | P04 对抗复核修复（5639a58 批次）：FileDropzone file input 加 `stopPropagation` 修点击递归（原始 upload.js 同款潜在缺陷，登记为有意差异）；`.mh-bulk-import` 改 `.mh-modal__dialog.mh-bulk-import` 修 CSS 加载序战败（pages.css 先于 organisms.css 被打败）；submit 按钮补 align-self/min-width/40px/14px/无 border-shadow/hover 0.92（原 stretch 满宽）；Template Import 按原始度量覆盖（~33px/13px/600/#1a1d20/14px 图标/琥珀 hover）；表单 label 13px/600 + input border/focus 金环按原始（新 token --mh-ink-strong/--mh-ink-field/--mh-icon-slate/--mh-focus-gold）；dropzone dragover 边框改 --mh-gold(#e6bc73) 与 hover(#daa860) 区分；back 链补 transition；模板链接补 `download`；14 字段补 `autocomplete="off"`（TextInput/TextArea/Select/FormField 透传）；onNavigate/onDownloadTemplate 回调 href 与渲染 fallback 对齐；JSDoc 补 selectedPrefix/accept/templateHref；故事 selectedFile/fileName 改 useSynced + submitTimer 卸载清理；harness 新增 `upload`（setInputFiles）动作；p04-close 先 wait 弹窗挂载再 Escape（防假 PASS）；新增 p04-data-upload-drop 配对（双侧 setInputFiles→Selected 提示 + story 侧 dropzone 点击验证无 pageerror）。npm test 9/9、build 59 entries、visual-check 19/19 | Devin |
+| 2026-09-23 | M3 P05 技能菜单/模型流 + 619659b 复核修复：`AssistantPanel` 扩展 `skillMenu`/`selectedSkill`/`enterToSubmit`/`onAttach`/`onSelectSkill`/`onClearSkill`/`onSkillAction`/`onFeedback`；新增 `SkillMenu`（私有，分类/详情/搜索/置顶提示/最近两项）与导出 `ModelFlowDialog`+`modelFlowSteps`（history 勾选→Generate 校验→生成表单 Back 保留勾选与规则/手动表单 Save/Submit 必填校验/450ms 关闭，`buildModelDraft`/`buildModelLogic`/`buildModelDescription` 确定性生成）；lite 助手对齐原始：scope 隐藏+保位、`historyTitle="Recent Chats"`、Enter 不提交、backdrop/Escape/工具行按原始精简；P05 Back 改白底 pill、`.mh-page__offset` 取代内联 height:56、配色按 media-tracking.css 精化；`Select` 占位改隐式文本值（对齐原生 option）；新图标 chat/pen/pin/spokes；新增 LiteAskPanel/ModelFlow 独立组织物故事与 index.js 导出；visual-check 增 p05-assistant-history/-maximize/-new-session/-escape、p05-skill-menu/-history/-manual 七场景并修正原侧选择器（`#aiGeneratedModelDialog` 兼手动表单）。死 CSS 不重建：`.ai-skill-create/.ai-skill-manage/.ai-history-*` 无生产方。npm test 9/9、build 61 entries（56 stories）、visual-check 26/26 全套件回归 | Devin |
