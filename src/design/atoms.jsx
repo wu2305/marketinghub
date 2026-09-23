@@ -66,6 +66,7 @@ export function Link({ href = "#", children, onNavigate }) {
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.defaultValue=""] initial uncontrolled value
  * @param {string} [props.placeholder]
+ * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false] adds aria-invalid and error styling
  * @param {typeof SIZES[number]} [props.size="md"]
@@ -78,6 +79,7 @@ export function TextInput({
   value,
   defaultValue = "",
   placeholder,
+  autoComplete,
   disabled = false,
   invalid = false,
   size = "md",
@@ -94,6 +96,7 @@ export function TextInput({
       type={type}
       value={current}
       placeholder={placeholder}
+      autoComplete={autoComplete}
       disabled={disabled}
       aria-invalid={invalid || undefined}
       aria-label={label}
@@ -112,6 +115,7 @@ export function TextInput({
  * @param {string} [props.value]
  * @param {string} [props.defaultValue=""]
  * @param {string} [props.placeholder]
+ * @param {string} [props.autoComplete]
  * @param {number} [props.rows=4]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
@@ -125,6 +129,7 @@ export const TextArea = React.forwardRef(function TextArea({
   value,
   defaultValue = "",
   placeholder,
+  autoComplete,
   rows = 4,
   disabled = false,
   invalid = false,
@@ -143,6 +148,7 @@ export const TextArea = React.forwardRef(function TextArea({
       rows={rows}
       value={current}
       placeholder={placeholder}
+      autoComplete={autoComplete}
       disabled={disabled}
       aria-invalid={invalid || undefined}
       aria-label={label}
@@ -163,6 +169,7 @@ export const TextArea = React.forwardRef(function TextArea({
  * @param {string} [props.defaultValue=""]
  * @param {Array<{ id?: string, value?: string, label: string } | string>} [props.options=[]]
  * @param {string} [props.placeholder] renders a leading empty option
+ * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
  * @param {typeof SIZES[number]} [props.size="md"]
@@ -175,6 +182,7 @@ export function Select({
   defaultValue = "",
   options = [],
   placeholder,
+  autoComplete,
   disabled = false,
   invalid = false,
   size = "md",
@@ -190,6 +198,7 @@ export function Select({
       className={cx("mh-select", `mh-select--${size}`, invalid && "is-invalid")}
       name={name}
       value={current}
+      autoComplete={autoComplete}
       disabled={disabled}
       aria-invalid={invalid || undefined}
       aria-label={label}

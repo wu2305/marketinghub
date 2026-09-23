@@ -203,6 +203,7 @@ export function FormField({
   value,
   defaultValue,
   placeholder,
+  autoComplete,
   options,
   rows,
   className,
@@ -215,11 +216,11 @@ export function FormField({
         {required ? <i className="mh-field__required"> *</i> : null}
       </span>
       {control === "textarea" ? (
-        <TextArea name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} rows={rows} invalid={invalid} onChange={onChange} />
+        <TextArea name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} rows={rows} invalid={invalid} onChange={onChange} />
       ) : control === "select" ? (
-        <Select name={name} value={value} defaultValue={defaultValue} options={options} placeholder={placeholder} invalid={invalid} onChange={onChange} />
+        <Select name={name} value={value} defaultValue={defaultValue} options={options} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} onChange={onChange} />
       ) : (
-        <TextInput name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} invalid={invalid} onChange={onChange} />
+        <TextInput name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} onChange={onChange} />
       )}
       {hint ? <small className="mh-field__hint">{hint}</small> : null}
     </label>
@@ -455,6 +456,7 @@ export function FileDropzone({
         hidden
         aria-hidden="true"
         tabIndex={-1}
+        onClick={(event) => event.stopPropagation()}
         onChange={(event) => {
           const file = event.target.files?.[0];
           if (file) onSelect?.({ name: file.name });

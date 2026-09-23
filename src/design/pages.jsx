@@ -670,7 +670,7 @@ export function CampaignPage({
  * @param {string} [props.submitLabel="Submit"]
  * @param {string} [props.submittingLabel="Submitted"]
  * @param {boolean} [props.submitting=false]
- * @param {object} [props.bulkImport={}] modal copy: title, dropzoneTitle, dropzoneHint, templateLabel, tipsTitle, tips[]
+ * @param {object} [props.bulkImport={}] modal copy/state: title, dropzoneTitle, dropzoneHint, selectedPrefix, accept, templateLabel, templateHref, tipsTitle, tips[]
  * @param {boolean} [props.bulkImportOpen=false]
  * @param {string} [props.selectedFile] file name shown in the dropzone hint
  * @param {(target: object) => void} [props.onNavigate]
@@ -707,7 +707,7 @@ export function DataUploadPage({
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-upload">
         <div className="mh-upload__toolbar">
-          <a className="mh-upload__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref })}>
+          <a className="mh-upload__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref || "#" })}>
             <Icon name="arrow-left" />
             <span>{toolbar.backLabel || "Back"}</span>
           </a>
@@ -728,7 +728,7 @@ export function DataUploadPage({
           <div className="mh-upload__card">
             <div className="mh-upload__grid">
               {fields.map((field) => (
-                <FormField key={field.name} label={field.label} name={field.name} placeholder={field.placeholder || "Enter"} />
+                <FormField key={field.name} label={field.label} name={field.name} placeholder={field.placeholder || "Enter"} autoComplete="off" />
               ))}
             </div>
           </div>
@@ -747,7 +747,7 @@ export function DataUploadPage({
             accept={bulkImport.accept}
             onSelect={onSelectFile}
           />
-          <a className="mh-bulk-import__template" href={bulkImport.templateHref || "#"} onClick={() => onDownloadTemplate?.({ href: bulkImport.templateHref })}>
+          <a className="mh-bulk-import__template" href={bulkImport.templateHref || "#"} download onClick={() => onDownloadTemplate?.({ href: bulkImport.templateHref || "#" })}>
             <Icon name="download" />
             <span>{bulkImport.templateLabel || "Download template"}</span>
           </a>

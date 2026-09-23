@@ -112,18 +112,18 @@ export default [
       url: "/assets/pages/data-upload.html",
       actions: [{ click: "#dataUploadForm .submit-btn" }],
       expect: [
+        { sel: "#dataUploadForm .submit-btn", text: "Submitted" },
         { sel: ".data-upload-form-card" },
         { sel: ".form-grid", text: "Sales LY" },
-        { sel: "#dataUploadForm .submit-btn", text: "Submitted" },
       ],
     },
     story: {
       id: "pages--data-upload",
       actions: [{ click: ".mh-upload__form .mh-button--gold" }],
       expect: [
+        { sel: ".mh-upload__form .mh-button--gold", text: "Submitted" },
         { sel: ".mh-upload__card" },
         { sel: ".mh-upload__grid", text: "Sales LY" },
-        { sel: ".mh-upload__form .mh-button--gold", text: "Submitted" },
       ],
     },
   },
@@ -170,8 +170,43 @@ export default [
     story: {
       id: "pages--data-upload",
       args: { bulkImportOpen: true },
-      actions: [{ press: ["body", "Escape"] }],
+      actions: [
+        { wait: ".mh-modal .mh-dropzone" },
+        { press: ["body", "Escape"] },
+      ],
       expect: [{ sel: ".mh-modal", state: "detached" }],
+    },
+  },
+  {
+    id: "p04-data-upload-drop",
+    original: {
+      url: "/assets/pages/data-upload.html",
+      actions: [
+        { click: "#bulkImportBtn" },
+        { wait: "#bulkImportModal:not([hidden])" },
+        {
+          upload: [
+            "#bulkImportFile",
+            { name: "city-sales.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", content: "demo" },
+          ],
+        },
+      ],
+      expect: [{ sel: ".bulk-import-dropzone-hint", text: "Selected: city-sales.xlsx" }],
+    },
+    story: {
+      id: "pages--data-upload",
+      args: { bulkImportOpen: true },
+      actions: [
+        { wait: ".mh-modal .mh-dropzone" },
+        { click: ".mh-dropzone" },
+        {
+          upload: [
+            ".mh-dropzone__input",
+            { name: "city-sales.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", content: "demo" },
+          ],
+        },
+      ],
+      expect: [{ sel: ".mh-dropzone__hint", text: "Selected: city-sales.xlsx" }],
     },
   },
   {

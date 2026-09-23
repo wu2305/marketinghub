@@ -111,6 +111,10 @@ a {
   --mh-slate: #5b6678;
   --mh-empty: #8a93a5;
   --mh-control-line: #c8d2d8;
+  --mh-ink-strong: #1a1d20;
+  --mh-ink-field: #1c2328;
+  --mh-icon-slate: #5b6470;
+  --mh-focus-gold: rgba(218, 168, 96, 0.18);
 }
 
 .mh-sr {

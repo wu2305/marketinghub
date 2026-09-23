@@ -390,8 +390,9 @@ export const DataUpload = {
   render: function DataUploadStory(args) {
     const [importOpen, setImportOpen] = useSynced(args.bulkImportOpen);
     const [submitting, setSubmitting] = useSynced(args.submitting);
-    const [selectedFile, setSelectedFile] = React.useState(args.selectedFile);
+    const [selectedFile, setSelectedFile] = useSynced(args.selectedFile);
     const submitTimer = React.useRef(null);
+    React.useEffect(() => () => clearTimeout(submitTimer.current), []);
     return (
       <DataUploadPage
         {...args}

@@ -324,6 +324,7 @@
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
+  transition: background 0.15s ease;
 }
 
 .mh-upload__back svg {
@@ -337,10 +338,71 @@
   outline: 0;
 }
 
+.mh-upload__toolbar .mh-button {
+  height: auto;
+  padding: 8px 14px;
+  border-color: var(--mh-control-line);
+  border-radius: 4px;
+  color: var(--mh-ink-strong);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mh-upload__toolbar .mh-button__icon {
+  width: 14px;
+  height: 14px;
+  color: var(--mh-icon-slate);
+}
+
+.mh-upload__toolbar .mh-button:hover,
+.mh-upload__toolbar .mh-button:focus-visible {
+  border-color: var(--mh-bubble-to);
+  background: var(--mh-hover-warm);
+}
+
 .mh-upload__form {
   display: flex;
   flex-direction: column;
   gap: 22px;
+}
+
+.mh-upload__form > .mh-button {
+  align-self: flex-start;
+  width: auto;
+  min-width: 120px;
+  min-height: 40px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: none;
+  font-size: 14px;
+}
+
+.mh-upload__form > .mh-button:hover,
+.mh-upload__form > .mh-button:focus-visible {
+  filter: brightness(0.92);
+}
+
+.mh-upload__grid .mh-field {
+  color: var(--mh-ink-field);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mh-upload__grid .mh-input {
+  height: 40px;
+  border-color: var(--mh-control-line);
+  font-size: 13.5px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.mh-upload__grid .mh-input:focus,
+.mh-upload__grid .mh-input:focus-visible {
+  border-color: var(--mh-bubble-to);
+  box-shadow: 0 0 0 3px var(--mh-focus-gold);
+  outline: 0;
 }
 
 .mh-upload__card {
@@ -357,7 +419,7 @@
   row-gap: 18px;
 }
 
-.mh-bulk-import {
+.mh-modal__dialog.mh-bulk-import {
   width: min(560px, calc(100% - 64px));
   max-height: calc(100vh - 96px);
   display: flex;

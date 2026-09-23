@@ -651,11 +651,15 @@
 }
 
 .mh-dropzone:hover,
-.mh-dropzone.is-dragover,
 .mh-dropzone:focus-visible {
   border-color: var(--mh-bubble-to);
   background: var(--mh-hover-warm);
   outline: 0;
+}
+
+.mh-dropzone.is-dragover {
+  border-color: var(--mh-gold);
+  background: var(--mh-hover-warm);
 }
 
 .mh-dropzone__icon {

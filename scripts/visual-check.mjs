@@ -122,6 +122,12 @@ async function runSide(browser, name, spec, url, viewport) {
       else if (step.check) await page.check(step.check);
       else if (step.hover) await page.hover(step.hover);
       else if (step.press) await page.press(step.press[0], step.press[1]);
+      else if (step.upload)
+        await page.setInputFiles(step.upload[0], {
+          name: step.upload[1].name,
+          mimeType: step.upload[1].mimeType || "application/octet-stream",
+          buffer: Buffer.from(step.upload[1].content || "", "utf8"),
+        });
       else if (step.wait) await page.waitForSelector(step.wait, { state: "visible", timeout: 8000 });
       else if (step.waitMs) await page.waitForTimeout(step.waitMs);
     }

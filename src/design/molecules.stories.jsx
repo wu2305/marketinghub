@@ -21,6 +21,12 @@ import {
 } from "./molecules.jsx";
 import { Button } from "./atoms.jsx";
 
+function useSynced(value) {
+  const [state, setState] = React.useState(value);
+  React.useEffect(() => setState(value), [value]);
+  return [state, setState];
+}
+
 export default { title: "Molecules", tags: ["autodocs"] };
 
 export const Search = {
@@ -259,7 +265,7 @@ export const Dropzone = {
     onSelect: { action: "onSelect" },
   },
   render: function DropzoneStory(args) {
-    const [fileName, setFileName] = React.useState(args.fileName);
+    const [fileName, setFileName] = useSynced(args.fileName);
     return (
       <div style={{ padding: 24, maxWidth: 480 }}>
         <FileDropzone
