@@ -446,6 +446,824 @@ export default [
     },
   },
   {
+    /* Report Copilot workspace (aiWorkspace) — drawer opens over the live view. */
+    id: "p02-copilot-open",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: "#aiWorkspace", text: "Data Analysis Assistant" },
+        { sel: ".ai-workspace-head span", text: "REPORT COPILOT" },
+        { sel: ".ai-context-card", text: "INVEST CITY STRATEGY QUICK SUMMARY" },
+        { sel: ".ai-context-card", text: "Context loaded" },
+        { sel: ".ai-recommendation-head h3", text: "Scenario reports" },
+        { sel: "#aiPeriodHint", text: "Investment Holistic Analysis FY26P9" },
+        { sel: "#aiCommandInput[required]" },
+        { sel: "#aiEntry.global-ai-launcher", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: ".mh-copilot", text: "Data Analysis Assistant" },
+        { sel: ".mh-copilot__head-title span", text: "REPORT COPILOT" },
+        { sel: ".mh-copilot__summary-card", text: "INVEST CITY STRATEGY QUICK SUMMARY" },
+        { sel: ".mh-copilot__summary-card", text: "Context loaded" },
+        { sel: ".mh-copilot__start .mh-copilot__section-title h3", text: "Scenario reports" },
+        { sel: ".mh-copilot__period-hint", text: "Investment Holistic Analysis FY26P9" },
+        { sel: ".mh-copilot__command-box textarea[required]" },
+        { sel: ".mh-launcher", state: "hidden" },
+      ],
+    },
+  },
+  {
+    id: "p02-copilot-more",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendationNote" },
+      ],
+      expect: [
+        { sel: "#aiRecommendations.show-all" },
+        { sel: ".ai-recommendation >> nth=4", text: "Product mix analysis" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__view-more" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__recs.is-show-all" },
+        { sel: ".mh-copilot__rec >> nth=4", text: "Product mix analysis" },
+      ],
+    },
+  },
+  {
+    id: "p02-copilot-answer",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+      ],
+      expect: [
+        { sel: "#aiAnswer .answer-label", text: "CONTEXTUAL ANSWER" },
+        { sel: "#aiAnswerTitle", text: "Invested cities lead on traffic quality, not uniformly on conversion." },
+        { sel: "#aiAnswerFindings .answer-finding" },
+        { sel: "#aiAnswerSources a" },
+        { sel: ".ai-answer-context-tools", text: "AI summary" },
+        { sel: "#aiAnswerFeedback", text: "Was this answer helpful?" },
+        { sel: "#aiStart .ai-recommendation", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer-label", text: "CONTEXTUAL ANSWER" },
+        { sel: ".mh-copilot__answer-title", text: "Invested cities lead on traffic quality, not uniformly on conversion." },
+        { sel: ".mh-copilot__findings .mh-copilot__finding" },
+        { sel: ".mh-copilot__sources a" },
+        { sel: ".mh-copilot__tools", text: "AI summary" },
+        { sel: ".mh-copilot__feedback", text: "Was this answer helpful?" },
+        { sel: ".mh-copilot__start", state: "detached" },
+      ],
+    },
+  },
+  {
+    /* Holistic report streams 11 blocks at 110ms — settle past the stream. */
+    id: "p02-copilot-holistic",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=0" },
+        { wait: "#aiAnswerReport .stream-block" },
+        { waitMs: 1600 },
+      ],
+      expect: [
+        { sel: "#aiAnswerTitle", text: "Investment Holistic Analysis — COACH Pilot City" },
+        { sel: ".holistic-report", text: "Executive Summary" },
+        { sel: ".holistic-report", text: "City-Level Breakdown" },
+        { sel: ".holistic-report .hr-table" },
+        { sel: ".holistic-report .hr-insight" },
+        { sel: "#aiAnswerSummary", state: "hidden" },
+      ],
+      settleMs: 1800,
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=0" },
+        { wait: ".mh-holistic .mh-stream-block" },
+        { waitMs: 1600 },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer-title", text: "Investment Holistic Analysis — COACH Pilot City" },
+        { sel: ".mh-holistic", text: "Executive Summary" },
+        { sel: ".mh-holistic", text: "City-Level Breakdown" },
+        { sel: ".mh-holistic .mh-hr-table" },
+        { sel: ".mh-holistic .mh-hr-insight" },
+        { sel: ".mh-copilot__answer-summary", state: "detached" },
+      ],
+      settleMs: 1800,
+    },
+  },
+  {
+    /* Fresh custom question → chat mode: query bubble + standard answer card. */
+    id: "p02-copilot-chat",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { fill: ["#aiCommandInput", "What changed this week?"] },
+        { click: "#aiCmdSend" },
+        { wait: "#aiChatThread .report-chat-entry" },
+      ],
+      expect: [
+        { sel: "#aiAnswer.is-chat-mode" },
+        { sel: ".user-query-bubble", text: "What changed this week?" },
+        { sel: ".answer-card h3", text: "Recommended next move." },
+        { sel: ".answer-card-head small", text: "2 grounded sources" },
+        { sel: ".answer-actions", text: "Open report context" },
+        { sel: ".answer-feedback-btn", text: "Helpful" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { fill: [".mh-copilot__command-box textarea", "What changed this week?"] },
+        { click: ".mh-copilot__send" },
+        { wait: ".mh-copilot__thread .mh-copilot__entry" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer.is-chat-mode" },
+        { sel: ".mh-copilot__bubble", text: "What changed this week?" },
+        { sel: ".mh-copilot__card h3", text: "Recommended next move." },
+        { sel: ".mh-copilot__card-head small", text: "2 grounded sources" },
+        { sel: ".mh-copilot__card-actions", text: "Open report context" },
+        { sel: ".mh-copilot__fb", text: "Helpful" },
+      ],
+    },
+  },
+  {
+    /* Canonical phrasing → rich pilot-city sales card (streams ~5 blocks/140ms). */
+    id: "p02-copilot-chat-rich",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { fill: ["#aiCommandInput", "How was pilot city sales performance last month?"] },
+        { click: "#aiCmdSend" },
+        { wait: "#aiChatThread .rich-answer" },
+        { waitMs: 1200 },
+      ],
+      expect: [
+        { sel: ".rich-answer .ra-lead", text: "7,916.2" },
+        { sel: ".rich-answer .ra-channel >> nth=0", text: "Retail" },
+        { sel: ".rich-answer .ra-channel >> nth=0", text: "+6.7%" },
+        { sel: ".rich-answer .ra-channel >> nth=1", text: "−9.0%" },
+        { sel: ".rich-answer .ra-insight", text: "FY27P2" },
+        { sel: ".rich-answer .ra-option", text: "Analyze 6 cities" },
+        { sel: ".rich-answer .ra-source-line", text: "Sources used" },
+        { sel: ".rich-answer .answer-feedback-btn >> nth=1", text: "Not helpful" },
+      ],
+      settleMs: 1400,
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { fill: [".mh-copilot__command-box textarea", "How was pilot city sales performance last month?"] },
+        { click: ".mh-copilot__send" },
+        { wait: ".mh-copilot__card--rich" },
+        { waitMs: 1200 },
+      ],
+      expect: [
+        { sel: ".mh-copilot__card--rich .mh-ra-lead", text: "7,916.2" },
+        { sel: ".mh-ra-channel >> nth=0", text: "Retail" },
+        { sel: ".mh-ra-channel >> nth=0", text: "+6.7%" },
+        { sel: ".mh-ra-channel >> nth=1", text: "−9.0%" },
+        { sel: ".mh-ra-insight", text: "FY27P2" },
+        { sel: ".mh-ra-option", text: "Analyze 6 cities" },
+        { sel: ".mh-ra-source-line", text: "Sources used" },
+        { sel: ".mh-copilot__card--rich .mh-copilot__fb >> nth=1", text: "Not helpful" },
+      ],
+      settleMs: 1400,
+    },
+  },
+  {
+    /* Custom question over an open answer appends below it (answer stays). */
+    id: "p02-copilot-chat-append",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+        { fill: ["#aiCommandInput", "Any follow-up?"] },
+        { click: "#aiCmdSend" },
+        { wait: "#aiChatThread .report-chat-entry" },
+      ],
+      expect: [
+        { sel: "#aiAnswer:not(.is-chat-mode)" },
+        { sel: "#aiAnswerTitle", text: "Invested cities lead on traffic quality, not uniformly on conversion." },
+        { sel: "#aiChatThread .user-query-bubble", text: "Any follow-up?" },
+        { sel: "#aiAnswerFindings .answer-finding" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+        { fill: [".mh-copilot__command-box textarea", "Any follow-up?"] },
+        { click: ".mh-copilot__send" },
+        { wait: ".mh-copilot__thread .mh-copilot__entry" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer:not(.is-chat-mode)" },
+        { sel: ".mh-copilot__answer-title", text: "Invested cities lead on traffic quality, not uniformly on conversion." },
+        { sel: ".mh-copilot__thread .mh-copilot__bubble", text: "Any follow-up?" },
+        { sel: ".mh-copilot__findings .mh-copilot__finding" },
+      ],
+    },
+  },
+  {
+    /* Context dock: "AI summary" tool moves the section into the answer view. */
+    id: "p02-copilot-dock",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+        { click: "[data-ai-context-panel='summary']" },
+      ],
+      expect: [
+        { sel: "#aiAnswerContextDock .ai-context-section:not([hidden])" },
+        { sel: "#aiAnswerContextDock .ai-context-card", text: "Context loaded" },
+        { sel: "[data-ai-context-panel='summary'].active" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+        { click: ".mh-copilot__tool >> nth=0" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__dock .mh-copilot__section--docked" },
+        { sel: ".mh-copilot__dock .mh-copilot__summary-card", text: "Context loaded" },
+        { sel: ".mh-copilot__tool.is-active" },
+      ],
+    },
+  },
+  {
+    /* History popup: the original anchors to the fixed drawer (offscreen bug —
+       attached-only expect). The story anchors inside the head-actions bar and
+       clicking an item fills the composer. */
+    id: "p02-copilot-history",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiWorkspace #aiHistory" },
+        { wait: "#aiReportHistoryPopup:not([hidden])" },
+      ],
+      expect: [
+        { sel: "#aiReportHistoryPopup", state: "attached" },
+        { sel: "#aiReportHistoryPopup .ai-recent-chat >> nth=2", state: "attached" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-copilot__history" },
+        { click: ".mh-copilot__history-item >> nth=1" },
+        {
+          eval:
+            "(() => { const v = document.querySelector('.mh-copilot__command-box textarea').value; if (!v.includes('Compare traffic uplift with sales growth by city.')) throw new Error('composer value: ' + JSON.stringify(v)); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-copilot__history", state: "detached" }],
+    },
+  },
+  {
+    /* "+" opens the report skill menu; hovering Analytical Model previews the
+       detail panel (unpinned, no focus steal). */
+    id: "p02-copilot-skill",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiCmdUpload" },
+        { wait: ".report-ai-upload-popup:not([hidden])" },
+        { hover: "[data-report-skill-category='Analytical Model']" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".report-ai-upload-popup", text: "Upload File" },
+        { sel: ".report-ai-upload-popup", text: "Analytical Model" },
+        { sel: ".ai-skill-detail-panel:not([hidden])" },
+        { sel: ".ai-skill-detail-panel input[type='search']" },
+        { sel: ".ai-skill-footer-action >> nth=0", text: "Add from Chat History" },
+        { sel: ".ai-skill-footer-action >> nth=1", text: "Create Analytical Model Manually" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__command-actions .mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { hover: ".mh-skill__category:has-text('Analytical Model')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-skill", text: "Upload File" },
+        { sel: ".mh-skill", text: "Analytical Model" },
+        { sel: ".mh-skill__detail" },
+        { sel: ".mh-skill__detail input[type='search']" },
+        { sel: ".mh-skill__action >> nth=0", text: "Add from Chat History" },
+        { sel: ".mh-skill__action >> nth=1", text: "Create Analytical Model Manually" },
+      ],
+    },
+  },
+  {
+    /* Picking a model option fills the composer with the canned sentence. */
+    id: "p02-copilot-skill-pick",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiCmdUpload" },
+        { wait: ".report-ai-upload-popup:not([hidden])" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { wait: ".ai-skill-detail-panel:not([hidden]) .ai-skill-option" },
+        { click: ".ai-skill-option >> nth=0" },
+        {
+          eval:
+            "(() => { const v = document.querySelector('#aiCommandInput').value; if (!/^Use .+ to interpret this report\\.$/.test(v)) throw new Error('composer value: ' + JSON.stringify(v)); })()",
+        },
+      ],
+      expect: [{ sel: ".report-ai-upload-popup", state: "hidden" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__command-actions .mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category:has-text('Analytical Model')" },
+        { wait: ".mh-skill__option" },
+        { click: ".mh-skill__option >> nth=0" },
+        {
+          eval:
+            "(() => { const v = document.querySelector('.mh-copilot__command-box textarea').value; if (!/^Use .+ to interpret this report\\.$/.test(v)) throw new Error('composer value: ' + JSON.stringify(v)); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-skill", state: "detached" }],
+    },
+  },
+  {
+    /* "Add from Chat History" → flat message list + generation rule. */
+    id: "p02-copilot-flow-history",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiCmdUpload" },
+        { wait: ".report-ai-upload-popup:not([hidden])" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-report-skill-action='history']" },
+        { wait: "#aiReportHistoryGenerateDialog" },
+      ],
+      expect: [
+        { sel: "#aiReportHistoryGenerateDialog", text: "Generate Analytical Model" },
+        { sel: "#aiReportHistoryGenerateDialog", text: "1 · Select Conversations" },
+        { sel: "#aiReportHistoryGenerateDialog", text: "2 · Generation Rule" },
+        { sel: "[data-report-history-count]", text: "Selected" },
+        { sel: "#aiReportHistoryGenerateDialog textarea" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__command-actions .mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category:has-text('Analytical Model')" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action:has-text('Add from Chat History')" },
+        { wait: ".mh-flow__card--history" },
+      ],
+      expect: [
+        { sel: ".mh-flow__card--history", text: "Generate Analytical Model" },
+        { sel: ".mh-flow__card--history", text: "1 · Select Conversations" },
+        { sel: ".mh-flow__card--history", text: "2 · Generation Rule" },
+        { sel: ".mh-flow__count", text: "Selected" },
+        { sel: ".mh-flow__rule" },
+      ],
+    },
+  },
+  {
+    /* Generate → model form (Submit before Save in the report variant). */
+    id: "p02-copilot-flow-form",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiCmdUpload" },
+        { wait: ".report-ai-upload-popup:not([hidden])" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-report-skill-action='history']" },
+        { wait: "#aiReportHistoryGenerateDialog" },
+        { click: "[data-report-generate-model]" },
+        { wait: "#aiReportGeneratedModelDialog" },
+      ],
+      expect: [
+        { sel: "#aiReportGeneratedModelDialog", text: "New Analytical Model" },
+        { sel: "#aiReportGeneratedModelDialog", text: "Basic Information" },
+        { sel: "#aiReportGeneratedModelDialog", text: "Trigger When" },
+        { sel: "#aiReportGeneratedModelDialog", text: "Prohibited Analysis Directions" },
+        { sel: "#aiReportGeneratedModelDialog .ai-flow-back", text: "← Back" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__command-actions .mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category:has-text('Analytical Model')" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action:has-text('Add from Chat History')" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__btn--primary" },
+        { wait: ".mh-flow__card--form" },
+      ],
+      expect: [
+        { sel: ".mh-flow__card--form", text: "New Analytical Model" },
+        { sel: ".mh-flow__card--form", text: "Basic Information" },
+        { sel: ".mh-flow__card--form", text: "Trigger When" },
+        { sel: ".mh-flow__card--form", text: "Prohibited Analysis Directions" },
+        { sel: ".mh-flow__back", text: "← Back" },
+      ],
+    },
+  },
+  {
+    id: "p02-copilot-maximize",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiWorkspace #aiMaximize" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: "#aiWorkspace.open.is-ai-expanded" },
+        { sel: "#aiWorkspace #aiMaximize[aria-label='Restore']" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: "button[aria-label='Maximize']" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: ".mh-copilot.is-open.mh-copilot--expanded" },
+        { sel: "button[aria-label='Restore']" },
+      ],
+    },
+  },
+  {
+    /* New Session clears the answer and restores both context panels. */
+    id: "p02-copilot-newsession",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+        { click: "#aiNewSession" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: "#aiAnswer", state: "hidden" },
+        { sel: ".ai-context-section:not([hidden])" },
+        { sel: "#aiRecommendations .ai-recommendation" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+        { click: "button[aria-label='New session']" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer", state: "detached" },
+        { sel: ".mh-copilot__summary-card" },
+        { sel: ".mh-copilot__rec" },
+      ],
+    },
+  },
+  {
+    id: "p02-copilot-escape",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { press: ["body", "Escape"] },
+        { waitMs: 400 },
+      ],
+      expect: [{ sel: "#aiWorkspace.open", state: "detached" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { press: ["body", "Escape"] },
+        { waitMs: 400 },
+      ],
+      expect: [{ sel: ".mh-copilot.is-open", state: "detached" }],
+    },
+  },
+  {
+    id: "p02-copilot-scrim",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiScrim" },
+        { waitMs: 400 },
+      ],
+      expect: [{ sel: "#aiWorkspace.open", state: "detached" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__scrim" },
+        { waitMs: 400 },
+      ],
+      expect: [{ sel: ".mh-copilot.is-open", state: "detached" }],
+    },
+  },
+  {
+    /* "← Suggested questions" exits the answer view and restores the panels. */
+    id: "p02-copilot-back",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+        { click: "[data-ai-back]" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: "#aiAnswer", state: "hidden" },
+        { sel: "#aiStart .ai-recommendation" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+        { click: ".mh-copilot__back" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-copilot__answer", state: "detached" },
+        { sel: ".mh-copilot__rec" },
+      ],
+    },
+  },
+  {
+    /* Answer feedback is radio-like with a dynamic status line. */
+    id: "p02-copilot-feedback",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiRecommendations .ai-recommendation >> nth=1" },
+        { wait: "#aiAnswer:not([hidden])" },
+        { click: "[data-ai-feedback='helpful']" },
+      ],
+      expect: [
+        { sel: "[data-ai-feedback='helpful'][aria-pressed='true']" },
+        { sel: "#aiFeedbackStatus", text: "Thanks. This answer was marked helpful." },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=1" },
+        { wait: ".mh-copilot__answer" },
+        { click: ".mh-copilot__feedback button:has-text('Helpful')" },
+      ],
+      expect: [
+        { sel: ".mh-copilot__feedback button[aria-pressed='true']", text: "Helpful" },
+        { sel: ".mh-copilot__feedback-status", text: "Thanks. This answer was marked helpful." },
+      ],
+    },
+  },
+  {
+    /* Opening moves focus onto the workspace close button (keyboard exit). */
+    id: "p02-copilot-focus",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { waitMs: 400 },
+        {
+          eval:
+            "(() => { const el = document.activeElement; if (!el || !el.classList.contains('ai-close')) throw new Error('focus on ' + (el && el.className)); })()",
+        },
+      ],
+      expect: [{ sel: "#aiWorkspace.open" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { waitMs: 400 },
+        {
+          eval:
+            "(() => { const el = document.activeElement; if (!el || !el.classList.contains('mh-copilot__close')) throw new Error('focus on ' + (el && el.className)); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-copilot.is-open" }],
+    },
+  },
+  {
+    /* 390px: unexpanded drawer = min(40vw,100vw-80)=156px flush right;
+       expanded fills the viewport with a 12px inset. */
+    id: "p02-copilot-mobile",
+    viewport: { width: 390, height: 844 },
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { waitMs: 600 },
+        {
+          eval:
+            "(() => { const r = document.querySelector('#aiWorkspace').getBoundingClientRect(); if (Math.abs(r.left - 234) > 2 || Math.abs(r.width - 156) > 2) throw new Error('drawer ' + JSON.stringify(r)); })()",
+        },
+        { click: "#aiWorkspace #aiMaximize" },
+        { waitMs: 600 },
+        {
+          eval:
+            "(() => { const r = document.querySelector('#aiWorkspace').getBoundingClientRect(); if (Math.abs(r.left - 12) > 2 || Math.abs(r.top - 12) > 2 || Math.abs(r.width - 366) > 2 || Math.abs(r.height - 820) > 2) throw new Error('expanded ' + JSON.stringify(r)); })()",
+        },
+      ],
+      expect: [{ sel: "#aiWorkspace.open.is-ai-expanded" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { waitMs: 600 },
+        {
+          eval:
+            "(() => { const r = document.querySelector('.mh-copilot').getBoundingClientRect(); if (Math.abs(r.left - 234) > 2 || Math.abs(r.width - 156) > 2) throw new Error('drawer ' + JSON.stringify(r)); })()",
+        },
+        { click: "button[aria-label='Maximize']" },
+        { waitMs: 600 },
+        {
+          eval:
+            "(() => { const r = document.querySelector('.mh-copilot').getBoundingClientRect(); if (Math.abs(r.left - 12) > 2 || Math.abs(r.top - 12) > 2 || Math.abs(r.width - 366) > 2 || Math.abs(r.height - 820) > 2) throw new Error('expanded ' + JSON.stringify(r)); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-copilot.is-open.mh-copilot--expanded" }],
+    },
+  },
+  {
+    /* Non-city report keeps the shared chrome with the default profile hint. */
+    id: "p02-copilot-generic",
+    original: {
+      url: "/assets/pages/reports.html?project=fourp&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: "#aiWorkspace", text: "Data Analysis Assistant" },
+        { sel: "#aiPeriodHint", text: "Type your question directly or start with a preset analysis below." },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "fourp", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { waitMs: 400 },
+      ],
+      expect: [
+        { sel: ".mh-copilot", text: "Data Analysis Assistant" },
+        { sel: ".mh-copilot__period-hint", text: "Type your question directly or start with a preset analysis below." },
+      ],
+    },
+  },
+  {
     id: "p03-self-service",
     original: { url: "/assets/pages/flexible.html", expect: [{ sel: "#tab-self-service" }, { sel: ".report-card" }] },
     story: { id: "pages--self-service", expect: [{ sel: ".mh-self-tools" }, { sel: ".mh-action-card" }] },

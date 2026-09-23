@@ -133,6 +133,7 @@ export const TextArea = React.forwardRef(function TextArea({
   rows = 4,
   disabled = false,
   invalid = false,
+  required = false,
   label,
   onChange,
   onKeyDown,
@@ -150,6 +151,7 @@ export const TextArea = React.forwardRef(function TextArea({
       placeholder={placeholder}
       autoComplete={autoComplete}
       disabled={disabled}
+      required={required}
       aria-invalid={invalid || undefined}
       aria-label={label}
       onKeyDown={onKeyDown}

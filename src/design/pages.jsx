@@ -19,6 +19,7 @@ import {
   Panel,
   ProjectCatalog,
   ProjectDirectory,
+  ReportCopilot,
   ReportDetailsDrawer,
   ReportRow,
   SummaryStrip,
@@ -164,6 +165,8 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(target: object) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
+ * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
+ * @param {boolean} [props.workspaceOpen=false]
  * @param {(target: object) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
  * @param {object} [props.assistant={}] AssistantPanel props
  * @param {boolean} [props.assistantOpen=false]
@@ -199,6 +202,8 @@ export function MarketingCockpitPage({
   onCloseDetails,
   onOpenLive,
   onBack,
+  workspace = {},
+  workspaceOpen = false,
   onOpenWorkspace,
   assistant = {},
   assistantOpen = false,
@@ -355,7 +360,9 @@ export function MarketingCockpitPage({
         onClose={onCloseDetails}
         onOpenLive={onOpenLive}
       />
-      <AssistantLauncher hidden={assistantOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />
+      {/* body:has(#aiWorkspace.open) hides the launcher in the original too */}
+      <AssistantLauncher hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />
+      <ReportCopilot open={workspaceOpen} {...workspace} />
       <AssistantPanel
         open={assistantOpen}
         placement="drawer"

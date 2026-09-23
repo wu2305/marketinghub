@@ -1953,3 +1953,696 @@ export function scSelectionLabel(selected, optionCount) {
     ? selected.slice(0, 2).join(", ") + " +" + (selected.length - 2)
     : selected.join(", ");
 }
+
+/* ============================================================
+   Report Copilot (aiWorkspace) — the report-scoped AI drawer on the
+   live report view. Deterministic local port of the workspace block of
+   assets/js/reports/report-core.js plus its city-invest answer modules.
+   ============================================================ */
+
+export const COPILOT_COMMAND_HINT =
+  "Type your question directly or start with a preset analysis below.";
+export const COPILOT_INPUT_PLACEHOLDER = "Choose a preset or ask your own question...";
+export const COPILOT_ANSWER_LABEL = "CONTEXTUAL ANSWER";
+export const COPILOT_GENERIC_SUMMARY =
+  "I would answer this using the active report, its governed comparison window, and the connected knowledge below. The first pass would validate data freshness, identify material movement, and trace the conclusion to its model and definitions.";
+
+const COPILOT_DEFAULT_PROFILE = {
+  panelTitle: "Data Analysis Assistant",
+  periodHint: "Type your question directly or start with a preset analysis below.",
+};
+
+/** Workspace chrome per live report: only title + period hint render (rest of the profile targets dead nodes). */
+export function copilotProfile(projectKey, reportIndex) {
+  const assistant = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex]?.assistant || {};
+  return {
+    panelTitle: assistant.panelTitle || COPILOT_DEFAULT_PROFILE.panelTitle,
+    periodHint: assistant.periodHint || COPILOT_DEFAULT_PROFILE.periodHint,
+  };
+}
+
+/**
+ * The start view's "01 · AI summary" card. The original markup hard-codes this
+ * card (the assistant profile never reaches it), so it is identical for every
+ * report. `paragraphs` are inline segment lists; `tone` marks metric spans.
+ */
+export const COPILOT_SUMMARY = {
+  title: "Invest City Strategy Quick Summary",
+  status: "Context loaded",
+  paragraphs: [
+    [
+      { text: "Invest cities deliver " },
+      { text: "10%", tone: "positive" },
+      { text: " daily traffic uplift, driving " },
+      { text: "1%", tone: "positive" },
+      { text: " daily sales growth and " },
+      { text: "1%", tone: "positive" },
+      { text: " AUR improvement." },
+    ],
+    [
+      { text: "Key gaps: CR " },
+      { text: "(-9%)", tone: "negative" },
+      { text: ", SV " },
+      { text: "(-7%)", tone: "negative" },
+      { text: ", new customer ratio " },
+      { text: "(-2%)", tone: "negative" },
+      { text: " and UPT " },
+      { text: "(-1%)", tone: "negative" },
+      { text: " all decline, revealing conversion and basket-size weaknesses." },
+    ],
+    [{ text: "Should prioritize conversion optimization to fully monetize traffic gains." }],
+  ],
+};
+
+/** Recent-chats popup behind the workspace History button. */
+export const COPILOT_HISTORY = [
+  { title: "City performance summary", prompt: "Summarize the latest city performance movements." },
+  { title: "Traffic vs sales", prompt: "Compare traffic uplift with sales growth by city." },
+  { title: "Conversion gaps", prompt: "Find conversion gaps in this scenario report." },
+];
+
+export function copilotSourceHref(projectKey, asset) {
+  return KNOWLEDGE_HREF + "?report=" + projectKey + "&category=" + asset.category + "&asset=" + asset.id;
+}
+
+/** Sources attached to copilot answers: the report's resolved knowledge, capped at 4. */
+export function copilotSources(projectKey, report) {
+  return resolveReportAssets(projectKey, report)
+    .slice(0, 4)
+    .map((asset) => ({ id: asset.id, title: asset.title, href: copilotSourceHref(projectKey, asset) }));
+}
+
+/**
+ * Recommendation click → answer payload. City Strategy report 0 index 0 streams
+ * the holistic report; every other recommendation resolves to a standard
+ * answer (falling back to recommendation 0 like the original).
+ */
+export function resolveCopilotAnswer(projectKey, reportIndex, recIndex) {
+  const report = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex];
+  if (!report || !(report.recommendations || []).length) return null;
+  if (isCityInvestReport(projectKey, reportIndex) && recIndex === 0) {
+    return { kind: "holistic", title: "Investment Holistic Analysis — COACH Pilot City" };
+  }
+  const rec = report.recommendations[recIndex] || report.recommendations[0];
+  return {
+    kind: "answer",
+    title: rec.answerTitle,
+    summary: rec.summary,
+    findings: (rec.findings || []).map((finding) => ({ label: finding[0], text: finding[1] })),
+  };
+}
+
+/**
+ * Only the canonical "last month" phrasing gets the fixed rich card — the
+ * explore follow-ups also contain "pilot city sales performance", so the
+ * period wording is required (same rule as the original).
+ */
+export function isPilotCitySalesQuestion(question) {
+  const normalized = String(question || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!normalized) return false;
+  return (
+    normalized.indexOf("pilot city") !== -1 &&
+    normalized.indexOf("sales") !== -1 &&
+    normalized.indexOf("last month") !== -1
+  );
+}
+
+/**
+ * Command-form submit → chat entry. In the original a fresh question clears
+ * the thread (chat mode) while a question asked over an open recommendation
+ * answer appends below it — the caller decides append vs replace.
+ */
+export function buildCopilotChatEntry(projectKey, reportIndex, question) {
+  const report = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex];
+  const sources = report ? copilotSources(projectKey, report) : [];
+  if (isPilotCitySalesQuestion(question)) {
+    return { kind: "rich", question, sources };
+  }
+  return { kind: "standard", question, summary: COPILOT_GENERIC_SUMMARY, sources };
+}
+
+/* ---------- Workspace skill menu (the "+" in the command bar) ---------- */
+
+export const REPORT_SKILL_FALLBACK = [
+  { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "Use this interpretation logic" },
+  { id: "roi-diagnosis", title: "ROI diagnosis model", note: "Analyze ROI movement and drivers" },
+  { id: "conversion-drop", title: "Conversion drop analysis", note: "Find conversion pressure and likely reasons" },
+];
+
+/** Analytical Model records the workspace menu lists (dedup by id, max 12, fallback when empty). */
+export function copilotSkillItems() {
+  const seen = new Set();
+  const models = KNOWLEDGE_ASSETS.filter((asset) => asset.type === "Analytical Model").map((asset) => ({
+    id: asset.id,
+    title: asset.title,
+    note: asset.summary || "Use this interpretation logic",
+  }));
+  const items = models.filter((item) => item.title && !seen.has(item.id) && seen.add(item.id)).slice(0, 12);
+  return items.length ? items : REPORT_SKILL_FALLBACK;
+}
+
+/** Report-variant skill menu config: Upload File + Analytical Model only. */
+export const REPORT_SKILL_MENU = {
+  attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
+  categories: [
+    { id: "upload", label: "Upload File", icon: "upload" },
+    { id: "model", label: "Analytical Model", icon: "spokes" },
+  ],
+  searchPlaceholder: "Search Analytical Model",
+  emptyLabel: "No matching skills",
+  historyLabel: "Add from Chat History",
+  manualLabel: "Create Analytical Model Manually",
+};
+
+/* ---------- Report-flavored "Generate Analytical Model" flow ---------- */
+
+export const REPORT_COPILOT_FLOW = {
+  labels: {
+    rulePlaceholder:
+      "Describe how AI should distill the analysis logic, for example: focus on the city dimension and keep only the driver with the strongest evidence.",
+  },
+  threads: [
+    {
+      title: "City investment review",
+      messages: [
+        {
+          role: "user",
+          text: "Invested cities show traffic uplift but conversion gaps remain. Where should we focus first?",
+          checked: true,
+        },
+        {
+          role: "ai",
+          label: "Connected report view",
+          title: "Conversion is the bottleneck.",
+          text: "Start with the invested cities where traffic uplift did not convert, then verify data freshness before scaling budget.",
+          sources: ["City Strategy", "Qualified traffic", "Conversion Rate"],
+          checked: true,
+        },
+      ],
+    },
+    {
+      title: "Report performance comparison",
+      messages: [
+        {
+          role: "user",
+          text: "Compare city performance across traffic, sales, CR, AUR and UPT before scaling investment.",
+          checked: true,
+        },
+        {
+          role: "ai",
+          label: "Connected report view",
+          title: "Prioritize conversion before scaling.",
+          text: "Compare cities on the same window and grain, isolate the largest gap, and separate real change from delayed source data.",
+          sources: ["Governed reports", "Metric definitions", "Refresh status"],
+          checked: true,
+        },
+      ],
+    },
+    {
+      title: "Data quality check",
+      messages: [
+        {
+          role: "user",
+          text: "Which metrics have data quality issues that make the report unreliable?",
+          checked: false,
+        },
+        {
+          role: "ai",
+          label: "Connected knowledge view",
+          title: "Three metrics need a freshness check.",
+          text: "Trace source lineage and refresh state for the flagged metrics before using the report conclusion.",
+          sources: ["Data Models", "Quality notes", "Refresh status"],
+          checked: false,
+        },
+      ],
+    },
+  ],
+  sections: [
+    {
+      title: "Basic Information",
+      fields: [
+        { key: "name", label: "Name", required: true, placeholder: "Enter analytical model name" },
+        { key: "description", label: "Description", textarea: true, placeholder: "Describe what this model helps interpret" },
+        { key: "trigger", label: "Trigger When", required: true, textarea: true, placeholder: "Describe when AI should use this model" },
+      ],
+    },
+    {
+      title: "Metrics",
+      fields: [
+        { key: "domain", label: "Business Domain", placeholder: "Report Performance; City Strategy" },
+        { key: "metrics", label: "Referenced Metrics", placeholder: "Traffic; Sales; Conversion Rate; AUR; UPT" },
+      ],
+    },
+    {
+      title: "Structure & Guidance",
+      fields: [
+        { key: "structure", label: "Structure & Guidance", required: true, textarea: true, tall: true, placeholder: "Write the step-by-step interpretation logic" },
+      ],
+    },
+    {
+      title: "Constraints",
+      fields: [
+        { key: "constraints", label: "Prohibited Analysis Directions", textarea: true, placeholder: "Add limits, warnings, or blocked analysis directions" },
+      ],
+    },
+  ],
+  generatedDefaults: {
+    name: "Report performance interpretation model",
+    trigger:
+      "Use when users ask for an interpretation of a report result and need one clear conclusion grounded in connected report context.",
+    domain: "Report Performance; City Strategy",
+    metrics: "Traffic; Sales; Conversion Rate; AUR; UPT",
+    constraints:
+      "Do not infer causality without supporting context. Do not generate charts or a full report; return one concise analysis result.",
+  },
+};
+
+/** Keyword map shared by the two report generation helpers below. */
+function reportRuleDimensions(rule) {
+  const text = String(rule || "").trim().toLowerCase();
+  const has = (words) => words.some((word) => text.includes(word));
+  const dimensions = [];
+  if (has(["channel", "media", "platform", "site"])) dimensions.push("channels");
+  if (has(["city", "cities", "market", "region", "store"])) dimensions.push("cities");
+  if (has(["segment", "customer", "member", "audience"])) dimensions.push("customer segments");
+  if (has(["time", "week", "month", "trend", "period", "quarter"])) dimensions.push("time periods");
+  return { text, has, dimensions };
+}
+
+/** Report variant of the generated Description (buildReportDescription). */
+export function buildReportModelDescription(messages, rule) {
+  const questions = messages.filter((message) => message.role === "user").map((message) => message.text);
+  const scope = (questions.length ? questions : messages.map((message) => message.text)).join(" ").toLowerCase();
+  const topics = [];
+  if (/\bcit(y|ies)\b|invest/.test(scope)) topics.push("city performance");
+  if (/conversion|\bcr\b/.test(scope)) topics.push("conversion");
+  if (/data quality|lineage|freshness/.test(scope)) topics.push("data quality");
+  if (!topics.length) topics.push("report performance");
+  const topicPhrase = topics.length > 1 ? topics.slice(0, -1).join(", ") + " and " + topics[topics.length - 1] : topics[0];
+  const { has, dimensions } = reportRuleDimensions(rule);
+  const dimensionPhrase = dimensions.join(" and ");
+  const ranked = has(["rank", "priorit", "top", "most impactful", "biggest"]);
+  const goal =
+    "Clarify what drove the movement in " + topicPhrase + ", so the team can decide the next optimization step.";
+  const method = dimensionPhrase
+    ? ranked
+      ? "Ranks " + dimensionPhrase + " by business impact and returns one conclusion."
+      : "Compares " + dimensionPhrase + " to isolate the strongest performance signal and support one next action."
+    : "Expected insight is the strongest performance signal and the primary risk driver.";
+  const conversations = new Set(messages.map((message) => message.threadIndex)).size;
+  return (
+    goal +
+    " " +
+    method +
+    "\n\nSource: " +
+    conversations +
+    " conversation" +
+    (conversations === 1 ? "" : "s") +
+    " · " +
+    messages.length +
+    " message" +
+    (messages.length === 1 ? "" : "s") +
+    "."
+  );
+}
+
+/** Report variant of the generated Structure & Guidance (buildReportAnalysisLogic). */
+export function buildReportModelLogic(rule) {
+  const { has, dimensions } = reportRuleDimensions(rule);
+  const scope = dimensions.length
+    ? "across " + dimensions.join(" and ")
+    : "across cities, channels, and key report dimensions";
+  const driver = has(["rank", "priorit", "top", "most impactful", "biggest"])
+    ? "Rank the candidate drivers by business impact and keep only the strongest one."
+    : has(["driver", "root cause", "reason", "why", "cause", "factor"])
+      ? "Isolate the driver with the strongest supporting evidence."
+      : "Identify the strongest performance signal and the primary risk driver.";
+  const output = has(["concise", "brief", "short", "one conclusion", "one result"])
+    ? "Return one conclusion and a recommended next action."
+    : "Return the key findings and a recommended next action.";
+  return [
+    "1. Define the report question, the comparison window, and the business scope.",
+    "2. Compare metric movement " + scope + ".",
+    "3. " + driver,
+    "4. " + output,
+  ].join("\n");
+}
+
+/** Draft field values for the report variant's generated model form. */
+export function buildReportModelDraft(messages, rule) {
+  return {
+    ...REPORT_COPILOT_FLOW.generatedDefaults,
+    description: buildReportModelDescription(messages, rule),
+    structure: buildReportModelLogic(rule),
+  };
+}
+
+/* ---------- Streamed holistic report (City Strategy rec 0) ---------- */
+
+/**
+ * Cell conventions for the holistic tables: plain string → text;
+ * `{ n: "+0.3%" }` → signed value (green/red by leading sign);
+ * `{ d: "g"|"y"|"r" }` → status dot. Inline segments: string → text,
+ * `{ b }` → strong, `{ n }` → signed value, `{ d }` → dot, `{ br: true }`.
+ */
+export const COPILOT_HOLISTIC = {
+  meta: [
+    ["Report date", "2026-09-17"],
+    ["Data as of", "FY27P2"],
+    ["Baseline", "FY25P4–FY25P9"],
+    ["Investment period", "FY25P11–FY27P2"],
+  ],
+  blocks: [
+    { type: "meta" },
+    {
+      type: "group",
+      heading: { index: "I", title: "Executive Summary" },
+      sub: "⚠ Anomaly alerts",
+      alerts: [
+        { dot: "g", segments: [{ b: "Strongest metric:" }, " Traffic uplift by ", { n: "+9.1%" }] },
+        { dot: "r", segments: [{ b: "Weakest metric:" }, " CR% uplift by ", { n: "−9.8%" }] },
+        {
+          dot: "y",
+          segments: [
+            { b: "Overall:" },
+            " Sales flat at ",
+            { n: "+0.3%" },
+            " despite strong Traffic, dragged by significant Conversion decline.",
+          ],
+        },
+        {
+          dot: "y",
+          segments: [
+            { b: "Outlet channel:" },
+            " Material decline in Sales uplift by ",
+            { n: "−9.0%" },
+            " with negative Traffic and CR.",
+          ],
+        },
+        {
+          dot: "y",
+          segments: [
+            { b: "Chengdu:" },
+            " Severe divergence with Traffic uplift ",
+            { n: "+12.5%" },
+            " but CR% uplift ",
+            { n: "−14.9%" },
+            ", leading to Sales decline.",
+          ],
+        },
+        {
+          dot: "y",
+          segments: [
+            { b: "Qingdao:" },
+            " Strong Sales uplift ",
+            { n: "+7.4%" },
+            " driven by Traffic, though CR% remains negative at ",
+            { n: "−7.8%" },
+            ".",
+          ],
+        },
+        {
+          dot: "y",
+          segments: [
+            { b: "Hefei:" },
+            " Top performer with Sales uplift ",
+            { n: "+14.4%" },
+            " and stable CR%, outperforming all other pilot cities.",
+          ],
+        },
+      ],
+    },
+    {
+      type: "group",
+      sub: "1.2 Overall core metrics summary",
+      note: "UPLIFT% — positive values in green, negative in red.",
+      table: {
+        headers: ["Metric", "PRE", "POST", "VAR%", "UPLIFT%"],
+        rows: [
+          ["Sales", "7,187.0", "7,916.2", "110.1%", { n: "+0.3%" }],
+          ["Traffic", "303.7", "350.8", "115.5%", { n: "+9.1%" }],
+          ["CR", "6%", "7%", "114.9%", { n: "−9.8%" }],
+          ["SV", "23.7", "22.6", "95.4%", { n: "−7.9%" }],
+          ["AT", "379.1", "314.5", "83.0%", { n: "+0.2%" }],
+          ["UPT", "1.3", "1.2", "87.2%", { n: "−1.5%" }],
+        ],
+      },
+      insight: {
+        label: "Insight",
+        segments: [
+          "The core metric summary reveals a classic 'traffic-conversion mismatch': Traffic uplift by +9.1% failed to translate into Sales due to a substantial CR% decline of -9.8%. Consequently, Selling Value (SV) dropped by -7.9%, neutralizing the volume gain. Average Transaction (AT) remained stable with a negligible uplift of +0.2%, indicating that basket size metrics (AUR/UPT) were not the primary drivers of the performance gap.",
+        ],
+      },
+    },
+    { type: "chart", heading: { index: "II", title: "Monthly Trend Analysis" }, sub: "2.1 Monthly Uplift% by core metric", note: "Sales, Traffic, and CR% only. Monthly Uplift% = Invest City Var% − Non-Invest City Var%." },
+    {
+      type: "insight",
+      label: "Insight",
+      segments: [
+        "In the latest period (FY27P2), the trend shows signs of stabilization with Sales direction improving. Traffic continues to lead growth at +9.1%, while CR% remains the primary drag at -9.8%. The divergence suggests that while customer acquisition efforts are effective, in-store conversion mechanisms require immediate attention to sustain Sales momentum.",
+      ],
+    },
+    {
+      type: "group",
+      heading: { index: "III", title: "City-Level Breakdown" },
+      sub: "3.1 City performance summary",
+      table: {
+        headers: ["City", "Sales", "Traffic", "CR%"],
+        total: true,
+        rows: [
+          ["Chengdu", { d: "r" }, { d: "g" }, { d: "r" }],
+          ["Xian", { d: "r" }, { d: "y" }, { d: "r" }],
+          ["Wuhan", { d: "r" }, { d: "y" }, { d: "r" }],
+          ["Qingdao", { d: "g" }, { d: "g" }, { d: "r" }],
+          ["Shenzhen", { d: "g" }, { d: "y" }, { d: "r" }],
+          ["Hefei", { d: "g" }, { d: "y" }, { d: "r" }],
+          ["Total Invest City", "—", "—", "—"],
+        ],
+      },
+      dotLegend: true,
+    },
+    {
+      type: "group",
+      sub: "3.2 City UPLIFT% data table",
+      table: {
+        headers: ["City", "Sales UPLIFT%", "Traffic UPLIFT%", "CR% UPLIFT%"],
+        total: true,
+        rows: [
+          ["Chengdu", { n: "−3.2%" }, { n: "+12.5%" }, { n: "−14.9%" }],
+          ["Xian", { n: "−3.1%" }, { n: "+4.4%" }, { n: "−5.6%" }],
+          ["Wuhan", { n: "−1.2%" }, { n: "+7.4%" }, { n: "−13.4%" }],
+          ["Qingdao", { n: "+7.4%" }, { n: "+18.5%" }, { n: "−7.8%" }],
+          ["Shenzhen", { n: "+2.4%" }, { n: "+6.4%" }, { n: "−6.5%" }],
+          ["Hefei", { n: "+14.4%" }, { n: "+7.9%" }, { n: "−0.1%" }],
+          ["Total Invest City", { n: "+0.3%" }, { n: "+9.1%" }, { n: "−9.8%" }],
+        ],
+      },
+    },
+    {
+      type: "insight",
+      label: "City insights",
+      segments: [
+        "🌟 ",
+        { b: "Top performers — Hefei:" },
+        " highest Sales uplift +14.4%, supported by positive Traffic and stable CR%, demonstrating balanced growth. ",
+        { b: "Qingdao:" },
+        " Sales uplift +7.4% primarily driven by strong Traffic uplift +18.5%, despite weaker conversion. ",
+        { b: "Shenzhen:" },
+        " modest Sales growth +2.4%, with Traffic gains partially offset by declining CR% and UPT.",
+        { br: true },
+        { br: true },
+        "🔴 ",
+        { b: "Underperformers — Chengdu:" },
+        " Sales declined -3.2% due to a severe CR% drop of -14.9%, which overwhelmed a +12.5% Traffic increase. ",
+        { b: "Xian:" },
+        " Sales fell -3.1% as moderate Traffic growth could not compensate for declines in both CR% and AT. ",
+        { b: "Wuhan:" },
+        " Sales dipped -1.2%, characterized by high Traffic volatility and significant CR% erosion of -13.4%.",
+      ],
+    },
+    {
+      type: "group",
+      heading: { index: "IV", title: "Channel-Level Breakdown" },
+      sub: "4.1 Channel UPLIFT% data table",
+      table: {
+        headers: ["Channel", "Sales UPLIFT%", "Traffic UPLIFT%", "CR% UPLIFT%"],
+        total: true,
+        rows: [
+          ["Retail", { n: "+6.7%" }, { n: "+19.5%" }, { n: "−9.6%" }],
+          ["Outlet", { n: "−9.0%" }, { n: "−4.9%" }, { n: "−5.6%" }],
+          ["TTL", { n: "+0.3%" }, { n: "+9.1%" }, { n: "−9.8%" }],
+        ],
+      },
+      insight: {
+        label: "Channel insights",
+        segments: [
+          { b: "Overall (TTL):" },
+          " Retail channel acted as the growth engine with Sales uplift +6.7%, while Outlet channel dragged overall performance with a -9.0% decline.",
+          { br: true },
+          { br: true },
+          { b: "Retail:" },
+          " Strong Traffic generation (+19.5%) but suffered from conversion inefficiencies (-9.6% CR%), resulting in net positive Sales.",
+          { br: true },
+          { br: true },
+          { b: "Outlet:" },
+          " Headwinds across the board with negative Traffic (-4.9%) and CR% (-5.6%), leading to a broad-based Sales contraction.",
+          { br: true },
+          { br: true },
+          { b: "Shared weakness:" },
+          " Both channels experienced negative Conversion Rate trends, indicating a systemic issue in closing sales despite varying traffic conditions.",
+        ],
+      },
+    },
+    {
+      type: "group",
+      heading: { index: "V", title: "City × Channel Cross-Dimensional Analysis" },
+      sub: "5.1 Cross-dimensional performance summary",
+      table: {
+        headers: ["City", "Channel", "Sales", "Traffic", "CR%"],
+        rows: [
+          ["Total Invest City", "Retail", "—", "—", "—"],
+          ["Total Invest City", "Outlet", "—", "—", "—"],
+          ["Chengdu", "Retail", { d: "g" }, { d: "g" }, { d: "r" }],
+          ["Chengdu", "Outlet", { d: "r" }, { d: "r" }, { d: "r" }],
+          ["Xian", "Retail", { d: "r" }, { d: "y" }, { d: "r" }],
+          ["Xian", "Outlet", { d: "g" }, { d: "g" }, { d: "r" }],
+          ["Wuhan", "Retail", { d: "g" }, { d: "g" }, { d: "r" }],
+          ["Wuhan", "Outlet", { d: "r" }, { d: "r" }, { d: "r" }],
+          ["Qingdao", "Retail", { d: "y" }, { d: "g" }, { d: "r" }],
+          ["Qingdao", "Outlet", { d: "g" }, { d: "g" }, { d: "g" }],
+          ["Shenzhen", "Retail", { d: "y" }, { d: "y" }, { d: "r" }],
+          ["Shenzhen", "Outlet", { d: "g" }, { d: "r" }, { d: "g" }],
+          ["Hefei", "Retail", { d: "g" }, { d: "y" }, { d: "g" }],
+          ["Hefei", "Outlet", { d: "g" }, { d: "g" }, { d: "g" }],
+        ],
+      },
+      dotLegend: true,
+    },
+    {
+      type: "group",
+      sub: "5.2 Cross-dimensional data table",
+      table: {
+        headers: ["City", "Channel", "Sales UPLIFT%", "Traffic UPLIFT%", "CR% UPLIFT%"],
+        rows: [
+          ["Total Invest City", "Retail", { n: "+6.7%" }, { n: "+19.5%" }, { n: "−9.6%" }],
+          ["Total Invest City", "Outlet", { n: "−9.0%" }, { n: "−4.9%" }, { n: "−5.6%" }],
+          ["Chengdu", "Retail", { n: "+14.3%" }, { n: "+34.2%" }, { n: "−14.4%" }],
+          ["Chengdu", "Outlet", { n: "−38.4%" }, { n: "−26.0%" }, { n: "−16.1%" }],
+          ["Xian", "Retail", { n: "−8.5%" }, { n: "+4.5%" }, { n: "−6.1%" }],
+          ["Xian", "Outlet", { n: "+8.5%" }, { n: "+9.0%" }, { n: "−1.7%" }],
+          ["Wuhan", "Retail", { n: "+13.4%" }, { n: "+30.6%" }, { n: "−13.5%" }],
+          ["Wuhan", "Outlet", { n: "−10.0%" }, { n: "−10.7%" }, { n: "−1.2%" }],
+          ["Qingdao", "Retail", { n: "+3.3%" }, { n: "+20.9%" }, { n: "−12.7%" }],
+          ["Qingdao", "Outlet", { n: "+23.9%" }, { n: "+7.9%" }, { n: "+13.6%" }],
+          ["Shenzhen", "Retail", { n: "+6.4%" }, { n: "+17.4%" }, { n: "−9.2%" }],
+          ["Shenzhen", "Outlet", { n: "+4.0%" }, { n: "−4.9%" }, { n: "+8.5%" }],
+          ["Hefei", "Retail", { n: "+20.7%" }, { n: "+10.4%" }, { n: "+0.9%" }],
+          ["Hefei", "Outlet", { n: "+8.8%" }, { n: "+4.8%" }, { n: "+1.7%" }],
+        ],
+      },
+      insight: {
+        label: "Cross-dimensional insight",
+        segments: [
+          { b: "Overall:" },
+          " A stark contrast exists between channels: Retail cities like Hefei and Chengdu show high Traffic but mixed Sales outcomes, while Outlet performance is generally weak except for specific pockets like Qingdao Outlet.",
+          { br: true },
+          { br: true },
+          { b: "Retail channel:" },
+          " Most cities exhibit a 'High Traffic, Low Conversion' pattern; for instance, Chengdu Retail Traffic surged +34.2% but CR% fell -14.4%, yet Sales still grew +14.3% due to volume.",
+          { br: true },
+          { br: true },
+          { b: "Outlet channel:" },
+          " Highly polarized results; Qingdao Outlet achieved strong Sales uplift +23.9% with positive CR%, whereas Chengdu Outlet collapsed with Sales down -38.4% and negative Traffic/CR.",
+        ],
+      },
+    },
+  ],
+  chart: {
+    periods: ["FY26P7", "FY26P8", "FY26P9", "FY26P10", "FY26P11", "FY26P12", "FY27P1", "FY27P2"],
+    min: -12,
+    max: 12,
+    ticks: [-12, -6, 0, 6, 12],
+    series: [
+      { name: "Sales", tone: "ink", values: [2.4, 1.9, 1.2, 0.6, -0.4, 0.1, -0.3, 0.3] },
+      { name: "Traffic", tone: "pos", values: [6.2, 7.1, 7.6, 8.3, 8.8, 9.4, 9.0, 9.1] },
+      { name: "CR%", tone: "neg", values: [-6.5, -7.2, -8.0, -8.6, -9.2, -9.6, -10.1, -9.8] },
+    ],
+  },
+};
+
+export const COPILOT_DOT_LEGEND = [
+  { dot: "r", text: " Pilot falls behind National Rest" },
+  { dot: "y", text: " Better than National Rest, below Pilot average" },
+  { dot: "g", text: " Better than National Rest and above Pilot average" },
+];
+
+/** Fixed rich answer card for the canonical pilot-city sales question. */
+export const COPILOT_PILOT_SALES = {
+  lead: [
+    "Last month (FY27P2), Pilot City delivered total Sales of ",
+    { b: "7,916.2" },
+    ", with Sales uplift ",
+    { badge: "↑ +0.3%", tone: "pos" },
+    " vs. non-invest cities — essentially flat.",
+  ],
+  channelsTitle: "Sales by channel",
+  channelsSub: "Uplift vs. non-invest cities",
+  channels: [
+    {
+      icon: "cart",
+      tone: "retail",
+      name: "Retail",
+      uplift: "+6.7%",
+      up: true,
+      stats: [
+        { label: "Traffic", value: "+19.5%", up: true },
+        { label: "CR%", value: "−9.6%", up: false },
+      ],
+    },
+    {
+      icon: "tag",
+      tone: "outlet",
+      name: "Outlet",
+      uplift: "−9.0%",
+      up: false,
+      stats: [
+        { label: "Traffic", value: "−4.9%", up: false },
+        { label: "CR%", value: "−5.6%", up: false },
+      ],
+    },
+  ],
+  insight:
+    "In the latest period (FY27P2), the trend shows signs of stabilization with Sales direction improving. Traffic continues to lead growth at +9.1%, while CR% remains the primary drag at −9.8%. The divergence suggests that while customer acquisition efforts are effective, in-store conversion mechanisms require immediate attention to sustain Sales momentum.",
+  exploreTitle: "Would you like to explore further?",
+  exploreHint: "Here are some quick options:",
+  explore: [
+    {
+      icon: "chart",
+      title: "Analyze 6 cities",
+      sub: "Which cities drive the change?",
+      question: "Compare pilot city sales performance across the 6 cities",
+    },
+    {
+      icon: "store",
+      title: "Channel by city",
+      sub: "How do channels perform in each city?",
+      question: "Show the city by channel breakdown for pilot cities",
+    },
+    {
+      icon: "trend",
+      title: "Compare with previous periods",
+      sub: "Is the trend sustained?",
+      question: "Compare pilot city sales performance with previous periods",
+    },
+    {
+      icon: "bulb",
+      title: "Key insights & next steps",
+      sub: "What's driving the performance?",
+      question: "What are the key insights and next steps for pilot cities?",
+    },
+  ],
+};

@@ -212,6 +212,96 @@ a {
   --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
+  --mh-copilot-line: #dfe3e8;
+  --mh-copilot-line-strong: #cbd2d9;
+  --mh-copilot-ink: #141414;
+  --mh-copilot-copy: #3f4854;
+  --mh-copilot-muted: #6b7280;
+  --mh-copilot-head-bg: #fbfcfd;
+  --mh-copilot-hover-bg: #f4f6f8;
+  --mh-copilot-tool-bg: #f2f4f7;
+  --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
+  --mh-copilot-gold-wash: rgba(218, 168, 96, 0.14);
+  --mh-copilot-metric-pos: #16a34a;
+  --mh-copilot-metric-neg: #dc2626;
+  --mh-copilot-box-line: #d8e0e6;
+  --mh-copilot-send-ink: #000000;
+  --mh-copilot-upload-line: #d8dde2;
+  --mh-copilot-upload-hover-line: #b5bcc4;
+  --mh-copilot-upload-hover-bg: #f0f2f4;
+  --mh-copilot-card-line: #d8dee6;
+  --mh-copilot-card-faint: #667487;
+  --mh-copilot-card-ink: #101820;
+  --mh-copilot-card-copy: #415064;
+  --mh-copilot-card-action-ink: #111111;
+  --mh-copilot-chip-bg: #f6f8fb;
+  --mh-copilot-action-bg: #edf0f3;
+  --mh-copilot-fb-hover-line: rgba(184, 138, 61, 0.68);
+  --mh-copilot-fb-hover-bg: rgba(231, 187, 106, 0.16);
+  --mh-copilot-fb-pressed-line: rgba(184, 138, 61, 0.8);
+  --mh-copilot-fb-pressed-bg: #e7bb6b;
+  --mh-copilot-placeholder: #8a939d;
+  --mh-copilot-popup-line: #d8e0e6;
+  --mh-copilot-popup-shadow: 0 18px 44px rgba(26, 35, 44, 0.16);
+  --mh-copilot-popup-icon: #171b1f;
+  --mh-copilot-footer-icon: #d9a441;
+  --mh-copilot-faint: #74726c;
+  --mh-copilot-hint: #6a747c;
+  --mh-copilot-gold-from: #f2d185;
+  --mh-copilot-gold-to: #daa860;
+  --mh-copilot-send-disabled-bg: #e8ebee;
+  --mh-copilot-send-disabled-ink: #8a949e;
+
+  /* Copilot holistic report (hr-*) — city-invest-analysis.css */
+  --mh-hr-ink: #26262a;
+  --mh-hr-muted: #8a8a85;
+  --mh-hr-mid: #5f5e5a;
+  --mh-hr-index: #a29b8c;
+  --mh-hr-note: #9aa0a8;
+  --mh-hr-line: #eceae4;
+  --mh-hr-surface: #faf9f6;
+  --mh-hr-card-line: #f0ede6;
+  --mh-hr-gridline: #eceef1;
+  --mh-hr-grid-zero: #c9c7bd;
+  --mh-hr-axis: #aab0b8;
+  --mh-hr-th-line: #e4e2da;
+  --mh-hr-td-line: #f0efe9;
+  --mh-hr-dot-pos: #00a06b;
+  --mh-hr-dot-warn: #e6a23c;
+  --mh-hr-dot-neg: #e34d59;
+  --mh-hr-pos: #0a7a54;
+  --mh-hr-neg: #d43d4a;
+  --mh-hr-insight-line: #c9a44a;
+  --mh-hr-insight-bg: #fdfbf6;
+  --mh-hr-insight-ink: #444441;
+  --mh-hr-cursor: #c9a44a;
+
+  /* Copilot rich answer (ra-*) — city-invest-analysis.css */
+  --mh-ra-ink: #26262a;
+  --mh-ra-up: #0a7a54;
+  --mh-ra-down: #d43d4a;
+  --mh-ra-badge-up-bg: rgba(0, 160, 107, 0.1);
+  --mh-ra-badge-down-bg: rgba(227, 77, 89, 0.12);
+  --mh-ra-line: #eceae4;
+  --mh-ra-card-line: #eceef1;
+  --mh-ra-muted: #9aa0a8;
+  --mh-ra-name: #6b7280;
+  --mh-ra-stat-line: #f0f2f5;
+  --mh-ra-icon-retail-bg: rgba(201, 164, 74, 0.16);
+  --mh-ra-icon-retail: #8a6d1f;
+  --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
+  --mh-ra-icon-outlet: #185fa5;
+  --mh-ra-insight-line: #c9a44a;
+  --mh-ra-insight-bg: #fbf9f4;
+  --mh-ra-insight-ink: #3f3f3c;
+  --mh-ra-option-icon-bg: rgba(24, 95, 165, 0.1);
+  --mh-ra-option-hover-line: #c9a44a;
+  --mh-ra-option-hover-bg: #fdfbf6;
+  --mh-ra-source-chip-line: #d8dee6;
+  --mh-ra-source-chip-bg: #f6f8fb;
+  --mh-ra-source-chip-ink: #415064;
 }
 
 .mh-sr {

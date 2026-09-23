@@ -1,6 +1,7 @@
 import React from "react";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
+import { COPILOT_HISTORY, COPILOT_SUMMARY, REPORT_COPILOT_FLOW, REPORT_SKILL_MENU, buildCopilotChatEntry, buildReportModelDraft, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./report-data.js";
 
 const shell = { logo: LOGO, navigation: NAV };
 
@@ -113,6 +114,7 @@ export const MarketingCockpit = {
     dashboard: 0,
     details: null,
     assistantOpen: false,
+    workspaceOpen: false,
     prompt: "",
     ...shell,
     hero: COCKPIT.hero,
@@ -134,6 +136,14 @@ export const MarketingCockpit = {
     onOpenLive: { action: "onOpenLive" },
     onBack: { action: "onBack" },
     onOpenWorkspace: { action: "onOpenWorkspace" },
+    onWorkspaceClose: { action: "onWorkspaceClose" },
+    onWorkspaceBack: { action: "onWorkspaceBack" },
+    onWorkspaceRecommendation: { action: "onWorkspaceRecommendation" },
+    onWorkspaceAsk: { action: "onWorkspaceAsk" },
+    onWorkspacePromptChange: { action: "onWorkspacePromptChange" },
+    onWorkspaceExplore: { action: "onWorkspaceExplore" },
+    onChatFeedback: { action: "onChatFeedback" },
+    onCopy: { action: "onCopy" },
     onOpenAssistant: { action: "onOpenAssistant" },
     onCloseAssistant: { action: "onCloseAssistant" },
     onPromptChange: { action: "onPromptChange" },
@@ -155,17 +165,41 @@ export const MarketingCockpit = {
     const [query, setQuery] = useSynced(args.query);
     const [project, setProject] = useSynced(args.project);
     const [view, setView] = useSynced(args.view);
+    const [dashboard, setDashboard] = useSynced(args.dashboard);
     const [details, setDetails] = useSynced(args.details);
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
     const [answers, setAnswers] = React.useState([]);
     const [skill, setSkill] = React.useState(null);
     const [flow, setFlow] = React.useState(null);
+    /* Report Copilot host state — the deterministic "AI" the original fakes
+       with report-core.js: answers resolve from the active report, custom
+       questions append to the chat thread when the answer view is open. */
+    const [wsOpen, setWsOpen] = useSynced(args.workspaceOpen);
+    const [wsPrompt, setWsPrompt] = useSynced("");
+    const [wsAnswer, setWsAnswer] = React.useState(null);
+    const [wsChat, setWsChat] = React.useState([]);
+    const [wsFlow, setWsFlow] = React.useState(null);
     const submitAnswer = (text) => {
       const trimmed = String(text || "").trim();
       if (!trimmed) return;
       setAnswers((current) => [...current, buildReportAssistantAnswer(trimmed)]);
       setPrompt("");
+    };
+    const liveKey = COCKPIT.projects[project] ? project : Object.keys(COCKPIT.projects)[0];
+    const liveProject = COCKPIT.projects[liveKey];
+    const liveIndex = Math.min(Math.max(Number(dashboard) || 0, 0), liveProject.reports.length - 1);
+    const liveReport = liveProject.reports[liveIndex];
+    const wsProfile = copilotProfile(liveKey, liveIndex);
+    const wsAsk = ({ question }) => {
+      /* showAiAnswer: appends only while the answer view is open, else clears
+         the thread and enters chat mode. */
+      const append = Boolean(wsAnswer) || wsChat.length > 0;
+      const entry = buildCopilotChatEntry(liveKey, liveIndex, question);
+      setWsChat((current) => (append ? [...current, entry] : [entry]));
+      if (!append) setWsAnswer(null);
+      setWsPrompt("");
+      args.onWorkspaceAsk?.({ question });
     };
     return (
       <MarketingCockpitPage
@@ -238,9 +272,93 @@ export const MarketingCockpit = {
               }
             : undefined
         }
+        workspace={{
+          title: wsProfile.panelTitle,
+          summary: COPILOT_SUMMARY,
+          recommendations: liveReport.recommendations.map((rec) => ({ title: rec.title })),
+          periodHint: wsProfile.periodHint,
+          sources: copilotSources(liveKey, liveReport),
+          answer: wsAnswer,
+          chat: wsChat,
+          prompt: wsPrompt,
+          history: COPILOT_HISTORY,
+          skillMenu: { ...REPORT_SKILL_MENU, items: copilotSkillItems() },
+          flow: wsFlow
+            ? {
+                step: wsFlow.step,
+                submitFirst: true,
+                threads: wsFlow.threads,
+                rule: wsFlow.rule,
+                draft: wsFlow.draft,
+                sections: REPORT_COPILOT_FLOW.sections,
+                labels: REPORT_COPILOT_FLOW.labels,
+                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
+                  setWsFlow((current) => ({
+                    ...current,
+                    threads: current.threads.map((thread, ti) =>
+                      ti === threadIndex
+                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                        : thread,
+                    ),
+                  })),
+                onRuleChange: ({ value }) => setWsFlow((current) => ({ ...current, rule: value })),
+                onGenerate: ({ messages, rule }) =>
+                  setWsFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule) })),
+                onBack: () => setWsFlow((current) => ({ ...current, step: "history" })),
+                onClose: () => setWsFlow(null),
+                onSave: ({ values }) => args.onFlowSave?.(values),
+                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+              }
+            : undefined,
+          onClose: () => {
+            setWsOpen(false);
+            args.onWorkspaceClose?.();
+          },
+          onBack: () => {
+            /* data-ai-back: answer view closes, context panels come home. */
+            setWsAnswer(null);
+            setWsChat([]);
+            args.onWorkspaceBack?.();
+          },
+          onNewSession: () => {
+            setWsAnswer(null);
+            setWsChat([]);
+            setWsPrompt("");
+            args.onNewSession?.();
+          },
+          onMaximize: args.onMaximize,
+          onHistorySelect: args.onHistorySelect,
+          onRecommendation: ({ index }) => {
+            setWsAnswer(resolveCopilotAnswer(liveKey, liveIndex, index));
+            setWsChat([]);
+            args.onWorkspaceRecommendation?.({ index });
+          },
+          onAsk: wsAsk,
+          onPromptChange: ({ value }) => {
+            setWsPrompt(value);
+            args.onWorkspacePromptChange?.({ value });
+          },
+          onFeedback: args.onFeedback,
+          onChatFeedback: args.onChatFeedback,
+          onCopy: args.onCopy,
+          onExplore: args.onWorkspaceExplore,
+          onAttach: args.onAttach,
+          onSelectSkill: args.onSelectSkill,
+          onSkillAction: ({ action }) => {
+            args.onSkillAction?.({ action });
+            setWsFlow({
+              step: action === "history" ? "history" : "manual",
+              threads: REPORT_COPILOT_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+              rule: "",
+              draft: {},
+            });
+          },
+        }}
+        workspaceOpen={wsOpen}
         query={query}
         project={project}
         view={view}
+        dashboard={dashboard}
         details={details}
         onOpenAssistant={() => {
           setOpen(true);
@@ -270,19 +388,35 @@ export const MarketingCockpit = {
           setProject(target.id);
           args.onOpenProject?.(target);
         }}
-        onOpenReport={args.onOpenReport}
+        onOpenReport={(target) => {
+          setProject(target.project);
+          setDashboard(target.index);
+          setView("live");
+          args.onOpenReport?.(target);
+        }}
         onOpenDetails={args.onOpenDetails}
         onCloseDetails={(event) => {
           setDetails(null);
           args.onCloseDetails?.(event);
         }}
-        onOpenLive={args.onOpenLive}
+        onOpenLive={(target) => {
+          if (details) {
+            setProject(details.project);
+            setDashboard(details.index);
+            setView("live");
+            setDetails(null);
+          }
+          args.onOpenLive?.(target);
+        }}
         onBack={(target) => {
           setProject(target.project);
           setView("catalog");
           args.onBack?.(target);
         }}
-        onOpenWorkspace={args.onOpenWorkspace}
+        onOpenWorkspace={() => {
+          setWsOpen(true);
+          args.onOpenWorkspace?.();
+        }}
       />
     );
   },

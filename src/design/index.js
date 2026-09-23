@@ -49,6 +49,7 @@ export {
   CampaignRail,
   ProjectDirectory,
   ReportRow,
+  ReportCopilot,
   ReportDetailsDrawer,
   LiveReportView,
   LiveOverview,

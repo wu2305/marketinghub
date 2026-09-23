@@ -190,5 +190,58 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "cart") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <circle cx="9" cy="20" r="1.5" />
+        <circle cx="17" cy="20" r="1.5" />
+        <path d="M3 4h2l2.4 12.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H6" />
+      </svg>
+    );
+  }
+  if (name === "tag") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" />
+        <circle cx="7.5" cy="7.5" r="1.5" />
+      </svg>
+    );
+  }
+  if (name === "chart") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M4 20V10" />
+        <path d="M10 20V4" />
+        <path d="M16 20v-7" />
+        <path d="M22 20H2" />
+      </svg>
+    );
+  }
+  if (name === "store") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M4 10v10h16V10" />
+        <path d="M3 6l1.5-3h15L21 6c0 1.7-1.3 3-3 3-1.1 0-2.1-.6-2.6-1.5C14.9 8.4 13.9 9 13 9s-1.9-.6-2.4-1.5C10.1 8.4 9.1 9 8 9 6.3 9 3 7.7 3 6Z" />
+        <path d="M9 20v-5h6v5" />
+      </svg>
+    );
+  }
+  if (name === "trend") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M3 17l6-6 4 4 8-8" />
+        <path d="M14 7h7v7" />
+      </svg>
+    );
+  }
+  if (name === "bulb") {
+    return (
+      <svg {...common} strokeWidth="1.8">
+        <path d="M9 18h6" />
+        <path d="M10 21h4" />
+        <path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2l.1.2h4.8l.1-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z" />
+      </svg>
+    );
+  }
   return null;
 }
