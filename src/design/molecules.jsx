@@ -223,11 +223,17 @@ export function DataTable({ columns = [], rows = [], caption, onRowClick }) {
 
 export function SidebarItem({ label, icon, active = false, badge, count, onSelect }) {
   return (
-    <button className={cx("mh-sidebar-item", active && "is-active")} type="button" aria-current={active ? "page" : undefined} onClick={() => onSelect?.({ label })}>
+    <button
+      className={cx("mh-sidebar-item", active && "is-active")}
+      type="button"
+      aria-current={active ? "page" : undefined}
+      title={count !== undefined && count !== null ? `${label} · ${count}` : label}
+      onClick={() => onSelect?.({ label })}
+    >
       {icon ? <Icon path={icon} className="mh-sidebar-item__icon" /> : null}
       <span className="mh-sidebar-item__label">{label}</span>
       {badge ? <span className="mh-sidebar-item__badge">{badge}</span> : null}
-      {count !== undefined && count !== null && !badge ? <span className="mh-sidebar-item__count">{count}</span> : null}
+      {count !== undefined && count !== null ? <span className="mh-sidebar-item__count">{count}</span> : null}
     </button>
   );
 }

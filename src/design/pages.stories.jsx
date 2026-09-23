@@ -150,49 +150,49 @@ export const Interpreter = {
   args: {
     activeType: "overview",
     query: "",
-    status: "All statuses",
+    filterValues: {},
     ...shell,
     hero: INTERPRETER.hero,
     overviewItem: INTERPRETER.overview,
-    groups: INTERPRETER.groups,
+    sidebarTitle: INTERPRETER.sidebarTitle,
     types: INTERPRETER.types,
-    assets: INTERPRETER.assets,
+    records: INTERPRETER.records,
   },
   argTypes: {
     activeType: {
       control: "select",
-      options: ["overview", "principles", "context", "model", "metrics", "terms", "analytical", "scenario", "email"],
+      options: ["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)],
     },
-    status: { control: "select", options: ["All statuses", "Draft", "Under Review", "Published"] },
     onNavigate: { action: "onNavigate" },
     onSelectType: { action: "onSelectType" },
     onQueryChange: { action: "onQueryChange" },
-    onStatusChange: { action: "onStatusChange" },
+    onFilterChange: { action: "onFilterChange" },
     onCreate: { action: "onCreate" },
     onSelectAsset: { action: "onSelectAsset" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
     const [query, setQuery] = useSynced(args.query);
-    const [status, setStatus] = useSynced(args.status);
+    const [filterValues, setFilterValues] = useSynced(args.filterValues);
     return (
       <AiInterpreterPage
         {...args}
         activeType={activeType}
         query={query}
-        status={status}
+        filterValues={filterValues}
         onNavigate={args.onNavigate}
         onSelectType={(event) => {
           setActiveType(event.id);
+          setFilterValues({});
           args.onSelectType?.(event);
         }}
         onQueryChange={(event) => {
           setQuery(event.value);
           args.onQueryChange?.(event);
         }}
-        onStatusChange={(event) => {
-          setStatus(event.value);
-          args.onStatusChange?.(event);
+        onFilterChange={(event) => {
+          setFilterValues((values) => ({ ...values, [event.id]: event.value }));
+          args.onFilterChange?.(event);
         }}
         onCreate={args.onCreate}
         onSelectAsset={args.onSelectAsset}

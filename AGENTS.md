@@ -42,18 +42,25 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - `npm run build-storybook` 通过；38 个故事全部可渲染。
 - 五个页面故事（Home、Marketing Cockpit、Self-Service Center、AI Interpreter、RedNote Campaign Tool）在 1440px 下首屏与原始页面基本一致。
 
-### 2.4 2026-09-22 审核确认的缺口
+### 2.4 2026-09-23 审核确认的缺口
+
+本次基于本地 `main`（2555d8a，含 #8）静态代码审查，并运行 `npm run build-storybook -- --disable-telemetry`：构建通过，38 stories、0 docs。未重跑浏览器截图、Controls 全枚举或全交互验收；2026-09-22 的截图结论保留为历史记录。
 
 | 类别 | 事实 |
 |---|---|
-| 覆盖深度 | 提取只到每个页面的首屏。AI Interpreter 各类型视图（卡片网格、同义词标签、创建者筛选、编辑/删除/下线动作、分页、`!` 规则提示）、Analytical Model 表单、Scenario 编辑器、版本对比、Review Center、Feedback、Personal Memory、Metric Dictionary 公式构建器、Data Model 浏览器均无组件。 |
-| 视觉偏差 | Home 助手面板做成右侧抽屉，原始首页为居中弹窗。Cockpit 按钮缺 `→`，搜索图标不同。Interpreter 侧栏缺图标与分组条；可管理类型动作应为 Manage，现为 View；类型计数与原文不符。 |
-| 内容耦合 | Campaign 的 Execution / Assets / Analytics / Accounts 四个 section 的数据写死在 `pages.jsx`，页面组件不接收数据 props。 |
-| Token | `tokens.css` 21 个变量；`atoms.css` / `molecules.css` / `organisms.css` / `pages.css` 内仍有 171 处直接十六进制色值，金色渐变、危险色、深色 Hero 全部绕开 token。 |
-| 响应式 | 四个组件 CSS 中零条 `@media`。 |
-| 语义 | `Header` 导航项渲染为 `<button>`；`Link`、`WorkspaceCard` 的 `<a>` 一律 `preventDefault`；`content.js` 的 `href` 为 Demo 中不存在的 `/home`、`/cockpit`；`Hero` 写死 `id="mh-hero-title"`。 |
-| 文档与类型 | 无 `autodocs`、无 PropTypes / TypeScript、无 `index.js` 导出入口。`StatusBadge` 的 tone 由字符串包含判断决定。 |
-| 验证 | 无测试、无 lint、无视觉回归。PR 描述中的 test plan 为手工勾选。 |
+| 已修正 | #8 已补 Cockpit 箭头与搜索符、Interpreter 侧栏图标/分组/Manage/计数，Campaign 四个 section 数据已改 props，Header 导航项已改链接，Hero 已使用 useId。Home 原始 CSS 最终覆盖为右侧抽屉，撤销旧审核“应为居中弹窗”的判断。 |
+| 覆盖深度 | 17 个 HTML、47 个 JS、50 个 CSS；当前仅 5 个页面故事。Interpreter 非 overview 仍共用通用行列表，Actions 列为空；类型专属列表、创建/编辑、详情与治理流程未完整提取。BusinessTermForm 已有独立故事，但未接入页面创建流程。 |
+| 交互 | BusinessTermForm 的 required 仅渲染星号，空值仍调用 Save/Submit；TermForm 故事仅记录 onChange，未更新受控值。AssistantPanel 缺少进入/限制/恢复焦点与 Escape 关闭；Tabs 无方向键处理，DataTable 点击行无键盘入口。 |
+| 内容与接口 | 页面仍写死搜索/筛选等文案；知识类型通过显示标题和 startsWith 匹配；StatusBadge 通过字符串包含推导 tone；Button 等直接透传 DOM event，与具名对象约定不一致。 |
+| Token 与样式 | tokens.css 现有 27 个变量；四个组件 CSS 共 169 个十六进制色值（155 行）。间距、圆角等仍大量直接赋值；tokens.css 混入全局元素 reset，会影响宿主页面。 |
+| 响应式 | 四个组件 CSS 仍无 @media；多列网格、固定宽度搜索框与侧栏未提供窄屏布局。基础控件已有部分 focus-visible，有机体覆盖不足。 |
+| 导航 | Header 导航使用 content.js 中不存在的 /home、/cockpit 等路由；logo、Link、WorkspaceCard 仍阻止默认跳转，WorkspaceCard 的 href 直接使用 title。 |
+| 文档与验证 | 无 autodocs、组件 props 类型声明、公共 index.js、测试/lint/视觉对照脚本/CI。故事数不能代表所有导出组件均有独立故事，也不能证明完整状态覆盖。 |
+| 深审：数据契约 | React 服务端渲染确认：只改 Business Terms 显示标题，列表由 1 条变 0；未知 activeType 显示全部 6 条。概览合计 35，示例仅 6 条；model/metrics/email 均为空列表。Principles 等只读类型仍出现 Create New Knowledge。 |
+| 深审：状态与字段 | 原始 Analytical Model 可 Published 且 Disabled；Scenario 区分 Draft/Queued/Building/Published 与 AI 可用性，当前单 status 与统一过滤器不能完整表达。BusinessTermForm 缺少原始 Data Model 多选关联，回调也不携带 scope。 |
+| 深审：故事与可移植性 | 受控值不回写并非仅 TermForm，Input/Area/Dropdown/Search/Tabs/Pills/Field/Scope 等故事同样只记录 Action。TypeCard 图像写死根路径 /assets，依赖 Storybook staticDirs；尚无独立宿主验证。 |
+| 深审：参照与验收 | types.js 的 Scenario 旧状态与后加载 scenario-reports.js 的状态映射不同；typeMeta 仅解决计数来源。需逐特性记录实际生效脚本/样式、文档规则、存储初态与冲突取舍。单纯故事数、颜色扫描、每页一个故事不能证明完整提取。 |
+
 
 ## 3. 组件与样式规则
 
@@ -107,17 +114,21 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 阶段 A — 收口现有五个页面（首屏一致 → 状态一致）
 
-- 修复 2.4 表中“视觉偏差”全部条目。
+- 已由 #8 修正旧审核视觉条目；保留已确认的 Home 抽屉与 typeMeta 计数取舍。
+- 补现有入口导航与交互状态验收记录；区分“回调已触发”和“流程已演示完成”。
+- 修复 Interpreter 显示标题参与类型匹配、未知类型回退全量数据、只读类型创建入口与示例数据覆盖缺失；以稳定标识和明确能力表达现有 Demo 行为。
 - Campaign 四个 section 的数据改为 props，`content.js` 提供默认值。
 - `Header` 导航改为 `<a>`；`Hero` 去掉写死 id。
 - 完成标准：五个页面故事的所有交互状态与原始页面对应状态对照通过，并登记有意差异。
 
 ### 阶段 B — 工程基线
 
-- 补 `tags: ["autodocs"]`、props 类型声明、`src/design/index.js`。
+- 补 `tags: ["autodocs"]`、props 类型声明、`src/design/index.js`；盘点导出组件与独立故事覆盖。
+- 统一导航、具名回调、稳定类型标识与显式状态 tone；隔离全局 reset，补表单校验和键盘交互的针对性验证。
 - 组件 CSS 色值全部 token 化。
 - 每个有机体与页面补 `@media` 断点与 `:focus-visible`。
-- 落地 `scripts/visual-check.mjs`（按第 4 节步骤自动截图并输出并排图）。
+- 落地 `scripts/visual-check.mjs`（按第 4 节步骤自动截图并输出并排图）；在 handover 中维护页面/状态/动作/故事/验证的覆盖清单，不能仅以故事总数验收。
+- 对照须固定 URL、viewport、storage 初态与交互步骤；校验受控故事状态回写，增加不依赖 Storybook 配置的宿主组合验证与静态资源检查。
 - 完成标准：`rg '#[0-9a-fA-F]{3,8}' src/design/*.css` 只命中 `tokens.css`；每个 `.stories.jsx` 含 autodocs；脚本可一键产出全部页面对照图。
 
 ### 阶段 C — AI Interpreter 深度提取
@@ -127,14 +138,14 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 1. 类型视图：卡片网格（同义词标签、状态、创建者、动作按钮）、创建者筛选、分页、`!` 管理规则提示、按类型切换的 Hero。
 2. 表单：`AnalyticalModelForm`、Scenario Report 表单、必填校验与 Save / Submit 状态规则（见 v22 文档第 2、3 节）。
 3. 详情抽屉、版本对比、Metric Dictionary 公式构建器、Data Model 浏览器。
-- 完成标准：`knowledge.html` 八种类型的列表态与至少一种创建态均有页面故事，且对照通过。
+- 完成标准：`knowledge.html` 八种类型的列表态有页面故事；三种可管理类型各覆盖适用的创建/编辑、校验、保存/提交与禁用条件，只读类型不误给创建入口。发布/处理状态与 AI 可用性分开表达，保留类型专属字段与关联；行为断言与视觉对照均通过。
 
 ### 阶段 D — 治理与自助模块
 
 - Review Center、Feedback & Quality、Personal Memory、Scenario Library / Detail / Edit。
 - Self-Service 的数据视图、上传页、Media Tracking Detail。
 - Marketing Cockpit 的报表详情与 Copilot 面板。
-- 完成标准：17 个原始 HTML 各有至少一个对应页面故事。
+- 完成标准：17 个原始 HTML 各有对应页面故事，并按 handover 覆盖清单完成适用的页内状态和主要动作；仅有入口截图不算完成。
 
 ### 阶段 E — 交付形态
 

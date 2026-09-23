@@ -144,61 +144,102 @@ export function SelfServicePage({
   );
 }
 
+function recordFieldValues(record, field) {
+  const value = record[field];
+  if (value === undefined || value === null) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function uniqueFilterOptions(records, field) {
+  const seen = new Set();
+  for (const record of records) {
+    for (const value of recordFieldValues(record, field)) seen.add(value);
+  }
+  return [...seen].sort().map((value) => ({ id: value, label: value }));
+}
+
+function recordMatchesFilter(record, filter, value) {
+  const option = (filter.options || []).find((item) => item.id === value);
+  const field = option?.field || filter.id;
+  const expected = option?.id ?? value;
+  return recordFieldValues(record, field).includes(expected);
+}
+
 export function AiInterpreterPage({
   current = "interpreter",
   logo,
   navigation = [],
   hero = { stats: [] },
   overviewItem = { id: "overview", label: "Overview" },
-  groups = [],
+  sidebarTitle,
   types = [],
-  assets = [],
+  records = [],
   activeType = "overview",
   query = "",
-  status = "All statuses",
+  filterValues = {},
   onNavigate,
   onSelectType,
   onQueryChange,
-  onStatusChange,
+  onFilterChange,
   onCreate,
   onSelectAsset,
 }) {
-  const overview = activeType === "overview";
-  const rows = assets.filter((asset) => {
-    const type = types.find((item) => item.id === activeType);
-    const typeMatch = overview || !type || asset.type === type.title || asset.type.startsWith(type.title.replace(/s$/, ""));
-    const queryMatch = !query || `${asset.title} ${asset.summary}`.toLowerCase().includes(query.toLowerCase());
-    const statusMatch = status === "All statuses" || asset.status === status;
-    return typeMatch && queryMatch && statusMatch;
+  const overview = activeType === "overview" || !activeType;
+  const type = types.find((item) => item.id === activeType);
+  const known = overview || Boolean(type);
+
+  const typeRecords = type ? records.filter((record) => record.typeId === type.id) : [];
+  const filters = (type?.statusFilters || []).map((filter) => ({
+    ...filter,
+    options: filter.options || uniqueFilterOptions(typeRecords, filter.id),
+  }));
+  const rows = typeRecords.filter((record) => {
+    const queryMatch = !query || `${record.title} ${record.summary}`.toLowerCase().includes(query.toLowerCase());
+    const filterMatch = filters.every((filter) => !filterValues[filter.id] || recordMatchesFilter(record, filter, filterValues[filter.id]));
+    return queryMatch && filterMatch;
   });
+
+  const heroStats = type
+    ? [
+        { label: type.title, value: String(type.stats.total), caption: `${type.stats.units[1]} governed for AI use` },
+        { label: "New this month", value: String(type.stats.monthly), caption: "knowledge assets added recently" },
+      ]
+    : hero.stats || [];
+  const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
+
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
       <div style={{ height: 56 }} />
-      <Hero {...hero} height={260} variant="knowledge" scrim="knowledge">
-        {(hero.stats || []).map((stat) => (
+      <Hero {...heroProps} height={260} variant="knowledge" scrim="knowledge">
+        {heroStats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" compact />
         ))}
       </Hero>
       <div className="mh-interpreter">
         <KnowledgeSidebar
-          overview={{ ...overviewItem, active: overview }}
-          groups={groups.map((group) => ({
-            ...group,
-            items: group.items.map((item) => ({ ...item, active: item.id === activeType })),
-          }))}
+          overview={overviewItem}
+          title={sidebarTitle}
+          types={types}
+          activeId={activeType}
           onSelect={onSelectType}
         />
         <div className="mh-interpreter__main">
           {overview ? (
-            <TypeGrid items={types} onSelect={onSelectType} />
+            <TypeGrid items={types} activeId={activeType} onSelect={onSelectType} />
+          ) : !known ? (
+            <div className="mh-empty mh-empty--unknown" role="status">
+              <strong>Unknown knowledge type</strong>
+              <p>{`"${activeType}" is not one of the ${types.length} knowledge types. Pick a type from the navigation.`}</p>
+            </div>
           ) : (
             <KnowledgeLibrary
+              type={{ ...type, statusFilters: filters }}
               query={query}
-              status={status}
+              filterValues={filterValues}
               rows={rows}
               onQueryChange={onQueryChange}
-              onStatusChange={onStatusChange}
+              onFilterChange={onFilterChange}
               onCreate={onCreate}
               onSelect={onSelectAsset}
             />

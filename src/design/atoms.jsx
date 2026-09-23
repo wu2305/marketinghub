@@ -150,13 +150,13 @@ export function Select({
 export function StatusBadge({ status = "draft", outline = false, children }) {
   const key = String(status).toLowerCase().replace(/\s+/g, "-");
   const tone =
-    key.includes("publish") || key === "success" || key === "token-valid"
+    key.includes("publish") || key === "success" || key === "token-valid" || key === "enabled"
       ? "success"
-      : key.includes("review") || key === "syncing"
+      : key.includes("review") || key === "syncing" || key === "building"
         ? "review"
-        : key.includes("pending") || key === "watch"
+        : key.includes("pending") || key === "watch" || key === "queued"
           ? "pending"
-          : key.includes("pause") || key === "danger"
+          : key.includes("pause") || key === "danger" || key === "disabled"
             ? "paused"
             : key.includes("draft")
               ? "draft"

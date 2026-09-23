@@ -80,17 +80,16 @@ export const Sidebar = {
   name: "Knowledge sidebar",
   args: { active: "overview" },
   argTypes: {
-    active: { control: "select", options: ["overview", ...INTERPRETER.groups[0].items.map((item) => item.id)] },
+    active: { control: "select", options: ["overview", ...INTERPRETER.types.map((type) => type.id)] },
     onSelect: { action: "onSelect" },
   },
   render: (args) => (
     <div style={{ width: 240 }}>
       <KnowledgeSidebar
-        overview={{ ...INTERPRETER.overview, active: args.active === "overview" }}
-        groups={INTERPRETER.groups.map((group) => ({
-          ...group,
-          items: group.items.map((item) => ({ ...item, active: item.id === args.active })),
-        }))}
+        overview={INTERPRETER.overview}
+        title={INTERPRETER.sidebarTitle}
+        types={INTERPRETER.types}
+        activeId={args.active}
         onSelect={args.onSelect}
       />
     </div>
@@ -99,22 +98,43 @@ export const Sidebar = {
 
 export const KnowledgeType = {
   name: "Type card",
-  args: { ...INTERPRETER.types[0], active: false, art: 0 },
-  argTypes: { onSelect: { action: "onSelect" } },
+  args: { ...INTERPRETER.types[0], count: "10 principles", active: false, manageable: false, art: 0 },
+  argTypes: {
+    manageable: { control: "boolean" },
+    onSelect: { action: "onSelect" },
+  },
   render: (args) => <TypeCard {...args} />,
 };
 
 export const Library = {
-  name: "Library toolbar",
-  args: { query: "", status: "All statuses" },
+  name: "Knowledge library",
+  args: {
+    typeId: "Scenario Reporting",
+    query: "",
+    filterValues: {},
+  },
   argTypes: {
-    status: { control: "select", options: ["All statuses", "Draft", "Under Review", "Published"] },
+    typeId: { control: "select", options: INTERPRETER.types.map((type) => type.id) },
     onQueryChange: { action: "onQueryChange" },
-    onStatusChange: { action: "onStatusChange" },
+    onFilterChange: { action: "onFilterChange" },
     onCreate: { action: "onCreate" },
     onSelect: { action: "onSelect" },
   },
-  render: (args) => <KnowledgeLibrary {...args} rows={INTERPRETER.assets} />,
+  render: function LibraryStory(args) {
+    const type = INTERPRETER.types.find((item) => item.id === args.typeId);
+    return (
+      <KnowledgeLibrary
+        type={type}
+        query={args.query}
+        filterValues={args.filterValues}
+        rows={INTERPRETER.records.filter((record) => record.typeId === args.typeId)}
+        onQueryChange={args.onQueryChange}
+        onFilterChange={args.onFilterChange}
+        onCreate={args.onCreate}
+        onSelect={args.onSelect}
+      />
+    );
+  },
 };
 
 export const Launcher = {

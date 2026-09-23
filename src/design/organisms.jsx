@@ -193,27 +193,37 @@ export function ActionCard({ title, description, actionLabel, onOpen }) {
   );
 }
 
-export function KnowledgeSidebar({ brand = "AI Interpreter", overview, groups = [], onSelect }) {
+export function KnowledgeSidebar({ brand = "AI Interpreter", overview, title, types = [], activeId, onSelect }) {
   return (
     <aside className="mh-sidebar" aria-label="Knowledge navigation">
       <div className="mh-sidebar__brand">{brand}</div>
-      {overview ? <SidebarItem {...overview} onSelect={() => onSelect?.({ id: overview.id, label: overview.label })} /> : null}
-      {groups.map((group) => (
-        <div className="mh-sidebar__group" key={group.title}>
-          <div className="mh-sidebar__title">{group.title}</div>
-          {group.items.map((item) => (
-            <SidebarItem key={item.id} {...item} onSelect={() => onSelect?.({ id: item.id, label: item.label })} />
+      {overview ? (
+        <SidebarItem {...overview} active={overview.id === activeId} onSelect={() => onSelect?.({ id: overview.id, label: overview.label })} />
+      ) : null}
+      {types.length ? (
+        <div className="mh-sidebar__group">
+          {title ? <div className="mh-sidebar__title">{title}</div> : null}
+          {types.map((type) => (
+            <SidebarItem
+              key={type.id}
+              label={type.title}
+              icon={type.icon}
+              badge={type.manageable ? "Manage" : undefined}
+              count={type.stats?.total}
+              active={type.id === activeId}
+              onSelect={() => onSelect?.({ id: type.id, label: type.title })}
+            />
           ))}
         </div>
-      ))}
+      ) : null}
     </aside>
   );
 }
 
-export function TypeCard({ title, count, summary, action, art = 0, active = false, onSelect }) {
+export function TypeCard({ title, count, summary, action, manageable = false, art = 0, active = false, onSelect }) {
   return (
     <button
-      className={cx("mh-type-card", active && "is-active")}
+      className={cx("mh-type-card", manageable ? "is-manageable" : "is-read-only", active && "is-active")}
       type="button"
       style={{ "--mh-art": ART[art] || ART[0] }}
       onClick={() => onSelect?.({ title })}
@@ -226,79 +236,126 @@ export function TypeCard({ title, count, summary, action, art = 0, active = fals
   );
 }
 
-export function TypeGrid({ items = [], onSelect }) {
+// Mirrors types.js overviewCountLabel: "<total> <singular|plural unit>".
+function formatTypeCount(stats) {
+  if (!stats) return undefined;
+  const { units, total } = stats;
+  return `${total} ${total === 1 ? units[0] : units[1]}`;
+}
+
+export function TypeGrid({ items = [], activeId, onSelect }) {
   return (
     <div className="mh-type-grid">
       {items.map((item, index) => (
-        <TypeCard key={item.id} {...item} art={item.art ?? index} onSelect={() => onSelect?.({ id: item.id, title: item.title })} />
+        <TypeCard
+          key={item.id}
+          title={item.title}
+          count={item.count ?? formatTypeCount(item.stats)}
+          summary={item.summary}
+          action={item.action}
+          manageable={item.manageable}
+          art={item.art ?? index}
+          active={item.id === activeId}
+          onSelect={() => onSelect?.({ id: item.id, title: item.title })}
+        />
       ))}
     </div>
   );
 }
 
-export function LibraryToolbar({ query, onQueryChange, status, statusOptions = [], onStatusChange, actionLabel = "Create New Knowledge", onCreate }) {
+export function LibraryToolbar({ query, onQueryChange, filters = [], filterValues = {}, onFilterChange, createLabel, onCreate }) {
   return (
     <div className="mh-toolbar">
       <div className="mh-toolbar__filters">
-        <label className="mh-filter">
-          Status
-          <select className="mh-select mh-select--sm" value={status} aria-label="Status" onChange={(event) => onStatusChange?.({ value: event.target.value })}>
-            {statusOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </label>
+        {filters.map((filter) => (
+          <label className="mh-filter" key={filter.id}>
+            {filter.label}
+            <select
+              className="mh-select mh-select--sm"
+              value={filterValues[filter.id] || ""}
+              aria-label={filter.label}
+              onChange={(event) => onFilterChange?.({ id: filter.id, value: event.target.value })}
+            >
+              <option value="">{filter.allLabel || "All"}</option>
+              {(filter.options || []).map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ))}
       </div>
       <div className="mh-toolbar__actions">
         <div style={{ width: 280 }}>
           <SearchField label="Search knowledge" value={query} placeholder="Search knowledge..." size="sm" onChange={onQueryChange} />
         </div>
-        <Button variant="gold" size="lg" icon="plus" onClick={onCreate}>
-          {actionLabel}
-        </Button>
+        {createLabel ? (
+          <Button variant="gold" size="lg" icon="plus" onClick={onCreate}>
+            {createLabel}
+          </Button>
+        ) : null}
       </div>
     </div>
   );
 }
 
-export function AssetRow({ title, summary, type, owner, status, active = false, onSelect }) {
+const STAGE_LABELS = { draft: "Draft", "under-review": "Under Review", queued: "Queued", building: "Building", published: "Published" };
+const AVAILABILITY_LABELS = { enabled: "Enabled", disabled: "Disabled" };
+
+export function AssetRow({ title, summary, badge, typeLabel, owner, stage, availability, active = false, onSelect }) {
   return (
     <button className={cx("mh-asset", active && "is-active")} type="button" onClick={() => onSelect?.({ title })}>
       <span>
-        <strong>{title}</strong>
+        <strong>
+          {badge ? <span className="mh-asset__kind">{badge}</span> : null}
+          {title}
+        </strong>
         <small>{summary}</small>
       </span>
-      <span>{type}</span>
+      <span>{typeLabel}</span>
       <span>{owner}</span>
-      <StatusBadge status={status}>{status}</StatusBadge>
-      <span />
+      <StatusBadge status={stage}>{STAGE_LABELS[stage] || stage}</StatusBadge>
+      <StatusBadge status={availability}>{AVAILABILITY_LABELS[availability] || availability}</StatusBadge>
     </button>
   );
 }
 
-export function KnowledgeLibrary({ query, onQueryChange, status, onStatusChange, rows = [], onCreate, onSelect }) {
+export function KnowledgeLibrary({ type, query, onQueryChange, filterValues = {}, onFilterChange, rows = [], onCreate, onSelect, emptyTitle = "No knowledge assets", emptyMessage }) {
+  const createLabel = type?.manageable ? type.createLabel || `Create ${type.title}` : undefined;
   return (
     <section className="mh-library" aria-label="Knowledge library">
       <LibraryToolbar
         query={query}
-        status={status}
-        statusOptions={["All statuses", "Draft", "Under Review", "Published"]}
+        filters={type?.statusFilters || []}
+        filterValues={filterValues}
         onQueryChange={onQueryChange}
-        onStatusChange={onStatusChange}
-        onCreate={onCreate}
+        onFilterChange={onFilterChange}
+        createLabel={createLabel}
+        onCreate={type ? () => onCreate?.({ typeId: type.id, title: type.title }) : undefined}
       />
       <div className="mh-asset-head">
         <span>Knowledge Title</span>
         <span>Type</span>
         <span>Creator</span>
-        <span>Status</span>
-        <span>Actions</span>
+        <span>Process</span>
+        <span>AI Status</span>
       </div>
-      {rows.map((row) => (
-        <AssetRow key={row.id} {...row} onSelect={() => onSelect?.(row)} />
-      ))}
+      {rows.length ? (
+        rows.map((row) => (
+          <AssetRow
+            key={row.id}
+            {...row}
+            typeLabel={row.typeLabel ?? type?.title}
+            onSelect={() => onSelect?.(row)}
+          />
+        ))
+      ) : (
+        <div className="mh-empty" role="status">
+          <strong>{emptyTitle}</strong>
+          <p>{emptyMessage || "No records match the current filters."}</p>
+        </div>
+      )}
     </section>
   );
 }

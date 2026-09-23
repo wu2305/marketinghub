@@ -201,10 +201,21 @@ export const SELF_SERVICE = {
   ],
 };
 
-// Totals are typeMeta[].stats.total from assets/js/knowledge/types.js.
-function knowledgeCount(total, singular, plural) {
-  return `${total} ${total === 1 ? singular : plural}`;
-}
+// Knowledge type ids are the typeMeta[].key values from assets/js/knowledge/types.js —
+// the same identifiers the original demo uses in ?type= URLs and asset.type fields.
+// stats mirror typeMeta[].stats (the agreed counting source, see AGENTS.md 3.3).
+// statusFilters mirror each type's own library view:
+//   types.js (generic list + Principles), business-term-library.js, scenario-reports.js,
+//   field-library.js (Report Context / Metric Dictionary / Analytical Model / Email Reports).
+const availabilityFilter = (label = "Status") => ({
+  id: "availability",
+  label,
+  allLabel: "All statuses",
+  options: [
+    { id: "enabled", label: "Enabled" },
+    { id: "disabled", label: "Disabled" },
+  ],
+});
 
 export const INTERPRETER = {
   hero: {
@@ -225,42 +236,467 @@ export const INTERPRETER = {
   overview: {
     id: "overview",
     label: "Overview",
-    active: true,
     icon: "M3 11.5 12 4l9 7.5M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6",
   },
-  groups: [
+  sidebarTitle: "Knowledge · 8 types",
+  types: [
     {
-      title: "Knowledge · 8 types",
-      items: [
-        { id: "principles", label: "Principles", icon: "M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" },
-        { id: "context", label: "Report Context", icon: "M4 4h12l4 4v12H4V4zM16 4v4h4" },
-        { id: "model", label: "Data Models", icon: "M3 7h18M3 12h18M3 17h18" },
-        { id: "metrics", label: "Metric Dictionary", icon: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z" },
-        { id: "terms", label: "Business Terms", badge: "Manage", icon: "M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z" },
-        { id: "analytical", label: "Analytical Models", badge: "Manage", icon: "M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" },
-        { id: "scenario", label: "Scenario Reports", badge: "Manage", icon: "M5 3h10l4 4v14H5zM15 3v5h5M8 12h8M8 16h8" },
-        { id: "email", label: "Email Reports", icon: "M3 5h18v14H3zM3 6l9 7 9-7" },
+      id: "Principles",
+      title: "Principles",
+      icon: "M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z",
+      summary: "AI response rules and governing principles.",
+      action: "View principles",
+      manageable: false,
+      stats: { units: ["principle", "principles"], total: 10, monthly: 2 },
+      statusFilters: [],
+    },
+    {
+      id: "Report Context",
+      title: "Report Context",
+      icon: "M4 4h12l4 4v12H4V4zM16 4v4h4",
+      summary: "Report interpretation and business context.",
+      action: "View contexts",
+      manageable: false,
+      stats: { units: ["context", "contexts"], total: 6, monthly: 2 },
+      statusFilters: [
+        {
+          id: "projects",
+          label: "Project",
+          allLabel: "All projects",
+          options: [
+            { id: "D2C Insights", label: "D2C Insights" },
+            { id: "DC Media Performance", label: "DC Media Performance" },
+            { id: "DG Media Tracking", label: "DG Media Tracking" },
+          ],
+        },
+        availabilityFilter("AI Interpreter Status"),
       ],
     },
+    {
+      id: "Data Model",
+      title: "Data Models",
+      icon: "M3 7h18M3 12h18M3 17h18",
+      summary: "Entities, attributes, and relationships.",
+      action: "View models",
+      manageable: false,
+      stats: { units: ["model", "models"], total: 3, monthly: 1 },
+      statusFilters: [],
+    },
+    {
+      id: "Metric Dictionary",
+      title: "Metric Dictionary",
+      icon: "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+      summary: "Governed metric definitions and calculations.",
+      action: "View metrics",
+      manageable: false,
+      stats: { units: ["metric", "metrics"], total: 3, monthly: 1 },
+      statusFilters: [
+        { id: "domains", label: "Data Model", allLabel: "All models" },
+        {
+          id: "metricType",
+          label: "Type",
+          allLabel: "All types",
+          options: [
+            { id: "Base", label: "Base" },
+            { id: "Calculated", label: "Calculated" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "Business Term",
+      title: "Business Terms",
+      icon: "M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z",
+      summary: "Definitions and synonyms for business term.",
+      action: "Manage terms",
+      manageable: true,
+      createLabel: "Add Business Term",
+      stats: { units: ["term", "terms"], total: 6, monthly: 3 },
+      statusFilters: [
+        {
+          id: "availability",
+          label: "Status",
+          allLabel: "All statuses",
+          options: [
+            { id: "enabled", label: "Enabled" },
+            { id: "disabled", label: "Disabled" },
+            { id: "draft", label: "Draft", field: "stage" },
+          ],
+        },
+        { id: "owner", label: "Creator", allLabel: "All creators" },
+      ],
+    },
+    {
+      id: "Analytical Model",
+      title: "Analytical Models",
+      icon: "M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4",
+      summary: "Reusable analysis frameworks and methods.",
+      action: "Manage models",
+      manageable: true,
+      createLabel: "Add Analytical Model",
+      stats: { units: ["model", "models"], total: 1, monthly: 1 },
+      statusFilters: [
+        availabilityFilter(),
+        { id: "domains", label: "Data Model", allLabel: "All models" },
+        { id: "owner", label: "Creator", allLabel: "All creators" },
+      ],
+    },
+    {
+      id: "Scenario Reporting",
+      title: "Scenario Reports",
+      icon: "M5 3h10l4 4v14H5zM15 3v5h5M8 12h8M8 16h8",
+      summary: "Governed reporting scenarios and templates.",
+      action: "Manage scenarios",
+      manageable: true,
+      createLabel: "Add Scenario Reporting",
+      stats: { units: ["scenario", "scenarios"], total: 3, monthly: 2 },
+      statusFilters: [
+        availabilityFilter(),
+        {
+          id: "stage",
+          label: "Process",
+          allLabel: "All statuses",
+          options: [
+            { id: "draft", label: "Draft" },
+            { id: "queued", label: "Queued" },
+            { id: "building", label: "Building" },
+            { id: "published", label: "Published" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "Email Reports",
+      title: "Email Reports",
+      icon: "M3 5h18v14H3zM3 6l9 7 9-7",
+      summary: "Scheduled insights and distributions.",
+      action: "View reports",
+      manageable: false,
+      stats: { units: ["report", "reports"], total: 3, monthly: 1 },
+      statusFilters: [availabilityFilter()],
+    },
   ],
-  types: [
-    { id: "principles", title: "Principles", total: 10, count: knowledgeCount(10, "principle", "principles"), summary: "AI response rules and governing principles.", action: "View principles" },
-    { id: "context", title: "Report Context", total: 6, count: knowledgeCount(6, "context", "contexts"), summary: "Report interpretation and business context.", action: "View contexts" },
-    { id: "model", title: "Data Models", total: 3, count: knowledgeCount(3, "model", "models"), summary: "Entities, attributes, and relationships.", action: "View models" },
-    { id: "metrics", title: "Metric Dictionary", total: 3, count: knowledgeCount(3, "metric", "metrics"), summary: "Governed metric definitions and calculations.", action: "View metrics" },
-    { id: "terms", title: "Business Terms", total: 6, count: knowledgeCount(6, "term", "terms"), summary: "Definitions and synonyms for business term.", action: "Manage terms" },
-    { id: "analytical", title: "Analytical Models", total: 1, count: knowledgeCount(1, "model", "models"), summary: "Reusable analysis frameworks and methods.", action: "Manage models" },
-    { id: "scenario", title: "Scenario Reports", total: 3, count: knowledgeCount(3, "scenario", "scenarios"), summary: "Governed reporting scenarios and templates.", action: "Manage scenarios" },
-    { id: "email", title: "Email Reports", total: 3, count: knowledgeCount(3, "report", "reports"), summary: "Scheduled insights and distributions.", action: "View reports" },
+  // Sampled records only — overview totals live on types[].stats, so rows below
+  // intentionally cover fewer entries than stats.total. Sources:
+  //   Principles       types.js globalPrinciples
+  //   Report Context   knowledge.js marketingKnowledgeAssets
+  //   Data Model       data-model-browser.js / knowledge.html dataModelSources
+  //   Metric Dictionary knowledge.js metric assets (field-library.js view)
+  //   Business Term    business-term-library.js seed terms/synonyms
+  //   Analytical Model field-library.js normalized playbook
+  //   Scenario Reporting scenario-reports.js base scenarios
+  //   Email Reports    email-library.js demoAssets
+  // Sampled records only — overview totals live on types[].stats, so rows below
+  // intentionally cover fewer entries than stats.total. Field names mirror the
+  // source payloads; `stage` is the workflow/process dimension and
+  // `availability` the AI Interpreter enablement — never collapse the two.
+  //   stage: generic map co-build->draft / solidify->under-review / calibrate->published;
+  //          Scenario keeps its own vocabulary (draft/queued/building/published).
+  // Sources:
+  //   Principles        knowledge.js assets (globalPrinciples powers the dedicated card view — Phase C)
+  //   Report Context    knowledge.js assets; projects = project labels from field-library.js
+  //                     (business_domain -> D2C Insights / DC Media Performance / DG Media Tracking)
+  //   Data Model        knowledge.js "Channel data model" + knowledge.html dataModelSources
+  //                     "Marketing DW Data Model" + data-model-browser.js "D2C Insight"
+  //   Metric Dictionary knowledge.js metric assets; metricType mirrors metric_type
+  //   Business Term     business-term-library.js seeds (scope is the Data Model association;
+  //                     Global Synonym rows carry the global "All models / All reports" scope)
+  //   Analytical Model  knowledge.js playbook normalized by field-library.js
+  //                     (Current User + Enabled + Draft)
+  //   Scenario Reporting scenario-reports.js baseRecords (report + reportHref = linked report;
+  //                     structureGuidance / attachments preserved for the future form)
+  //   Email Reports     types.js demoAssets (email-library.js table consumes the same records)
+  records: [
+    {
+      id: "investment-principles",
+      typeId: "Principles",
+      title: "Campaign investment decision principles",
+      summary: "Shared guardrails for evaluating investment pressure, conversion efficiency, and the confidence required before recommending action.",
+      owner: "Sarah Chen",
+      stage: "under-review",
+      availability: "enabled",
+    },
+    {
+      id: "analysis-guardrails",
+      typeId: "Principles",
+      title: "Trusted analysis guardrails",
+      summary: "Minimum checks for freshness, metric consistency, comparison windows, and business context before an AI answer is decision-ready.",
+      owner: "Michael Liu",
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "city-report-context",
+      typeId: "Report Context",
+      title: "City Strategy report context",
+      summary: "Purpose, audience, comparison logic, and guardrails for the Invest City Strategy report.",
+      owner: "Emily Wang",
+      projects: ["D2C Insights"],
+      domains: ["City Strategy"],
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "fourp-report-context",
+      typeId: "Report Context",
+      title: "4P performance context",
+      summary: "Approved interpretation of Place, Price, Product, and Promotion performance within the governed 4P framework.",
+      owner: "David Zhang",
+      projects: ["D2C Insights"],
+      domains: ["4P"],
+      stage: "under-review",
+      availability: "enabled",
+    },
+    {
+      id: "rednote-reporting-context",
+      typeId: "Report Context",
+      title: "Rednote reporting context",
+      summary: "Approved interpretation rules and scope for Rednote reporting.",
+      owner: "Rachel Kim",
+      projects: ["DG Media Tracking"],
+      domains: ["Rednote"],
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "channel-data-model",
+      typeId: "Data Model",
+      title: "Channel data model",
+      summary: "Governed grain, lineage, and quality context for the Channel dimension and related fact tables.",
+      owner: "Kevin Zhao",
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "marketing-dw-data-model",
+      typeId: "Data Model",
+      title: "Marketing DW Data Model",
+      summary: "Data model source bundling the Channel, Customer, and Campaign Performance tables.",
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "d2c-insight-data-model",
+      typeId: "Data Model",
+      title: "D2C Insight",
+      summary: "Data model browser domain covering sales order detail, channel, and customer tables.",
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "metric-dictionary-member-conversion",
+      typeId: "Metric Dictionary",
+      title: "Member conversion",
+      summary: "Share of identified member visits that result in a qualified transaction within the governed conversion window.",
+      badge: "Base",
+      owner: "Amy Wu",
+      domains: ["Customer"],
+      metricType: "Base",
+      stage: "published",
+      availability: "enabled",
+    },
+    {
+      id: "metric-dictionary-campaign-roi",
+      typeId: "Metric Dictionary",
+      title: "Campaign ROI",
+      summary: "Attributed campaign revenue divided by governed media spend, using the approved attribution and comparison window.",
+      badge: "Calculated",
+      owner: "Tom Anderson",
+      domains: ["City Strategy", "4P", "ABO"],
+      metricType: "Calculated",
+      stage: "under-review",
+      availability: "enabled",
+    },
+    {
+      id: "metric-dictionary-promotion-lift",
+      typeId: "Metric Dictionary",
+      title: "Promotion lift",
+      summary: "Incremental performance versus the approved baseline after controlling for channel, product mix, and comparison period.",
+      badge: "Calculated",
+      owner: "Linda Park",
+      domains: ["4P"],
+      metricType: "Calculated",
+      stage: "draft",
+      availability: "enabled",
+    },
+    {
+      id: "business-term-gmv",
+      typeId: "Business Term",
+      title: "GMV (Gross Merchandise Value)",
+      summary: "Total value of merchandise sold through the platform before deductions.",
+      badge: "Business Term",
+      owner: "Current User",
+      stage: "published",
+      availability: "enabled",
+      kind: "Business Term",
+      synonyms: ["Gross Sales", "Merchandise Value", "Gross Merchandise Sales"],
+      scope: ["D2C Insight", "Revenue Dashboard", "Sales Performance"],
+    },
+    {
+      id: "business-term-paid-customer",
+      typeId: "Business Term",
+      title: "Paid Customer",
+      summary: "A customer who completed at least one valid paid order during the selected period.",
+      badge: "Business Term",
+      owner: "Emily Wang",
+      stage: "published",
+      availability: "enabled",
+      kind: "Business Term",
+      synonyms: ["Paying Customer", "Converted Customer"],
+      scope: ["D2C Insight", "Customer 360", "Conversion Overview"],
+    },
+    {
+      id: "business-term-active-member",
+      typeId: "Business Term",
+      title: "Active Member",
+      summary: "A registered member with a qualified visit or transaction in the reporting period.",
+      badge: "Business Term",
+      owner: "Sophie Taylor",
+      stage: "published",
+      availability: "enabled",
+      kind: "Business Term",
+      synonyms: ["Engaged Member"],
+      scope: ["D2C Insight", "Member Performance"],
+    },
+    {
+      id: "global-synonym-revenue",
+      typeId: "Business Term",
+      title: "Revenue",
+      summary: "Global aliases used to recognize governed revenue-related questions.",
+      badge: "Global Synonym",
+      owner: "Current User",
+      stage: "published",
+      availability: "enabled",
+      kind: "Global Synonym",
+      synonyms: ["Sales", "Turnover", "Income"],
+      scope: ["All models", "All reports"],
+    },
+    {
+      id: "global-synonym-customer",
+      typeId: "Business Term",
+      title: "Customer",
+      summary: "Global aliases for customers and purchasing members.",
+      badge: "Global Synonym",
+      owner: "Marco Li",
+      stage: "published",
+      availability: "enabled",
+      kind: "Global Synonym",
+      synonyms: ["Buyer", "Shopper", "Client"],
+      scope: ["All models", "All reports"],
+    },
+    {
+      id: "global-synonym-campaign",
+      typeId: "Business Term",
+      title: "Campaign",
+      summary: "Global aliases for marketing campaign activities.",
+      badge: "Global Synonym",
+      owner: "Sophie Chen",
+      stage: "published",
+      availability: "enabled",
+      kind: "Global Synonym",
+      synonyms: ["Promotion", "Activation"],
+      scope: ["All models", "All reports"],
+    },
+    {
+      id: "playbook-opportunity-scan",
+      typeId: "Analytical Model",
+      title: "Opportunity scan playbook",
+      summary: "Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.",
+      owner: "Current User",
+      domains: ["City Strategy", "4P"],
+      stage: "draft",
+      availability: "enabled",
+      kind: "Playbook",
+    },
+    {
+      id: "scenario-channel-performance",
+      typeId: "Scenario Reporting",
+      title: "Channel Performance Analysis",
+      summary: "A reusable reporting scenario for channel efficiency, drivers, and recommendation-style summaries.",
+      owner: "Emily Wang",
+      stage: "building",
+      availability: "disabled",
+      report: "Invest City Strategy Analysis",
+      reportHref: "../pages/reports.html?project=city&dashboard=0",
+      updated: "Sep 3, 2026",
+      structureGuidance:
+        "1. Open with the main conclusion and the key business change.\n2. Break down the movement by city, channel, and period.\n3. Explain exceptions and the most likely drivers.\n4. End with actions, ownership, and timing.",
+      attachments: ["City strategy briefing"],
+    },
+    {
+      id: "scenario-campaign-review",
+      typeId: "Scenario Reporting",
+      title: "Campaign Review Reporting",
+      summary: "A structured reporting scenario that reviews delivery, engagement, conversion, and return.",
+      owner: "Marco Li",
+      stage: "published",
+      availability: "enabled",
+      report: "Campaign Quality Watch",
+      reportHref: "../pages/reports.html?project=abo&dashboard=1",
+      updated: "Aug 31, 2026",
+      structureGuidance:
+        "1. Summarize delivery and performance.\n2. Identify abnormal campaigns or channels.\n3. Explain changes by mix, spend, and conversion.\n4. Highlight actions for the next cycle.",
+      attachments: ["Campaign review template", "Reference screenshot"],
+    },
+    {
+      id: "scenario-channel-exceptions",
+      typeId: "Scenario Reporting",
+      title: "Channel Exception Watch",
+      summary: "A short-form scenario for monitoring channel anomalies, queue state and release readiness.",
+      owner: "Sophie Chen",
+      stage: "queued",
+      availability: "disabled",
+      report: "Source Integrity Monitor",
+      reportHref: "../pages/reports.html?project=ottolv&dashboard=1",
+      updated: "Sep 1, 2026",
+      structureGuidance:
+        "1. Check the current queue status.\n2. Surface rule breaches and blocked items.\n3. Separate release blockers from normal fluctuations.\n4. List the items that need follow-up.",
+      attachments: ["Exception checklist"],
+    },
+    {
+      id: "email-report-weekly-performance",
+      typeId: "Email Reports",
+      title: "Weekly Marketing Performance",
+      summary: "Weekly executive summary of channel delivery, conversion and ROI.",
+      owner: "Emily Wang",
+      stage: "published",
+      availability: "enabled",
+      emailSubject: "Weekly Marketing Performance | Executive Summary",
+      schedule: "Every Monday · 09:00",
+      relatedReport: "Marketing Executive Dashboard",
+      lastSent: "Aug 31, 2026",
+      updated: "Yesterday",
+    },
+    {
+      id: "email-report-campaign-alert",
+      typeId: "Email Reports",
+      title: "Campaign Performance Alert",
+      summary: "Daily exception report for campaigns outside governed performance thresholds.",
+      owner: "Campaign Operations",
+      stage: "published",
+      availability: "enabled",
+      emailSubject: "Campaign Performance Alert | Action Required",
+      schedule: "Daily · 08:30",
+      relatedReport: "Campaign Performance",
+      lastSent: "Sep 1, 2026",
+      updated: "2 days ago",
+    },
+    {
+      id: "email-report-monthly-customer",
+      typeId: "Email Reports",
+      title: "Monthly Customer Growth Review",
+      summary: "Monthly customer acquisition, activation and retention review.",
+      owner: "Customer Analytics",
+      stage: "under-review",
+      availability: "disabled",
+      emailSubject: "Monthly Customer Growth Review",
+      schedule: "First business day · 10:00",
+      relatedReport: "Customer 360",
+      lastSent: "Aug 1, 2026",
+      updated: "1 week ago",
+    },
   ],
-  assets: [
-    { id: "investment-principles", title: "Campaign investment decision principles", summary: "Shared guardrails for evaluating investment pressure and conversion efficiency.", type: "Principles", owner: "Sarah Chen", status: "Published" },
-    { id: "analysis-guardrails", title: "Trusted analysis guardrails", summary: "Minimum checks for freshness, metric consistency, and comparison windows.", type: "Principles", owner: "Michael Liu", status: "Published" },
-    { id: "city-report-context", title: "City Strategy report context", summary: "Purpose, audience, and guardrails for the Invest City Strategy report.", type: "Report Context", owner: "Emily Wang", status: "Published" },
-    { id: "business-term-gmv", title: "GMV (Gross Merchandise Value)", summary: "Total value of merchandise sold through the platform before deductions.", type: "Business Term", owner: "Current User", status: "Draft" },
-    { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", summary: "A reusable scan for weekly commercial opportunity review.", type: "Analytical Model", owner: "Marketing Analytics", status: "Under Review" },
-    { id: "scenario-channel-performance", title: "Channel Performance Analysis", summary: "A reusable report approach for channel efficiency and recommended actions.", type: "Scenario Reporting", owner: "Marketing Analytics", status: "Published" },
-  ],
+
 };
 
 export const CAMPAIGN = {
