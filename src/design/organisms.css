@@ -773,6 +773,10 @@
   background: #f7ead2;
 }
 
+.mh-launcher[hidden] {
+  display: none;
+}
+
 .mh-launcher {
   position: fixed;
   right: 24px;
@@ -1868,5 +1872,42 @@ body.dialog-open {
   background: var(--mh-hover-warm);
   border-color: var(--mh-bubble-to);
   color: var(--mh-ink);
+  outline: 0;
+}
+
+.mh-assistant__answer--simple {
+  gap: 0;
+}
+
+.mh-assistant__answer--simple p {
+  margin: 0;
+  color: var(--mh-copy);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mh-assistant__skill {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--mh-line);
+  border-radius: 6px;
+  background: var(--mh-surface);
+  color: var(--mh-ink);
+  cursor: pointer;
+}
+
+.mh-assistant__skill svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mh-assistant__skill:hover,
+.mh-assistant__skill:focus-visible {
+  border-color: var(--mh-bubble-to);
+  background: var(--mh-hover-warm);
   outline: 0;
 }

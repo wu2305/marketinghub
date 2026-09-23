@@ -1018,3 +1018,143 @@ export const DATA_UPLOAD = {
     ],
   },
 };
+
+const TRACKING_COLUMNS = [
+  "fiscal_year",
+  "fiscal_period",
+  "aggregation_level",
+  "ad_format_level",
+  "campaign_name",
+  "campaign_id",
+  "region_info",
+  "region",
+  "channel_info",
+  "channel",
+  "partner_info",
+  "partner",
+  "platform_info",
+  "platform",
+  "spot_info",
+  "spot",
+  "audien",
+].map((key) => ({ key, header: key }));
+
+const TRACKING_BASE = {
+  fiscal_year: "FY26",
+  fiscal_period: "P10",
+  aggregation_level: "-",
+  ad_format_level: "-",
+  region_info: "General Market",
+  region: "China Region",
+  channel_info: "Single Channel",
+  channel: "DISLPLAY",
+  partner_info: "Qiang Media",
+  partner: "Yuqingchan Media",
+  platform_info: "Single Operation",
+};
+
+const SPRING = "COACH_202603_BIBEI_K_Coach_Spring_campaign_Sina Media_E-commerce Connect";
+const PILOT = "COACH_202604_FY26_Coach_Pilot_Campaign_c_cities_Ap_OTT_E-commerce Connect";
+
+const TRACKING_VARIANTS = [
+  ["1Ss", "Feeds", "1805"],
+  ["1Ss", "Feeds", "8440"],
+  ["15s15s1KOLs1K/V", "Openings1Feeds", "1805"],
+  ["15s15s1KOLs1K/V", "Openings1Feeds", "8440"],
+  ["KOL1", "Feeds", "1805"],
+  ["KOL1", "Feeds", "8440"],
+  ["KOL2", "Feeds", "1805"],
+  ["KOL2", "Feeds", "8440"],
+  ["KOL3", "Feeds", "1805"],
+  ["KOL3", "Feeds", "8440"],
+  ["KV", "Feeds", "1805"],
+  ["KV", "Feeds", "8440"],
+];
+
+const TRACKING_ROWS = [
+  ...TRACKING_VARIANTS.map(([spotInfo, spot, audien]) => ({
+    ...TRACKING_BASE,
+    campaign_name: SPRING,
+    campaign_id: "2493188",
+    platform: "MOB",
+    spot_info: spotInfo,
+    spot,
+    audien,
+  })),
+  ...[
+    ["15s", "Opening", "1805"],
+    ["15s", "Opening", "8440"],
+    ["15s30s", "Opening", "1805"],
+  ].map(([spotInfo, spot, audien]) => ({
+    ...TRACKING_BASE,
+    campaign_name: PILOT,
+    campaign_id: "4139494",
+    platform: "OTT",
+    spot_info: spotInfo,
+    spot,
+    audien,
+  })),
+];
+
+export const MEDIA_TRACKING = {
+  toolbar: { backHref: "/assets/pages/flexible.html", backLabel: "Back" },
+  head: { eyebrow: "MEDIA TRACKING DETAIL", title: "Media Tracking Detail" },
+  periods: [
+    { id: "daily", label: "Daily" },
+    { id: "weekly", label: "Weekly" },
+    { id: "monthly", label: "Monthly" },
+    { id: "spot", label: "Spot Info Mapping" },
+  ],
+  filters: [
+    { name: "fiscal_year", label: "fiscal_year", required: true, options: ["FY26", "FY25"] },
+    { name: "fiscal_period", label: "fiscal_period", required: true, options: ["P10", "P09", "P08"] },
+    { name: "aggregation_level", label: "aggregation_level", options: [], placeholder: "Select options (multiple)" },
+    { name: "ad_format_level", label: "ad_format_level", options: [], placeholder: "Select options (multiple)" },
+    { name: "campaign_name", label: "campaign_name", required: true, options: [], placeholder: "Select options (multiple)" },
+    { name: "region_info", label: "region_info", options: [], placeholder: "Select options (multiple)" },
+    { name: "region", label: "region", options: [], placeholder: "Select options (multiple)" },
+    { name: "channel_info", label: "channel_info", options: [], placeholder: "Select options (multiple)" },
+    { name: "channel", label: "channel", options: [], placeholder: "Select options (multiple)" },
+    { name: "partner_info", label: "partner_info", options: [], placeholder: "Select options (multiple)" },
+    { name: "partner", label: "partner", options: [], placeholder: "Select options (multiple)" },
+    { name: "platform_info", label: "platform_info", options: [], placeholder: "Select options (multiple)" },
+    { name: "platform", label: "platform", options: [], placeholder: "Select options (multiple)" },
+    { name: "spot_info", label: "spot_info", options: [], placeholder: "Select options (multiple)" },
+    { name: "spot", label: "spot", options: [], placeholder: "Select options (multiple)" },
+  ],
+  notes: [
+    { term: "Region Info", text: "The marketplace dimension maps to market configuration information; separate packages map back to the corresponding market configuration." },
+    { term: "Channel Info", text: "The marketplace dimension maps to volume-level OTT media configuration; cross-channel settings map to the advertising strategy." },
+    { term: "Partner Info", text: "The marketplace dimension maps to individual-media cross-configuration information; media objects correspond to market configuration objects." },
+    { term: "Platform Info", text: "The marketplace dimension maps to platform-level configuration, organized by media." },
+    { term: "Aggregation Level", text: "Uses Campaign / Media / Platform granularity. Options include Select All, Brand A, Brand X, and Brand A+. Dimension selection supports multiple selections, Select All, and Clear All. R items (for example, Brand / Brand X) support multiple selections. BIG advertising links large-scale placements with placement / Brand X settings (for example, 15–30, SOP, and L-X); placement examples include five Brand, Platform, and Brand X items. BIO covers currency-denominated entries in the table; one CTP slot is counted as one unit." },
+  ],
+  table: {
+    title: "Media Tracking Monthly Detail",
+    count: "42 fields displayed",
+    columns: TRACKING_COLUMNS,
+    rows: TRACKING_ROWS,
+  },
+};
+
+export const LITE_ASSISTANT = {
+  title: "Ask AI Interpreter",
+  historyTitle: "Recent Chats",
+  suggestions: [
+    "Definition of Attributed ROI",
+    "City investment strategy knowledge",
+    "Metrics with data quality issues",
+  ],
+  scopes: ["Knowledge"],
+  scope: "Knowledge",
+  history: [
+    { id: "media", label: "Summarize the latest media tracking performance.", prompt: "Summarize the latest media tracking performance." },
+    { id: "quality", label: "Find channels with data quality issues.", prompt: "Find channels with data quality issues." },
+    { id: "roi", label: "Explain the Attributed ROI movement.", prompt: "Explain the Attributed ROI movement." },
+  ],
+};
+
+/** Lite-panel answer shape: a single card line, no bubble/sources/actions. */
+export function buildLiteAssistantAnswer(query) {
+  return { query, simple: true, lead: "I will use the AI Interpreter knowledge context to answer:" };
+}

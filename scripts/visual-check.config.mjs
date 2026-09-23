@@ -175,6 +175,73 @@ export default [
     },
   },
   {
+    id: "p05-media-tracking",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      expect: [
+        { sel: ".media-tracking-head", text: "Media Tracking Detail" },
+        { sel: ".media-tracking-tab.active", text: "Monthly" },
+        { sel: ".media-tracking-count", text: "42 fields displayed" },
+        { sel: ".media-tracking-table", text: "2493188" },
+        { sel: ".media-tracking-description", text: "Region Info" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      expect: [
+        { sel: ".mh-tracking__head", text: "Media Tracking Detail" },
+        { sel: ".mh-tracking .mh-tabs__tab.is-active", text: "Monthly" },
+        { sel: ".mh-tracking__count", text: "42 fields displayed" },
+        { sel: ".mh-tracking__table", text: "2493188" },
+        { sel: ".mh-tracking__description", text: "Region Info" },
+      ],
+    },
+  },
+  {
+    id: "p05-media-tracking-tab",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [{ click: "[data-period='daily']" }],
+      expect: [{ sel: ".media-tracking-tab.active", text: "Daily" }],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [{ click: ".mh-tracking .mh-tabs__tab:first-child" }],
+      expect: [{ sel: ".mh-tracking .mh-tabs__tab.is-active", text: "Daily" }],
+    },
+  },
+  {
+    id: "p05-media-tracking-assistant",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { wait: "#assistantPanel:not([hidden])" },
+        { fill: ["#promptCanvas", "Summarize the latest media tracking performance."] },
+        { click: "#sendQuery" },
+        { wait: "#answerFeed:not([hidden]) .answer-card" },
+      ],
+      expect: [
+        { sel: "#assistantPanel", text: "Ask AI Interpreter" },
+        { sel: "#answerFeed", text: "I will use the AI Interpreter knowledge context to answer:" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail",
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-assistant" },
+        { fill: [".mh-assistant__box textarea", "Summarize the latest media tracking performance."] },
+        { click: ".mh-assistant__send .mh-button" },
+        { wait: ".mh-assistant__answer--simple" },
+      ],
+      expect: [
+        { sel: ".mh-assistant", text: "Ask AI Interpreter" },
+        { sel: ".mh-assistant__answer--simple", text: "I will use the AI Interpreter knowledge context to answer:" },
+      ],
+    },
+  },
+  {
     id: "p06-campaign",
     original: { url: "/assets/pages/campaign.html", expect: [{ sel: ".campaign-rail" }, { sel: "#overviewTitle" }] },
     story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign" }, { sel: ".mh-rail" }] },

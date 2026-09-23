@@ -521,11 +521,12 @@ export function KnowledgeLibrary({ type, query, onQueryChange, filterValues = {}
  * Floating corner button that opens the assistant panel.
  * @param {object} props
  * @param {string} [props.label="AI Interpreter"]
+ * @param {boolean} [props.hidden=false] mirrors the original `display:none` while the panel is open
  * @param {() => void} [props.onOpen]
  */
-export function AssistantLauncher({ label = "AI Interpreter", onOpen }) {
+export function AssistantLauncher({ label = "AI Interpreter", hidden = false, onOpen }) {
   return (
-    <button className="mh-launcher" type="button" aria-label="Open AI assistant" onClick={onOpen}>
+    <button className="mh-launcher" type="button" aria-label="Open AI assistant" hidden={hidden} onClick={onOpen}>
       <span className="mh-launcher__orb">AI</span>
       <span>{label}</span>
     </button>
@@ -560,6 +561,17 @@ function AssistantAnswer({ answer, onFeedback }) {
     }).catch(() => {});
     onFeedback?.({ query: answer.query, feedback: "copy" });
   };
+  if (answer.simple) {
+    return (
+      <div className="mh-assistant__entry">
+        <article className="mh-assistant__answer mh-assistant__answer--simple" ref={cardRef}>
+          <p>
+            {answer.lead} <strong>{answer.query}</strong>
+          </p>
+        </article>
+      </div>
+    );
+  }
   return (
     <div className="mh-assistant__entry">
       <div className="mh-assistant__query">
@@ -635,9 +647,11 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {string} [props.prompt=""]
  * @param {string} [props.model="Data Model"]
  * @param {string} [props.mode="Analytical Model"]
- * @param {Array<object>} [props.answers=[]] AssistantAnswer entries, oldest first
+ * @param {Array<object>} [props.answers=[]] AssistantAnswer entries, oldest first; `{ simple: true, lead, query }` renders the lite single-line card
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
+ * @param {string} [props.historyTitle="Recent"]
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"
+ * @param {() => void} [props.onSkill] renders the composer "+" skill-menu trigger when provided
  * @param {() => void} [props.onClose]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: { prompt: string, scope?: string, model: string, mode: string }) => void} [props.onSubmit]
@@ -665,7 +679,9 @@ export function AssistantPanel({
   mode = "Analytical Model",
   answers = [],
   history = [],
+  historyTitle = "Recent",
   historyCount,
+  onSkill,
   onClose,
   onPromptChange,
   onSubmit,
@@ -782,7 +798,8 @@ export function AssistantPanel({
                 <div className="mh-assistant__history-pop" role="dialog" aria-label="Recent conversations">
                   <div className="mh-assistant__history-head">
                     <h4>
-                      Recent <span className="mh-assistant__history-count">{historyCount}</span>
+                      {historyTitle}
+                      {historyCount != null ? <span className="mh-assistant__history-count"> {historyCount}</span> : null}
                     </h4>
                     <button type="button" aria-label="Close" onClick={() => setHistoryOpen(false)}>
                       ×
@@ -873,6 +890,11 @@ export function AssistantPanel({
               ref={promptRef}
             />
             <div className="mh-assistant__tools">
+              {onSkill ? (
+                <button className="mh-assistant__skill" type="button" aria-label="Choose AI skill" onClick={onSkill}>
+                  <Icon name="plus" />
+                </button>
+              ) : null}
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">

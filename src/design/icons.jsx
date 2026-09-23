@@ -135,6 +135,13 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "chevron-down") {
+    return (
+      <svg {...common} strokeWidth="2">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    );
+  }
   if (name === "arrow-left") {
     return (
       <svg {...common} strokeWidth="2">

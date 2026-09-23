@@ -1,6 +1,6 @@
 import React from "react";
-import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LOGO, NAV, SELF_SERVICE, buildAssistantAnswer } from "./content.js";
-import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, SelfServicePage } from "./pages.jsx";
+import { ASSISTANT, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer } from "./content.js";
+import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
 
@@ -418,6 +418,96 @@ export const DataUpload = {
           submitTimer.current = setTimeout(() => setSubmitting(false), 1500);
           args.onSubmitForm?.(values);
         }}
+      />
+    );
+  },
+};
+
+export const MediaTrackingDetail = {
+  name: "Media Tracking Detail",
+  args: {
+    ...shell,
+    toolbar: MEDIA_TRACKING.toolbar,
+    head: MEDIA_TRACKING.head,
+    periods: MEDIA_TRACKING.periods,
+    period: "monthly",
+    filters: MEDIA_TRACKING.filters,
+    notes: MEDIA_TRACKING.notes,
+    table: MEDIA_TRACKING.table,
+    assistant: { ...LITE_ASSISTANT, showScopes: true, showPicks: false },
+    assistantOpen: false,
+    prompt: "",
+  },
+  argTypes: {
+    period: { control: "inline-radio", options: ["daily", "weekly", "monthly", "spot"] },
+    onNavigate: { action: "onNavigate" },
+    onPeriodChange: { action: "onPeriodChange" },
+    onFilterChange: { action: "onFilterChange" },
+    onOpenAssistant: { action: "onOpenAssistant" },
+    onCloseAssistant: { action: "onCloseAssistant" },
+    onPromptChange: { action: "onPromptChange" },
+    onSubmit: { action: "onSubmit" },
+    onSuggestion: { action: "onSuggestion" },
+    onNewSession: { action: "onNewSession" },
+    onMaximize: { action: "onMaximize" },
+    onHistory: { action: "onHistory" },
+    onHistorySelect: { action: "onHistorySelect" },
+    onSkill: { action: "onSkill" },
+  },
+  render: function MediaTrackingStory(args) {
+    const [period, setPeriod] = useSynced(args.period);
+    const [open, setOpen] = useSynced(args.assistantOpen);
+    const [prompt, setPrompt] = useSynced(args.prompt);
+    const [answers, setAnswers] = React.useState([]);
+    return (
+      <MediaTrackingDetailPage
+        {...args}
+        period={period}
+        assistant={{ ...args.assistant, answers }}
+        assistantOpen={open}
+        prompt={prompt}
+        onNavigate={args.onNavigate}
+        onPeriodChange={(event) => {
+          setPeriod(event.id);
+          args.onPeriodChange?.(event);
+        }}
+        onFilterChange={args.onFilterChange}
+        onOpenAssistant={() => {
+          setOpen(true);
+          args.onOpenAssistant?.();
+        }}
+        onCloseAssistant={() => {
+          setOpen(false);
+          args.onCloseAssistant?.();
+        }}
+        onPromptChange={(event) => {
+          setPrompt(event.value);
+          args.onPromptChange?.(event);
+        }}
+        onSubmit={(event) => {
+          const text = String(event.prompt || "").trim();
+          if (text) {
+            setAnswers([buildLiteAssistantAnswer(text)]);
+            setPrompt("");
+          }
+          args.onSubmit?.(event);
+        }}
+        onSuggestion={(event) => {
+          setPrompt(event.prompt);
+          args.onSuggestion?.(event);
+        }}
+        onNewSession={() => {
+          setAnswers([]);
+          setPrompt("");
+          args.onNewSession?.();
+        }}
+        onMaximize={args.onMaximize}
+        onHistory={args.onHistory}
+        onHistorySelect={(event) => {
+          setPrompt(event.prompt);
+          args.onHistorySelect?.(event);
+        }}
+        onSkill={args.onSkill}
       />
     );
   },
