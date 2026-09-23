@@ -1,6 +1,6 @@
 import React from "react";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
-import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage } from "./pages.jsx";
+import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
 
 const shell = { logo: LOGO, navigation: NAV };
 
@@ -109,6 +109,8 @@ export const MarketingCockpit = {
   args: {
     query: "",
     project: "all",
+    view: "catalog",
+    dashboard: 0,
     details: null,
     assistantOpen: false,
     prompt: "",
@@ -121,6 +123,8 @@ export const MarketingCockpit = {
   },
   argTypes: {
     project: { control: "select", options: ["all", "city", "fourp", "customer", "abo", "rednote", "ottolv"] },
+    view: { control: "select", options: cockpitViews },
+    dashboard: { control: { type: "number", min: 0, max: 1 } },
     onNavigate: { action: "onNavigate" },
     onQueryChange: { action: "onQueryChange" },
     onOpenProject: { action: "onOpenProject" },
@@ -128,6 +132,8 @@ export const MarketingCockpit = {
     onOpenDetails: { action: "onOpenDetails" },
     onCloseDetails: { action: "onCloseDetails" },
     onOpenLive: { action: "onOpenLive" },
+    onBack: { action: "onBack" },
+    onOpenWorkspace: { action: "onOpenWorkspace" },
     onOpenAssistant: { action: "onOpenAssistant" },
     onCloseAssistant: { action: "onCloseAssistant" },
     onPromptChange: { action: "onPromptChange" },
@@ -148,6 +154,7 @@ export const MarketingCockpit = {
   render: function CockpitStory(args) {
     const [query, setQuery] = useSynced(args.query);
     const [project, setProject] = useSynced(args.project);
+    const [view, setView] = useSynced(args.view);
     const [details, setDetails] = useSynced(args.details);
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
@@ -233,6 +240,7 @@ export const MarketingCockpit = {
         }
         query={query}
         project={project}
+        view={view}
         details={details}
         onOpenAssistant={() => {
           setOpen(true);
@@ -269,6 +277,12 @@ export const MarketingCockpit = {
           args.onCloseDetails?.(event);
         }}
         onOpenLive={args.onOpenLive}
+        onBack={(target) => {
+          setProject(target.project);
+          setView("catalog");
+          args.onBack?.(target);
+        }}
+        onOpenWorkspace={args.onOpenWorkspace}
       />
     );
   },

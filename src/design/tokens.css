@@ -181,6 +181,37 @@ a {
   --mh-reports-footer-bg: #fbfcfd;
   --mh-reports-media-bg: #dfe4e8;
   --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
+  /* Live report view (reports-core dark accents over the catalog light skin) */
+  --mh-live-toolbar-bg: rgba(244, 246, 248, 0.96);
+  --mh-live-line: #dfe3e8;
+  --mh-live-inkline: #2a2925;
+  --mh-live-bar: #d8d4c9;
+  --mh-live-bar-alt: #79a991;
+  --mh-live-faint: #74726c;
+  --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
+  /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
+  --mh-sc-bg: #f0f2f5;
+  --mh-sc-ink: #1f2329;
+  --mh-sc-label: #5a6068;
+  --mh-sc-faint: #9aa0a8;
+  --mh-sc-note: #8a9099;
+  --mh-sc-line: #eceef1;
+  --mh-sc-line-strong: #d9dde3;
+  --mh-sc-field-bg: #f7f8fa;
+  --mh-sc-static-bg: #eef0f3;
+  --mh-sc-static-line: #e0e3e8;
+  --mh-sc-static-ink: #6b7280;
+  --mh-sc-row-hover: #f3f5f8;
+  --mh-sc-head-line: #eeeeee;
+  --mh-sc-pos: #00a06b;
+  --mh-sc-neg: #e34d59;
+  --mh-sc-noninvest: #c9a876;
+  --mh-sc-invest: #333333;
+  --mh-sc-axis: #aab0b8;
+  --mh-sc-gridline: #eef0f3;
+  --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .mh-sr {

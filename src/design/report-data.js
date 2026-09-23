@@ -1736,3 +1736,220 @@ export function reportContextHref(projectKey, report) {
   if (!context) return KNOWLEDGE_HREF;
   return KNOWLEDGE_HREF + "?type=Report%20Context&detail=" + encodeURIComponent(context.id);
 }
+
+/* ---------------------------------------------------------------------------
+ * Six-city invest analysis embed — the live view of `city` report index 0.
+ * Constants, seeded scenario generator, labels, and chart helpers are verbatim
+ * ports of the original `sc*` block in assets/js/reports/report-core.js so the
+ * deterministic demo output matches byte-for-byte. The original `isDefault`
+ * check (`f.city.includes("Total")`) is kept exactly: the city filter carries
+ * city names, never "Total", so every render — including the default state —
+ * takes the seeded-variation branch.
+ * ------------------------------------------------------------------------- */
+
+export function isCityInvestReport(projectKey, reportIndex) {
+  return projectKey === "city" && reportIndex === 0;
+}
+
+export const SC_TITLE = "Invest City Strategy Analysis（6 Cities）";
+export const SC_FOOTNOTE =
+  "*Non-invest city: Excluding stores in Invest cities; from FY27P01 onward, 11 cities are excluded (6 before FY27P01). Only Comp Stores are counted.";
+export const SC_BASE_PERIOD = "FY25 P4–P9";
+export const SC_INVEST_START = "FY25 P11";
+export const SC_FORMULA =
+  "Uplift = Invest City Var% − Non Invest City Var%；Var% = Invest / Base × 100%";
+
+export const SC_CATS = [
+  "FY25P4", "FY25P5", "FY25P6", "FY25P7", "FY25P8", "FY25P9", "FY25P10", "FY25P11",
+  "FY25P12", "FY26P1", "FY26P2", "FY26P3", "FY26P4", "FY26P5", "FY26P6", "FY26P7",
+  "FY26P8", "FY26P9", "FY26P10", "FY26P11", "FY26P12", "FY27P1", "FY27P2", "FY27P3",
+];
+
+export const SC_BASELINE = {
+  SV: {
+    t: [26, 25, 24, 23, 22, 23, 24, 23, 22, 22, 23, 22.6, 23, 22, 22, 22.5, 21.8, 22.2, 21.5, 22, 21.7, 22.3, 21.9, 22.1],
+    n: [24, 25, 24, 23, 22, 23, 25, 24, 23, 23, 24, 23, 24, 23, 23, 23.5, 22.8, 23.2, 22.5, 23, 22.7, 23.1, 22.9, 23.0],
+  },
+  "New%": {
+    t: [50, 51, 49, 52, 53, 51, 50, 49, 48, 47, 48, 49, 50, 49, 48, 48, 49, 47, 48, 49, 48, 48, 49, 48],
+    n: [45, 46, 44, 47, 48, 46, 45, 44, 43, 42, 43, 44, 45, 44, 43, 43, 44, 42, 43, 44, 43, 43, 44, 43],
+  },
+  AT: {
+    t: [320, 315, 322, 318, 310, 305, 300, 295, 290, 295, 300, 305, 310, 308, 306, 304, 307, 305, 308, 305, 307, 306, 309, 307],
+    n: [308, 302, 310, 305, 298, 294, 290, 286, 282, 286, 290, 295, 300, 298, 296, 294, 297, 295, 298, 295, 297, 296, 299, 297],
+  },
+  AUR: {
+    t: [290, 285, 292, 288, 280, 275, 270, 265, 262, 268, 272, 278, 282, 280, 279, 277, 280, 278, 281, 279, 280, 278, 281, 280],
+    n: [282, 278, 285, 280, 274, 270, 266, 262, 260, 264, 268, 272, 276, 274, 273, 271, 274, 272, 275, 273, 274, 272, 275, 274],
+  },
+  "CR%": {
+    t: [9, 8.5, 9.2, 8.8, 8, 7.5, 7, 6.8, 6.5, 6.8, 7, 7.2, 7.5, 7.3, 7.1, 6.9, 7.1, 6.8, 7, 6.9, 7, 6.9, 7.1, 7],
+    n: [7, 6.8, 7.1, 6.9, 6.4, 6.1, 5.8, 5.6, 5.4, 5.6, 5.8, 6, 6.2, 6.1, 6, 5.9, 6.1, 5.8, 6, 5.9, 6, 5.9, 6.1, 6],
+  },
+  UPT: {
+    t: [1.30, 1.29, 1.31, 1.28, 1.25, 1.22, 1.20, 1.18, 1.15, 1.18, 1.20, 1.22, 1.24, 1.23, 1.22, 1.21, 1.22, 1.20, 1.21, 1.20, 1.21, 1.20, 1.21, 1.20],
+    n: [1.22, 1.21, 1.23, 1.20, 1.18, 1.16, 1.14, 1.12, 1.10, 1.12, 1.14, 1.16, 1.18, 1.17, 1.16, 1.15, 1.16, 1.14, 1.15, 1.14, 1.15, 1.14, 1.15, 1.14],
+  },
+};
+
+export const SC_CHART_ORDER = ["SV", "New%", "AT", "AUR", "CR%", "UPT"];
+
+export const SC_END_OPTIONS = [
+  "FY27 P3", "FY27 P2", "FY27 P1", "FY26 P12", "FY26 P11", "FY26 P10", "FY26 P9",
+  "FY26 P8", "FY26 P7", "FY26 P6", "FY26 P5", "FY26 P4", "FY26 P3", "FY26 P2",
+  "FY26 P1", "FY25 P12", "FY25 P11",
+];
+
+export const SC_END_IDX = {
+  "FY25 P11": 7, "FY25 P12": 8, "FY26 P1": 9, "FY26 P2": 10, "FY26 P3": 11,
+  "FY26 P4": 12, "FY26 P5": 13, "FY26 P6": 14, "FY26 P7": 15, "FY26 P8": 16,
+  "FY26 P9": 17, "FY26 P10": 18, "FY26 P11": 19, "FY26 P12": 20, "FY27 P1": 21,
+  "FY27 P2": 22, "FY27 P3": 23,
+};
+
+export const SC_START_IDX = SC_CATS.indexOf("FY25P11");
+
+export const SC_KPI = [
+  { key: "ADT", name: "Avg Daily Traffic", uplift: 10, var: 116, baseAfter: 0.4, fmt: "K", dec: 1 },
+  { key: "ADS", name: "Avg Daily Sales", uplift: 1, var: 6, baseAfter: 8, fmt: "K", dec: 0 },
+  { key: "New", name: "New%", uplift: -2, var: -15, trend: "New%", baseAfter: 57, fmt: "%", dec: 0 },
+  { key: "SV", name: "SV", uplift: -8, var: -18, trend: "SV", baseAfter: 22.6, fmt: "num", dec: 1 },
+  { key: "SC", name: "Sales Contribution", uplift: null, var: null, baseAfter: 20, fmt: "%2" },
+  { key: "CR", name: "CR%", uplift: -9, var: -15, trend: "CR%", baseAfter: 8, fmt: "%", dec: 0 },
+  { key: "AT", name: "AT", uplift: 0, var: -8, trend: "AT", baseAfter: 314.7, fmt: "num", dec: 1 },
+  { key: "UPT", name: "UPT", uplift: -1, var: -2, trend: "UPT", baseAfter: 1.2, fmt: "num", dec: 1 },
+  { key: "AUR", name: "AUR", uplift: 1, var: 0, trend: "AUR", baseAfter: 274.7, fmt: "num", dec: 1 },
+  { key: "TAM", name: "TAM(K)", uplift: null, var: null, baseAfter: 4581, fmt: "int" },
+];
+
+export const SC_KPI_ROWS = [
+  ["ADT", "ADS", "New", "SV", "SC"],
+  ["CR", "AT", "UPT", "AUR", "TAM"],
+];
+
+export const SC_CITY_STORES = {
+  Chengdu: ["Wangfujing", "Mixc Mall", "Ifs", "Lotte", "Chicony Dps", "Skp", "Time Outlet", "Florentia Village", "Times Outlets 2", "Shanshan Outlet Plaza"],
+  Hefei: ["Intime", "Mixc", "Sasseur Outlet"],
+  Qingdao: ["Mixc", "Hisense", "Bailian Outlets"],
+  Shenzhen: ["King Glory", "Mixc Mall", "Maoye", "Haiya Mega Mall", "Uni Walk (Yifang City)", "Pafc Mall", "Coh Cn Mixc World", "No.8 Warehouse Outlet", "Shanshan Outlet Pop Up"],
+  Wuhan: ["International Plaza", "Chicony", "Dream Plaza", "Skp Permanent Store", "Bailian Outlet", "Florentia Village", "Shouchuang Outlet Temp"],
+  Xian: ["Saga", "City On (Taubman)", "Skp Women'S", "Skp Men'S", "Kaiyuan", "Coh Cn Dt51", "Sean Outlet", "Sasseur Outlet", "Coh Cn Mixc"],
+};
+
+export const SC_ALL_STORES = [...new Set(Object.values(SC_CITY_STORES).flat())];
+export const SC_CITY_OPTIONS = ["Chengdu", "Hefei", "Qingdao", "Shenzhen", "Wuhan", "Xian"];
+export const SC_CHANNEL_OPTIONS = ["All", "Offline Outlet", "Offline Retail", "Online"];
+export const SC_PILOT_OPTIONS = ["Pilot TTL", "Pilot Comp"];
+
+export function scHashStr(s) {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+export function scMulberry32(a) {
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function scFmtAfter(meta, v) {
+  if (meta.fmt === "K") return v.toFixed(meta.dec) + "K";
+  if (meta.fmt === "%") return v.toFixed(meta.dec) + "%";
+  if (meta.fmt === "%2") return Math.round(v) + "%";
+  if (meta.fmt === "int") return Math.round(v).toLocaleString("en-US");
+  return v.toFixed(meta.dec);
+}
+
+export function scGenScenario(f) {
+  const isDefault =
+    f.channel === "All" && f.pilot === "Pilot TTL" && f.city.includes("Total") && f.end === "FY27 P3";
+  const seedStr = [f.channel, f.pilot, f.city.slice().sort().join(","), f.store.slice().sort().join(","), f.end].join("|");
+  const rng = scMulberry32(scHashStr(seedStr));
+  const endIdx = SC_END_IDX[f.end] ?? 14;
+  const trends = {};
+  SC_CHART_ORDER.forEach(function (m) {
+    if (isDefault) {
+      trends[m] = { t: SC_BASELINE[m].t.slice(), n: SC_BASELINE[m].n.slice() };
+    } else {
+      const fT = 0.88 + rng() * 0.24;
+      const fN = 0.88 + rng() * 0.24;
+      trends[m] = {
+        t: SC_BASELINE[m].t.map(function (v) { return v * fT * (1 + (rng() - 0.5) * 0.06); }),
+        n: SC_BASELINE[m].n.map(function (v) { return v * fN * (1 + (rng() - 0.5) * 0.06); }),
+      };
+    }
+  });
+  const kpi = {};
+  SC_KPI.forEach(function (meta) {
+    let uplift = meta.uplift;
+    let vari = meta.var;
+    let after = meta.baseAfter;
+    if (meta.trend) after = trends[meta.trend].t[endIdx];
+    if (!isDefault) {
+      if (meta.key === "ADT" || meta.key === "ADS") {
+        after = meta.baseAfter * (0.86 + rng() * 0.28);
+      } else if (meta.key === "SC") {
+        after = 13 + rng() * 14;
+      } else if (meta.key === "TAM") {
+        after = 3900 + rng() * 1900;
+      }
+      if (meta.uplift !== null) {
+        uplift = Math.round(meta.uplift + (rng() - 0.5) * 10);
+        vari = Math.round(meta.var + (rng() - 0.5) * 28);
+      }
+    }
+    kpi[meta.key] = { uplift: uplift, vari: vari, after: after };
+  });
+  return { trends: trends, kpi: kpi, endIdx: endIdx, isDefault: isDefault };
+}
+
+export function scPickTicks(len) {
+  if (len <= 3) return Array.from({ length: len }, function (_, i) { return i; });
+  const step = Math.max(2, Math.round((len - 1) / 6));
+  const out = [];
+  for (let i = 0; i < len; i += step) out.push(i);
+  if (out[out.length - 1] !== len - 1) out.push(len - 1);
+  if (out.length >= 3 && out[out.length - 1] - out[out.length - 2] === 1) out.splice(out.length - 2, 1);
+  return out;
+}
+
+export function scStoreOptionsFor(cities) {
+  if (cities.length === 0) return SC_ALL_STORES;
+  return [
+    ...new Set(
+      cities.filter(function (c) { return SC_CITY_STORES[c]; }).flatMap(function (c) { return SC_CITY_STORES[c]; })
+    ),
+  ];
+}
+
+export function scStoreScopeSuffix(cities) {
+  if (cities.length === 0) return "";
+  if (cities.length === 1) return "· " + cities[0];
+  if (cities.length === 2) return "· " + cities.join(" + ");
+  return "· " + cities.length + " Cities";
+}
+
+export function scTotalLabel(cities) {
+  if (cities.length === 0) return "Total";
+  const full = cities.length === SC_CITY_OPTIONS.length && SC_CITY_OPTIONS.every(function (x) { return cities.includes(x); });
+  if (full) return "Total";
+  if (cities.length <= 2) return cities.join(" + ");
+  return cities.length + " Cities";
+}
+
+/** Multi-select display label — the original refresh() branch (no "All" sentinel option). */
+export function scSelectionLabel(selected, optionCount) {
+  if (selected.length === 0) return "(None)";
+  if (selected.length === optionCount) return "All Stores";
+  return selected.length > 2
+    ? selected.slice(0, 2).join(", ") + " +" + (selected.length - 2)
+    : selected.join(", ");
+}

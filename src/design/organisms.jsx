@@ -4,6 +4,30 @@ import { Button, StatusBadge, TextArea } from "./atoms.jsx";
 import { cx } from "./cx.js";
 import { Icon } from "./icons.jsx";
 import {
+  SC_ALL_STORES,
+  SC_BASE_PERIOD,
+  SC_CATS,
+  SC_CHANNEL_OPTIONS,
+  SC_CITY_OPTIONS,
+  SC_END_OPTIONS,
+  SC_FORMULA,
+  SC_FOOTNOTE,
+  SC_INVEST_START,
+  SC_KPI,
+  SC_KPI_ROWS,
+  SC_PILOT_OPTIONS,
+  SC_CHART_ORDER,
+  SC_START_IDX,
+  SC_TITLE,
+  scFmtAfter,
+  scGenScenario,
+  scPickTicks,
+  scSelectionLabel,
+  scStoreOptionsFor,
+  scStoreScopeSuffix,
+  scTotalLabel,
+} from "./report-data.js";
+import {
   CategoryHeading,
   ColumnChart,
   DataTable,
@@ -2166,5 +2190,486 @@ export function UploadHistory({
         )}
       </div>
     </Modal>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ * Live report view (reports.html?view=live): sticky toolbar, heading, and the
+ * live panel. The panel hosts either the generic `LiveOverview` or the
+ * city-project `CityInvestDashboard` embed, decided by the caller.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Live report shell: back-to-library toolbar, kicker/title heading, live panel.
+ * @param {object} props
+ * @param {string} props.kicker eyebrow text, e.g. "4P Report / LIVE REPORT"
+ * @param {string} props.title report title
+ * @param {string} props.backHref catalog link for the active project
+ * @param {string} [props.backLabel="Report library"]
+ * @param {(target: { href: string }) => void} [props.onBack]
+ * @param {React.ReactNode} props.children live panel content
+ */
+export function LiveReportView({ kicker, title, backHref, backLabel = "Report library", onBack, children }) {
+  return (
+    <section className="mh-live">
+      <div className="mh-live-toolbar">
+        <a
+          className="mh-live-back"
+          href={backHref}
+          onClick={(event) => {
+            if (event.defaultPrevented) return;
+            onBack?.({ href: backHref });
+          }}
+        >
+          <span aria-hidden="true">←</span> {backLabel}
+        </a>
+      </div>
+      <header className="mh-live-heading">
+        <div>
+          <p className="mh-eyebrow">{kicker}</p>
+          <h1>{title}</h1>
+        </div>
+      </header>
+      <div className="mh-live-panel">{children}</div>
+    </section>
+  );
+}
+
+/**
+ * Generic live overview: KPI cards, primary/comparison bar chart, and the
+ * "Leading views" rank list (first five chart rows, original chart order).
+ * @param {object} props
+ * @param {Array<[string, string, string]>} [props.metrics=[]] [name, value, delta]
+ * @param {Array<[string, number, number]>} [props.chart=[]] [label, primary, comparison]
+ * @param {string} [props.accent] project accent color for rank bars
+ */
+export function LiveOverview({ metrics = [], chart = [], accent }) {
+  return (
+    <div className="mh-live-dashboard">
+      <div className="mh-live-kpis">
+        {metrics.map((metric) => (
+          <article className="mh-live-kpi" key={metric[0]}>
+            <span>{metric[0]}</span>
+            <strong>{metric[1]}</strong>
+            <small>{metric[2]}</small>
+          </article>
+        ))}
+      </div>
+      <div className="mh-live-grid">
+        <section className="mh-live-card">
+          <header className="mh-live-card__head">
+            <div>
+              <span>PERFORMANCE</span>
+              <h2>Current period versus baseline</h2>
+            </div>
+            <span>Primary / comparison</span>
+          </header>
+          <div className="mh-live-chart">
+            {chart.map((item) => (
+              <div className="mh-live-chart__group" key={item[0]}>
+                <i style={{ height: item[1] + "%" }} />
+                <b style={{ height: item[2] + "%" }} />
+                <span>{item[0]}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+        <section className="mh-live-card">
+          <header className="mh-live-card__head">
+            <div>
+              <span>PRIORITY</span>
+              <h2>Leading views</h2>
+            </div>
+            <span>Index</span>
+          </header>
+          <div className="mh-live-ranks">
+            {chart.slice(0, 5).map((item, index) => (
+              <div className="mh-live-rank" key={item[0]}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <strong>{item[0]}</strong>
+                  <i style={{ width: item[1] + "%", background: accent }} />
+                </div>
+                <b>{item[1]}</b>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------
+ * Six-city invest analysis embed — deterministic seeded scenario data ported
+ * from the original sc* helpers in report-core.js (see report-data.js).
+ * ---------------------------------------------------------------------- */
+
+function ScFilterDropdown({ label, options, selected, multi = false, suffix = "", open = false, onToggle, onChange }) {
+  const name = React.useId();
+  const text = multi ? scSelectionLabel(selected, options.length) : selected[0];
+  const pick = (option, checked) => {
+    if (multi) {
+      onChange?.(checked ? [...selected, option] : selected.filter((item) => item !== option));
+    } else {
+      onChange?.([option]);
+    }
+  };
+  return (
+    <div className="mh-sc-fitem">
+      <span className="mh-sc-flabel">{label}</span>
+      <span
+        className={cx("mh-sc-fval", open && "is-open")}
+        role="button"
+        tabIndex={0}
+        onClick={(event) => {
+          event.stopPropagation();
+          onToggle?.();
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            event.stopPropagation();
+            onToggle?.();
+          }
+        }}
+      >
+        <span className="mh-sc-fval__txt">
+          {text}
+          {suffix ? " " + suffix : ""}
+        </span>
+        <span className="mh-sc-panel" role="listbox" onClick={(event) => event.stopPropagation()}>
+          {multi ? (
+            <span className="mh-sc-phead">
+              <span className="mh-sc-phead__label">Multi-select</span>
+              <span>
+                <button type="button" onClick={() => onChange?.(options.slice())}>
+                  Select all
+                </button>{" "}
+                ·{" "}
+                <button type="button" onClick={() => onChange?.([])}>
+                  Clear
+                </button>
+              </span>
+            </span>
+          ) : null}
+          {options.map((option) => (
+            <label className="mh-sc-prow" key={option}>
+              <input
+                type={multi ? "checkbox" : "radio"}
+                name={name}
+                value={option}
+                checked={selected.includes(option)}
+                onChange={(event) => pick(option, event.target.checked)}
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+        </span>
+      </span>
+    </div>
+  );
+}
+
+const SC_CHART_W = 440;
+const SC_CHART_H = 150;
+const SC_PAD_L = 42;
+const SC_PAD_R = 16;
+const SC_PAD_T = 10;
+const SC_PAD_B = 30;
+
+function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
+  const chartRef = React.useRef(null);
+  const tipRef = React.useRef(null);
+  const [tipWidth, setTipWidth] = React.useState(0);
+  const [hover, setHover] = React.useState(null);
+  const s = Math.min(SC_START_IDX, endIdx);
+  const labels = SC_CATS.slice(s, endIdx + 1);
+  const t = data.t.slice(s, endIdx + 1);
+  const n = data.n.slice(s, endIdx + 1);
+  const all = t.concat(n);
+  let min = Math.min(...all);
+  let max = Math.max(...all);
+  const span = max - min || 1;
+  min -= span * 0.12;
+  max += span * 0.12;
+  const X = (i) => SC_PAD_L + (SC_CHART_W - SC_PAD_L - SC_PAD_R) * (i / (labels.length - 1));
+  const Y = (v) => SC_PAD_T + (SC_CHART_H - SC_PAD_T - SC_PAD_B) * (1 - (v - min) / (max - min));
+  const ticks = new Set(scPickTicks(labels.length));
+  const grid = [0, 1, 2, 3].map((g) => min + ((max - min) * g) / 3);
+  const points = (arr) => arr.map((v, i) => X(i).toFixed(1) + "," + Y(v).toFixed(1)).join(" ");
+  React.useLayoutEffect(() => {
+    if (hover && tipRef.current) {
+      const width = tipRef.current.offsetWidth;
+      if (width !== tipWidth) setTipWidth(width);
+    }
+  }, [hover, tipWidth]);
+  const onMove = (event) => {
+    const svg = event.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    if (!rect.width) return;
+    const lx = (event.clientX - rect.left) * (SC_CHART_W / rect.width);
+    let best = 0;
+    let bd = Infinity;
+    for (let i = 0; i < labels.length; i++) {
+      const dx = Math.abs(X(i) - lx);
+      if (dx < bd) {
+        bd = dx;
+        best = i;
+      }
+    }
+    const host = chartRef.current?.getBoundingClientRect();
+    setHover({
+      index: best,
+      x: event.clientX - (host?.left || 0) + 14,
+      y: event.clientY - (host?.top || 0) + 10,
+      hostWidth: host?.width || 0,
+    });
+  };
+  const tipLeft = hover && tipWidth && hover.x + tipWidth > hover.hostWidth ? hover.x - tipWidth - 28 : hover?.x;
+  return (
+    <div className="mh-sc-chart" ref={chartRef}>
+      <div className="mh-sc-chart__head">
+        <span className="mh-sc-chart__name">{name}</span>
+        <span className="mh-sc-chart__legend">
+          <span>
+            <i style={{ background: "#333" }} />
+            {totalLabel}
+          </span>
+          <span>
+            <i style={{ background: "#c9a876" }} />
+            Non-Invest Avg
+          </span>
+        </span>
+      </div>
+      <svg
+        viewBox={`0 0 ${SC_CHART_W} ${SC_CHART_H}`}
+        preserveAspectRatio="xMidYMid meet"
+        onMouseMove={onMove}
+        onMouseLeave={() => setHover(null)}
+      >
+        <rect x="0" y="0" width={SC_CHART_W} height={SC_CHART_H} fill="transparent" pointerEvents="all" />
+        {grid.map((val, g) => (
+          <line key={g} x1={SC_PAD_L} y1={Y(val)} x2={SC_CHART_W - SC_PAD_R} y2={Y(val)} stroke="#eef0f3" strokeWidth="1" />
+        ))}
+        {grid.map((val, g) => (
+          <text key={"y" + g} x={SC_PAD_L - 6} y={Y(val) + 3} textAnchor="end" fontSize="9" fill="#aab0b8">
+            {val.toFixed(decimals)}
+          </text>
+        ))}
+        {labels.map((cat, i) =>
+          ticks.has(i) ? (
+            <text key={cat} x={X(i)} y={SC_CHART_H - 12} textAnchor="middle" fontSize="8" fill="#aab0b8">
+              {cat}
+            </text>
+          ) : null
+        )}
+        <polyline points={points(n)} fill="none" stroke="#c9a876" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
+        <polyline points={points(t)} fill="none" stroke="#333333" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+        {hover ? (
+          <g>
+            <line
+              x1={X(hover.index).toFixed(1)}
+              y1={SC_PAD_T}
+              x2={X(hover.index).toFixed(1)}
+              y2={SC_CHART_H - SC_PAD_B}
+              stroke="#9aa0a8"
+              strokeWidth="1"
+              strokeDasharray="3 2"
+            />
+            <circle cx={X(hover.index).toFixed(1)} cy={Y(t[hover.index]).toFixed(1)} r="3.2" fill="#333" stroke="#fff" strokeWidth="1" />
+            <circle cx={X(hover.index).toFixed(1)} cy={Y(n[hover.index]).toFixed(1)} r="3.2" fill="#c9a876" stroke="#fff" strokeWidth="1" />
+          </g>
+        ) : null}
+      </svg>
+      {hover ? (
+        <div className="mh-sc-tip" ref={tipRef} style={{ left: tipLeft, top: hover.y }}>
+          <b>{labels[hover.index]}</b>
+          <br />
+          <span>● {totalLabel}: {t[hover.index].toFixed(decimals)}</span>
+          <br />
+          <span>● Non-Invest: {n[hover.index].toFixed(decimals)}</span>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * Six-city invest analysis embed. Self-contained filter state (end period,
+ * channel, pilot, multi-select cities and cascading stores); every change
+ * regenerates the deterministic seeded scenario and briefly dims the canvas,
+ * matching `initCityInvestDashboard`.
+ * @param {object} props
+ * @param {(filters: { end: string, channel: string, pilot: string, cities: string[], stores: string[] }) => void} [props.onFiltersChange]
+ */
+export function CityInvestDashboard({ onFiltersChange }) {
+  const [end, setEnd] = React.useState("FY27 P3");
+  const [channel, setChannel] = React.useState("All");
+  const [pilot, setPilot] = React.useState("Pilot TTL");
+  const [cities, setCities] = React.useState(SC_CITY_OPTIONS);
+  const [stores, setStores] = React.useState(SC_ALL_STORES);
+  const [openFilter, setOpenFilter] = React.useState(null);
+  const [dim, setDim] = React.useState(false);
+
+  const storeOptions = scStoreOptionsFor(cities);
+  const totalLabel = scTotalLabel(cities);
+  const scenario = React.useMemo(
+    () => scGenScenario({ end, channel, pilot, city: cities, store: stores }),
+    [end, channel, pilot, cities, stores]
+  );
+
+  React.useEffect(() => {
+    if (!openFilter) return undefined;
+    const close = () => setOpenFilter(null);
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [openFilter]);
+
+  React.useEffect(() => {
+    if (!dim) return undefined;
+    const raf = requestAnimationFrame(() => requestAnimationFrame(() => setDim(false)));
+    return () => cancelAnimationFrame(raf);
+  }, [dim]);
+
+  const commit = (patch) => {
+    const next = {
+      end: patch.end ?? end,
+      channel: patch.channel ?? channel,
+      pilot: patch.pilot ?? pilot,
+      cities: patch.cities ?? cities,
+      stores: patch.stores ?? stores,
+    };
+    setEnd(next.end);
+    setChannel(next.channel);
+    setPilot(next.pilot);
+    setCities(next.cities);
+    setStores(next.stores);
+    setDim(true);
+    onFiltersChange?.(next);
+  };
+
+  const toggleFilter = (key) => setOpenFilter((current) => (current === key ? null : key));
+
+  return (
+    <div className="mh-sixcity">
+      <div className="mh-sc-canvas" style={{ opacity: dim ? 0.55 : 1 }}>
+        <div className="mh-sc-titlebar">
+          <p className="mh-sc-title">{SC_TITLE}</p>
+          <div className="mh-sc-footnotes">
+            <p className="mh-sc-footnote">{SC_FOOTNOTE}</p>
+          </div>
+        </div>
+        <div className="mh-sc-filters">
+          <div className="mh-sc-fitem">
+            <span className="mh-sc-flabel">Base Period</span>
+            <span className="mh-sc-fstatic">{SC_BASE_PERIOD}</span>
+          </div>
+          <div className="mh-sc-fitem">
+            <span className="mh-sc-flabel">Invest Period Start</span>
+            <span className="mh-sc-fstatic">{SC_INVEST_START}</span>
+          </div>
+          <ScFilterDropdown
+            label="Invest Period End"
+            options={SC_END_OPTIONS}
+            selected={[end]}
+            open={openFilter === "end"}
+            onToggle={() => toggleFilter("end")}
+            onChange={(value) => commit({ end: value[0] })}
+          />
+          <ScFilterDropdown
+            label="Channel"
+            options={SC_CHANNEL_OPTIONS}
+            selected={[channel]}
+            open={openFilter === "channel"}
+            onToggle={() => toggleFilter("channel")}
+            onChange={(value) => commit({ channel: value[0] })}
+          />
+          <ScFilterDropdown
+            label="Pilot"
+            options={SC_PILOT_OPTIONS}
+            selected={[pilot]}
+            open={openFilter === "pilot"}
+            onToggle={() => toggleFilter("pilot")}
+            onChange={(value) => commit({ pilot: value[0] })}
+          />
+          <ScFilterDropdown
+            label="City"
+            options={SC_CITY_OPTIONS}
+            selected={cities}
+            multi
+            open={openFilter === "city"}
+            onToggle={() => toggleFilter("city")}
+            onChange={(value) => commit({ cities: value, stores: scStoreOptionsFor(value) })}
+          />
+          <ScFilterDropdown
+            label="Store"
+            options={storeOptions}
+            selected={stores.filter((store) => storeOptions.includes(store))}
+            multi
+            suffix={scStoreScopeSuffix(cities)}
+            open={openFilter === "store"}
+            onToggle={() => toggleFilter("store")}
+            onChange={(value) => commit({ stores: value })}
+          />
+        </div>
+        {SC_KPI_ROWS.map((row, rowIndex) => (
+          <div className="mh-sc-kpi-grid" key={rowIndex} style={rowIndex > 0 ? { marginTop: 10 } : undefined}>
+            {row.map((key) => {
+              const meta = SC_KPI.find((item) => item.key === key);
+              const value = scenario.kpi[key];
+              if (meta.uplift === null) {
+                return (
+                  <div className="mh-sc-kpi is-plain" key={key}>
+                    <div className="mh-sc-kpi__top">
+                      <span className="mh-sc-kpi__name">{meta.name}</span>
+                    </div>
+                    <div className="mh-sc-kpi__uplift">{scFmtAfter(meta, value.after)}</div>
+                  </div>
+                );
+              }
+              const up = value.uplift;
+              return (
+                <div className="mh-sc-kpi" key={key}>
+                  <div className="mh-sc-kpi__top">
+                    <span className="mh-sc-kpi__name">{meta.name}</span>
+                  </div>
+                  <div className="mh-sc-kpi__uplift-label">Uplift</div>
+                  <div className={cx("mh-sc-kpi__uplift", up >= 0 ? "is-pos" : "is-neg")}>
+                    {up > 0 ? "+" : ""}
+                    {up}%<span className="mh-sc-kpi__arrow">{up >= 0 ? "▲" : "▼"}</span>
+                  </div>
+                  <div className="mh-sc-kpi__row2">
+                    <span className="mh-sc-kpi__var">
+                      Var% {value.vari > 0 ? "+" : ""}
+                      {value.vari}%
+                    </span>
+                    <span className="mh-sc-kpi__after">
+                      After <b>{scFmtAfter(meta, value.after)}</b>
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+        <div className="mh-sc-kpi-legend">
+          <span className="mh-sc-formula">{SC_FORMULA}</span>
+        </div>
+        <div className="mh-sc-sec-title">{totalLabel} Monthly Key Indicator Trend vs. Non Invest City</div>
+        <div className="mh-sc-chart-grid">
+          {SC_CHART_ORDER.map((name) => (
+            <ScTrendChart
+              key={name}
+              name={name}
+              data={scenario.trends[name]}
+              endIdx={scenario.endIdx}
+              decimals={name === "UPT" ? 2 : 0}
+              totalLabel={totalLabel}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

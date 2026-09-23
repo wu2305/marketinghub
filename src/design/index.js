@@ -50,6 +50,9 @@ export {
   ProjectDirectory,
   ReportRow,
   ReportDetailsDrawer,
+  LiveReportView,
+  LiveOverview,
+  CityInvestDashboard,
   Panel,
   SummaryStrip,
   TaskList,
@@ -65,7 +68,7 @@ export {
   heroScrims,
   modalVariants,
 } from "./organisms.jsx";
-export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage, MediaTrackingDetailPage } from "./pages.jsx";
+export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage, MediaTrackingDetailPage, cockpitViews } from "./pages.jsx";
 export { Icon } from "./icons.jsx";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
 export * as demoContent from "./content.js";
