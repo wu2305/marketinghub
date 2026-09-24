@@ -1,4 +1,8 @@
 import React from "react";
+import { LOGO, NAV } from "../content.js";
+
+/** Shared shell props for page-level stories: logo + primary navigation. */
+export const pageShell = { logo: LOGO, navigation: NAV };
 
 /**
  * Local state seeded from a story arg and re-synced whenever the arg changes.
