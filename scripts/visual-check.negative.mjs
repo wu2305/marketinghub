@@ -1,0 +1,53 @@
+/**
+ * Negative checks for scripts/visual-check.mjs --negative.
+ *
+ * Each entry deep-merges its overrides onto a copy of the named base scenario
+ * and MUST produce a machine FAIL — they prove the harness cannot be satisfied
+ * by the wrong story, wrong args or wrong state. A mutation that passes is a
+ * regression in the assertions and fails the --negative run.
+ *
+ * Fields: id (own id), base (scenario id), story?/original? partial overrides
+ * (merged per-key; `args` merges into the base args), reason.
+ */
+export default [
+  {
+    // Pages--campaign renders the campaign workspace, so the Home hero and
+    // workspace-card expects can never be satisfied.
+    id: "neg-p01-wrong-story",
+    base: "p01-home",
+    story: { id: "pages--campaign" },
+    reason: "wrong story id: campaign page must not satisfy Home assertions",
+  },
+  {
+    // Regression for the old audit hole: the accounts scenario passed while the
+    // story actually rendered the Overview Dashboard.
+    id: "neg-p06-accounts-overview",
+    base: "p06-campaign-accounts",
+    story: { args: { section: "overview" } },
+    reason: "section=overview must not satisfy Account Binding assertions",
+  },
+  {
+    // Base asserts the 4P overview copy; the city project renders a different
+    // live report with different title/KPIs.
+    id: "neg-p02-live-wrong-project",
+    base: "p02-live-overview",
+    story: { args: { project: "city" } },
+    reason: "project=city must not satisfy 4P Executive Overview assertions",
+  },
+  {
+    // Base filters Principles by category; Business Term renders a different
+    // knowledge list without the check filter / principle cards.
+    id: "neg-p07-wrong-type",
+    base: "p07-principles-category-filter",
+    story: { args: { activeType: "Business Term" } },
+    reason: "activeType=Business Term must not satisfy Principles filter assertions",
+  },
+  {
+    // Base clicks the Daily tab; with the default tab (Monthly) still active
+    // the "Daily" active-tab assertion must fail.
+    id: "neg-p05-default-tab",
+    base: "p05-media-tracking-tab",
+    story: { actions: [] },
+    reason: "default Monthly tab must not satisfy Daily active-tab assertion",
+  },
+];

@@ -8,11 +8,51 @@
  */
 export const BASELINE = { width: 1440, height: 1400 };
 
+/**
+ * Console errors that are allowed to fail-open. Each entry needs a precise
+ * reason citing the original-demo defect (file/line). Story-side console
+ * errors must never be allowed here — report them instead.
+ * { side: "original"|"story", scenario?: "<id>", pattern: "<RegExp source>", reason }
+ */
+export const CONSOLE_ALLOW = [
+  // Original demo defect: shrinking the live chart range to a single period
+  // (end = FY25 P11 while hovered) makes scDrawChart divide by
+  // `labels.length - 1` = 0 — assets/js/reports/report-core.js ~L3773
+  // (`const X = function (i) { ... i / (labels.length - 1) }`), so the
+  // polyline (~L3793) and x-axis labels (~L3788) emit NaN coordinates.
+  {
+    side: "original",
+    scenario: "p02-live-city-hover-shrink",
+    pattern: "^Error: <text> attribute x: Expected length",
+    reason: "single-period chart emits NaN label x — report-core.js scDrawChart labels.length-1 division",
+  },
+  {
+    side: "original",
+    scenario: "p02-live-city-hover-shrink",
+    pattern: "^Error: <polyline> attribute points: Expected number",
+    reason: "single-period chart emits NaN polyline points — report-core.js scDrawChart labels.length-1 division",
+  },
+];
+
 export default [
   {
     id: "p01-home",
-    original: { url: "/index.html", expect: [{ sel: ".home-command-hero" }, { sel: ".workspace-card" }] },
-    story: { id: "pages--home", expect: [{ sel: ".mh-hero--home" }, { sel: ".mh-workspace-card" }] },
+    original: {
+      url: "/index.html",
+      expect: [
+        { sel: ".home-command-hero" },
+        { sel: ".workspace-card", count: 4 },
+        { sel: "h1", text: "Marketing Portal" },
+      ],
+    },
+    story: {
+      id: "pages--home",
+      expect: [
+        { sel: ".mh-hero--home" },
+        { sel: ".mh-workspace-card", count: 4 },
+        { sel: "#storybook-root h1", text: "Marketing Portal" },
+      ],
+    },
   },
   {
     id: "p01-home-assistant",
@@ -72,7 +112,8 @@ export default [
         },
       ],
       expect: [
-        { sel: "#uploadFile[aria-label='Choose AI skill']" },
+        { sel: "#uploadFile[aria-label='Choose AI skill']", attr: { name: "aria-label", value: "Choose AI skill" } },
+        { sel: "#assistantPanel", text: "Ask a question" },
         { sel: ".ask-scope", state: "hidden" },
         { sel: ".suggest-picker", state: "hidden" },
         { sel: ".model-picker", state: "hidden" },
@@ -90,7 +131,8 @@ export default [
         },
       ],
       expect: [
-        { sel: "button[aria-label='Choose AI skill']" },
+        { sel: "button[aria-label='Choose AI skill']", attr: { name: "aria-label", value: "Choose AI skill" } },
+        { sel: ".mh-assistant", text: "Ask a question" },
         { sel: ".mh-assistant__scopes", state: "detached" },
         { sel: ".mh-assistant__pick", state: "detached" },
       ],
@@ -117,7 +159,7 @@ export default [
       expect: [
         { sel: "#homeHistoryPopup", state: "hidden" },
         { sel: "#sendQuery[disabled]" },
-        { sel: "#answerFeed .answer-entry" },
+        { sel: "#answerFeed .answer-entry", text: "Recommended next move." },
       ],
     },
     story: {
@@ -134,7 +176,7 @@ export default [
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
         { sel: ".mh-assistant__send .mh-button[disabled]" },
-        { sel: ".mh-assistant__entry" },
+        { sel: ".mh-assistant__entry", text: "Recommended next move." },
       ],
     },
   },
@@ -191,7 +233,10 @@ export default [
         { wait: "#aiHistoryGenerateDialog:not([hidden])" },
         { click: "#aiHistoryGenerateDialog footer [data-ai-flow-close]" },
       ],
-      expect: [{ sel: "#aiHistoryGenerateDialog", state: "detached" }],
+      expect: [
+        { sel: "#aiHistoryGenerateDialog", state: "detached" },
+        { sel: "#assistantPanel", text: "Ask a question" },
+      ],
     },
     story: {
       id: "pages--home",
@@ -209,7 +254,10 @@ export default [
         { wait: ".mh-flow__card--history" },
         { click: ".mh-flow__foot .mh-flow__btn--secondary" },
       ],
-      expect: [{ sel: ".mh-flow", state: "detached" }],
+      expect: [
+        { sel: ".mh-flow", state: "detached" },
+        { sel: ".mh-assistant", text: "Ask a question" },
+      ],
     },
   },
   {
@@ -377,7 +425,7 @@ export default [
         { wait: ".report-details-drawer.open" },
         { click: "#detailsFullscreen" },
       ],
-      expect: [{ sel: ".report-details-drawer.fullscreen" }],
+      expect: [{ sel: ".report-details-drawer.fullscreen", text: "REPORT DETAILS" }],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -386,7 +434,7 @@ export default [
         { wait: ".mh-details" },
         { click: "button[aria-label='Toggle fullscreen']" },
       ],
-      expect: [{ sel: ".mh-details.is-fullscreen" }],
+      expect: [{ sel: ".mh-details.is-fullscreen", text: "REPORT DETAILS" }],
     },
   },
   {
@@ -398,7 +446,10 @@ export default [
         { wait: ".report-details-drawer.open" },
         { press: ["body", "Escape"] },
       ],
-      expect: [{ sel: ".report-details-drawer.open", state: "detached" }],
+      expect: [
+        { sel: ".report-details-drawer.open", state: "detached" },
+        { sel: ".project-report-heading", text: "Available reports" },
+      ],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -407,7 +458,10 @@ export default [
         { wait: ".mh-details" },
         { press: ["body", "Escape"] },
       ],
-      expect: [{ sel: ".mh-details", state: "detached" }],
+      expect: [
+        { sel: ".mh-details", state: "detached" },
+        { sel: ".mh-project-directory", text: "Available reports" },
+      ],
     },
   },
   {
@@ -1253,8 +1307,8 @@ export default [
         { wait: "#aiReportHistoryPopup:not([hidden])" },
       ],
       expect: [
-        { sel: "#aiReportHistoryPopup", state: "attached" },
-        { sel: "#aiReportHistoryPopup .ai-recent-chat >> nth=2", state: "attached" },
+        { sel: "#aiReportHistoryPopup", state: "attached", text: "Recent Chats" },
+        { sel: "#aiReportHistoryPopup .ai-recent-chat >> nth=2", state: "attached", text: "FIND CONVERSION GAPS" },
       ],
     },
     story: {
@@ -1271,7 +1325,10 @@ export default [
             "(() => { const v = document.querySelector('.mh-copilot__command-box textarea').value; if (!v.includes('Compare traffic uplift with sales growth by city.')) throw new Error('composer value: ' + JSON.stringify(v)); })()",
         },
       ],
-      expect: [{ sel: ".mh-copilot__history", state: "detached" }],
+      expect: [
+        { sel: ".mh-copilot__history", state: "detached" },
+        { sel: ".mh-copilot", text: "Data Analysis Assistant" },
+      ],
     },
   },
   {
@@ -1336,7 +1393,10 @@ export default [
             "(() => { const v = document.querySelector('#aiCommandInput').value; if (!/^Use .+ to interpret this report\\.$/.test(v)) throw new Error('composer value: ' + JSON.stringify(v)); })()",
         },
       ],
-      expect: [{ sel: ".report-ai-upload-popup", state: "hidden" }],
+      expect: [
+        { sel: ".report-ai-upload-popup", state: "hidden" },
+        { sel: "#aiWorkspace", text: "Data Analysis Assistant" },
+      ],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -1354,7 +1414,10 @@ export default [
             "(() => { const v = document.querySelector('.mh-copilot__command-box textarea').value; if (!/^Use .+ to interpret this report\\.$/.test(v)) throw new Error('composer value: ' + JSON.stringify(v)); })()",
         },
       ],
-      expect: [{ sel: ".mh-skill", state: "detached" }],
+      expect: [
+        { sel: ".mh-skill", state: "detached" },
+        { sel: ".mh-copilot", text: "Data Analysis Assistant" },
+      ],
     },
   },
   {
@@ -1462,8 +1525,8 @@ export default [
         { waitMs: 400 },
       ],
       expect: [
-        { sel: "#aiWorkspace.open.is-ai-expanded" },
-        { sel: "#aiWorkspace #aiMaximize[aria-label='Restore']" },
+        { sel: "#aiWorkspace.open.is-ai-expanded", text: "Data Analysis Assistant" },
+        { sel: "#aiWorkspace #aiMaximize", attr: { name: "aria-label", value: "Restore" } },
       ],
     },
     story: {
@@ -1476,8 +1539,8 @@ export default [
         { waitMs: 400 },
       ],
       expect: [
-        { sel: ".mh-copilot.is-open.mh-copilot--expanded" },
-        { sel: "button[aria-label='Restore']" },
+        { sel: ".mh-copilot.is-open.mh-copilot--expanded", text: "Data Analysis Assistant" },
+        { sel: "button[aria-label='Restore']", attr: { name: "aria-label", value: "Restore" } },
       ],
     },
   },
@@ -1496,8 +1559,8 @@ export default [
       ],
       expect: [
         { sel: "#aiAnswer", state: "hidden" },
-        { sel: ".ai-context-section:not([hidden])" },
-        { sel: "#aiRecommendations .ai-recommendation" },
+        { sel: ".ai-context-section:not([hidden])", text: "AI summary" },
+        { sel: "#aiRecommendations .ai-recommendation", count: 6 },
       ],
     },
     story: {
@@ -1513,8 +1576,8 @@ export default [
       ],
       expect: [
         { sel: ".mh-copilot__answer", state: "detached" },
-        { sel: ".mh-copilot__summary-card" },
-        { sel: ".mh-copilot__rec" },
+        { sel: ".mh-copilot__summary-card", text: "INVEST CITY STRATEGY QUICK SUMMARY" },
+        { sel: ".mh-copilot__rec", count: 6 },
       ],
     },
   },
@@ -1528,7 +1591,10 @@ export default [
         { press: ["body", "Escape"] },
         { waitMs: 400 },
       ],
-      expect: [{ sel: "#aiWorkspace.open", state: "detached" }],
+      expect: [
+        { sel: "#aiWorkspace.open", state: "detached" },
+        { sel: "h1", text: "Marketing Cockpit" },
+      ],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -1539,7 +1605,10 @@ export default [
         { press: ["body", "Escape"] },
         { waitMs: 400 },
       ],
-      expect: [{ sel: ".mh-copilot.is-open", state: "detached" }],
+      expect: [
+        { sel: ".mh-copilot.is-open", state: "detached" },
+        { sel: "#storybook-root h1", text: "Marketing Cockpit" },
+      ],
     },
   },
   {
@@ -1552,7 +1621,10 @@ export default [
         { click: "#aiScrim" },
         { waitMs: 400 },
       ],
-      expect: [{ sel: "#aiWorkspace.open", state: "detached" }],
+      expect: [
+        { sel: "#aiWorkspace.open", state: "detached" },
+        { sel: "h1", text: "Marketing Cockpit" },
+      ],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -1563,7 +1635,10 @@ export default [
         { click: ".mh-copilot__scrim" },
         { waitMs: 400 },
       ],
-      expect: [{ sel: ".mh-copilot.is-open", state: "detached" }],
+      expect: [
+        { sel: ".mh-copilot.is-open", state: "detached" },
+        { sel: "#storybook-root h1", text: "Marketing Cockpit" },
+      ],
     },
   },
   {
@@ -1581,7 +1656,7 @@ export default [
       ],
       expect: [
         { sel: "#aiAnswer", state: "hidden" },
-        { sel: "#aiStart .ai-recommendation" },
+        { sel: "#aiStart .ai-recommendation", count: 6 },
       ],
     },
     story: {
@@ -1597,7 +1672,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-copilot__answer", state: "detached" },
-        { sel: ".mh-copilot__rec" },
+        { sel: ".mh-copilot__rec", count: 6 },
       ],
     },
   },
@@ -1648,7 +1723,7 @@ export default [
             "(() => { const el = document.activeElement; if (!el || !el.classList.contains('ai-close')) throw new Error('focus on ' + (el && el.className)); })()",
         },
       ],
-      expect: [{ sel: "#aiWorkspace.open" }],
+      expect: [{ sel: "#aiWorkspace.open", text: "Data Analysis Assistant" }],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -1662,7 +1737,7 @@ export default [
             "(() => { const el = document.activeElement; if (!el || !el.classList.contains('mh-copilot__close')) throw new Error('focus on ' + (el && el.className)); })()",
         },
       ],
-      expect: [{ sel: ".mh-copilot.is-open" }],
+      expect: [{ sel: ".mh-copilot.is-open", text: "Data Analysis Assistant" }],
     },
   },
   {
@@ -1687,7 +1762,7 @@ export default [
             "(() => { const r = document.querySelector('#aiWorkspace').getBoundingClientRect(); if (Math.abs(r.left - 12) > 2 || Math.abs(r.top - 12) > 2 || Math.abs(r.width - 366) > 2 || Math.abs(r.height - 820) > 2) throw new Error('expanded ' + JSON.stringify(r)); })()",
         },
       ],
-      expect: [{ sel: "#aiWorkspace.open.is-ai-expanded" }],
+      expect: [{ sel: "#aiWorkspace.open.is-ai-expanded", text: "Data Analysis Assistant" }],
     },
     story: {
       id: "pages--marketing-cockpit",
@@ -1707,7 +1782,7 @@ export default [
             "(() => { const r = document.querySelector('.mh-copilot').getBoundingClientRect(); if (Math.abs(r.left - 12) > 2 || Math.abs(r.top - 12) > 2 || Math.abs(r.width - 366) > 2 || Math.abs(r.height - 820) > 2) throw new Error('expanded ' + JSON.stringify(r)); })()",
         },
       ],
-      expect: [{ sel: ".mh-copilot.is-open.mh-copilot--expanded" }],
+      expect: [{ sel: ".mh-copilot.is-open.mh-copilot--expanded", text: "Data Analysis Assistant" }],
     },
   },
   {
@@ -1741,12 +1816,24 @@ export default [
   },
   {
     id: "p03-self-service",
-    original: { url: "/assets/pages/flexible.html", expect: [{ sel: "#tab-self-service" }, { sel: ".report-card" }] },
-    story: { id: "pages--self-service", expect: [{ sel: ".mh-self-tools" }, { sel: ".mh-action-card" }] },
+    original: {
+      url: "/assets/pages/flexible.html",
+      expect: [
+        { sel: "#tab-self-service", text: "Self-Service Analysis", attr: { name: "aria-selected", value: "true" } },
+        { sel: ".report-card", count: 3 },
+      ],
+    },
+    story: {
+      id: "pages--self-service",
+      expect: [
+        { sel: ".mh-self-tools", text: "Self-Service Analysis" },
+        { sel: ".mh-action-card", count: 3 },
+      ],
+    },
   },
   {
     id: "p03-self-service-upload",
-    original: { url: "/assets/pages/flexible.html?tab=upload", expect: [{ sel: "#data-upload-panel" }, { sel: ".upload-card-grid" }] },
+    original: { url: "/assets/pages/flexible.html?tab=upload", expect: [{ sel: "#data-upload-panel", text: "Finance Pilot City" }, { sel: ".upload-card-grid" }] },
     story: {
       id: "pages--self-service",
       args: { tab: "upload" },
@@ -1843,7 +1930,10 @@ export default [
         { wait: "#bulkImportModal:not([hidden])" },
         { press: ["body", "Escape"] },
       ],
-      expect: [{ sel: "#bulkImportModal", state: "hidden" }],
+      expect: [
+        { sel: "#bulkImportModal", state: "hidden" },
+        { sel: "h1", text: "Self-Service Center" },
+      ],
     },
     story: {
       id: "pages--data-upload",
@@ -1852,7 +1942,10 @@ export default [
         { wait: ".mh-modal .mh-dropzone" },
         { press: ["body", "Escape"] },
       ],
-      expect: [{ sel: ".mh-modal", state: "detached" }],
+      expect: [
+        { sel: ".mh-modal", state: "detached" },
+        { sel: "#storybook-root h1", text: "Self-Service Center" },
+      ],
     },
   },
   {
@@ -1987,7 +2080,8 @@ export default [
       ],
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
-        { sel: ".mh-assistant__send .mh-button:not([disabled])" },
+        { sel: ".mh-assistant__send .mh-button:not([disabled])", text: "ASK" },
+        { sel: ".mh-assistant", text: "Ask a question" },
       ],
     },
   },
@@ -2001,8 +2095,8 @@ export default [
         { click: "#aiMaximize" },
       ],
       expect: [
-        { sel: "#assistantPanel.is-ai-expanded" },
-        { sel: "#aiMaximize[aria-label='Restore']" },
+        { sel: "#assistantPanel.is-ai-expanded", text: "Ask AI Interpreter" },
+        { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore" } },
       ],
     },
     story: {
@@ -2013,8 +2107,8 @@ export default [
         { click: "button[aria-label='Maximize']" },
       ],
       expect: [
-        { sel: ".mh-assistant--expanded" },
-        { sel: "button[aria-label='Restore']" },
+        { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
+        { sel: "button[aria-label='Restore']", attr: { name: "aria-label", value: "Restore" } },
       ],
     },
   },
@@ -2030,7 +2124,10 @@ export default [
         { wait: "#answerFeed .answer-card" },
         { click: "#aiNewSession" },
       ],
-      expect: [{ sel: "#answerFeed .answer-card", state: "detached" }],
+      expect: [
+        { sel: "#answerFeed .answer-card", state: "detached" },
+        { sel: "#assistantPanel", text: "Ask a question" },
+      ],
     },
     story: {
       id: "pages--media-tracking-detail",
@@ -2042,7 +2139,10 @@ export default [
         { wait: ".mh-assistant__answer--simple" },
         { click: "button[aria-label='New session']" },
       ],
-      expect: [{ sel: ".mh-assistant__answer", state: "detached" }],
+      expect: [
+        { sel: ".mh-assistant__answer", state: "detached" },
+        { sel: ".mh-assistant", text: "Ask a question" },
+      ],
     },
   },
   {
@@ -2056,7 +2156,7 @@ export default [
       ],
       expect: [
         { sel: "#assistantPanel", state: "hidden" },
-        { sel: ".global-ai-launcher" },
+        { sel: ".global-ai-launcher", text: "AI Interpreter" },
       ],
     },
     story: {
@@ -2068,7 +2168,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-assistant", state: "detached" },
-        { sel: ".mh-launcher" },
+        { sel: ".mh-launcher", text: "AI Interpreter" },
       ],
     },
   },
@@ -2128,6 +2228,7 @@ export default [
       ],
       expect: [
         { sel: "#aiHistoryGenerateDialog", state: "detached" },
+        { sel: "h1", text: "Media Tracking Detail" },
       ],
     },
     story: {
@@ -2149,6 +2250,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-flow", state: "detached" },
+        { sel: ".mh-assistant", text: "Ask a question" },
       ],
     },
   },
@@ -2193,8 +2295,8 @@ export default [
   },
   {
     id: "p06-campaign",
-    original: { url: "/assets/pages/campaign.html", expect: [{ sel: ".campaign-rail" }, { sel: "#overviewTitle" }] },
-    story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign" }, { sel: ".mh-rail" }] },
+    original: { url: "/assets/pages/campaign.html", expect: [{ sel: ".campaign-rail" }, { sel: "#overviewTitle", text: "Overview Dashboard" }] },
+    story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign", text: "Overview Dashboard" }, { sel: ".mh-rail" }] },
   },
   {
     id: "p06-campaign-task-dialog",
@@ -2230,7 +2332,7 @@ export default [
     id: "p06-campaign-accounts",
     original: {
       url: "/assets/pages/campaign.html#accounts",
-      expect: [{ sel: "#accountsTitle" }, { sel: ".campaign-view.active .data-table" }],
+      expect: [{ sel: "#accountsTitle", text: "Account Binding" }, { sel: ".campaign-view.active .data-table" }],
     },
     story: {
       id: "pages--campaign",
@@ -2411,6 +2513,7 @@ export default [
       expect: [
         { sel: "#answerFeed .answer-card", state: "detached" },
         { sel: "#answerFeed", state: "hidden" },
+        { sel: ".assistant-modal", text: "Ask a question" },
       ],
     },
     story: {
@@ -2421,7 +2524,10 @@ export default [
         { wait: ".mh-assistant__answer--workspace" },
         { click: "button[aria-label='New session']" },
       ],
-      expect: [{ sel: ".mh-assistant__entry", state: "detached" }],
+      expect: [
+        { sel: ".mh-assistant__entry", state: "detached" },
+        { sel: ".mh-assistant", text: "Ask a question" },
+      ],
     },
   },
   {
@@ -2439,7 +2545,7 @@ export default [
       ],
       expect: [
         { sel: "#aiRecentHistoryPopup", state: "hidden" },
-        { sel: "#sendQuery:not([disabled])" },
+        { sel: "#sendQuery:not([disabled])", text: "ASK" },
       ],
     },
     story: {
@@ -2455,7 +2561,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
-        { sel: ".mh-assistant__send .mh-button:not([disabled])" },
+        { sel: ".mh-assistant__send .mh-button:not([disabled])", text: "ASK" },
       ],
     },
   },
@@ -2469,8 +2575,8 @@ export default [
         { click: "#aiMaximize" },
       ],
       expect: [
-        { sel: ".assistant-panel.is-ai-expanded .assistant-modal" },
-        { sel: "#aiMaximize[aria-label='Restore AI Interpreter panel']" },
+        { sel: ".assistant-panel.is-ai-expanded .assistant-modal", text: "Ask AI Interpreter" },
+        { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
       ],
     },
     story: {
@@ -2478,8 +2584,8 @@ export default [
       args: { assistantOpen: true },
       actions: [{ click: "button[aria-label='Maximize AI Interpreter panel']" }],
       expect: [
-        { sel: ".mh-assistant--expanded" },
-        { sel: "button[aria-label='Restore AI Interpreter panel']" },
+        { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
+        { sel: "button[aria-label='Restore AI Interpreter panel']", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
       ],
     },
   },
@@ -2500,8 +2606,8 @@ export default [
         { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
       ],
       expect: [
-        { sel: ".assistant-panel.is-ai-expanded .assistant-modal" },
-        { sel: "#aiMaximize[aria-label='Restore AI Interpreter panel']" },
+        { sel: ".assistant-panel.is-ai-expanded .assistant-modal", text: "Ask AI Interpreter" },
+        { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
       ],
     },
     story: {
@@ -2516,8 +2622,8 @@ export default [
         { wait: ".mh-assistant" },
       ],
       expect: [
-        { sel: ".mh-assistant--expanded" },
-        { sel: "button[aria-label='Restore AI Interpreter panel']" },
+        { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
+        { sel: "button[aria-label='Restore AI Interpreter panel']", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
       ],
     },
   },
@@ -2574,7 +2680,10 @@ export default [
         { wait: "#aiHistoryGenerateDialog:not([hidden])" },
         { click: "#aiHistoryGenerateDialog footer [data-ai-flow-close]" },
       ],
-      expect: [{ sel: "#aiHistoryGenerateDialog", state: "detached" }],
+      expect: [
+        { sel: "#aiHistoryGenerateDialog", state: "detached" },
+        { sel: ".assistant-modal", text: "Ask a question" },
+      ],
     },
     story: {
       id: "pages--campaign",
@@ -2592,7 +2701,10 @@ export default [
         { wait: ".mh-flow__card--history" },
         { click: ".mh-flow__foot .mh-flow__btn--secondary" },
       ],
-      expect: [{ sel: ".mh-flow", state: "detached" }],
+      expect: [
+        { sel: ".mh-flow", state: "detached" },
+        { sel: ".mh-assistant", text: "Ask a question" },
+      ],
     },
   },
   {
@@ -2640,7 +2752,7 @@ export default [
       ],
       expect: [
         { sel: "#assistantPanel[hidden]", state: "attached" },
-        { sel: "#aiEntry" },
+        { sel: "#aiEntry", text: "AI Interpreter" },
       ],
     },
     story: {
@@ -2649,7 +2761,7 @@ export default [
       actions: [{ wait: ".mh-assistant" }, { press: ["body", "Escape"] }],
       expect: [
         { sel: ".mh-assistant", state: "detached" },
-        { sel: ".mh-launcher" },
+        { sel: ".mh-launcher", text: "AI Interpreter" },
       ],
     },
   },
@@ -2672,7 +2784,7 @@ export default [
         { click: ".answer-feedback-btn[data-feedback='helpful']" },
         { waitMs: 300 },
       ],
-      expect: [{ sel: ".answer-feedback-btn[data-feedback='helpful'][aria-pressed='false']" }],
+      expect: [{ sel: ".answer-feedback-btn[data-feedback='helpful']", attr: { name: "aria-pressed", value: "false" }, text: "Helpful" }],
     },
     story: {
       id: "pages--campaign",
@@ -2688,36 +2800,66 @@ export default [
         { click: ".mh-assistant__feedback button[data-kind='helpful']" },
         { waitMs: 300 },
       ],
-      expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful'][aria-pressed='false']" }],
+      expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful']", attr: { name: "aria-pressed", value: "false" }, text: "Helpful" }],
     },
   },
   {
     id: "p07-interpreter-overview",
-    original: { url: "/assets/pages/knowledge.html", expect: [{ sel: ".v20-type-card" }, { sel: "#businessTypeNav button" }] },
-    story: { id: "pages--interpreter", expect: [{ sel: ".mh-type-grid" }, { sel: ".mh-sidebar" }] },
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html",
+      expect: [
+        { sel: ".v20-type-card", count: 8 },
+        { sel: "#businessTypeNav button", count: 8 },
+        { sel: "h1", text: "AI Interpreter" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      expect: [
+        { sel: ".mh-type-grid" },
+        { sel: ".mh-type-card", count: 8 },
+        { sel: ".mh-sidebar", text: "AI INTERPRETER" },
+      ],
+    },
   },
   {
     id: "p07-interpreter-business-term",
-    original: { url: "/assets/pages/knowledge.html?type=Business%20Term", expect: [{ sel: ".bt-term-card" }] },
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: { url: "/assets/pages/knowledge.html?type=Business%20Term", expect: [{ sel: ".bt-term-card", count: 6, text: "GMV (Gross Merchandise Value)" }] },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Business Term" },
-      expect: [{ sel: ".mh-library", text: "GMV (Gross Merchandise Value)" }, { sel: ".mh-asset" }],
+      expect: [{ sel: ".mh-library", text: "GMV (Gross Merchandise Value)" }, { sel: ".mh-asset", count: 6 }],
     },
   },
   {
     id: "p07-interpreter-scenario",
-    original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card" }] },
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card", count: 3, text: "Channel Performance Analysis" }] },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Scenario Reporting" },
-      expect: [{ sel: ".mh-library", text: "Channel Performance Analysis" }, { sel: ".mh-asset" }],
+      expect: [{ sel: ".mh-library", text: "Channel Performance Analysis" }, { sel: ".mh-asset", count: 3 }],
     },
   },
   {
     /* types.js: ?type=Principles swaps the asset table for the numbered card
        grid; the "Showing X of Y" count line is display:none on type pages. */
     id: "p07-interpreter-principles",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       expect: [
@@ -2742,6 +2884,10 @@ export default [
   },
   {
     id: "p07-principles-category-open",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [
@@ -2770,6 +2916,10 @@ export default [
     /* Multi-select category filter: picking one category keeps the dropdown
        open, updates the summary to "{n} selected" and re-renders the cards. */
     id: "p07-principles-category-filter",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [
@@ -2806,6 +2956,10 @@ export default [
     /* Search matches category, title and description; the page count and card
        list update live ("Match the Requested Scope" contains "boundary"). */
     id: "p07-principles-search",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [{ fill: ["#knowledgeSearch", "requested scope"] }, { waitMs: 300 }],
@@ -2828,6 +2982,10 @@ export default [
   },
   {
     id: "p07-principles-empty",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [{ fill: ["#knowledgeSearch", "zzzz-nothing"] }, { waitMs: 300 }],
@@ -2844,6 +3002,10 @@ export default [
     /* Long descriptions clamp to ~2 lines; the chevron expands the full text
        (toggle only renders when the measured text overflows). */
     id: "p07-principles-expand",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [
@@ -2852,8 +3014,8 @@ export default [
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description.is-expanded" },
-        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description-toggle[aria-expanded='true']" },
+        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description.is-expanded", text: "Users primarily request business data" },
+        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description-toggle", attr: { name: "aria-expanded", value: "true" } },
       ],
     },
     story: {
@@ -2865,18 +3027,25 @@ export default [
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__desc.is-expanded" },
-        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle[aria-expanded='true']" },
+        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__desc.is-expanded", text: "Users primarily request business data" },
+        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle", attr: { name: "aria-expanded", value: "true" } },
       ],
     },
   },
   {
     /* types.js: "/" focuses the visible type-page search (not while editing). */
     id: "p07-principles-slash",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       actions: [{ press: ["body", "/"] }, { waitMs: 200 }],
-      expect: [{ sel: "#knowledgeSearch:focus" }],
+      expect: [
+        { sel: "#knowledgeSearch:focus" },
+        { sel: "#businessPagination", text: "10 principles" },
+      ],
     },
     story: {
       id: "pages--interpreter",
@@ -2887,7 +3056,10 @@ export default [
         { press: ["body", "/"] },
         { waitMs: 200 },
       ],
-      expect: [{ sel: ".mh-principles input[type='search']:focus" }],
+      expect: [
+        { sel: ".mh-principles input[type='search']:focus" },
+        { sel: ".mh-pagination", text: "10 principles" },
+      ],
     },
   },
 ];

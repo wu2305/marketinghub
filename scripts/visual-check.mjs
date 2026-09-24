@@ -3,27 +3,44 @@
  * Paired visual comparison between the original static demo and Storybook stories.
  *
  * Serves the repo root (original pages) and storybook-static/ (stories) with sirv,
- * loads each pair in isolated Playwright Chromium contexts, asserts the expected
- * elements are visible, runs optional interactions, then screenshots serially and
- * writes a side-by-side HTML report to --out (default /tmp/mh-visual).
+ * loads each pair in isolated Playwright Chromium contexts, runs interactions and
+ * assertions, screenshots serially, and writes a report to --out (default
+ * /tmp/mh-visual): index.html side-by-side, results.json machine record,
+ * reviews.json human verdicts (preserved across runs into the same --out).
  *
- * Fails loudly: navigation errors, page errors, missing expected controls, and
- * HTTP >= 400 responses on same-origin assets all count as failures.
+ * Evidence discipline:
+ * - Requires a build stamp (storybook-static/mh-build-stamp.json, written by
+ *   `npm run build-storybook`) whose sourceHash matches the current
+ *   src/design/.storybook/package* fingerprint; stale or missing -> exit 2.
+ * - Machine checks cover load (navigation, pageerrors, failed/>=400 requests,
+ *   Storybook error display) and behavior (actions, expects, console errors,
+ *   layout boxes). A machine pass only means the asserted surface matched —
+ *   visual sign-off is a separate human verdict recorded via --review, never
+ *   defaulted by the machine.
+ * - Every side of every scenario needs at least one discriminating expect
+ *   (text, count or attr); otherwise the scenario fails as "weak assertions".
  *
  * Usage:
- *   npm run build-storybook   # first, so storybook-static exists
- *   node scripts/visual-check.mjs [--out /tmp/mh-visual] [--only p01] [--verbose]
+ *   npm run build-storybook   # first, so storybook-static exists and is stamped
+ *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--verbose]
+ *   node scripts/visual-check.mjs --negative [--out DIR]
+ *   node scripts/visual-check.mjs --review <out> <scenarioId> pass|fail "note"
  */
 import http from "node:http";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
 import { chromium } from "playwright";
-import scenarios, { BASELINE } from "./visual-check.config.mjs";
+import scenarios, { BASELINE, CONSOLE_ALLOW } from "./visual-check.config.mjs";
+import negatives from "./visual-check.negative.mjs";
+import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const STATIC = path.join(ROOT, "storybook-static");
+const STAMP = path.join(STATIC, "mh-build-stamp.json");
+const INDEX = path.join(STATIC, "index.json");
+const CONFIG_FILE = path.join(ROOT, "scripts", "visual-check.config.mjs");
 const ORIG_PORT = Number(process.env.MH_ORIG_PORT || 4173);
 const STORY_PORT = Number(process.env.MH_STORY_PORT || 6007);
 
@@ -34,12 +51,87 @@ const flag = (name) => {
 };
 const OUT = flag("out") || "/tmp/mh-visual";
 const ONLY = flag("only");
+const NEGATIVE = args.includes("--negative");
 const VERBOSE = args.includes("--verbose");
+const REVIEW_AT = args.indexOf("--review");
 
-if (!existsSync(path.join(STATIC, "index.json"))) {
+const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
+const pageOf = (id) => id.split("-")[0];
+
+function readJson(file) {
+  return JSON.parse(readFileSync(file, "utf8"));
+}
+
+function loadReviews(out) {
+  const file = path.join(out, "reviews.json");
+  return existsSync(file) ? readJson(file) : {};
+}
+
+/**
+ * --review <out> <scenarioId> pass|fail "note": copy the shot hashes recorded in
+ * <out>/results.json into <out>/reviews.json so a later run can detect a stale
+ * review when a screenshot changes. No browsers involved.
+ */
+if (REVIEW_AT >= 0) {
+  const [outDir, sid, verdict, ...noteParts] = args.slice(REVIEW_AT + 1);
+  const note = noteParts.join(" ");
+  if (!outDir || !sid || !["pass", "fail"].includes(verdict || "")) {
+    console.error('usage: --review <out> <scenarioId> pass|fail "note"');
+    process.exit(2);
+  }
+  const resultsFile = path.join(outDir, "results.json");
+  if (!existsSync(resultsFile)) {
+    console.error(`${resultsFile} not found — run visual-check into that directory first`);
+    process.exit(2);
+  }
+  const entry = readJson(resultsFile).scenarios.find((s) => s.id === sid);
+  if (!entry) {
+    console.error(`scenario ${sid} not in ${resultsFile}`);
+    process.exit(2);
+  }
+  if (!entry.original.shotHash || !entry.story.shotHash) {
+    console.error(`scenario ${sid} has no screenshot hashes to review`);
+    process.exit(2);
+  }
+  const reviewsFile = path.join(outDir, "reviews.json");
+  const reviews = existsSync(reviewsFile) ? readJson(reviewsFile) : {};
+  reviews[sid] = {
+    verdict,
+    note,
+    reviewedAt: new Date().toISOString(),
+    originalShotHash: entry.original.shotHash,
+    storyShotHash: entry.story.shotHash,
+  };
+  writeFileSync(reviewsFile, JSON.stringify(reviews, null, 2) + "\n");
+  console.log(`review recorded: ${sid} -> ${verdict}${note ? ` (${note})` : ""} in ${reviewsFile}`);
+  // Re-render the HTML report so the new manual verdict shows immediately.
+  const data = readJson(resultsFile);
+  for (const e of data.scenarios) Object.assign(e, manualStatus(e, reviews));
+  renderReport(data.run, data.scenarios, outDir);
+  process.exit(0);
+}
+
+// --- build-stamp gate: refuse to produce evidence against stale output -------
+if (!existsSync(INDEX)) {
   console.error("storybook-static/index.json not found — run `npm run build-storybook` first.");
   process.exit(2);
 }
+const fingerprint = sourceFingerprint();
+const stamp = existsSync(STAMP) ? readJson(STAMP) : null;
+if (!stamp || stamp.sourceHash !== fingerprint.hash) {
+  console.error("storybook-static is stale for current sources — run npm run build-storybook");
+  process.exit(2);
+}
+
+const index = readJson(INDEX);
+const indexIds = new Set();
+const indexCounts = { stories: 0, docs: 0 };
+for (const e of Object.values(index.entries)) {
+  indexIds.add(e.id);
+  if (e.type === "story") indexCounts.stories += 1;
+  else if (e.type === "docs") indexCounts.docs += 1;
+}
+const configHash = sha256(readFileSync(CONFIG_FILE));
 
 function serve(dir, port, label) {
   const handler = sirv(dir, { dev: true, etag: true });
@@ -92,9 +184,51 @@ function storyUrl(spec) {
   return `http://127.0.0.1:${STORY_PORT}/iframe.html?viewMode=story&id=${spec.id}${argString}`;
 }
 
-async function runSide(browser, name, spec, url, viewport) {
-  const errors = [];
-  const warnings = [];
+function consoleAllowance(side, scenarioId, text) {
+  return (CONSOLE_ALLOW || []).find(
+    (a) => a.side === side && (!a.scenario || a.scenario === scenarioId) && new RegExp(a.pattern).test(text),
+  );
+}
+
+function describeStep(step) {
+  const [kind, v] = Object.entries(step)[0];
+  return `${kind}(${Array.isArray(v) ? v.map((x) => (typeof x === "object" ? JSON.stringify(x) : x)).join(", ") : v})`;
+}
+
+async function storyMounted(page) {
+  return page.evaluate(() => {
+    const badClass = ["sb-show-errordisplay", "sb-show-nopreview"].find((c) => document.body.classList.contains(c));
+    return { badClass, rootChildren: document.querySelector("#storybook-root")?.childElementCount ?? 0 };
+  });
+}
+
+async function checkStoryHealth(page, res, phase) {
+  if (phase === "load") {
+    // The preview mounts asynchronously after the load event; give it time.
+    try {
+      await page.waitForFunction(() => document.querySelector("#storybook-root")?.childElementCount > 0, null, {
+        timeout: 15000,
+      });
+    } catch {
+      res.errors.push("[load] #storybook-root is empty (story did not render)");
+    }
+  }
+  const { badClass, rootChildren } = await storyMounted(page);
+  if (badClass) res.errors.push(`[${phase}] storybook body class ${badClass}`);
+  if (rootChildren === 0) res.errors.push(`[${phase}] #storybook-root is empty`);
+}
+
+/**
+ * Run one side of a scenario. Errors are tagged with the phase in which they
+ * occurred: [load] covers navigation, pageerrors, request failures and console
+ * errors up to the first action (plus the post-load Storybook health check);
+ * [behavior] covers everything after — actions, expects, layout capture and the
+ * post-actions Storybook health check.
+ */
+async function runSide(browser, name, spec, url, viewport, side, scenarioId, layoutSels) {
+  const res = { url, errors: [], warnings: [], shot: null, shotHash: null, boxes: {} };
+  let phase = "load";
+  const err = (msg) => res.errors.push(`[${phase}] ${msg}`);
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
   if (spec.storage) {
     const seed = spec.storage;
@@ -103,55 +237,192 @@ async function runSide(browser, name, spec, url, viewport) {
     }, seed);
   }
   const page = await context.newPage();
-  page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
-  page.on("requestfailed", (r) => errors.push(`requestfailed: ${r.url()} ${r.failure()?.errorText || ""}`));
+  page.on("pageerror", (e) => err(`pageerror: ${e.message}`));
+  page.on("requestfailed", (r) => err(`requestfailed: ${r.url()} ${r.failure()?.errorText || ""}`));
   page.on("response", (r) => {
-    if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`);
+    if (r.status() >= 400) err(`HTTP ${r.status()} ${r.url()}`);
   });
   page.on("console", (m) => {
-    if (m.type() === "error" || m.type() === "warning") warnings.push(`console.${m.type()}: ${m.text()}`);
+    const text = `console.${m.type()}: ${m.text()}`;
+    if (m.type() === "error") {
+      const allowed = consoleAllowance(side, scenarioId, m.text());
+      if (allowed) res.warnings.push(`allowed ${text} — ${allowed.reason}`);
+      else err(text);
+    } else if (m.type() === "warning") {
+      res.warnings.push(text);
+    }
   });
-  let shot = null;
   try {
     const response = await page.goto(url, { waitUntil: "load", timeout: 30000 });
-    if (!response || !response.ok()) errors.push(`navigation failed: HTTP ${response?.status()}`);
+    if (!response || !response.ok()) err(`navigation failed: HTTP ${response?.status()}`);
+    if (side === "story") await checkStoryHealth(page, res, "load");
+
+    phase = "behavior";
     for (const step of spec.actions || []) {
-      if (step.click) await page.click(step.click);
-      else if (step.fill) await page.fill(step.fill[0], step.fill[1]);
-      else if (step.select) await page.selectOption(step.select[0], step.select[1]);
-      else if (step.check) await page.check(step.check);
-      else if (step.hover) await page.hover(step.hover);
-      else if (step.press) await page.press(step.press[0], step.press[1]);
-      else if (step.upload)
-        await page.setInputFiles(step.upload[0], {
-          name: step.upload[1].name,
-          mimeType: step.upload[1].mimeType || "application/octet-stream",
-          buffer: Buffer.from(step.upload[1].content || "", "utf8"),
-        });
-      else if (step.wait) await page.waitForSelector(step.wait, { state: "visible", timeout: 8000 });
-      else if (step.waitMs) await page.waitForTimeout(step.waitMs);
-      else if (step.eval) await page.evaluate(step.eval);
-    }
-    for (const exp of spec.expect || []) {
       try {
-        await page.waitForSelector(exp.sel, { state: exp.state || "visible", timeout: 8000 });
+        if (step.click) await page.click(step.click);
+        else if (step.fill) await page.fill(step.fill[0], step.fill[1]);
+        else if (step.select) await page.selectOption(step.select[0], step.select[1]);
+        else if (step.check) await page.check(step.check);
+        else if (step.hover) await page.hover(step.hover);
+        else if (step.press) await page.press(step.press[0], step.press[1]);
+        else if (step.upload)
+          await page.setInputFiles(step.upload[0], {
+            name: step.upload[1].name,
+            mimeType: step.upload[1].mimeType || "application/octet-stream",
+            buffer: Buffer.from(step.upload[1].content || "", "utf8"),
+          });
+        else if (step.wait) await page.waitForSelector(step.wait, { state: "visible", timeout: 8000 });
+        else if (step.waitMs) await page.waitForTimeout(step.waitMs);
+        else if (step.eval) await page.evaluate(step.eval);
+      } catch (e) {
+        err(`action ${describeStep(step)} failed: ${e.message.split("\n")[0]}`);
+        break;
+      }
+    }
+    if (side === "story") await checkStoryHealth(page, res, "behavior");
+
+    for (const exp of spec.expect || []) {
+      const state = exp.state || "visible";
+      const countOnly = exp.count !== undefined && (state === "hidden" || state === "detached");
+      try {
+        if (!countOnly) await page.waitForSelector(exp.sel, { state, timeout: 8000 });
         if (exp.text) {
-          const ok = await page.locator(exp.sel).first().innerText().then((t) => t.includes(exp.text));
-          if (!ok) errors.push(`expect text "${exp.text}" not found in ${exp.sel}`);
+          const t = await page.locator(exp.sel).first().innerText();
+          if (!t.includes(exp.text)) err(`expect text "${exp.text}" not found in ${exp.sel}`);
+        }
+        if (exp.count !== undefined) {
+          const n = await page.locator(exp.sel).count();
+          if (n !== exp.count) err(`expect count ${exp.count} got ${n} for ${exp.sel}`);
+        }
+        if (exp.attr) {
+          const v = await page.locator(exp.sel).first().getAttribute(exp.attr.name);
+          if (v !== exp.attr.value) err(`expect ${exp.sel}[${exp.attr.name}]="${exp.attr.value}" got ${JSON.stringify(v)}`);
         }
       } catch {
-        errors.push(`expect selector not ${exp.state || "visible"}: ${exp.sel}`);
+        err(`expect selector not ${state}: ${exp.sel}`);
       }
     }
     await page.waitForTimeout(spec.settleMs ?? 700);
-    shot = path.join(OUT, `${name}.png`);
-    await page.screenshot({ path: shot, fullPage: Boolean(spec.fullPage) });
+    const shotPath = path.join(OUT, `${name}.png`);
+    await page.screenshot({ path: shotPath, fullPage: Boolean(spec.fullPage) });
+    res.shot = `${name}.png`;
+    res.shotHash = sha256(readFileSync(shotPath));
+    for (const sel of layoutSels || []) {
+      res.boxes[sel] = await page.locator(sel).first().boundingBox().catch(() => null);
+    }
   } catch (e) {
-    errors.push(`exception: ${e.message.split("\n")[0]}`);
+    err(`exception: ${e.message.split("\n")[0]}`);
   } finally {
     await context.close();
   }
-  return { shot, errors, warnings };
+  res.load = res.errors.every((e) => !e.startsWith("[load]")) ? "pass" : "fail";
+  res.behavior = res.errors.every((e) => !e.startsWith("[behavior]")) ? "pass" : "fail";
+  return res;
+}
+
+const hasStrongExpect = (spec) =>
+  (spec?.expect || []).some((e) => e.text !== undefined || e.count !== undefined || e.attr !== undefined);
+
+function deepMerge(base, over) {
+  const out = { ...base };
+  for (const [k, v] of Object.entries(over || {})) {
+    if (v === undefined) continue;
+    out[k] = v && typeof v === "object" && !Array.isArray(v) && typeof base?.[k] === "object" && base?.[k] !== null && !Array.isArray(base[k])
+      ? deepMerge(base[k], v)
+      : v;
+  }
+  return out;
+}
+
+function manualStatus(entry, reviews) {
+  const r = reviews[entry.id];
+  if (!r) return { manual: "pending", manualNote: "" };
+  if (r.originalShotHash === entry.original.shotHash && r.storyShotHash === entry.story.shotHash) {
+    return { manual: r.verdict, manualNote: r.note || "" };
+  }
+  return { manual: "pending", manualNote: `stale review (${r.verdict} ${r.reviewedAt}${r.note ? `, ${r.note}` : ""}) — screenshots changed` };
+}
+
+function compareLayout(scenario, orig, story, errors) {
+  const rows = [];
+  for (const l of scenario.layout || []) {
+    const a = orig.boxes[l.orig];
+    const b = story.boxes[l.story];
+    const row = { orig: l.orig, story: l.story, props: l.props, tol: l.tol, origBox: a, storyBox: b, ok: true };
+    if (!a || !b) {
+      row.ok = false;
+      errors.push(`layout: missing box ${!a ? `original ${l.orig}` : `story ${l.story}`}`);
+    } else {
+      for (const p of l.props) {
+        const d = Math.abs(a[p] - b[p]);
+        if (d > l.tol) {
+          row.ok = false;
+          errors.push(`layout: ${p} differs by ${d.toFixed(1)}px (tol ${l.tol}) — ${l.orig}=${a[p].toFixed(1)} vs ${l.story}=${b[p].toFixed(1)}`);
+        }
+      }
+    }
+    rows.push(row);
+  }
+  return rows;
+}
+
+function renderReport(run, entries, outDir) {
+  const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const badge = (v, staleNote) => {
+    const cls = v === "pass" ? "ok" : v === "fail" ? "bad" : "pend";
+    return `<span class="${cls}">${esc(v)}</span>${staleNote ? ` <span class="pend">${esc(staleNote)}</span>` : ""}`;
+  };
+  const rows = entries
+    .map((e) => {
+      const stale = e.manualNote?.startsWith("stale review") ? e.manualNote : "";
+      return `
+  <section class="${e.machine === "pass" ? "ok" : "bad"}">
+    <h2>${esc(e.id)} — machine ${esc(e.machine)}</h2>
+    <table class="status"><tr><th>load</th><th>behavior</th><th>manual</th></tr>
+      <tr><td>o:${badge(e.original.load)} s:${badge(e.story.load)}</td>
+          <td>o:${badge(e.original.behavior)} s:${badge(e.story.behavior)}</td>
+          <td>${badge(e.manual)}${stale ? "" : esc(e.manualNote || "")}</td></tr></table>
+    ${stale ? `<p class="pend">${esc(stale)}</p>` : ""}
+    ${e.layout?.length ? `<pre>${esc(e.layout.map((l) => `${l.ok ? "ok" : "MISMATCH"} ${l.orig} vs ${l.story}: ${JSON.stringify(l.origBox)} / ${JSON.stringify(l.storyBox)} tol ${l.tol}`).join("\n"))}</pre>` : ""}
+    <div class="pair">
+      <figure><figcaption>original: ${esc(e.original.url)}</figcaption>
+        ${e.original.shot ? `<a href="${esc(e.original.shot)}"><img src="${esc(e.original.shot)}"></a>` : "<p>no screenshot</p>"}</figure>
+      <figure><figcaption>story: ${esc(e.story.id)}${e.story.args ? " " + esc(JSON.stringify(e.story.args)) : ""}</figcaption>
+        ${e.story.shot ? `<a href="${esc(e.story.shot)}"><img src="${esc(e.story.shot)}"></a>` : "<p>no screenshot</p>"}</figure>
+    </div>
+    ${[...e.original.errors.map((x) => `orig: ${x}`), ...e.story.errors.map((x) => `story: ${x}`)].length
+      ? `<pre>${esc([...e.original.errors.map((x) => `orig: ${x}`), ...e.story.errors.map((x) => `story: ${x}`)].join("\n"))}</pre>`
+      : ""}
+  </section>`;
+    })
+    .join("\n");
+  const prov = `head ${run.head.slice(0, 7)} | sourceHash ${run.sourceHash.slice(0, 12)} | configHash ${run.configHash.slice(0, 12)} | built ${run.build?.builtAt} | stories ${run.index.stories} docs ${run.index.docs} | argv: ${esc(run.argv.join(" "))} | ${run.startedAt}`;
+  writeFileSync(
+    path.join(outDir, "index.html"),
+    `<!doctype html><meta charset="utf-8"><title>visual-check</title>
+<style>body{font:14px/1.5 system-ui;margin:24px}h2{font-size:16px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}figure{margin:0}figcaption{color:#555;font-size:12px;margin-bottom:4px}img{width:100%;border:1px solid #ccc}pre{background:#fdecea;padding:8px;white-space:pre-wrap}.status{border-collapse:collapse}.status th,.status td{border:1px solid #ccc;padding:2px 10px;font-size:12px}.ok{color:#0a7a3d}.bad{color:#b00020}.pend{color:#8a6d00}.prov{color:#555;font-size:12px}</style>
+<h1>visual-check report</h1><p class="prov">${prov}</p>${rows}`,
+  );
+}
+
+// --- scenario selection ------------------------------------------------------
+let list;
+if (NEGATIVE) {
+  list = negatives.map((n) => {
+    const base = scenarios.find((s) => s.id === n.base);
+    if (!base) throw new Error(`negative ${n.id}: base scenario ${n.base} not found`);
+    const copy = deepMerge(structuredClone(base), { story: n.story, original: n.original });
+    copy.id = n.id;
+    copy.reason = n.reason;
+    return copy;
+  });
+} else {
+  list = ONLY ? scenarios.filter((s) => s.id.includes(ONLY)) : scenarios;
+}
+if (list.length === 0) {
+  console.error(`no scenario matches ${NEGATIVE ? "--negative" : `--only ${ONLY}`}`);
+  process.exit(2);
 }
 
 const browser = await chromium.launch();
@@ -159,47 +430,121 @@ const origServer = await serve(ROOT, ORIG_PORT, "original demo");
 const storyServer = await serve(STATIC, STORY_PORT, "storybook-static");
 mkdirSync(OUT, { recursive: true });
 
-const list = ONLY ? scenarios.filter((s) => s.id.includes(ONLY)) : scenarios;
-if (list.length === 0) {
-  console.error(`no scenario matches --only ${ONLY}`);
-  process.exit(2);
-}
+const startedAt = new Date().toISOString();
+const { head, dirtyPaths } = gitInfo();
+const entries = [];
+const allowancesUsed = [];
 
-const results = [];
 for (const scenario of list) {
   const viewport = scenario.viewport || BASELINE;
-  const origUrl = `http://127.0.0.1:${ORIG_PORT}${scenario.original.url}`;
-  const sUrl = storyUrl(scenario.story);
+  const entry = {
+    id: scenario.id,
+    page: pageOf(scenario.id),
+    viewport,
+    original: { url: `http://127.0.0.1:${ORIG_PORT}${scenario.original.url}`, storage: scenario.original.storage },
+    story: { id: scenario.story.id, args: scenario.story.args, url: storyUrl(scenario.story) },
+    machine: "fail",
+    layout: [],
+  };
+  const topErrors = [];
+  const weakSides = [!hasStrongExpect(scenario.original) && "original", !hasStrongExpect(scenario.story) && "story"].filter(Boolean);
+  if (weakSides.length) {
+    topErrors.push(`weak assertions: ${weakSides.join(" + ")} side has no text/count/attr expect`);
+  }
+  if (!indexIds.has(scenario.story.id)) {
+    topErrors.push(`story id ${scenario.story.id} not in storybook-static/index.json`);
+  }
+  if (topErrors.length) {
+    entry.original.load = entry.original.behavior = "skipped";
+    entry.story.load = entry.story.behavior = "skipped";
+    entry.original.errors = topErrors;
+    entry.story.errors = [];
+    entries.push(entry);
+    console.log(`FAIL ${scenario.id}`);
+    for (const e of topErrors) console.log(`  ${e}`);
+    continue;
+  }
+
+  const origLayoutSels = (scenario.layout || []).map((l) => l.orig);
+  const storyLayoutSels = (scenario.layout || []).map((l) => l.story);
   const [orig, story] = [
-    await runSide(browser, `${scenario.id}-original`, scenario.original, origUrl, viewport),
-    await runSide(browser, `${scenario.id}-story`, scenario.story, sUrl, viewport),
+    await runSide(browser, `${scenario.id}-original`, scenario.original, entry.original.url, viewport, "original", scenario.id, origLayoutSels),
+    await runSide(browser, `${scenario.id}-story`, scenario.story, entry.story.url, viewport, "story", scenario.id, storyLayoutSels),
   ];
-  const ok = orig.errors.length === 0 && story.errors.length === 0;
-  results.push({ scenario, orig, story, ok });
-  console.log(`${ok ? "PASS" : "FAIL"} ${scenario.id}`);
-  for (const e of [...orig.errors.map((x) => `  orig: ${x}`), ...story.errors.map((x) => `  story: ${x}`)]) console.log(e);
+  entry.original = { ...entry.original, ...orig, storage: scenario.original.storage };
+  entry.story = { ...entry.story, ...story };
+  delete entry.original.boxes;
+  delete entry.story.boxes;
+  const layoutErrors = [];
+  entry.layout = compareLayout(scenario, orig, story, layoutErrors);
+  entry.story.errors.push(...layoutErrors);
+  entry.machine = orig.errors.length === 0 && story.errors.length === 0 && layoutErrors.length === 0 ? "pass" : "fail";
+  entries.push(entry);
+  console.log(`${entry.machine === "pass" ? "PASS" : "FAIL"} ${scenario.id}${NEGATIVE ? ` (negative: expected fail)` : ""}`);
+  for (const e of [...orig.errors.map((x) => `  orig: ${x}`), ...story.errors.map((x) => `  story: ${x}`), ...layoutErrors.map((x) => `  ${x}`)]) console.log(e);
   if (VERBOSE) for (const w of [...orig.warnings, ...story.warnings]) console.log(`  warn: ${w}`);
 }
 
-const rows = results.map(({ scenario, orig, story, ok }) => `
-  <section class="${ok ? "ok" : "bad"}">
-    <h2>${scenario.id} — ${ok ? "PASS" : "FAIL"}</h2>
-    <div class="pair">
-      <figure><figcaption>original: ${scenario.original.url}</figcaption>
-        ${orig.shot ? `<a href="${path.basename(orig.shot)}"><img src="${path.basename(orig.shot)}"></a>` : "<p>no screenshot</p>"}</figure>
-      <figure><figcaption>story: ${scenario.story.id}${scenario.story.args ? " " + JSON.stringify(scenario.story.args) : ""}</figcaption>
-        ${story.shot ? `<a href="${path.basename(story.shot)}"><img src="${path.basename(story.shot)}"></a>` : "<p>no screenshot</p>"}</figure>
-    </div>
-    ${[...orig.errors, ...story.errors].length ? `<pre>${[...orig.errors, ...story.errors].join("\n")}</pre>` : ""}
-  </section>`).join("\n");
-writeFileSync(path.join(OUT, "index.html"), `<!doctype html><meta charset="utf-8"><title>visual-check</title>
-<style>body{font:14px/1.5 system-ui;margin:24px}h2{font-size:16px}.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}figure{margin:0}figcaption{color:#555;font-size:12px;margin-bottom:4px}img{width:100%;border:1px solid #ccc}.bad h2{color:#b00020}.ok h2{color:#0a7a3d}pre{background:#fdecea;padding:8px;white-space:pre-wrap}</style>
-<h1>visual-check report ${new Date().toISOString()}</h1>${rows}`);
+// collect which console allowances actually fired
+for (const e of entries) {
+  for (const side of ["original", "story"]) {
+    for (const w of e[side]?.warnings || []) {
+      const m = w.match(/^allowed console\.error: (.*) — (.*)$/);
+      if (m) allowancesUsed.push({ scenario: e.id, side, text: m[1].slice(0, 160), reason: m[2] });
+    }
+  }
+}
+
+// manual verdicts (reviews.json preserved across runs into the same --out)
+const reviews = loadReviews(OUT);
+for (const e of entries) Object.assign(e, manualStatus(e, reviews));
+
+const summary = {
+  total: entries.length,
+  machinePass: entries.filter((e) => e.machine === "pass").length,
+  manual: {
+    pass: entries.filter((e) => e.manual === "pass").length,
+    fail: entries.filter((e) => e.manual === "fail").length,
+    pending: entries.filter((e) => e.manual === "pending").length,
+  },
+  perPage: Object.fromEntries(
+    [...new Set(entries.map((e) => e.page))].map((p) => [p, entries.filter((e) => e.page === p).length]),
+  ),
+  index: indexCounts,
+  allowancesUsed,
+};
+
+const run = {
+  startedAt,
+  argv: process.argv.slice(2),
+  head,
+  dirtyPaths,
+  sourceHash: fingerprint.hash,
+  configHash,
+  build: stamp,
+  index: indexCounts,
+};
+writeFileSync(path.join(OUT, "results.json"), JSON.stringify({ run, scenarios: entries, summary }, null, 2) + "\n");
+renderReport(run, entries, OUT);
 
 await browser.close();
 origServer.close();
 storyServer.close();
 
-const failed = results.filter((r) => !r.ok);
-console.log(`\n${results.length - failed.length}/${results.length} scenarios passed; report: ${path.join(OUT, "index.html")}`);
-process.exit(failed.length ? 1 : 0);
+const perPage = Object.entries(summary.perPage).map(([k, v]) => `${k}=${v}`).join(" ");
+if (NEGATIVE) {
+  const unexpected = entries.filter((e) => e.machine === "pass");
+  console.log(`\nnegative checks: ${entries.length - unexpected.length}/${entries.length} failed as expected`);
+  for (const e of unexpected) console.log(`NEGATIVE CHECK PASSED UNEXPECTEDLY: ${e.id}`);
+  process.exit(unexpected.length ? 1 : 0);
+}
+console.log(`\nstories: ${indexCounts.stories} docs: ${indexCounts.docs} | scenarios per page: ${perPage}`);
+console.log(
+  `machine: ${summary.machinePass}/${summary.total} pass | manual: pass ${summary.manual.pass}, fail ${summary.manual.fail}, pending ${summary.manual.pending} — machine pass does NOT mean visual pass`,
+);
+if (allowancesUsed.length) {
+  console.log(`console allowances used: ${allowancesUsed.length}`);
+  for (const a of allowancesUsed) console.log(`  ${a.scenario} ${a.side}: ${a.text} — ${a.reason}`);
+}
+console.log(`report: ${path.join(OUT, "index.html")}`);
+process.exit(summary.machinePass === summary.total ? 0 : 1);
