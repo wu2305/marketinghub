@@ -2,7 +2,7 @@ import { WorkspaceGrid } from "./index.jsx";
 import { HOME } from "../../../content.js";
 
 export default {
-  title: "Organisms/Workspace grid",
+  title: "Features/Home/Workspace grid",
   component: WorkspaceGrid,
   tags: ["autodocs"],
   parameters: {

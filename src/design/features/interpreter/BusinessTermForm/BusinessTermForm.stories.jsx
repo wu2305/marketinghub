@@ -2,7 +2,7 @@ import { BusinessTermForm } from "./index.jsx";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Business term form",
+  title: "Features/Interpreter/Business term form",
   component: BusinessTermForm,
   tags: ["autodocs"],
   parameters: {

@@ -35,7 +35,7 @@ const preview = {
     controls: { expanded: true, matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
       storySort: {
-        order: ["Foundations", "Atoms", "Molecules", "Organisms", "Pages"],
+        order: ["Foundations", "Atoms", "Molecules", "Organisms", "Features", "Pages"],
       },
     },
     backgrounds: {

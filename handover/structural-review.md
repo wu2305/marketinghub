@@ -350,9 +350,10 @@ S5：
   - P08–P17 之间交叉链接密集（knowledge-create/view、review-center ↔ knowledge、scenario-*），照现状推进会让每个宿主的翻译表和每个页面的 href props 同步膨胀。
   - 建议：统一为“路由 id + 参数”——组件发 `onNavigate({ id, params, href })`，href 由一个 `hrefFor(id, params)` 解析器生成（页面一个 prop 或一个 context），原始 Demo URL 的解析器放 `demo/`；Cockpit 的四个 href props 收敛为它。这改变公共接口，需用户确认后作为 M1 条目执行。
 
-- [ ] **R7 共享登记文件是并行冲突热点，波次 2 的“2–3 个 agent 并行”在现状下做不到**
+- [x] **R7 共享登记文件是并行冲突热点，波次 2 的“2–3 个 agent 并行”在现状下做不到** —— 2026-09-25 完成（分支 `structural/r7-split-hotspots`，两个提交）：
   - `scripts/visual-check.config.mjs` 3605 行，230 个场景在一个默认导出数组里；`src/design/pages.stories.jsx` 735 行装着全部 7 个页面故事和它们的状态；`content.js` 1703 行；`index.js`。S2–S8、A2 和每个新页面都要改其中至少两个。S1 解决了组件文件的冲突，没有解决这些文件。
   - 处理（纯搬迁，零行为变化，R1 合入后立刻独占执行）：visual-check 场景按页拆为 `scripts/visual-check/scenarios/p01.mjs … p07.mjs`，由聚合文件按原顺序拼回（`--only`/过滤参数行为不变）；页面故事拆到 `pages/<Page>/<Page>.stories.jsx`，title 与 story id 不变（脚本只引用 `pages--*` id，已核实 115 处）；content.js 的按页拆分仍由 S6 做。
+  - 证据：a7d4478 场景拆分（`common.mjs` + 7 个 p0x 模块；深比较聚合默认导出与拆分前 115 场景一致）、fa06b57 页面故事拆分（7 个 `pages/<Page>/<Page>.stories.jsx`，meta title 仍 `"Pages"`，`pages--*` id 集合与拆分前一致）。`visual-check.mjs` 的 `CONFIG_FILES` 已纳入全部场景模块，构建戳覆盖断言集。验证：npm test 64/64、build-storybook 73 stories + 61 docs、visual-check 115/115（`/tmp/mh-r7-full`）、negative 7/7、host-check 7/7。
 
 - [ ] **R8 tokens.css 的 reset 会作用到调用方传入的插槽内容**（并入 cleanup 清单或 S7）
   - `tokens.css:42–57` 用 `:where([class*="mh-"], [class*="mh-"] *)` 重置盒模型、按钮、链接。宿主传给 `Hero`、`Modal`、`Panel` 等的 `children` 都位于 `mh-*` 祖先之内，同样被重置；`host-check` 的哨兵只放在所有 `mh-*` 容器之外，测不到这种情况。
@@ -363,9 +364,9 @@ S5：
   - 同一张表里：“最新独立审核 8c93802 … 63 stories + 5 docs”、“构建验证 d6557c3 … 63 stories、5 docs”、“故事数 73 + 61 docs”、“最近视觉对照 105/105”；S1 条目记录的是 115/115。§2.1 M4 行写 Business Term 在 `devin/story-docs-closure` 完成。A3 的约束是“不改任何事实”，所以没人负责刷新这些过时事实。
   - 处理：R1 合入后，在 main 上跑一次全套验证，用一次运行的结果重写 §1 表格（每项注明提交号），过期行移到 §2.5。
 
-- [ ] **R10 Storybook 分类与代码结构不一致**（低优先级，可与 R7 同做）
-  - 26 个 `features/*` 故事仍以 `Organisms/…` 为 title，读者无法区分可复用组件和单页模块；AGENTS.md §3.4 仍按 Atoms/Molecules/Organisms 表述规则。visual-check 只引用 `pages--*`，改 title 不影响配对；`stories.test.jsx` 可能断言 title，改时同步。
-  - 处理：features 改为 `Features/<Page>/<Name>`，components 保留原 Atoms/Molecules/Organisms 或统一为 `Components/<Name>`（选一，写进 AGENTS.md §3.4）。
+- [x] **R10 Storybook 分类与代码结构不一致**（与 R7 同做）—— 2026-09-25 完成：26 个 `features/*` 故事 title 由 `Organisms/…` 改为 `Features/<Page>/<Name>`（共享组件保留 Atoms/Molecules/Organisms）。visual-check 只引用 `pages--*`，配对不受影响；`stories.test.jsx` 不按 title 断言。AGENTS.md §3.4 增补 title 约定，§2.3/§2.4 改为页面故事在 `pages/<Page>/<Page>.stories.jsx`。story id 映射：`organisms-<slug>--default` → `features-<page>-<slug>--default`（26 条，逐条见 handover §2.5 日志）。
+  - 26 个 `features/*` 故事原以 `Organisms/…` 为 title，读者无法区分可复用组件和单页模块；AGENTS.md §3.4 仍按 Atoms/Molecules/Organisms 表述规则。visual-check 只引用 `pages--*`，改 title 不影响配对；`stories.test.jsx` 可能断言 title，改时同步。
+  - 处理：features 改为 `Features/<Page>/<Name>`，components 保留原 Atoms/Molecules/Organisms（已写进 AGENTS.md §3.4）。
 
 - [x] **R11 结构整改队列本身在推迟覆盖**（2026-09-25 用户决定采纳，见 D1/D3）
   - 现行执行顺序把 S2–S8、A2–A4（10 项以上、4 个波次）全部排在 P08–P17 与 P07 其余六类之前。AGENTS.md §5 M1 明确写“不等待一个预想中的完整框架才开始页面工作”。覆盖现状 7/17 页，P07 八类中六类仍是占位，另有 R2 两处助手缺失。

@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Type card",
+  title: "Features/Interpreter/Type card",
   component: TypeCard,
   tags: ["autodocs"],
   parameters: {

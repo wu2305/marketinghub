@@ -7,7 +7,7 @@ import { cityInvestScenarioSource } from "../../../demo/report-demo.js";
 const { baseline: _baseline, ...CITY_INVEST_VIEW } = CITY_INVEST;
 
 export default {
-  title: "Organisms/Six-city invest analysis",
+  title: "Features/Cockpit/Six-city invest analysis",
   component: CityInvestDashboard,
   tags: ["autodocs"],
   parameters: {

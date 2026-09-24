@@ -6,7 +6,7 @@ import { callbackProp, prop } from "../../../lib/story-helpers.js";
 const bundle = INTERPRETER.businessTermLibrary;
 
 export default {
-  title: "Organisms/Business term view",
+  title: "Features/Interpreter/Business term view",
   component: BusinessTermView,
   tags: ["autodocs"],
   parameters: {

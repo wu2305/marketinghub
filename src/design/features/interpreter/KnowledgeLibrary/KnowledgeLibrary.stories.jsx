@@ -4,7 +4,7 @@ import { recordMatchesFilter, uniqueFilterOptions } from "../../../cx.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Knowledge library",
+  title: "Features/Interpreter/Knowledge library",
   component: KnowledgeLibrary,
   tags: ["autodocs"],
   parameters: {

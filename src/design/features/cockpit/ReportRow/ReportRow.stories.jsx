@@ -6,7 +6,7 @@ const project = COCKPIT.projects.city;
 const report = project.reports[0];
 
 export default {
-  title: "Organisms/Report row",
+  title: "Features/Cockpit/Report row",
   component: ReportRow,
   tags: ["autodocs"],
   parameters: {

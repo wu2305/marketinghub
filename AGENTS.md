@@ -40,7 +40,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 2.3 当前方案（PR #6 起，main）
 
-- 代码位于 `src/design`：`tokens.css`；通用组件在 `components/<Name>/`，单页功能模块在 `features/<page>/<Name>/`，页面组件在 `pages/<Page>/`，跨组件共享的私有模块在 `lib/`；每个组件目录内为 `index.jsx` + `<Name>.css` + `<Name>.stories.jsx`，页面故事仍在 `pages.stories.jsx`；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
+- 代码位于 `src/design`：`tokens.css`；通用组件在 `components/<Name>/`，单页功能模块在 `features/<page>/<Name>/`，页面组件在 `pages/<Page>/`，跨组件共享的私有模块在 `lib/`；每个组件目录内为 `index.jsx` + `<Name>.css` + `<Name>.stories.jsx`，页面故事在 `pages/<Page>/<Page>.stories.jsx`（meta title 统一为 `"Pages"`，story id 不变）；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
 - Storybook 8.6，`@storybook/react-vite`，`.storybook/main.js` 以 `esbuild.jsx = "automatic"` 编译 JSX，`staticDirs` 把 `assets/` 映射到 `/assets`。
 - 独立宿主 `examples/host`（base `/mh-host/`）由 `scripts/host-check.mjs` 验证；配对视觉对照由 `scripts/visual-check.mjs` 执行（绑定构建戳，含 `--negative` 负向变异）。
 - 故事数、测试数、构建与对照结论只记在 `handover/README.md` §1，本文件不写这些数字。
@@ -51,7 +51,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
 - **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类中 overview、Principles、Business Term 有专用视图并通过人工审图（Business Term 的 M5 创建/编辑入口未建）；其余六类仍是过渡通用列表（人工 fail）。
-- **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于 `pages.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
+- **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于各自的 `pages/<Page>/<Page>.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
 - **覆盖层**：滚动锁与焦点还原已共享，但 Escape 与焦点环由各组件自行实现：嵌套时一次 Escape 会关闭所有层，ModelFlowDialog 不响应 Escape，只有 Modal 有焦点环。
 - **组件边界**：AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
 - **文案**：AiInterpreterPage 写死统计标签、管理规则与未知类型文案；有机体可见文案有的走 props，有的写死，规则不统一。
@@ -92,6 +92,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 组件同样遵守奥卡姆剃刀：不写只转发 props 的包装组件；同义组件合并为一个并以 `variant`/`tone`/`size` 区分；新组件先放 `features/<page>/`，被第二个真实页面使用时才提升到 `components/`；不预建通用渲染器；没有页面或故事之外使用者的导出、props 与分支应删除。新增前先确认现有组件或 prop 无法覆盖。
 - Pages 故事的渲染树只允许出现 `src/design` 内的组件。
 - 所有故事文件启用 `tags: ["autodocs"]`。每个组件用 JSDoc 或 PropTypes 声明 props 的类型与取值；若引入 TypeScript，一次性迁移整个 `src/design`。
+- 故事 title 反映代码层级：共享组件用 `Atoms`/`Molecules`/`Organisms`，单页模块用 `Features/<Page>/<Name>`，页面用 `Pages`；改变 title 即改变 story id，须在 handover 登记旧→新映射并同步引用。
 - 提供 `src/design/index.js` 作为唯一公共导出入口。
 
 ### 3.5 参照物缺陷

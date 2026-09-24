@@ -4,7 +4,7 @@ import { COCKPIT } from "../../../content.js";
 const cityProject = COCKPIT.projects.city;
 
 export default {
-  title: "Organisms/Project card",
+  title: "Features/Cockpit/Project card",
   component: ProjectCard,
   tags: ["autodocs"],
   parameters: {

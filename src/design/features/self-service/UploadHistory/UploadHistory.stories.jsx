@@ -3,7 +3,7 @@ import { SELF_SERVICE } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Upload history",
+  title: "Features/Self-Service/Upload history",
   component: UploadHistory,
   tags: ["autodocs"],
   parameters: {

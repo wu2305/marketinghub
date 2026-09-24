@@ -1,7 +1,7 @@
 import { ActionCard } from "./index.jsx";
 
 export default {
-  title: "Organisms/Action card",
+  title: "Features/Self-Service/Action card",
   component: ActionCard,
   tags: ["autodocs"],
   parameters: {

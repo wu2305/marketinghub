@@ -7,7 +7,7 @@ import { buildReportModelDraft } from "../../../report-logic.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Report Copilot workspace",
+  title: "Features/Cockpit/Report Copilot workspace",
   component: ReportCopilot,
   tags: ["autodocs"],
   parameters: {

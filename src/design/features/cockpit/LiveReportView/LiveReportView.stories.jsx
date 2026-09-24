@@ -3,7 +3,7 @@ import { LiveReportView } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
 
 export default {
-  title: "Organisms/Live report view",
+  title: "Features/Cockpit/Live report view",
   component: LiveReportView,
   tags: ["autodocs"],
   parameters: {

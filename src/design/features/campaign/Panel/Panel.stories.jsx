@@ -1,7 +1,7 @@
 import { Panel } from "./index.jsx";
 
 export default {
-  title: "Organisms/Panel",
+  title: "Features/Campaign/Panel",
   component: Panel,
   tags: ["autodocs"],
   parameters: {

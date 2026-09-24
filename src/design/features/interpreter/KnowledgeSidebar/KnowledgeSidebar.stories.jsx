@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Knowledge sidebar",
+  title: "Features/Interpreter/Knowledge sidebar",
   component: KnowledgeSidebar,
   tags: ["autodocs"],
   parameters: {

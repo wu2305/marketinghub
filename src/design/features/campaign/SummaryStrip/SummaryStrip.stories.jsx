@@ -2,7 +2,7 @@ import { SummaryStrip } from "./index.jsx";
 import { CAMPAIGN } from "../../../content.js";
 
 export default {
-  title: "Organisms/Summary strip",
+  title: "Features/Campaign/Summary strip",
   component: SummaryStrip,
   tags: ["autodocs"],
   parameters: {

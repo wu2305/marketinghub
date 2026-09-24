@@ -6,7 +6,7 @@ import { pluralize } from "../../../report-logic.js";
 const project = COCKPIT.projects.city;
 
 export default {
-  title: "Organisms/Project directory",
+  title: "Features/Cockpit/Project directory",
   component: ProjectDirectory,
   tags: ["autodocs"],
   parameters: {

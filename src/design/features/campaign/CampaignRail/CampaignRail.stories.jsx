@@ -3,7 +3,7 @@ import { CAMPAIGN } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Campaign rail",
+  title: "Features/Campaign/Campaign rail",
   component: CampaignRail,
   tags: ["autodocs"],
   parameters: {

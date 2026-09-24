@@ -2,7 +2,7 @@ import { ProjectCatalog } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
 
 export default {
-  title: "Organisms/Project catalog",
+  title: "Features/Cockpit/Project catalog",
   component: ProjectCatalog,
   tags: ["autodocs"],
   parameters: {

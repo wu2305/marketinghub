@@ -4,7 +4,7 @@ import { COCKPIT } from "../../../content.js";
 const project = COCKPIT.projects.fourp;
 
 export default {
-  title: "Organisms/Live overview",
+  title: "Features/Cockpit/Live overview",
   component: LiveOverview,
   tags: ["autodocs"],
   parameters: {

@@ -2,7 +2,7 @@ import { TaskList } from "./index.jsx";
 import { CAMPAIGN } from "../../../content.js";
 
 export default {
-  title: "Organisms/Task list",
+  title: "Features/Campaign/Task list",
   component: TaskList,
   tags: ["autodocs"],
   parameters: {

@@ -3,7 +3,7 @@ import { COCKPIT } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Report details drawer",
+  title: "Features/Cockpit/Report details drawer",
   component: ReportDetailsDrawer,
   tags: ["autodocs"],
   parameters: {

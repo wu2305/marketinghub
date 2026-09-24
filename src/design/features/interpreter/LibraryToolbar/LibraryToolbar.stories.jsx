@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Library toolbar",
+  title: "Features/Interpreter/Library toolbar",
   component: LibraryToolbar,
   tags: ["autodocs"],
   parameters: {

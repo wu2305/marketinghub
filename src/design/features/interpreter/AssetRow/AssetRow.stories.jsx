@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Asset row",
+  title: "Features/Interpreter/Asset row",
   component: AssetRow,
   tags: ["autodocs"],
   parameters: {

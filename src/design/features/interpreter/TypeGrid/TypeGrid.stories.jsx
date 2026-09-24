@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Type grid",
+  title: "Features/Interpreter/Type grid",
   component: TypeGrid,
   tags: ["autodocs"],
   parameters: {

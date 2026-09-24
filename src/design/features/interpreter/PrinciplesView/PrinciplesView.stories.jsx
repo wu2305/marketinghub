@@ -3,7 +3,7 @@ import { INTERPRETER } from "../../../content.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Organisms/Principles library",
+  title: "Features/Interpreter/Principles library",
   component: PrinciplesView,
   tags: ["autodocs"],
   parameters: {

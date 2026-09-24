@@ -2,7 +2,7 @@ import { WorkspaceCard } from "./index.jsx";
 import { HOME } from "../../../content.js";
 
 export default {
-  title: "Organisms/Workspace card",
+  title: "Features/Home/Workspace card",
   component: WorkspaceCard,
   tags: ["autodocs"],
   parameters: {
