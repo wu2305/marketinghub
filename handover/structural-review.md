@@ -316,7 +316,7 @@ S5：
 
 ### 发现
 
-- [ ] **R1 S1 未合入 main，而全部后续提示词要求“从最新 main 开分支”（阻断）**
+- [x] **R1 S1 未合入 main，而全部后续提示词要求“从最新 main 开分支”（阻断）** —— 2026-09-25 已完成：main 快进 2daa11e→41d6053，已推送 github 与 origin。合入前复核：npm test 64/64；build-storybook 73 stories + 61 docs（与 S1 基线一致）；build:host + host-check 7/7。自 S1 全套 visual-check 115/115 以来仅文档变更，未重跑 visual-check。未走 PR（直接快进）。
   - 证据：`origin/main` = `github/main` = 2daa11e；`structural/s1-file-split` 领先 3 个提交（d652fd8、ad7ba3a、1dd1d7d），无 PR。AGENTS.md §2.3/§2.4 已按拆分后的目录描述代码并引用 ad7ba3a，main 上的规则与 main 上的代码不一致。
   - 后果：波次 2 的 agent 按通用前言 `git switch -c <分支> origin/main` 会拿到拆分前的 `organisms.jsx` 单文件，要么在旧结构上开发，要么与 S1 大面积冲突。
   - 处理：先为 S1 开 PR 并合入 main（快进即可），之后才启动任何波次 2 条目。顺带：`origin` 上仍有 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 等 7 个 cursor/* 旧分支（AGENTS.md §2.2 要求关闭 #1、#5），由用户决定是否删除远端分支。
