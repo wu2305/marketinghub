@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
+import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, COCKPIT_SKILL_MENU, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
 import { COPILOT_HISTORY, COPILOT_SUMMARY, REPORT_COPILOT_FLOW, REPORT_SKILL_MENU, buildCopilotChatEntry, buildReportModelDraft, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./report-data.js";
 
@@ -186,7 +186,7 @@ export const MarketingCockpit = {
     groups: COCKPIT.groups,
     projects: COCKPIT.projects,
     detailsSections: COCKPIT.detailsSections,
-    assistant: { ...COCKPIT.assistant, showScopes: false, showPicks: false, hideStageOnAnswers: true, enterToSubmit: false, skillMenu: ASSISTANT_SKILL_MENU },
+    assistant: { ...COCKPIT.assistant, showScopes: false, showPicks: false, hideStageOnAnswers: true, enterToSubmit: false, skillMenu: COCKPIT_SKILL_MENU },
   },
   argTypes: {
     project: { control: "select", options: ["all", "city", "fourp", "customer", "abo", "rednote", "ottolv"] },

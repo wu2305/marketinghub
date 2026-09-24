@@ -1245,6 +1245,7 @@
 }
 
 .mh-assistant__actions {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1330,11 +1331,20 @@
   border: 1px solid var(--mh-line-strong-ai);
   border-radius: 6px;
   background: var(--mh-surface);
+  box-shadow: var(--mh-composer-shadow);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.mh-assistant__box:focus-within {
+  border-color: var(--mh-bubble-from);
+  box-shadow: var(--mh-composer-focus);
 }
 
 .mh-assistant__box .mh-textarea {
-  height: 44px;
   min-height: 44px;
+  max-height: 88px;
   padding: 6px 0 4px;
   border: 0;
   border-radius: 0;
@@ -1402,6 +1412,114 @@
   border-radius: 8px;
   box-shadow: var(--mh-flow-shadow);
   transform: translate(-50%, -50%);
+}
+
+/* assistantModalEnter / assistantDrawerEnter — the component mounts on open so
+   the animation plays once, like the original's :not([hidden]) trigger;
+   drawer→expanded switches animation-name and replays, as in the original. */
+@keyframes mhAssistantModalEnter {
+  from {
+    transform: translate(-50%, -48%) scale(0.98);
+    opacity: 0.7;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes mhAssistantDrawerEnter {
+  from {
+    transform: translateX(100%);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.mh-assistant__dialog {
+  animation: mhAssistantModalEnter 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mh-assistant--drawer .mh-assistant__dialog {
+  animation-name: mhAssistantDrawerEnter;
+}
+
+.mh-assistant--expanded .mh-assistant__dialog {
+  animation-name: mhAssistantModalEnter;
+}
+
+@media (max-height: 760px) {
+  .mh-assistant--home.mh-assistant--expanded .mh-assistant__dialog {
+    height: 100vh;
+    max-height: 100vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .mh-assistant__dialog {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    min-height: 0;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .mh-assistant--drawer .mh-assistant__dialog {
+    top: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-left: 0;
+    border-radius: 0;
+  }
+
+  .mh-assistant--drawer.mh-assistant--expanded .mh-assistant__dialog {
+    top: 50%;
+    left: 50%;
+    width: min(640px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    height: min(720px, calc(100vh - 32px));
+    max-height: calc(100vh - 32px);
+    border: 1px solid var(--mh-line-strong-ai);
+    border-radius: 8px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-assistant:not(.mh-assistant--home) .mh-assistant__stage {
+    padding: 16px;
+  }
+
+  .mh-assistant:not(.mh-assistant--home) .mh-assistant__stage h3 {
+    font-size: 20px;
+  }
+
+  .mh-assistant:not(.mh-assistant--home) .mh-assistant__suggestions {
+    gap: 6px;
+  }
+
+  .mh-assistant:not(.mh-assistant--home) .mh-suggestion {
+    padding: 7px 12px;
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mh-assistant *,
+  .mh-assistant *::before,
+  .mh-assistant *::after {
+    scroll-behavior: auto;
+  }
+
+  .mh-assistant__dialog {
+    animation: none;
+  }
 }
 
 .mh-assistant__feed {
@@ -1617,14 +1735,17 @@
   margin-left: auto;
 }
 
+/* The shared panel anchors `.ai-recent-history` to `.assistant-header-actions`
+   (right:66px = clear of the close button), while home positions its popup to
+   the LEFT of the History button via JS — mirrored below per variant. */
 .mh-assistant__history {
-  position: relative;
+  position: static;
 }
 
 .mh-assistant__history-pop {
   position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
+  top: calc(100% + 8px);
+  right: 66px;
   z-index: 5;
   display: flex;
   width: 360px;
@@ -1635,6 +1756,17 @@
   border-radius: 10px;
   background: var(--mh-surface);
   box-shadow: var(--mh-popover-shadow);
+}
+
+/* home-history-popup is fixed with JS-computed left = button.left − width − 8
+   and top = button.top — the popover sits left of the button, tops aligned. */
+.mh-assistant--home .mh-assistant__history {
+  position: relative;
+}
+
+.mh-assistant--home .mh-assistant__history-pop {
+  top: 0;
+  right: calc(100% + 8px);
 }
 
 .mh-assistant__history-head {
@@ -2311,8 +2443,15 @@ body.dialog-open {
 }
 
 .mh-assistant__skill svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+}
+
+/* home.css shrinks `.upload-action` to 28px inside home-ask-panel; the svg
+   stays 16px in both variants. */
+.mh-assistant--home .mh-assistant__skill {
+  width: 28px;
+  height: 28px;
 }
 
 .mh-assistant__skill:hover,

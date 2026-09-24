@@ -936,6 +936,21 @@ export const ASSISTANT_SKILL_MENU = {
   manualLabel: "Create Analytical Model Manually",
 };
 
+/* reports.html is the only assistant host that loads data/knowledge.js, so its
+   `readAnalyticalModels()` returns the real asset record — a single item whose
+   note is the record's summary — instead of the three `fallbackAnalytical`
+   entries shown on home/campaign/lite. */
+export const COCKPIT_SKILL_MENU = {
+  ...ASSISTANT_SKILL_MENU,
+  items: [
+    {
+      id: "playbook-opportunity-scan",
+      title: "Opportunity scan playbook",
+      note: "Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.",
+    },
+  ],
+};
+
 export const CAMPAIGN = {
   rail: {
     eyebrow: "Campaign execution",

@@ -1310,7 +1310,10 @@ export function AssistantPanel({
 
   React.useEffect(() => {
     if (!open) {
-      setExpanded(false);
+      // Quirk parity: home (portal.js) and lite (assistant-panel-lite.js) reset
+      // `is-ai-expanded` on close, but the shared workspace panel's close only
+      // sets `hidden` — the expanded modal persists across close→reopen there.
+      if (tone === "home" || lite) setExpanded(false);
       setHistoryOpen(false);
       return undefined;
     }
@@ -1350,11 +1353,20 @@ export function AssistantPanel({
     }
   }, [answers.length]);
 
+  // `.query-canvas` auto-grows 44→88px with content (assistant-panel.css
+  // min/max-height); a <textarea> needs JS to size to scrollHeight.
+  React.useLayoutEffect(() => {
+    const el = promptRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [prompt]);
+
   if (!open) return null;
   return (
     <section
       className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")}
-      aria-label={title}
+      aria-label={lite ? "AI Interpreter" : title}
     >
       <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={onClose} />
       <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
@@ -1470,6 +1482,7 @@ export function AssistantPanel({
         </div>
         <form
           className="mh-assistant__ask"
+          aria-label="Ask AI Interpreter AI"
           onSubmit={(event) => {
             event.preventDefault();
             onSubmit?.({
@@ -1508,7 +1521,7 @@ export function AssistantPanel({
               </span>
             ) : null}
             <TextArea
-              label="Ask AI Interpreter"
+              label="Ask AI Interpreter AI"
               rows={1}
               value={prompt}
               placeholder="Type your question or upload Excel/CSV files for data analysis"
@@ -1535,7 +1548,7 @@ export function AssistantPanel({
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">
-                <Button variant="gold" size="sm" type="submit" disabled={submitDisabled || !String(prompt).trim()}>
+                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={submitDisabled || !String(prompt).trim()}>
                   ASK
                 </Button>
               </span>

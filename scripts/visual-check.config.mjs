@@ -108,10 +108,16 @@ export default [
         { click: "#homeHistory" },
         { wait: "#homeHistoryPopup:not([hidden])" },
         { click: ".home-history-item" },
+        // The quirk is only proven if the composer actually received the prompt
+        // while ASK stayed disabled — and Enter still submits from that state.
+        { eval: "(() => { const c = document.querySelector('#promptCanvas'); if (!c.textContent.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + c.textContent); if (!document.querySelector('#sendQuery').disabled) throw new Error('ASK enabled after history fill'); })()" },
+        { press: ["#promptCanvas", "Enter"] },
+        { wait: "#answerFeed .answer-entry" },
       ],
       expect: [
         { sel: "#homeHistoryPopup", state: "hidden" },
         { sel: "#sendQuery[disabled]" },
+        { sel: "#answerFeed .answer-entry" },
       ],
     },
     story: {
@@ -121,10 +127,14 @@ export default [
         { click: "button[aria-label='History']" },
         { wait: ".mh-assistant__history-pop" },
         { click: ".mh-assistant__history-item" },
+        { eval: "(() => { const t = document.querySelector('.mh-assistant__box .mh-textarea'); if (!t.value.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + t.value); if (!document.querySelector('.mh-assistant__send .mh-button').disabled) throw new Error('ASK enabled after history fill'); })()" },
+        { press: [".mh-assistant__box .mh-textarea", "Enter"] },
+        { wait: ".mh-assistant__entry" },
       ],
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
         { sel: ".mh-assistant__send .mh-button[disabled]" },
+        { sel: ".mh-assistant__entry" },
       ],
     },
   },
@@ -2467,6 +2477,44 @@ export default [
       id: "pages--campaign",
       args: { assistantOpen: true },
       actions: [{ click: "button[aria-label='Maximize AI Interpreter panel']" }],
+      expect: [
+        { sel: ".mh-assistant--expanded" },
+        { sel: "button[aria-label='Restore AI Interpreter panel']" },
+      ],
+    },
+  },
+  {
+    /* Quirk: the shared workspace panel's closeAssistant only sets `hidden` —
+       `is-ai-expanded` survives close→reopen (home/lite reset it instead). */
+    id: "p06-assistant-expand-persist",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#aiMaximize" },
+        { wait: ".assistant-panel.is-ai-expanded .assistant-modal" },
+        { click: "#assistantPanel .close-btn" },
+        { wait: "#aiEntry:not([hidden])" },
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+      ],
+      expect: [
+        { sel: ".assistant-panel.is-ai-expanded .assistant-modal" },
+        { sel: "#aiMaximize[aria-label='Restore AI Interpreter panel']" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: "button[aria-label='Maximize AI Interpreter panel']" },
+        { wait: ".mh-assistant--expanded" },
+        { click: ".mh-assistant__close" },
+        { wait: "button[aria-label='Open AI assistant']:not([hidden])" },
+        { click: "button[aria-label='Open AI assistant']" },
+        { wait: ".mh-assistant" },
+      ],
       expect: [
         { sel: ".mh-assistant--expanded" },
         { sel: "button[aria-label='Restore AI Interpreter panel']" },

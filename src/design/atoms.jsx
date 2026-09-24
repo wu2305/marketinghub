@@ -15,6 +15,7 @@ const SIZES = ["sm", "md", "lg"];
  * @param {"button"|"submit"} [props.type="button"]
  * @param {string} [props.icon] icon name from icons.jsx
  * @param {React.ReactNode} props.children
+ * @param {string} [props.label] aria-label override when the visible text isn't the right accessible name
  * @param {() => void} [props.onClick]
  */
 export function Button({
@@ -24,6 +25,7 @@ export function Button({
   type = "button",
   icon,
   children,
+  label,
   onClick,
 }) {
   return (
@@ -31,6 +33,7 @@ export function Button({
       className={cx("mh-button", `mh-button--${variant}`, `mh-button--${size}`)}
       type={type}
       disabled={disabled}
+      aria-label={label}
       onClick={onClick}
     >
       {icon ? <Icon name={icon} className="mh-button__icon" /> : null}

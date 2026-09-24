@@ -47,6 +47,8 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 2.4 2026-09-23 审核确认的缺口
 
+2026-09-24 增量对抗审核（02918b5 + 审核开始时已有的 8 个 tracked 工作区修改）：重新构建通过，实际索引为 63 stories + 5 docs（不是 68 stories），单测 10/10；P07 配对脚本 10/10 断言通过，但人工查看 Principles 配对截图确认整体 Hero/侧栏布局仍显著不同，撤销 handover“像素一致”的结论。Campaign 创建任务输入 Object 后 Cancel→重开，原始保留输入，React 回到 `341 plans`；此前将丢值登记为生命周期有意差异不能抵消可达流程缺口。结构性风险：CityInvestDashboard 无内容/数据 props、报表搜索依赖固定 KNOWLEDGE_ASSETS、Copilot 流取消令牌为模块全局、tokens 存在宿主全局 reset；独立宿主复用未得到证明。Accounts 错参数负向复核已能拒绝 overview，应不再沿用旧漏洞仍存在的结论。证据：`/tmp/mh-audit-20260924-p07`、`/tmp/mh-audit-20260924-runtime/results.json`。未复跑全套场景或 Controls 全枚举，未修改实现。
+
 对抗性复核（888177a + 当时工作区，其他模型仍在补 JSDoc）：9/9 单测复跑通过，已生成索引仍为 38 stories。临时副本将 p06-campaign-accounts 的故事参数故意改成 overview，实际故事截图为 Overview Dashboard，脚本仍 PASS；当前选择器主要证明外壳存在，未证明场景状态正确。另在首页打开助手，model/mode/suggest/attach picker 与 platformGuideTrigger 五个节点均存在但不可见，assistant-panel.css:802–810 强制隐藏；M0 把源码节点直接列为待实现功能存在恢复旧界面的风险。脚本扫描盘点、运行时可达盘点与完成验收必须区分。证据在 /tmp/mh-adversarial-wrong-state 和 /tmp/mh-adversarial-home，未修改组件实现。
 
 增量复核（a9542f7）：稳定类型标识、未知类型空态、只读创建入口、双维状态已修正，npm test 9/9 复跑通过。下表部分条目为修复前历史事实，当前状态以 handover 为准。新发现：Principles 示例未取实际生效的 globalPrinciples；Data Model 混用资产/模型源/domain 且补写原文不存在的说明和状态；Library 独立故事仍不回写输入或执行筛选；多选筛选被单选取代，搜索缺同义词/范围/创建者。现存原始截图只有 overview、Principles、Business Term、Scenario，不能支持八类型完整对照结论；实际 Principles 对照仍有 Hero/侧栏布局和数据内容差异。
@@ -118,6 +120,10 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 ## 5. 长期规划（2026-09-23 全量重建里程碑）
 
 本节取代旧 A–E 的机械串行安排；旧进度保留作历史证据，不自动等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 handover/README.md 维护。执行指令模板见 handover/execution-prompt.md。
+
+2026-09-24 审核执行纠偏：后续复制 P07 类型视图前先验收 Interpreter 专用外壳；M1 的不同内容注入与同页多实例检查应穿插当前条目，及早暴露固定 Demo 数据/全局状态耦合。配对脚本断言通过与人工视觉通过分别登记；可达状态丢失继续作为未完成项，不得用“组件生命周期”理由永久豁免。全量里程碑范围与顺序不变。
+
+同日根因评估：优先明确展示组件、演示数据/纯计算、流程状态宿主三者的依赖与责任，再用不同内容、生命周期、多实例和独立宿主导航验证边界。故事内持有本地状态本身不违规；需要跨宿主重用的流程不能只能从 stories 复制。专项执行指令见 `handover/structural-repair-prompt.md`，它不维护第二份进度，也不取代 M0–M7 全量目标。
 
 - **M0 全量盘点与参照基线**：核对 17 个 HTML 及 URL 参数、hash、脚本加载和覆盖关系；列出所有页内视图/状态/动作、组件候选与来源冲突。每个入口有台账，未知细节显式待查；完成首轮后即开始实现，后续随发现补充，不无限审查。
 - **M1 最小工程底座与公共基础**：可重复构建/交互验证/视觉对照、公共导出、props 声明与 autodocs、token/样式隔离、资源与导航约定、可操作的故事。先建立后续实施所需的最小闭环，其余基础组件随真实页面需求提取；不等待一个预想中的完整框架才开始页面工作。

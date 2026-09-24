@@ -152,6 +152,9 @@ a {
   --mh-ai-chip-pos-bg: #e8f5e9;
   --mh-ai-chip-neg: #c62828;
   --mh-ai-chip-neg-bg: #ffebee;
+  /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
+  --mh-composer-shadow: 0 5px 16px rgba(31, 41, 55, 0.06);
+  --mh-composer-focus: 0 0 0 3px rgba(218, 168, 96, 0.18);
   --mh-bg-faint: #f9fafb;
   --mh-field-line: #cfd6db;
   /* skill menu / model-flow dialog */

@@ -10,10 +10,10 @@
 |---|---|
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 53（Foundations 1、Atoms 7、Molecules 17、Organisms 22、Pages 6）+ 5 autodocs 页；全部导出组件均有独立故事 |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），9 条行为测试通过（2026-09-23） |
-| 构建验证 | 通过（2026-09-23，`npm run build-storybook -- --disable-telemetry`，58 entries：53 stories、5 docs） |
-| 最近视觉对照 | 2026-09-23，1440px：故事截图含八类型/overview/unknown；现存原始截图仅 overview/Principles/Business Term/Scenario。全八类配对及非默认筛选截图未齐；Principles 配对仍有显著布局与数据差异。产物 `/tmp/mh-visual/*.png` |
+| 故事数 | 63 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 29、Pages 7）+ 5 docs；2026-09-24 新构建 index.json 实数 |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），10 条行为测试通过（2026-09-24 本次复跑） |
+| 构建验证 | 通过（2026-09-24，`npm run build-storybook -- --disable-telemetry`，68 entries：63 stories、5 docs；02918b5 + 审核前已有工作区修改） |
+| 最近视觉对照 | 2026-09-24，1440×1400：P07 十场景加载/断言通过；人工审核 Principles 默认态未通过，Hero/侧栏整体布局不同。证据 `/tmp/mh-audit-20260924-p07`；未复跑全站视觉验收 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -54,7 +54,7 @@ npm test               # vitest 行为测试
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
-| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——Principles 专用卡片视图已实现+配对验证（10/10 p07 场景）；其余七类仍用通用列表待提取 |
+| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——Principles 卡片实现及 10/10 场景断言通过，整体视觉未通过（2026-09-24 复核）；其余七类仍用通用列表待提取 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
@@ -167,10 +167,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M4 P07 推进中——Principles 专用视图已完成并配对验证。本轮新增：`PrinciplesView` 有机体（300px 搜索 + 220px 分类 CheckboxFilter disclosure + 编号卡片 01–10 + 两线 clamp 按需展开钮 + 空态 + 共享 Pagination 10/20/50）、`data-active-type` 类型页壳（padding/背景差异、隐藏 `.library-search-actions`/`.business-overview-head`/countline 死 chrome）、Hero 按活动类型动态统计（单复数 caption）、`/` 与 Cmd/Ctrl+K 搜索聚焦（TextInput/SearchField 增 `inputRef`）、侧栏 plural 标签 + `navCount` tooltip（countForType 值 10/6/1/3/1/1/2/3 ≠ typeMeta total）+ 计数 chip 恒 `display:none`（与原始一致，含 overview）。`globalPrinciples` 十条由 types.js 逐字生成（`type`→`category`）。修复 clamp 字体竞态：`PrincipleDescription` 在 `document.fonts.ready` 与 resize 后重测，避免按回退字体误截（原 02 卡无展开钮）。死代码登记：`#principleVersionDrawer`/`#principleVersionScrim` 被 shared-controls.js 运行时移除、`data-principle-versions` 无生产者、`patchRows` 找不存在的 `.asset-stage`——均不建。新增 CheckboxFilter/Pagination molecules 与独立故事；10 个 p07 配对场景全过。
+- **当前目标**：M4 P07 推进中——Principles 专用视图已有实现；2026-09-24 复核确认场景断言通过但整体视觉未通过，先修专用外壳。本轮新增：`PrinciplesView` 有机体（300px 搜索 + 220px 分类 CheckboxFilter disclosure + 编号卡片 01–10 + 两线 clamp 按需展开钮 + 空态 + 共享 Pagination 10/20/50）、`data-active-type` 类型页壳（padding/背景差异、隐藏 `.library-search-actions`/`.business-overview-head`/countline 死 chrome）、Hero 按活动类型动态统计（单复数 caption）、`/` 与 Cmd/Ctrl+K 搜索聚焦（TextInput/SearchField 增 `inputRef`）、侧栏 plural 标签 + `navCount` tooltip（countForType 值 10/6/1/3/1/1/2/3 ≠ typeMeta total）+ 计数 chip 恒 `display:none`（与原始一致，含 overview）。`globalPrinciples` 十条由 types.js 逐字生成（`type`→`category`）。修复 clamp 字体竞态：`PrincipleDescription` 在 `document.fonts.ready` 与 resize 后重测，避免按回退字体误截（原 02 卡无展开钮）。死代码登记：`#principleVersionDrawer`/`#principleVersionScrim` 被 shared-controls.js 运行时移除、`data-principle-versions` 无生产者、`patchRows` 找不存在的 `.asset-stage`——均不建。新增 CheckboxFilter/Pagination molecules 与独立故事；10 个 p07 配对场景全过。
 - **下一步**：M4 P07 继续——按台账推进剩余七类专用视图（Report Context、Data Model、Metric Dictionary、Business Term、Analytical Model、Scenario Reporting、Email Reports），逐类核实 types.js 行渲染/动作/筛选差异后提取。M1 余项并行欠账：色值 token 化余量、`@media`/`:focus-visible` 覆盖、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ 2d87dd9 → 13ce501 → 88cbaaf → f777199），未合入 main。P06 批次对抗审核（698769bf）在途，P07 Principles 批次审核随提交启动；返回结果在下轮处理。
-- **未提交改动**：无（f777199 已含本轮全部实现+场景+台账）。
-- **已有验证**：2026-09-24 `build-storybook` 68 stories（65→68）；`node scripts/visual-check.mjs --only p07` 10/10 PASS（principles/category-open/category-filter/search/empty/expand/slash + overview/business-term/scenario 回归）；`npm test` 10/10（interpreter.test.jsx 更新为 Principles 卡片契约）。截图人工比对：p07-interpreter-principles 与 p07-principles-category-open 对与原始像素一致（编号卡、类别下拉、侧栏计数隐藏、02 卡无展开钮）。场景选择器经验：`.principle-list-item`/`.mh-principle` 裸选择器在筛选后仍命中剩余卡，detached 断言须 `:has-text()` 具体化；`/` 聚焦场景须先等 input 挂载。全套件 `node scripts/visual-check.mjs` 99/99 PASS（P01–P07）。此前验证：2026-09-23 `npm test` 9/9、visual-check 34/34（P05 十场景明细见历史行）。
+- **未提交改动**：2026-09-24 审核基线 HEAD 为 02918b5；审核开始时已有 handover、visual-check.config、atoms、content、organisms CSS/JSX、pages.stories、tokens 共 8 个 tracked 修改及未跟踪 `.commandcode/`。本次仅补审核文档，不覆盖这些实现改动。
+- **已有验证**：2026-09-24 `build-storybook` 68 stories（65→68）；`node scripts/visual-check.mjs --only p07` 10/10 PASS（principles/category-open/category-filter/search/empty/expand/slash + overview/business-term/scenario 回归）；`npm test` 10/10（interpreter.test.jsx 更新为 Principles 卡片契约）。历史人工结论曾称 Principles“像素一致”，2026-09-24 新构建复核撤销：原始侧栏从页头下贯穿、Hero 位于右侧；React Hero 横跨顶部、侧栏从 Hero 下开始。场景选择器经验：`.principle-list-item`/`.mh-principle` 裸选择器在筛选后仍命中剩余卡，detached 断言须 `:has-text()` 具体化；`/` 聚焦场景须先等 input 挂载。全套件 `node scripts/visual-check.mjs` 99/99 PASS（P01–P07）。此前验证：2026-09-23 `npm test` 9/9、visual-check 34/34（P05 十场景明细见历史行）。
 - **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
 - **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
 
@@ -224,8 +224,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Interpreter 未知类型 | 原 `?type=` 非法值回退 `all` 显示概览；本实现改为显式 Unknown 空态，不渲染任何记录 | 防止非法类型意外展示全量记录的实现选择；用户并未禁止回退概览，此差异须在最终参照验收中重新评估 | devin/interpreter-type-contract |
 | Interpreter 列表形态 | 类型页为通用行表（Title/Type/Creator/Process/AI Status 双状态列）；原专用视图为卡片网格、专属列（Email 10 列、BT 同义词卡、Scenario 卡 + 分页 + 逐卡动作） | 本轮只修数据契约与动作入口；逐类型视图属阶段 C | devin/interpreter-type-contract |
 | Interpreter Hero | 选中类型时 Hero 标题/描述/统计切换为该类型（对齐原文逐类型 hero） | types.js 注释确认每类型有独立 hero statistics | devin/interpreter-type-contract |
-| Home 助手历史弹窗 | React 版 popover 含 × 关闭按钮且锚定在抽屉内按钮下方；原始 `#homeHistoryPopup` 无关闭按钮（CSS 为死代码）、`position:fixed` 位于按钮左侧 | × 仅为可达性便利；锚定差异为组合方式差异，不做像素级复刻 | devin/interpreter-type-contract |
-| Modal 表单值 | React Modal 关闭即卸载，重开时字段回 `defaultValue`；原生 `<dialog>` 仅隐藏，编辑值保留 | 受控组件生命周期差异；原始无提交后重开校验流程，登记不改架构 | devin/interpreter-type-contract |
+| Home 助手历史弹窗 | React 版 popover 含 × 关闭按钮；原始 `#homeHistoryPopup` 无关闭按钮（CSS 为死代码）。锚定已按原始复刻：home 位于按钮左侧顶对齐，非 home 面板 `right:66px` 锚于 actions 容器 | × 仅为可达性便利 | devin/interpreter-type-contract |
+| Modal 表单值（撤销豁免） | Campaign Object 输入→Cancel→重开：原始保留输入，React 恢复 `341 plans`，2026-09-24 已实测 | 可达行为缺口；应由宿主保存草稿等方式恢复，生命周期不是永久有意差异理由 | devin/interpreter-type-contract |
 | P04 FileDropzone | React 版给 file input 加 `stopPropagation`，点击 dropzone 可正常打开文件选择器；原始 upload.js 同款嵌套结构存在递归调用（`fileInput.click()` 冒泡回 dropzone 处理器）为参照缺陷 | 不逐 bug 复刻参照物；点击崩溃属明确缺陷 | devin/interpreter-type-contract |
 | P04 FileDropzone drop | React 版 drop 即触发 `onSelect` 并显示 "Selected: <file>"；原始 `fileInput.files = dataTransfer.files` 不派发 change，提示不更新（仅文件选择器路径更新） | React 行为更符合原始意图；差异登记 | devin/interpreter-type-contract |
 | P05 导航 active | React `current="self-service"` 渲染导航下划线激活态；原始 media-tracking 页 CSS 无激活下划线（flexible 页才有） | 保留语义激活态；下划线是共享 Header 的既有渲染，不逐页关断 | devin/interpreter-type-contract |
@@ -233,8 +233,18 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | AssistantPanel 菜单态 | React 关闭即卸载，重开后技能菜单/选中芯片复位；原始仅隐藏面板，隐藏期间菜单 DOM 状态保留 | 受控组件生命周期差异；原始无可达的“关后保留菜单再复用”验收路径，登记不改架构 | devin/interpreter-type-contract |
 | P02 详情抽屉标题 | React `ReportDetailsDrawer` 渲染当前报表真实标题；原始 `openDetails()` 从不写 `#detailsTitle`，恒为静态 "Invest City Strategy Analysis"（demo 缺陷，且该函数无调用方） | 不逐 bug 复刻；抽屉本身在原页不可达，组件按 props 驱动保留 | devin/interpreter-type-contract |
 | P02 Report Copilot History 弹层 | React 版弹层锚定在 head-actions 栏内、紧贴 History 按钮下方可见；原始 `#aiReportHistoryPopup` 是 `.ai-workspace-head-actions`（无 position）的 absolute 子节点，`top:calc(100%+8px)` 相对 fixed 抽屉解析为视口下方（实测 top≈1408@1400 高），任何视口下不可见 | 原实现为恒不可达的 demo 缺陷；修复锚定而非复刻 bug。弹层内 prompt 文本的大写渲染来自 `.ai-workspace-head span` 级联泄漏，React 版仍复刻该视觉效果 | devin/interpreter-type-contract |
+| AssistantPanel `+` → Upload File | React 版点击 Upload File 打开真实文件选择器（`onAttach` 回调）；原始 `openCategory("Upload")` 在 `assistant-skill-menu.js:401` 早退，`renderDetail` 的 Upload 分支与 `#aiAttachmentInput` 恒不可达——点击只钉住详情面板无任何效果 | 实现的是明显意图（菜单文案/accept 列表齐全），原始为死代码；登记差异而非复刻无效路径 | devin/interpreter-type-contract |
 
 ## 4. 已知缺口
+
+2026-09-24 对抗审核新增/纠正（02918b5 + 工作区）：
+- **根因评估补充**：展示接口、演示数据和流程状态的依赖边界尚不稳定；CockpitStory 部分处理直接读 COCKPIT.projects 而非 args.projects，换内容可能造成展示与动作使用不同数据；导航回调更新故事状态的同时 `<a>` 仍指向原 HTML，需在独立 React 宿主实测连续导航，不能把原 HTML 当成 React 完成证据。此补充为静态审查，未新增浏览器复现。纠偏指令在 `handover/structural-repair-prompt.md`；本次仅生成指令，尚未实施其中批次。
+- **P1 验收误判**：P07 10/10 PASS 仅代表加载/场景断言，Principles 整体布局人工审核失败；脚本不记录独立视觉审批结果，也不绑定构建提交/dirty 状态。当前 68 entries 实为 63 stories + 5 docs。
+- **P1 数据接口耦合**：CityInvestDashboard 仅收 onFiltersChange，数据/文案/选项固定 import；MarketingCockpitPage 的搜索辅助函数固定读取 KNOWLEDGE_ASSETS，宿主传新 projects 无法同步替换知识数据。ReportCopilot rich 数据也直接引用模块常量。需要语义数据接口，不需要重启 DOM 包装路线。
+- **P1 可达状态损失**：Campaign 任务 Object 填 `AUDIT retained input`→Cancel→重开，原始保留，React 为 `341 plans`；两侧无 pageerror。证据 `/tmp/mh-audit-20260924-runtime/results.json` 与 paired reopen PNG。撤销生命周期差异豁免。
+- **P2 实例/宿主隔离**：activeCopilotStream 位于模块作用域，新实例可取消另一实例；tokens.css 仍对全局 button/input/a 等 reset。此两项为代码审查结论，未跑多实例宿主实验。
+- **已修复确认**：复用当前 Accounts 场景断言检验 section=overview，Account Binding 文案断言失败，旧错参数漏洞本次不再复现。当前 Principles 已取 globalPrinciples，旧内容来源缺口不再适用于此类型。
+- **证据范围**：npm test 10/10；新构建 63 stories/5 docs；P07 10/10 场景断言通过；人工查看 Principles 默认配对；Campaign 重开交互及 Accounts 负向检查。未重跑全套、全部 Controls、窄屏或其余页面验收，不能据此报全量通过。Browser plugin not available，使用现有 Playwright，产物均在 `/tmp/mh-audit-20260924-*`。
 
 来自 2026-09-23 代码审查（细项见 AGENTS.md 2.4），尚待处理：
 
@@ -295,3 +305,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | P02 live 残余清零：dashboard 契约修正——`dashboard` prop 默认 null，`view=live` 无 dashboard 回项目目录（原 `query.get("dashboard")!==null` 门控，P02b 误为恒 live）；越界 index 回退 report0（原 `reports[i]?i:0`，非 clamp 末位）；pages.stories 去 `dashboard:0` 默认 arg 使缺省态可配。新增 12 个配对场景：p02-live-gate（无 dashboard→目录）、-oob（d=9→report0）、city-d1（通用视图非六城）、fourp-d1、customer-d0/d1、abo-d0/d1、rednote-d0/d1、ottolv-d0/d1——逐视图断言 kicker/h1/首 KPI 值/首 rank 值+项目 accent。六项目×两报表 live 全配对完毕。npm test 9/9、build 65 stories、visual-check 74/74 全套件 | Devin |
 | 2026-09-24 | M3 P06 助手深度流 + Home 助手补全 + copilot 复核修复：CampaignPage 助手改共享非 Home 工作区面板（`placement="drawer"`+`enterToSubmit={false}`+`showPicks={false}`+转发 `onSuggestion`/`onNewSession`/`onMaximize`/`onHistory`/`onHistorySelect`/`onAttach`/`onSelectSkill`/`onClearSkill`/`onSkillAction`，挂 `skillFlow` ModelFlowDialog）；`CAMPAIGN.assistant` 新增 suggestions/history/skillMenu，`buildCampaignAnswer` 出 `variant:"workspace"` 答案卡（气泡+flush "AI ResponseContext: Campaigns" 横幅 quirk+三 findings+三 source chips+feedback）。`AssistantPanel` 新增 `lite`（短 maximize 标签，对应原 `data-lite-panel` 判定）与 `submitDisabled`（复刻 Home history 填充不 dispatch input→ASK 恒禁用的 quirk）props；maximize aria-label 按变体区分（home/lite 短标签、workspace 全标签 "Maximize/Restore AI Interpreter panel"）；`SkillMenu` 触发标签与默认统一为 "Choose AI skill"（assistant-skill-menu.js 初始化时改写 #uploadFile，原 markup "Upload file" 不生效——三页实证）。Home 故事接入 skillMenu+skillFlow 与 historyFilled quirk 状态。copilot 复核落地：metric tone 类名改 --positive/--negative 对齐数据；close 仅复位 expanded（原 closeAi 保留折叠/show-all/feedback/dock/popup）；`useStream` 加模块级 activeCopilotStream 取消令牌（新流冻结旧流+去 cursor，复刻 cancelActiveStream）；view-more 二次点击折叠 section（原 handler 不 stopPropagation 冒泡到 collapsible 头）；CopilotSection 加 `aria-labelledby`（useId）。驳回 1 项：history 弹层 prompt 大写为 `.ai-workspace-head span` 级联泄漏的如实计算值（原弹层恒在视口外，计算样式仍为大写），保留。新增 15 个配对场景：p06-assistant-open（抽屉几何 eval+隐藏控件+禁用 ASK）/-answer（workspace 卡全结构）/-replace（feed 单条替换）/-newsession/-history（填充+ASK 恢复）/-maximize（全标签）/-skill/-flow/-manual/-escape/-feedback（pressed 色 eval）；p01-home-assistant-open（"Choose AI skill"+禁用 ASK 计算色 rgb(232,235,238)/rgb(138,148,158)）/-history-quirk/-skill/-flow。原侧零高 `.assistant-panel` 容器（缺 foundation.css 页）选择器改 `.assistant-modal` 目标、`[hidden]` 断言用 attached。npm test 9/9、build 65 stories、visual-check 92/92 全套件 | Devin |
 | 2026-09-24 | M4 P07 Principles 专用视图：`PrinciplesView` 有机体（搜索+CheckboxFilter 分类 disclosure+编号卡 01–10+两线 clamp 按需展开钮+空态+Pagination 10/20/50）替换通用列表；`data-active-type` 类型页壳与 Hero 活动类型统计；`/`+Cmd/Ctrl+K 聚焦（inputRef 链）；侧栏 plural 标签+navCount tooltip+计数 chip 恒隐；globalPrinciples 十条逐字移植（type→category）；clamp 在 fonts.ready/resize 后重测修字体竞态；版本抽屉/versions 事件/asset-stage 登记死代码不建。新增 CheckboxFilter/Pagination molecules+独立故事；10 个 p07 配对场景全过，npm test 10/10，build 68 stories | Devin |
+
+| 2026-09-24 | 对抗审核 02918b5 + 既有工作区：复跑单测/构建/P07 场景，纠正 63 stories + 5 docs；撤销 Principles 像素一致结论，复现 Campaign 重开丢值，确认 Accounts 负向断言已修复；记录固定数据与全局状态隔离风险。先更新 AGENTS 2.4/5，再更新本台账；未改组件实现 | Codex |
