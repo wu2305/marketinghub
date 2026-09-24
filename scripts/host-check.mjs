@@ -305,6 +305,35 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- unmapped demo link: raw /assets/pages href → coverage under the base ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".host-copilot .mh-copilot", { timeout: 10000 });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  /* The generic chat entry renders "Open report context" with the original
+     knowledge.html href — a raw demo route that never passes through the
+     page-level href builders. */
+  const copA = page.locator('.host-copilot[data-instance="a"] .mh-copilot');
+  await copA.locator("textarea").fill("what drove this?");
+  await copA.locator(".mh-copilot__send").click();
+  await copA.locator(".mh-copilot__entry").first().waitFor({ timeout: 8000 });
+  const link = copA.locator('a:has-text("Open report context")').first();
+  const href = await link.getAttribute("href");
+  if (!href || !href.includes("/assets/pages/")) notes.push(`expected a raw demo href, got ${href}`);
+  await link.click();
+  await page.waitForSelector(".host-coverage", { timeout: 5000 });
+  const loc = new URL(page.url());
+  if (!loc.pathname.startsWith(`${BASE}coverage/`)) notes.push(`unmapped link landed off-base: ${loc.pathname}`);
+  if (loc.pathname.startsWith("/assets/pages/")) notes.push(`unmapped link hit the original route: ${loc.pathname}`);
+  if (!(await page.locator(".host-coverage").innerText()).match(/not yet rebuilt/i)) notes.push("coverage notice missing");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("unmapped link reloaded the page");
+  notes.push(...errors);
+  record("coverage-unmapped", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 

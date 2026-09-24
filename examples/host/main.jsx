@@ -118,7 +118,11 @@ function useRoute() {
       const internal = url.pathname.startsWith(BASE) || url.pathname === "/index.html" || url.pathname.startsWith("/assets/pages/");
       if (!internal) return;
       event.preventDefault();
-      const next = url.pathname + url.search;
+      /* Demo-route hrefs become coverage URLs — the address bar must never
+         leave /mh-host/ (a reload of an unmapped /assets/pages/ URL 404s). */
+      const next = url.pathname.startsWith(BASE)
+        ? url.pathname + url.search
+        : mapDemoHref(url.pathname + url.search);
       if (next === window.location.pathname + window.location.search) return;
       window.history.pushState(null, "", next);
       setLoc(next);
