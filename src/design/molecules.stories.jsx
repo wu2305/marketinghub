@@ -1,6 +1,7 @@
 import React from "react";
 import {
   CategoryHeading,
+  CheckboxFilter,
   ColumnChart,
   DataTable,
   FileDropzone,
@@ -8,6 +9,7 @@ import {
   FilterPills,
   FormField,
   MetricStat,
+  Pagination,
   ProgressList,
   ScopeOption,
   SearchField,
@@ -250,6 +252,86 @@ export const StatusToast = {
       <Toast {...args} />
     </>
   ),
+};
+
+export const CategoryFilter = {
+  name: "Checkbox filter",
+  args: {
+    label: "Category",
+    allLabel: "All categories",
+    selectedLabel: "{count} selected",
+    selected: [],
+  },
+  argTypes: {
+    selected: {
+      control: "check",
+      options: ["Role", "System", "Doing tasks", "Tone and style"],
+    },
+    onToggle: { action: "onToggle" },
+  },
+  render: function CategoryFilterStory(args) {
+    const [selected, setSelected] = useSynced(args.selected);
+    return (
+      <div style={{ padding: 24 }}>
+        <CheckboxFilter
+          {...args}
+          options={[
+            { id: "Role", label: "Role" },
+            { id: "Strict Restrictions", label: "Strict Restrictions" },
+            { id: "System", label: "System" },
+            { id: "Doing tasks", label: "Doing tasks" },
+            { id: "Tone and style", label: "Tone and style" },
+          ]}
+          selected={selected}
+          onToggle={(event) => {
+            setSelected(
+              event.checked ? [...selected, event.id] : selected.filter((id) => id !== event.id),
+            );
+            args.onToggle?.(event);
+          }}
+        />
+      </div>
+    );
+  },
+};
+
+export const LibraryPagination = {
+  name: "Pagination",
+  args: {
+    total: 35,
+    units: ["asset", "assets"],
+    page: 1,
+    pageSize: 10,
+    pageSizes: [10, 20, 50],
+    rowsLabel: "Rows per page",
+  },
+  argTypes: {
+    pageSize: { control: "inline-radio", options: [10, 20, 50] },
+    onPage: { action: "onPage" },
+    onPageSize: { action: "onPageSize" },
+  },
+  render: function LibraryPaginationStory(args) {
+    const [page, setPage] = useSynced(args.page);
+    const [pageSize, setPageSize] = useSynced(args.pageSize);
+    return (
+      <div style={{ maxWidth: 720 }}>
+        <Pagination
+          {...args}
+          page={page}
+          pageSize={pageSize}
+          onPage={(event) => {
+            setPage(event.page);
+            args.onPage?.(event);
+          }}
+          onPageSize={(event) => {
+            setPageSize(event.pageSize);
+            setPage(1);
+            args.onPageSize?.(event);
+          }}
+        />
+      </div>
+    );
+  },
 };
 
 export const Dropzone = {

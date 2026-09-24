@@ -17,8 +17,9 @@ export const tabsVariants = ["underline", "segmented"];
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.placeholder="Search"]
  * @param {"sm"|"md"|"lg"} [props.size="md"]
- * @param {"field"|"plain"} [props.variant="field"]
+ * @param {"field"|"plain"} [props.variant="field"] plain = the original `.overview-global-search` gold pill
  * @param {typeof searchIconPositions[number]} [props.icon="start"]
+ * @param {React.Ref<HTMLInputElement>} [props.inputRef] forwarded to the input
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
  */
 export function SearchField({
@@ -29,6 +30,7 @@ export function SearchField({
   size = "md",
   variant = "field",
   icon = "start",
+  inputRef,
   onChange,
 }) {
   return (
@@ -41,7 +43,7 @@ export function SearchField({
       ) : (
         <Icon name="search" className="mh-search__icon" />
       )}
-      <TextInput name={name} type="search" size={size} value={value} placeholder={placeholder} label={label} onChange={onChange} />
+      <TextInput name={name} type="search" size={size} value={value} placeholder={placeholder} label={label} inputRef={inputRef} onChange={onChange} />
     </label>
   );
 }
@@ -469,5 +471,99 @@ export function FileDropzone({
       <p className="mh-dropzone__title">{title}</p>
       <p className="mh-dropzone__hint">{fileName ? `${selectedPrefix} ${fileName}` : hint}</p>
     </div>
+  );
+}
+
+/**
+ * Multi-select dropdown filter — a field label plus a `<details>`/`<summary>`
+ * disclosure holding checkbox options. Mirrors the shared
+ * `.business-filter-field` / `.fm-options` control used for status, data-model
+ * and category filters in the original knowledge libraries.
+ * @param {object} props
+ * @param {string} props.label field label, e.g. "Category"
+ * @param {string} [props.allLabel="All"] summary when nothing is selected
+ * @param {string} [props.selectedLabel="{count} selected"] summary template once options are checked
+ * @param {Array<{ id: string, label: string }>} [props.options=[]]
+ * @param {Array<string>} [props.selected=[]] checked option ids
+ * @param {(event: { id: string, checked: boolean }) => void} [props.onToggle]
+ */
+export function CheckboxFilter({ label, allLabel = "All", selectedLabel = "{count} selected", options = [], selected = [], onToggle }) {
+  const summary = selected.length ? selectedLabel.replace("{count}", String(selected.length)) : allLabel;
+  return (
+    <div className="mh-check-filter">
+      <span className="mh-check-filter__label">{label}</span>
+      <details className="mh-check-filter__details">
+        <summary className="mh-check-filter__summary">
+          <b>{summary}</b>
+        </summary>
+        <div className="mh-check-filter__options">
+          {options.map((option) => (
+            <label key={option.id} className="mh-check-filter__option">
+              <input
+                type="checkbox"
+                checked={selected.includes(option.id)}
+                onChange={(event) => onToggle?.({ id: option.id, checked: event.target.checked })}
+              />
+              {option.label}
+            </label>
+          ))}
+        </div>
+      </details>
+    </div>
+  );
+}
+
+/**
+ * Footer pagination row — total label, rows-per-page select and ‹ 1 2 3 ›
+ * buttons. Mirrors `#businessPagination` / `renderPagination` in the original.
+ * @param {object} props
+ * @param {number} props.total total item count
+ * @param {[string, string]} [props.units=["asset", "assets"]] singular/plural for the total label
+ * @param {number} [props.page=1]
+ * @param {number} [props.pageSize=10]
+ * @param {Array<number>} [props.pageSizes=[10, 20, 50]]
+ * @param {string} [props.rowsLabel="Rows per page"]
+ * @param {(event: { page: number }) => void} [props.onPage]
+ * @param {(event: { pageSize: number }) => void} [props.onPageSize]
+ */
+export function Pagination({ total, units = ["asset", "assets"], page = 1, pageSize = 10, pageSizes = [10, 20, 50], rowsLabel = "Rows per page", onPage, onPageSize }) {
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  const current = Math.min(Math.max(1, page), pages);
+  const totalLabel = `${total} ${total === 1 ? units[0] : units[1]}`;
+  return (
+    <nav className="mh-pagination" aria-label="Knowledge pagination">
+      <span className="mh-pagination__total">{totalLabel}</span>
+      <label className="mh-pagination__size">
+        {rowsLabel}{" "}
+        <select
+          value={pageSize}
+          onChange={(event) => onPageSize?.({ pageSize: Number(event.target.value) || pageSize })}
+        >
+          {pageSizes.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="mh-pagination__pages">
+        <button type="button" disabled={current === 1} onClick={() => onPage?.({ page: Math.max(1, current - 1) })}>
+          ‹
+        </button>
+        {Array.from({ length: pages }, (_, index) => index + 1).map((item) => (
+          <button
+            key={item}
+            type="button"
+            className={item === current ? "is-active" : undefined}
+            onClick={() => onPage?.({ page: item })}
+          >
+            {item}
+          </button>
+        ))}
+        <button type="button" disabled={current === pages} onClick={() => onPage?.({ page: Math.min(pages, current + 1) })}>
+          ›
+        </button>
+      </div>
+    </nav>
   );
 }

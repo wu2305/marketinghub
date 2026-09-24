@@ -17,6 +17,7 @@ import {
   Modal,
   ModelFlowDialog,
   Panel,
+  PrinciplesView,
   ProjectCatalog,
   ProjectDirectory,
   ReportCopilot,
@@ -29,7 +30,7 @@ import {
   WorkspaceGrid,
 } from "./organisms.jsx";
 import { Icon } from "./icons.jsx";
-import { normalizeOptions, recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
+import { cx, normalizeOptions, recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
 import {
   REPORT_CATALOG_HREF,
   isCityInvestReport,
@@ -486,6 +487,7 @@ export function SelfServicePage({
  * @param {string} [props.sidebarTitle]
  * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, statusFilters)
  * @param {Array<object>} [props.records=[]] sampled records; each row links to a type via `typeId`
+ * @param {object} [props.principles={}] PrinciplesView props for `?type=Principles` (items, selectedCategories, page, pageSize, expanded, strings, callbacks)
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {string} [props.query=""]
  * @param {Object<string, string>} [props.filterValues={}]
@@ -505,6 +507,7 @@ export function AiInterpreterPage({
   sidebarTitle,
   types = [],
   records = [],
+  principles = {},
   activeType = "overview",
   query = "",
   filterValues = {},
@@ -518,6 +521,26 @@ export function AiInterpreterPage({
   const overview = activeType === "overview" || !activeType;
   const type = types.find((item) => item.id === activeType);
   const known = overview || Boolean(type);
+  const searchRef = React.useRef(null);
+
+  // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages.
+  React.useEffect(() => {
+    if (overview || !known) return undefined;
+    const onKeydown = (event) => {
+      const active = document.activeElement;
+      const editing =
+        active &&
+        (active.matches("input, textarea, select") || active.getAttribute("contenteditable") === "true");
+      const isSearchShortcut =
+        event.key === "/" || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k");
+      if (isSearchShortcut && !editing && searchRef.current) {
+        event.preventDefault();
+        searchRef.current.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeydown);
+    return () => document.removeEventListener("keydown", onKeydown);
+  }, [overview, known]);
 
   const typeRecords = type ? records.filter((record) => record.typeId === type.id) : [];
   const filters = (type?.statusFilters || []).map((filter) => ({
@@ -530,10 +553,14 @@ export function AiInterpreterPage({
     return queryMatch && filterMatch;
   });
 
+  // renderHeroStats: labels stay static; values/captions follow the active type,
+  // singularizing the unit when its own value is 1 ("1 model governed…").
+  const unit = type?.stats?.units?.[1] || "knowledge assets";
+  const captionUnit = (value) => (value === 1 && unit.endsWith("s") ? unit.slice(0, -1) : unit);
   const heroStats = type
     ? [
-        { label: type.title, value: String(type.stats.total), caption: `${type.stats.units[1]} governed for AI use` },
-        { label: "New this month", value: String(type.stats.monthly), caption: "knowledge assets added recently" },
+        { label: "Published Knowledge", value: type.stats.total.toLocaleString(), caption: `${captionUnit(type.stats.total)} governed for AI use` },
+        { label: "New This Month", value: type.stats.monthly.toLocaleString(), caption: `${captionUnit(type.stats.monthly)} added recently` },
       ]
     : hero.stats || [];
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
@@ -542,7 +569,7 @@ export function AiInterpreterPage({
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
-      <Hero {...heroProps} height={260} variant="knowledge" scrim="knowledge">
+      <Hero {...heroProps} height={260} variant="knowledge" scrim="knowledge" asideLabel={`${type ? type.title : "All types"} knowledge statistics`}>
         {heroStats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" compact />
         ))}
@@ -555,7 +582,10 @@ export function AiInterpreterPage({
           activeId={activeType}
           onSelect={onSelectType}
         />
-        <div className="mh-interpreter__main">
+        <div
+          className={cx("mh-interpreter__main", !overview && known && "mh-interpreter__main--type")}
+          data-active-type={type ? activeType : "Overview"}
+        >
           {overview ? (
             <TypeGrid items={types} activeId={activeType} onSelect={onSelectType} />
           ) : !known ? (
@@ -563,6 +593,13 @@ export function AiInterpreterPage({
               <strong>Unknown knowledge type</strong>
               <p>{`"${activeType}" is not one of the ${types.length} knowledge types. Pick a type from the navigation.`}</p>
             </div>
+          ) : type.view === "principles" ? (
+            <PrinciplesView
+              query={query}
+              onQueryChange={onQueryChange}
+              searchRef={searchRef}
+              {...principles}
+            />
           ) : (
             <KnowledgeLibrary
               type={{ ...type, statusFilters: filters }}

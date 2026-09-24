@@ -10,6 +10,10 @@ const baseProps = {
   sidebarTitle: INTERPRETER.sidebarTitle,
   types: INTERPRETER.types,
   records: INTERPRETER.records,
+  principles: {
+    items: INTERPRETER.principles,
+    strings: INTERPRETER.principlesLibrary,
+  },
 };
 
 function renderPage(props = {}) {
@@ -22,6 +26,8 @@ function Harness({ onSelectType, ...rest }) {
   const [activeType, setActiveType] = React.useState(rest.activeType ?? "overview");
   const [query, setQuery] = React.useState(rest.query ?? "");
   const [filterValues, setFilterValues] = React.useState(rest.filterValues ?? {});
+  const [selectedCategories, setSelectedCategories] = React.useState([]);
+  const [expanded, setExpanded] = React.useState([]);
   return (
     <AiInterpreterPage
       {...baseProps}
@@ -29,6 +35,22 @@ function Harness({ onSelectType, ...rest }) {
       activeType={activeType}
       query={query}
       filterValues={filterValues}
+      principles={{
+        ...baseProps.principles,
+        ...rest.principles,
+        selectedCategories,
+        expanded,
+        onToggleCategory: (event) =>
+          setSelectedCategories(
+            event.checked
+              ? [...selectedCategories, event.id]
+              : selectedCategories.filter((id) => id !== event.id),
+          ),
+        onToggleExpand: (event) =>
+          setExpanded(
+            event.expanded ? [...expanded, event.id] : expanded.filter((id) => id !== event.id),
+          ),
+      }}
       onSelectType={(event) => {
         setActiveType(event.id);
         setFilterValues({});
@@ -81,6 +103,13 @@ describe("AI Interpreter type contract", () => {
     render(<Harness onSelectType={() => {}} />);
     for (const type of INTERPRETER.types) {
       fireEvent.click(screen.getAllByRole("button", { name: new RegExp(type.title) })[0]);
+      // types.js: ?type=Principles swaps the asset table for the card grid.
+      if (type.view === "principles") {
+        const cards = document.querySelectorAll(".mh-principle");
+        expect(cards.length).toBe(INTERPRETER.principles.length);
+        expect(document.querySelector(".mh-asset")).toBeNull();
+        continue;
+      }
       const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
       const titles = rowTitles();
       expect(titles.length).toBe(expected.length);
@@ -132,13 +161,22 @@ describe("AI Interpreter type contract", () => {
     expect(titles[0]).toContain("Draft Term Fixture");
   });
 
-  it("query narrows rows and produces a distinguishable empty state", () => {
+  it("query narrows principle cards and produces the dedicated empty state", () => {
     render(<Harness activeType="Principles" />);
-    fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "Trusted analysis" } });
-    expect(rowTitles().length).toBe(1);
+    fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "requested scope" } });
+    expect(document.querySelectorAll(".mh-principle").length).toBe(1);
+    expect(document.querySelector(".mh-principle").textContent).toContain("Match the Requested Scope");
 
     fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "zzzzz" } });
-    expect(rowTitles().length).toBe(0);
-    expect(screen.getByText("No records match the current filters.")).toBeTruthy();
+    expect(document.querySelectorAll(".mh-principle").length).toBe(0);
+    expect(screen.getByText("No matching principles. Change the category or search.")).toBeTruthy();
+  });
+
+  it("filters principle cards by the category checkbox set", () => {
+    render(<Harness activeType="Principles" />);
+    fireEvent.click(screen.getByLabelText("System"));
+    expect(document.querySelectorAll(".mh-principle").length).toBe(1);
+    expect(document.querySelector(".mh-principle").textContent).toContain("Handle Runtime Context Carefully");
+    expect(screen.getByText("1 selected")).toBeTruthy();
   });
 });

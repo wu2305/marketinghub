@@ -327,6 +327,40 @@ a {
   --mh-ra-source-chip-line: #d8dee6;
   --mh-ra-source-chip-bg: #f6f8fb;
   --mh-ra-source-chip-ink: #415064;
+
+  /* Knowledge type libraries — checkbox filter, principles cards, pagination
+     (ai-interpreter-overview.css / principles-library.css / library.css) */
+  --mh-check-filter-line: #e4e0d9;
+  --mh-check-filter-label: #969188;
+  --mh-check-filter-ink: #383634;
+  --mh-check-filter-option: #4a4743;
+  --mh-check-filter-checked-bg: #f7f2e8;
+  --mh-check-filter-checked-ink: #84611f;
+  --mh-check-filter-shadow: 0 8px 24px rgba(25, 34, 48, 0.1);
+  --mh-principle-line: #d8dfe5;
+  --mh-principle-shadow: 0 4px 14px rgba(25, 31, 37, 0.08);
+  --mh-principle-number-bg: #f4ede0;
+  --mh-principle-number-ink: #9a661a;
+  --mh-principle-badge-bg: #eef1f3;
+  --mh-principle-badge-ink: #5e6872;
+  --mh-principle-title: #20252a;
+  --mh-principle-copy: #4d5963;
+  --mh-principle-toggle: #956318;
+  --mh-principle-toggle-hover: #71480d;
+  --mh-principle-focus-ring: rgba(185, 130, 52, 0.35);
+  --mh-principle-empty-line: #d8dfe4;
+  --mh-principle-empty-ink: #6f7a83;
+  --mh-principle-search-ink: #292724;
+  --mh-principle-search-placeholder: #77716b;
+  --mh-pagination-line: #dfe3e8;
+  --mh-pagination-ink: #6b7280;
+  --mh-pagination-btn-line: #dfe3e8;
+  --mh-pagination-btn-ink: #3f4854;
+  --mh-pagination-active: #141414;
+  --mh-pagination-hover-line: #e6bc73;
+  --mh-pagination-hover-bg: #fff9f2;
+  --mh-pagination-select-line: #d9dee3;
+  --mh-pagination-select-ink: #404850;
 }
 
 .mh-sr {

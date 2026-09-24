@@ -71,6 +71,7 @@ export function Link({ href = "#", children, onNavigate }) {
  * @param {boolean} [props.invalid=false] adds aria-invalid and error styling
  * @param {typeof SIZES[number]} [props.size="md"]
  * @param {string} [props.label] accessible label (visually hidden)
+ * @param {React.Ref<HTMLInputElement>} [props.inputRef] forwarded to the input
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
  */
 export function TextInput({
@@ -84,6 +85,7 @@ export function TextInput({
   invalid = false,
   size = "md",
   label,
+  inputRef,
   onChange,
 }) {
   const [uncontrolled, setUncontrolled] = React.useState(defaultValue);
@@ -91,6 +93,7 @@ export function TextInput({
   const current = controlled ? value : uncontrolled;
   return (
     <input
+      ref={inputRef}
       className={cx("mh-input", `mh-input--${size}`, invalid && "is-invalid")}
       name={name}
       type={type}

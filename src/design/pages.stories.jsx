@@ -564,6 +564,14 @@ export const Interpreter = {
     sidebarTitle: INTERPRETER.sidebarTitle,
     types: INTERPRETER.types,
     records: INTERPRETER.records,
+    principles: {
+      items: INTERPRETER.principles,
+      strings: INTERPRETER.principlesLibrary,
+      selectedCategories: [],
+      page: 1,
+      pageSize: 10,
+      expanded: [],
+    },
   },
   argTypes: {
     activeType: {
@@ -576,25 +584,69 @@ export const Interpreter = {
     onFilterChange: { action: "onFilterChange" },
     onCreate: { action: "onCreate" },
     onSelectAsset: { action: "onSelectAsset" },
+    onToggleCategory: { action: "onToggleCategory" },
+    onPage: { action: "onPage" },
+    onPageSize: { action: "onPageSize" },
+    onToggleExpand: { action: "onToggleExpand" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
     const [query, setQuery] = useSynced(args.query);
     const [filterValues, setFilterValues] = useSynced(args.filterValues);
+    const [selCategories, setSelCategories] = useSynced(args.principles?.selectedCategories || []);
+    const [principlePage, setPrinciplePage] = useSynced(args.principles?.page || 1);
+    const [principlePageSize, setPrinciplePageSize] = useSynced(args.principles?.pageSize || 10);
+    const [principleExpanded, setPrincipleExpanded] = useSynced(args.principles?.expanded || []);
     return (
       <AiInterpreterPage
         {...args}
         activeType={activeType}
         query={query}
         filterValues={filterValues}
+        principles={{
+          ...args.principles,
+          selectedCategories: selCategories,
+          page: principlePage,
+          pageSize: principlePageSize,
+          expanded: principleExpanded,
+          // types.js: query/category/page-size/type changes reset to page 1.
+          onToggleCategory: (event) => {
+            setSelCategories(
+              event.checked
+                ? [...selCategories, event.id]
+                : selCategories.filter((id) => id !== event.id),
+            );
+            setPrinciplePage(1);
+            args.onToggleCategory?.(event);
+          },
+          onPage: (event) => {
+            setPrinciplePage(event.page);
+            args.onPage?.(event);
+          },
+          onPageSize: (event) => {
+            setPrinciplePageSize(event.pageSize);
+            setPrinciplePage(1);
+            args.onPageSize?.(event);
+          },
+          onToggleExpand: (event) => {
+            setPrincipleExpanded(
+              event.expanded
+                ? [...principleExpanded, event.id]
+                : principleExpanded.filter((id) => id !== event.id),
+            );
+            args.onToggleExpand?.(event);
+          },
+        }}
         onNavigate={args.onNavigate}
         onSelectType={(event) => {
           setActiveType(event.id);
           setFilterValues({});
+          setPrinciplePage(1);
           args.onSelectType?.(event);
         }}
         onQueryChange={(event) => {
           setQuery(event.value);
+          setPrinciplePage(1);
           args.onQueryChange?.(event);
         }}
         onFilterChange={(event) => {

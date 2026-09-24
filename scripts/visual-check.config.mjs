@@ -2666,4 +2666,180 @@ export default [
       expect: [{ sel: ".mh-library", text: "Channel Performance Analysis" }, { sel: ".mh-asset" }],
     },
   },
+  {
+    /* types.js: ?type=Principles swaps the asset table for the numbered card
+       grid; the "Showing X of Y" count line is display:none on type pages. */
+    id: "p07-interpreter-principles",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      expect: [
+        { sel: ".knowledge-main[data-active-type='Principles']" },
+        { sel: "#principlesCategoryFilter" },
+        { sel: ".principle-list-item", text: "Interactive Agent for Business Questions" },
+        { sel: "#assetList", state: "hidden" },
+        { sel: "#businessPagination button.active", text: "1" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      expect: [
+        { sel: ".mh-interpreter__main[data-active-type='Principles']" },
+        { sel: ".mh-check-filter" },
+        { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-library", state: "detached" },
+        { sel: ".mh-pagination__pages button.is-active", text: "1" },
+      ],
+    },
+  },
+  {
+    id: "p07-principles-category-open",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [
+        { click: "#principlesCategoryFilter summary" },
+        { wait: "#principlesCategoryFilter details[open]" },
+      ],
+      expect: [
+        { sel: "#principlesCategoryOptions label", text: "Role" },
+        { sel: "#principlesCategorySummary", text: "All categories" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [
+        { click: ".mh-check-filter__summary" },
+        { wait: ".mh-check-filter__details[open]" },
+      ],
+      expect: [
+        { sel: ".mh-check-filter__option", text: "Role" },
+        { sel: ".mh-check-filter__summary", text: "All categories" },
+      ],
+    },
+  },
+  {
+    /* Multi-select category filter: picking one category keeps the dropdown
+       open, updates the summary to "{n} selected" and re-renders the cards. */
+    id: "p07-principles-category-filter",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [
+        { click: "#principlesCategoryFilter summary" },
+        { wait: "#principlesCategoryFilter details[open]" },
+        { click: "#principlesCategoryOptions label:has-text('System')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: "#principlesCategorySummary", text: "1 selected" },
+        { sel: ".principle-list-item", text: "Handle Runtime Context Carefully" },
+        { sel: ".principle-list-item:has-text('Interactive Agent')", state: "detached" },
+        { sel: "#businessPagination", text: "1 principle" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [
+        { click: ".mh-check-filter__summary" },
+        { wait: ".mh-check-filter__details[open]" },
+        { click: ".mh-check-filter__option:has-text('System')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-check-filter__summary", text: "1 selected" },
+        { sel: ".mh-principle", text: "Handle Runtime Context Carefully" },
+        { sel: ".mh-principle:has-text('Interactive Agent')", state: "detached" },
+        { sel: ".mh-pagination", text: "1 principle" },
+      ],
+    },
+  },
+  {
+    /* Search matches category, title and description; the page count and card
+       list update live ("Match the Requested Scope" contains "boundary"). */
+    id: "p07-principles-search",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [{ fill: ["#knowledgeSearch", "requested scope"] }, { waitMs: 300 }],
+      expect: [
+        { sel: ".principle-list-item", text: "Match the Requested Scope" },
+        { sel: ".principle-list-item:has-text('Interactive Agent')", state: "detached" },
+        { sel: "#businessPagination", text: "1 principle" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [{ fill: [".mh-principles input[type='search']", "requested scope"] }, { waitMs: 300 }],
+      expect: [
+        { sel: ".mh-principle", text: "Match the Requested Scope" },
+        { sel: ".mh-principle:has-text('Interactive Agent')", state: "detached" },
+        { sel: ".mh-pagination", text: "1 principle" },
+      ],
+    },
+  },
+  {
+    id: "p07-principles-empty",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [{ fill: ["#knowledgeSearch", "zzzz-nothing"] }, { waitMs: 300 }],
+      expect: [{ sel: ".principles-empty", text: "No matching principles" }],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [{ fill: [".mh-principles input[type='search']", "zzzz-nothing"] }, { waitMs: 300 }],
+      expect: [{ sel: ".mh-principles__empty", text: "No matching principles" }],
+    },
+  },
+  {
+    /* Long descriptions clamp to ~2 lines; the chevron expands the full text
+       (toggle only renders when the measured text overflows). */
+    id: "p07-principles-expand",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [
+        { wait: ".principle-list-item:has-text('Resolve Requests') .principle-description-toggle" },
+        { click: ".principle-list-item:has-text('Resolve Requests') .principle-description-toggle" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description.is-expanded" },
+        { sel: ".principle-list-item:has-text('Resolve Requests') .principle-description-toggle[aria-expanded='true']" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [
+        { wait: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
+        { click: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__desc.is-expanded" },
+        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle[aria-expanded='true']" },
+      ],
+    },
+  },
+  {
+    /* types.js: "/" focuses the visible type-page search (not while editing). */
+    id: "p07-principles-slash",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [{ press: ["body", "/"] }, { waitMs: 200 }],
+      expect: [{ sel: "#knowledgeSearch:focus" }],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [
+        { wait: ".mh-principles input[type='search']" },
+        { waitMs: 400 },
+        { press: ["body", "/"] },
+        { waitMs: 200 },
+      ],
+      expect: [{ sel: ".mh-principles input[type='search']:focus" }],
+    },
+  },
 ];

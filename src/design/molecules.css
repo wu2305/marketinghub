@@ -51,7 +51,7 @@
   align-items: center;
   gap: 14px;
   height: 44px;
-  padding: 0 16px 0 18px;
+  padding: 0 13px 0 18px;
   border: 1px solid #d9bd91;
   border-radius: 14px;
   background: #fff;
@@ -76,11 +76,216 @@
   font-size: 14px;
 }
 
+.mh-search--plain .mh-input {
+  color: var(--mh-principle-search-ink);
+}
+
+.mh-search--plain .mh-input::placeholder {
+  color: var(--mh-principle-search-placeholder);
+  font-size: 12px;
+}
+
 .mh-search--plain:focus-within {
   border-color: #b98234;
   box-shadow:
     0 0 0 3px rgba(185, 130, 52, 0.13),
     0 10px 26px rgba(116, 78, 31, 0.1);
+}
+
+/* Checkbox disclosure filter — the shared `.business-filter-field` /
+   `.fm-options` multi-select used by knowledge type libraries. */
+.mh-check-filter {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 220px;
+  min-width: 220px;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--mh-check-filter-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--mh-check-filter-ink);
+}
+
+.mh-check-filter__label {
+  flex: 0 0 auto;
+  color: var(--mh-check-filter-label);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.mh-check-filter__details {
+  position: static;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 42px;
+}
+
+.mh-check-filter__summary {
+  display: flex;
+  height: 42px;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 18px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--mh-check-filter-ink);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  list-style: none;
+  cursor: pointer;
+}
+
+.mh-check-filter__summary::-webkit-details-marker {
+  display: none;
+}
+
+.mh-check-filter::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.mh-check-filter:has(.mh-check-filter__details[open])::after {
+  transform: translateY(-30%) rotate(225deg);
+}
+
+.mh-check-filter__options {
+  position: absolute;
+  z-index: 200;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  min-width: 260px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--mh-check-filter-line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--mh-check-filter-shadow);
+}
+
+.mh-check-filter__option {
+  position: relative;
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px;
+  color: var(--mh-check-filter-option);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mh-check-filter__option input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(50%);
+}
+
+.mh-check-filter__option:has(input:checked) {
+  background: var(--mh-check-filter-checked-bg);
+  color: var(--mh-check-filter-checked-ink);
+}
+
+/* Shared library pagination — `#businessPagination`. */
+.mh-pagination {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--mh-pagination-line);
+  background: #fff;
+  color: var(--mh-pagination-ink);
+  font-size: 11px;
+}
+
+.mh-pagination__total {
+  margin-right: auto;
+}
+
+.mh-pagination__size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-pagination__size select {
+  height: 30px;
+  padding: 0 24px 0 8px;
+  border: 1px solid var(--mh-pagination-select-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-select-ink);
+  font-size: 11px;
+}
+
+.mh-pagination__pages {
+  display: flex;
+  gap: 4px;
+}
+
+.mh-pagination__pages button {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  border: 1px solid var(--mh-pagination-btn-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-btn-ink);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.mh-pagination__pages button:hover:not(:disabled) {
+  border-color: var(--mh-pagination-hover-line);
+  background: var(--mh-pagination-hover-bg);
+  color: var(--mh-ink-ai-strong);
+}
+
+.mh-pagination__pages button.is-active {
+  border-color: var(--mh-pagination-active);
+  background: var(--mh-pagination-active);
+  color: #fff;
+}
+
+.mh-pagination__pages button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.mh-pagination__pages button:focus-visible,
+.mh-pagination__size select:focus-visible {
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
 }
 
 .mh-metric {
@@ -609,7 +814,11 @@
   letter-spacing: 0.04em;
 }
 
+/* `.sidebar-type-count` is display:none under `.knowledge-main[data-active-type]`
+   — and data-active-type is always set on knowledge.html — so the count chip is
+   never visible; it only feeds the "label · count" tooltip. */
 .mh-sidebar-item__count {
+  display: none;
   margin-left: auto;
   color: var(--mh-faint);
   font-size: 11px;
