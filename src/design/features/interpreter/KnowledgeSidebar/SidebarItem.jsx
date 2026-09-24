@@ -1,6 +1,6 @@
-import "../../tokens.css";
-import { cx } from "../../cx.js";
-import { Icon } from "../../icons.jsx";
+import "../../../tokens.css";
+import { cx } from "../../../cx.js";
+import { Icon } from "../../../icons.jsx";
 import "./SidebarItem.css";
 
 

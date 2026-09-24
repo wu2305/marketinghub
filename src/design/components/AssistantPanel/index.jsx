@@ -1,8 +1,8 @@
 import "../../tokens.css";
 import React from "react";
 import { Button } from "../../components/Button/index.jsx";
-import { ScopeOption } from "../../components/ScopeOption/index.jsx";
-import { Suggestion } from "../../components/Suggestion/index.jsx";
+import { ScopeOption } from "./ScopeOption.jsx";
+import { Suggestion } from "./Suggestion.jsx";
 import { TextArea } from "../../components/TextArea/index.jsx";
 import { cx } from "../../cx.js";
 import { Icon } from "../../icons.jsx";

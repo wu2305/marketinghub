@@ -13,3 +13,20 @@ display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
+
+.mh-category {
+display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--mh-line-strong);
+}
+
+.mh-category h2 {
+margin: 0;
+  color: var(--mh-ink);
+  font-family: var(--mh-display);
+  font-size: 28px;
+  font-style: italic;
+  font-weight: 600;
+}

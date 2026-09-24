@@ -46,9 +46,6 @@ export {
   headingLevels,
 } from "./components/SectionHeading/index.jsx";
 export {
-  CategoryHeading,
-} from "./components/CategoryHeading/index.jsx";
-export {
   ViewHeading,
 } from "./components/ViewHeading/index.jsx";
 export {
@@ -63,12 +60,6 @@ export {
   formFieldControls,
 } from "./components/FormField/index.jsx";
 export {
-  Suggestion,
-} from "./components/Suggestion/index.jsx";
-export {
-  ScopeOption,
-} from "./components/ScopeOption/index.jsx";
-export {
   ProgressList,
 } from "./components/ProgressList/index.jsx";
 export {
@@ -77,9 +68,6 @@ export {
 export {
   DataTable,
 } from "./components/DataTable/index.jsx";
-export {
-  SidebarItem,
-} from "./components/SidebarItem/index.jsx";
 export {
   FileDropzone,
 } from "./components/FileDropzone/index.jsx";

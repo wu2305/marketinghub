@@ -1,8 +1,15 @@
 import "../../../tokens.css";
-import { CategoryHeading } from "../../../components/CategoryHeading/index.jsx";
 import { ProjectCard } from "../../../features/cockpit/ProjectCard/index.jsx";
 import "./ProjectCatalog.css";
 
+/* Mid-page category heading (h2) — private to the catalog. */
+function CategoryHeading({ title, id }) {
+  return (
+    <header className="mh-category">
+      <h2 id={id}>{title}</h2>
+    </header>
+  );
+}
 
 /**
  * Cockpit catalog: category groups of ProjectCard.

@@ -11,7 +11,6 @@ import * as selectStories from "./components/Select/Select.stories.jsx";
 import * as searchFieldStories from "./components/SearchField/SearchField.stories.jsx";
 import * as tabsStories from "./components/Tabs/Tabs.stories.jsx";
 import * as filterPillsStories from "./components/FilterPills/FilterPills.stories.jsx";
-import * as scopeOptionStories from "./components/ScopeOption/ScopeOption.stories.jsx";
 import * as checkboxFilterStories from "./components/CheckboxFilter/CheckboxFilter.stories.jsx";
 import * as reportRowStories from "./features/cockpit/ReportRow/ReportRow.stories.jsx";
 
@@ -46,9 +45,9 @@ const components = [
 const ATOM_MODULES = ["Button", "TextInput", "TextArea", "Select", "StatusBadge"];
 const MOLECULE_MODULES = [
   "SearchField", "CheckboxFilter", "Pagination", "MetricStat", "SectionHeading",
-  "CategoryHeading", "ViewHeading", "FilterPills", "Tabs", "FormField",
-  "Suggestion", "ScopeOption", "ProgressList", "ColumnChart", "DataTable",
-  "SidebarItem", "FileDropzone", "Toast",
+  "ViewHeading", "FilterPills", "Tabs", "FormField",
+  "ProgressList", "ColumnChart", "DataTable",
+  "FileDropzone", "Toast",
 ];
 const documentedComponents = new Set([
   ...Object.entries(componentModules)
@@ -113,7 +112,6 @@ describe("controlled stories write back", () => {
   const { Default: SearchFieldStory } = composeStories(searchFieldStories);
   const { Default: TabsStory } = composeStories(tabsStories);
   const { Default: FilterPillsStory } = composeStories(filterPillsStories);
-  const { Default: ScopeOptionStory } = composeStories(scopeOptionStories);
   const { Default: CheckboxFilterStory } = composeStories(checkboxFilterStories);
   const { Default: ButtonStory } = composeStories(buttonStories);
   const { Default: ReportRowStory } = composeStories(reportRowStories);
@@ -168,15 +166,6 @@ describe("controlled stories write back", () => {
     const pill = screen.getByRole("button", { name: "DG" });
     fireEvent.click(pill);
     expect(pill.getAttribute("aria-pressed")).toBe("true");
-  });
-
-  it("ScopeOption toggles aria-pressed", () => {
-    render(<ScopeOptionStory />);
-    const option = screen.getByRole("button", { name: "Campaigns" });
-    fireEvent.click(option);
-    expect(option.getAttribute("aria-pressed")).toBe("true");
-    fireEvent.click(option);
-    expect(option.getAttribute("aria-pressed")).toBe("false");
   });
 
   it("CheckboxFilter checks an option", () => {

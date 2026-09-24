@@ -1,5 +1,5 @@
 import "../../../tokens.css";
-import { SidebarItem } from "../../../components/SidebarItem/index.jsx";
+import { SidebarItem } from "./SidebarItem.jsx";
 import "./KnowledgeSidebar.css";
 
 
