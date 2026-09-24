@@ -1031,7 +1031,7 @@
   position: fixed;
   right: 24px;
   bottom: 22px;
-  z-index: 880;
+  z-index: var(--mh-z-launcher);
   display: inline-flex;
   width: auto;
   min-width: 104px;
@@ -2160,7 +2160,7 @@
 .mh-modal {
   position: fixed;
   inset: 0;
-  z-index: 140;
+  z-index: var(--mh-z-overlay);
   display: grid;
   place-items: center;
 }
@@ -5930,4 +5930,731 @@ body.dialog-open {
   .mh-copilot {
     transition: none;
   }
+}
+
+/* ── Modal drawer variant ────────────────────────────────────────────────
+   Right-side full-height panel — `fm-overlay`/`fm-drawer` in
+   field-components.css (knowledge detail views). */
+.mh-modal--drawer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mh-modal--drawer .mh-modal__scrim {
+  background: var(--mh-bt-drawer-scrim);
+  backdrop-filter: none;
+}
+
+.mh-modal--drawer .mh-modal__dialog {
+  width: min(820px, 94vw);
+  height: 100%;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--mh-bt-drawer-bg);
+  box-shadow: var(--mh-bt-drawer-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mh-modal--drawer .mh-modal__header {
+  padding: 24px;
+  background: var(--mh-surface);
+  border-bottom: 1px solid var(--mh-bt-drawer-line);
+}
+
+.mh-modal--drawer .mh-modal__eyebrow {
+  display: block;
+  margin-top: 5px;
+  color: var(--mh-bt-drawer-eyebrow);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 1;
+  text-transform: none;
+}
+
+.mh-modal--drawer .mh-modal__titleline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 11px 0 0;
+}
+
+.mh-modal--drawer .mh-modal__title {
+  margin: 0;
+  font-size: 23px;
+  line-height: 1.3;
+  color: var(--mh-bt-drawer-title);
+}
+
+.mh-modal--drawer .mh-modal__close {
+  width: auto;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--mh-bt-confirm-btn-line);
+  border-radius: 6px;
+  background: var(--mh-surface);
+  color: var(--mh-copy);
+  font-size: 22px;
+}
+
+.mh-modal--drawer .mh-modal__close:hover,
+.mh-modal--drawer .mh-modal__close:focus-visible {
+  background: var(--mh-bt-action-hover-bg);
+  border-color: var(--mh-bt-action);
+  color: var(--mh-ink);
+}
+
+.mh-modal--drawer .mh-modal__body {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  background: var(--mh-surface);
+}
+
+.mh-modal--drawer .mh-modal__foot {
+  padding: 16px 24px;
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  border-top: 1px solid var(--mh-bt-drawer-line);
+  background: var(--mh-surface);
+}
+
+/* ── ConfirmDialog — `.fm-dialog` / `.knowledge-confirm-dialog` ────────── */
+.mh-modal:has(> .mh-modal__dialog.mh-confirm) {
+  z-index: var(--mh-z-modal);
+}
+
+.mh-modal:has(> .mh-modal__dialog.mh-confirm--confirm) .mh-modal__scrim {
+  background: var(--mh-bt-confirm-scrim);
+  backdrop-filter: none;
+}
+
+.mh-modal:has(> .mh-modal__dialog.mh-confirm--info) .mh-modal__scrim {
+  background: var(--mh-bt-dialog-scrim);
+  backdrop-filter: none;
+}
+
+.mh-confirm.mh-modal__dialog {
+  width: auto;
+  max-width: min(440px, 85vw);
+  padding: 0;
+  border-color: var(--mh-bt-dialog-line);
+  border-radius: 12px;
+  color: var(--mh-bt-dialog-ink);
+}
+
+.mh-confirm .mh-modal__header {
+  padding: 20px 20px 0;
+}
+
+.mh-confirm .mh-modal__title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--mh-bt-confirm-title);
+}
+
+.mh-confirm--info.mh-modal__dialog {
+  width: 370px;
+}
+
+.mh-confirm--info .mh-modal__header {
+  padding: 25px 25px 0;
+}
+
+/* `dialog.fm-dialog` — centred title/message, Close focused on open. The
+   heading must span the full header row or text-align has no room to centre. */
+.mh-confirm--info .mh-modal__heading {
+  flex: 1;
+}
+
+.mh-confirm--info .mh-modal__title {
+  margin: 0;
+  font-size: 16.38px;
+  text-align: center;
+}
+
+.mh-confirm .mh-modal__close {
+  display: none;
+}
+
+/* `.knowledge-confirm-dialog` — the warning icon is pinned top-left of the
+   dialog and the message aligns under the title column. */
+.mh-confirm--confirm.mh-modal__dialog {
+  position: relative;
+  border: 0;
+  border-radius: 18px;
+}
+
+.mh-confirm--confirm .mh-modal__header {
+  padding: 20px 20px 0;
+}
+
+.mh-confirm--confirm .mh-modal__eyebrow {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 25px;
+  height: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--mh-bt-confirm-icon-bg);
+  color: var(--mh-bt-confirm-icon);
+  font-size: 0;
+  letter-spacing: 0;
+}
+
+.mh-confirm--confirm .mh-modal__eyebrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mh-confirm--confirm .mh-modal__title {
+  margin: 0 0 0 37px;
+  font-size: 14px;
+  line-height: 1.25;
+  color: var(--mh-bt-confirm-title);
+}
+
+.mh-confirm--confirm .mh-confirm__message {
+  margin: 5px 20px 20px 57px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--mh-bt-confirm-copy);
+  white-space: nowrap;
+}
+
+.mh-confirm--info .mh-confirm__message {
+  margin: 14px 25px 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--mh-bt-dialog-ink);
+  text-align: center;
+}
+
+.mh-confirm__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 20px;
+}
+
+.mh-confirm--info .mh-confirm__foot {
+  margin-top: 22px;
+  padding: 0 25px 25px;
+  gap: 8px;
+}
+
+.mh-confirm__btn {
+  height: 25px;
+  padding: 0 10px;
+  border: 1px solid var(--mh-bt-confirm-btn-line);
+  border-radius: 7px;
+  background: var(--mh-surface);
+  color: var(--mh-bt-confirm-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mh-confirm--info .mh-confirm__btn {
+  height: auto;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+.mh-confirm__btn--primary {
+  background: var(--mh-bt-confirm-primary);
+  border-color: var(--mh-bt-confirm-primary);
+  color: var(--mh-surface);
+}
+
+/* The original focuses the first button on open via native <dialog>
+   autofocus; its global :focus-visible rule always draws the ring. */
+.mh-confirm__btn:focus-visible,
+.mh-confirm__btn:focus {
+  outline: 2px solid var(--mh-focus-strong);
+  outline-offset: 2px;
+}
+
+/* ── BusinessTermView — business-term-library.js dedicated view ────────── */
+.mh-btview {
+  min-width: 0;
+}
+
+/* `.unified-type-toolbar` shared bar (unified-type-toolbar.css) */
+.mh-btview__tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 71px;
+  padding: 13px 0 14px;
+}
+
+.mh-btview__search {
+  flex: 0 0 300px;
+  width: 300px;
+}
+
+.mh-btview__search .mh-search {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 44px;
+  padding: 0 13px 0 18px;
+  border: 1px solid var(--mh-bt-search-line);
+  border-radius: 14px;
+  background: var(--mh-surface);
+  box-shadow: var(--mh-bt-search-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.mh-btview__search .mh-search:focus-within {
+  border-color: var(--mh-bt-search-focus);
+  box-shadow: 0 0 0 3px rgba(185, 130, 52, 0.13), 0 10px 26px rgba(116, 78, 31, 0.1);
+}
+
+.mh-btview__search .mh-search__icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--mh-bt-search-icon);
+}
+
+.mh-btview__search .mh-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+  color: var(--mh-principle-search-ink);
+}
+
+.mh-btview__search .mh-input::placeholder {
+  color: var(--mh-principle-search-placeholder);
+}
+
+.mh-btview__search .mh-input:focus-visible {
+  outline: 0;
+}
+
+/* `.business-multi-filter` — the shared multi-select disclosure field. */
+.mh-btview .mh-check-filter {
+  width: 180px;
+  min-width: 180px;
+  flex: 0 0 180px;
+  height: 44px;
+  padding: 0 13px;
+}
+
+.mh-btview .mh-check-filter__label {
+  font-size: 11px;
+}
+
+.mh-btview .mh-check-filter__options {
+  min-width: 240px;
+}
+
+/* `#btAddTerm` — gold pill link (business-term.css `.bt-add`). */
+.mh-btview__create {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 15px;
+  margin-left: auto;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  box-shadow: var(--mh-bt-create-shadow);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mh-btview__create:hover {
+  background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+}
+
+.mh-btview__create:focus-visible {
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-btview__create > span {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.mh-btview__countline {
+  font-size: 12px;
+  color: var(--mh-bt-countline);
+}
+
+.mh-btview__countline strong {
+  color: var(--mh-check-filter-option);
+  font-weight: 600;
+}
+
+/* `.bt-term-card-list` — business-term.css, overridden to 3 columns by
+   ai-interpreter-overview.css; reference breakpoints drop to 2/1 columns. */
+.mh-btview__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .mh-btview__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-btview__cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* `.bt-term-card` — measured cascade: 12/20/50 padding (the bottom row is
+   reserved for the absolutely positioned creator + actions). */
+.mh-btview__card {
+  position: relative;
+  padding: 12px 20px 50px;
+  border: 1px solid var(--mh-principle-line);
+  border-radius: 14px;
+  background: var(--mh-surface);
+  box-shadow: var(--mh-principle-shadow);
+  color: var(--mh-bt-copy);
+}
+
+.mh-btview__card:focus-visible {
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-btview__card h3 {
+  margin: 0;
+  max-width: calc(100% - 112px);
+  overflow: hidden;
+  color: var(--mh-bt-title);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-btview__draft {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  background: var(--mh-bt-draft-bg);
+  color: var(--mh-bt-draft-ink);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: super;
+}
+
+.mh-btview__card p {
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* `.bt-term-card-meta` — creator pinned bottom-left by the final cascade. */
+.mh-btview__meta {
+  position: absolute;
+  bottom: 14px;
+  left: 20px;
+}
+
+.mh-btview__field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mh-btview__field > span {
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-btview__field > strong {
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-btview__synonyms {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.mh-btview__synonyms > span {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+}
+
+.mh-btview__tags {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
+}
+
+.mh-btview__tag {
+  flex: 0 0 auto;
+  display: inline-flex;
+  height: 24px;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--mh-bt-tag-bg);
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.mh-btview__tag--overflow {
+  min-width: 26px;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+/* `.bt-term-card-pills` — fixed 76×20 status capsule. */
+.mh-btview__pills {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+}
+
+.mh-btview__state {
+  display: inline-flex;
+  width: 76px;
+  height: 20px;
+  min-height: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0;
+  border-radius: 5px;
+  background: var(--mh-bt-state-bg);
+  color: var(--mh-bt-state-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mh-btview__state::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mh-btview__state.is-off {
+  background: var(--mh-bt-state-off-bg);
+  color: var(--mh-bt-state-off-ink);
+}
+
+/* `.bt-term-card-actions` — final cascade pins them bottom-right; the
+   original's --bt-actions-top synonym alignment is dead code. */
+.mh-btview__actions {
+  position: absolute;
+  right: 16px;
+  bottom: 10px;
+  display: flex;
+}
+
+.mh-btview__action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-btview__action {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mh-bt-action);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.mh-btview__action svg {
+  width: 15px;
+  height: 15px;
+}
+
+.mh-btview__action:hover:not(.is-disabled):not([aria-disabled="true"]),
+.mh-btview__action:focus-visible:not(.is-disabled):not([aria-disabled="true"]) {
+  background: var(--mh-bt-action-hover-bg);
+}
+
+.mh-btview__action.is-disabled,
+.mh-btview__action[aria-disabled="true"] {
+  color: var(--mh-bt-action-disabled);
+  cursor: not-allowed;
+}
+
+.mh-btview__empty {
+  padding: 42px;
+  color: var(--mh-bt-empty);
+  text-align: center;
+}
+
+/* Drawer footer actions keep the bordered `.fm-icon-action` look (not the
+   card's transparent gold). */
+.mh-btview__drawer-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 22px;
+  padding: 5px 10px 5px 9px;
+  border-radius: 999px;
+  background: var(--mh-bt-status-off-bg);
+  color: var(--mh-bt-status-off-ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mh-btview__drawer-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--mh-bt-status-off-dot);
+}
+
+.mh-btview__drawer-status.is-on {
+  background: var(--mh-bt-status-on-bg);
+  color: var(--mh-bt-status-on-ink);
+}
+
+.mh-btview__drawer-status.is-on::before {
+  background: var(--mh-bt-status-on-dot);
+}
+
+.mh-btview__detail {
+  display: grid;
+  gap: 8px;
+}
+
+.mh-btview__section {
+  display: grid;
+  gap: 8px;
+}
+
+.mh-btview__section + .mh-btview__section {
+  margin-top: 10px;
+}
+
+.mh-btview__section h3 {
+  margin: 0;
+  color: var(--mh-bt-section-title);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mh-btview__section p {
+  margin: 0;
+  color: var(--mh-bt-section-copy);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.mh-btview__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mh-btview__chip {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: var(--mh-bt-chip-bg);
+  color: var(--mh-bt-chip-ink);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* `.bt-scope-tag` inside the drawer — the small green data-model pill. */
+.mh-btview__scope {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--mh-bt-scope-bg);
+  color: var(--mh-bt-scope-ink);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* The drawer's footer actions use the bordered control look. */
+.mh-modal--drawer .mh-modal__foot .mh-btview__action {
+  border-color: var(--mh-line);
+  background: var(--mh-surface);
+  color: var(--mh-copy);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-danger {
+  color: var(--mh-bt-confirm-copy);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):hover,
+.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):focus-visible {
+  border-color: var(--mh-bt-action);
+  background: var(--mh-bt-action-hover-bg);
+  color: var(--mh-ink);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-disabled,
+.mh-modal--drawer .mh-modal__foot .mh-btview__action[aria-disabled="true"] {
+  color: #aeb7c1;
 }

@@ -1,5 +1,5 @@
-import { Pagination } from "../../molecules.jsx";
-import { callbackProp, prop, useSynced } from "../story-helpers.js";
+import { Pagination, paginationVariants } from "../../molecules.jsx";
+import { callbackProp, enumProp, prop, useSynced } from "../story-helpers.js";
 
 export default {
   title: "Molecules/Pagination",
@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          "Footer pagination row — total label, rows-per-page select and ‹ 1 2 3 › buttons. Mirrors `#businessPagination` / `renderPagination` in the original.",
+          "Footer pagination row — total label, rows-per-page select and page controls. “numbered” mirrors `#businessPagination` / `renderPagination` (‹ 1 2 3 ›); “compact” mirrors `fm-pagination` in the Business Term / Scenario libraries (Previous / “page / total” / Next, always plural unit).",
       },
     },
   },
@@ -20,14 +20,20 @@ export default {
     pageSize: 10,
     pageSizes: [10, 20, 50],
     rowsLabel: "Rows per page",
+    variant: "numbered",
+    previousLabel: "Previous",
+    nextLabel: "Next",
   },
   argTypes: {
     total: prop("number", { description: "Total item count." }),
-    units: prop("[string, string]", { defaultValue: ["asset", "assets"], description: "Singular/plural labels for the total." }),
+    units: prop("[string, string]", { defaultValue: ["asset", "assets"], description: "Singular/plural labels for the total (compact always uses the plural)." }),
     page: prop("number", { defaultValue: 1, description: "Current page (clamped to range)." }),
     pageSize: prop("number", { defaultValue: 10, description: "Rows per page.", control: "inline-radio", options: [10, 20, 50] }),
     pageSizes: prop("Array<number>", { defaultValue: [10, 20, 50], description: "Options in the rows-per-page select." }),
     rowsLabel: prop("string", { defaultValue: "Rows per page", description: "Label on the page-size select." }),
+    variant: enumProp(paginationVariants, "numbered", "numbered = ‹ 1 2 3 › page buttons; compact = Previous / “p / total” / Next (fm-pagination)."),
+    previousLabel: prop("string", { defaultValue: "Previous", description: "Previous button label (compact only)." }),
+    nextLabel: prop("string", { defaultValue: "Next", description: "Next button label (compact only)." }),
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, "Fired when a page button is clicked."),
     onPageSize: callbackProp(
       "onPageSize",
@@ -61,3 +67,12 @@ export default {
 };
 
 export const Default = {};
+
+export const Compact = {
+  args: {
+    total: 6,
+    units: ["record", "records"],
+    pageSizes: [5, 10, 20],
+    variant: "compact",
+  },
+};

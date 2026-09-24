@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AiInterpreterPage } from "./pages.jsx";
+import { useBusinessTermDemo } from "./demo/business-term-demo.js";
 import { INTERPRETER } from "./content.js";
 
 const baseProps = {
@@ -16,8 +17,15 @@ const baseProps = {
   },
 };
 
+/* The dedicated Business Term view needs its page-level container (same
+   wiring as the pages--interpreter story). */
+function Page(props) {
+  const businessTerms = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
+  return <AiInterpreterPage {...baseProps} businessTerms={businessTerms} {...props} />;
+}
+
 function renderPage(props = {}) {
-  return render(<AiInterpreterPage {...baseProps} {...props} />);
+  return render(<Page {...props} />);
 }
 
 // Mirrors the story wiring: controlled props driven by state, so clicks in the
@@ -28,10 +36,12 @@ function Harness({ onSelectType, ...rest }) {
   const [filterValues, setFilterValues] = React.useState(rest.filterValues ?? {});
   const [selectedCategories, setSelectedCategories] = React.useState([]);
   const [expanded, setExpanded] = React.useState([]);
+  const businessTerms = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
   return (
     <AiInterpreterPage
       {...baseProps}
       {...rest}
+      businessTerms={businessTerms}
       activeType={activeType}
       query={query}
       filterValues={filterValues}
@@ -89,7 +99,9 @@ describe("AI Interpreter type contract", () => {
 
     unmount();
     renderPage({ activeType: "Business Term" });
-    expect(screen.getByRole("button", { name: "Add Business Term" })).toBeTruthy();
+    /* The dedicated view's Add control is a real link to the M5 create page
+       (business-term-library.js renders <a target="_blank">). */
+    expect(screen.getByRole("link", { name: "Add Business Term" })).toBeTruthy();
   });
 
   it("does not expose a create action on read-only types even when onCreate is provided", () => {
@@ -107,6 +119,13 @@ describe("AI Interpreter type contract", () => {
       if (type.view === "principles") {
         const cards = document.querySelectorAll(".mh-principle");
         expect(cards.length).toBe(INTERPRETER.principles.length);
+        expect(document.querySelector(".mh-asset")).toBeNull();
+        continue;
+      }
+      // business-term-library.js swaps in #businessTermOverview's term cards.
+      if (type.view === "business-term") {
+        const cards = document.querySelectorAll(".mh-btview__card");
+        expect(cards.length).toBe(INTERPRETER.businessTermLibrary.records.length);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
       }
@@ -143,22 +162,15 @@ describe("AI Interpreter type contract", () => {
     expect(titles.some((text) => text.includes("Channel Exception Watch"))).toBe(true);
   });
 
-  it("business term Draft option matches stage, not availability", () => {
-    const draftTerm = {
-      id: "test-draft-term",
-      typeId: "Business Term",
-      title: "Draft Term Fixture",
-      summary: "Injected fixture exercising the Draft stage filter.",
-      owner: "Current User",
-      stage: "draft",
-      availability: "enabled",
-      kind: "Business Term",
-    };
-    render(<Harness activeType="Business Term" records={[...INTERPRETER.records, draftTerm]} />);
-    fireEvent.change(screen.getByLabelText("Status"), { target: { value: "draft" } });
-    const titles = rowTitles();
-    expect(titles.length).toBe(1);
-    expect(titles[0]).toContain("Draft Term Fixture");
+  it("renders the dedicated Business Term view", () => {
+    render(<Harness activeType="Business Term" />);
+    expect(document.querySelectorAll(".mh-btview__card").length).toBe(
+      INTERPRETER.businessTermLibrary.records.length,
+    );
+    expect(document.querySelector(".mh-asset")).toBeNull();
+    expect(screen.getByLabelText("Search knowledge")).toBeTruthy();
+    /* the "AI Interpreter" launcher stays visible on the dedicated page. */
+    expect(document.querySelector(".mh-launcher")).toBeTruthy();
   });
 
   it("query narrows principle cards and produces the dedicated empty state", () => {

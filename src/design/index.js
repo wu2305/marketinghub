@@ -11,6 +11,7 @@ export {
   SearchField,
   CheckboxFilter,
   Pagination,
+  paginationVariants,
   MetricStat,
   SectionHeading,
   CategoryHeading,
@@ -67,6 +68,9 @@ export {
   Modal,
   ModelFlowDialog,
   UploadHistory,
+  BusinessTermView,
+  ConfirmDialog,
+  confirmDialogTones,
   assistantPlacements,
   modelFlowSteps,
   headerTones,
@@ -109,6 +113,7 @@ export {
 /* Deterministic demo state + simulators for hosts and tests. */
 export { useCockpitDemo } from "./demo/cockpit-demo.js";
 export { useHomeDemo } from "./demo/home-demo.js";
+export { useBusinessTermDemo } from "./demo/business-term-demo.js";
 export {
   generateCityInvestScenario,
   cityInvestScenarioSource,

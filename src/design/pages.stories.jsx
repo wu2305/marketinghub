@@ -5,6 +5,7 @@ import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "./demo/report-fixtures.j
 import { cityInvestScenarioSource } from "./demo/report-demo.js";
 import { useCockpitDemo } from "./demo/cockpit-demo.js";
 import { useHomeDemo } from "./demo/home-demo.js";
+import { useBusinessTermDemo } from "./demo/business-term-demo.js";
 
 const shell = { logo: LOGO, navigation: NAV };
 const HOME_DEMO = { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft };
@@ -228,6 +229,9 @@ export const Interpreter = {
     onPage: { action: "onPage" },
     onPageSize: { action: "onPageSize" },
     onToggleExpand: { action: "onToggleExpand" },
+    onFilterToggle: { action: "onFilterToggle" },
+    onOpen: { action: "onOpen" },
+    onAction: { action: "onAction" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
@@ -237,12 +241,26 @@ export const Interpreter = {
     const [principlePage, setPrinciplePage] = useSynced(args.principles?.page || 1);
     const [principlePageSize, setPrinciplePageSize] = useSynced(args.principles?.pageSize || 10);
     const [principleExpanded, setPrincipleExpanded] = useSynced(args.principles?.expanded || []);
+    /* Page-level container: filter/search/page/detail state survives switching
+       to other knowledge types and back (module-level in the original). */
+    const businessTerms = useBusinessTermDemo({
+      ...INTERPRETER.businessTermLibrary,
+      onNavigate: args.onNavigate,
+      onQueryChange: args.onQueryChange,
+      onFilterToggle: args.onFilterToggle,
+      onPage: args.onPage,
+      onPageSize: args.onPageSize,
+      onOpen: args.onOpen,
+      onAction: args.onAction,
+      onCreate: args.onCreate,
+    });
     return (
       <AiInterpreterPage
         {...args}
         activeType={activeType}
         query={query}
         filterValues={filterValues}
+        businessTerms={businessTerms}
         principles={{
           ...args.principles,
           selectedCategories: selCategories,

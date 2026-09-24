@@ -20,6 +20,8 @@ import {
   ReportCopilot,
   useCockpitDemo,
   useHomeDemo,
+  useBusinessTermDemo,
+  BusinessTermView,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -30,6 +32,7 @@ import {
   COCKPIT,
   COCKPIT_SKILL_MENU,
   HOME,
+  INTERPRETER,
   LOGO,
   MODEL_FLOW,
   NAV,
@@ -45,6 +48,7 @@ import {
   ALT_KNOWLEDGE,
   ALT_PROJECTS,
 } from "../../src/design/demo/__fixtures__/alt-cockpit.js";
+import { ALT_BUSINESS_TERMS } from "../../src/design/demo/__fixtures__/alt-business-terms.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -244,6 +248,8 @@ const Sentinel = () => (
 function ComposeRoute() {
   const copilotA = useCopilotInstance({ copilot: COPILOT, projects: REPORT_PROJECTS, knowledge: KNOWLEDGE_ASSETS, projectKey: "city", rawIndex: 0 });
   const copilotB = useCopilotInstance({ copilot: ALT_COPILOT, projects: ALT_PROJECTS, knowledge: ALT_KNOWLEDGE, projectKey: "alpha", rawIndex: 0 });
+  const termsA = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
+  const termsB = useBusinessTermDemo({ ...ALT_BUSINESS_TERMS });
   return (
     <main className="host-compose">
       <header className="host-compose__head">
@@ -257,6 +263,10 @@ function ComposeRoute() {
       <section className="host-grid" aria-label="Report copilots">
         <div className="host-cell host-copilot" data-instance="a"><ReportCopilot {...copilotA} /></div>
         <div className="host-cell host-copilot" data-instance="b"><ReportCopilot {...copilotB} /></div>
+      </section>
+      <section className="host-grid" aria-label="Business term libraries">
+        <div className="host-cell" data-instance="a"><BusinessTermView {...termsA} /></div>
+        <div className="host-cell" data-instance="b"><BusinessTermView {...termsB} /></div>
       </section>
       <section aria-label="Host sentinel"><Sentinel /></section>
     </main>

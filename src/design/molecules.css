@@ -288,6 +288,66 @@
   outline-offset: 2px;
 }
 
+/* fm-pagination — the Business Term / Scenario library footer: "{n} records"
+   left, then Rows-per-page select + Previous / "p / total" / Next. */
+.mh-pagination--compact {
+  min-height: 0;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 0;
+  border-top: 0;
+  background: transparent;
+  font-size: 12px;
+  color: var(--mh-bt-pag-ink);
+}
+
+.mh-pagination--compact .mh-pagination__total {
+  margin-right: 0;
+}
+
+.mh-pagination--compact .mh-pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mh-pagination--compact .mh-pagination__size select {
+  height: 28px;
+  padding: 6px;
+  border-color: var(--mh-pagination-select-line);
+  font-size: 12px;
+}
+
+.mh-pagination--compact .mh-pagination__prev,
+.mh-pagination--compact .mh-pagination__next {
+  padding: 7px 10px;
+  border: 1px solid var(--mh-pagination-btn-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mh-pagination--compact .mh-pagination__prev:hover:not(:disabled),
+.mh-pagination--compact .mh-pagination__next:hover:not(:disabled) {
+  border-color: var(--mh-pagination-hover-line);
+  background: var(--mh-pagination-hover-bg);
+}
+
+.mh-pagination--compact .mh-pagination__prev:disabled,
+.mh-pagination--compact .mh-pagination__next:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mh-pagination--compact .mh-pagination__prev:focus-visible,
+.mh-pagination--compact .mh-pagination__next:focus-visible {
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
 .mh-metric {
   display: grid;
   gap: 6px;

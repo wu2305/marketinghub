@@ -101,6 +101,8 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-warn-note: #776f4b;
   --mh-focus-blue: #8da7c0;
   --mh-focus-ring: rgba(63, 115, 166, 0.1);
+  /* workspace.css global :focus-visible ring */
+  --mh-focus-strong: rgba(63, 115, 166, 0.55);
   --mh-line-hover: #929da7;
   --mh-scrim-deep: rgba(15, 18, 24, 0.55);
   --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
@@ -366,6 +368,67 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-pagination-hover-bg: #fff9f2;
   --mh-pagination-select-line: #d9dee3;
   --mh-pagination-select-ink: #404850;
+  /* Business Term dedicated view (business-term.css / business-term-reference.css /
+     ai-interpreter-overview.css / unified-type-toolbar.css / field-components.css) */
+  --mh-bt-title: #1d1c1b;
+  --mh-bt-copy: #403e3b;
+  --mh-bt-label: #99948a;
+  --mh-bt-tag-bg: #f1efeb;
+  --mh-bt-state-bg: #f7f1e5;
+  --mh-bt-state-ink: #b4872d;
+  --mh-bt-state-off-bg: #f1f1ef;
+  --mh-bt-state-off-ink: #77736d;
+  --mh-bt-action: #c8892b;
+  --mh-bt-action-disabled: #858b91;
+  --mh-bt-action-hover-bg: #fff6e8;
+  --mh-bt-search-line: #d9bd91;
+  --mh-bt-search-focus: #b98234;
+  --mh-bt-search-icon: #6f665d;
+  --mh-bt-search-shadow: 0 8px 24px rgba(116, 78, 31, 0.08);
+  --mh-bt-countline: #6f6961;
+  --mh-bt-empty: #78838d;
+  --mh-bt-draft-bg: #f6ede0;
+  --mh-bt-draft-ink: #a76412;
+  --mh-bt-create-from: #e3ba6d;
+  --mh-bt-create-to: #cb8f2b;
+  --mh-bt-create-from-hover: #ecc673;
+  --mh-bt-create-to-hover: #d59a33;
+  --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
+  --mh-bt-drawer-bg: #f6f7f9;
+  --mh-bt-drawer-line: #dfe5eb;
+  --mh-bt-drawer-eyebrow: #a57531;
+  --mh-bt-drawer-title: #252423;
+  --mh-bt-drawer-shadow: -8px 0 32px rgba(23, 32, 42, 0.15);
+  --mh-bt-drawer-scrim: rgba(20, 32, 50, 0.4);
+  --mh-bt-status-on-bg: #fff4df;
+  --mh-bt-status-on-ink: #8c5622;
+  --mh-bt-status-on-dot: #c17d22;
+  --mh-bt-status-off-bg: #f0f2f4;
+  --mh-bt-status-off-ink: #8b8f94;
+  --mh-bt-status-off-dot: #929292;
+  --mh-bt-section-title: #20262d;
+  --mh-bt-section-copy: #5d6872;
+  --mh-bt-chip-bg: #edf1f5;
+  --mh-bt-chip-ink: #536576;
+  --mh-bt-scope-bg: #edf5f1;
+  --mh-bt-scope-ink: #28785f;
+  --mh-bt-dialog-line: #dbe1e8;
+  --mh-bt-dialog-ink: #354253;
+  --mh-bt-dialog-scrim: rgba(23, 34, 50, 0.4);
+  --mh-bt-confirm-scrim: rgba(48, 56, 68, 0.5);
+  --mh-bt-confirm-icon-bg: #fff3e7;
+  --mh-bt-confirm-icon: #e58a24;
+  --mh-bt-confirm-title: #252f3e;
+  --mh-bt-confirm-copy: #737e90;
+  --mh-bt-confirm-btn-line: #dce2e9;
+  --mh-bt-confirm-btn-ink: #2e3948;
+  --mh-bt-confirm-primary: #cf8a20;
+  --mh-bt-pag-ink: #6c7785;
+  /* overlay stacking scale — assistant-launcher.css / field-components.css
+     order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
+  --mh-z-launcher: 880;
+  --mh-z-overlay: 1900;
+  --mh-z-modal: 2400;
 }
 
 .mh-sr {

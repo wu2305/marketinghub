@@ -6,6 +6,7 @@ import {
   ActionCard,
   AssistantLauncher,
   AssistantPanel,
+  BusinessTermView,
   CampaignRail,
   CityInvestDashboard,
   Header,
@@ -494,6 +495,7 @@ export function SelfServicePage({
  * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, statusFilters)
  * @param {Array<object>} [props.records=[]] sampled records; each row links to a type via `typeId`
  * @param {object} [props.principles={}] PrinciplesView props for `?type=Principles` (items, selectedCategories, page, pageSize, expanded, strings, callbacks)
+ * @param {object} [props.businessTerms={}] BusinessTermView props for `?type=Business Term` — drive it with `useBusinessTermDemo` so the state lives at page level
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {string} [props.query=""]
  * @param {Object<string, string>} [props.filterValues={}]
@@ -514,6 +516,7 @@ export function AiInterpreterPage({
   types = [],
   records = [],
   principles = {},
+  businessTerms = {},
   activeType = "overview",
   query = "",
   filterValues = {},
@@ -627,6 +630,11 @@ export function AiInterpreterPage({
               searchRef={searchRef}
               {...principles}
             />
+          ) : type.view === "business-term" ? (
+            /* business-term-library.js replaces the generic library chrome with
+               #businessTermOverview; the "/" and Cmd/Ctrl+K shortcut keeps
+               targeting the visible search input. */
+            <BusinessTermView searchRef={searchRef} {...businessTerms} />
           ) : (
             <KnowledgeLibrary
               type={{ ...type, statusFilters: filters }}

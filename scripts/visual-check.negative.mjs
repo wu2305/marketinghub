@@ -35,12 +35,20 @@ export default [
     reason: "project=city must not satisfy 4P Executive Overview assertions",
   },
   {
-    // Base filters Principles by category; Business Term renders a different
-    // knowledge list without the check filter / principle cards.
+    // Base filters Principles by category; the dedicated Business Term view
+    // renders term cards instead of principle cards.
     id: "neg-p07-wrong-type",
     base: "p07-principles-category-filter",
     story: { args: { activeType: "Business Term" } },
     reason: "activeType=Business Term must not satisfy Principles filter assertions",
+  },
+  {
+    // The dedicated view has no generic asset rows and no launcher; the
+    // overview's type grid must not satisfy its assertions either.
+    id: "neg-p07-business-term-overview",
+    base: "p07-interpreter-business-term",
+    story: { args: { activeType: "overview" } },
+    reason: "activeType=overview must not satisfy Business Term card/toolbar assertions",
   },
   {
     // Base clicks the Daily tab; with the default tab (Monthly) still active
