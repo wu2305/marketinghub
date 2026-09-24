@@ -28,7 +28,7 @@
  */
 import http from "node:http";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
@@ -40,7 +40,15 @@ import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
 const STATIC = path.join(ROOT, "storybook-static");
 const STAMP = path.join(STATIC, "mh-build-stamp.json");
 const INDEX = path.join(STATIC, "index.json");
-const CONFIG_FILE = path.join(ROOT, "scripts", "visual-check.config.mjs");
+const CONFIG_FILES = [
+  path.join(ROOT, "scripts", "visual-check.config.mjs"),
+  path.join(ROOT, "scripts", "visual-check.negative.mjs"),
+  path.join(ROOT, "scripts", "visual-check", "common.mjs"),
+  ...readdirSync(path.join(ROOT, "scripts", "visual-check", "scenarios"))
+    .filter((f) => f.endsWith(".mjs"))
+    .sort()
+    .map((f) => path.join(ROOT, "scripts", "visual-check", "scenarios", f)),
+];
 const ORIG_PORT = Number(process.env.MH_ORIG_PORT || 4173);
 const STORY_PORT = Number(process.env.MH_STORY_PORT || 6007);
 
@@ -131,7 +139,10 @@ for (const e of Object.values(index.entries)) {
   if (e.type === "story") indexCounts.stories += 1;
   else if (e.type === "docs") indexCounts.docs += 1;
 }
-const configHash = sha256(readFileSync(CONFIG_FILE));
+// Hash every scenario module so the run record proves which assertion set ran.
+const configHash = createHash("sha256")
+  .update(CONFIG_FILES.map((f) => path.relative(ROOT, f) + "\0" + readFileSync(f, "utf8")).join("\0"))
+  .digest("hex");
 
 function serve(dir, port, label) {
   const handler = sirv(dir, { dev: true, etag: true });
