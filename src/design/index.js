@@ -76,3 +76,40 @@ export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, Cam
 export { Icon } from "./icons.jsx";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
 export * as demoContent from "./content.js";
+/* Pure report/knowledge logic — all inputs explicit. */
+export {
+  pluralize,
+  resolveReportAssets,
+  projectSearchText,
+  reportSearchText,
+  resolveReportContext,
+  storeOptionsFor,
+  storeScopeSuffix,
+  totalLabel,
+  selectionLabel,
+  pickTicks,
+  fmtAfter,
+  isPilotCitySalesQuestion,
+  buildReportModelDescription,
+  buildReportModelLogic,
+  buildReportModelDraft,
+} from "./report-logic.js";
+export {
+  projectCatalogHref,
+  liveReportHref,
+  reportContextHref,
+  copilotSourceHref,
+  REPORT_CATALOG_HREF,
+  KNOWLEDGE_HREF,
+} from "./report-routes.js";
+/* Deterministic demo state + simulators for hosts and tests. */
+export { useCockpitDemo } from "./demo/cockpit-demo.js";
+export {
+  generateCityInvestScenario,
+  cityInvestScenarioSource,
+  copilotProfile,
+  copilotSources,
+  resolveCopilotAnswer,
+  buildCopilotChatEntry,
+  copilotSkillItems,
+} from "./demo/report-demo.js";

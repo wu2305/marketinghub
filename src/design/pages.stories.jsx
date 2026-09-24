@@ -1,7 +1,9 @@
 import React from "react";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, COCKPIT_SKILL_MENU, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
-import { COPILOT_HISTORY, COPILOT_SUMMARY, REPORT_COPILOT_FLOW, REPORT_SKILL_MENU, buildCopilotChatEntry, buildReportModelDraft, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./report-data.js";
+import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "./demo/report-fixtures.js";
+import { cityInvestScenarioSource } from "./demo/report-demo.js";
+import { useCockpitDemo } from "./demo/cockpit-demo.js";
 
 const shell = { logo: LOGO, navigation: NAV };
 
@@ -171,6 +173,10 @@ export const Home = {
   },
 };
 
+/* CityInvestDashboard arg data: the component never reads `baseline` — only the
+   getScenario source built from it does. */
+const { baseline: _baseline, ...CITY_INVEST_VIEW } = CITY_INVEST;
+
 export const MarketingCockpit = {
   name: "Marketing Cockpit",
   args: {
@@ -185,6 +191,9 @@ export const MarketingCockpit = {
     hero: COCKPIT.hero,
     groups: COCKPIT.groups,
     projects: COCKPIT.projects,
+    knowledge: KNOWLEDGE_ASSETS,
+    cityInvest: { ...CITY_INVEST_VIEW, getScenario: cityInvestScenarioSource(CITY_INVEST) },
+    demo: { copilot: COPILOT, modelFlow: MODEL_FLOW, reportAnswerFor: buildReportAssistantAnswer },
     detailsSections: COCKPIT.detailsSections,
     assistant: { ...COCKPIT.assistant, showScopes: false, showPicks: false, hideStageOnAnswers: true, enterToSubmit: false, skillMenu: COCKPIT_SKILL_MENU },
   },
@@ -192,6 +201,10 @@ export const MarketingCockpit = {
     project: { control: "select", options: ["all", "city", "fourp", "customer", "abo", "rednote", "ottolv"] },
     view: { control: "select", options: cockpitViews },
     dashboard: { control: { type: "number", min: 0, max: 1 } },
+    knowledge: { control: false },
+    cityInvest: { control: false },
+    demo: { control: false },
+    onFiltersChange: { action: "onFiltersChange" },
     onNavigate: { action: "onNavigate" },
     onQueryChange: { action: "onQueryChange" },
     onOpenProject: { action: "onOpenProject" },
@@ -227,267 +240,7 @@ export const MarketingCockpit = {
     onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function CockpitStory(args) {
-    const [query, setQuery] = useSynced(args.query);
-    const [project, setProject] = useSynced(args.project);
-    const [view, setView] = useSynced(args.view);
-    const [dashboard, setDashboard] = useSynced(args.dashboard);
-    const [details, setDetails] = useSynced(args.details);
-    const [open, setOpen] = useSynced(args.assistantOpen);
-    const [prompt, setPrompt] = useSynced(args.prompt);
-    const [answers, setAnswers] = React.useState([]);
-    const [skill, setSkill] = React.useState(null);
-    const [flow, setFlow] = React.useState(null);
-    /* Report Copilot host state — the deterministic "AI" the original fakes
-       with report-core.js: answers resolve from the active report, custom
-       questions append to the chat thread when the answer view is open. */
-    const [wsOpen, setWsOpen] = useSynced(args.workspaceOpen);
-    const [wsPrompt, setWsPrompt] = useSynced("");
-    const [wsAnswer, setWsAnswer] = React.useState(null);
-    const [wsChat, setWsChat] = React.useState([]);
-    const [wsFlow, setWsFlow] = React.useState(null);
-    const submitAnswer = (text) => {
-      const trimmed = String(text || "").trim();
-      if (!trimmed) return;
-      setAnswers((current) => [...current, buildReportAssistantAnswer(trimmed)]);
-      setPrompt("");
-    };
-    const liveKey = COCKPIT.projects[project] ? project : Object.keys(COCKPIT.projects)[0];
-    const liveProject = COCKPIT.projects[liveKey];
-    const liveIndex = liveProject.reports[Number(dashboard)] ? Number(dashboard) : 0;
-    /* Raw param index — the holistic gate tests it un-resolved, matching
-       `activeReportIndex`; content helpers resolve `reports[i] ? i : 0`
-       internally. */
-    const liveRawIndex = Number.isFinite(Number(dashboard)) ? Number(dashboard) : 0;
-    const liveReport = liveProject.reports[liveIndex];
-    const wsProfile = copilotProfile(liveKey, liveRawIndex);
-    const wsAsk = ({ question }) => {
-      /* showAiAnswer: appends only while the answer view is open, else clears
-         the thread and enters chat mode. */
-      const append = Boolean(wsAnswer) || wsChat.length > 0;
-      const entry = buildCopilotChatEntry(liveKey, liveRawIndex, question);
-      setWsChat((current) => (append ? [...current, entry] : [entry]));
-      if (!append) setWsAnswer(null);
-      setWsPrompt("");
-      args.onWorkspaceAsk?.({ question });
-    };
-    return (
-      <MarketingCockpitPage
-        {...args}
-        assistant={{
-          ...args.assistant,
-          answers,
-          selectedSkill: skill,
-          onSuggestion: (event) => {
-            submitAnswer(event.prompt);
-            args.onSuggestion?.(event);
-          },
-          onNewSession: () => {
-            setAnswers([]);
-            setPrompt("");
-            args.onNewSession?.();
-          },
-          onMaximize: args.onMaximize,
-          onHistory: args.onHistory,
-          onHistorySelect: (event) => {
-            setPrompt(event.prompt);
-            args.onHistorySelect?.(event);
-          },
-          onFeedback: args.onFeedback,
-          onAttach: args.onAttach,
-          onSelectSkill: (event) => {
-            setSkill({ id: event.id, type: event.type, title: event.title });
-            args.onSelectSkill?.(event);
-          },
-          onClearSkill: () => {
-            setSkill(null);
-            args.onClearSkill?.();
-          },
-          onSkillAction: ({ action }) => {
-            args.onSkillAction?.({ action });
-            setFlow({
-              step: action === "history" ? "history" : "manual",
-              threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-              rule: "",
-              draft: {},
-            });
-          },
-        }}
-        assistantOpen={open}
-        prompt={prompt}
-        skillFlow={
-          flow
-            ? {
-                step: flow.step,
-                threads: flow.threads,
-                rule: flow.rule,
-                draft: flow.draft,
-                sections: MODEL_FLOW.sections,
-                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-                  setFlow((current) => ({
-                    ...current,
-                    threads: current.threads.map((thread, ti) =>
-                      ti === threadIndex
-                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                        : thread,
-                    ),
-                  })),
-                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-                onGenerate: ({ messages, rule }) =>
-                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
-                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-                onClose: () => setFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
-              }
-            : undefined
-        }
-        workspace={{
-          title: wsProfile.panelTitle,
-          summary: COPILOT_SUMMARY,
-          recommendations: liveReport.recommendations.map((rec) => ({ title: rec.title })),
-          periodHint: wsProfile.periodHint,
-          sources: copilotSources(liveKey, liveReport),
-          answer: wsAnswer,
-          chat: wsChat,
-          prompt: wsPrompt,
-          history: COPILOT_HISTORY,
-          skillMenu: { ...REPORT_SKILL_MENU, items: copilotSkillItems() },
-          flow: wsFlow
-            ? {
-                step: wsFlow.step,
-                submitFirst: true,
-                threads: wsFlow.threads,
-                rule: wsFlow.rule,
-                draft: wsFlow.draft,
-                sections: REPORT_COPILOT_FLOW.sections,
-                labels: REPORT_COPILOT_FLOW.labels,
-                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-                  setWsFlow((current) => ({
-                    ...current,
-                    threads: current.threads.map((thread, ti) =>
-                      ti === threadIndex
-                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                        : thread,
-                    ),
-                  })),
-                onRuleChange: ({ value }) => setWsFlow((current) => ({ ...current, rule: value })),
-                onGenerate: ({ messages, rule }) =>
-                  setWsFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule) })),
-                onBack: () => setWsFlow((current) => ({ ...current, step: "history" })),
-                onClose: () => setWsFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
-              }
-            : undefined,
-          onClose: () => {
-            setWsOpen(false);
-            args.onWorkspaceClose?.();
-          },
-          onBack: () => {
-            /* data-ai-back: answer view closes, context panels come home. */
-            setWsAnswer(null);
-            setWsChat([]);
-            args.onWorkspaceBack?.();
-          },
-          onNewSession: () => {
-            setWsAnswer(null);
-            setWsChat([]);
-            setWsPrompt("");
-            args.onNewSession?.();
-          },
-          onMaximize: args.onMaximize,
-          onHistorySelect: args.onHistorySelect,
-          onRecommendation: ({ index }) => {
-            setWsAnswer(resolveCopilotAnswer(liveKey, liveRawIndex, index));
-            setWsChat([]);
-            args.onWorkspaceRecommendation?.({ index });
-          },
-          onAsk: wsAsk,
-          onPromptChange: ({ value }) => {
-            setWsPrompt(value);
-            args.onWorkspacePromptChange?.({ value });
-          },
-          onFeedback: args.onFeedback,
-          onChatFeedback: args.onChatFeedback,
-          onCopy: args.onCopy,
-          onExplore: args.onWorkspaceExplore,
-          onAttach: args.onAttach,
-          onSelectSkill: args.onSelectSkill,
-          onSkillAction: ({ action }) => {
-            args.onSkillAction?.({ action });
-            setWsFlow({
-              step: action === "history" ? "history" : "manual",
-              threads: REPORT_COPILOT_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-              rule: "",
-              draft: {},
-            });
-          },
-        }}
-        workspaceOpen={wsOpen}
-        query={query}
-        project={project}
-        view={view}
-        dashboard={dashboard}
-        details={details}
-        onOpenAssistant={() => {
-          setOpen(true);
-          args.onOpenAssistant?.();
-        }}
-        onCloseAssistant={() => {
-          setOpen(false);
-          args.onCloseAssistant?.();
-        }}
-        onPromptChange={(event) => {
-          setPrompt(event.value);
-          args.onPromptChange?.(event);
-        }}
-        onSubmit={(event) => {
-          submitAnswer(event.prompt);
-          args.onSubmit?.(event);
-        }}
-        onNavigate={(target) => {
-          if (target.id === "cockpit-all") setProject("all");
-          args.onNavigate?.(target);
-        }}
-        onQueryChange={(event) => {
-          setQuery(event.value);
-          args.onQueryChange?.(event);
-        }}
-        onOpenProject={(target) => {
-          setProject(target.id);
-          args.onOpenProject?.(target);
-        }}
-        onOpenReport={(target) => {
-          setProject(target.project);
-          setDashboard(target.index);
-          setView("live");
-          args.onOpenReport?.(target);
-        }}
-        onOpenDetails={args.onOpenDetails}
-        onCloseDetails={(event) => {
-          setDetails(null);
-          args.onCloseDetails?.(event);
-        }}
-        onOpenLive={(target) => {
-          if (details) {
-            setProject(details.project);
-            setDashboard(details.index);
-            setView("live");
-            setDetails(null);
-          }
-          args.onOpenLive?.(target);
-        }}
-        onBack={(target) => {
-          setProject(target.project);
-          setView("catalog");
-          args.onBack?.(target);
-        }}
-        onOpenWorkspace={() => {
-          setWsOpen(true);
-          args.onOpenWorkspace?.();
-        }}
-      />
-    );
+    return <MarketingCockpitPage {...useCockpitDemo(args)} />;
   },
 };
 

@@ -1,6 +1,8 @@
 import React from "react";
 import { ASSISTANT, CAMPAIGN, COCKPIT, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MODEL_FLOW, NAV, SELF_SERVICE, buildLiteAssistantAnswer, buildModelDraft } from "./content.js";
-import { COPILOT_HISTORY, COPILOT_SUMMARY, REPORT_COPILOT_FLOW, REPORT_SKILL_MENU, buildCopilotChatEntry, buildReportModelDraft, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./report-data.js";
+import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "./demo/report-fixtures.js";
+import { buildCopilotChatEntry, cityInvestScenarioSource, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./demo/report-demo.js";
+import { buildReportModelDraft } from "./report-logic.js";
 import {
   ActionCard,
   AssetRow,
@@ -583,12 +585,27 @@ export const LiveReport = {
   },
 };
 
+/* CityInvestDashboard arg data: the component never reads `baseline` — only the
+   getScenario source built from it does. */
+const { baseline: _baseline, ...CITY_INVEST_VIEW } = CITY_INVEST;
+
 export const SixCityDashboard = {
   name: "Six-city invest analysis",
-  argTypes: { onFiltersChange: { action: "onFiltersChange" } },
+  args: { ...CITY_INVEST_VIEW },
+  argTypes: {
+    copy: { control: false },
+    periods: { control: false },
+    options: { control: false },
+    kpis: { control: false },
+    kpiRows: { control: false },
+    charts: { control: false },
+    endIndex: { control: false },
+    defaultFilters: { control: false },
+    onFiltersChange: { action: "onFiltersChange" },
+  },
   render: (args) => (
     <div style={{ minHeight: 640, background: "#f3f5f7", padding: "0 0 40px" }}>
-      <CityInvestDashboard onFiltersChange={args.onFiltersChange} />
+      <CityInvestDashboard {...args} getScenario={cityInvestScenarioSource(CITY_INVEST)} onFiltersChange={args.onFiltersChange} />
     </div>
   ),
 };
@@ -621,7 +638,7 @@ export const ReportCopilotWorkspace = {
     const projectKey = COCKPIT.projects[args.project] ? args.project : "city";
     const reportIndex = Math.min(Math.max(Number(args.index) || 0, 0), COCKPIT.projects[projectKey].reports.length - 1);
     const report = COCKPIT.projects[projectKey].reports[reportIndex];
-    const profile = copilotProfile(projectKey, reportIndex);
+    const profile = copilotProfile(COCKPIT.projects, COPILOT, projectKey, reportIndex);
     const [open, setOpen] = useSynced(args.open);
     const [prompt, setPrompt] = useSynced("");
     const [answer, setAnswer] = React.useState(null);
@@ -633,15 +650,19 @@ export const ReportCopilotWorkspace = {
           open={open}
           stream={args.stream}
           title={profile.panelTitle}
-          summary={COPILOT_SUMMARY}
+          eyebrow={COPILOT.eyebrow}
+          commandHint={COPILOT.commandHint}
+          inputPlaceholder={COPILOT.inputPlaceholder}
+          answerLabel={COPILOT.answerLabel}
+          summary={COPILOT.summary}
           recommendations={report.recommendations.map((rec) => ({ title: rec.title }))}
           periodHint={profile.periodHint}
-          sources={copilotSources(projectKey, report)}
+          sources={copilotSources(KNOWLEDGE_ASSETS, projectKey, report)}
           answer={answer}
           chat={chat}
           prompt={prompt}
-          history={COPILOT_HISTORY}
-          skillMenu={{ ...REPORT_SKILL_MENU, items: copilotSkillItems() }}
+          history={COPILOT.history}
+          skillMenu={{ ...COPILOT.skillMenu, items: copilotSkillItems(KNOWLEDGE_ASSETS, COPILOT.skillFallback) }}
           flow={
             flow
               ? {
@@ -650,8 +671,8 @@ export const ReportCopilotWorkspace = {
                   threads: flow.threads,
                   rule: flow.rule,
                   draft: flow.draft,
-                  sections: REPORT_COPILOT_FLOW.sections,
-                  labels: REPORT_COPILOT_FLOW.labels,
+                  sections: COPILOT.flow.sections,
+                  labels: COPILOT.flow.labels,
                   onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
                     setFlow((current) => ({
                       ...current,
@@ -663,7 +684,7 @@ export const ReportCopilotWorkspace = {
                     })),
                   onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
                   onGenerate: ({ messages, rule }) =>
-                    setFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule) })),
+                    setFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule, COPILOT.flow.generatedDefaults) })),
                   onBack: () => setFlow((current) => ({ ...current, step: "history" })),
                   onClose: () => setFlow(null),
                   onSave: ({ values }) => args.onFlowSave?.(values),
@@ -689,13 +710,13 @@ export const ReportCopilotWorkspace = {
           onMaximize={args.onMaximize}
           onHistorySelect={args.onHistorySelect}
           onRecommendation={({ index }) => {
-            setAnswer(resolveCopilotAnswer(projectKey, reportIndex, index));
+            setAnswer(resolveCopilotAnswer(COCKPIT.projects, COPILOT, projectKey, reportIndex, index));
             setChat([]);
             args.onRecommendation?.({ index });
           }}
           onAsk={({ question }) => {
             const append = Boolean(answer) || chat.length > 0;
-            const entry = buildCopilotChatEntry(projectKey, reportIndex, question);
+            const entry = buildCopilotChatEntry(COCKPIT.projects, KNOWLEDGE_ASSETS, COPILOT, projectKey, reportIndex, question);
             setChat((current) => (append ? [...current, entry] : [entry]));
             if (!append) setAnswer(null);
             setPrompt("");
@@ -715,7 +736,7 @@ export const ReportCopilotWorkspace = {
             args.onSkillAction?.({ action });
             setFlow({
               step: action === "history" ? "history" : "manual",
-              threads: REPORT_COPILOT_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+              threads: COPILOT.flow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
               rule: "",
               draft: {},
             });

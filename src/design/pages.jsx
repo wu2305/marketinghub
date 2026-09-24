@@ -32,16 +32,18 @@ import {
 import { Icon } from "./icons.jsx";
 import { cx, normalizeOptions, recordMatchesFilter, uniqueFilterOptions } from "./cx.js";
 import {
-  REPORT_CATALOG_HREF,
-  isCityInvestReport,
-  liveReportHref,
   pluralize,
-  projectCatalogHref,
   projectSearchText,
-  reportContextHref,
   reportSearchText,
   resolveReportAssets,
-} from "./report-data.js";
+  resolveReportContext,
+} from "./report-logic.js";
+import {
+  REPORT_CATALOG_HREF,
+  liveReportHref,
+  projectCatalogHref,
+  reportContextHref,
+} from "./report-routes.js";
 
 function Shell({ tone = "workspace", children }) {
   return <div className={`mh-page mh-page--${tone}`}>{children}</div>;
@@ -159,9 +161,11 @@ export const cockpitViews = ["catalog", "live"];
  * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view
  * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
+ * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
+ * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
  * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
  * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
- * @param {(id: string) => string} [props.contextHref=reportContextHref]
+ * @param {(id: string, report: object) => string} [props.contextHref] defaults to the resolved report context's knowledge link
  * @param {string} [props.backHref=REPORT_CATALOG_HREF]
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
@@ -196,9 +200,11 @@ export function MarketingCockpitPage({
   dashboard = null,
   details = null,
   detailsSections = [],
+  knowledge = [],
+  cityInvest,
   projectHref = projectCatalogHref,
   liveHref = liveReportHref,
-  contextHref = reportContextHref,
+  contextHref = (projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report)),
   backHref = REPORT_CATALOG_HREF,
   onNavigate,
   onQueryChange,
@@ -258,8 +264,8 @@ export function MarketingCockpitPage({
               onNavigate?.({ id: "cockpit-project", href: target.href, label: liveProject.title });
             }}
           >
-            {isCityInvestReport(liveKey, rawIndex) ? (
-              <CityInvestDashboard />
+            {liveProject.reports[rawIndex]?.embed === "city-invest" && cityInvest ? (
+              <CityInvestDashboard {...cityInvest} />
             ) : (
               <LiveOverview metrics={liveReport.metrics || []} chart={liveReport.chart || []} accent={liveProject.accent} />
             )}
@@ -280,12 +286,12 @@ export function MarketingCockpitPage({
               description={active.description}
               countText={pluralize(active.reports.length, "dashboard")}
               updated={active.sourceStrip[0] || "Update schedule available in project"}
-              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(project, active, report).includes(search)).length, "dashboard")}
+              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, "dashboard")}
               onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: "All report projects" })}
             >
               {active.reports
                 .map((report, index) => ({ report, index }))
-                .filter((item) => !search || reportSearchText(project, active, item.report).includes(search))
+                .filter((item) => !search || reportSearchText(knowledge, project, active, item.report).includes(search))
                 .map((item) => (
                   <ReportRow
                     key={item.report.title}
@@ -297,7 +303,7 @@ export function MarketingCockpitPage({
                       { label: "Owner", value: item.report.owner },
                       { label: "Cadence", value: item.report.cadence },
                       { label: "Updated", value: item.report.updated },
-                      { label: "Knowledge", value: pluralize(resolveReportAssets(project, item.report).length, "asset") },
+                      { label: "Knowledge", value: pluralize(resolveReportAssets(knowledge, project, item.report).length, "asset") },
                     ]}
                     href={liveHref(project, item.index)}
                     detailsHref={contextHref(project, item.report)}
@@ -306,7 +312,7 @@ export function MarketingCockpitPage({
                   />
                 ))}
             </ProjectDirectory>
-            {active.reports.filter((report) => !search || reportSearchText(project, active, report).includes(search)).length === 0 ? (
+            {active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length === 0 ? (
               <div className="mh-empty-state">
                 <strong>No matching reports.</strong>
                 <span>Try another report or project name.</span>
@@ -323,7 +329,7 @@ export function MarketingCockpitPage({
                   title: group.label || group.title,
                   projects: Object.keys(projects)
                     .filter((key) => projects[key].group === group.id)
-                    .filter((key) => !search || projectSearchText(key, projects[key]).includes(search))
+                    .filter((key) => !search || projectSearchText(knowledge, key, projects[key]).includes(search))
                     .map((key) => ({
                       id: key,
                       title: projects[key].title,
@@ -339,7 +345,7 @@ export function MarketingCockpitPage({
             />
             {groups
               .filter((group) => group.id !== "all")
-              .every((group) => !Object.keys(projects).some((key) => projects[key].group === group.id && (!search || projectSearchText(key, projects[key]).includes(search)))) ? (
+              .every((group) => !Object.keys(projects).some((key) => projects[key].group === group.id && (!search || projectSearchText(knowledge, key, projects[key]).includes(search)))) ? (
               <div className="mh-empty-state">
                 <strong>No matching reports.</strong>
                 <span>Try another report or project name.</span>

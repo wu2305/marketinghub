@@ -13,7 +13,7 @@
  */
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -26,7 +26,14 @@ function git(args) {
 
 export function sourceFiles() {
   const out = git(["ls-files", "-co", "--exclude-standard", "--", ...SOURCE_PATHS]);
-  return out.split("\n").filter(Boolean).sort();
+  // ls-files -c lists index entries, including tracked files deleted in the
+  // working tree — those are covered by the hash via their absence from the
+  // list, and reading them would crash.
+  return out
+    .split("\n")
+    .filter(Boolean)
+    .filter((file) => existsSync(path.join(ROOT, file)))
+    .sort();
 }
 
 export function sourceFingerprint() {

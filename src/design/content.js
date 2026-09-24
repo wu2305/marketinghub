@@ -1,4 +1,4 @@
-import { DETAILS_ASSET_SECTIONS, REPORT_GROUPS, REPORT_PROJECTS } from "./report-data.js";
+import { DETAILS_ASSET_SECTIONS, REPORT_GROUPS, REPORT_PROJECTS } from "./demo/report-fixtures.js";
 
 export const NAV = [
   { id: "home", label: "Home", href: "/index.html" },
@@ -1508,9 +1508,9 @@ export function buildModelDescription(messages, rule) {
 }
 
 /** Draft field values for the generated model form (step "generated"). */
-export function buildModelDraft(messages, rule) {
+export function buildModelDraft(messages, rule, generatedDefaults = MODEL_FLOW.generatedDefaults) {
   return {
-    ...MODEL_FLOW.generatedDefaults,
+    ...generatedDefaults,
     description: buildModelDescription(messages, rule),
     structure: buildModelLogic(rule),
   };

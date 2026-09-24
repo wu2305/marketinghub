@@ -1,9 +1,16 @@
 /**
- * Report catalog + knowledge data ported verbatim from the original demo:
+ * Demo fixtures for the Marketing Cockpit / report path — data only, no logic.
+ * Ported verbatim from the original demo:
  * - REPORT_GROUPS / REPORT_PROJECTS from assets/js/reports/report-core.js
  *   (image paths rewritten ../images/ -> /assets/images/).
  * - KNOWLEDGE_ASSETS from assets/js/data/knowledge.js (window.marketingKnowledgeAssets).
+ * - CITY_INVEST from the sc* block of report-core.js (periods, baselines, KPI
+ *   meta, filter options and every visible label).
+ * - COPILOT from the aiWorkspace block of report-core.js (summary card, recent
+ *   chats, holistic report, pilot-sales card, skill menu, model flow).
  * Field shapes follow the original; do not 'clean up' keys the original supplies.
+ * Components never import this module — the demo state layer passes the data in
+ * via props (see demo/cockpit-demo.js).
  */
 
 export const REPORT_GROUPS = [
@@ -47,6 +54,8 @@ export const REPORT_PROJECTS = {
       {
         title: "Invest City Strategy Analysis",
         type: "Investment impact analysis",
+        // live view of this report is the six-city invest embed, not LiveOverview
+        embed: "city-invest",
         description:
           "Compares invested cities against non-invested cities across traffic, sales, new customer rate, store visit value, CR, AT, UPT, AUR, sales contribution, and TAM to evaluate campaign uplift during the investment period.",
         owner: "D2C Insight",
@@ -1605,58 +1614,6 @@ export const KNOWLEDGE_ASSETS = [
   },
 ];
 
-
-export const CATEGORY_LABELS = {
-  all: "All knowledge",
-  context: "Report context",
-  models: "Models",
-  metrics: "Metrics",
-  terms: "Business terms",
-  playbooks: "Analysis playbooks",
-  principles: "Principles",
-  memory: "My memory",
-};
-
-export const STAGE_LABELS = { "co-build": "Co-build", solidify: "Solidify", calibrate: "Calibrate" };
-
-export function pluralize(count, singular, plural) {
-  return count + " " + (count === 1 ? singular : plural || singular + "s");
-}
-
-/** Knowledge assets linked to a report: resolvable ids scoped to the project. */
-export function resolveReportAssets(projectKey, report) {
-  return (report.knowledgeIds || [])
-    .map((id) => KNOWLEDGE_ASSETS.find((asset) => asset.id === id))
-    .filter(Boolean)
-    .filter((asset) => !asset.projects || asset.projects.includes(projectKey));
-}
-
-/** All-mode catalog search text for a project (title/kicker/category/description + reports + asset titles). */
-export function projectSearchText(projectKey, project) {
-  const knowledge = project.reports.reduce(
-    (titles, report) => titles.concat(resolveReportAssets(projectKey, report).map((asset) => asset.title)),
-    [],
-  );
-  return [project.title, project.kicker, project.category, project.description]
-    .concat(project.reports.map((report) => [report.title, report.type, report.description, report.owner].join(" ")))
-    .concat(knowledge)
-    .join(" ")
-    .toLowerCase();
-}
-
-/** Project-mode search text for one report row. */
-export function reportSearchText(projectKey, project, report) {
-  const knowledgeText = resolveReportAssets(projectKey, report)
-    .map((asset) => asset.title)
-    .join(" ");
-  return [report.title, report.type, report.description, report.owner, knowledgeText].join(" ").toLowerCase();
-}
-
-/**
- * Static knowledge-asset pill sections inside the report details drawer.
- * The original drawer hard-codes these pills (city-scoped hrefs) for every
- * report — they are markup content, not resolved from knowledgeIds.
- */
 export const DETAILS_ASSET_SECTIONS = [
   {
     label: "PRINCIPLES",
@@ -1705,67 +1662,27 @@ export const DETAILS_ASSET_SECTIONS = [
   },
 ];
 
-/** Catalog links — same targets as the original `reports.html?…` URLs under the demo host. */
-export function projectCatalogHref(projectKey) {
-  return "/assets/pages/reports.html?project=" + projectKey;
-}
-
-export function liveReportHref(projectKey, reportIndex) {
-  return "/assets/pages/reports.html?project=" + projectKey + "&dashboard=" + reportIndex + "&view=live";
-}
-
-export const REPORT_CATALOG_HREF = "/assets/pages/reports.html";
-
-export const KNOWLEDGE_HREF = "/assets/pages/knowledge.html";
-
-/** Mirrors the original `data-details-project` click resolution in report-core.js. */
-export function resolveReportContext(projectKey, report) {
-  const contexts = KNOWLEDGE_ASSETS.filter((asset) => asset.type === "Report Context");
-  return (
-    contexts.find((asset) =>
-      (asset.connections || []).some((connection) => connection.name === report.title)
-    ) ||
-    contexts.find((asset) => (report.knowledgeIds || []).includes(asset.id)) ||
-    contexts.find((asset) => (asset.projects || []).includes(projectKey)) ||
-    null
-  );
-}
-
-export function reportContextHref(projectKey, report) {
-  const context = resolveReportContext(projectKey, report);
-  if (!context) return KNOWLEDGE_HREF;
-  return KNOWLEDGE_HREF + "?type=Report%20Context&detail=" + encodeURIComponent(context.id);
-}
-
 /* ---------------------------------------------------------------------------
- * Six-city invest analysis embed — the live view of `city` report index 0.
- * Constants, seeded scenario generator, labels, and chart helpers are verbatim
- * ports of the original `sc*` block in assets/js/reports/report-core.js so the
- * deterministic demo output matches byte-for-byte. The original `isDefault`
- * check (`f.city.includes("Total")`) is kept exactly: the city filter carries
- * city names, never "Total", so every render — including the default state —
- * takes the seeded-variation branch.
+ * Six-city invest analysis fixture — the data behind the live embed of
+ * `city` report index 0. Constants are verbatim ports of the original sc*
+ * values in assets/js/reports/report-core.js.
  * ------------------------------------------------------------------------- */
 
-export function isCityInvestReport(projectKey, reportIndex) {
-  return projectKey === "city" && reportIndex === 0;
-}
-
-export const SC_TITLE = "Invest City Strategy Analysis（6 Cities）";
-export const SC_FOOTNOTE =
+const SC_TITLE = "Invest City Strategy Analysis（6 Cities）";
+const SC_FOOTNOTE =
   "*Non-invest city: Excluding stores in Invest cities; from FY27P01 onward, 11 cities are excluded (6 before FY27P01). Only Comp Stores are counted.";
-export const SC_BASE_PERIOD = "FY25 P4–P9";
-export const SC_INVEST_START = "FY25 P11";
-export const SC_FORMULA =
+const SC_BASE_PERIOD = "FY25 P4–P9";
+const SC_INVEST_START = "FY25 P11";
+const SC_FORMULA =
   "Uplift = Invest City Var% − Non Invest City Var%；Var% = Invest / Base × 100%";
 
-export const SC_CATS = [
+const SC_CATS = [
   "FY25P4", "FY25P5", "FY25P6", "FY25P7", "FY25P8", "FY25P9", "FY25P10", "FY25P11",
   "FY25P12", "FY26P1", "FY26P2", "FY26P3", "FY26P4", "FY26P5", "FY26P6", "FY26P7",
   "FY26P8", "FY26P9", "FY26P10", "FY26P11", "FY26P12", "FY27P1", "FY27P2", "FY27P3",
 ];
 
-export const SC_BASELINE = {
+const SC_BASELINE = {
   SV: {
     t: [26, 25, 24, 23, 22, 23, 24, 23, 22, 22, 23, 22.6, 23, 22, 22, 22.5, 21.8, 22.2, 21.5, 22, 21.7, 22.3, 21.9, 22.1],
     n: [24, 25, 24, 23, 22, 23, 25, 24, 23, 23, 24, 23, 24, 23, 23, 23.5, 22.8, 23.2, 22.5, 23, 22.7, 23.1, 22.9, 23.0],
@@ -1792,24 +1709,24 @@ export const SC_BASELINE = {
   },
 };
 
-export const SC_CHART_ORDER = ["SV", "New%", "AT", "AUR", "CR%", "UPT"];
+const SC_CHART_ORDER = ["SV", "New%", "AT", "AUR", "CR%", "UPT"];
 
-export const SC_END_OPTIONS = [
+const SC_END_OPTIONS = [
   "FY27 P3", "FY27 P2", "FY27 P1", "FY26 P12", "FY26 P11", "FY26 P10", "FY26 P9",
   "FY26 P8", "FY26 P7", "FY26 P6", "FY26 P5", "FY26 P4", "FY26 P3", "FY26 P2",
   "FY26 P1", "FY25 P12", "FY25 P11",
 ];
 
-export const SC_END_IDX = {
+const SC_END_IDX = {
   "FY25 P11": 7, "FY25 P12": 8, "FY26 P1": 9, "FY26 P2": 10, "FY26 P3": 11,
   "FY26 P4": 12, "FY26 P5": 13, "FY26 P6": 14, "FY26 P7": 15, "FY26 P8": 16,
   "FY26 P9": 17, "FY26 P10": 18, "FY26 P11": 19, "FY26 P12": 20, "FY27 P1": 21,
   "FY27 P2": 22, "FY27 P3": 23,
 };
 
-export const SC_START_IDX = SC_CATS.indexOf("FY25P11");
+const SC_START_IDX = SC_CATS.indexOf("FY25P11");
 
-export const SC_KPI = [
+const SC_KPI = [
   { key: "ADT", name: "Avg Daily Traffic", uplift: 10, var: 116, baseAfter: 0.4, fmt: "K", dec: 1 },
   { key: "ADS", name: "Avg Daily Sales", uplift: 1, var: 6, baseAfter: 8, fmt: "K", dec: 0 },
   { key: "New", name: "New%", uplift: -2, var: -15, trend: "New%", baseAfter: 57, fmt: "%", dec: 0 },
@@ -1822,12 +1739,12 @@ export const SC_KPI = [
   { key: "TAM", name: "TAM(K)", uplift: null, var: null, baseAfter: 4581, fmt: "int" },
 ];
 
-export const SC_KPI_ROWS = [
+const SC_KPI_ROWS = [
   ["ADT", "ADS", "New", "SV", "SC"],
   ["CR", "AT", "UPT", "AUR", "TAM"],
 ];
 
-export const SC_CITY_STORES = {
+const SC_CITY_STORES = {
   Chengdu: ["Wangfujing", "Mixc Mall", "Ifs", "Lotte", "Chicony Dps", "Skp", "Time Outlet", "Florentia Village", "Times Outlets 2", "Shanshan Outlet Plaza"],
   Hefei: ["Intime", "Mixc", "Sasseur Outlet"],
   Qingdao: ["Mixc", "Hisense", "Bailian Outlets"],
@@ -1836,135 +1753,80 @@ export const SC_CITY_STORES = {
   Xian: ["Saga", "City On (Taubman)", "Skp Women'S", "Skp Men'S", "Kaiyuan", "Coh Cn Dt51", "Sean Outlet", "Sasseur Outlet", "Coh Cn Mixc"],
 };
 
-export const SC_ALL_STORES = [...new Set(Object.values(SC_CITY_STORES).flat())];
-export const SC_CITY_OPTIONS = ["Chengdu", "Hefei", "Qingdao", "Shenzhen", "Wuhan", "Xian"];
-export const SC_CHANNEL_OPTIONS = ["All", "Offline Outlet", "Offline Retail", "Online"];
-export const SC_PILOT_OPTIONS = ["Pilot TTL", "Pilot Comp"];
+const SC_ALL_STORES = [...new Set(Object.values(SC_CITY_STORES).flat())];
+const SC_CITY_OPTIONS = ["Chengdu", "Hefei", "Qingdao", "Shenzhen", "Wuhan", "Xian"];
+const SC_CHANNEL_OPTIONS = ["All", "Offline Outlet", "Offline Retail", "Online"];
+const SC_PILOT_OPTIONS = ["Pilot TTL", "Pilot Comp"];
 
-export function scHashStr(s) {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-}
+/**
+ * City-invest embed contract. `copy` carries every visible label; `options`
+ * feeds the filter dropdowns (`cityStores` is the city→stores cascade map);
+ * `baseline` + `kpis` + `endIndex` + `charts` drive the deterministic
+ * scenario generator in demo/report-demo.js.
+ */
+export const CITY_INVEST = {
+  copy: {
+    title: SC_TITLE,
+    footnote: SC_FOOTNOTE,
+    basePeriod: SC_BASE_PERIOD,
+    investStart: SC_INVEST_START,
+    formula: SC_FORMULA,
+    trendHeading: "Monthly Key Indicator Trend vs. Non Invest City",
+    labelBasePeriod: "Base Period",
+    labelInvestStart: "Invest Period Start",
+    labelInvestEnd: "Invest Period End",
+    labelChannel: "Channel",
+    labelPilot: "Pilot",
+    labelCity: "City",
+    labelStore: "Store",
+    uplift: "Uplift",
+    varPct: "Var%",
+    after: "After",
+    allStores: "All Stores",
+    none: "(None)",
+    total: "Total",
+    cities: "Cities",
+    multiSelect: "Multi-select",
+    selectAll: "Select all",
+    clear: "Clear",
+    nonInvestAvg: "Non-Invest Avg",
+    nonInvest: "Non-Invest",
+  },
+  periods: SC_CATS,
+  startIndex: SC_START_IDX,
+  endIndex: SC_END_IDX,
+  options: {
+    end: SC_END_OPTIONS,
+    channel: SC_CHANNEL_OPTIONS,
+    pilot: SC_PILOT_OPTIONS,
+    cities: SC_CITY_OPTIONS,
+    cityStores: SC_CITY_STORES,
+  },
+  kpis: SC_KPI,
+  kpiRows: SC_KPI_ROWS,
+  charts: SC_CHART_ORDER,
+  baseline: SC_BASELINE,
+  defaultFilters: {
+    end: "FY27 P3",
+    channel: "All",
+    pilot: "Pilot TTL",
+    cities: [...SC_CITY_OPTIONS],
+    stores: [...SC_ALL_STORES],
+  },
+};
 
-export function scMulberry32(a) {
-  return function () {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
+/* ---------------------------------------------------------------------------
+ * Report Copilot fixture — the deterministic content of the aiWorkspace
+ * drawer: summary card, recent chats, recommendation answers (incl. the
+ * streamed holistic report), the rich pilot-sales card and the skill menu /
+ * "Generate Analytical Model" flow.
+ * ------------------------------------------------------------------------- */
 
-export function scFmtAfter(meta, v) {
-  if (meta.fmt === "K") return v.toFixed(meta.dec) + "K";
-  if (meta.fmt === "%") return v.toFixed(meta.dec) + "%";
-  if (meta.fmt === "%2") return Math.round(v) + "%";
-  if (meta.fmt === "int") return Math.round(v).toLocaleString("en-US");
-  return v.toFixed(meta.dec);
-}
-
-export function scGenScenario(f) {
-  const isDefault =
-    f.channel === "All" && f.pilot === "Pilot TTL" && f.city.includes("Total") && f.end === "FY27 P3";
-  const seedStr = [f.channel, f.pilot, f.city.slice().sort().join(","), f.store.slice().sort().join(","), f.end].join("|");
-  const rng = scMulberry32(scHashStr(seedStr));
-  const endIdx = SC_END_IDX[f.end] ?? 14;
-  const trends = {};
-  SC_CHART_ORDER.forEach(function (m) {
-    if (isDefault) {
-      trends[m] = { t: SC_BASELINE[m].t.slice(), n: SC_BASELINE[m].n.slice() };
-    } else {
-      const fT = 0.88 + rng() * 0.24;
-      const fN = 0.88 + rng() * 0.24;
-      trends[m] = {
-        t: SC_BASELINE[m].t.map(function (v) { return v * fT * (1 + (rng() - 0.5) * 0.06); }),
-        n: SC_BASELINE[m].n.map(function (v) { return v * fN * (1 + (rng() - 0.5) * 0.06); }),
-      };
-    }
-  });
-  const kpi = {};
-  SC_KPI.forEach(function (meta) {
-    let uplift = meta.uplift;
-    let vari = meta.var;
-    let after = meta.baseAfter;
-    if (meta.trend) after = trends[meta.trend].t[endIdx];
-    if (!isDefault) {
-      if (meta.key === "ADT" || meta.key === "ADS") {
-        after = meta.baseAfter * (0.86 + rng() * 0.28);
-      } else if (meta.key === "SC") {
-        after = 13 + rng() * 14;
-      } else if (meta.key === "TAM") {
-        after = 3900 + rng() * 1900;
-      }
-      if (meta.uplift !== null) {
-        uplift = Math.round(meta.uplift + (rng() - 0.5) * 10);
-        vari = Math.round(meta.var + (rng() - 0.5) * 28);
-      }
-    }
-    kpi[meta.key] = { uplift: uplift, vari: vari, after: after };
-  });
-  return { trends: trends, kpi: kpi, endIdx: endIdx, isDefault: isDefault };
-}
-
-export function scPickTicks(len) {
-  if (len <= 3) return Array.from({ length: len }, function (_, i) { return i; });
-  const step = Math.max(2, Math.round((len - 1) / 6));
-  const out = [];
-  for (let i = 0; i < len; i += step) out.push(i);
-  if (out[out.length - 1] !== len - 1) out.push(len - 1);
-  if (out.length >= 3 && out[out.length - 1] - out[out.length - 2] === 1) out.splice(out.length - 2, 1);
-  return out;
-}
-
-export function scStoreOptionsFor(cities) {
-  if (cities.length === 0) return SC_ALL_STORES;
-  return [
-    ...new Set(
-      cities.filter(function (c) { return SC_CITY_STORES[c]; }).flatMap(function (c) { return SC_CITY_STORES[c]; })
-    ),
-  ];
-}
-
-export function scStoreScopeSuffix(cities) {
-  if (cities.length === 0) return "";
-  if (cities.length === 1) return "· " + cities[0];
-  if (cities.length === 2) return "· " + cities.join(" + ");
-  return "· " + cities.length + " Cities";
-}
-
-export function scTotalLabel(cities) {
-  if (cities.length === 0) return "Total";
-  const full = cities.length === SC_CITY_OPTIONS.length && SC_CITY_OPTIONS.every(function (x) { return cities.includes(x); });
-  if (full) return "Total";
-  if (cities.length <= 2) return cities.join(" + ");
-  return cities.length + " Cities";
-}
-
-/** Multi-select display label — the original refresh() branch (no "All" sentinel option). */
-export function scSelectionLabel(selected, optionCount) {
-  if (selected.length === 0) return "(None)";
-  if (selected.length === optionCount) return "All Stores";
-  return selected.length > 2
-    ? selected.slice(0, 2).join(", ") + " +" + (selected.length - 2)
-    : selected.join(", ");
-}
-
-/* ============================================================
-   Report Copilot (aiWorkspace) — the report-scoped AI drawer on the
-   live report view. Deterministic local port of the workspace block of
-   assets/js/reports/report-core.js plus its city-invest answer modules.
-   ============================================================ */
-
-export const COPILOT_COMMAND_HINT =
+const COPILOT_COMMAND_HINT =
   "Type your question directly or start with a preset analysis below.";
-export const COPILOT_INPUT_PLACEHOLDER = "Choose a preset or ask your own question...";
-export const COPILOT_ANSWER_LABEL = "CONTEXTUAL ANSWER";
-export const COPILOT_GENERIC_SUMMARY =
+const COPILOT_INPUT_PLACEHOLDER = "Choose a preset or ask your own question...";
+const COPILOT_ANSWER_LABEL = "CONTEXTUAL ANSWER";
+const COPILOT_GENERIC_SUMMARY =
   "I would answer this using the active report, its governed comparison window, and the connected knowledge below. The first pass would validate data freshness, identify material movement, and trace the conclusion to its model and definitions.";
 
 const COPILOT_DEFAULT_PROFILE = {
@@ -1972,29 +1834,7 @@ const COPILOT_DEFAULT_PROFILE = {
   periodHint: "Type your question directly or start with a preset analysis below.",
 };
 
-/* Mirrors the original `activeReport()`: content resolves via
-   `reports[i] ? i : 0` while callers keep passing the raw `dashboard` index —
-   the embed/holistic gates then test the raw value, matching report-core.js. */
-function reportAt(projectKey, reportIndex) {
-  const reports = REPORT_PROJECTS[projectKey]?.reports;
-  return (reports && reports[reportIndex]) || (reports && reports[0]) || null;
-}
-
-/** Workspace chrome per live report: only title + period hint render (rest of the profile targets dead nodes). */
-export function copilotProfile(projectKey, reportIndex) {
-  const assistant = reportAt(projectKey, reportIndex)?.assistant || {};
-  return {
-    panelTitle: assistant.panelTitle || COPILOT_DEFAULT_PROFILE.panelTitle,
-    periodHint: assistant.periodHint || COPILOT_DEFAULT_PROFILE.periodHint,
-  };
-}
-
-/**
- * The start view's "01 · AI summary" card. The original markup hard-codes this
- * card (the assistant profile never reaches it), so it is identical for every
- * report. `paragraphs` are inline segment lists; `tone` marks metric spans.
- */
-export const COPILOT_SUMMARY = {
+const COPILOT_SUMMARY = {
   title: "Invest City Strategy Quick Summary",
   status: "Context loaded",
   paragraphs: [
@@ -2023,98 +1863,19 @@ export const COPILOT_SUMMARY = {
 };
 
 /** Recent-chats popup behind the workspace History button. */
-export const COPILOT_HISTORY = [
+const COPILOT_HISTORY = [
   { title: "City performance summary", prompt: "Summarize the latest city performance movements." },
   { title: "Traffic vs sales", prompt: "Compare traffic uplift with sales growth by city." },
   { title: "Conversion gaps", prompt: "Find conversion gaps in this scenario report." },
 ];
 
-export function copilotSourceHref(projectKey, asset) {
-  return KNOWLEDGE_HREF + "?report=" + projectKey + "&category=" + asset.category + "&asset=" + asset.id;
-}
-
-/** Sources attached to copilot answers: the report's resolved knowledge, capped at 4. */
-export function copilotSources(projectKey, report) {
-  return resolveReportAssets(projectKey, report)
-    .slice(0, 4)
-    .map((asset) => ({ id: asset.id, title: asset.title, href: copilotSourceHref(projectKey, asset) }));
-}
-
-/**
- * Recommendation click → answer payload. City Strategy report 0 index 0 streams
- * the holistic report; every other recommendation resolves to a standard
- * answer (falling back to recommendation 0 like the original).
- */
-export function resolveCopilotAnswer(projectKey, reportIndex, recIndex) {
-  const report = reportAt(projectKey, reportIndex);
-  if (!report || !(report.recommendations || []).length) return null;
-  if (isCityInvestReport(projectKey, reportIndex) && recIndex === 0) {
-    return { kind: "holistic", title: "Investment Holistic Analysis — COACH Pilot City" };
-  }
-  const rec = report.recommendations[recIndex] || report.recommendations[0];
-  return {
-    kind: "answer",
-    title: rec.answerTitle,
-    summary: rec.summary,
-    findings: (rec.findings || []).map((finding) => ({ label: finding[0], text: finding[1] })),
-  };
-}
-
-/**
- * Only the canonical "last month" phrasing gets the fixed rich card — the
- * explore follow-ups also contain "pilot city sales performance", so the
- * period wording is required (same rule as the original).
- */
-export function isPilotCitySalesQuestion(question) {
-  const normalized = String(question || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  if (!normalized) return false;
-  return (
-    normalized.indexOf("pilot city") !== -1 &&
-    normalized.indexOf("sales") !== -1 &&
-    normalized.indexOf("last month") !== -1
-  );
-}
-
-/**
- * Command-form submit → chat entry. In the original a fresh question clears
- * the thread (chat mode) while a question asked over an open recommendation
- * answer appends below it — the caller decides append vs replace.
- */
-export function buildCopilotChatEntry(projectKey, reportIndex, question) {
-  const report = reportAt(projectKey, reportIndex);
-  const sources = report ? copilotSources(projectKey, report) : [];
-  if (isPilotCitySalesQuestion(question)) {
-    return { kind: "rich", question, sources };
-  }
-  return { kind: "standard", question, summary: COPILOT_GENERIC_SUMMARY, sources };
-}
-
-/* ---------- Workspace skill menu (the "+" in the command bar) ---------- */
-
-export const REPORT_SKILL_FALLBACK = [
+const REPORT_SKILL_FALLBACK = [
   { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "Use this interpretation logic" },
   { id: "roi-diagnosis", title: "ROI diagnosis model", note: "Analyze ROI movement and drivers" },
   { id: "conversion-drop", title: "Conversion drop analysis", note: "Find conversion pressure and likely reasons" },
 ];
 
-/** Analytical Model records the workspace menu lists (dedup by id, max 12, fallback when empty). */
-export function copilotSkillItems() {
-  const seen = new Set();
-  const models = KNOWLEDGE_ASSETS.filter((asset) => asset.type === "Analytical Model").map((asset) => ({
-    id: asset.id,
-    title: asset.title,
-    note: asset.summary || "Use this interpretation logic",
-  }));
-  const items = models.filter((item) => item.title && !seen.has(item.id) && seen.add(item.id)).slice(0, 12);
-  return items.length ? items : REPORT_SKILL_FALLBACK;
-}
-
-/** Report-variant skill menu config: Upload File + Analytical Model only. */
-export const REPORT_SKILL_MENU = {
+const REPORT_SKILL_MENU = {
   // the copilot composer's "+" is #aiCmdUpload, labelled "Choose AI skill"
   triggerLabel: "Choose AI skill",
   attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
@@ -2130,7 +1891,7 @@ export const REPORT_SKILL_MENU = {
 
 /* ---------- Report-flavored "Generate Analytical Model" flow ---------- */
 
-export const REPORT_COPILOT_FLOW = {
+const REPORT_COPILOT_FLOW = {
   labels: {
     rulePlaceholder:
       "Describe how AI should distill the analysis logic, for example: focus on the city dimension and keep only the driver with the strongest evidence.",
@@ -2231,95 +1992,7 @@ export const REPORT_COPILOT_FLOW = {
   },
 };
 
-/** Keyword map shared by the two report generation helpers below. */
-function reportRuleDimensions(rule) {
-  const text = String(rule || "").trim().toLowerCase();
-  const has = (words) => words.some((word) => text.includes(word));
-  const dimensions = [];
-  if (has(["channel", "media", "platform", "site"])) dimensions.push("channels");
-  if (has(["city", "cities", "market", "region", "store"])) dimensions.push("cities");
-  if (has(["segment", "customer", "member", "audience"])) dimensions.push("customer segments");
-  if (has(["time", "week", "month", "trend", "period", "quarter"])) dimensions.push("time periods");
-  return { text, has, dimensions };
-}
-
-/** Report variant of the generated Description (buildReportDescription). */
-export function buildReportModelDescription(messages, rule) {
-  const questions = messages.filter((message) => message.role === "user").map((message) => message.text);
-  const scope = (questions.length ? questions : messages.map((message) => message.text)).join(" ").toLowerCase();
-  const topics = [];
-  if (/\bcit(y|ies)\b|invest/.test(scope)) topics.push("city performance");
-  if (/conversion|\bcr\b/.test(scope)) topics.push("conversion");
-  if (/data quality|lineage|freshness/.test(scope)) topics.push("data quality");
-  if (!topics.length) topics.push("report performance");
-  const topicPhrase = topics.length > 1 ? topics.slice(0, -1).join(", ") + " and " + topics[topics.length - 1] : topics[0];
-  const { has, dimensions } = reportRuleDimensions(rule);
-  const dimensionPhrase = dimensions.join(" and ");
-  const ranked = has(["rank", "priorit", "top", "most impactful", "biggest"]);
-  const goal =
-    "Clarify what drove the movement in " + topicPhrase + ", so the team can decide the next optimization step.";
-  const method = dimensionPhrase
-    ? ranked
-      ? "Ranks " + dimensionPhrase + " by business impact and returns one conclusion."
-      : "Compares " + dimensionPhrase + " to isolate the strongest performance signal and support one next action."
-    : "Expected insight is the strongest performance signal and the primary risk driver.";
-  const conversations = new Set(messages.map((message) => message.threadIndex)).size;
-  return (
-    goal +
-    " " +
-    method +
-    "\n\nSource: " +
-    conversations +
-    " conversation" +
-    (conversations === 1 ? "" : "s") +
-    " · " +
-    messages.length +
-    " message" +
-    (messages.length === 1 ? "" : "s") +
-    "."
-  );
-}
-
-/** Report variant of the generated Structure & Guidance (buildReportAnalysisLogic). */
-export function buildReportModelLogic(rule) {
-  const { has, dimensions } = reportRuleDimensions(rule);
-  const scope = dimensions.length
-    ? "across " + dimensions.join(" and ")
-    : "across cities, channels, and key report dimensions";
-  const driver = has(["rank", "priorit", "top", "most impactful", "biggest"])
-    ? "Rank the candidate drivers by business impact and keep only the strongest one."
-    : has(["driver", "root cause", "reason", "why", "cause", "factor"])
-      ? "Isolate the driver with the strongest supporting evidence."
-      : "Identify the strongest performance signal and the primary risk driver.";
-  const output = has(["concise", "brief", "short", "one conclusion", "one result"])
-    ? "Return one conclusion and a recommended next action."
-    : "Return the key findings and a recommended next action.";
-  return [
-    "1. Define the report question, the comparison window, and the business scope.",
-    "2. Compare metric movement " + scope + ".",
-    "3. " + driver,
-    "4. " + output,
-  ].join("\n");
-}
-
-/** Draft field values for the report variant's generated model form. */
-export function buildReportModelDraft(messages, rule) {
-  return {
-    ...REPORT_COPILOT_FLOW.generatedDefaults,
-    description: buildReportModelDescription(messages, rule),
-    structure: buildReportModelLogic(rule),
-  };
-}
-
-/* ---------- Streamed holistic report (City Strategy rec 0) ---------- */
-
-/**
- * Cell conventions for the holistic tables: plain string → text;
- * `{ n: "+0.3%" }` → signed value (green/red by leading sign);
- * `{ d: "g"|"y"|"r" }` → status dot. Inline segments: string → text,
- * `{ b }` → strong, `{ n }` → signed value, `{ d }` → dot, `{ br: true }`.
- */
-export const COPILOT_HOLISTIC = {
+const COPILOT_HOLISTIC = {
   meta: [
     ["Report date", "2026-09-17"],
     ["Data as of", "FY27P2"],
@@ -2584,14 +2257,13 @@ export const COPILOT_HOLISTIC = {
   },
 };
 
-export const COPILOT_DOT_LEGEND = [
+const COPILOT_DOT_LEGEND = [
   { dot: "r", text: " Pilot falls behind National Rest" },
   { dot: "y", text: " Better than National Rest, below Pilot average" },
   { dot: "g", text: " Better than National Rest and above Pilot average" },
 ];
 
-/** Fixed rich answer card for the canonical pilot-city sales question. */
-export const COPILOT_PILOT_SALES = {
+const COPILOT_PILOT_SALES = {
   lead: [
     "Last month (FY27P2), Pilot City delivered total Sales of ",
     { b: "7,916.2" },
@@ -2655,4 +2327,21 @@ export const COPILOT_PILOT_SALES = {
       question: "What are the key insights and next steps for pilot cities?",
     },
   ],
+};
+
+/** Copilot fixture bundle — passed to the page via `demo.copilot`. */
+export const COPILOT = {
+  eyebrow: "REPORT COPILOT",
+  commandHint: COPILOT_COMMAND_HINT,
+  inputPlaceholder: COPILOT_INPUT_PLACEHOLDER,
+  answerLabel: COPILOT_ANSWER_LABEL,
+  genericSummary: COPILOT_GENERIC_SUMMARY,
+  defaultProfile: COPILOT_DEFAULT_PROFILE,
+  summary: COPILOT_SUMMARY,
+  history: COPILOT_HISTORY,
+  holistic: { title: "Investment Holistic Analysis — COACH Pilot City", ...COPILOT_HOLISTIC, dotLegend: COPILOT_DOT_LEGEND },
+  pilotSales: COPILOT_PILOT_SALES,
+  skillFallback: REPORT_SKILL_FALLBACK,
+  skillMenu: REPORT_SKILL_MENU,
+  flow: REPORT_COPILOT_FLOW,
 };

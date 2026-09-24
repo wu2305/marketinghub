@@ -4,35 +4,13 @@ import { Button, StatusBadge, TextArea } from "./atoms.jsx";
 import { cx } from "./cx.js";
 import { Icon } from "./icons.jsx";
 import {
-  COPILOT_ANSWER_LABEL,
-  COPILOT_COMMAND_HINT,
-  COPILOT_DOT_LEGEND,
-  COPILOT_HOLISTIC,
-  COPILOT_INPUT_PLACEHOLDER,
-  COPILOT_PILOT_SALES,
-  SC_ALL_STORES,
-  SC_BASE_PERIOD,
-  SC_CATS,
-  SC_CHANNEL_OPTIONS,
-  SC_CITY_OPTIONS,
-  SC_END_OPTIONS,
-  SC_FORMULA,
-  SC_FOOTNOTE,
-  SC_INVEST_START,
-  SC_KPI,
-  SC_KPI_ROWS,
-  SC_PILOT_OPTIONS,
-  SC_CHART_ORDER,
-  SC_START_IDX,
-  SC_TITLE,
-  scFmtAfter,
-  scGenScenario,
-  scPickTicks,
-  scSelectionLabel,
-  scStoreOptionsFor,
-  scStoreScopeSuffix,
-  scTotalLabel,
-} from "./report-data.js";
+  fmtAfter,
+  pickTicks,
+  selectionLabel,
+  storeOptionsFor,
+  storeScopeSuffix,
+  totalLabel,
+} from "./report-logic.js";
 import {
   CategoryHeading,
   CheckboxFilter,
@@ -2591,13 +2569,14 @@ export function LiveOverview({ metrics = [], chart = [], accent }) {
 }
 
 /* -------------------------------------------------------------------------
- * Six-city invest analysis embed — deterministic seeded scenario data ported
- * from the original sc* helpers in report-core.js (see report-data.js).
+ * City-invest analysis embed — the live report view rendered when a report
+ * carries `embed: "city-invest"`. All data arrives via props; the seeded
+ * scenario generator lives in demo/report-demo.js.
  * ---------------------------------------------------------------------- */
 
-function ScFilterDropdown({ label, options, selected, multi = false, suffix = "", open = false, onToggle, onChange }) {
+function ScFilterDropdown({ label, options, selected, multi = false, suffix = "", copy, open = false, onToggle, onChange }) {
   const name = React.useId();
-  const text = multi ? scSelectionLabel(selected, options.length) : selected[0];
+  const text = multi ? selectionLabel(selected, options.length, copy) : selected[0];
   const pick = (option, checked) => {
     if (multi) {
       onChange?.(checked ? [...selected, option] : selected.filter((item) => item !== option));
@@ -2631,14 +2610,14 @@ function ScFilterDropdown({ label, options, selected, multi = false, suffix = ""
         <span className="mh-sc-panel" role="listbox" onClick={(event) => event.stopPropagation()}>
           {multi ? (
             <span className="mh-sc-phead">
-              <span className="mh-sc-phead__label">Multi-select</span>
+              <span className="mh-sc-phead__label">{copy.multiSelect}</span>
               <span>
                 <button type="button" onClick={() => onChange?.(options.slice())}>
-                  Select all
+                  {copy.selectAll}
                 </button>{" "}
                 ·{" "}
                 <button type="button" onClick={() => onChange?.([])}>
-                  Clear
+                  {copy.clear}
                 </button>
               </span>
             </span>
@@ -2668,13 +2647,13 @@ const SC_PAD_R = 16;
 const SC_PAD_T = 10;
 const SC_PAD_B = 30;
 
-function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
+function ScTrendChart({ name, data, endIdx, decimals = 0, periods, startIndex, copy, totalLabel }) {
   const chartRef = React.useRef(null);
   const tipRef = React.useRef(null);
   const [tipWidth, setTipWidth] = React.useState(0);
   const [hover, setHover] = React.useState(null);
-  const s = Math.min(SC_START_IDX, endIdx);
-  const labels = SC_CATS.slice(s, endIdx + 1);
+  const s = Math.min(startIndex, endIdx);
+  const labels = periods.slice(s, endIdx + 1);
   const t = data.t.slice(s, endIdx + 1);
   const n = data.n.slice(s, endIdx + 1);
   const all = t.concat(n);
@@ -2685,7 +2664,7 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
   max += span * 0.12;
   const X = (i) => SC_PAD_L + (SC_CHART_W - SC_PAD_L - SC_PAD_R) * (i / (labels.length - 1));
   const Y = (v) => SC_PAD_T + (SC_CHART_H - SC_PAD_T - SC_PAD_B) * (1 - (v - min) / (max - min));
-  const ticks = new Set(scPickTicks(labels.length));
+  const ticks = new Set(pickTicks(labels.length));
   const grid = [0, 1, 2, 3].map((g) => min + ((max - min) * g) / 3);
   const points = (arr) => arr.map((v, i) => X(i).toFixed(1) + "," + Y(v).toFixed(1)).join(" ");
   React.useEffect(() => {
@@ -2703,6 +2682,7 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
     }
   }, [liveHover, tipWidth]);
   const onMove = (event) => {
+    if (labels.length < 2) return;
     const svg = event.currentTarget;
     const rect = svg.getBoundingClientRect();
     if (!rect.width) return;
@@ -2738,7 +2718,7 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
           </span>
           <span>
             <i style={{ background: "#c9a876" }} />
-            Non-Invest Avg
+            {copy.nonInvestAvg}
           </span>
         </span>
       </div>
@@ -2758,14 +2738,21 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
           </text>
         ))}
         {labels.map((cat, i) =>
-          ticks.has(i) ? (
+          /* A single-period range makes X() a 0/0 division — the original emits
+             NaN attributes the browser rejects (and logs console errors for);
+             skip those elements so nothing NaN reaches the DOM. */
+          ticks.has(i) && labels.length > 1 ? (
             <text key={cat} x={X(i)} y={SC_CHART_H - 12} textAnchor="middle" fontSize="8" fill="#aab0b8">
               {cat}
             </text>
           ) : null
         )}
-        <polyline points={points(n)} fill="none" stroke="#c9a876" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
-        <polyline points={points(t)} fill="none" stroke="#333333" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+        {labels.length > 1 ? (
+          <React.Fragment>
+            <polyline points={points(n)} fill="none" stroke="#c9a876" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
+            <polyline points={points(t)} fill="none" stroke="#333333" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
+          </React.Fragment>
+        ) : null}
         {liveHover ? (
           <g>
             <line
@@ -2788,7 +2775,7 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
           <br />
           <span>● {totalLabel}: {t[hi].toFixed(decimals)}</span>
           <br />
-          <span>● Non-Invest: {n[hi].toFixed(decimals)}</span>
+          <span>● {copy.nonInvest}: {n[hi].toFixed(decimals)}</span>
         </div>
       ) : null}
     </div>
@@ -2796,27 +2783,38 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
 }
 
 /**
- * Six-city invest analysis embed. Self-contained filter state (end period,
- * channel, pilot, multi-select cities and cascading stores); every change
- * regenerates the deterministic seeded scenario and briefly dims the canvas,
- * matching `initCityInvestDashboard`.
+ * City-invest analysis embed. Filter state (end period, channel, pilot,
+ * multi-select cities and cascading stores) stays local and uncontrolled —
+ * seeded from `defaultFilters`, every change regenerates the scenario via
+ * `getScenario(filters)` and briefly dims the canvas, matching
+ * `initCityInvestDashboard`. All data and visible copy arrive via props.
  * @param {object} props
+ * @param {object} props.copy every visible label (title, footnote, basePeriod,
+ *   investStart, formula, trendHeading + filter/KPI/chart labels)
+ * @param {string[]} props.periods period axis labels
+ * @param {number} props.startIndex index of the invest-start period
+ * @param {{ end: string[], channel: string[], pilot: string[], cities: string[], cityStores: Record<string, string[]> }} props.options
+ * @param {Array<object>} props.kpis KPI meta rows (key/name/uplift/var/trend/baseAfter/fmt/dec)
+ * @param {string[][]} props.kpiRows KPI key grid layout
+ * @param {string[]} props.charts trend-chart order (baseline keys)
+ * @param {object} props.defaultFilters initial filter values
+ * @param {(filters: { end: string, channel: string, pilot: string, city: string[], store: string[] }) => object} props.getScenario deterministic scenario source
  * @param {(filters: { end: string, channel: string, pilot: string, cities: string[], stores: string[] }) => void} [props.onFiltersChange]
  */
-export function CityInvestDashboard({ onFiltersChange }) {
-  const [end, setEnd] = React.useState("FY27 P3");
-  const [channel, setChannel] = React.useState("All");
-  const [pilot, setPilot] = React.useState("Pilot TTL");
-  const [cities, setCities] = React.useState(SC_CITY_OPTIONS);
-  const [stores, setStores] = React.useState(SC_ALL_STORES);
+export function CityInvestDashboard({ copy, periods, startIndex, options, kpis, kpiRows, charts, defaultFilters, getScenario, onFiltersChange }) {
+  const [end, setEnd] = React.useState(defaultFilters.end);
+  const [channel, setChannel] = React.useState(defaultFilters.channel);
+  const [pilot, setPilot] = React.useState(defaultFilters.pilot);
+  const [cities, setCities] = React.useState(defaultFilters.cities);
+  const [stores, setStores] = React.useState(defaultFilters.stores);
   const [openFilter, setOpenFilter] = React.useState(null);
   const [dim, setDim] = React.useState(false);
 
-  const storeOptions = scStoreOptionsFor(cities);
-  const totalLabel = scTotalLabel(cities);
+  const storeOptions = storeOptionsFor(options.cityStores, cities);
+  const total = totalLabel(cities, options.cities, copy);
   const scenario = React.useMemo(
-    () => scGenScenario({ end, channel, pilot, city: cities, store: stores }),
-    [end, channel, pilot, cities, stores]
+    () => getScenario({ end, channel, pilot, city: cities, store: stores }),
+    [getScenario, end, channel, pilot, cities, stores]
   );
 
   React.useEffect(() => {
@@ -2855,68 +2853,73 @@ export function CityInvestDashboard({ onFiltersChange }) {
     <div className="mh-sixcity">
       <div className="mh-sc-canvas" style={{ opacity: dim ? 0.55 : 1 }}>
         <div className="mh-sc-titlebar">
-          <p className="mh-sc-title">{SC_TITLE}</p>
+          <p className="mh-sc-title">{copy.title}</p>
           <div className="mh-sc-footnotes">
-            <p className="mh-sc-footnote">{SC_FOOTNOTE}</p>
+            <p className="mh-sc-footnote">{copy.footnote}</p>
           </div>
         </div>
         <div className="mh-sc-filters">
           <div className="mh-sc-fitem">
-            <span className="mh-sc-flabel">Base Period</span>
-            <span className="mh-sc-fstatic">{SC_BASE_PERIOD}</span>
+            <span className="mh-sc-flabel">{copy.labelBasePeriod}</span>
+            <span className="mh-sc-fstatic">{copy.basePeriod}</span>
           </div>
           <div className="mh-sc-fitem">
-            <span className="mh-sc-flabel">Invest Period Start</span>
-            <span className="mh-sc-fstatic">{SC_INVEST_START}</span>
+            <span className="mh-sc-flabel">{copy.labelInvestStart}</span>
+            <span className="mh-sc-fstatic">{copy.investStart}</span>
           </div>
           <ScFilterDropdown
-            label="Invest Period End"
-            options={SC_END_OPTIONS}
+            label={copy.labelInvestEnd}
+            options={options.end}
             selected={[end]}
+            copy={copy}
             open={openFilter === "end"}
             onToggle={() => toggleFilter("end")}
             onChange={(value) => commit({ end: value[0] })}
           />
           <ScFilterDropdown
-            label="Channel"
-            options={SC_CHANNEL_OPTIONS}
+            label={copy.labelChannel}
+            options={options.channel}
             selected={[channel]}
+            copy={copy}
             open={openFilter === "channel"}
             onToggle={() => toggleFilter("channel")}
             onChange={(value) => commit({ channel: value[0] })}
           />
           <ScFilterDropdown
-            label="Pilot"
-            options={SC_PILOT_OPTIONS}
+            label={copy.labelPilot}
+            options={options.pilot}
             selected={[pilot]}
+            copy={copy}
             open={openFilter === "pilot"}
             onToggle={() => toggleFilter("pilot")}
             onChange={(value) => commit({ pilot: value[0] })}
           />
           <ScFilterDropdown
-            label="City"
-            options={SC_CITY_OPTIONS}
+            label={copy.labelCity}
+            options={options.cities}
             selected={cities}
             multi
+            copy={copy}
             open={openFilter === "city"}
             onToggle={() => toggleFilter("city")}
-            onChange={(value) => commit({ cities: value, stores: scStoreOptionsFor(value) })}
+            onChange={(value) => commit({ cities: value, stores: storeOptionsFor(options.cityStores, value) })}
           />
           <ScFilterDropdown
-            label="Store"
+            label={copy.labelStore}
             options={storeOptions}
             selected={stores.filter((store) => storeOptions.includes(store))}
             multi
-            suffix={scStoreScopeSuffix(cities)}
+            suffix={storeScopeSuffix(cities, copy)}
+            copy={copy}
             open={openFilter === "store"}
             onToggle={() => toggleFilter("store")}
             onChange={(value) => commit({ stores: value })}
           />
         </div>
-        {SC_KPI_ROWS.map((row, rowIndex) => (
+        {kpiRows.map((row, rowIndex) => (
           <div className="mh-sc-kpi-grid" key={rowIndex} style={rowIndex > 0 ? { marginTop: 10 } : undefined}>
             {row.map((key) => {
-              const meta = SC_KPI.find((item) => item.key === key);
+              const meta = kpis.find((item) => item.key === key);
               const value = scenario.kpi[key];
               if (meta.uplift === null) {
                 return (
@@ -2924,7 +2927,7 @@ export function CityInvestDashboard({ onFiltersChange }) {
                     <div className="mh-sc-kpi__top">
                       <span className="mh-sc-kpi__name">{meta.name}</span>
                     </div>
-                    <div className="mh-sc-kpi__uplift">{scFmtAfter(meta, value.after)}</div>
+                    <div className="mh-sc-kpi__uplift">{fmtAfter(meta, value.after)}</div>
                   </div>
                 );
               }
@@ -2934,18 +2937,18 @@ export function CityInvestDashboard({ onFiltersChange }) {
                   <div className="mh-sc-kpi__top">
                     <span className="mh-sc-kpi__name">{meta.name}</span>
                   </div>
-                  <div className="mh-sc-kpi__uplift-label">Uplift</div>
+                  <div className="mh-sc-kpi__uplift-label">{copy.uplift}</div>
                   <div className={cx("mh-sc-kpi__uplift", up >= 0 ? "is-pos" : "is-neg")}>
                     {up > 0 ? "+" : ""}
                     {up}%<span className="mh-sc-kpi__arrow">{up >= 0 ? "▲" : "▼"}</span>
                   </div>
                   <div className="mh-sc-kpi__row2">
                     <span className="mh-sc-kpi__var">
-                      Var% {value.vari > 0 ? "+" : ""}
+                      {copy.varPct} {value.vari > 0 ? "+" : ""}
                       {value.vari}%
                     </span>
                     <span className="mh-sc-kpi__after">
-                      After <b>{scFmtAfter(meta, value.after)}</b>
+                      {copy.after} <b>{fmtAfter(meta, value.after)}</b>
                     </span>
                   </div>
                 </div>
@@ -2954,18 +2957,21 @@ export function CityInvestDashboard({ onFiltersChange }) {
           </div>
         ))}
         <div className="mh-sc-kpi-legend">
-          <span className="mh-sc-formula">{SC_FORMULA}</span>
+          <span className="mh-sc-formula">{copy.formula}</span>
         </div>
-        <div className="mh-sc-sec-title">{totalLabel} Monthly Key Indicator Trend vs. Non Invest City</div>
+        <div className="mh-sc-sec-title">{total} {copy.trendHeading}</div>
         <div className="mh-sc-chart-grid">
-          {SC_CHART_ORDER.map((name) => (
+          {charts.map((name) => (
             <ScTrendChart
               key={name}
               name={name}
               data={scenario.trends[name]}
               endIdx={scenario.endIdx}
               decimals={name === "UPT" ? 2 : 0}
-              totalLabel={totalLabel}
+              periods={periods}
+              startIndex={startIndex}
+              copy={copy}
+              totalLabel={total}
             />
           ))}
         </div>
@@ -3224,11 +3230,11 @@ function HolisticReport({ data, stream = true }) {
             {block.table ? <HrTable headers={block.table.headers} rows={block.table.rows} total={block.table.total} /> : null}
             {block.dotLegend ? (
               <p className="mh-hr-note">
-                {COPILOT_DOT_LEGEND.map((item, i) => (
+                {(data.dotLegend || []).map((item, i) => (
                   <React.Fragment key={i}>
                     <HrDot kind={item.dot} />
                     {item.text}
-                    {i < COPILOT_DOT_LEGEND.length - 1 ? "  " : ""}
+                    {i < data.dotLegend.length - 1 ? "  " : ""}
                   </React.Fragment>
                 ))}
               </p>
@@ -3393,7 +3399,7 @@ function CopilotChatEntry({ entry, stream = true, onChatFeedback, onCopy, onExpl
         </div>
         {rich ? (
           <PilotSalesBody
-            data={COPILOT_PILOT_SALES}
+            data={entry.card}
             sources={entry.sources}
             stream={stream}
             trailing={feedbackRow}
@@ -3481,17 +3487,18 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * the rich pilot-sales card (set false for instant render).
  * @param {object} props
  * @param {boolean} [props.open=false]
- * @param {string} [props.title="Data Analysis Assistant"]
- * @param {string} [props.eyebrow="REPORT COPILOT"]
+ * @param {string} props.title panel title (from the report's assistant profile)
+ * @param {string} props.eyebrow eyebrow label over the title
  * @param {{ title: string, status: string, paragraphs: Array<Array<object|string>> }} [props.summary]
  * @param {Array<{ title: string, meta?: string }>} [props.recommendations=[]]
  * @param {string} [props.periodHint=""]
  * @param {Array<{ id: string, title: string, href: string }>} [props.sources=[]]
- * @param {{ kind: "answer"|"holistic", title: string, summary?: string, findings?: Array<{ label: string, text: string> }> }|null} [props.answer=null]
- * @param {Array<{ id?: string, kind: "standard"|"rich", question: string, summary?: string, sources: Array<object> }>} [props.chat=[]]
+ * @param {{ kind: "answer"|"holistic", title: string, summary?: string, findings?: Array<{ label: string, text: string> }, report?: object }|null} [props.answer=null] holistic answers carry their data as `report`
+ * @param {Array<{ id?: string, kind: "standard"|"rich", question: string, summary?: string, card?: object, sources: Array<object> }>} [props.chat=[]] rich entries carry their card data as `card`
  * @param {string} [props.prompt=""]
- * @param {string} [props.commandHint]
- * @param {string} [props.inputPlaceholder]
+ * @param {string} props.commandHint helper line above the composer
+ * @param {string} props.inputPlaceholder composer placeholder
+ * @param {string} props.answerLabel label over an open answer
  * @param {Array<{ title: string, prompt: string }>} [props.history=[]]
  * @param {object} [props.skillMenu] SkillMenu config; renders the "+" menu when set
  * @param {object} [props.flow] ModelFlowDialog props; renders the flow dialog when set
@@ -3514,8 +3521,8 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  */
 export function ReportCopilot({
   open = false,
-  title = "Data Analysis Assistant",
-  eyebrow = "REPORT COPILOT",
+  title,
+  eyebrow,
   summary,
   recommendations = [],
   periodHint = "",
@@ -3523,8 +3530,9 @@ export function ReportCopilot({
   answer = null,
   chat = [],
   prompt = "",
-  commandHint = COPILOT_COMMAND_HINT,
-  inputPlaceholder = COPILOT_INPUT_PLACEHOLDER,
+  commandHint,
+  inputPlaceholder,
+  answerLabel,
   history = [],
   skillMenu,
   flow,
@@ -3855,10 +3863,10 @@ export function ReportCopilot({
             </div>
             {!chatMode && answer ? (
               <React.Fragment>
-                <span className="mh-copilot__answer-label">{COPILOT_ANSWER_LABEL}</span>
+                <span className="mh-copilot__answer-label">{answerLabel}</span>
                 <h3 className="mh-copilot__answer-title">{answer.title}</h3>
                 {answer.kind === "holistic" ? (
-                  <HolisticReport data={COPILOT_HOLISTIC} stream={stream} />
+                  <HolisticReport data={answer.report} stream={stream} />
                 ) : (
                   <React.Fragment>
                     <p className="mh-copilot__answer-summary">{answer.summary}</p>
