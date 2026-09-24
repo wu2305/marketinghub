@@ -1,0 +1,33 @@
+.mh-sidebar {
+min-height: 656px;
+  padding: 24px 18px 40px;
+  border-right: 1px solid #e6e1d8;
+  background: #fff;
+}
+
+.mh-sidebar__brand {
+margin: 12px 16px 30px;
+  color: #b9b5af;
+  font-family: var(--mh-font);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.mh-sidebar__group {
+margin: 8px 0 2px;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--mh-line);
+}
+
+.mh-sidebar__title {
+padding: 0 0 8px;
+  color: var(--mh-kicker);
+  font-family: var(--mh-font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}

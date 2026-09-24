@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { AiInterpreterPage } from "./pages.jsx";
+import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
 import { useBusinessTermDemo } from "./demo/business-term-demo.js";
 import { INTERPRETER } from "./content.js";
 

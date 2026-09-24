@@ -1,0 +1,217 @@
+.mh-page--tracking {
+min-height: 100vh;
+  background: var(--mh-page-bg);
+}
+
+.mh-tracking {
+width: min(1500px, calc(100% - 44px));
+  margin: 0 auto;
+  padding: 24px 22px 80px;
+}
+
+.mh-tracking__topbar {
+display: flex;
+  justify-content: flex-start;
+  margin-top: 48px;
+  margin-bottom: 18px;
+}
+
+.mh-tracking__back {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--mh-line-soft);
+  border-radius: 6px;
+  background: var(--mh-surface);
+  color: var(--mh-ink-strong);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.mh-tracking__back svg {
+width: 14px;
+  height: 14px;
+}
+
+.mh-tracking__back:hover,
+.mh-tracking__back:focus-visible {
+background: var(--mh-bg);
+  outline: 0;
+}
+
+.mh-tracking__head {
+margin-bottom: 20px;
+}
+
+.mh-tracking__eyebrow {
+display: inline-block;
+  margin-bottom: 8px;
+  color: var(--mh-eyebrow);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mh-tracking__head h1 {
+margin: 0;
+  color: var(--mh-ink-strong);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.mh-tracking .mh-tabs {
+gap: 4px;
+  margin-bottom: 18px;
+  border-bottom-color: var(--mh-line-tab);
+}
+
+.mh-tracking .mh-tabs__tab {
+padding: 10px 18px;
+  margin-bottom: -1px;
+  color: var(--mh-muted-strong);
+  font-size: 13px;
+}
+
+.mh-tracking .mh-tabs__tab:hover,
+.mh-tracking .mh-tabs__tab:focus-visible {
+color: var(--mh-ink-strong);
+}
+
+.mh-tracking .mh-tabs__tab.is-active {
+border-bottom-color: var(--mh-ink-strong);
+  color: var(--mh-ink-strong);
+}
+
+.mh-tracking__filters {
+display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid var(--mh-line-soft);
+  border-radius: 8px;
+  background: var(--mh-surface);
+}
+
+.mh-tracking__filters .mh-field > span {
+color: var(--mh-muted-strong);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.mh-tracking__filters .mh-field__required {
+color: var(--mh-required);
+}
+
+.mh-tracking__filters .mh-select {
+height: 32px;
+  padding: 0 10px;
+  border-color: var(--mh-field-line);
+  color: var(--mh-ink-strong);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mh-tracking__description {
+margin: 0 0 20px;
+  padding: 14px 18px;
+  border: 1px solid var(--mh-line-tab);
+  border-radius: 6px;
+  background: var(--mh-bg-faint);
+  color: var(--mh-subtle-ai);
+  font-size: 11.5px;
+  line-height: 1.7;
+}
+
+.mh-tracking__description strong {
+color: var(--mh-ink-strong);
+  font-weight: 700;
+}
+
+.mh-tracking__table-wrap {
+overflow: hidden;
+  border: 1px solid var(--mh-line-soft);
+  border-radius: 8px;
+  background: var(--mh-surface);
+}
+
+.mh-tracking__table-head {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--mh-line-tab);
+  background: var(--mh-row-hover);
+}
+
+.mh-tracking__table-head h2 {
+margin: 0;
+  color: var(--mh-ink-strong);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.mh-tracking__count {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mh-muted-strong);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-tracking__count svg {
+width: 14px;
+  height: 14px;
+}
+
+.mh-tracking__scroll {
+max-height: 600px;
+  overflow: auto;
+}
+
+.mh-tracking__table {
+width: 100%;
+  min-width: 1800px;
+  border-collapse: collapse;
+  font-size: 11.5px;
+}
+
+.mh-tracking__table thead th {
+position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mh-line-soft);
+  background: var(--mh-line-faintest);
+  color: var(--mh-subtle-ai);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.mh-tracking__table tbody td {
+padding: 10px 12px;
+  border-bottom: 1px solid var(--mh-line-faintest);
+  color: var(--mh-ink-strong);
+  white-space: nowrap;
+}
+
+.mh-tracking__table tbody tr:hover {
+background: var(--mh-bg-faint);
+}
+
+.mh-tracking__table tbody tr:last-child td {
+border-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .mh-tracking__filters {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

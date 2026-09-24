@@ -1,0 +1,15 @@
+.mh-catalog {
+display: grid;
+  gap: 42px;
+}
+
+.mh-catalog__group {
+display: grid;
+  gap: 16px;
+}
+
+.mh-project-grid {
+display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}

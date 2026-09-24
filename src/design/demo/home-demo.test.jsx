@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { HomePage } from "../pages.jsx";
+import { HomePage } from "../pages/HomePage/index.jsx";
 import { useHomeDemo } from "./home-demo.js";
 import {
   ASSISTANT,

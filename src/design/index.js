@@ -6,80 +6,221 @@
  * `demoContent` holds the static copy and sample records used by the stories;
  * hosts should pass their own data via props.
  */
-export { Button, Link, TextInput, TextArea, Select, StatusBadge, buttonVariants, controlSizes, buttonTypes } from "./atoms.jsx";
+export {
+  Button,
+  buttonVariants,
+  controlSizes,
+  buttonTypes,
+} from "./components/Button/index.jsx";
+export {
+  Link,
+} from "./components/Link/index.jsx";
+export {
+  TextInput,
+} from "./components/TextInput/index.jsx";
+export {
+  TextArea,
+} from "./components/TextArea/index.jsx";
+export {
+  Select,
+} from "./components/Select/index.jsx";
+export {
+  StatusBadge,
+} from "./components/StatusBadge/index.jsx";
 export {
   SearchField,
-  CheckboxFilter,
-  Pagination,
-  paginationVariants,
-  MetricStat,
-  SectionHeading,
-  CategoryHeading,
-  ViewHeading,
-  FilterPills,
-  Tabs,
-  FormField,
-  Suggestion,
-  ScopeOption,
-  ProgressList,
-  ColumnChart,
-  DataTable,
-  SidebarItem,
-  FilterActions,
-  FileDropzone,
-  Toast,
   searchIconPositions,
   searchVariants,
+} from "./components/SearchField/index.jsx";
+export {
+  CheckboxFilter,
+} from "./components/CheckboxFilter/index.jsx";
+export {
+  Pagination,
+  paginationVariants,
+} from "./components/Pagination/index.jsx";
+export {
+  MetricStat,
   metricStatVariants,
   metricStatAccents,
-  tabsVariants,
+} from "./components/MetricStat/index.jsx";
+export {
+  SectionHeading,
   headingLevels,
+} from "./components/SectionHeading/index.jsx";
+export {
+  CategoryHeading,
+} from "./components/CategoryHeading/index.jsx";
+export {
+  ViewHeading,
+} from "./components/ViewHeading/index.jsx";
+export {
+  FilterPills,
+} from "./components/FilterPills/index.jsx";
+export {
+  Tabs,
+  tabsVariants,
+} from "./components/Tabs/index.jsx";
+export {
+  FormField,
   formFieldControls,
-} from "./molecules.jsx";
+} from "./components/FormField/index.jsx";
+export {
+  Suggestion,
+} from "./components/Suggestion/index.jsx";
+export {
+  ScopeOption,
+} from "./components/ScopeOption/index.jsx";
+export {
+  ProgressList,
+} from "./components/ProgressList/index.jsx";
+export {
+  ColumnChart,
+} from "./components/ColumnChart/index.jsx";
+export {
+  DataTable,
+} from "./components/DataTable/index.jsx";
+export {
+  SidebarItem,
+} from "./components/SidebarItem/index.jsx";
+export {
+  FilterActions,
+} from "./components/FilterActions/index.jsx";
+export {
+  FileDropzone,
+} from "./components/FileDropzone/index.jsx";
+export {
+  Toast,
+} from "./components/Toast/index.jsx";
 export {
   Header,
-  Hero,
-  WorkspaceCard,
-  WorkspaceGrid,
-  ProjectCard,
-  ProjectCatalog,
-  ActionCard,
-  KnowledgeSidebar,
-  TypeCard,
-  TypeGrid,
-  LibraryToolbar,
-  AssetRow,
-  KnowledgeLibrary,
-  PrinciplesView,
-  AssistantLauncher,
-  AssistantPanel,
-  CampaignRail,
-  ProjectDirectory,
-  ReportRow,
-  ReportCopilot,
-  ReportDetailsDrawer,
-  LiveReportView,
-  LiveOverview,
-  CityInvestDashboard,
-  Panel,
-  SummaryStrip,
-  TaskList,
-  BusinessTermForm,
-  Modal,
-  ModelFlowDialog,
-  UploadHistory,
-  BusinessTermView,
-  ConfirmDialog,
-  confirmDialogTones,
-  assistantPlacements,
-  modelFlowSteps,
   headerTones,
   headerPositions,
+} from "./components/Header/index.jsx";
+export {
+  Hero,
   heroVariants,
   heroScrims,
+} from "./components/Hero/index.jsx";
+export {
+  WorkspaceCard,
+} from "./features/home/WorkspaceCard/index.jsx";
+export {
+  WorkspaceGrid,
+} from "./features/home/WorkspaceGrid/index.jsx";
+export {
+  ProjectCard,
+} from "./features/cockpit/ProjectCard/index.jsx";
+export {
+  ProjectCatalog,
+} from "./features/cockpit/ProjectCatalog/index.jsx";
+export {
+  ActionCard,
+} from "./features/self-service/ActionCard/index.jsx";
+export {
+  KnowledgeSidebar,
+} from "./features/interpreter/KnowledgeSidebar/index.jsx";
+export {
+  TypeCard,
+} from "./features/interpreter/TypeCard/index.jsx";
+export {
+  TypeGrid,
+} from "./features/interpreter/TypeGrid/index.jsx";
+export {
+  LibraryToolbar,
+} from "./features/interpreter/LibraryToolbar/index.jsx";
+export {
+  AssetRow,
+} from "./features/interpreter/AssetRow/index.jsx";
+export {
+  KnowledgeLibrary,
+} from "./features/interpreter/KnowledgeLibrary/index.jsx";
+export {
+  PrinciplesView,
+} from "./features/interpreter/PrinciplesView/index.jsx";
+export {
+  AssistantLauncher,
+} from "./components/AssistantLauncher/index.jsx";
+export {
+  AssistantPanel,
+  assistantPlacements,
+} from "./components/AssistantPanel/index.jsx";
+export {
+  CampaignRail,
+} from "./features/campaign/CampaignRail/index.jsx";
+export {
+  ProjectDirectory,
+} from "./features/cockpit/ProjectDirectory/index.jsx";
+export {
+  ReportRow,
+} from "./features/cockpit/ReportRow/index.jsx";
+export {
+  ReportCopilot,
+} from "./features/cockpit/ReportCopilot/index.jsx";
+export {
+  ReportDetailsDrawer,
+} from "./features/cockpit/ReportDetailsDrawer/index.jsx";
+export {
+  LiveReportView,
+} from "./features/cockpit/LiveReportView/index.jsx";
+export {
+  LiveOverview,
+} from "./features/cockpit/LiveOverview/index.jsx";
+export {
+  CityInvestDashboard,
+} from "./features/cockpit/CityInvestDashboard/index.jsx";
+export {
+  Panel,
+} from "./features/campaign/Panel/index.jsx";
+export {
+  SummaryStrip,
+} from "./features/campaign/SummaryStrip/index.jsx";
+export {
+  TaskList,
+} from "./features/campaign/TaskList/index.jsx";
+export {
+  BusinessTermForm,
+} from "./features/interpreter/BusinessTermForm/index.jsx";
+export {
+  Modal,
   modalVariants,
-} from "./organisms.jsx";
-export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage, MediaTrackingDetailPage, cockpitViews } from "./pages.jsx";
+} from "./components/Modal/index.jsx";
+export {
+  ModelFlowDialog,
+  modelFlowSteps,
+} from "./components/ModelFlowDialog/index.jsx";
+export {
+  UploadHistory,
+} from "./features/self-service/UploadHistory/index.jsx";
+export {
+  BusinessTermView,
+} from "./features/interpreter/BusinessTermView/index.jsx";
+export {
+  ConfirmDialog,
+  confirmDialogTones,
+} from "./components/ConfirmDialog/index.jsx";
+export {
+  HomePage,
+} from "./pages/HomePage/index.jsx";
+export {
+  MarketingCockpitPage,
+  cockpitViews,
+} from "./pages/MarketingCockpitPage/index.jsx";
+export {
+  SelfServicePage,
+} from "./pages/SelfServicePage/index.jsx";
+export {
+  AiInterpreterPage,
+} from "./pages/AiInterpreterPage/index.jsx";
+export {
+  CampaignPage,
+} from "./pages/CampaignPage/index.jsx";
+export {
+  DataUploadPage,
+} from "./pages/DataUploadPage/index.jsx";
+export {
+  MediaTrackingDetailPage,
+} from "./pages/MediaTrackingDetailPage/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";

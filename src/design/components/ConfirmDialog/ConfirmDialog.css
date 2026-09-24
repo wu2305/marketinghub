@@ -1,0 +1,67 @@
+/* ── ConfirmDialog — `.fm-dialog` / `.knowledge-confirm-dialog` ────────── */
+
+.mh-modal:has(> .mh-modal__dialog.mh-confirm) {
+z-index: var(--mh-z-modal);
+}
+
+.mh-confirm--confirm .mh-confirm__message {
+margin: 5px 20px 20px 57px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--mh-bt-confirm-copy);
+  white-space: nowrap;
+}
+
+.mh-confirm--info .mh-confirm__message {
+margin: 14px 25px 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--mh-bt-dialog-ink);
+  text-align: center;
+}
+
+.mh-confirm__foot {
+display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 20px;
+}
+
+.mh-confirm--info .mh-confirm__foot {
+margin-top: 22px;
+  padding: 0 25px 25px;
+  gap: 8px;
+}
+
+.mh-confirm__btn {
+height: 25px;
+  padding: 0 10px;
+  border: 1px solid var(--mh-bt-confirm-btn-line);
+  border-radius: 7px;
+  background: var(--mh-surface);
+  color: var(--mh-bt-confirm-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mh-confirm--info .mh-confirm__btn {
+height: auto;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+.mh-confirm__btn--primary {
+background: var(--mh-bt-confirm-primary);
+  border-color: var(--mh-bt-confirm-primary);
+  color: var(--mh-surface);
+}
+
+/* The original focuses the first button on open via native <dialog>
+   autofocus; its global :focus-visible rule always draws the ring. */
+
+.mh-confirm__btn:focus-visible,
+.mh-confirm__btn:focus {
+outline: 2px solid var(--mh-focus-strong);
+  outline-offset: 2px;
+}

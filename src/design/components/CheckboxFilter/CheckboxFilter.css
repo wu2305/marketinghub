@@ -1,0 +1,135 @@
+/* Checkbox disclosure filter — the shared `.business-filter-field` /
+   `.fm-options` multi-select used by knowledge type libraries. */
+
+.mh-check-filter {
+position: relative;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 220px;
+  min-width: 220px;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--mh-check-filter-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--mh-check-filter-ink);
+}
+
+.mh-check-filter__label {
+flex: 0 0 auto;
+  color: var(--mh-check-filter-label);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.mh-check-filter__details {
+position: static;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 42px;
+}
+
+.mh-check-filter__summary {
+display: flex;
+  height: 42px;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 18px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--mh-check-filter-ink);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  list-style: none;
+  cursor: pointer;
+}
+
+.mh-check-filter__summary::-webkit-details-marker {
+display: none;
+}
+
+.mh-check-filter::after {
+content: "";
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  pointer-events: none;
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 150ms ease;
+}
+
+.mh-check-filter:has(.mh-check-filter__details[open])::after {
+transform: translateY(-30%) rotate(225deg);
+}
+
+.mh-check-filter__options {
+position: absolute;
+  z-index: 200;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  min-width: 260px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid var(--mh-check-filter-line);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--mh-check-filter-shadow);
+}
+
+.mh-check-filter__option {
+position: relative;
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px;
+  color: var(--mh-check-filter-option);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mh-check-filter__option input[type="checkbox"] {
+position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(50%);
+}
+
+.mh-check-filter__option:has(input:checked) {
+background: var(--mh-check-filter-checked-bg);
+  color: var(--mh-check-filter-checked-ink);
+}
+
+/* `.business-multi-filter` — the shared multi-select disclosure field. */
+
+.mh-btview .mh-check-filter {
+width: 180px;
+  min-width: 180px;
+  flex: 0 0 180px;
+  height: 44px;
+  padding: 0 13px;
+}
+
+.mh-btview .mh-check-filter__label {
+font-size: 11px;
+}
+
+.mh-btview .mh-check-filter__options {
+min-width: 240px;
+}

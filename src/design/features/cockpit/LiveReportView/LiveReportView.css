@@ -1,0 +1,79 @@
+/* ------------------------------------------------------------------ */
+
+/* Live report view (reports.html?view=live)                            */
+
+/* ------------------------------------------------------------------ */
+
+.mh-live-toolbar {
+position: sticky;
+  top: 72px;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 62px;
+  margin: -10px -12px 20px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--mh-live-line);
+  background: var(--mh-live-toolbar-bg);
+  box-shadow: var(--mh-live-shadow);
+  backdrop-filter: blur(20px);
+}
+
+.mh-live-back {
+display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 13px 0 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--mh-reports-copy);
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.mh-live-back:hover {
+border-color: var(--mh-live-back-hover-line);
+  background: var(--mh-live-back-hover-bg);
+  color: var(--mh-live-back-hover);
+}
+
+.mh-live-back:focus-visible {
+outline: 2px solid var(--mh-reports-blue);
+  outline-offset: 2px;
+}
+
+.mh-live-heading {
+display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--mh-live-inkline);
+}
+
+.mh-live-heading .mh-eyebrow {
+margin: 0;
+  color: var(--mh-reports-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.mh-live-heading h1 {
+margin: 7px 0 0;
+  color: var(--mh-reports-ink);
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.mh-live-panel {
+padding-top: 18px;
+}

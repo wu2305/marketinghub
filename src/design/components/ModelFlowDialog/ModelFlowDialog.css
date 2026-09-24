@@ -1,0 +1,337 @@
+/* Model-creation flow dialogs (chat-history step + model form step). */
+
+.mh-flow {
+position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--mh-scrim-mid);
+  font-family: var(--mh-font);
+}
+
+.mh-flow__card {
+display: grid;
+  width: min(620px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 8px;
+  background: var(--mh-surface);
+  color: var(--mh-ink-ai);
+  box-shadow: var(--mh-flow-shadow);
+}
+
+.mh-flow__card--history {
+width: min(760px, calc(100vw - 48px));
+}
+
+.mh-flow__card--form {
+width: min(780px, calc(100vw - 48px));
+}
+
+.mh-flow__head,
+.mh-flow__foot {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--mh-line-ai);
+}
+
+.mh-flow__foot {
+justify-content: flex-end;
+  border-top: 1px solid var(--mh-line-ai);
+  border-bottom: 0;
+}
+
+.mh-flow__head strong {
+display: block;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.mh-flow__head span {
+display: block;
+  margin-top: 4px;
+  color: var(--mh-muted-ai);
+  font-size: 12px;
+}
+
+.mh-flow__head button {
+display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 6px;
+  background: var(--mh-surface);
+  color: var(--mh-copy-ai);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.mh-flow__body {
+display: grid;
+  gap: 16px;
+  overflow: auto;
+  padding: 16px 18px;
+}
+
+.mh-flow__block {
+display: grid;
+  gap: 8px;
+}
+
+.mh-flow__block-head {
+display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--mh-ink-ai);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mh-flow__count,
+.mh-flow__optional {
+color: var(--mh-muted-ai);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mh-flow__thread {
+display: grid;
+  max-height: 360px;
+  gap: 10px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.mh-flow__msg {
+display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 6px 8px 6px 4px;
+  border-left: 2px solid transparent;
+  border-radius: 0 7px 7px 0;
+  cursor: pointer;
+}
+
+.mh-flow__msg:hover {
+background: var(--mh-surface-ai);
+}
+
+.mh-flow__msg input {
+margin: 6px 0 0;
+}
+
+.mh-flow__msg.is-selected {
+border-left-color: var(--mh-gold-rule);
+  background: var(--mh-gold-faint);
+}
+
+.mh-flow__bubble {
+justify-self: end;
+  max-width: 78%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
+  color: var(--mh-ink-ai);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.mh-flow__answer {
+display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 6px;
+  background: var(--mh-surface);
+}
+
+.mh-flow__answer-head {
+color: var(--mh-info);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mh-flow__answer strong {
+color: var(--mh-ink-ai);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.mh-flow__answer small {
+color: var(--mh-copy-ai);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.mh-flow__sources {
+display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mh-flow__sources span {
+padding: 3px 7px;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 999px;
+  color: var(--mh-copy-ai);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mh-flow__rule {
+width: 100%;
+  box-sizing: border-box;
+  min-height: 74px;
+  resize: vertical;
+  padding: 9px 10px;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 6px;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.mh-flow__rule::placeholder {
+color: var(--mh-placeholder);
+  font-weight: 400;
+  opacity: 1;
+}
+
+.mh-flow__rule:focus {
+border-color: var(--mh-gold-rule);
+  box-shadow: 0 0 0 2px var(--mh-gold-ring);
+  outline: 0;
+}
+
+.mh-flow__error {
+margin: 0;
+  color: var(--mh-danger);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.mh-flow__form {
+display: grid;
+  gap: 12px;
+  overflow: auto;
+  padding: 16px 18px;
+}
+
+.mh-flow__section {
+display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 7px;
+}
+
+.mh-flow__section h4 {
+margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.mh-flow__field {
+display: grid;
+  gap: 6px;
+  color: var(--mh-copy-ai);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.mh-flow__field-label {
+display: inline-flex;
+  width: fit-content;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.mh-flow__required {
+color: var(--mh-danger);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.mh-flow__field input,
+.mh-flow__field textarea {
+width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--mh-line-ai);
+  border-radius: 6px;
+  padding: 9px 10px;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  font-size: 12px;
+}
+
+.mh-flow__field input::placeholder,
+.mh-flow__field textarea::placeholder {
+color: var(--mh-placeholder);
+  font-weight: 400;
+  opacity: 1;
+}
+
+.mh-flow__field input.is-invalid,
+.mh-flow__field textarea.is-invalid {
+border-color: var(--mh-danger);
+  box-shadow: 0 0 0 2px var(--mh-danger-ring);
+}
+
+.mh-flow__field textarea {
+min-height: 74px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.mh-flow__field textarea.mh-flow__tall {
+min-height: 150px;
+}
+
+.mh-flow__field-error {
+color: var(--mh-danger);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.mh-flow__btn {
+min-width: 86px;
+  height: 34px;
+  border-radius: 6px;
+  font-family: var(--mh-font);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mh-flow__btn--primary {
+border: 0;
+  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
+  color: var(--mh-ink-ai);
+}
+
+.mh-flow__btn--secondary {
+border: 1px solid var(--mh-line-ai);
+  background: var(--mh-surface);
+  color: var(--mh-copy-ai);
+}
+
+.mh-flow__back {
+margin-right: auto;
+}

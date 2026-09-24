@@ -1,0 +1,45 @@
+.mh-table-wrap {
+width: 100%;
+  overflow: auto;
+}
+
+.mh-table {
+width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mh-font);
+}
+
+.mh-table th,
+.mh-table td {
+height: 50px;
+  padding: 0 12px;
+  border-bottom: 1px solid #e3e7ea;
+  color: var(--mh-copy);
+  font-size: 11px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.mh-table th {
+height: 38px;
+  background: #f3f6f8;
+  color: #66717b;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mh-table tbody tr:nth-child(even) {
+background: #fbfcfd;
+}
+
+.mh-table tbody tr:hover {
+background: #fff9e7;
+}
+
+.mh-table__note {
+margin: 10px 0 0;
+  color: var(--mh-muted);
+  font-family: var(--mh-font);
+  font-size: 11px;
+}

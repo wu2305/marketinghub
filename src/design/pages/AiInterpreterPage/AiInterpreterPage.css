@@ -1,0 +1,316 @@
+.mh-empty--unknown {
+border-style: dashed;
+  background: #fbfbfc;
+}
+
+.mh-interpreter {
+display: grid;
+  width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: stretch;
+  background: var(--mh-page-bg);
+}
+
+/* Original overview `.knowledge-main`: padding 28px 0 42px 34px — no right
+   padding, so the card grid runs to the column's right edge. */
+
+.mh-interpreter__main {
+min-width: 0;
+  padding: 28px 0 42px 34px;
+}
+
+/* Type pages flush the library toolbar to the hero edge
+   (.knowledge-main.business-type-page → padding 0 44px 42px). The original's
+   later ai-interpreter-overview.css `!important` overrides resolve the canvas
+   to #f6f7f8 on every interpreter state. */
+
+.mh-interpreter__main--type {
+/* column 1 is reserved for the (now fixed) sidebar rail, same as the
+     original's `.knowledge-main.business-type-page { grid-column: 2 }`. */
+  grid-column: 2;
+  padding: 0 44px 42px;
+  background: var(--mh-page-bg);
+}
+
+@media (max-width: 1240px) {
+  .mh-interpreter__main--type {
+  padding-right: 32px;
+      padding-left: 32px;
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-interpreter__main--type {
+  padding-right: 20px;
+      padding-left: 20px;
+  }
+}
+
+/* The original page sets a global `min-width: 1180px` (base/workspace.css) —
+   below that the document scrolls horizontally instead of reflowing. */
+
+.mh-page--interpreter {
+min-width: 1180px;
+}
+
+/* Type pages (ai-interpreter-overview.css `body:has(.business-type-page)`
+   overrides): the sidebar leaves the flow and becomes a fixed 240px rail from
+   under the 56px header to the viewport bottom; the hero compresses into the
+   content column. The grid still reserves column 1 so `.mh-interpreter__main`
+   stays aligned with the hero's left edge. */
+
+.mh-page--interpreter-type .mh-hero {
+width: min(1260px, calc(100% - 328px));
+  margin-left: max(284px, calc((100vw - 1500px) / 2 + 240px));
+}
+
+/* The original's `.knowledge-layout` keeps `min-height: calc(100vh - 24px)`
+   (business-term-reference.css) so the canvas always runs to the page foot. */
+
+.mh-page--interpreter-type .mh-interpreter {
+min-height: calc(100vh - 24px);
+}
+
+.mh-page--interpreter-type .mh-hero .mh-hero__eyebrow {
+font-size: 8px;
+}
+
+.mh-page--interpreter-type .mh-hero .mh-hero__copy h1 {
+font-size: 45px;
+}
+
+.mh-page--interpreter-type .mh-hero .mh-hero__copy h1::after {
+width: 51px;
+  height: 6px;
+  margin-top: 13px;
+}
+
+.mh-page--interpreter-type .mh-hero .mh-hero__copy > p:last-of-type {
+max-width: 384px;
+  margin-top: 11px;
+  font-size: 14px;
+}
+
+.mh-page--interpreter-type .mh-sidebar {
+position: fixed;
+  z-index: 2;
+  top: var(--mh-header);
+  bottom: 0;
+  left: max(44px, calc((100vw - 1500px) / 2));
+  width: 240px;
+  height: auto;
+  min-height: 0;
+  padding: 24px 12px 40px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-right-color: var(--mh-line-warm);
+  background: var(--mh-surface);
+}
+
+/* Sidebar rows inherit the page's 14px font and the type-page padding on all
+   interpreter states (the original's data-active-type rules are global). */
+
+.mh-page--interpreter .mh-sidebar-item {
+padding: 10px 12px;
+  font-size: inherit;
+}
+
+/* Original sidebar rhythm: brand 12/16/18 margin at lh 1.2, the Overview row
+   carries margin-bottom 10, and `.business-knowledge-nav` has no top border —
+   just 8px top / 12px bottom padding with a 2px item pitch. */
+
+.mh-page--interpreter .mh-sidebar__brand {
+margin-bottom: 18px;
+  line-height: 1.2;
+}
+
+.mh-page--interpreter .mh-sidebar > .mh-sidebar-item {
+margin-bottom: 10px;
+}
+
+.mh-page--interpreter .mh-sidebar__group {
+display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 8px 0 12px;
+  border-top: 0;
+}
+
+.mh-page--interpreter .mh-sidebar__title {
+padding-bottom: 10px;
+}
+
+/* On type pages the type list indents 16px from the rail's right edge
+   (`.business-knowledge-nav` margin-right) while Overview stays full-width. */
+
+.mh-page--interpreter-type .mh-sidebar__group {
+margin-right: 16px;
+}
+
+/* The original's `.knowledge-library`/`#fmLibrary` shells are flat on type
+   pages — no white panel, no border; only the pagination strip stays white. */
+
+.mh-page--interpreter-type .mh-principles,
+.mh-page--interpreter-type .mh-library {
+overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* types.js renderManagementRulesHint — the "!" Operation Reminder trigger hangs
+   7px below the hero stats' right edge; the tooltip opens above it on
+   hover/focus (ai-interpreter-overview.css .knowledge-management-rules-*). */
+
+.mh-page--interpreter .mh-hero__aside {
+position: relative;
+}
+
+.mh-rules-hint {
+position: absolute;
+  z-index: 20;
+  top: calc(100% + 7px);
+  right: 0;
+}
+
+.mh-rules-hint__trigger {
+display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.64);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.16);
+  color: var(--mh-surface);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: help;
+}
+
+.mh-rules-hint__trigger:focus-visible {
+outline: 2px solid var(--mh-surface);
+  outline-offset: 2px;
+}
+
+.mh-rules-hint__tooltip {
+position: absolute;
+  right: 0;
+  bottom: 25px;
+  display: none;
+  width: max-content;
+  max-width: min(520px, calc(100vw - 40px));
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 12px 28px rgba(22, 18, 10, 0.18);
+  backdrop-filter: blur(20px) saturate(125%);
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.mh-rules-hint__tooltip::before {
+position: absolute;
+  right: 7px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.32);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.16);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.mh-rules-hint__tooltip h3 {
+margin: 0 0 7px;
+  color: var(--mh-surface);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mh-rules-hint__tooltip ol {
+margin: 0;
+  padding-left: 18px;
+}
+
+.mh-rules-hint__tooltip li + li {
+margin-top: 4px;
+}
+
+.mh-rules-hint:hover .mh-rules-hint__tooltip,
+.mh-rules-hint:focus-within .mh-rules-hint__tooltip {
+display: block;
+}
+
+/* The original's ≤1100 hero-stats rule applies to every interpreter state. */
+
+@media (max-width: 1100px) {
+  .mh-page--interpreter .mh-hero__aside {
+  flex-basis: 420px;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 12px;
+  }
+
+  .mh-page--interpreter .mh-hero__aside .mh-metric {
+  min-height: 112px;
+      padding: 18px;
+  }
+}
+
+@media (max-width: 1240px) {
+  .mh-page--interpreter .mh-interpreter {
+  width: calc(100% - 64px);
+  }
+
+  .mh-page--interpreter-type .mh-sidebar {
+  left: 32px;
+  }
+
+  .mh-page--interpreter-type .mh-hero {
+  width: calc(100% - 304px);
+      margin-left: 272px;
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-page--interpreter .mh-interpreter {
+  width: calc(100% - 40px);
+  }
+
+  .mh-page--interpreter-type .mh-sidebar {
+  left: 20px;
+  }
+
+  .mh-page--interpreter-type .mh-hero {
+  width: calc(100% - 280px);
+      margin-left: 260px;
+  }
+}
+
+.mh-interpreter__main .mh-heading {
+margin: 2px 0 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--mh-line);
+}
+
+.mh-interpreter__main .mh-heading h2 {
+font-family: var(--mh-font);
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.mh-interpreter__main .mh-heading__kicker {
+margin-bottom: 6px;
+  color: var(--mh-gold-deep);
+  letter-spacing: 0.08em;
+}

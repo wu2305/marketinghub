@@ -1,0 +1,112 @@
+.mh-upload-history {
+width: min(800px, calc(100% - 64px));
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+.mh-upload-history__body {
+flex: 1;
+  overflow: auto;
+  padding: 2px 18px 14px;
+}
+
+.mh-upload-history__table {
+width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  color: var(--mh-ink);
+}
+
+.mh-upload-history__table thead th {
+position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 14px;
+  border-bottom: 0;
+  background: var(--mh-bg-soft);
+  color: var(--mh-slate);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.mh-upload-history__table tbody td {
+padding: 12px 14px;
+  border-bottom: 1px solid var(--mh-line-faint);
+  vertical-align: middle;
+}
+
+.mh-upload-history__table tbody tr:last-child td {
+border-bottom: 0;
+}
+
+.mh-upload-history__table tbody tr:hover {
+background: var(--mh-row-hover);
+}
+
+.mh-upload-history__file {
+display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mh-ink);
+  font-weight: 600;
+}
+
+.mh-upload-history__file svg {
+width: 16px;
+  height: 16px;
+  color: var(--mh-slate);
+  flex-shrink: 0;
+}
+
+.mh-upload-history__uploader,
+.mh-upload-history__time {
+color: var(--mh-subtle);
+}
+
+.mh-upload-history__empty {
+flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 36px 18px;
+  color: var(--mh-empty);
+  font-size: 14px;
+}
+
+.mh-upload-history__actions {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mh-upload-history__btn {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--mh-control-line);
+  border-radius: 3px;
+  background: var(--mh-surface);
+  color: var(--mh-ink);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mh-upload-history__btn svg {
+width: 12px;
+  height: 12px;
+}
+
+.mh-upload-history__btn:hover,
+.mh-upload-history__btn:focus-visible {
+background: var(--mh-hover-warm);
+  border-color: var(--mh-bubble-to);
+  color: var(--mh-ink);
+  outline: 0;
+}

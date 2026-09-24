@@ -1,0 +1,18 @@
+.mh-page {
+min-height: 100vh;
+  background: var(--mh-bg);
+  color: var(--mh-ink);
+  font-family: var(--mh-font);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.mh-page__shell {
+width: min(1500px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 28px 0 80px;
+}
+
+.mh-page__offset {
+height: var(--mh-header);
+}

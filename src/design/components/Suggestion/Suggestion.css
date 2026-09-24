@@ -1,0 +1,31 @@
+.mh-suggestion {
+border: 1px solid var(--mh-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--mh-copy);
+  font-family: var(--mh-font);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mh-suggestion {
+padding: 8px 14px;
+}
+
+.mh-suggestion:hover {
+border-color: #daa860;
+  background: #faeed4;
+  color: #1a1d20;
+}
+
+.mh-assistant--drawer .mh-assistant__suggestions .mh-suggestion {
+color: var(--mh-copy-ai);
+}
+
+@media (max-width: 760px) {
+  .mh-assistant:not(.mh-assistant--home) .mh-suggestion {
+  padding: 7px 12px;
+      font-size: 10px;
+  }
+}

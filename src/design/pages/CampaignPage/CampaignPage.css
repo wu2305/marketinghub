@@ -1,0 +1,235 @@
+.mh-count {
+display: inline-grid;
+  min-width: 30px;
+  height: 24px;
+  place-items: center;
+  border-radius: 3px;
+  font-family: var(--mh-font);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mh-count--good {
+background: #edf6f1;
+  color: var(--mh-green);
+}
+
+.mh-count--alert {
+background: #faeff1;
+  color: #a23b4f;
+}
+
+.mh-health {
+display: inline-flex;
+  height: 32px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--mh-line-strong);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--mh-copy);
+  font-family: var(--mh-font);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.mh-health i {
+width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mh-green);
+  box-shadow: 0 0 0 3px rgba(52, 118, 91, 0.12);
+}
+
+.mh-campaign {
+display: grid;
+  width: min(1540px, calc(100% - 64px));
+  margin: 0 auto;
+  padding: 80px 0 92px;
+  grid-template-columns: 236px minmax(0, 1fr);
+  gap: 32px;
+}
+
+.mh-campaign__metrics {
+display: grid;
+  margin-top: 16px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mh-campaign__split {
+display: grid;
+  margin-top: 12px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(340px, 0.92fr);
+  gap: 12px;
+}
+
+.mh-campaign__split .mh-panel {
+min-height: 281px;
+}
+
+.mh-campaign__table {
+margin-top: 12px;
+}
+
+.mh-campaign__tools {
+display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mh-campaign__tools .mh-search {
+width: 190px;
+}
+
+.mh-campaign__tools .mh-input {
+width: 190px;
+  height: 34px;
+  font-size: 11px;
+}
+
+.mh-stack {
+display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.mh-efficiency {
+display: grid;
+  padding-top: 5px;
+}
+
+.mh-efficiency > div {
+display: grid;
+  min-height: 62px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--mh-line);
+}
+
+.mh-efficiency > div:last-child {
+border-bottom: 0;
+}
+
+.mh-efficiency span {
+color: var(--mh-copy);
+  font-size: 11px;
+}
+
+.mh-efficiency strong {
+color: var(--mh-ink);
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.mh-recommendations article {
+display: grid;
+  min-height: 78px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--mh-line);
+}
+
+.mh-recommendations article:last-child {
+border-bottom: 0;
+}
+
+.mh-recommendations article > span {
+display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--mh-index-line);
+  border-radius: 3px;
+  background: var(--mh-index-bg);
+  color: var(--mh-index-ink);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.mh-recommendations strong {
+color: var(--mh-ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mh-recommendations p {
+margin: 4px 0 0;
+  color: var(--mh-muted);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.mh-task-dialog__form {
+display: block;
+}
+
+.mh-task-dialog__intro {
+margin-top: 9px;
+  color: var(--mh-muted);
+  font-size: 11px;
+}
+
+.mh-task-dialog__grid {
+display: grid;
+  margin-top: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mh-task-dialog__grid .mh-field > span {
+color: var(--mh-muted);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.mh-task-dialog__grid .mh-input,
+.mh-task-dialog__grid .mh-select {
+height: 38px;
+  padding: 0 10px;
+  font-size: 11px;
+}
+
+.mh-task-dialog__grid .mh-input:focus,
+.mh-task-dialog__grid .mh-select:focus {
+border-color: var(--mh-focus-blue);
+  box-shadow: 0 0 0 3px var(--mh-focus-ring);
+}
+
+.mh-task-dialog__preview {
+display: grid;
+  gap: 3px;
+  margin-top: 16px;
+  padding: 12px 13px;
+  border: 1px solid var(--mh-warn-line);
+  border-left: 3px solid var(--mh-warn-accent);
+  background: var(--mh-warn-bg);
+}
+
+.mh-task-dialog__preview > span {
+color: var(--mh-faint);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.mh-task-dialog__preview strong {
+color: var(--mh-ink);
+  font-size: 11px;
+}
+
+.mh-task-dialog__preview small {
+color: var(--mh-warn-note);
+  font-size: 9px;
+}
+
+.mh-task-dialog__footer {
+display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}

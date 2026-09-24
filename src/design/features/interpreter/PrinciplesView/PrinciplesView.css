@@ -1,0 +1,194 @@
+/* Principles dedicated library — `#principlesCardGrid` + toolbar
+   (principles-library.css + the ai-interpreter-overview.css type overrides).
+   The original `.fm-overview-countline` is display:none on type pages, so the
+   React view does not render it. */
+
+.mh-principles {
+overflow: visible;
+  border: 1px solid var(--mh-line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(31, 41, 55, 0.05);
+}
+
+.mh-principles__toolbar {
+display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px 13px 0;
+}
+
+.mh-principles__search {
+width: 300px;
+  flex: 0 0 auto;
+}
+
+.mh-principles__grid {
+display: grid;
+  padding: 0 18px 18px 0;
+}
+
+.mh-principles__list {
+display: grid;
+  gap: 12px;
+}
+
+.mh-principle {
+position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 16px;
+  padding: 10px 20px;
+  border: 1px solid var(--mh-principle-line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: var(--mh-principle-shadow);
+  cursor: default;
+}
+
+.mh-principle__number {
+display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--mh-principle-number-bg);
+  color: var(--mh-principle-number-ink);
+  font-family: var(--mh-font);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.mh-principle__copy {
+min-width: 0;
+}
+
+.mh-principle__titleline {
+display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+
+.mh-principle__titlemain {
+display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+}
+
+.mh-principle__badge {
+flex: 0 0 auto;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--mh-principle-badge-bg);
+  color: var(--mh-principle-badge-ink);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mh-principle__titleline h3 {
+min-width: 0;
+  margin: 0;
+  color: var(--mh-principle-title);
+  font-family: var(--mh-font);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.mh-principle__descwrap {
+position: relative;
+  min-width: 0;
+}
+
+.mh-principle__desc {
+display: block;
+  margin: 0;
+  padding-right: 64px;
+  color: var(--mh-principle-copy);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.75;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.mh-principle__desc:not(.is-expanded) {
+max-height: 3.5em;
+  overflow: hidden;
+}
+
+.mh-principle__toggle {
+position: absolute;
+  right: 16px;
+  bottom: 0;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mh-principle-toggle);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mh-principle__toggle svg {
+width: 16px;
+  height: 16px;
+}
+
+.mh-principle__toggle:hover {
+color: var(--mh-principle-toggle-hover);
+}
+
+.mh-principle__toggle:focus-visible {
+border-radius: 3px;
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-principles__empty {
+padding: 28px;
+  border: 1px dashed var(--mh-principle-empty-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--mh-principle-empty-ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .mh-principles__grid {
+  padding: 0 12px 12px 0;
+  }
+
+  .mh-principles__toolbar {
+  flex-wrap: wrap;
+      padding-right: 12px;
+  }
+
+  .mh-principles__search {
+  width: 100%;
+  }
+
+  .mh-principle {
+  grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 16px;
+  }
+
+  .mh-principle__titleline {
+  flex-direction: column;
+      align-items: flex-start;
+  }
+}

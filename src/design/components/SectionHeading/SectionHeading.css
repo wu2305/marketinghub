@@ -1,0 +1,51 @@
+.mh-heading {
+display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+.mh-heading__kicker {
+margin: 0;
+  color: #65717c;
+  font-family: var(--mh-font);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.mh-heading h2,
+.mh-heading h1 {
+margin: 8px 0 0;
+  color: #1c2227;
+  font-family: var(--mh-display);
+  font-size: 30px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.mh-heading__text {
+max-width: 420px;
+  margin: 0 0 2px;
+  color: #67727c;
+  font-family: var(--mh-font);
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.mh-heading--stack {
+display: grid;
+  justify-content: start;
+  gap: 0;
+}
+
+.mh-heading--stack .mh-heading__text {
+max-width: 640px;
+  margin-top: 8px;
+  text-align: left;
+  font-size: 13px;
+}

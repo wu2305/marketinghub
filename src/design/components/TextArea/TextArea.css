@@ -1,0 +1,53 @@
+.mh-textarea {
+font-family: var(--mh-font);
+  letter-spacing: 0;
+}
+
+.mh-textarea:focus-visible {
+outline: 2px solid rgba(63, 115, 166, 0.55);
+  outline-offset: 2px;
+}
+
+.mh-textarea {
+width: 100%;
+  border: 1px solid var(--mh-line-strong);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--mh-ink);
+  font-size: 13px;
+}
+
+.mh-textarea {
+min-height: 96px;
+  padding: 10px 12px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.mh-textarea:focus {
+border-color: #daa860;
+  box-shadow: 0 0 0 3px rgba(218, 168, 96, 0.15);
+  outline: 0;
+}
+
+.mh-textarea:disabled {
+cursor: not-allowed;
+  background: #f3f5f7;
+  color: var(--mh-faint);
+}
+
+.mh-textarea.is-invalid {
+border-color: var(--mh-red);
+  box-shadow: 0 0 0 3px rgba(155, 18, 48, 0.12);
+}
+
+.mh-assistant__box .mh-textarea {
+min-height: 44px;
+  max-height: 88px;
+  padding: 6px 0 4px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  resize: none;
+  font-size: 14px;
+}

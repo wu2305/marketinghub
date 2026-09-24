@@ -1,6 +1,12 @@
 import React from "react";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, COCKPIT_SKILL_MENU, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildCampaignAnswer, buildHomeAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
-import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
+import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
+import { CampaignPage } from "./pages/CampaignPage/index.jsx";
+import { DataUploadPage } from "./pages/DataUploadPage/index.jsx";
+import { HomePage } from "./pages/HomePage/index.jsx";
+import { MarketingCockpitPage, cockpitViews } from "./pages/MarketingCockpitPage/index.jsx";
+import { MediaTrackingDetailPage } from "./pages/MediaTrackingDetailPage/index.jsx";
+import { SelfServicePage } from "./pages/SelfServicePage/index.jsx";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "./demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "./demo/report-demo.js";
 import { useCockpitDemo } from "./demo/cockpit-demo.js";

@@ -1,0 +1,37 @@
+.mh-progress {
+display: grid;
+  gap: 15px;
+}
+
+.mh-progress__row {
+display: grid;
+  grid-template-columns: minmax(110px, 1fr) 34px minmax(120px, 1.35fr);
+  align-items: center;
+  gap: 11px;
+  color: var(--mh-copy);
+  font-family: var(--mh-font);
+  font-size: 11px;
+}
+
+.mh-progress__row strong {
+color: var(--mh-ink);
+  text-align: right;
+}
+
+.mh-progress__track {
+height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: #e7ebee;
+}
+
+.mh-progress__bar {
+display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--mh-amber);
+}
+
+.mh-panel__body > .mh-progress {
+padding-top: 18px;
+}

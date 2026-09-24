@@ -1,0 +1,49 @@
+.mh-badge {
+display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  background: #f2f5f7;
+  color: var(--mh-copy);
+  font-family: var(--mh-font);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mh-badge--published,
+.mh-badge--success {
+background: #edf6f1;
+  color: var(--mh-green);
+}
+
+.mh-badge--draft {
+background: #f3f5f7;
+  color: #66717b;
+}
+
+.mh-badge--review,
+.mh-badge--syncing {
+background: #eef3f8;
+  color: var(--mh-blue);
+}
+
+.mh-badge--pending,
+.mh-badge--watch {
+background: #fbf5ea;
+  color: var(--mh-amber);
+}
+
+.mh-badge--paused,
+.mh-badge--danger {
+background: #faeff1;
+  color: #a23b4f;
+}
+
+.mh-badge--outline {
+border: 1px solid currentColor;
+  background: #fff;
+}

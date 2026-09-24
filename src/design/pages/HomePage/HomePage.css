@@ -1,0 +1,18 @@
+.mh-page--home {
+padding-top: 72px;
+  background: var(--mh-page-bg);
+}
+
+.mh-page--home .mh-hero {
+margin-top: -56px;
+}
+
+.mh-page__inset {
+width: min(1440px, calc(100% - 88px));
+  margin: 0 auto;
+  padding: 20px 0 84px;
+}
+
+.mh-page__inset .mh-heading {
+margin-bottom: 18px;
+}

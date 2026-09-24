@@ -1,0 +1,422 @@
+/* ── BusinessTermView — business-term-library.js dedicated view ────────── */
+
+.mh-btview {
+min-width: 0;
+}
+
+/* `.unified-type-toolbar` shared bar (unified-type-toolbar.css) */
+
+.mh-btview__tools {
+display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 71px;
+  padding: 13px 0 14px;
+}
+
+.mh-btview__search {
+flex: 0 0 300px;
+  width: 300px;
+}
+
+/* `#btAddTerm` — gold pill link (business-term.css `.bt-add`). */
+
+.mh-btview__create {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 15px;
+  margin-left: auto;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  box-shadow: var(--mh-bt-create-shadow);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mh-btview__create:hover {
+background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+}
+
+.mh-btview__create:focus-visible {
+outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-btview__create > span {
+font-size: 12px;
+  line-height: 1;
+}
+
+.mh-btview__countline {
+font-size: 12px;
+  color: var(--mh-bt-countline);
+}
+
+.mh-btview__countline strong {
+color: var(--mh-check-filter-option);
+  font-weight: 600;
+}
+
+/* `.bt-term-card-list` — business-term.css, overridden to 3 columns by
+   ai-interpreter-overview.css; reference breakpoints drop to 2/1 columns. */
+
+.mh-btview__cards {
+display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .mh-btview__cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-btview__cards {
+  grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* `.bt-term-card` — measured cascade: 12/20/50 padding (the bottom row is
+   reserved for the absolutely positioned creator + actions). */
+
+.mh-btview__card {
+position: relative;
+  padding: 12px 20px 50px;
+  border: 1px solid var(--mh-principle-line);
+  border-radius: 14px;
+  background: var(--mh-surface);
+  box-shadow: var(--mh-principle-shadow);
+  color: var(--mh-bt-copy);
+}
+
+.mh-btview__card:focus-visible {
+outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-btview__card h3 {
+margin: 0;
+  max-width: calc(100% - 112px);
+  overflow: hidden;
+  color: var(--mh-bt-title);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-btview__draft {
+margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 9px;
+  background: var(--mh-bt-draft-bg);
+  color: var(--mh-bt-draft-ink);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.35;
+  vertical-align: super;
+}
+
+.mh-btview__card p {
+margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* `.bt-term-card-meta` — creator pinned bottom-left by the final cascade. */
+
+.mh-btview__meta {
+position: absolute;
+  bottom: 14px;
+  left: 20px;
+}
+
+.mh-btview__field {
+display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.mh-btview__field > span {
+color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-btview__field > strong {
+overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-btview__synonyms {
+margin-top: 10px;
+  width: 100%;
+}
+
+.mh-btview__synonyms > span {
+display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+}
+
+.mh-btview__tags {
+flex: 1;
+  display: flex;
+  min-width: 0;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow: hidden;
+}
+
+.mh-btview__tag {
+flex: 0 0 auto;
+  display: inline-flex;
+  height: 24px;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--mh-bt-tag-bg);
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.mh-btview__tag--overflow {
+min-width: 26px;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+/* `.bt-term-card-pills` — fixed 76×20 status capsule. */
+
+.mh-btview__pills {
+position: absolute;
+  top: 10px;
+  right: 18px;
+}
+
+.mh-btview__state {
+display: inline-flex;
+  width: 76px;
+  height: 20px;
+  min-height: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0;
+  border-radius: 5px;
+  background: var(--mh-bt-state-bg);
+  color: var(--mh-bt-state-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mh-btview__state::before {
+content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mh-btview__state.is-off {
+background: var(--mh-bt-state-off-bg);
+  color: var(--mh-bt-state-off-ink);
+}
+
+/* `.bt-term-card-actions` — final cascade pins them bottom-right; the
+   original's --bt-actions-top synonym alignment is dead code. */
+
+.mh-btview__actions {
+position: absolute;
+  right: 16px;
+  bottom: 10px;
+  display: flex;
+}
+
+.mh-btview__action-row {
+display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-btview__action {
+display: grid;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mh-bt-action);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.mh-btview__action svg {
+width: 15px;
+  height: 15px;
+}
+
+.mh-btview__action:hover:not(.is-disabled):not([aria-disabled="true"]),
+.mh-btview__action:focus-visible:not(.is-disabled):not([aria-disabled="true"]) {
+background: var(--mh-bt-action-hover-bg);
+}
+
+.mh-btview__action.is-disabled,
+.mh-btview__action[aria-disabled="true"] {
+color: var(--mh-bt-action-disabled);
+  cursor: not-allowed;
+}
+
+.mh-btview__empty {
+padding: 42px;
+  color: var(--mh-bt-empty);
+  text-align: center;
+}
+
+/* Drawer footer actions keep the bordered `.fm-icon-action` look (not the
+   card's transparent gold). */
+
+.mh-btview__drawer-status {
+display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 22px;
+  padding: 5px 10px 5px 9px;
+  border-radius: 999px;
+  background: var(--mh-bt-status-off-bg);
+  color: var(--mh-bt-status-off-ink);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mh-btview__drawer-status::before {
+content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--mh-bt-status-off-dot);
+}
+
+.mh-btview__drawer-status.is-on {
+background: var(--mh-bt-status-on-bg);
+  color: var(--mh-bt-status-on-ink);
+}
+
+.mh-btview__drawer-status.is-on::before {
+background: var(--mh-bt-status-on-dot);
+}
+
+.mh-btview__detail {
+display: grid;
+  gap: 8px;
+}
+
+.mh-btview__section {
+display: grid;
+  gap: 8px;
+}
+
+.mh-btview__section + .mh-btview__section {
+margin-top: 10px;
+}
+
+.mh-btview__section h3 {
+margin: 0;
+  color: var(--mh-bt-section-title);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mh-btview__section p {
+margin: 0;
+  color: var(--mh-bt-section-copy);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.mh-btview__chips {
+display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mh-btview__chip {
+display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: var(--mh-bt-chip-bg);
+  color: var(--mh-bt-chip-ink);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* `.bt-scope-tag` inside the drawer — the small green data-model pill. */
+
+.mh-btview__scope {
+display: inline-flex;
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--mh-bt-scope-bg);
+  color: var(--mh-bt-scope-ink);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* The drawer's footer actions use the bordered control look. */
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action {
+border-color: var(--mh-line);
+  background: var(--mh-surface);
+  color: var(--mh-copy);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-danger {
+color: var(--mh-bt-confirm-copy);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):hover,
+.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):focus-visible {
+border-color: var(--mh-bt-action);
+  background: var(--mh-bt-action-hover-bg);
+  color: var(--mh-ink);
+}
+
+.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-disabled,
+.mh-modal--drawer .mh-modal__foot .mh-btview__action[aria-disabled="true"] {
+color: #aeb7c1;
+}

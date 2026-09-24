@@ -1,0 +1,25 @@
+.mh-task {
+display: grid;
+  min-height: 78px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--mh-line);
+  font-family: var(--mh-font);
+}
+
+.mh-task:last-child {
+border-bottom: 0;
+}
+
+.mh-task strong {
+color: var(--mh-ink);
+  font-size: 11px;
+}
+
+.mh-task p {
+margin: 4px 0 0;
+  color: var(--mh-muted);
+  font-size: 10px;
+}

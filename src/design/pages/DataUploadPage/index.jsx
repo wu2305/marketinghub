@@ -1,0 +1,122 @@
+import "../../tokens.css";
+import { Button } from "../../components/Button/index.jsx";
+import { FileDropzone } from "../../components/FileDropzone/index.jsx";
+import { FormField } from "../../components/FormField/index.jsx";
+import { Header } from "../../components/Header/index.jsx";
+import { Hero } from "../../components/Hero/index.jsx";
+import { Modal } from "../../components/Modal/index.jsx";
+import { Icon } from "../../icons.jsx";
+import { Shell } from "../../pages/Shell/index.jsx";
+import "./DataUploadPage.css";
+
+
+/**
+ * Data Upload entry page (data-upload.html): Self-Service hero shell, a
+ * back/template-import toolbar, a carded multi-field form, and the Template
+ * Import modal with a file dropzone and tips. Submit disables the button and
+ * flashes `submittingLabel` — the host owns the timer (original restores
+ * after 1500ms).
+ * @param {object} props
+ * @param {string} [props.current="self-service"]
+ * @param {object} props.logo
+ * @param {Array<object>} [props.navigation=[]]
+ * @param {object} [props.hero={}] Hero props
+ * @param {{ backHref?: string, backLabel?: string, importLabel?: string }} [props.toolbar={}]
+ * @param {Array<{ name: string, label: string, placeholder?: string }>} [props.fields=[]]
+ * @param {string} [props.submitLabel="Submit"]
+ * @param {string} [props.submittingLabel="Submitted"]
+ * @param {boolean} [props.submitting=false]
+ * @param {object} [props.bulkImport={}] modal copy/state: title, dropzoneTitle, dropzoneHint, selectedPrefix, accept, templateLabel, templateHref, tipsTitle, tips[]
+ * @param {boolean} [props.bulkImportOpen=false]
+ * @param {string} [props.selectedFile] file name shown in the dropzone hint
+ * @param {(target: object) => void} [props.onNavigate]
+ * @param {() => void} [props.onOpenImport]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]
+ * @param {(file: { name: string }) => void} [props.onSelectFile]
+ * @param {(target: { href: string }) => void} [props.onDownloadTemplate]
+ * @param {(values: Object<string, string>) => void} [props.onSubmitForm]
+ */
+export function DataUploadPage({
+  current = "self-service",
+  logo,
+  navigation = [],
+  hero = {},
+  toolbar = {},
+  fields = [],
+  submitLabel = "Submit",
+  submittingLabel = "Submitted",
+  submitting = false,
+  bulkImport = {},
+  bulkImportOpen = false,
+  selectedFile,
+  onNavigate,
+  onOpenImport,
+  onCloseImport,
+  onSelectFile,
+  onDownloadTemplate,
+  onSubmitForm,
+}) {
+  return (
+    <Shell>
+      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <div className="mh-page__offset" aria-hidden="true" />
+      <Hero {...hero} height={260} variant="banner" scrim="none" />
+      <main className="mh-upload">
+        <div className="mh-upload__toolbar">
+          <a className="mh-upload__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref || "#" })}>
+            <Icon name="arrow-left" />
+            <span>{toolbar.backLabel || "Back"}</span>
+          </a>
+          <Button variant="secondary" icon="upload" onClick={onOpenImport}>
+            {toolbar.importLabel || "Template Import"}
+          </Button>
+        </div>
+        <form
+          className="mh-upload__form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            const values = {};
+            for (const [name, value] of data.entries()) values[name] = String(value).trim();
+            onSubmitForm?.(values);
+          }}
+        >
+          <div className="mh-upload__card">
+            <div className="mh-upload__grid">
+              {fields.map((field) => (
+                <FormField key={field.name} label={field.label} name={field.name} placeholder={field.placeholder || "Enter"} autoComplete="off" />
+              ))}
+            </div>
+          </div>
+          <Button variant="gold" size="lg" type="submit" disabled={submitting}>
+            {submitting ? submittingLabel : submitLabel}
+          </Button>
+        </form>
+      </main>
+      <Modal open={bulkImportOpen} title={bulkImport.title} className="mh-bulk-import" variant="sheet" onClose={onCloseImport}>
+        <div className="mh-bulk-import__body">
+          <FileDropzone
+            title={bulkImport.dropzoneTitle}
+            hint={bulkImport.dropzoneHint}
+            selectedPrefix={bulkImport.selectedPrefix}
+            fileName={selectedFile}
+            accept={bulkImport.accept}
+            onSelect={onSelectFile}
+          />
+          <a className="mh-bulk-import__template" href={bulkImport.templateHref || "#"} download onClick={() => onDownloadTemplate?.({ href: bulkImport.templateHref || "#" })}>
+            <Icon name="download" />
+            <span>{bulkImport.templateLabel || "Download template"}</span>
+          </a>
+          <div className="mh-bulk-import__tips">
+            <h4>{bulkImport.tipsTitle || "Tips"}</h4>
+            <ul>
+              {(bulkImport.tips || []).map((tip) => (
+                <li key={tip}>{tip}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Modal>
+    </Shell>
+  );
+}

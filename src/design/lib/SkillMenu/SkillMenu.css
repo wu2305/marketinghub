@@ -1,0 +1,364 @@
+.mh-assistant__skill {
+display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--mh-line);
+  border-radius: 6px;
+  background: var(--mh-surface);
+  color: var(--mh-ink);
+  cursor: pointer;
+}
+
+.mh-assistant__skill svg {
+width: 16px;
+  height: 16px;
+}
+
+/* home.css shrinks `.upload-action` to 28px inside home-ask-panel; the svg
+   stays 16px in both variants. */
+
+.mh-assistant--home .mh-assistant__skill {
+width: 28px;
+  height: 28px;
+}
+
+.mh-assistant__skill:hover,
+.mh-assistant__skill:focus-visible {
+border-color: var(--mh-bubble-to);
+  background: var(--mh-hover-warm);
+  outline: 0;
+}
+
+/* "+" skill menu — anchored to the composer toolbar, opens upward. */
+
+.mh-skillbox {
+display: inline-flex;
+  align-items: center;
+}
+
+.mh-skill {
+position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 8;
+  display: flex;
+  align-items: flex-end;
+  max-width: calc(100vw - 44px);
+  gap: 8px;
+  color: var(--mh-ink-ai);
+}
+
+.mh-skill__categories,
+.mh-skill__detail {
+border: 1px solid var(--mh-line-ai);
+  border-radius: 14px;
+  background: var(--mh-surface);
+  box-shadow: 0 18px 44px rgba(26, 35, 44, 0.16);
+}
+
+.mh-skill__categories {
+width: 160px;
+  padding: 8px;
+}
+
+.mh-skill__detail {
+width: 250px;
+  min-width: 0;
+  max-height: min(420px, calc(100vh - 180px));
+  overflow: hidden;
+  padding: 10px;
+}
+
+.mh-assistant--expanded .mh-skill__categories {
+width: 178px;
+}
+
+.mh-assistant--expanded .mh-skill__detail {
+width: 300px;
+}
+
+.mh-skill__category {
+display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 9px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mh-skill__category-main {
+display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-skill__category-icon {
+display: flex;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  color: var(--mh-muted-ai);
+}
+
+.mh-skill__category-icon svg {
+width: 16px;
+  height: 16px;
+}
+
+.mh-skill__category + .mh-skill__category {
+margin-top: 4px;
+}
+
+.mh-skill__category > span:last-child {
+color: var(--mh-muted-ai);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.mh-skill__category:hover,
+.mh-skill__category:focus-visible,
+.mh-skill__category.is-active {
+background: var(--mh-fill-hover);
+  outline: 0;
+}
+
+.mh-skill__search {
+display: flex;
+  align-items: center;
+  gap: 9px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 9px;
+  background: var(--mh-fill-soft);
+  color: var(--mh-muted-ai);
+}
+
+.mh-skill__search svg {
+flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.mh-skill__search input {
+min-width: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  font-size: 11px;
+  outline: 0;
+}
+
+.mh-skill__search input::placeholder {
+color: var(--mh-search-placeholder);
+}
+
+.mh-skill__list {
+max-height: 220px;
+  overflow: auto;
+  margin: 8px -4px 0;
+  padding: 0 4px 8px;
+}
+
+.mh-skill__option {
+display: grid;
+  width: 100%;
+  position: relative;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mh-skill__option:hover,
+.mh-skill__option:focus-visible,
+.mh-skill__option.is-selected {
+background: var(--mh-fill-soft);
+  outline: 0;
+}
+
+.mh-skill__option-head {
+display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 6px;
+}
+
+.mh-skill__option strong {
+overflow: hidden;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-skill__pin {
+display: grid;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  position: relative;
+  border-radius: 999px;
+  color: var(--mh-ink-ai);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.mh-skill__pin svg {
+width: 11px;
+  height: 11px;
+}
+
+.mh-skill__pin::after {
+content: "置顶";
+  position: absolute;
+  right: -5px;
+  bottom: calc(100% + 8px);
+  display: none;
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--mh-tooltip);
+  color: var(--mh-surface);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.mh-skill__pin:hover::after {
+display: block;
+}
+
+.mh-skill__option:hover .mh-skill__pin,
+.mh-skill__option:focus-visible .mh-skill__pin {
+opacity: 1;
+}
+
+.mh-skill__option small {
+overflow: hidden;
+  color: var(--mh-muted-ai);
+  font-size: 10px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-skill__empty {
+padding: 18px 8px;
+  color: var(--mh-muted-ai);
+  font-size: 12px;
+  text-align: center;
+}
+
+.mh-skill__footer {
+display: grid;
+  gap: 2px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--mh-line-ai);
+}
+
+.mh-skill__action {
+display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mh-ink-ai);
+  font-family: var(--mh-font);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mh-skill__action > span:last-child {
+color: var(--mh-ink-ai);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.mh-skill__action-label {
+display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-skill__action-label svg {
+flex: 0 0 13px;
+  width: 13px;
+  height: 13px;
+  color: var(--mh-gold-deep);
+}
+
+.mh-skill__action-label span {
+overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-skill__action:hover,
+.mh-skill__action:focus-visible {
+background: var(--mh-fill-soft);
+  outline: 0;
+}
+
+/* "+" trigger takes the upload-action skin inside this composer */
+
+.mh-copilot__command-actions .mh-assistant__skill {
+width: 32px;
+  height: 32px;
+  border-color: var(--mh-copilot-upload-line);
+  color: var(--mh-copilot-ink);
+}
+
+.mh-copilot__command-actions .mh-assistant__skill:hover,
+.mh-copilot__command-actions .mh-assistant__skill:focus-visible {
+border-color: var(--mh-copilot-upload-hover-line);
+  background: var(--mh-copilot-upload-hover-bg);
+}
+
+.mh-copilot__command-actions .mh-assistant__skill svg {
+width: 16px;
+  height: 16px;
+}
+
+/* Expanded workspace widens the skill popup panels (mirrors the demo). */
+
+.mh-copilot--expanded .mh-skill__categories {
+width: 178px;
+}
+
+.mh-copilot--expanded .mh-skill__detail {
+width: 300px;
+}

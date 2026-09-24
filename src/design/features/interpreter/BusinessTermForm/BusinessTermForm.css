@@ -1,0 +1,32 @@
+.mh-form {
+display: grid;
+  gap: 18px;
+  max-width: 760px;
+  padding: 20px;
+  border: 1px solid var(--mh-line);
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--mh-font);
+}
+
+.mh-form__grid {
+display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.mh-form__wide {
+grid-column: 1 / -1;
+}
+
+.mh-form__actions {
+display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mh-form__note {
+margin: 0;
+  color: var(--mh-muted);
+  font-size: 12px;
+}

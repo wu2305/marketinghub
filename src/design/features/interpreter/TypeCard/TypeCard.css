@@ -1,0 +1,103 @@
+.mh-type-card {
+position: relative;
+  display: block;
+  width: 100%;
+  height: 171px;
+  font-family: var(--mh-font);
+  padding: 0 24px;
+  overflow: hidden;
+  border: 1px solid #ebe6de;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff 0%, #fffefa 100%);
+  box-shadow: 0 8px 22px rgba(57, 43, 25, 0.045);
+  text-align: left;
+  cursor: pointer;
+}
+
+.mh-type-card::before {
+display: none;
+}
+
+.mh-type-card::after {
+position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: var(--mh-art);
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  background-size: 100% 100%;
+  content: "";
+  pointer-events: none;
+}
+
+.mh-type-card strong,
+.mh-type-card small,
+.mh-type-card em,
+.mh-type-card__count {
+position: absolute;
+  z-index: 1;
+  font-family: var(--mh-font);
+  font-style: normal;
+}
+
+.mh-type-card strong {
+top: 30px;
+  left: 24px;
+  color: #17202d;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mh-type-card__count {
+top: 18px;
+  right: 8px;
+  display: inline-flex;
+  height: 26px;
+  align-items: center;
+  padding: 0 13px;
+  border-radius: 999px;
+  background: #fbf2e4;
+  color: #b5640b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mh-type-card small {
+top: 62px;
+  left: 24px;
+  width: 60%;
+  color: #69707b;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.mh-type-card em {
+bottom: 20px;
+  left: 24px;
+  width: 178px;
+  padding-top: 11px;
+  color: #a95d08;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.mh-type-card em::before {
+position: absolute;
+  top: 0;
+  left: 0;
+  width: 66%;
+  height: 1px;
+  background: #ece8e1;
+  content: "";
+}
+
+.mh-type-card.is-active {
+background: #fffaf3;
+}
+
+/* The original's `.v20-type-card.is-manageable` only gets a warmer top border
+   (#e6e1d8) at rest — same count pill and other sides as every card. */
+
+.mh-type-card.is-manageable {
+border-top-color: var(--mh-line-warm-strong);
+}

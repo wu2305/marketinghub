@@ -2,23 +2,23 @@ import React from "react";
 import { composeStories } from "@storybook/react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import * as atomsModule from "./atoms.jsx";
-import * as moleculesModule from "./molecules.jsx";
-import * as organismsModule from "./organisms.jsx";
 import * as iconsModule from "./icons.jsx";
 
-import * as buttonStories from "./stories/atoms/Button.stories.jsx";
-import * as textInputStories from "./stories/atoms/TextInput.stories.jsx";
-import * as textAreaStories from "./stories/atoms/TextArea.stories.jsx";
-import * as selectStories from "./stories/atoms/Select.stories.jsx";
-import * as searchFieldStories from "./stories/molecules/SearchField.stories.jsx";
-import * as tabsStories from "./stories/molecules/Tabs.stories.jsx";
-import * as filterPillsStories from "./stories/molecules/FilterPills.stories.jsx";
-import * as scopeOptionStories from "./stories/molecules/ScopeOption.stories.jsx";
-import * as checkboxFilterStories from "./stories/molecules/CheckboxFilter.stories.jsx";
-import * as reportRowStories from "./stories/organisms/ReportRow.stories.jsx";
+import * as buttonStories from "./components/Button/Button.stories.jsx";
+import * as textInputStories from "./components/TextInput/TextInput.stories.jsx";
+import * as textAreaStories from "./components/TextArea/TextArea.stories.jsx";
+import * as selectStories from "./components/Select/Select.stories.jsx";
+import * as searchFieldStories from "./components/SearchField/SearchField.stories.jsx";
+import * as tabsStories from "./components/Tabs/Tabs.stories.jsx";
+import * as filterPillsStories from "./components/FilterPills/FilterPills.stories.jsx";
+import * as scopeOptionStories from "./components/ScopeOption/ScopeOption.stories.jsx";
+import * as checkboxFilterStories from "./components/CheckboxFilter/CheckboxFilter.stories.jsx";
+import * as reportRowStories from "./features/cockpit/ReportRow/ReportRow.stories.jsx";
 
-const storyModules = import.meta.glob("./stories/**/*.stories.jsx", { eager: true });
+const storyModules = import.meta.glob(
+  ["./components/**/*.stories.jsx", "./features/**/*.stories.jsx", "./icons.stories.jsx"],
+  { eager: true },
+);
 const metas = Object.values(storyModules)
   .map((module) => module.default)
   .filter(Boolean);
@@ -26,25 +26,40 @@ const metas = Object.values(storyModules)
 const isComponentExport = (name, value) =>
   /^[A-Z]/.test(name) && (typeof value === "function" || (value !== null && typeof value === "object"));
 
+const componentModules = import.meta.glob(
+  ["./components/*/index.jsx", "./features/*/*/index.jsx"],
+  { eager: true },
+);
+const componentEntries = Object.values(componentModules).flatMap((module) =>
+  Object.entries(module),
+);
+
 const components = [
-  ...Object.entries(atomsModule),
-  ...Object.entries(moleculesModule),
-  ...Object.entries(organismsModule),
+  ...componentEntries,
   ...Object.entries(iconsModule),
 ]
   .filter(([name, value]) => isComponentExport(name, value))
   .map(([name, value]) => ({ name, component: value }));
 
-// Atoms + Molecules + Icon + ReportRow carry full per-prop documentation.
+// The former atoms/molecules layers (now the shared components/ set built from
+// them) plus Icon and ReportRow carry full per-prop documentation.
+const ATOM_MODULES = ["Button", "Link", "TextInput", "TextArea", "Select", "StatusBadge"];
+const MOLECULE_MODULES = [
+  "SearchField", "CheckboxFilter", "Pagination", "MetricStat", "SectionHeading",
+  "CategoryHeading", "ViewHeading", "FilterPills", "Tabs", "FormField",
+  "Suggestion", "ScopeOption", "ProgressList", "ColumnChart", "DataTable",
+  "SidebarItem", "FilterActions", "FileDropzone", "Toast",
+];
 const documentedComponents = new Set([
-  ...Object.values(atomsModule).filter((value, index) =>
-    isComponentExport(Object.keys(atomsModule)[index], value),
-  ),
-  ...Object.values(moleculesModule).filter((value, index) =>
-    isComponentExport(Object.keys(moleculesModule)[index], value),
-  ),
+  ...Object.entries(componentModules)
+    .filter(([path]) =>
+      [...ATOM_MODULES, ...MOLECULE_MODULES].some((n) => path === `./components/${n}/index.jsx`),
+    )
+    .flatMap(([, module]) => Object.entries(module))
+    .filter(([name, value]) => isComponentExport(name, value))
+    .map(([, value]) => value),
   iconsModule.Icon,
-  organismsModule.ReportRow,
+  componentModules["./features/cockpit/ReportRow/index.jsx"].ReportRow,
 ]);
 
 describe("story coverage", () => {

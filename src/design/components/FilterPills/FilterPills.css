@@ -1,0 +1,31 @@
+.mh-pills {
+display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mh-pills__item {
+display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #5b6470;
+  font-family: var(--mh-font);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.mh-pills__item:hover,
+.mh-pills__item:focus-visible {
+background: #eef1f4;
+}
+
+.mh-pills__item.is-active {
+background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  color: #000;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { BusinessTermView } from "../organisms.jsx";
+import { BusinessTermView } from "../features/interpreter/BusinessTermView/index.jsx";
 import { useBusinessTermDemo } from "./business-term-demo.js";
 import { INTERPRETER } from "../content.js";
 import { ALT_BUSINESS_TERMS } from "./__fixtures__/alt-business-terms.js";

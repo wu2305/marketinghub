@@ -1,0 +1,140 @@
+/* Shared library pagination — `#businessPagination`. */
+
+.mh-pagination {
+display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--mh-pagination-line);
+  background: #fff;
+  color: var(--mh-pagination-ink);
+  font-size: 11px;
+}
+
+.mh-pagination__total {
+margin-right: auto;
+}
+
+.mh-pagination__size {
+display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-pagination__size select {
+height: 30px;
+  padding: 0 24px 0 8px;
+  border: 1px solid var(--mh-pagination-select-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-select-ink);
+  font-size: 11px;
+}
+
+.mh-pagination__pages {
+display: flex;
+  gap: 4px;
+}
+
+.mh-pagination__pages button {
+min-width: 30px;
+  height: 30px;
+  padding: 0 7px;
+  border: 1px solid var(--mh-pagination-btn-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-btn-ink);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.mh-pagination__pages button:hover:not(:disabled) {
+border-color: var(--mh-pagination-hover-line);
+  background: var(--mh-pagination-hover-bg);
+  color: var(--mh-ink-ai-strong);
+}
+
+.mh-pagination__pages button.is-active {
+border-color: var(--mh-pagination-active);
+  background: var(--mh-pagination-active);
+  color: #fff;
+}
+
+.mh-pagination__pages button:disabled {
+cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.mh-pagination__pages button:focus-visible,
+.mh-pagination__size select:focus-visible {
+outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+/* fm-pagination — the Business Term / Scenario library footer: "{n} records"
+   left, then Rows-per-page select + Previous / "p / total" / Next. */
+
+.mh-pagination--compact {
+min-height: 0;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0 0;
+  border-top: 0;
+  background: transparent;
+  font-size: 12px;
+  color: var(--mh-bt-pag-ink);
+}
+
+.mh-pagination--compact .mh-pagination__total {
+margin-right: 0;
+}
+
+.mh-pagination--compact .mh-pagination__controls {
+display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mh-pagination--compact .mh-pagination__size select {
+height: 28px;
+  padding: 6px;
+  border-color: var(--mh-pagination-select-line);
+  font-size: 12px;
+}
+
+.mh-pagination--compact .mh-pagination__prev,
+.mh-pagination--compact .mh-pagination__next {
+padding: 7px 10px;
+  border: 1px solid var(--mh-pagination-btn-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-pagination-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.mh-pagination--compact .mh-pagination__prev:hover:not(:disabled),
+.mh-pagination--compact .mh-pagination__next:hover:not(:disabled) {
+border-color: var(--mh-pagination-hover-line);
+  background: var(--mh-pagination-hover-bg);
+}
+
+.mh-pagination--compact .mh-pagination__prev:disabled,
+.mh-pagination--compact .mh-pagination__next:disabled {
+cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mh-pagination--compact .mh-pagination__prev:focus-visible,
+.mh-pagination--compact .mh-pagination__next:focus-visible {
+outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
