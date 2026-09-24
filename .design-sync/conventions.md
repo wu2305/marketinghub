@@ -30,7 +30,7 @@
   Prefixed families (`--mh-copilot-*`, `--mh-reports-*`, `--mh-sc-*`, `--mh-bt-*`, ...) belong to single components. Don't reuse them.
 - `mh-*` class names are internal BEM. Don't add them to your own markup.
 
-**Callbacks receive named objects, not DOM events.** For example: `Button` `onClick({ label })`, `Link` `onNavigate({ href, label })`, `TextInput` `onChange({ name, value })`. Navigation renders a real `<a href>`, and actions render `<button type="button">`.
+**Callbacks receive named objects, not DOM events.** For example: `Button` `onClick({ label })`, `TextInput` `onChange({ name, value })`. Navigation renders a real `<a href>`, and actions render `<button type="button">`.
 
 **Overlays** (`Modal`, `AssistantPanel`, `ReportDetailsDrawer`, `UploadHistory`, `ModelFlowDialog`, `Toast`, `AssistantLauncher`) are `position: fixed` and cover the viewport. Render them at the page root. `Modal`, `AssistantPanel`, `ReportDetailsDrawer`, `UploadHistory` and `Toast` take `open`, plus `onClose` on all but `Toast`. Mount and unmount `ModelFlowDialog` and `AssistantLauncher` instead.
 

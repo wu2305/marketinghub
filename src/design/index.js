@@ -13,9 +13,6 @@ export {
   buttonTypes,
 } from "./components/Button/index.jsx";
 export {
-  Link,
-} from "./components/Link/index.jsx";
-export {
   TextInput,
 } from "./components/TextInput/index.jsx";
 export {
@@ -83,9 +80,6 @@ export {
 export {
   SidebarItem,
 } from "./components/SidebarItem/index.jsx";
-export {
-  FilterActions,
-} from "./components/FilterActions/index.jsx";
 export {
   FileDropzone,
 } from "./components/FileDropzone/index.jsx";

@@ -43,12 +43,12 @@ const components = [
 
 // The former atoms/molecules layers (now the shared components/ set built from
 // them) plus Icon and ReportRow carry full per-prop documentation.
-const ATOM_MODULES = ["Button", "Link", "TextInput", "TextArea", "Select", "StatusBadge"];
+const ATOM_MODULES = ["Button", "TextInput", "TextArea", "Select", "StatusBadge"];
 const MOLECULE_MODULES = [
   "SearchField", "CheckboxFilter", "Pagination", "MetricStat", "SectionHeading",
   "CategoryHeading", "ViewHeading", "FilterPills", "Tabs", "FormField",
   "Suggestion", "ScopeOption", "ProgressList", "ColumnChart", "DataTable",
-  "SidebarItem", "FilterActions", "FileDropzone", "Toast",
+  "SidebarItem", "FileDropzone", "Toast",
 ];
 const documentedComponents = new Set([
   ...Object.entries(componentModules)
