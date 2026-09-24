@@ -1,5 +1,5 @@
 import React from "react";
-import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
+import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
 import { COPILOT_HISTORY, COPILOT_SUMMARY, REPORT_COPILOT_FLOW, REPORT_SKILL_MENU, buildCopilotChatEntry, buildReportModelDraft, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "./report-data.js";
 
@@ -27,7 +27,7 @@ export const Home = {
     hero: HOME.hero,
     heading: HOME.heading,
     cards: HOME.cards,
-    assistant: ASSISTANT,
+    assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
   },
   argTypes: {
     scope: { control: "select", options: ["All", "Campaigns", "Dashboards", "Knowledge"] },
@@ -44,17 +44,51 @@ export const Home = {
     onHistory: { action: "onHistory" },
     onHistorySelect: { action: "onHistorySelect" },
     onFeedback: { action: "onFeedback" },
+    onAttach: { action: "onAttach" },
+    onSelectSkill: { action: "onSelectSkill" },
+    onClearSkill: { action: "onClearSkill" },
+    onSkillAction: { action: "onSkillAction" },
+    onFlowSave: { action: "onFlowSave" },
+    onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function HomeStory(args) {
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
     const [scope, setScope] = useSynced(args.scope);
     const [answers, setAnswers] = React.useState([]);
+    const [skill, setSkill] = React.useState(null);
+    const [flow, setFlow] = React.useState(null);
+    /* portal.js home-history pick writes promptCanvas.textContent without
+       updateSendState() — ASK stays disabled until the user types. */
+    const [historyFilled, setHistoryFilled] = React.useState(false);
     const scopeContexts = { All: "personalized", Campaigns: "campaign", Dashboards: "report", Knowledge: "knowledge" };
     return (
       <HomePage
         {...args}
-        assistant={{ ...args.assistant, answers }}
+        assistant={{
+          ...args.assistant,
+          answers,
+          selectedSkill: skill,
+          submitDisabled: historyFilled,
+          onAttach: args.onAttach,
+          onSelectSkill: (event) => {
+            setSkill({ id: event.id, type: event.type, title: event.title });
+            args.onSelectSkill?.(event);
+          },
+          onClearSkill: () => {
+            setSkill(null);
+            args.onClearSkill?.();
+          },
+          onSkillAction: ({ action }) => {
+            args.onSkillAction?.({ action });
+            setFlow({
+              step: action === "history" ? "history" : "manual",
+              threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+              rule: "",
+              draft: {},
+            });
+          },
+        }}
         assistantOpen={open}
         prompt={prompt}
         scope={scope}
@@ -70,10 +104,12 @@ export const Home = {
         }}
         onPromptChange={(event) => {
           setPrompt(event.value);
+          setHistoryFilled(false);
           args.onPromptChange?.(event);
         }}
         onSuggestion={(event) => {
           setPrompt(event.prompt);
+          setHistoryFilled(false);
           args.onSuggestion?.(event);
         }}
         onScopeChange={(event) => {
@@ -85,21 +121,51 @@ export const Home = {
           if (text) {
             setAnswers([buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
             setPrompt("");
+            setHistoryFilled(false);
           }
           args.onSubmit?.(event);
         }}
         onNewSession={() => {
           setAnswers([]);
           setPrompt("");
+          setHistoryFilled(false);
           args.onNewSession?.();
         }}
         onMaximize={args.onMaximize}
         onHistory={args.onHistory}
         onHistorySelect={(event) => {
           setPrompt(event.prompt);
+          setHistoryFilled(true);
           args.onHistorySelect?.(event);
         }}
         onFeedback={args.onFeedback}
+        skillFlow={
+          flow
+            ? {
+                step: flow.step,
+                threads: flow.threads,
+                rule: flow.rule,
+                draft: flow.draft,
+                sections: MODEL_FLOW.sections,
+                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
+                  setFlow((current) => ({
+                    ...current,
+                    threads: current.threads.map((thread, ti) =>
+                      ti === threadIndex
+                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                        : thread,
+                    ),
+                  })),
+                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
+                onGenerate: ({ messages, rule }) =>
+                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
+                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
+                onClose: () => setFlow(null),
+                onSave: ({ values }) => args.onFlowSave?.(values),
+                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+              }
+            : undefined
+        }
       />
     );
   },
@@ -188,13 +254,17 @@ export const MarketingCockpit = {
     const liveKey = COCKPIT.projects[project] ? project : Object.keys(COCKPIT.projects)[0];
     const liveProject = COCKPIT.projects[liveKey];
     const liveIndex = liveProject.reports[Number(dashboard)] ? Number(dashboard) : 0;
+    /* Raw param index — the holistic gate tests it un-resolved, matching
+       `activeReportIndex`; content helpers resolve `reports[i] ? i : 0`
+       internally. */
+    const liveRawIndex = Number.isFinite(Number(dashboard)) ? Number(dashboard) : 0;
     const liveReport = liveProject.reports[liveIndex];
-    const wsProfile = copilotProfile(liveKey, liveIndex);
+    const wsProfile = copilotProfile(liveKey, liveRawIndex);
     const wsAsk = ({ question }) => {
       /* showAiAnswer: appends only while the answer view is open, else clears
          the thread and enters chat mode. */
       const append = Boolean(wsAnswer) || wsChat.length > 0;
-      const entry = buildCopilotChatEntry(liveKey, liveIndex, question);
+      const entry = buildCopilotChatEntry(liveKey, liveRawIndex, question);
       setWsChat((current) => (append ? [...current, entry] : [entry]));
       if (!append) setWsAnswer(null);
       setWsPrompt("");
@@ -328,7 +398,7 @@ export const MarketingCockpit = {
           onMaximize: args.onMaximize,
           onHistorySelect: args.onHistorySelect,
           onRecommendation: ({ index }) => {
-            setWsAnswer(resolveCopilotAnswer(liveKey, liveIndex, index));
+            setWsAnswer(resolveCopilotAnswer(liveKey, liveRawIndex, index));
             setWsChat([]);
             args.onWorkspaceRecommendation?.({ index });
           },
@@ -547,7 +617,7 @@ export const Campaign = {
     assistantOpen: false,
     prompt: "",
     ...shell,
-    assistant: ASSISTANT,
+    assistant: CAMPAIGN.assistant,
     rail: CAMPAIGN.rail,
     channels: CAMPAIGN.channels,
     metrics: CAMPAIGN.metrics,
@@ -585,6 +655,17 @@ export const Campaign = {
     onCloseTask: { action: "onCloseTask" },
     onSubmitTask: { action: "onSubmitTask" },
     onSubmit: { action: "onSubmit" },
+    onSuggestion: { action: "onSuggestion" },
+    onNewSession: { action: "onNewSession" },
+    onMaximize: { action: "onMaximize" },
+    onHistorySelect: { action: "onHistorySelect" },
+    onFeedback: { action: "onFeedback" },
+    onAttach: { action: "onAttach" },
+    onSelectSkill: { action: "onSelectSkill" },
+    onClearSkill: { action: "onClearSkill" },
+    onSkillAction: { action: "onSkillAction" },
+    onFlowSave: { action: "onFlowSave" },
+    onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function CampaignStory(args) {
     const [section, setSection] = useSynced(args.section);
@@ -592,6 +673,9 @@ export const Campaign = {
     const [query, setQuery] = useSynced(args.query);
     const [open, setOpen] = useSynced(args.assistantOpen);
     const [prompt, setPrompt] = useSynced(args.prompt);
+    const [answers, setAnswers] = React.useState([]);
+    const [skill, setSkill] = React.useState(null);
+    const [flow, setFlow] = React.useState(null);
     const [taskOpen, setTaskOpen] = useSynced(args.taskDialogOpen);
     const [toast, setToast] = useSynced(args.toast || { open: false, message: "" });
     const toastTimer = React.useRef(null);
@@ -649,7 +733,82 @@ export const Campaign = {
         onOpenAssistant={() => setOpen(true)}
         onCloseAssistant={() => setOpen(false)}
         onPromptChange={(event) => setPrompt(event.value)}
-        onSubmit={args.onSubmit}
+        /* workspace.js: submit replaces the feed with one answer entry; a
+           suggestion click submits immediately and clears the composer. */
+        onSuggestion={(event) => {
+          setAnswers([buildCampaignAnswer(event.prompt)]);
+          setPrompt("");
+          args.onSuggestion?.(event);
+        }}
+        onSubmit={(event) => {
+          const text = String(event.prompt || "").trim();
+          if (text) {
+            setAnswers([buildCampaignAnswer(text)]);
+            setPrompt("");
+          }
+          args.onSubmit?.(event);
+        }}
+        assistant={{
+          ...args.assistant,
+          answers,
+          selectedSkill: skill,
+          onNewSession: () => {
+            setAnswers([]);
+            setPrompt("");
+            args.onNewSession?.();
+          },
+          onMaximize: args.onMaximize,
+          onHistorySelect: (event) => {
+            setPrompt(event.prompt);
+            args.onHistorySelect?.(event);
+          },
+          onFeedback: args.onFeedback,
+          onAttach: args.onAttach,
+          onSelectSkill: (event) => {
+            setSkill({ id: event.id, type: event.type, title: event.title });
+            args.onSelectSkill?.(event);
+          },
+          onClearSkill: () => {
+            setSkill(null);
+            args.onClearSkill?.();
+          },
+          onSkillAction: ({ action }) => {
+            args.onSkillAction?.({ action });
+            setFlow({
+              step: action === "history" ? "history" : "manual",
+              threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
+              rule: "",
+              draft: {},
+            });
+          },
+        }}
+        skillFlow={
+          flow
+            ? {
+                step: flow.step,
+                threads: flow.threads,
+                rule: flow.rule,
+                draft: flow.draft,
+                sections: MODEL_FLOW.sections,
+                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
+                  setFlow((current) => ({
+                    ...current,
+                    threads: current.threads.map((thread, ti) =>
+                      ti === threadIndex
+                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
+                        : thread,
+                    ),
+                  })),
+                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
+                onGenerate: ({ messages, rule }) =>
+                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
+                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
+                onClose: () => setFlow(null),
+                onSave: ({ values }) => args.onFlowSave?.(values),
+                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+              }
+            : undefined
+        }
       />
     );
   },

@@ -72,6 +72,7 @@ function Shell({ tone = "workspace", children }) {
  * @param {(event: { open: boolean }) => void} [props.onHistory]
  * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
  * @param {(event: { query: string, feedback: string|null }) => void} [props.onFeedback]
+ * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  */
 export function HomePage({
   current = "home",
@@ -82,6 +83,7 @@ export function HomePage({
   cards = [],
   assistant = {},
   assistantOpen = false,
+  skillFlow,
   prompt = "",
   scope = "All",
   onNavigate,
@@ -114,6 +116,7 @@ export function HomePage({
       <AssistantPanel
         open={assistantOpen}
         placement="drawer"
+        tone="home"
         {...assistant}
         suggestions={assistant.homeSuggestions || assistant.suggestions}
         scope={scope}
@@ -131,6 +134,7 @@ export function HomePage({
         onHistorySelect={onHistorySelect}
         onFeedback={onFeedback}
       />
+      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );
 }
@@ -150,12 +154,13 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
  * @param {Object<string, object>} [props.projects={}] project records keyed by id
  * @param {string} [props.project="all"] active catalog project id or "all"
- * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view
- * @param {number|null} [props.dashboard=null] live report index; required to enter live view
+ * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view; advisory only — the original opens live whenever `dashboard` is present and rewrites `view=live` into the URL
+ * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view
  * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
  * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
+ * @param {(id: string) => string} [props.contextHref=reportContextHref]
  * @param {string} [props.backHref=REPORT_CATALOG_HREF]
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
@@ -219,13 +224,17 @@ export function MarketingCockpitPage({
   const projectKeys = Object.keys(projects);
   const liveKey = projects[project] ? project : projectKeys[0];
   const liveProject = projects[liveKey];
-  /* Original: `reports[activeReportIndex] ? activeReportIndex : 0` — an
-     out-of-range index falls back to 0, and the live view only opens when the
-     `dashboard` param is present (`?view=live` alone renders the catalog). */
+  /* Original report-core.js: `dashboard` param present ⇒ live view regardless
+     of `view` (the param even rewrites `view=live` into the URL), so the gate
+     is `dashboard != null` alone. Two indices matter: content resolves via
+     `reports[i] ? i : 0` (out-of-range → report 0) while the six-city embed
+     gate reads the raw finite index — `?project=city&dashboard=2` shows
+     report 0's generic overview, not the embed. */
   const liveIndexNum = Number(dashboard);
+  const rawIndex = Number.isFinite(liveIndexNum) ? liveIndexNum : 0;
   const liveIndex = liveProject && liveProject.reports[liveIndexNum] ? liveIndexNum : 0;
   const liveReport = liveProject ? liveProject.reports[liveIndex] : null;
-  const isLive = view === "live" && dashboard !== null && dashboard !== undefined && Boolean(liveProject && liveReport);
+  const isLive = dashboard !== null && dashboard !== undefined && Boolean(liveProject && liveReport);
   let detailsTarget = null;
   if (details && projects[details.project]) {
     const detailProject = projects[details.project];
@@ -240,7 +249,7 @@ export function MarketingCockpitPage({
       <main className="mh-page__shell">
         {isLive ? (
           <LiveReportView
-            kicker={`${liveProject.title} / LIVE REPORT`}
+            kicker={`${liveProject.title.toUpperCase()} / LIVE REPORT`}
             title={liveReport.title}
             backHref={projectHref(liveKey)}
             onBack={(target) => {
@@ -248,7 +257,7 @@ export function MarketingCockpitPage({
               onNavigate?.({ id: "cockpit-project", href: target.href, label: liveProject.title });
             }}
           >
-            {isCityInvestReport(liveKey, liveIndex) ? (
+            {isCityInvestReport(liveKey, rawIndex) ? (
               <CityInvestDashboard />
             ) : (
               <LiveOverview metrics={liveReport.metrics || []} chart={liveReport.chart || []} accent={liveProject.accent} />
@@ -603,6 +612,7 @@ export function AiInterpreterPage({
  * @param {object} [props.taskDialog={}] Create Campaign Task dialog copy: eyebrow, title, description, fields {actions, platforms, accounts}, object {label, value}, preview {eyebrow, state, note}, cancelLabel, submitLabel
  * @param {boolean} [props.taskDialogOpen=false]
  * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
+ * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
  * @param {"rednote"|"douyin"} [props.channel="rednote"]
  * @param {string} [props.query=""] account search text
@@ -622,6 +632,7 @@ export function AiInterpreterPage({
  * @param {() => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: object) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  */
 export function CampaignPage({
   current = "campaign",
@@ -649,6 +660,7 @@ export function CampaignPage({
   taskDialog = {},
   taskDialogOpen = false,
   toast = {},
+  skillFlow,
   section = "overview",
   channel = "rednote",
   query = "",
@@ -668,6 +680,7 @@ export function CampaignPage({
   onCloseAssistant,
   onPromptChange,
   onSubmit,
+  onSuggestion,
 }) {
   const visibleAccounts = accountRows.filter((row) => !query || row.name.toLowerCase().includes(query.toLowerCase()));
   const executionHeading = headings.execution || {};
@@ -832,7 +845,19 @@ export function CampaignPage({
         </main>
       </div>
       <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
-      <AssistantPanel open={assistantOpen} {...assistant} prompt={prompt} onClose={onCloseAssistant} onPromptChange={onPromptChange} onSubmit={onSubmit} />
+      <AssistantPanel
+        open={assistantOpen}
+        placement="drawer"
+        enterToSubmit={false}
+        showPicks={false}
+        {...assistant}
+        prompt={prompt}
+        onClose={onCloseAssistant}
+        onPromptChange={onPromptChange}
+        onSubmit={onSubmit}
+        onSuggestion={onSuggestion}
+      />
+      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
       <Modal
         open={taskDialogOpen}
         eyebrow={taskDialog.eyebrow}
@@ -1134,6 +1159,7 @@ export function MediaTrackingDetailPage({
         open={assistantOpen}
         placement="drawer"
         enterToSubmit={false}
+        lite
         {...assistant}
         prompt={prompt}
         onClose={onCloseAssistant}

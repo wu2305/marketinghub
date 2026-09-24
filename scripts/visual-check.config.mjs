@@ -20,7 +20,7 @@ export default [
       url: "/index.html",
       actions: [
         { click: "#aiEntry" },
-        { wait: "#assistantPanel:not([hidden])" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
         { click: ".ask-suggestion" },
         { click: "#sendQuery" },
         { wait: "#answerFeed .answer-card" },
@@ -54,6 +54,152 @@ export default [
         { sel: ".mh-assistant__history-pop", state: "detached" },
         { sel: ".mh-assistant__scopes", state: "detached" },
       ],
+    },
+  },
+  {
+    /* Home composer: assistant-skill-menu.js relabels "+" to "Choose AI skill"
+       at init; ASK renders the disabled skin (#e8ebee/#8a949e) while empty;
+       scope pills and the three composer pickers stay display:none. */
+    id: "p01-home-assistant-open",
+    original: {
+      url: "/index.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { waitMs: 450 },
+        {
+          eval: "(() => { const b = document.querySelector('#sendQuery'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(138, 148, 158)') throw new Error('ASK ink ' + cs.color); })()",
+        },
+      ],
+      expect: [
+        { sel: "#uploadFile[aria-label='Choose AI skill']" },
+        { sel: ".ask-scope", state: "hidden" },
+        { sel: ".suggest-picker", state: "hidden" },
+        { sel: ".model-picker", state: "hidden" },
+        { sel: ".mode-picker", state: "hidden" },
+        { sel: ".attach-picker", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--home",
+      args: { assistantOpen: true },
+      actions: [
+        { wait: ".mh-assistant--drawer" },
+        {
+          eval: "(() => { const b = document.querySelector('.mh-assistant__send .mh-button'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(138, 148, 158)') throw new Error('ASK ink ' + cs.color); })()",
+        },
+      ],
+      expect: [
+        { sel: "button[aria-label='Choose AI skill']" },
+        { sel: ".mh-assistant__scopes", state: "detached" },
+        { sel: ".mh-assistant__pick", state: "detached" },
+      ],
+    },
+  },
+  {
+    /* Home history pick fills promptCanvas WITHOUT updateSendState — the ASK
+       button stays disabled until the next input event (original quirk). */
+    id: "p01-home-history-quirk",
+    original: {
+      url: "/index.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#homeHistory" },
+        { wait: "#homeHistoryPopup:not([hidden])" },
+        { click: ".home-history-item" },
+      ],
+      expect: [
+        { sel: "#homeHistoryPopup", state: "hidden" },
+        { sel: "#sendQuery[disabled]" },
+      ],
+    },
+    story: {
+      id: "pages--home",
+      args: { assistantOpen: true },
+      actions: [
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-assistant__history-pop" },
+        { click: ".mh-assistant__history-item" },
+      ],
+      expect: [
+        { sel: ".mh-assistant__history-pop", state: "detached" },
+        { sel: ".mh-assistant__send .mh-button[disabled]" },
+      ],
+    },
+  },
+  {
+    id: "p01-home-skill",
+    original: {
+      url: "/index.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: ".ai-skill-option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".ai-skill-chip:not([hidden])", text: "Analytical Model: ROI diagnosis model" },
+        { sel: "#aiSkillMenu", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--home",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
+        { sel: ".mh-skill", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p01-home-flow",
+    original: {
+      url: "/index.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-ai-skill-action='history']" },
+        { wait: "#aiHistoryGenerateDialog" },
+        { click: "[data-ai-generate-model]" },
+        { wait: "#aiGeneratedModelDialog" },
+        { click: "[data-ai-back-to-history]" },
+        { wait: "#aiHistoryGenerateDialog:not([hidden])" },
+        { click: "#aiHistoryGenerateDialog footer [data-ai-flow-close]" },
+      ],
+      expect: [{ sel: "#aiHistoryGenerateDialog", state: "detached" }],
+    },
+    story: {
+      id: "pages--home",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action >> nth=0" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__card--form" },
+        { click: ".mh-flow__back" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--secondary" },
+      ],
+      expect: [{ sel: ".mh-flow", state: "detached" }],
     },
   },
   {
@@ -260,7 +406,7 @@ export default [
       url: "/assets/pages/reports.html",
       actions: [
         { click: "#aiEntry" },
-        { wait: "#assistantPanel:not([hidden])" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
         { click: ".ask-suggestion" },
         { wait: "#answerFeed .answer-card" },
       ],
@@ -454,9 +600,11 @@ export default [
       actions: [
         { hover: ".sc-chart:first-child svg" },
         { waitMs: 200 },
-        { click: "#sc-endCtrl" },
+        /* Programmatic clicks keep the pointer over the svg — a real click
+           would fire mouseleave and clear the hover before the shrink. */
+        { eval: "document.querySelector('#sc-endCtrl').click()" },
         { wait: "#sc-endCtrl.sc-open .sc-panel" },
-        { click: "#sc-endCtrl .sc-prow:has-text('FY25 P11')" },
+        { eval: "[...document.querySelectorAll('#sc-endCtrl .sc-prow')].find((el) => el.textContent.includes('FY25 P11')).click()" },
         { waitMs: 400 },
       ],
       expect: [
@@ -471,9 +619,9 @@ export default [
       actions: [
         { hover: ".mh-sc-chart:first-of-type svg" },
         { waitMs: 200 },
-        { click: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('Invest Period End')) .mh-sc-fval" },
+        { eval: "document.querySelector('.mh-sc-fitem .mh-sc-fval').click()" },
         { wait: ".mh-sc-fval.is-open .mh-sc-panel" },
-        { click: ".mh-sc-fval.is-open .mh-sc-prow:has-text('FY25 P11')" },
+        { eval: "[...document.querySelectorAll('.mh-sc-fval.is-open .mh-sc-prow')].find((el) => el.textContent.includes('FY25 P11')).click()" },
         { waitMs: 400 },
       ],
       expect: [
@@ -500,7 +648,7 @@ export default [
       args: { project: "fourp", view: "live" },
       expect: [
         { sel: ".mh-report-row", text: "4P Executive Overview" },
-        { sel: ".mh-live", state: "hidden" },
+        { sel: ".mh-live", state: "detached" },
       ],
     },
   },
@@ -519,6 +667,42 @@ export default [
     },
   },
   {
+    /* No `view` param at all: the original still opens live (dashboard param
+       alone is the gate — it rewrites view=live into the URL). */
+    id: "p02-live-noview",
+    original: {
+      url: "/assets/pages/reports.html?project=fourp&dashboard=0",
+      expect: [{ sel: "#liveTitle", text: "4P Executive Overview" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "fourp", dashboard: 0 },
+      expect: [{ sel: ".mh-live-heading h1", text: "4P Executive Overview" }],
+    },
+  },
+  {
+    /* City + out-of-range index: content falls back to report 0 but the
+       six-city embed gate reads the RAW index — generic overview, no embed. */
+    id: "p02-live-city-oob",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=2&view=live",
+      expect: [
+        { sel: "#liveTitle", text: "Invest City Strategy Analysis" },
+        { sel: ".live-kpi strong", text: "2.84" },
+        { sel: ".sixcity-embed", state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 2 },
+      expect: [
+        { sel: ".mh-live-heading h1", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-live-kpi strong", text: "2.84" },
+        { sel: ".mh-sixcity", state: "detached" },
+      ],
+    },
+  },
+  {
     /* city dashboard=1 is the generic LiveOverview (six-city embed only at index 0). */
     id: "p02-live-city-d1",
     original: {
@@ -528,7 +712,7 @@ export default [
         { sel: "#liveTitle", text: "City Analysis Dashboard" },
         { sel: ".live-kpi strong", text: "¥86.4M" },
         { sel: ".live-rank-row b", text: "84" },
-        { sel: ".sixcity-embed", state: "hidden" },
+        { sel: ".sixcity-embed", state: "detached" },
       ],
     },
     story: {
@@ -539,7 +723,7 @@ export default [
         { sel: ".mh-live-heading h1", text: "City Analysis Dashboard" },
         { sel: ".mh-live-kpi strong", text: "¥86.4M" },
         { sel: ".mh-live-rank b", text: "84" },
-        { sel: ".mh-sixcity", state: "hidden" },
+        { sel: ".mh-sixcity", state: "detached" },
       ],
     },
   },
@@ -2045,6 +2229,418 @@ export default [
         { sel: ".mh-campaign", text: "Account Binding" },
         { sel: ".mh-campaign .mh-table" },
       ],
+    },
+  },
+  {
+    /* Channel tabs: original only toggles active/aria-selected — no content
+       swap — and Douyin is disabled+aria-disabled with a title tooltip. */
+    id: "p06-campaign-channel",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [{ click: "[data-channel='Rednote']" }, { waitMs: 150 }],
+      expect: [
+        { sel: "[data-channel='Rednote'].active[aria-selected='true']" },
+        { sel: "[data-channel='Douyin'][disabled][aria-disabled='true']" },
+        { sel: "[data-channel='Douyin'][title*='not configured']" },
+        { sel: ".metric-card strong", text: "83" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      actions: [{ click: ".mh-tabs__tab:has-text('Rednote')" }, { waitMs: 150 }],
+      expect: [
+        { sel: ".mh-tabs__tab.is-active[aria-selected='true']", text: "Rednote" },
+        { sel: ".mh-tabs__tab[disabled][aria-disabled='true']", text: "Douyin" },
+        { sel: ".mh-tabs__tab[title*='not configured']" },
+        { sel: ".mh-metric__value", text: "83" },
+      ],
+    },
+  },
+  {
+    /* Campaign assistant = shared non-home panel: right drawer
+       min(40vw,100vw-80), scope pills and the three composer pickers are
+       display:none !important, "+" skill trigger + ASK remain. */
+    id: "p06-assistant-open",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { waitMs: 450 },
+        {
+          eval: "(() => { const r = document.querySelector('.assistant-modal').getBoundingClientRect(); if (Math.round(r.width) !== 576 || Math.round(r.x) !== 864 || Math.round(r.height) !== 1400) throw new Error('drawer geometry ' + JSON.stringify({ x: r.x, w: r.width, h: r.height })); })()",
+        },
+      ],
+      expect: [
+        { sel: ".assistant-panel:not(.home-ask-panel):not([hidden]) .assistant-modal" },
+        { sel: ".ask-stage-headline h3", text: "Ask a question" },
+        { sel: ".ask-scope", state: "hidden" },
+        { sel: ".suggest-picker", state: "hidden" },
+        { sel: ".model-picker", state: "hidden" },
+        { sel: ".mode-picker", state: "hidden" },
+        { sel: "#uploadFile" },
+        { sel: "#sendQuery[disabled]" },
+        { sel: ".ask-suggestion", text: "What's the ROI trend across my active campaigns?" },
+        { sel: "#aiEntry", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { wait: ".mh-assistant--drawer" },
+        { waitMs: 450 },
+        {
+          eval: "(() => { const r = document.querySelector('.mh-assistant__dialog').getBoundingClientRect(); if (Math.round(r.width) !== 576 || Math.round(r.x) !== 864 || Math.round(r.height) !== 1400) throw new Error('drawer geometry ' + JSON.stringify({ x: r.x, w: r.width, h: r.height })); })()",
+        },
+      ],
+      expect: [
+        { sel: ".mh-assistant__stage h3", text: "Ask a question" },
+        { sel: ".mh-assistant__scopes", state: "detached" },
+        { sel: ".mh-assistant__pick", state: "detached" },
+        { sel: "button[aria-label='Choose AI skill']" },
+        { sel: ".mh-assistant__send .mh-button[disabled]" },
+        { sel: ".mh-assistant__suggestions button", text: "What's the ROI trend across my active campaigns?" },
+        { sel: ".mh-launcher", state: "hidden" },
+      ],
+    },
+  },
+  {
+    /* workspace.js createAnswer: suggestion click submits immediately; the feed
+       renders the workspace card (flush banner, findings, source chips) below
+       the always-visible ask stage. */
+    id: "p06-assistant-answer",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: ".ask-suggestion" },
+        { wait: "#answerFeed .answer-card" },
+      ],
+      expect: [
+        { sel: ".answer-card-header", text: "AI ResponseContext: Campaigns" },
+        { sel: ".answer-card-body > p", text: "Based on current campaign data, here are the key findings." },
+        { sel: ".answer-finding", text: "ROI Trend" },
+        { sel: ".answer-finding:has-text('Budget Alert')" },
+        { sel: ".answer-finding:has-text('Automation Queue')" },
+        { sel: ".answer-source-line span", text: "Campaign Dashboard / Active Plans" },
+        { sel: ".answer-feedback-btn[data-feedback='helpful']" },
+        { sel: ".assistant-ask-stage" },
+        { sel: "#sendQuery[disabled]" },
+        { sel: ".user-query-bubble", text: "What's the ROI trend across my active campaigns this quarter?" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [{ click: ".mh-assistant__suggestions button" }, { wait: ".mh-assistant__answer--workspace" }],
+      expect: [
+        { sel: ".mh-assistant__answer-banner", text: "AI ResponseContext: Campaigns" },
+        { sel: ".mh-assistant__answer-body > p", text: "Based on current campaign data, here are the key findings." },
+        { sel: ".mh-assistant__finding", text: "ROI Trend" },
+        { sel: ".mh-assistant__finding:has-text('Budget Alert')" },
+        { sel: ".mh-assistant__finding:has-text('Automation Queue')" },
+        { sel: ".mh-assistant__sources span", text: "Campaign Dashboard / Active Plans" },
+        { sel: ".mh-assistant__feedback button[data-kind='helpful']" },
+        { sel: ".mh-assistant__stage" },
+        { sel: ".mh-assistant__send .mh-button[disabled]" },
+        { sel: ".mh-assistant__bubble", text: "What's the ROI trend across my active campaigns this quarter?" },
+      ],
+    },
+  },
+  {
+    /* submitQuery assigns answerFeed.innerHTML — each ask replaces the feed,
+       never appends. */
+    id: "p06-assistant-replace",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { fill: ["#promptCanvas", "First question about budgets"] },
+        { click: "#sendQuery" },
+        { wait: "#answerFeed .answer-card" },
+        { fill: ["#promptCanvas", "Second question about automation"] },
+        { click: "#sendQuery" },
+        { waitMs: 200 },
+        {
+          eval: "(() => { const n = document.querySelectorAll('#answerFeed .answer-entry').length; if (n !== 1) throw new Error('feed entries ' + n); })()",
+        },
+      ],
+      expect: [{ sel: ".user-query-bubble", text: "Second question about automation" }],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { fill: [".mh-assistant__box textarea", "First question about budgets"] },
+        { click: ".mh-assistant__send .mh-button" },
+        { wait: ".mh-assistant__answer--workspace" },
+        { fill: [".mh-assistant__box textarea", "Second question about automation"] },
+        { click: ".mh-assistant__send .mh-button" },
+        { waitMs: 200 },
+        {
+          eval: "(() => { const n = document.querySelectorAll('.mh-assistant__entry').length; if (n !== 1) throw new Error('feed entries ' + n); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-assistant__bubble", text: "Second question about automation" }],
+    },
+  },
+  {
+    id: "p06-assistant-newsession",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: ".ask-suggestion" },
+        { wait: "#answerFeed .answer-card" },
+        { click: "#newSession" },
+      ],
+      expect: [
+        { sel: "#answerFeed .answer-card", state: "detached" },
+        { sel: "#answerFeed", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__suggestions button" },
+        { wait: ".mh-assistant__answer--workspace" },
+        { click: "button[aria-label='New session']" },
+      ],
+      expect: [{ sel: ".mh-assistant__entry", state: "detached" }],
+    },
+  },
+  {
+    /* assistant-skill-menu.js history popup: click fills the canvas AND
+       dispatches input, so send re-enables (unlike the home quirk). */
+    id: "p06-assistant-history",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#aiHistory" },
+        { wait: "#aiRecentHistoryPopup:not([hidden])" },
+        { click: ".ai-recent-chat" },
+      ],
+      expect: [
+        { sel: "#aiRecentHistoryPopup", state: "hidden" },
+        { sel: "#sendQuery:not([disabled])" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-assistant__history-pop" },
+        { click: ".mh-assistant__history-item" },
+        {
+          eval: "(() => { const v = document.querySelector('.mh-assistant__box textarea').value; if (v !== 'Why did campaign ROI decline last week?') throw new Error('prompt fill ' + JSON.stringify(v)); })()",
+        },
+      ],
+      expect: [
+        { sel: ".mh-assistant__history-pop", state: "detached" },
+        { sel: ".mh-assistant__send .mh-button:not([disabled])" },
+      ],
+    },
+  },
+  {
+    id: "p06-assistant-maximize",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#aiMaximize" },
+      ],
+      expect: [
+        { sel: ".assistant-panel.is-ai-expanded .assistant-modal" },
+        { sel: "#aiMaximize[aria-label='Restore AI Interpreter panel']" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [{ click: "button[aria-label='Maximize AI Interpreter panel']" }],
+      expect: [
+        { sel: ".mh-assistant--expanded" },
+        { sel: "button[aria-label='Restore AI Interpreter panel']" },
+      ],
+    },
+  },
+  {
+    id: "p06-assistant-skill",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: ".ai-skill-option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".ai-skill-chip:not([hidden])", text: "Analytical Model: ROI diagnosis model" },
+        { sel: "#aiSkillMenu", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__option:has-text('ROI diagnosis')" },
+      ],
+      expect: [
+        { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
+        { sel: ".mh-skill", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p06-assistant-flow",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-ai-skill-action='history']" },
+        { wait: "#aiHistoryGenerateDialog" },
+        { click: "[data-ai-generate-model]" },
+        { wait: "#aiGeneratedModelDialog" },
+        { click: "[data-ai-back-to-history]" },
+        { wait: "#aiHistoryGenerateDialog:not([hidden])" },
+        { click: "#aiHistoryGenerateDialog footer [data-ai-flow-close]" },
+      ],
+      expect: [{ sel: "#aiHistoryGenerateDialog", state: "detached" }],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action >> nth=0" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__card--form" },
+        { click: ".mh-flow__back" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--secondary" },
+      ],
+      expect: [{ sel: ".mh-flow", state: "detached" }],
+    },
+  },
+  {
+    id: "p06-assistant-manual",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: "#uploadFile" },
+        { wait: "#aiSkillMenu:not([hidden])" },
+        { click: ".ai-skill-category >> nth=1" },
+        { wait: ".ai-skill-detail-panel:not([hidden])" },
+        { click: "[data-ai-skill-action='manual']" },
+        { wait: "#aiGeneratedModelDialog" },
+        { click: "#aiGeneratedModelDialog [data-ai-submit-model]" },
+        { wait: "#aiGeneratedModelDialog .field-error" },
+      ],
+      expect: [{ sel: "#aiGeneratedModelDialog .field-error", text: "Name is required." }],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__skill" },
+        { wait: ".mh-skill" },
+        { click: ".mh-skill__category >> nth=1" },
+        { wait: ".mh-skill__detail" },
+        { click: ".mh-skill__action >> nth=1" },
+        { wait: ".mh-flow__card--form" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__field-error" },
+      ],
+      expect: [{ sel: ".mh-flow__field-error", text: "Name is required." }],
+    },
+  },
+  {
+    id: "p06-assistant-escape",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { press: ["body", "Escape"] },
+      ],
+      expect: [
+        { sel: "#assistantPanel[hidden]", state: "attached" },
+        { sel: "#aiEntry" },
+      ],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [{ wait: ".mh-assistant" }, { press: ["body", "Escape"] }],
+      expect: [
+        { sel: ".mh-assistant", state: "detached" },
+        { sel: ".mh-launcher" },
+      ],
+    },
+  },
+  {
+    /* feedback toggles aria-pressed + .active (green/red chips after the 150ms
+       transition); copy writes the card text and shows "Copied!". */
+    id: "p06-assistant-feedback",
+    original: {
+      url: "/assets/pages/campaign.html",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+        { click: ".ask-suggestion" },
+        { wait: "#answerFeed .answer-card" },
+        { click: ".answer-feedback-btn[data-feedback='helpful']" },
+        { waitMs: 300 },
+        {
+          eval: "(() => { const b = document.querySelector('.answer-feedback-btn[data-feedback=\\\"helpful\\\"]'); if (b.getAttribute('aria-pressed') !== 'true' || !b.classList.contains('active')) throw new Error('feedback not pressed'); if (getComputedStyle(b).color !== 'rgb(46, 125, 50)') throw new Error('feedback color ' + getComputedStyle(b).color); })()",
+        },
+        { click: ".answer-feedback-btn[data-feedback='helpful']" },
+        { waitMs: 300 },
+      ],
+      expect: [{ sel: ".answer-feedback-btn[data-feedback='helpful'][aria-pressed='false']" }],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { assistantOpen: true },
+      actions: [
+        { click: ".mh-assistant__suggestions button" },
+        { wait: ".mh-assistant__answer--workspace" },
+        { click: ".mh-assistant__feedback button[data-kind='helpful']" },
+        { waitMs: 300 },
+        {
+          eval: "(() => { const b = document.querySelector('.mh-assistant__feedback button[data-kind=\\\"helpful\\\"]'); if (b.getAttribute('aria-pressed') !== 'true') throw new Error('feedback not pressed'); if (getComputedStyle(b).color !== 'rgb(46, 125, 50)') throw new Error('feedback color ' + getComputedStyle(b).color); })()",
+        },
+        { click: ".mh-assistant__feedback button[data-kind='helpful']" },
+        { waitMs: 300 },
+      ],
+      expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful'][aria-pressed='false']" }],
     },
   },
   {

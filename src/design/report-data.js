@@ -1972,9 +1972,17 @@ const COPILOT_DEFAULT_PROFILE = {
   periodHint: "Type your question directly or start with a preset analysis below.",
 };
 
+/* Mirrors the original `activeReport()`: content resolves via
+   `reports[i] ? i : 0` while callers keep passing the raw `dashboard` index —
+   the embed/holistic gates then test the raw value, matching report-core.js. */
+function reportAt(projectKey, reportIndex) {
+  const reports = REPORT_PROJECTS[projectKey]?.reports;
+  return (reports && reports[reportIndex]) || (reports && reports[0]) || null;
+}
+
 /** Workspace chrome per live report: only title + period hint render (rest of the profile targets dead nodes). */
 export function copilotProfile(projectKey, reportIndex) {
-  const assistant = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex]?.assistant || {};
+  const assistant = reportAt(projectKey, reportIndex)?.assistant || {};
   return {
     panelTitle: assistant.panelTitle || COPILOT_DEFAULT_PROFILE.panelTitle,
     periodHint: assistant.periodHint || COPILOT_DEFAULT_PROFILE.periodHint,
@@ -2038,7 +2046,7 @@ export function copilotSources(projectKey, report) {
  * answer (falling back to recommendation 0 like the original).
  */
 export function resolveCopilotAnswer(projectKey, reportIndex, recIndex) {
-  const report = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex];
+  const report = reportAt(projectKey, reportIndex);
   if (!report || !(report.recommendations || []).length) return null;
   if (isCityInvestReport(projectKey, reportIndex) && recIndex === 0) {
     return { kind: "holistic", title: "Investment Holistic Analysis — COACH Pilot City" };
@@ -2077,7 +2085,7 @@ export function isPilotCitySalesQuestion(question) {
  * answer appends below it — the caller decides append vs replace.
  */
 export function buildCopilotChatEntry(projectKey, reportIndex, question) {
-  const report = REPORT_PROJECTS[projectKey]?.reports?.[reportIndex];
+  const report = reportAt(projectKey, reportIndex);
   const sources = report ? copilotSources(projectKey, report) : [];
   if (isPilotCitySalesQuestion(question)) {
     return { kind: "rich", question, sources };
@@ -2107,6 +2115,8 @@ export function copilotSkillItems() {
 
 /** Report-variant skill menu config: Upload File + Analytical Model only. */
 export const REPORT_SKILL_MENU = {
+  // the copilot composer's "+" is #aiCmdUpload, labelled "Choose AI skill"
+  triggerLabel: "Choose AI skill",
   attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
   categories: [
     { id: "upload", label: "Upload File", icon: "upload" },

@@ -204,6 +204,41 @@ export function buildReportAssistantAnswer(query) {
   return { query, variant: "compact", body, sources };
 }
 
+/**
+ * Campaign assistant (`campaign/workspace.js` createAnswer): the shared
+ * workspace card — flush "AI Response"/"Context: Campaigns" banner (the
+ * original `.answer-card-header` matches no CSS rule), recommendation,
+ * labeled findings, source chips. Each submit replaces the feed.
+ */
+export function buildCampaignAnswer(query) {
+  return {
+    query,
+    variant: "workspace",
+    banner: "AI Response",
+    context: "Context: Campaigns",
+    body: "Based on current campaign data, here are the key findings.",
+    findings: [
+      {
+        label: "ROI Trend",
+        detail: "Active campaigns show 12% average ROI this quarter, with Rednote channels outperforming others.",
+      },
+      {
+        label: "Budget Alert",
+        detail: "2 campaigns are approaching 90% budget utilization and need attention.",
+      },
+      {
+        label: "Automation Queue",
+        detail: "3 tasks pending in review queue — 1 bulk plan creation, 2 status syncs.",
+      },
+    ],
+    sources: [
+      "Campaign Dashboard / Active Plans",
+      "Automation Queue / Pending Tasks",
+      "Budget Tracker / Real-time",
+    ],
+  };
+}
+
 export const COCKPIT = {
   hero: {
     image: "/assets/images/project-city-tabby.png",
@@ -788,6 +823,31 @@ export const INTERPRETER = {
 
 };
 
+/**
+ * "+" composer menu contract (assistant-skill-menu.js). On pages without
+ * knowledge.js the Analytical Model list falls back to these three records.
+ */
+export const ASSISTANT_SKILL_MENU = {
+  // assistant-skill-menu.js relabels #uploadFile to "Choose AI skill" at init on
+  // every page that loads it (home, campaign, lite) — the markup's "Upload file"
+  // never survives to the rendered DOM.
+  triggerLabel: "Choose AI skill",
+  attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
+  categories: [
+    { id: "upload", label: "Upload File", icon: "upload" },
+    { id: "model", label: "Analytical Model", icon: "spokes" },
+  ],
+  searchPlaceholder: "Search Analytical Model",
+  emptyLabel: "No matching skills",
+  items: [
+    { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "Use this interpretation logic" },
+    { id: "roi-diagnosis", title: "ROI diagnosis model", note: "Analyze ROI movement and drivers" },
+    { id: "conversion-drop", title: "Conversion drop analysis", note: "Find conversion pressure and likely reasons" },
+  ],
+  historyLabel: "Add from Chat History",
+  manualLabel: "Create Analytical Model Manually",
+};
+
 export const CAMPAIGN = {
   rail: {
     eyebrow: "Campaign execution",
@@ -803,7 +863,7 @@ export const CAMPAIGN = {
   },
   channels: [
     { id: "rednote", label: "Rednote" },
-    { id: "douyin", label: "Douyin", disabled: true },
+    { id: "douyin", label: "Douyin", disabled: true, title: "Douyin data is not configured in this prototype" },
   ],
   metrics: [
     { label: "Automated actions", value: "83", caption: "Current workspace", accent: "gold" },
@@ -953,6 +1013,27 @@ export const CAMPAIGN = {
   toasts: {
     taskSubmitted: "Campaign task added to the review queue.",
     bindAccount: "Account binding flow opened",
+  },
+  /* campaign/workspace.js — the shared non-home assistant panel: right drawer,
+     scope pills and the three composer pickers are `display:none !important`,
+     so the campaign suggestion set is the only reachable one. History items are
+     the shared assistant-skill-menu.js #aiRecentHistoryPopup records. */
+  assistant: {
+    title: "Ask AI Interpreter",
+    headline: "Ask a question",
+    description: "Your AI partner for every marketing task",
+    suggestions: [
+      { label: "What's the ROI trend across my active campaigns?", prompt: "What's the ROI trend across my active campaigns this quarter?" },
+      { label: "Campaigns near budget threshold", prompt: "Which campaigns are near budget threshold and need attention?" },
+      { label: "Automation task queue overview", prompt: "Show me the automation task queue and next best actions." },
+    ],
+    historyTitle: "Recent Chats",
+    history: [
+      { title: "Campaign ROI decline", label: "Why did campaign ROI decline last week?", prompt: "Why did campaign ROI decline last week?" },
+      { title: "Conversion drop", label: "Analyze conversion drop by customer segment.", prompt: "Analyze conversion drop by customer segment." },
+      { title: "Data quality issues", label: "Summarize metrics with data quality issues.", prompt: "Summarize metrics with data quality issues." },
+    ],
+    skillMenu: ASSISTANT_SKILL_MENU,
   },
   accounts: [
     { id: "1", account: "Coach_XHS_01", platform: "Rednote", authStatus: "Success", authLabel: "Token valid", sync: "2026-05-29 10:00", permission: "Allowed" },
@@ -1117,27 +1198,6 @@ export const MEDIA_TRACKING = {
     columns: TRACKING_COLUMNS,
     rows: TRACKING_ROWS,
   },
-};
-
-/**
- * "+" composer menu contract (assistant-skill-menu.js). On pages without
- * knowledge.js the Analytical Model list falls back to these three records.
- */
-export const ASSISTANT_SKILL_MENU = {
-  attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
-  categories: [
-    { id: "upload", label: "Upload File", icon: "upload" },
-    { id: "model", label: "Analytical Model", icon: "spokes" },
-  ],
-  searchPlaceholder: "Search Analytical Model",
-  emptyLabel: "No matching skills",
-  items: [
-    { id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "Use this interpretation logic" },
-    { id: "roi-diagnosis", title: "ROI diagnosis model", note: "Analyze ROI movement and drivers" },
-    { id: "conversion-drop", title: "Conversion drop analysis", note: "Find conversion pressure and likely reasons" },
-  ],
-  historyLabel: "Add from Chat History",
-  manualLabel: "Create Analytical Model Manually",
 };
 
 /**
@@ -1366,7 +1426,7 @@ export const LITE_ASSISTANT = {
     { id: "quality", title: "Data quality issues", label: "Find channels with data quality issues.", prompt: "Find channels with data quality issues." },
     { id: "roi", title: "Attributed ROI", label: "Explain the Attributed ROI movement.", prompt: "Explain the Attributed ROI movement." },
   ],
-  skillMenu: ASSISTANT_SKILL_MENU,
+  skillMenu: { ...ASSISTANT_SKILL_MENU, triggerLabel: "Choose AI skill" },
 };
 
 /** Lite-panel answer shape: a single card line, no bubble/sources/actions. */

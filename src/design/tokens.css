@@ -126,6 +126,7 @@ a {
   --mh-launcher-orb-ink: #111111;
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: #171b1f;
+  --mh-ink-ai-strong: #141414;
   --mh-copy-ai: #4f5963;
   --mh-muted-ai: #717b85;
   --mh-line-ai: #dce1e6;
@@ -206,6 +207,8 @@ a {
   --mh-live-inkline: #2a2925;
   --mh-live-chart-bg: #f7f7f7;
   --mh-live-back-hover: #141414;
+  --mh-live-back-hover-line: #cbd2d9;
+  --mh-live-back-hover-bg: #f7f7f7;
   --mh-live-bar: #d8d4c9;
   --mh-live-bar-alt: #79a991;
   --mh-live-faint: #74726c;

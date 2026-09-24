@@ -851,7 +851,7 @@ export function AssistantLauncher({ label = "AI Interpreter", hidden = false, on
  * One assistant answer entry: user query bubble plus the grounded answer card
  * with sources, related actions and feedback buttons.
  * @param {object} props
- * @param {{ query: string, kicker?: string, title: string, body: string, sources?: string[], actions?: Array<{ label: string, href?: string }> }} props.answer
+ * @param {{ query: string, kicker?: string, title: string, body: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: "compact"|"workspace", banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, simple?: boolean, lead?: string }} props.answer
  * @param {(event: { query: string, feedback: "helpful"|"not-helpful"|"copy"|null }) => void} [props.onFeedback]
  */
 function AssistantAnswer({ answer, onFeedback }) {
@@ -902,6 +902,40 @@ function AssistantAnswer({ answer, onFeedback }) {
       </button>
     </div>
   );
+  if (answer.variant === "workspace") {
+    return (
+      <div className="mh-assistant__entry">
+        <div className="mh-assistant__query">
+          <span className="mh-assistant__bubble">{answer.query}</span>
+        </div>
+        <article className="mh-assistant__answer mh-assistant__answer--workspace" ref={cardRef}>
+          {/* Original quirk: `.answer-card-header` matches no stylesheet rule,
+              so banner strong+span render as flush inline text. */}
+          <div className="mh-assistant__answer-banner">
+            <strong>{answer.banner}</strong>
+            <span>{answer.context}</span>
+          </div>
+          <div className="mh-assistant__answer-body">
+            <p>{answer.body}</p>
+            {(answer.findings || []).map((finding) => (
+              <div className="mh-assistant__finding" key={finding.label}>
+                <strong>{finding.label}</strong>
+                <p>{finding.detail}</p>
+              </div>
+            ))}
+          </div>
+          {answer.sources?.length ? (
+            <div className="mh-assistant__sources" aria-label="Sources">
+              {answer.sources.map((source) => (
+                <span key={source}>{source}</span>
+              ))}
+            </div>
+          ) : null}
+          {feedbackRow}
+        </article>
+      </div>
+    );
+  }
   if (answer.variant === "compact") {
     return (
       <div className="mh-assistant__entry">
@@ -976,6 +1010,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {object} props
  * @param {boolean} [props.open=false]
  * @param {typeof assistantPlacements[number]} [props.placement="modal"]
+ * @param {"home"|undefined} [props.tone] "home" mirrors `home-ask-panel`: white borderless composer strip
  * @param {string} [props.title="Ask AI Interpreter"]
  * @param {string} [props.headline="Ask a question"]
  * @param {string} [props.description]
@@ -991,10 +1026,12 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
  * @param {string} [props.historyTitle="Recent"]
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"
- * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
+ * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ triggerLabel?, attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
  * @param {{ id?: string, type: string, title: string }} [props.selectedSkill] chip shown inside the composer when a skill is selected
  * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
+ * @param {boolean} [props.lite=false] lite variant (original `data-lite-panel`): short maximize labels
  * @param {boolean} [props.hideStageOnAnswers=false] true mirrors the reports panel where the ask stage hides once the feed has entries
+ * @param {boolean} [props.submitDisabled=false] force-disables ASK — the home history pick fills the composer without updateSendState, leaving ASK off until the user types
  * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -1013,6 +1050,7 @@ function AssistantAnswer({ answer, onFeedback }) {
 export function AssistantPanel({
   open = false,
   placement = "modal",
+  tone,
   title = "Ask AI Interpreter",
   headline = "Ask a question",
   description = "Your AI partner for every marketing task",
@@ -1031,7 +1069,9 @@ export function AssistantPanel({
   skillMenu,
   selectedSkill,
   enterToSubmit = true,
+  lite = false,
   hideStageOnAnswers = false,
+  submitDisabled = false,
   onAttach,
   onSelectSkill,
   onClearSkill,
@@ -1100,7 +1140,7 @@ export function AssistantPanel({
   if (!open) return null;
   return (
     <section
-      className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", expanded && "mh-assistant--expanded")}
+      className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")}
       aria-label={title}
     >
       <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={onClose} />
@@ -1125,7 +1165,9 @@ export function AssistantPanel({
             <button
               className="mh-assistant__icon"
               type="button"
-              aria-label={expanded ? "Restore" : "Maximize"}
+              /* assistant-skill-menu.js cycles the full labels on non-home
+                 panels; portal.js keeps the short labels on the home panel. */
+              aria-label={tone === "home" || lite ? (expanded ? "Restore" : "Maximize") : expanded ? "Restore AI Interpreter panel" : "Maximize AI Interpreter panel"}
               title={expanded ? "Restore" : "Maximize"}
               onClick={() => {
                 setExpanded((value) => !value);
@@ -1280,7 +1322,7 @@ export function AssistantPanel({
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">
-                <Button variant="gold" size="sm" type="submit" disabled={!String(prompt).trim()}>
+                <Button variant="gold" size="sm" type="submit" disabled={submitDisabled || !String(prompt).trim()}>
                   ASK
                 </Button>
               </span>
@@ -1417,7 +1459,7 @@ function SkillMenu({ config, selectedSkill, composerRef, onAttach, onSelectSkill
       <button
         className="mh-assistant__skill"
         type="button"
-        aria-label="Choose AI skill"
+        aria-label={config.triggerLabel || "Choose AI skill"}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => (open ? closeMenu() : setOpen(true))}
@@ -2423,13 +2465,17 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
   React.useEffect(() => {
     setHover(null);
   }, [data, endIdx]);
-  const hi = hover ? Math.min(hover.index, labels.length - 1) : 0;
+  /* A hover recorded against a previous `data`/`endIdx` is dropped at render
+     time (the original destroys the tooltip DOM on rebuild), so no stale frame
+     ever paints; `hi` also clamps as a belt-and-braces index guard. */
+  const liveHover = hover && hover.data === data && hover.endIdx === endIdx ? hover : null;
+  const hi = liveHover ? Math.min(liveHover.index, labels.length - 1) : 0;
   React.useLayoutEffect(() => {
-    if (hover && tipRef.current) {
+    if (liveHover && tipRef.current) {
       const width = tipRef.current.offsetWidth;
       if (width !== tipWidth) setTipWidth(width);
     }
-  }, [hover, tipWidth]);
+  }, [liveHover, tipWidth]);
   const onMove = (event) => {
     const svg = event.currentTarget;
     const rect = svg.getBoundingClientRect();
@@ -2450,9 +2496,11 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
       x: event.clientX - (host?.left || 0) + 14,
       y: event.clientY - (host?.top || 0) + 10,
       hostWidth: host?.width || 0,
+      data,
+      endIdx,
     });
   };
-  const tipLeft = hover && tipWidth && hover.x + tipWidth > hover.hostWidth ? hover.x - tipWidth - 28 : hover?.x;
+  const tipLeft = liveHover && tipWidth && liveHover.x + tipWidth > liveHover.hostWidth ? liveHover.x - tipWidth - 28 : liveHover?.x;
   return (
     <div className="mh-sc-chart" ref={chartRef}>
       <div className="mh-sc-chart__head">
@@ -2492,7 +2540,7 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
         )}
         <polyline points={points(n)} fill="none" stroke="#c9a876" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round" />
         <polyline points={points(t)} fill="none" stroke="#333333" strokeWidth="1.4" strokeLinejoin="round" strokeLinecap="round" />
-        {hover ? (
+        {liveHover ? (
           <g>
             <line
               x1={X(hi).toFixed(1)}
@@ -2508,8 +2556,8 @@ function ScTrendChart({ name, data, endIdx, decimals = 0, totalLabel }) {
           </g>
         ) : null}
       </svg>
-      {hover ? (
-        <div className="mh-sc-tip" ref={tipRef} style={{ left: tipLeft, top: hover.y }}>
+      {liveHover ? (
+        <div className="mh-sc-tip" ref={tipRef} style={{ left: tipLeft, top: liveHover.y }}>
           <b>{labels[hi]}</b>
           <br />
           <span>● {totalLabel}: {t[hi].toFixed(decimals)}</span>
@@ -2850,21 +2898,36 @@ function StreamBlock({ animate = true, children }) {
   return <div className={cx("mh-stream-block", revealed && "is-revealed")}>{children}</div>;
 }
 
-/** Progressive reveal driver: mounts blocks one interval at a time with a trailing cursor. */
+/** Progressive reveal driver: mounts blocks one interval at a time with a trailing cursor.
+   streamBlocksInto() calls cancelActiveStream() — one stream at a time; a new
+   card freezes the previous mid-render and drops its cursor. */
+let activeCopilotStream = null;
 function useStream(total, stream, interval, scrollSelector) {
   const hostRef = React.useRef(null);
   const [shown, setShown] = React.useState(stream ? 0 : total);
-  React.useEffect(() => setShown(stream ? 0 : total), [stream, total]);
+  const [cancelled, setCancelled] = React.useState(false);
   React.useEffect(() => {
-    if (shown >= total) return undefined;
+    setShown(stream ? 0 : total);
+    setCancelled(false);
+  }, [stream, total]);
+  React.useEffect(() => {
+    const token = { cancel: () => setCancelled(true) };
+    activeCopilotStream?.cancel();
+    activeCopilotStream = token;
+    return () => {
+      if (activeCopilotStream === token) activeCopilotStream = null;
+    };
+  }, []);
+  React.useEffect(() => {
+    if (shown >= total || cancelled) return undefined;
     const timer = window.setTimeout(() => {
       setShown((n) => n + 1);
       const scroller = hostRef.current?.closest(scrollSelector);
       if (scroller) scroller.scrollTop = scroller.scrollHeight;
     }, interval);
     return () => window.clearTimeout(timer);
-  }, [shown, total, interval, scrollSelector]);
-  return { hostRef, shown, streaming: shown < total };
+  }, [shown, total, cancelled, interval, scrollSelector]);
+  return { hostRef, shown, streaming: shown < total && !cancelled };
 }
 
 function HolisticReport({ data, stream = true }) {
@@ -3134,6 +3197,7 @@ function CopilotChatEntry({ entry, stream = true, onChatFeedback, onCopy, onExpl
 
 /** Collapsible workspace section (summary drawer / scenario start view), also used docked in the answer view. */
 function CopilotSection({ index, className, heading, chevron = false, extra, collapsed = false, docked = false, onToggle, children }) {
+  const headingId = React.useId();
   const toggleFromHeading = (event) => {
     if (event.target.closest("button, a, input, select, textarea")) return;
     onToggle?.();
@@ -3147,7 +3211,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
     onToggle?.();
   };
   return (
-    <section className={cx("mh-copilot__section", className, docked && "mh-copilot__section--docked")}>
+    <section className={cx("mh-copilot__section", className, docked && "mh-copilot__section--docked")} aria-labelledby={headingId}>
       <div
         className="mh-copilot__section-head"
         role="button"
@@ -3158,7 +3222,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
       >
         <span className="mh-copilot__section-num">{index}</span>
         <div className="mh-copilot__section-title">
-          <h3>{heading}</h3>
+          <h3 id={headingId}>{heading}</h3>
         </div>
         {extra}
         {chevron ? (
@@ -3269,15 +3333,12 @@ export function ReportCopilot({
   const answerOpen = Boolean(answer) || chat.length > 0;
   const chatMode = !answer && chat.length > 0;
 
-  /* closeAi(): closing restores the drawer state — expanded off, panels home. */
+  /* closeAi() strips only is-ai-expanded — collapsed sections, the show-all
+     list, feedback pressed state, dock and the history popup all persist into
+     the next open. */
   React.useEffect(() => {
     if (open) return;
     setExpanded(false);
-    setHistoryOpen(false);
-    setDock(null);
-    setCollapsed({});
-    setShowAll(false);
-    setFeedback(null);
   }, [open]);
 
   /* openAi(): focus the close control and lock page scroll (dialog-open, the
@@ -3428,6 +3489,13 @@ export function ReportCopilot({
           type="button"
           className="mh-copilot__view-more"
           onClick={(event) => {
+            /* Once expanded, the original handler early-returns without
+               stopPropagation, so the click bubbles to the collapsible head
+               and toggles the section. */
+            if (showAll) {
+              toggleCollapsed("scenarios");
+              return;
+            }
             event.stopPropagation();
             setShowAll(true);
           }}

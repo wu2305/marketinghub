@@ -941,7 +941,7 @@
   position: absolute;
   inset: 0;
   border: 0;
-  background: rgba(31, 41, 55, 0.42);
+  background: var(--mh-scrim-mid);
 }
 
 .mh-assistant__dialog {
@@ -954,11 +954,11 @@
   max-height: calc(100vh - 80px);
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  border: 1px solid #bcc5ce;
+  border: 1px solid var(--mh-line-strong-ai);
   border-radius: 8px;
-  background: #fff;
-  color: #171b1f;
-  box-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
+  background: var(--mh-surface);
+  color: var(--mh-ink-ai);
+  box-shadow: var(--mh-flow-shadow);
   transform: translate(-50%, -50%);
 }
 
@@ -973,13 +973,14 @@
   min-height: 0;
   max-height: none;
   border: 0;
-  border-left: 1px solid #bcc5ce;
+  border-left: 1px solid var(--mh-line-strong-ai);
   border-radius: 0;
   box-shadow: var(--mh-drawer-shadow);
   transform: none;
 }
 
 .mh-assistant--drawer .mh-assistant__stage {
+  min-height: 100%;
   justify-items: center;
   align-content: center;
   gap: 16px;
@@ -1022,7 +1023,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 14px 18px 14px 20px;
-  border-bottom: 1px solid #dce1e6;
+  border-bottom: 1px solid var(--mh-line-ai);
 }
 
 .mh-assistant__identity {
@@ -1038,7 +1039,7 @@
   place-items: center;
   border-radius: 5px;
   background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
-  color: #111;
+  color: var(--mh-launcher-orb-ink);
   font-size: 11px;
   font-weight: 700;
 }
@@ -1061,10 +1062,10 @@
   width: 25px;
   height: 25px;
   place-items: center;
-  border: 1px solid #dce1e6;
+  border: 1px solid var(--mh-line-ai);
   border-radius: 4px;
-  background: #fff;
-  color: #4f5963;
+  background: var(--mh-surface);
+  color: var(--mh-copy-ai);
   cursor: pointer;
 }
 
@@ -1087,7 +1088,7 @@
 
 .mh-assistant__stage p {
   margin: 6px 0 0;
-  color: #717b85;
+  color: var(--mh-muted-ai);
 }
 
 .mh-assistant__suggestions {
@@ -1104,6 +1105,12 @@
   background: var(--mh-surface-ai);
 }
 
+/* home-ask-panel override: the Home drawer keeps a white borderless strip */
+.mh-assistant--home .mh-assistant__ask {
+  border-bottom: 0;
+  background: var(--mh-surface);
+}
+
 .mh-assistant__scope-reserve {
   min-height: 32px;
 }
@@ -1116,7 +1123,7 @@
 
 .mh-assistant__scopes > span {
   margin-right: 6px;
-  color: #717b85;
+  color: var(--mh-muted-ai);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1126,9 +1133,9 @@
   display: grid;
   gap: 8px;
   padding: 8px;
-  border: 1px solid #bcc5ce;
+  border: 1px solid var(--mh-line-strong-ai);
   border-radius: 6px;
-  background: #fff;
+  background: var(--mh-surface);
 }
 
 .mh-assistant__box .mh-textarea {
@@ -1166,10 +1173,10 @@
   height: 30px;
   align-items: center;
   padding: 0 8px;
-  border: 1px solid #dce1e6;
+  border: 1px solid var(--mh-line-ai);
   border-radius: 6px;
-  background: #fff;
-  color: #171b1f;
+  background: var(--mh-surface);
+  color: var(--mh-ink-ai);
   font-family: var(--mh-font);
   font-size: 11px;
   font-weight: 600;
@@ -1197,9 +1204,9 @@
   height: min(760px, calc(100vh - 80px));
   min-height: 520px;
   max-height: calc(100vh - 80px);
-  border: 1px solid var(--mh-line-strong);
+  border: 1px solid var(--mh-line-strong-ai);
   border-radius: 8px;
-  box-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
+  box-shadow: var(--mh-flow-shadow);
   transform: translate(-50%, -50%);
 }
 
@@ -1227,7 +1234,7 @@
   padding: 10px 14px;
   border-radius: 12px;
   background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
-  color: #111;
+  color: var(--mh-launcher-orb-ink);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.45;
@@ -1279,6 +1286,24 @@
   font-family: var(--mh-font);
   font-size: 12px;
   line-height: 1.5;
+}
+
+/* workspace answer card (campaign/self-service): `.answer-card-header` matches
+   no rule in the original, so the banner renders as flush inline text. */
+.mh-assistant__answer--workspace .mh-assistant__answer-banner strong {
+  color: var(--mh-ink-ai-strong);
+}
+
+.mh-assistant__answer--workspace .mh-assistant__answer-body > p,
+.mh-assistant__answer--workspace .mh-assistant__finding p {
+  margin: 0;
+  color: var(--mh-copy-ai);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mh-assistant__answer--workspace .mh-assistant__finding strong {
+  color: var(--mh-ink-ai-strong);
 }
 
 .mh-assistant__sources {
@@ -3514,6 +3539,8 @@ body.dialog-open {
 }
 
 .mh-live-back:hover {
+  border-color: var(--mh-live-back-hover-line);
+  background: var(--mh-live-back-hover-bg);
   color: var(--mh-live-back-hover);
 }
 
@@ -3524,7 +3551,7 @@ body.dialog-open {
 
 .mh-live-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 24px;
@@ -3882,14 +3909,13 @@ body.dialog-open {
 .mh-sc-phead {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 2px 8px 6px;
   margin-bottom: 4px;
   border-bottom: 1px solid var(--mh-sc-head-line);
 }
 
 .mh-sc-phead__label {
-  color: var(--mh-sc-label);
+  color: var(--mh-sc-note);
   font-size: 11px;
 }
 
@@ -3900,10 +3926,6 @@ body.dialog-open {
   color: var(--mh-sc-link);
   font-size: 11px;
   cursor: pointer;
-}
-
-.mh-sc-phead button:hover {
-  text-decoration: underline;
 }
 
 .mh-sc-prow {
@@ -4548,11 +4570,11 @@ body.dialog-open {
   font-size: 13px;
   color: var(--mh-copilot-faint);
 }
-.mh-copilot__metric--pos {
+.mh-copilot__metric--positive {
   color: var(--mh-copilot-metric-pos);
   font-weight: 600;
 }
-.mh-copilot__metric--neg {
+.mh-copilot__metric--negative {
   color: var(--mh-copilot-metric-neg);
   font-weight: 600;
 }

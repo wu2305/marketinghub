@@ -152,7 +152,7 @@ export function FilterPills({ label = "Filters", items = [], value, onChange }) 
  * Tab strip (role=tablist). Items may be disabled.
  * @param {object} props
  * @param {string} props.label tablist aria-label
- * @param {Array<{ id: string, label: string, disabled?: boolean }>} [props.items=[]]
+ * @param {Array<{ id: string, label: string, disabled?: boolean, title?: string }>} [props.items=[]]
  * @param {string} [props.value] id of the selected tab
  * @param {typeof tabsVariants[number]} [props.variant="underline"]
  * @param {(event: { id: string, label: string }) => void} [props.onChange]
@@ -167,7 +167,9 @@ export function Tabs({ label, items = [], value, variant = "underline", onChange
           type="button"
           role="tab"
           aria-selected={item.id === value}
+          aria-disabled={item.disabled || undefined}
           disabled={item.disabled}
+          title={item.title}
           onClick={() => onChange?.({ id: item.id, label: item.label })}
         >
           {item.label}
