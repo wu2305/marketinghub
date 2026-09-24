@@ -5,9 +5,12 @@ import { cx } from "./cx.js";
 import { Icon } from "./icons.jsx";
 
 export const searchIconPositions = ["start", "end", "none"];
+export const searchVariants = ["field", "plain"];
 export const metricStatVariants = ["card", "glass"];
 export const metricStatAccents = ["gold", "green", "amber", "blue", "red"];
 export const tabsVariants = ["underline", "segmented"];
+export const headingLevels = ["h1", "h2", "h3"];
+export const formFieldControls = ["text", "textarea", "select"];
 
 /**
  * Labeled search input with an icon that can lead, trail, or be omitted.
@@ -17,7 +20,7 @@ export const tabsVariants = ["underline", "segmented"];
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.placeholder="Search"]
  * @param {"sm"|"md"|"lg"} [props.size="md"]
- * @param {"field"|"plain"} [props.variant="field"] plain = the original `.overview-global-search` gold pill
+ * @param {typeof searchVariants[number]} [props.variant="field"] plain = the original `.overview-global-search` gold pill
  * @param {typeof searchIconPositions[number]} [props.icon="start"]
  * @param {React.Ref<HTMLInputElement>} [props.inputRef] forwarded to the input
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
@@ -74,7 +77,7 @@ export function MetricStat({ label, value, caption, variant = "card", accent = "
  * @param {string} [props.eyebrow]
  * @param {React.ReactNode} props.title
  * @param {React.ReactNode} [props.description]
- * @param {"h1"|"h2"|"h3"} [props.as="h2"] heading level element
+ * @param {typeof headingLevels[number]} [props.as="h2"] heading level element
  */
 export function SectionHeading({ eyebrow, title, description, as = "h2" }) {
   const Title = as;
@@ -186,13 +189,14 @@ export function Tabs({ label, items = [], value, variant = "underline", onChange
  * @param {object} props
  * @param {string} props.label
  * @param {string} [props.name]
- * @param {"text"|"textarea"|"select"} [props.control="text"]
+ * @param {typeof formFieldControls[number]} [props.control="text"]
  * @param {boolean} [props.required=false] renders the required marker
  * @param {boolean} [props.invalid=false]
  * @param {string} [props.hint]
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.defaultValue] initial uncontrolled value
  * @param {string} [props.placeholder]
+ * @param {string} [props.autoComplete]
  * @param {Array<{ id?: string, value?: string, label: string } | string>} [props.options] select only
  * @param {number} [props.rows] textarea only
  * @param {string} [props.className] extra class on the field wrapper

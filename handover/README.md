@@ -11,8 +11,8 @@
 | 设计系统位置 | `src/design` |
 | 最新独立审核 | 2026-09-24，8c93802：Storybook/host 新构建通过，63 stories + 5 docs，29/29 单测，P07 14/14、host 6/6；负向变异 6/6 如期失败（`/tmp/mh-audit-8c93802-negative`）。人工 Principles 默认态 pass、Business Term fail；新增故事输入/宿主历史/逐组件文档缺口见 §4。仅审核文档变更 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 63 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 29、Pages 7）+ 5 docs；2026-09-24 新构建 index.json 实数 |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），29 条通过（interpreter 10、cockpit-demo 替换夹具 7、lifecycle 11、assetUrl 1；2026-09-24 d6557c3） |
+| 故事数 | 66 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 32、Pages 7）+ 59 docs；2026-09-24 条目 A 新构建 index.json 实数。Atoms/Molecules/Organisms 已拆为逐组件 CSF（`src/design/stories/<层>/<组件>.stories.jsx`，meta 声明 `component`），每组件一页 Docs |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），43 条通过（interpreter 10、cockpit-demo 替换夹具 7、lifecycle 11、assetUrl 1、stories 14：逐组件 meta/component/autodocs 覆盖、Atoms/Molecules/Icon/ReportRow 文档完整性、受控故事回写与回调载荷；2026-09-24 条目 A） |
 | 构建验证 | 通过（2026-09-24 d6557c3，`npm run build-storybook -- --disable-telemetry` 现经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；63 stories、5 docs）；独立宿主 `npm run build:host` + `node scripts/host-check.mjs` 通过 |
 | 最近视觉对照 | 2026-09-24（d6557c3 构建）：全套 `node scripts/visual-check.mjs` 105/105 机器通过（`/tmp/mh-e-full`），`--negative` 6/6 按预期失败；机器通过≠人工通过。人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；Business Term fail（过渡通用列表）；其余场景人工 pending |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
@@ -168,10 +168,11 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前基线**：2026-09-24 本地分支 `devin/structural-repair`，HEAD `8c93802`。审核开始 tracked 工作区干净，未跟踪 `.commandcode/` 未改；本轮仅更新 AGENTS 与 handover。不据本地分支推断远端合并状态。
+- **当前基线**：2026-09-24 本地分支 `devin/story-docs-closure`，自 `devin/structural-repair`（8c93802 + 0b61ccb 审核文档提交）派生，依赖的纠偏 A–E 均未合入 origin/main（main 仍为 2555d8a）。未跟踪 `.commandcode/` 不属本仓库工作，未动。
+- **条目 A（基础故事与文档闭环）完成**：见 §5 同日日志；Atoms/Molecules/Icon/ReportRow 逐 prop 文档（类型、实际默认值、枚举来自导出常量、回调签名+示例载荷）、受控故事画布回写、ReportRow/ProjectDirectory/LiveOverview 补故事、Button 回调改具名 `{ label }`。其余有机体仅有 `component` + 组件说明，逐 prop 文档未完成（§4）。
 - **已验证**：结构纠偏 A–E 已落地；本轮重新构建 63 stories + 5 docs，29/29 单测、P07 14/14 机器场景、独立宿主 6/6 检查通过。人工签收本轮 Principles 默认态 pass、Business Term fail，其余本轮场景 pending；历史全套 105/105 与其他人工记录见 §1，不当成本轮复跑。
-- **下一条**：M4 P07 按原始差异逐类提取剩余七类专用视图，继续 M5/M6 全量范围。类型页外壳已修复，无需重做旧外壳专项；Business Term 的卡片/同义词/管理动作/分页仍是明确未完成项。
-- **穿插当前条目的 M1/M2 欠账**：Input 等受控故事需回写；逐组件接口文档与 ReportRow 独立故事需补齐；Home/Campaign/MediaTracking 的跨宿主演示流程需按实际共性从故事中提取，使用同一容器在宿主验证。Home History 宿主不回填已运行时复现。保留 token、回调具名对象、页面文案 props、容器响应式/键盘验证欠账。
+- **下一条**：条目 B——Home 演示流程提取为 `useHomeDemo`，故事与 `examples/host` 共用；随后 M4 Business Term 专用视图，再按原始差异逐类提取其余六类，继续 M5/M6 全量范围。类型页外壳已修复，无需重做旧外壳专项；Business Term 的卡片/同义词/管理动作/分页仍是明确未完成项。
+- **穿插当前条目的 M1/M2 欠账**：（受控回写、Atoms/Molecules 逐组件文档、ReportRow 故事已由条目 A 完成）有机体逐 prop 文档；Home/Campaign/MediaTracking 的跨宿主演示流程需按实际共性从故事中提取，使用同一容器在宿主验证。Home History 宿主不回填已运行时复现。保留 token、回调具名对象、页面文案 props、容器响应式/键盘验证欠账。
 - **证据**：`/tmp/mh-audit-8c93802-p07`（配对及 reviews）、`/tmp/mh-audit-8c93802-host`、`/tmp/mh-audit-8c93802-probe`（输入、Home 历史、Atoms docs）。未复跑全站 105 场景、全部 Controls 或所有页面人工验收。
 - **接续规则**：每条完成后更新当前提交、状态 ID、证据及最小下一步；不能从旧分支记录恢复已删除路线，也不以单页或机器 PASS 替代全量完成。
 
@@ -254,6 +255,9 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P02 Report Copilot 关闭焦点 | 关闭后焦点还原到打开者（共享 `useFocusRestore`） | 无障碍调整；原 `closeAi()` 不还原焦点，不影响可见状态 | devin/structural-repair |
 
 ## 4. 已知缺口
+
+2026-09-24 条目 A 结果（devin/story-docs-closure）：下方“P1 可操作故事与文档缺口”已修复——`atoms-text-input--default` 输入 AUDIT 保留（`/tmp/mh-itemA/results.json`），Docs 按组件显示真实接口；Button 已不直传 DOM event。仍存：除 ReportRow 外的有机体只有 `component` 与组件说明，argTypes 未逐 prop 写类型/默认/载荷（docgen 仅推断名称与默认值）；FormField 仍接受 `className`（违反 §3.1，待清理）；`iconNames` 与 Icon 内 if 链为两处维护，新增图标需同步。
+故事 ID 变更（条目 A，为使 meta 级 `component` 生效必须一组件一 meta；脚本只引用 `pages--*`，无需同步）：`atoms--input`→`atoms-text-input--default`，其余 Atoms/Molecules/Organisms 均变为 `<层>-<组件标题>--default`（如 `atoms--primary`→`atoms-button--default`、`molecules--search`→`molecules-search-field--default`、`organisms--askpanel`→`organisms-assistant-panel--ask-panel`）；`pages--*`、`foundations--*` 不变。
 
 2026-09-24 纠偏后对抗审核（8c93802，以下为当前新增/复核事实）：
 - **P1 流程可移植性不完整**：`pages.stories.jsx:56` HomeStory 持有历史选择/技能/模型流状态，`examples/host/main.jsx:144` HomeRoute 重写部分接线。实测相同 History 首条，故事 prompt 非空、宿主 prompt 为空；宿主缺 onHistorySelect，也未接模型流。Cockpit 的 useCockpitDemo 是已有正确边界，其他页面尚未推广；不是禁止故事持有任何状态。
@@ -349,3 +353,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | 结构纠偏收尾：D 复审后修 overview 卡片网格/边框并人工审图通过 P07 overview 与 Principles 四态；E 独立宿主（`examples/host`、`scripts/build-host.mjs`、`scripts/host-check.mjs`）、`assetUrl` 资源约定、`:where()` 作用域 reset、Storybook 显式链接适配（点击不再把 iframe 导到原 HTML）。npm test 29/29，63 stories/5 docs，visual-check 105/105 机器通过，negative 6/6，host-check 通过。更新 AGENTS 2.4/§5 与本台账 §1/§2/§4 | Devin |
 
 | 2026-09-24 | 8c93802 纠偏后对抗审核：复跑构建、29 单测、P07 14 场景与宿主 6 项；人工 Principles 默认态 pass、Business Term fail；复现 Input 故事输入不回写及 Home History 宿主不回填，核查 autodocs 不足、ReportRow 缺故事、接口残留；先补 AGENTS 2.4/5，再纠正本台账接续点与缺口。仅改文档，未修组件。证据 /tmp/mh-audit-8c93802-* | Codex |
+| 2026-09-24 | 条目 A 基础故事与文档闭环：三层故事拆为 57 个逐组件 CSF（meta `component`+autodocs+组件说明），`story-helpers.js`（useSynced/prop/enumProp/callbackProp）；Atoms/Molecules/Icon/ReportRow 全 prop 文档；新增导出常量 `buttonTypes`、`searchVariants`、`formFieldControls`、`headingLevels`、`iconNames`；受控故事画布回写（TextInput/TextArea/Select/SearchField/Tabs/FilterPills/FormField/ScopeOption/CheckboxFilter/Pagination/FileDropzone/BusinessTermForm 及 Header/KnowledgeSidebar/TypeGrid/CampaignRail 等）；补 ReportRow/ProjectDirectory/LiveOverview 故事；Button onClick 改 `{ label }`（消费方审计：均不用 event）。验证：npm test 43/43；build 66 stories + 59 docs；Playwright 画布探针与 args 枚举截图、Docs 截图、0 console/pageerror（`/tmp/mh-itemA`）；visual-check 105/105 机器通过（`/tmp/mh-itemA-visual`，未新增人工审图）、negative 6/6 如期失败、host-check 6/6。人工（lead）审 Button/ReportRow Docs 页 pass | Devin |

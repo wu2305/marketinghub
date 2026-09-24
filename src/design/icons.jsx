@@ -1,5 +1,44 @@
 import React from "react";
 
+/** Registered icon names — the values `Icon`'s `name` prop accepts. */
+export const iconNames = [
+  "search",
+  "plus",
+  "home",
+  "history",
+  "expand",
+  "spark",
+  "layers",
+  "thumb-up",
+  "thumb-down",
+  "file",
+  "eye",
+  "download",
+  "upload",
+  "file-upload",
+  "chevron-down",
+  "arrow-left",
+  "copy",
+  "chat",
+  "pen",
+  "pin",
+  "spokes",
+  "cart",
+  "tag",
+  "chart",
+  "store",
+  "trend",
+  "bulb",
+];
+
+/**
+ * Inline SVG icon (24×24, currentColor stroke). `path` renders raw SVG path
+ * data and takes precedence over `name`; unknown names render nothing.
+ * @param {object} props
+ * @param {typeof iconNames[number]} [props.name] registered icon name
+ * @param {string} [props.path] raw SVG path data for one-off icons
+ * @param {string} [props.className]
+ */
 export function Icon({ name, path, className }) {
   const common = {
     viewBox: "0 0 24 24",

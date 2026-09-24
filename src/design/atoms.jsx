@@ -5,6 +5,7 @@ import { Icon } from "./icons.jsx";
 
 const BUTTON_VARIANTS = ["primary", "gold", "secondary", "quiet", "danger"];
 const SIZES = ["sm", "md", "lg"];
+const BUTTON_TYPES = ["button", "submit"];
 
 /**
  * Action button. Renders `<button type="button">`; never use it for navigation.
@@ -12,11 +13,11 @@ const SIZES = ["sm", "md", "lg"];
  * @param {typeof BUTTON_VARIANTS[number]} [props.variant="primary"]
  * @param {typeof SIZES[number]} [props.size="md"]
  * @param {boolean} [props.disabled=false]
- * @param {"button"|"submit"} [props.type="button"]
+ * @param {typeof BUTTON_TYPES[number]} [props.type="button"]
  * @param {string} [props.icon] icon name from icons.jsx
  * @param {React.ReactNode} props.children
  * @param {string} [props.label] aria-label override when the visible text isn't the right accessible name
- * @param {() => void} [props.onClick]
+ * @param {(event: { label: string }) => void} [props.onClick] `label` is the label prop, or the trimmed visible text
  */
 export function Button({
   variant = "primary",
@@ -34,7 +35,7 @@ export function Button({
       type={type}
       disabled={disabled}
       aria-label={label}
-      onClick={onClick}
+      onClick={(event) => onClick?.({ label: label ?? event.currentTarget.textContent.trim() })}
     >
       {icon ? <Icon name={icon} className="mh-button__icon" /> : null}
       {children}
@@ -125,6 +126,7 @@ export function TextInput({
  * @param {number} [props.rows=4]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
+ * @param {boolean} [props.required=false] native required attribute
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {React.Ref<HTMLTextAreaElement>} [props.ref] forwarded to the textarea
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
@@ -256,3 +258,4 @@ export function StatusBadge({ status = "draft", outline = false, children }) {
 
 export const buttonVariants = BUTTON_VARIANTS;
 export const controlSizes = SIZES;
+export const buttonTypes = BUTTON_TYPES;
