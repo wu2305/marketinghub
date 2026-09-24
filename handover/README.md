@@ -209,6 +209,22 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 五个入口页面首屏在 1440px 与原始一致 | 完成 | #6 |
 | Cloud Agent 环境（`npm ci`，4173 / 6006） | 完成 | #2 → #6 |
 
+
+### 2.6 状态归属表（结构修复批 C，2026-09-24）
+
+| 状态 | 持有者 | 修改途径 | 关闭时 | New Session | 受控/非受控 |
+|---|---|---|---|---|---|
+| Campaign 任务弹窗草稿（action/platform/account/object） | `CampaignPage` 本地 state（初值取自 `taskDialog` 默认） | 表单字段 `onTaskDraftChange({name,value,draft})` | **保留**（Cancel/×/scrim/Escape/Submit 都不重置，对齐原生 `<dialog>`） | — | 默认非受控；传 `taskDraft` + `onTaskDraftChange` 受控 |
+| Campaign 助手 answers/prompt/expanded | answers、prompt：宿主（CampaignStory/页面 props）；expanded：AssistantPanel 内部 | onSubmit/onSuggestion/输入 | answers/prompt 由宿主决定（故事保留）；expanded 仅 home/lite tone 复位，workspace 变体保留（quirk） | 宿主 `onNewSession` 清 answers | 受控（answers/prompt）+ 内部（expanded） |
+| ModelFlow step/ticks/rule/draft | 宿主 flow 对象（useCockpitDemo / 各故事）；dialog 内部仅 error/invalid/done | onToggleMessage/onRuleChange/onGenerate/onBack/onClose | Cancel/×/Save/Submit 后宿主置 null → 重开全新 history；Back 回 history 保留 ticks+rule、丢弃 generated 编辑（表单卸载） | — | 受控（宿主 flow） |
+| Cockpit AssistantPanel answers/prompt | `useCockpitDemo` | submitAnswer/onPromptChange/历史填充 | 关闭保留；重开仍在 | onNewSession 清 answers+prompt | 受控（hook） |
+| ReportCopilot answer/chat/prompt | 宿主（useCockpitDemo） | onRecommendation/onAsk/onPromptChange/onNewSession | 关闭保留 | onNewSession 清 answer/chat/prompt | 受控（宿主） |
+| ReportCopilot expanded/dock/collapsed/showAll/feedback/historyOpen | 组件内部 | 按钮点击/答案重置 effect | 仅 expanded 复位（closeAi quirk），其余保留 | dock/showAll/historyOpen 复位，collapsed 保留 | 内部 |
+| Copilot 流式 registry | ReportCopilot 每实例 ref（CopilotStreamContext） | 新卡挂载时 cancel 旧 token | — | — | 实例隔离（旧模块全局已改为实例作用域） |
+| ReportDetailsDrawer fullscreen/activeScenario/showAll | 组件内部 | 按钮/resetKey effect | 按 `resetKey` 复位 | — | 内部 |
+| CityInvestDashboard filters（end/channel/pilot/cities/stores） | 组件内部 | 筛选提交 `commit` + `onFiltersChange` 通知 | — | — | 非受控（defaultFilters 播种） |
+| body `dialog-open` 锁 | `useBodyScrollLock`（organisms.jsx，WeakMap 按 document 计数） | 各覆盖物 open prop | 最后一个持有层释放才移除类 | — | 共享基础设施 |
+
 ## 3. 有意差异表
 
 | 位置 | 差异 | 理由 | 引入 PR |
@@ -225,7 +241,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Interpreter 列表形态 | 类型页为通用行表（Title/Type/Creator/Process/AI Status 双状态列）；原专用视图为卡片网格、专属列（Email 10 列、BT 同义词卡、Scenario 卡 + 分页 + 逐卡动作） | 本轮只修数据契约与动作入口；逐类型视图属阶段 C | devin/interpreter-type-contract |
 | Interpreter Hero | 选中类型时 Hero 标题/描述/统计切换为该类型（对齐原文逐类型 hero） | types.js 注释确认每类型有独立 hero statistics | devin/interpreter-type-contract |
 | Home 助手历史弹窗 | React 版 popover 含 × 关闭按钮；原始 `#homeHistoryPopup` 无关闭按钮（CSS 为死代码）。锚定已按原始复刻：home 位于按钮左侧顶对齐，非 home 面板 `right:66px` 锚于 actions 容器 | × 仅为可达性便利 | devin/interpreter-type-contract |
-| Modal 表单值（撤销豁免） | Campaign Object 输入→Cancel→重开：原始保留输入，React 恢复 `341 plans`，2026-09-24 已实测 | 可达行为缺口；应由宿主保存草稿等方式恢复，生命周期不是永久有意差异理由 | devin/interpreter-type-contract |
+| ~~Modal 表单值（撤销豁免）~~ | ~~Campaign Object 输入→Cancel→重开：原始保留输入，React 恢复 `341 plans`~~ 已修复（批 C）：`CampaignPage` 持有任务草稿（`taskDraft`/`onTaskDraftChange` 可控），Cancel/×/scrim/Escape/Submit 后重开均保留 | 原生 `<dialog>` 不重置表单；场景 p06-campaign-task-draft 双侧通过 | devin/structural-repair |
 | P04 FileDropzone | React 版给 file input 加 `stopPropagation`，点击 dropzone 可正常打开文件选择器；原始 upload.js 同款嵌套结构存在递归调用（`fileInput.click()` 冒泡回 dropzone 处理器）为参照缺陷 | 不逐 bug 复刻参照物；点击崩溃属明确缺陷 | devin/interpreter-type-contract |
 | P04 FileDropzone drop | React 版 drop 即触发 `onSelect` 并显示 "Selected: <file>"；原始 `fileInput.files = dataTransfer.files` 不派发 change，提示不更新（仅文件选择器路径更新） | React 行为更符合原始意图；差异登记 | devin/interpreter-type-contract |
 | P05 导航 active | React `current="self-service"` 渲染导航下划线激活态；原始 media-tracking 页 CSS 无激活下划线（flexible 页才有） | 保留语义激活态；下划线是共享 Header 的既有渲染，不逐页关断 | devin/interpreter-type-contract |
@@ -308,3 +324,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 2026-09-24 | 对抗审核 02918b5 + 既有工作区：复跑单测/构建/P07 场景，纠正 63 stories + 5 docs；撤销 Principles 像素一致结论，复现 Campaign 重开丢值，确认 Accounts 负向断言已修复；记录固定数据与全局状态隔离风险。先更新 AGENTS 2.4/5，再更新本台账；未改组件实现 | Codex |
 | 2026-09-24 | 结构修复批 A/B（devin/structural-repair）：A 批加固 `scripts/visual-check.mjs`——源指纹+build stamp（`scripts/fingerprint.mjs`/`build-storybook.mjs` 包装 storybook build，缺失或过期 exit 2）、`results.json` 运行档案（provenance/shotHash/load+behavior 分离）、`reviews.json` 人工验收记录（hash 变则 stale）、count/attr/weak-assertion 断言、console error 白名单（仅原侧可豁免+引用行号）、`--negative` 变异校验 5 例全负、`layout` 几何比对（P07 侧栏/Hero 差异如实登记 56/316·284/0·1112/1440）、覆盖率统计；指纹列表过滤已删追踪文件。B 批拆分 `report-data.js`：`demo/report-fixtures.js`（REPORT_GROUPS/PROJECTS+`embed:"city-invest"` 标记、KNOWLEDGE_ASSETS、DETAILS_ASSET_SECTIONS、COPILOT bundle、CITY_INVEST copy/options/kpis/baseline）、`report-logic.js`（纯函数全参显式）、`report-routes.js`（href 约定）、`demo/report-demo.js`（确定性模拟器 generateCityInvestScenario/cityInvestScenarioSource/copilotProfile/copilotSources/resolveCopilotAnswer/buildCopilotChatEntry/copilotSkillItems）、`demo/cockpit-demo.js` `useCockpitDemo`（原 CockpitStory 接线整体下沉，读 props.projects/knowledge/cityInvest/demo 修 COCKPIT.projects 旁路）；`CityInvestDashboard` 全 props 化（filter 状态仍本地非受控）+ 单期 NaN 图表跳过 NaN 元素（原缺陷如实，消 story 侧 console error）；`ReportCopilot` 去 fixture 默认值，holistic 读 `answer.report`、rich 卡读 `entry.card`；`MarketingCockpitPage` 增 `knowledge`/`cityInvest` props，embed 门改 `reports[rawIndex]?.embed`。新增 `demo/__fixtures__/alt-cockpit.js` + `cockpit-demo.test.jsx` 7 例（替换 fixture 全链路+双实例隔离+无泄漏断言）。npm test 17/17、build 63 stories、visual-check p02 51/51（hover-shrink story 侧无 NaN console）、negatives 5/5 | Devin |
+| 2026-09-24 | 结构修复批 C 状态归属/生命周期：`CampaignPage` 任务草稿页级持有（默认非受控，`taskDraft`+`onTaskDraftChange` 可控，FormField 全受控，submit 也不重置——对齐原生 dialog）；`useBodyScrollLock`（WeakMap 按 document 计数）+`useFocusRestore`（仅在焦点仍位于关闭层内或 body 时归还 opener）共享于 ReportDetailsDrawer/AssistantPanel/Modal/ReportCopilot，嵌套覆盖不再提前解锁；copilot 流式 registry 模块全局改 `CopilotStreamContext` 每实例 ref（同实例新卡仍冻结旧卡，跨实例互不影响）；ModelFlowDialog 生命周期核对无偏差（Back 保 ticks/rule 弃 generated 编辑、Cancel/× 全清、450ms 移除、无 Escape/无锁滚）仅补具名回调；公共回调去 DOM event——close 类统一 `{reason}`（scrim/backdrop/escape/button/cancel/save/submit），AssistantLauncher `onOpen({reason:"open"})`、copilot `onBack/onNewSession` 补 reason。新增 `lifecycle.test.jsx` 11 例（草稿五路持久、flow Back/重开、双流隔离、嵌套锁+焦点、New Session）与场景 `p06-campaign-task-draft`。npm test 28/28、build 63 stories、visual-check p06 17/17 + p02-copilot 22/22 + p05 10/10 + p01 6/6、negatives 5/5 | Devin |

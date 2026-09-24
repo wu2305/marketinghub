@@ -36,6 +36,50 @@ export const heroVariants = ["banner", "home", "knowledge"];
 export const heroScrims = ["banner", "home", "knowledge", "none"];
 export const modalVariants = ["modal", "sheet"];
 
+/* `dialog-open` locks body scroll while any overlay is open. The original demo
+   toggles it per dialog, but nested overlays must not unlock the page when an
+   inner one closes — so holds are ref-counted per document.body and the class
+   comes off only when the last open overlay releases. */
+const scrollLockHolds = new WeakMap();
+function useBodyScrollLock(active) {
+  React.useEffect(() => {
+    if (!active) return undefined;
+    const body = document.body;
+    scrollLockHolds.set(body, (scrollLockHolds.get(body) || 0) + 1);
+    body.classList.add("dialog-open");
+    return () => {
+      const next = (scrollLockHolds.get(body) || 1) - 1;
+      scrollLockHolds.set(body, Math.max(0, next));
+      if (next <= 0) body.classList.remove("dialog-open");
+    };
+  }, [active]);
+}
+
+/* Each overlay remembers the element that had focus when it opened. On close
+   the opener is refocused only when focus is still inside the closing layer or
+   on the page body — an inner overlay closing hands focus back to its own
+   opener, while an outer overlay closing underneath a focused inner one does
+   not steal it. `layerRef` points at the overlay's root element. */
+function useFocusRestore(active, layerRef) {
+  const previousRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!active) {
+      previousRef.current = null;
+      return undefined;
+    }
+    previousRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    return () => {
+      const previous = previousRef.current;
+      previousRef.current = null;
+      if (!previous || !previous.isConnected) return;
+      const activeEl = document.activeElement;
+      const layer = layerRef?.current;
+      const inside = layer ? layer.contains(activeEl) : false;
+      if (inside || !activeEl || activeEl === document.body || activeEl === document.documentElement) previous.focus();
+    };
+  }, [active]);
+}
+
 /**
  * Global site header with logo and top navigation.
  * @param {object} props
@@ -386,7 +430,7 @@ export function ProjectDirectory({
  * @param {string} [props.liveHref] footer "Open Dashboard" link target
  * @param {string} [props.liveLabel="Open Dashboard"]
  * @param {string|number} [props.resetKey] change to reset scenario/fullscreen state
- * @param {(target: object) => void} [props.onClose]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  */
 export function ReportDetailsDrawer({
@@ -410,6 +454,7 @@ export function ReportDetailsDrawer({
 }) {
   const titleId = React.useId();
   const closeRef = React.useRef(null);
+  const layerRef = React.useRef(null);
   const [fullscreen, setFullscreen] = React.useState(false);
   const [activeScenario, setActiveScenario] = React.useState(null);
   const [showAll, setShowAll] = React.useState(false);
@@ -418,26 +463,22 @@ export function ReportDetailsDrawer({
     setActiveScenario(null);
     setShowAll(false);
   }, [resetKey]);
+  useBodyScrollLock(open);
+  useFocusRestore(open, layerRef);
   React.useEffect(() => {
     if (!open) return undefined;
-    const previous = document.activeElement;
     closeRef.current?.focus();
-    document.body.classList.add("dialog-open");
     const onKey = (event) => {
-      if (event.key === "Escape") onClose?.({});
+      if (event.key === "Escape") onClose?.({ reason: "escape" });
     };
     document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.classList.remove("dialog-open");
-      document.removeEventListener("keydown", onKey);
-      if (previous && previous.isConnected) previous.focus();
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [open, resetKey]);
   if (!open) return null;
   return (
     <React.Fragment>
-      <div className="mh-details-scrim" onClick={() => onClose?.({})} />
-      <aside className={cx("mh-details", fullscreen && "is-fullscreen")} aria-labelledby={titleId}>
+      <div className="mh-details-scrim" onClick={() => onClose?.({ reason: "scrim" })} />
+      <aside ref={layerRef} className={cx("mh-details", fullscreen && "is-fullscreen")} aria-labelledby={titleId}>
         <header className="mh-details__head">
           <div>
             <span>{eyebrow}</span>
@@ -452,7 +493,7 @@ export function ReportDetailsDrawer({
             >
               <Icon name="expand" />
             </button>
-            <button ref={closeRef} className="mh-details__close" type="button" aria-label="Close report details" onClick={() => onClose?.({})}>
+            <button ref={closeRef} className="mh-details__close" type="button" aria-label="Close report details" onClick={() => onClose?.({ reason: "button" })}>
               ×
             </button>
           </div>
@@ -1027,11 +1068,11 @@ export function PrinciplesView({
  * @param {object} props
  * @param {string} [props.label="AI Interpreter"]
  * @param {boolean} [props.hidden=false] mirrors the original `display:none` while the panel is open
- * @param {() => void} [props.onOpen]
+ * @param {(event: { reason: "open" }) => void} [props.onOpen]
  */
 export function AssistantLauncher({ label = "AI Interpreter", hidden = false, onOpen }) {
   return (
-    <button className="mh-launcher" type="button" aria-label="Open AI assistant" hidden={hidden} onClick={onOpen}>
+    <button className="mh-launcher" type="button" aria-label="Open AI assistant" hidden={hidden} onClick={() => onOpen?.({ reason: "open" })}>
       <span className="mh-launcher__orb">AI</span>
       <span>{label}</span>
     </button>
@@ -1227,7 +1268,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
  * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction] model-creation menu entries
- * @param {() => void} [props.onClose]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onClose]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: { prompt: string, scope?: string, model?: string, mode?: string }) => void} [props.onSubmit] model/mode are sent only when `showPicks` is on
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
@@ -1281,11 +1322,14 @@ export function AssistantPanel({
   const titleId = React.useId();
   const [expanded, setExpanded] = React.useState(false);
   const [historyOpen, setHistoryOpen] = React.useState(false);
+  const layerRef = React.useRef(null);
   const mainRef = React.useRef(null);
   const promptRef = React.useRef(null);
   const onCloseRef = React.useRef(onClose);
   onCloseRef.current = onClose;
 
+  useBodyScrollLock(open);
+  useFocusRestore(open, layerRef);
   React.useEffect(() => {
     if (!open) {
       // Quirk parity: home (portal.js) and lite (assistant-panel-lite.js) reset
@@ -1295,14 +1339,8 @@ export function AssistantPanel({
       setHistoryOpen(false);
       return undefined;
     }
-    const previous = document.activeElement;
-    document.body.classList.add("dialog-open");
     const timer = window.setTimeout(() => promptRef.current?.focus(), 80);
-    return () => {
-      window.clearTimeout(timer);
-      document.body.classList.remove("dialog-open");
-      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
-    };
+    return () => window.clearTimeout(timer);
   }, [open]);
 
   React.useEffect(() => {
@@ -1310,7 +1348,7 @@ export function AssistantPanel({
     const onKeydown = (event) => {
       if (event.key !== "Escape") return;
       setHistoryOpen(false);
-      onCloseRef.current?.();
+      onCloseRef.current?.({ reason: "escape" });
     };
     document.addEventListener("keydown", onKeydown);
     return () => document.removeEventListener("keydown", onKeydown);
@@ -1343,10 +1381,11 @@ export function AssistantPanel({
   if (!open) return null;
   return (
     <section
+      ref={layerRef}
       className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")}
       aria-label={lite ? "AI Interpreter" : title}
     >
-      <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={onClose} />
+      <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
       <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <header className="mh-assistant__header">
           <div className="mh-assistant__identity">
@@ -1423,7 +1462,7 @@ export function AssistantPanel({
                 </div>
               ) : null}
             </div>
-            <button className="mh-assistant__close" type="button" aria-label="Close assistant" onClick={onClose}>
+            <button className="mh-assistant__close" type="button" aria-label="Close assistant" onClick={() => onClose?.({ reason: "button" })}>
               ×
             </button>
           </div>
@@ -1873,8 +1912,8 @@ const MODEL_FLOW_SECTIONS = [
  * @param {(event: { threadIndex: number, messageIndex: number, checked: boolean }) => void} [props.onToggleMessage]
  * @param {(event: { value: string }) => void} [props.onRuleChange]
  * @param {(event: { messages: Array<object>, rule: string }) => void} [props.onGenerate]
- * @param {() => void} [props.onBack]
- * @param {() => void} [props.onClose]
+ * @param {(event: { reason: "back" }) => void} [props.onBack]
+ * @param {(event: { reason: "button"|"cancel"|"save"|"submit" }) => void} [props.onClose]
  * @param {boolean} [props.submitFirst=false] report variant orders Submit before Save
  * @param {(event: { values: object }) => void} [props.onSave]
  * @param {(event: { values: object }) => void} [props.onSubmit]
@@ -1957,7 +1996,7 @@ export function ModelFlowDialog({
     (kind === "save" ? onSave : onSubmit)?.({ values });
     setDone(kind);
     window.clearTimeout(doneTimer.current);
-    doneTimer.current = window.setTimeout(() => onClose?.(), 450);
+    doneTimer.current = window.setTimeout(() => onClose?.({ reason: kind }), 450);
   };
 
   const title = isHistory ? copy.historyTitle : isGenerated ? copy.generatedTitle : copy.manualTitle;
@@ -1980,7 +2019,7 @@ export function ModelFlowDialog({
             <strong id={titleId}>{title}</strong>
             <span>{subtitle}</span>
           </div>
-          <button type="button" aria-label="Close" onClick={onClose}>
+          <button type="button" aria-label="Close" onClick={() => onClose?.({ reason: "button" })}>
             ×
           </button>
         </header>
@@ -2091,11 +2130,11 @@ export function ModelFlowDialog({
         )}
         <footer className="mh-flow__foot">
           {isGenerated ? (
-            <button type="button" className="mh-flow__btn mh-flow__btn--secondary mh-flow__back" onClick={onBack}>
+            <button type="button" className="mh-flow__btn mh-flow__btn--secondary mh-flow__back" onClick={() => onBack?.({ reason: "back" })}>
               {copy.backLabel}
             </button>
           ) : null}
-          <button type="button" className="mh-flow__btn mh-flow__btn--secondary" onClick={onClose}>
+          <button type="button" className="mh-flow__btn mh-flow__btn--secondary" onClick={() => onClose?.({ reason: "cancel" })}>
             {copy.cancelLabel}
           </button>
           {isHistory ? (
@@ -2323,21 +2362,21 @@ export function BusinessTermForm({
  * @param {string} [props.closeLabel="Close"]
  * @param {string} [props.titleId] defaults to a generated useId
  * @param {"modal"|"sheet"} [props.variant="modal"] "sheet" is the borderless radius-8 chrome with deep scrim used by the Self-Service dialogs
- * @param {() => void} [props.onClose]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
  */
 export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, variant = "modal", onClose }) {
   const generatedTitleId = React.useId();
   const dialogRef = React.useRef(null);
   const onCloseRef = React.useRef(onClose);
   onCloseRef.current = onClose;
+  useBodyScrollLock(open);
+  useFocusRestore(open, dialogRef);
   React.useEffect(() => {
     if (!open) return undefined;
-    const previous = document.activeElement;
-    document.body.classList.add("dialog-open");
     dialogRef.current?.focus();
     const onKey = (event) => {
       if (event.key === "Escape") {
-        onCloseRef.current?.();
+        onCloseRef.current?.({ reason: "escape" });
         return;
       }
       if (event.key === "Tab" && dialogRef.current) {
@@ -2357,16 +2396,12 @@ export function Modal({ open = false, eyebrow, title, children, className, close
       }
     };
     document.addEventListener("keydown", onKey);
-    return () => {
-      document.body.classList.remove("dialog-open");
-      document.removeEventListener("keydown", onKey);
-      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
-    };
+    return () => document.removeEventListener("keydown", onKey);
   }, [open]);
   if (!open) return null;
   return (
     <div className={cx("mh-modal", variant === "sheet" && "mh-modal--sheet")}>
-      <div className="mh-modal__scrim" onClick={onClose} />
+      <div className="mh-modal__scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <div
         className={cx("mh-modal__dialog", className)}
         role="dialog"
@@ -2382,7 +2417,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
               {title}
             </h2>
           </div>
-          <button type="button" className="mh-modal__close" aria-label={closeLabel} onClick={onClose}>
+          <button type="button" className="mh-modal__close" aria-label={closeLabel} onClick={() => onClose?.({ reason: "button" })}>
             ×
           </button>
         </header>
@@ -2400,7 +2435,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
  * @param {string} [props.title="Upload History"]
  * @param {Array<{ id?: string, file: string, uploader: string, time: string }>} [props.rows=[]]
  * @param {string} [props.emptyMessage="No upload history yet for this module."]
- * @param {() => void} [props.onClose]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
  * @param {(row: object) => void} [props.onPreview]
  * @param {(row: object) => void} [props.onDownload]
  */
@@ -3130,11 +3165,15 @@ function StreamBlock({ animate = true, children }) {
   return <div className={cx("mh-stream-block", revealed && "is-revealed")}>{children}</div>;
 }
 
-/** Progressive reveal driver: mounts blocks one interval at a time with a trailing cursor.
+/* Progressive reveal driver: mounts blocks one interval at a time with a trailing cursor.
    streamBlocksInto() calls cancelActiveStream() — one stream at a time; a new
-   card freezes the previous mid-render and drops its cursor. */
-let activeCopilotStream = null;
+   card freezes the previous mid-render and drops its cursor. The registry is
+   scoped per ReportCopilot instance via context (a bare useStream falls back
+   to a shared registry). */
+const defaultStreamRegistry = { current: null };
+const CopilotStreamContext = React.createContext(defaultStreamRegistry);
 function useStream(total, stream, interval, scrollSelector) {
+  const registry = React.useContext(CopilotStreamContext);
   const hostRef = React.useRef(null);
   const [shown, setShown] = React.useState(stream ? 0 : total);
   const [cancelled, setCancelled] = React.useState(false);
@@ -3144,12 +3183,12 @@ function useStream(total, stream, interval, scrollSelector) {
   }, [stream, total]);
   React.useEffect(() => {
     const token = { cancel: () => setCancelled(true) };
-    activeCopilotStream?.cancel();
-    activeCopilotStream = token;
+    registry.current?.cancel();
+    registry.current = token;
     return () => {
-      if (activeCopilotStream === token) activeCopilotStream = null;
+      if (registry.current === token) registry.current = null;
     };
-  }, []);
+  }, [registry]);
   React.useEffect(() => {
     if (shown >= total || cancelled) return undefined;
     const timer = window.setTimeout(() => {
@@ -3503,9 +3542,9 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * @param {object} [props.skillMenu] SkillMenu config; renders the "+" menu when set
  * @param {object} [props.flow] ModelFlowDialog props; renders the flow dialog when set
  * @param {boolean} [props.stream=true]
- * @param {() => void} [props.onClose]
- * @param {() => void} [props.onBack] back to the start/context view
- * @param {() => void} [props.onNewSession]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
+ * @param {(event: { reason: "back" }) => void} [props.onBack] back to the start/context view
+ * @param {(event: { reason: "new-session" }) => void} [props.onNewSession]
  * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
  * @param {(event: { title: string, prompt: string }) => void} [props.onHistorySelect]
  * @param {(event: { index: number }) => void} [props.onRecommendation]
@@ -3561,8 +3600,12 @@ export function ReportCopilot({
   const [feedback, setFeedback] = React.useState(null);
   const inputRef = React.useRef(null);
   const closeRef = React.useRef(null);
+  const layerRef = React.useRef(null);
   const headActionsRef = React.useRef(null);
   const answerRef = React.useRef(null);
+  /* Per-instance stream registry: cards inside this copilot cancel each other
+     mid-stream, but a stream in another ReportCopilot is unaffected. */
+  const streamRegistry = React.useRef(null);
 
   const answerOpen = Boolean(answer) || chat.length > 0;
   const chatMode = !answer && chat.length > 0;
@@ -3575,14 +3618,13 @@ export function ReportCopilot({
     setExpanded(false);
   }, [open]);
 
-  /* openAi(): focus the close control and lock page scroll (dialog-open, the
-     shared scroll-lock hook). `ai-workspace-expanded` mirrors the demo's body
-     hook so host pages can react to the expanded state. */
+  /* openAi(): focus the close control and lock page scroll (ref-counted
+     `dialog-open`). `ai-workspace-expanded` mirrors the demo's body hook so
+     host pages can react to the expanded state. */
+  useBodyScrollLock(open);
+  useFocusRestore(open, layerRef);
   React.useEffect(() => {
-    if (!open) return undefined;
-    closeRef.current?.focus();
-    document.body.classList.add("dialog-open");
-    return () => document.body.classList.remove("dialog-open");
+    if (open) closeRef.current?.focus();
   }, [open]);
 
   React.useEffect(() => {
@@ -3594,7 +3636,7 @@ export function ReportCopilot({
   React.useEffect(() => {
     if (!open) return undefined;
     const onKey = (event) => {
-      if (event.key === "Escape") onClose?.();
+      if (event.key === "Escape") onClose?.({ reason: "escape" });
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
@@ -3646,7 +3688,7 @@ export function ReportCopilot({
     setDock(null);
     setShowAll(false);
     setHistoryOpen(false);
-    onNewSession?.();
+    onNewSession?.({ reason: "new-session" });
     onPromptChange?.({ value: "" });
     inputRef.current?.focus();
   };
@@ -3661,7 +3703,7 @@ export function ReportCopilot({
 
   const backToStart = () => {
     setDock(null);
-    onBack?.();
+    onBack?.({ reason: "back" });
   };
 
   const toggleDock = (name) => setDock((current) => (current === name ? null : name));
@@ -3761,9 +3803,10 @@ export function ReportCopilot({
   );
 
   return (
-    <React.Fragment>
-      <div className="mh-copilot__scrim" hidden={!open} onClick={onClose} />
+    <CopilotStreamContext.Provider value={streamRegistry}>
+      <div className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
       <aside
+        ref={layerRef}
         className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")}
         aria-hidden={!open}
         aria-label="Report AI workspace"
@@ -3798,7 +3841,7 @@ export function ReportCopilot({
             >
               <Icon name="history" />
             </button>
-            <button ref={closeRef} type="button" className="mh-copilot__close" aria-label="Close AI workspace" onClick={onClose}>
+            <button ref={closeRef} type="button" className="mh-copilot__close" aria-label="Close AI workspace" onClick={() => onClose?.({ reason: "button" })}>
               ×
             </button>
             {historyOpen ? (
@@ -3986,6 +4029,6 @@ export function ReportCopilot({
         </form>
       </aside>
       {flow ? <ModelFlowDialog {...flow} /> : null}
-    </React.Fragment>
+    </CopilotStreamContext.Provider>
   );
 }

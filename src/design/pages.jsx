@@ -65,7 +65,7 @@ function Shell({ tone = "workspace", children }) {
  * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
  * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
  * @param {() => void} [props.onOpenAssistant]
- * @param {() => void} [props.onCloseAssistant]
+ * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: object) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
@@ -172,7 +172,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
  * @param {(target: { project: string, index: number }) => void} [props.onOpenDetails]
- * @param {(target: object) => void} [props.onCloseDetails]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
  * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
@@ -416,7 +416,7 @@ export function MarketingCockpitPage({
  * @param {(event: { id: string, label: string }) => void} [props.onCategoryChange]
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
  * @param {(target: { item: object }) => void} [props.onOpenHistory]
- * @param {() => void} [props.onCloseHistory]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseHistory]
  * @param {(row: object) => void} [props.onPreviewFile]
  * @param {(row: object) => void} [props.onDownloadFile]
  */
@@ -654,6 +654,8 @@ export function AiInterpreterPage({
  * @param {Array<object>} [props.accounts=[]]
  * @param {object} [props.taskDialog={}] Create Campaign Task dialog copy: eyebrow, title, description, fields {actions, platforms, accounts}, object {label, value}, preview {eyebrow, state, note}, cancelLabel, submitLabel
  * @param {boolean} [props.taskDialogOpen=false]
+ * @param {{ action?: string, platform?: string, account?: string, object?: string }} [props.taskDraft] controlled draft values; omit to let the page keep its own draft
+ * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft
  * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
@@ -665,14 +667,14 @@ export function AiInterpreterPage({
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {() => void} [props.onFilter]
  * @param {() => void} [props.onReset]
- * @param {() => void} [props.onCreateTask]
- * @param {() => void} [props.onBindAccount]
- * @param {() => void} [props.onCloseTask]
+ * @param {(event: { reason: "button" }) => void} [props.onCreateTask]
+ * @param {(event: { reason: "button" }) => void} [props.onBindAccount]
+ * @param {(event: { reason: "scrim"|"escape"|"button"|"cancel" }) => void} [props.onCloseTask]
  * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask]
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
  * @param {() => void} [props.onOpenAssistant]
- * @param {() => void} [props.onCloseAssistant]
+ * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: object) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
@@ -702,6 +704,8 @@ export function CampaignPage({
   accounts = [],
   taskDialog = {},
   taskDialogOpen = false,
+  taskDraft,
+  onTaskDraftChange,
   toast = {},
   skillFlow,
   section = "overview",
@@ -725,6 +729,28 @@ export function CampaignPage({
   onSubmit,
   onSuggestion,
 }) {
+  /* The original task dialog is a native <dialog> whose form is never reset —
+     cancel/×/backdrop/Escape and even a successful submit all keep the field
+     values. The draft therefore lives on the page (surviving Modal unmounts),
+     uncontrolled by default; `taskDraft` + `onTaskDraftChange` let a host take
+     over. */
+  const firstOption = (options) => {
+    const first = options?.[0];
+    return typeof first === "object" && first !== null ? first.value : first || "";
+  };
+  const taskDefaults = {
+    action: firstOption(taskDialog.fields?.actions),
+    platform: firstOption(taskDialog.fields?.platforms),
+    account: firstOption(taskDialog.fields?.accounts),
+    object: taskDialog.object?.value || "",
+  };
+  const [localTaskDraft, setLocalTaskDraft] = React.useState(taskDefaults);
+  const draft = taskDraft !== undefined ? taskDraft : localTaskDraft;
+  const updateTaskDraft = (name, value) => {
+    const next = { ...draft, [name]: value };
+    if (taskDraft === undefined) setLocalTaskDraft(next);
+    onTaskDraftChange?.({ name, value, draft: next });
+  };
   const visibleAccounts = accountRows.filter((row) => !query || row.name.toLowerCase().includes(query.toLowerCase()));
   const executionHeading = headings.execution || {};
   const assetsHeading = headings.assets || {};
@@ -800,7 +826,7 @@ export function CampaignPage({
                       <Button variant="primary" size="sm" type="submit">
                         Filter
                       </Button>
-                      <Button variant="secondary" size="sm" onClick={onReset}>
+                      <Button variant="secondary" size="sm" onClick={() => onReset?.({ reason: "button" })}>
                         Reset
                       </Button>
                     </form>
@@ -814,7 +840,7 @@ export function CampaignPage({
           {section === "execution" ? (
             <div className="mh-stack">
               <ViewHeading eyebrow={executionHeading.eyebrow} title={executionHeading.title} description={executionHeading.description}>
-                <Button variant="primary" onClick={onCreateTask}>
+                <Button variant="primary" onClick={() => onCreateTask?.({ reason: "button" })}>
                   {executionHeading.action}
                 </Button>
               </ViewHeading>
@@ -876,7 +902,7 @@ export function CampaignPage({
           {section === "accounts" ? (
             <div className="mh-stack">
               <ViewHeading eyebrow={accountsHeading.eyebrow} title={accountsHeading.title} description={accountsHeading.description}>
-                <Button variant="primary" onClick={onBindAccount}>
+                <Button variant="primary" onClick={() => onBindAccount?.({ reason: "button" })}>
                   {accountsHeading.action}
                 </Button>
               </ViewHeading>
@@ -912,21 +938,20 @@ export function CampaignPage({
           className="mh-task-dialog__form"
           onSubmit={(event) => {
             event.preventDefault();
-            const data = new FormData(event.currentTarget);
             onSubmitTask?.({
-              action: data.get("action") || "",
-              platform: data.get("platform") || "",
-              account: data.get("account") || "",
-              object: data.get("object") || "",
+              action: draft.action,
+              platform: draft.platform,
+              account: draft.account,
+              object: draft.object,
             });
           }}
         >
           <p className="mh-task-dialog__intro">{taskDialog.description}</p>
           <div className="mh-task-dialog__grid">
-            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} defaultValue={taskDialog.fields?.actions?.[0]} />
-            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} defaultValue={taskDialog.fields?.platforms?.[0]} />
-            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} defaultValue={taskDialog.fields?.accounts?.[0]} />
-            <FormField label={taskDialog.object?.label || "Object"} name="object" defaultValue={taskDialog.object?.value || ""} />
+            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} value={draft.action} onChange={(event) => updateTaskDraft("action", event.value)} />
+            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} value={draft.platform} onChange={(event) => updateTaskDraft("platform", event.value)} />
+            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} value={draft.account} onChange={(event) => updateTaskDraft("account", event.value)} />
+            <FormField label={taskDialog.object?.label || "Object"} name="object" value={draft.object} onChange={(event) => updateTaskDraft("object", event.value)} />
           </div>
           <div className="mh-task-dialog__preview">
             <span>{taskDialog.preview?.eyebrow}</span>
@@ -934,7 +959,7 @@ export function CampaignPage({
             <small>{taskDialog.preview?.note}</small>
           </div>
           <footer className="mh-task-dialog__footer">
-            <Button variant="secondary" onClick={onCloseTask}>
+            <Button variant="secondary" onClick={() => onCloseTask?.({ reason: "cancel" })}>
               {taskDialog.cancelLabel || "Cancel"}
             </Button>
             <Button variant="primary" type="submit">
@@ -969,7 +994,7 @@ export function CampaignPage({
  * @param {string} [props.selectedFile] file name shown in the dropzone hint
  * @param {(target: object) => void} [props.onNavigate]
  * @param {() => void} [props.onOpenImport]
- * @param {() => void} [props.onCloseImport]
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]
  * @param {(file: { name: string }) => void} [props.onSelectFile]
  * @param {(target: { href: string }) => void} [props.onDownloadTemplate]
  * @param {(values: Object<string, string>) => void} [props.onSubmitForm]
@@ -1084,7 +1109,7 @@ export function DataUploadPage({
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]
  * @param {() => void} [props.onOpenAssistant]
- * @param {() => void} [props.onCloseAssistant]
+ * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
  * @param {(event: object) => void} [props.onPromptChange]
  * @param {(event: object) => void} [props.onSubmit]
  * @param {(event: object) => void} [props.onSuggestion]

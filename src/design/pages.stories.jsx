@@ -449,6 +449,8 @@ export const Campaign = {
     section: { control: "select", options: ["overview", "execution", "assets", "analytics", "accounts"] },
     channel: { control: "inline-radio", options: ["rednote", "douyin"] },
     taskDialogOpen: { control: "boolean" },
+    taskDraft: { control: "object" },
+    onTaskDraftChange: { action: "onTaskDraftChange" },
     onNavigate: { action: "onNavigate" },
     onSectionChange: { action: "onSectionChange" },
     onChannelChange: { action: "onChannelChange" },

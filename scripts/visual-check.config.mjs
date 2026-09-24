@@ -2329,6 +2329,45 @@ export default [
     },
   },
   {
+    /* The original task <dialog> never resets its form — Cancel/×/backdrop/
+       Escape and even submit keep the field values; reopening shows them.
+       React keeps the draft on CampaignPage across Modal unmounts. */
+    id: "p06-campaign-task-draft",
+    original: {
+      url: "/assets/pages/campaign.html#execution",
+      actions: [
+        { click: "[data-open-task]" },
+        { wait: "#taskDialog[open]" },
+        { fill: ["#taskForm input[name='object']", "12 plans"] },
+        { select: ["#taskForm select[name='platform']", "Douyin"] },
+        { click: "#taskForm .secondary-action" },
+        { waitMs: 300 },
+        { click: "[data-open-task]" },
+        { wait: "#taskDialog[open]" },
+        { eval: "(() => { const v = document.querySelector(\"#taskForm input[name='object']\").value; if (v !== '12 plans') throw new Error('object reset to ' + v); })()" },
+        { eval: "(() => { const v = document.querySelector(\"#taskForm select[name='platform']\").value; if (v !== 'Douyin') throw new Error('platform reset to ' + v); })()" },
+      ],
+      expect: [{ sel: "#taskDialog", text: "Create Campaign Task" }, { sel: "#taskDialog[open]" }],
+    },
+    story: {
+      id: "pages--campaign",
+      args: { section: "execution" },
+      actions: [
+        { click: ".mh-view-heading .mh-button--primary" },
+        { wait: ".mh-modal .mh-task-dialog__form" },
+        { fill: [".mh-task-dialog input[name='object']", "12 plans"] },
+        { select: [".mh-task-dialog select[name='platform']", "Douyin"] },
+        { click: ".mh-task-dialog__footer .mh-button--secondary" },
+        { waitMs: 300 },
+        { click: ".mh-view-heading .mh-button--primary" },
+        { wait: ".mh-modal .mh-task-dialog__form" },
+        { eval: "(() => { const v = document.querySelector(\".mh-task-dialog input[name='object']\").value; if (v !== '12 plans') throw new Error('object reset to ' + v); })()" },
+        { eval: "(() => { const v = document.querySelector(\".mh-task-dialog select[name='platform']\").value; if (v !== 'Douyin') throw new Error('platform reset to ' + v); })()" },
+      ],
+      expect: [{ sel: ".mh-task-dialog", text: "Create Campaign Task" }, { sel: ".mh-modal .mh-task-dialog__form" }],
+    },
+  },
+  {
     id: "p06-campaign-accounts",
     original: {
       url: "/assets/pages/campaign.html#accounts",

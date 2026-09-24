@@ -202,21 +202,21 @@ export function useCockpitDemo(props) {
             onSubmit: ({ values }) => props.onFlowSubmit?.(values),
           }
         : undefined,
-      onClose: () => {
+      onClose: (event) => {
         setWsOpen(false);
-        props.onWorkspaceClose?.();
+        props.onWorkspaceClose?.(event);
       },
-      onBack: () => {
+      onBack: (event) => {
         /* data-ai-back: answer view closes, context panels come home. */
         setWsAnswer(null);
         setWsChat([]);
-        props.onWorkspaceBack?.();
+        props.onWorkspaceBack?.(event);
       },
-      onNewSession: () => {
+      onNewSession: (event) => {
         setWsAnswer(null);
         setWsChat([]);
         setWsPrompt("");
-        props.onNewSession?.();
+        props.onNewSession?.(event);
       },
       onMaximize: props.onMaximize,
       onHistorySelect: props.onHistorySelect,
@@ -255,13 +255,13 @@ export function useCockpitDemo(props) {
     cityInvest: props.cityInvest
       ? { ...props.cityInvest, onFiltersChange: props.onFiltersChange || props.cityInvest.onFiltersChange }
       : props.cityInvest,
-    onOpenAssistant: () => {
+    onOpenAssistant: (event) => {
       setOpen(true);
-      props.onOpenAssistant?.();
+      props.onOpenAssistant?.(event);
     },
-    onCloseAssistant: () => {
+    onCloseAssistant: (event) => {
       setOpen(false);
-      props.onCloseAssistant?.();
+      props.onCloseAssistant?.(event);
     },
     onPromptChange: (event) => {
       setPrompt(event.value);
@@ -308,9 +308,9 @@ export function useCockpitDemo(props) {
       setView("catalog");
       props.onBack?.(target);
     },
-    onOpenWorkspace: () => {
+    onOpenWorkspace: (event) => {
       setWsOpen(true);
-      props.onOpenWorkspace?.();
+      props.onOpenWorkspace?.(event);
     },
   };
 }
