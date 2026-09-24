@@ -179,6 +179,17 @@ export function buildAssistantAnswer(query, context = "personalized") {
   };
 }
 
+/* portal.js scope → answer-context mapping for the Home assistant. */
+const HOME_SCOPE_CONTEXTS = { All: "personalized", Campaigns: "campaign", Dashboards: "report", Knowledge: "knowledge" };
+
+/**
+ * Home assistant answer for a prompt plus the selected scope label — wraps
+ * buildAssistantAnswer with the scope→context mapping portal.js applies.
+ */
+export function buildHomeAssistantAnswer(text, scope = "All") {
+  return buildAssistantAnswer(text, HOME_SCOPE_CONTEXTS[scope] || "personalized");
+}
+
 /**
  * Reports-page shared assistant (`reports-inline-1.js` `createMainAnswer`):
  * the compact card — recommendation + "Sources used" spans + feedback — with

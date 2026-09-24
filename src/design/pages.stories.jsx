@@ -1,11 +1,13 @@
 import React from "react";
-import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, COCKPIT_SKILL_MENU, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
+import { ASSISTANT, ASSISTANT_SKILL_MENU, CAMPAIGN, COCKPIT, COCKPIT_SKILL_MENU, DATA_UPLOAD, HOME, INTERPRETER, LITE_ASSISTANT, LOGO, MEDIA_TRACKING, MODEL_FLOW, NAV, SELF_SERVICE, buildCampaignAnswer, buildHomeAssistantAnswer, buildLiteAssistantAnswer, buildModelDraft, buildReportAssistantAnswer } from "./content.js";
 import { AiInterpreterPage, CampaignPage, DataUploadPage, HomePage, MarketingCockpitPage, MediaTrackingDetailPage, SelfServicePage, cockpitViews } from "./pages.jsx";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "./demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "./demo/report-demo.js";
 import { useCockpitDemo } from "./demo/cockpit-demo.js";
+import { useHomeDemo } from "./demo/home-demo.js";
 
 const shell = { logo: LOGO, navigation: NAV };
+const HOME_DEMO = { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft };
 
 export default {
   title: "Pages",
@@ -54,122 +56,7 @@ export const Home = {
     onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function HomeStory(args) {
-    const [open, setOpen] = useSynced(args.assistantOpen);
-    const [prompt, setPrompt] = useSynced(args.prompt);
-    const [scope, setScope] = useSynced(args.scope);
-    const [answers, setAnswers] = React.useState([]);
-    const [skill, setSkill] = React.useState(null);
-    const [flow, setFlow] = React.useState(null);
-    /* portal.js home-history pick writes promptCanvas.textContent without
-       updateSendState() — ASK stays disabled until the user types. */
-    const [historyFilled, setHistoryFilled] = React.useState(false);
-    const scopeContexts = { All: "personalized", Campaigns: "campaign", Dashboards: "report", Knowledge: "knowledge" };
-    return (
-      <HomePage
-        {...args}
-        assistant={{
-          ...args.assistant,
-          answers,
-          selectedSkill: skill,
-          submitDisabled: historyFilled,
-          onAttach: args.onAttach,
-          onSelectSkill: (event) => {
-            setSkill({ id: event.id, type: event.type, title: event.title });
-            args.onSelectSkill?.(event);
-          },
-          onClearSkill: () => {
-            setSkill(null);
-            args.onClearSkill?.();
-          },
-          onSkillAction: ({ action }) => {
-            args.onSkillAction?.({ action });
-            setFlow({
-              step: action === "history" ? "history" : "manual",
-              threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-              rule: "",
-              draft: {},
-            });
-          },
-        }}
-        assistantOpen={open}
-        prompt={prompt}
-        scope={scope}
-        onNavigate={args.onNavigate}
-        onOpen={args.onOpen}
-        onOpenAssistant={() => {
-          setOpen(true);
-          args.onOpenAssistant?.();
-        }}
-        onCloseAssistant={() => {
-          setOpen(false);
-          args.onCloseAssistant?.();
-        }}
-        onPromptChange={(event) => {
-          setPrompt(event.value);
-          setHistoryFilled(false);
-          args.onPromptChange?.(event);
-        }}
-        onSuggestion={(event) => {
-          setPrompt(event.prompt);
-          setHistoryFilled(false);
-          args.onSuggestion?.(event);
-        }}
-        onScopeChange={(event) => {
-          setScope(event.scope);
-          args.onScopeChange?.(event);
-        }}
-        onSubmit={(event) => {
-          const text = String(event.prompt || "").trim();
-          if (text) {
-            setAnswers([buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
-            setPrompt("");
-            setHistoryFilled(false);
-          }
-          args.onSubmit?.(event);
-        }}
-        onNewSession={() => {
-          setAnswers([]);
-          setPrompt("");
-          setHistoryFilled(false);
-          args.onNewSession?.();
-        }}
-        onMaximize={args.onMaximize}
-        onHistory={args.onHistory}
-        onHistorySelect={(event) => {
-          setPrompt(event.prompt);
-          setHistoryFilled(true);
-          args.onHistorySelect?.(event);
-        }}
-        onFeedback={args.onFeedback}
-        skillFlow={
-          flow
-            ? {
-                step: flow.step,
-                threads: flow.threads,
-                rule: flow.rule,
-                draft: flow.draft,
-                sections: MODEL_FLOW.sections,
-                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-                  setFlow((current) => ({
-                    ...current,
-                    threads: current.threads.map((thread, ti) =>
-                      ti === threadIndex
-                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                        : thread,
-                    ),
-                  })),
-                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-                onGenerate: ({ messages, rule }) =>
-                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
-                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-                onClose: () => setFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
-              }
-            : undefined
-        }
-      />
-    );
+    return <HomePage {...useHomeDemo({ ...args, demo: HOME_DEMO })} />;
   },
 };
 

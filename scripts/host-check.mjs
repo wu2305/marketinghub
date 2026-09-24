@@ -13,6 +13,10 @@
  *                 then browser back (popstate) returns to the directory
  *   coverage    — a link to an unrebuilt original page shows the coverage
  *                 notice instead of navigating to /assets/pages/…
+ *   home-flow   — Home assistant via useHomeDemo: history pick fills the
+ *                 prompt with ASK disabled, typing re-enables, submit shows
+ *                 an answer, close→reopen keeps it, new session clears, and
+ *                 the skill menu opens the model-flow dialog
  *   sentinel    — host-owned elements get identical computed styles on the
  *                 bare sentinel page and the compose page (scoped resets do
  *                 not leak)
@@ -29,6 +33,7 @@ import path from "node:path";
 import { chromium } from "playwright";
 import sirv from "sirv";
 import { ROOT, sourceFingerprint } from "./fingerprint.mjs";
+import { ASSISTANT } from "../src/design/content.js";
 
 const HOST = path.join(ROOT, "examples", "host");
 const DIST = path.join(HOST, "dist");
@@ -222,6 +227,63 @@ async function newPage() {
   if (!/not yet rebuilt/i.test(text)) notes.push(`coverage notice text missing: ${text.slice(0, 80)}`);
   notes.push(...errors);
   record("coverage", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- home-flow: assistant history fill → disabled ASK → submit → session ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".mh-launcher", { timeout: 10000 });
+  const expectedPrompt = ASSISTANT.history[0].prompt;
+  const panel = page.locator(".mh-assistant");
+  const box = panel.locator("textarea");
+  const ask = panel.locator(".mh-assistant__send button");
+
+  await page.click(".mh-launcher");
+  await page.waitForSelector(".mh-assistant", { timeout: 5000 });
+  await panel.locator('button[aria-label="History"]').click();
+  await page.waitForSelector(".mh-assistant__history-item", { timeout: 5000 });
+  await page.locator(".mh-assistant__history-item").first().click();
+  const filled = await box.inputValue();
+  if (filled !== expectedPrompt) {
+    notes.push(`history pick filled "${filled.slice(0, 60)}" — expected "${expectedPrompt.slice(0, 60)}"`);
+  }
+  if (!(await ask.isDisabled())) notes.push("ASK not disabled after history pick");
+  await box.fill("typed follow-up");
+  if (await ask.isDisabled()) notes.push("ASK still disabled after typing");
+  await ask.click();
+  await page.waitForSelector(".mh-assistant__answer", { timeout: 5000 });
+  if ((await box.inputValue()) !== "") notes.push("prompt not cleared after submit");
+  await page.screenshot({ path: path.join(OUT, "home-flow-answer.png") });
+
+  /* close → reopen keeps the answer; new session clears it */
+  await panel.locator('button[aria-label="Close assistant"]').last().click();
+  await page.waitForSelector(".mh-assistant", { state: "detached", timeout: 5000 });
+  await page.click(".mh-launcher");
+  await page.waitForSelector(".mh-assistant", { timeout: 5000 });
+  if (!(await panel.locator(".mh-assistant__answer").count())) notes.push("answer lost across close → reopen");
+  await panel.locator('button[aria-label="New session"]').click();
+  if (await panel.locator(".mh-assistant__answer").count()) notes.push("answers survived new session");
+  if ((await box.inputValue()) !== "") notes.push("prompt not cleared by new session");
+
+  /* skill menu → "Add from Chat History" opens the model-flow dialog */
+  await panel.locator('button[aria-label="Choose AI skill"]').click();
+  await page.waitForSelector(".mh-skill", { timeout: 5000 });
+  await panel.locator(".mh-skill__category", { hasText: "Analytical Model" }).click();
+  await page.waitForSelector(".mh-skill__detail", { timeout: 5000 });
+  await panel.locator(".mh-skill__action", { hasText: "Add from Chat History" }).click();
+  await page.waitForSelector(".mh-flow", { timeout: 5000 });
+  if (!(await page.locator(".mh-flow").innerText()).includes("Generate Analytical Model")) {
+    notes.push("model flow dialog missing the history step title");
+  }
+  await page.screenshot({ path: path.join(OUT, "home-flow-skill.png") });
+  await page.locator(".mh-flow button[aria-label='Close']").click();
+  if (await page.locator(".mh-flow").count()) notes.push("model flow dialog did not close");
+
+  notes.push(...errors);
+  record("home-flow", notes.length === 0, notes);
   await page.close();
 }
 

@@ -108,6 +108,7 @@ export {
 } from "./report-routes.js";
 /* Deterministic demo state + simulators for hosts and tests. */
 export { useCockpitDemo } from "./demo/cockpit-demo.js";
+export { useHomeDemo } from "./demo/home-demo.js";
 export {
   generateCityInvestScenario,
   cityInvestScenarioSource,

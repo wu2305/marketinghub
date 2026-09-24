@@ -19,6 +19,7 @@ import {
   CityInvestDashboard,
   ReportCopilot,
   useCockpitDemo,
+  useHomeDemo,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -32,7 +33,8 @@ import {
   LOGO,
   MODEL_FLOW,
   NAV,
-  buildAssistantAnswer,
+  buildHomeAssistantAnswer,
+  buildModelDraft,
   buildReportAssistantAnswer,
 } from "../../src/design/content.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
@@ -142,45 +144,24 @@ function useRoute() {
 /* ------------------------------------------------------------------ */
 
 function HomeRoute() {
-  const [open, setOpen] = React.useState(false);
-  const [prompt, setPrompt] = React.useState("");
-  const [scope, setScope] = React.useState("All");
-  const [answers, setAnswers] = React.useState([]);
-  const scopeContexts = { All: "personalized", Campaigns: "campaign", Dashboards: "report", Knowledge: "knowledge" };
   const cards = HOME.cards.map((card) => ({
     ...card,
     href: mapDemoHref(card.href),
     links: (card.links || []).map((link) => ({ ...link, href: mapDemoHref(link.href) })),
   }));
-  return (
-    <HomePage
-      logo={hostLogo}
-      navigation={hostNav()}
-      hero={HOME.hero}
-      heading={HOME.heading}
-      cards={cards}
-      assistant={{
-        ...ASSISTANT,
-        skillMenu: ASSISTANT_SKILL_MENU,
-        answers,
-      }}
-      assistantOpen={open}
-      prompt={prompt}
-      scope={scope}
-      onOpenAssistant={() => setOpen(true)}
-      onCloseAssistant={() => setOpen(false)}
-      onPromptChange={({ value }) => setPrompt(value)}
-      onScopeChange={({ scope: next }) => setScope(next)}
-      onSuggestion={(event) => setPrompt(event.prompt)}
-      onSubmit={(event) => {
-        const text = String(event.prompt || "").trim();
-        if (!text) return;
-        setAnswers([buildAssistantAnswer(text, scopeContexts[scope] || "personalized")]);
-        setPrompt("");
-      }}
-      onNewSession={() => setAnswers([])}
-    />
-  );
+  const props = useHomeDemo({
+    logo: hostLogo,
+    navigation: hostNav(),
+    hero: HOME.hero,
+    heading: HOME.heading,
+    cards,
+    assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
+    assistantOpen: false,
+    prompt: "",
+    scope: "All",
+    demo: { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
+  });
+  return <HomePage {...props} />;
 }
 
 /* ------------------------------------------------------------------ */
