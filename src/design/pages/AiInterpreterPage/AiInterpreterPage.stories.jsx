@@ -1,6 +1,6 @@
 import React from "react";
 import { INTERPRETER } from "../../content.js";
-import { useBusinessTermDemo } from "../../demo/business-term-demo.js";
+import { useInterpreterDemo } from "../../demo/interpreter-demo.js";
 import { pageShell, useSynced } from "../../lib/story-helpers.js";
 import { AiInterpreterPage } from "./index.jsx";
 
@@ -48,89 +48,43 @@ export const Interpreter = {
     onToggleExpand: { action: "onToggleExpand" },
     onFilterToggle: { action: "onFilterToggle" },
     onOpen: { action: "onOpen" },
+    onCloseDetail: { action: "onCloseDetail" },
     onAction: { action: "onAction" },
+    onDialogConfirm: { action: "onDialogConfirm" },
+    onDialogCancel: { action: "onDialogCancel" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
-    const [query, setQuery] = useSynced(args.query);
-    const [filterValues, setFilterValues] = useSynced(args.filterValues);
-    const [selCategories, setSelCategories] = useSynced(args.principles?.selectedCategories || []);
-    const [principlePage, setPrinciplePage] = useSynced(args.principles?.page || 1);
-    const [principlePageSize, setPrinciplePageSize] = useSynced(args.principles?.pageSize || 10);
-    const [principleExpanded, setPrincipleExpanded] = useSynced(args.principles?.expanded || []);
+    const onSelectType = (event) => {
+      setActiveType(event.id);
+      args.onSelectType?.(event);
+    };
     /* Page-level container: filter/search/page/detail state survives switching
        to other knowledge types and back (module-level in the original). */
-    const businessTerms = useBusinessTermDemo({
-      ...INTERPRETER.businessTermLibrary,
+    const demo = useInterpreterDemo({
+      types: args.types,
+      records: args.records,
+      activeType,
+      query: args.query,
+      filterValues: args.filterValues,
+      principles: args.principles,
+      businessTermLibrary: INTERPRETER.businessTermLibrary,
       onNavigate: args.onNavigate,
       onQueryChange: args.onQueryChange,
-      onFilterToggle: args.onFilterToggle,
+      onFilterChange: args.onFilterChange,
+      onCreate: args.onCreate,
+      onSelectAsset: args.onSelectAsset,
+      onToggleCategory: args.onToggleCategory,
       onPage: args.onPage,
       onPageSize: args.onPageSize,
+      onToggleExpand: args.onToggleExpand,
+      onFilterToggle: args.onFilterToggle,
       onOpen: args.onOpen,
+      onCloseDetail: args.onCloseDetail,
       onAction: args.onAction,
-      onCreate: args.onCreate,
+      onDialogConfirm: args.onDialogConfirm,
+      onDialogCancel: args.onDialogCancel,
     });
-    return (
-      <AiInterpreterPage
-        {...args}
-        activeType={activeType}
-        query={query}
-        filterValues={filterValues}
-        businessTerms={businessTerms}
-        principles={{
-          ...args.principles,
-          selectedCategories: selCategories,
-          page: principlePage,
-          pageSize: principlePageSize,
-          expanded: principleExpanded,
-          // types.js: query/category/page-size/type changes reset to page 1.
-          onToggleCategory: (event) => {
-            setSelCategories(
-              event.checked
-                ? [...selCategories, event.id]
-                : selCategories.filter((id) => id !== event.id),
-            );
-            setPrinciplePage(1);
-            args.onToggleCategory?.(event);
-          },
-          onPage: (event) => {
-            setPrinciplePage(event.page);
-            args.onPage?.(event);
-          },
-          onPageSize: (event) => {
-            setPrinciplePageSize(event.pageSize);
-            setPrinciplePage(1);
-            args.onPageSize?.(event);
-          },
-          onToggleExpand: (event) => {
-            setPrincipleExpanded(
-              event.expanded
-                ? [...principleExpanded, event.id]
-                : principleExpanded.filter((id) => id !== event.id),
-            );
-            args.onToggleExpand?.(event);
-          },
-        }}
-        onNavigate={args.onNavigate}
-        onSelectType={(event) => {
-          setActiveType(event.id);
-          setFilterValues({});
-          setPrinciplePage(1);
-          args.onSelectType?.(event);
-        }}
-        onQueryChange={(event) => {
-          setQuery(event.value);
-          setPrinciplePage(1);
-          args.onQueryChange?.(event);
-        }}
-        onFilterChange={(event) => {
-          setFilterValues((values) => ({ ...values, [event.id]: event.value }));
-          args.onFilterChange?.(event);
-        }}
-        onCreate={args.onCreate}
-        onSelectAsset={args.onSelectAsset}
-      />
-    );
+    return <AiInterpreterPage {...args} activeType={activeType} {...demo} onSelectType={onSelectType} />;
   },
 };

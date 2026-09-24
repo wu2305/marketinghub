@@ -10,28 +10,31 @@ import "./KnowledgeLibrary.css";
  * get the create button, read-only types do not.
  * @param {object} props
  * @param {{ id: string, title: string, manageable?: boolean, createLabel?: string, statusFilters?: Array<object> }} props.type
+ * @param {Array<object>} [props.filters] resolved filter descriptors (options included); defaults to `type.statusFilters`
  * @param {string} [props.query]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {Object<string, string>} [props.filterValues={}]
  * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
- * @param {Array<object>} [props.rows=[]] AssetRow props plus id/typeLabel
+ * @param {Array<object>} [props.rows=[]] AssetRow props plus id/typeLabel (already filtered — S8/R4 contract)
  * @param {(event: { typeId: string, title: string }) => void} [props.onCreate]
  * @param {(row: object) => void} [props.onSelect]
+ * @param {React.Ref} [props.searchRef] forwarded to the toolbar search input ("/" shortcut)
  * @param {string} [props.emptyTitle="No knowledge assets"]
  * @param {string} [props.emptyMessage]
  */
-export function KnowledgeLibrary({ type, query, onQueryChange, filterValues = {}, onFilterChange, rows = [], onCreate, onSelect, emptyTitle = "No knowledge assets", emptyMessage }) {
+export function KnowledgeLibrary({ type, filters, query, onQueryChange, filterValues = {}, onFilterChange, rows = [], onCreate, onSelect, searchRef, emptyTitle = "No knowledge assets", emptyMessage, ...rest }) {
   const createLabel = type?.manageable ? type.createLabel || `Create ${type.title}` : undefined;
   return (
-    <section className="mh-library" aria-label="Knowledge library">
+    <section className="mh-library" aria-label="Knowledge library" {...rest}>
       <LibraryToolbar
         query={query}
-        filters={type?.statusFilters || []}
+        filters={filters ?? type?.statusFilters ?? []}
         filterValues={filterValues}
         onQueryChange={onQueryChange}
         onFilterChange={onFilterChange}
         createLabel={createLabel}
         onCreate={type ? () => onCreate?.({ typeId: type.id, title: type.title }) : undefined}
+        searchRef={searchRef}
       />
       <div className="mh-asset-head">
         <span>Knowledge Title</span>

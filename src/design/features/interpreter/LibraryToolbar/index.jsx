@@ -15,8 +15,9 @@ import "./LibraryToolbar.css";
  * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
  * @param {string} [props.createLabel] when omitted the create button is not rendered
  * @param {() => void} [props.onCreate]
+ * @param {React.Ref} [props.searchRef] forwarded to the search input ("/" shortcut)
  */
-export function LibraryToolbar({ query, onQueryChange, filters = [], filterValues = {}, onFilterChange, createLabel, onCreate }) {
+export function LibraryToolbar({ query, onQueryChange, filters = [], filterValues = {}, onFilterChange, createLabel, onCreate, searchRef }) {
   return (
     <div className="mh-toolbar">
       <div className="mh-toolbar__filters">
@@ -41,7 +42,7 @@ export function LibraryToolbar({ query, onQueryChange, filters = [], filterValue
       </div>
       <div className="mh-toolbar__actions">
         <div style={{ width: 280 }}>
-          <SearchField label="Search knowledge" value={query} placeholder="Search knowledge..." size="sm" onChange={onQueryChange} />
+          <SearchField label="Search knowledge" value={query} placeholder="Search knowledge..." size="sm" inputRef={searchRef} onChange={onQueryChange} />
         </div>
         {createLabel ? (
           <Button variant="gold" size="lg" icon="plus" onClick={onCreate}>

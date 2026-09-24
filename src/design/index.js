@@ -232,6 +232,7 @@ export {
 export { useCockpitDemo } from "./demo/cockpit-demo.js";
 export { useHomeDemo } from "./demo/home-demo.js";
 export { useBusinessTermDemo } from "./demo/business-term-demo.js";
+export { useInterpreterDemo } from "./demo/interpreter-demo.js";
 export {
   generateCityInvestScenario,
   cityInvestScenarioSource,

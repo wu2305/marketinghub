@@ -4,22 +4,30 @@ import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx"
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { cx, recordMatchesFilter, uniqueFilterOptions } from "../../cx.js";
+import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
 import { KnowledgeLibrary } from "../../features/interpreter/KnowledgeLibrary/index.jsx";
 import { KnowledgeSidebar } from "../../features/interpreter/KnowledgeSidebar/index.jsx";
 import { PrinciplesView } from "../../features/interpreter/PrinciplesView/index.jsx";
 import { TypeGrid } from "../../features/interpreter/TypeGrid/index.jsx";
+import { useSearchShortcut } from "../../lib/search-shortcut.js";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./AiInterpreterPage.css";
 
-
-
+/* S8: dedicated per-type views register here by `type.view`; every unregistered
+   type falls back to the transitional generic KnowledgeLibrary. Each view is
+   controlled — it receives already-filtered, already-paginated rows plus
+   controlled query/filter/page state and callbacks (R4 contract; the filter
+   and pagination functions live in demo/interpreter-demo.js). */
+const typeViews = {
+  principles: PrinciplesView,
+  "business-term": BusinessTermView,
+};
 
 /**
  * AI Interpreter knowledge workspace: sidebar type navigation, type overview
- * grid, and the generic per-type library list (transition implementation —
- * original per-type views are card/table grids, see handover §2.3 P07).
+ * grid, and per-type views dispatched through the registry (unregistered
+ * types render the transitional generic library list, see handover §2.3 P07).
  * @param {object} props
  * @param {string} [props.current="interpreter"]
  * @param {object} props.logo
@@ -27,13 +35,12 @@ import "./AiInterpreterPage.css";
  * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
  * @param {{ id: string, label: string, icon?: string }} [props.overviewItem]
  * @param {string} [props.sidebarTitle]
- * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, statusFilters)
- * @param {Array<object>} [props.records=[]] sampled records; each row links to a type via `typeId`
- * @param {object} [props.principles={}] PrinciplesView props for `?type=Principles` (items, selectedCategories, page, pageSize, expanded, strings, callbacks)
- * @param {object} [props.businessTerms={}] BusinessTermView props for `?type=Business Term` — drive it with `useBusinessTermDemo` so the state lives at page level
+ * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, statusFilters, view)
+ * @param {Object<string, object>} [props.views={}] prepared props per registered view key — e.g. `views.principles` drives PrinciplesView, `views["business-term"]` drives BusinessTermView (build with `useInterpreterDemo`)
+ * @param {{ rows: Array<object>, filters: Array<object> }} [props.library] prepared rows + resolved filter descriptors for the transitional generic library
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
- * @param {string} [props.query=""]
- * @param {Object<string, string>} [props.filterValues={}]
+ * @param {string} [props.query=""] controlled search text shared by the visible type view
+ * @param {Object<string, string>} [props.filterValues={}] controlled generic-library filter selections
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onSelectType]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
@@ -49,9 +56,8 @@ export function AiInterpreterPage({
   overviewItem = { id: "overview", label: "Overview" },
   sidebarTitle,
   types = [],
-  records = [],
-  principles = {},
-  businessTerms = {},
+  views = {},
+  library = { rows: [], filters: [] },
   activeType = "overview",
   query = "",
   filterValues = {},
@@ -66,37 +72,12 @@ export function AiInterpreterPage({
   const type = types.find((item) => item.id === activeType);
   const known = overview || Boolean(type);
   const searchRef = React.useRef(null);
+  const rootRef = React.useRef(null);
   const rulesHintId = React.useId();
 
-  // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages.
-  React.useEffect(() => {
-    if (overview || !known) return undefined;
-    const onKeydown = (event) => {
-      const active = document.activeElement;
-      const editing =
-        active &&
-        (active.matches("input, textarea, select") || active.getAttribute("contenteditable") === "true");
-      const isSearchShortcut =
-        event.key === "/" || ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k");
-      if (isSearchShortcut && !editing && searchRef.current) {
-        event.preventDefault();
-        searchRef.current.focus();
-      }
-    };
-    document.addEventListener("keydown", onKeydown);
-    return () => document.removeEventListener("keydown", onKeydown);
-  }, [overview, known]);
-
-  const typeRecords = type ? records.filter((record) => record.typeId === type.id) : [];
-  const filters = (type?.statusFilters || []).map((filter) => ({
-    ...filter,
-    options: filter.options || uniqueFilterOptions(typeRecords, filter.id),
-  }));
-  const rows = typeRecords.filter((record) => {
-    const queryMatch = !query || `${record.title} ${record.summary}`.toLowerCase().includes(query.toLowerCase());
-    const filterMatch = filters.every((filter) => !filterValues[filter.id] || recordMatchesFilter(record, filter, filterValues[filter.id]));
-    return queryMatch && filterMatch;
-  });
+  // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages;
+  // instance-scoped so two mounted pages never both steal the keypress.
+  useSearchShortcut({ enabled: !overview && known, searchRef, rootRef });
 
   // renderHeroStats: labels stay static; values/captions follow the active type,
   // singularizing the unit when its own value is 1 ("1 model governed…").
@@ -109,6 +90,8 @@ export function AiInterpreterPage({
       ]
     : hero.stats || [];
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
+
+  const View = type ? typeViews[type.view] : undefined;
 
   return (
     /* Type pages rearrange the shell like the original's
@@ -139,7 +122,7 @@ export function AiInterpreterPage({
           </div>
         ) : null}
       </Hero>
-      <div className="mh-interpreter">
+      <div className="mh-interpreter" ref={rootRef}>
         <KnowledgeSidebar
           overview={overviewItem}
           title={sidebarTitle}
@@ -158,28 +141,24 @@ export function AiInterpreterPage({
               <strong>Unknown knowledge type</strong>
               <p>{`"${activeType}" is not one of the ${types.length} knowledge types. Pick a type from the navigation.`}</p>
             </div>
-          ) : type.view === "principles" ? (
-            <PrinciplesView
-              query={query}
-              onQueryChange={onQueryChange}
-              searchRef={searchRef}
-              {...principles}
-            />
-          ) : type.view === "business-term" ? (
-            /* business-term-library.js replaces the generic library chrome with
-               #businessTermOverview; the "/" and Cmd/Ctrl+K shortcut keeps
-               targeting the visible search input. */
-            <BusinessTermView searchRef={searchRef} {...businessTerms} />
+          ) : View ? (
+            <View searchRef={searchRef} {...(views[type.view] || {})} />
           ) : (
+            /* Unregistered types render the transitional generic list —
+               business-term-library.js replaces this chrome wholesale, which is
+               the model each remaining dedicated view will follow. */
             <KnowledgeLibrary
-              type={{ ...type, statusFilters: filters }}
+              type={type}
+              filters={library.filters}
               query={query}
               filterValues={filterValues}
-              rows={rows}
+              rows={library.rows}
               onQueryChange={onQueryChange}
               onFilterChange={onFilterChange}
               onCreate={onCreate}
               onSelect={onSelectAsset}
+              searchRef={searchRef}
+              data-transitional="true"
             />
           )}
         </div>

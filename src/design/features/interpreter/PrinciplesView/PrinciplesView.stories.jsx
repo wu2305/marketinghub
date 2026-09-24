@@ -1,5 +1,6 @@
 import { PrinciplesView } from "./index.jsx";
 import { INTERPRETER } from "../../../content.js";
+import { filterPrinciples, paginateRows } from "../../../demo/interpreter-demo.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {
@@ -39,13 +40,18 @@ export default {
     const [page, setPage] = useSynced(args.page);
     const [pageSize, setPageSize] = useSynced(args.pageSize);
     const [expanded, setExpanded] = useSynced(args.expanded);
+    const filtered = filterPrinciples(INTERPRETER.principles, { query, selectedCategories: selected });
+    const window_ = paginateRows(filtered, { page, pageSize });
+    const categories = [...new Set(INTERPRETER.principles.map((item) => item.category))].map((id) => ({ id, label: id }));
     return (
       <PrinciplesView
-        items={INTERPRETER.principles}
+        items={window_.rows}
+        total={window_.total}
+        categories={categories}
         strings={INTERPRETER.principlesLibrary}
         query={query}
         selectedCategories={selected}
-        page={page}
+        page={window_.page}
         pageSize={pageSize}
         expanded={expanded}
         onQueryChange={(event) => {

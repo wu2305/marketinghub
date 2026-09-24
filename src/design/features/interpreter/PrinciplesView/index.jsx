@@ -106,9 +106,14 @@ function PrincipleDescription({ text, expanded, onToggle }) {
  * filter, "Showing X of Y" count line, numbered cards with clamped
  * descriptions, and shared pagination. Mirrors `renderPrinciplesCards`,
  * `matchingPrinciples` and `renderPrincipleCategoryFilter` in types.js.
+ * S8/R4 contract: the view is controlled — it receives already-filtered,
+ * already-paginated `items` plus `total`/`categories`; filtering and paging
+ * live in `demo/interpreter-demo.js` (`filterPrinciples`/`paginateRows`).
  * @param {object} props
- * @param {Array<{ id: string, category: string, title: string, description: string }>} [props.items=[]] all principles (unfiltered)
- * @param {string} [props.query=""] search text — matches category, title, description
+ * @param {Array<{ id: string, category: string, title: string, description: string }>} [props.items=[]] visible rows (filtered + paginated)
+ * @param {number} [props.total] filtered count feeding the pagination footer
+ * @param {Array<{ id: string, label: string }>} [props.categories=[]] category checkbox options (all categories, not only visible ones)
+ * @param {string} [props.query=""] controlled search text — matches category, title, description
  * @param {Array<string>} [props.selectedCategories=[]]
  * @param {number} [props.page=1]
  * @param {number} [props.pageSize=10]
@@ -123,6 +128,8 @@ function PrincipleDescription({ text, expanded, onToggle }) {
  */
 export function PrinciplesView({
   items = [],
+  total,
+  categories = [],
   query = "",
   selectedCategories = [],
   page = 1,
@@ -147,17 +154,11 @@ export function PrinciplesView({
     rowsPerPageLabel = "Rows per page",
     pageSizes = [10, 20, 50],
   } = strings;
-  const normalizedQuery = query.trim().toLowerCase();
-  const categories = [...new Set(items.map((item) => item.category))].map((id) => ({ id, label: id }));
-  const matching = items.filter(
-    (item) =>
-      (!selectedCategories.length || selectedCategories.includes(item.category)) &&
-      (!normalizedQuery || [item.category, item.title, item.description].join(" ").toLowerCase().includes(normalizedQuery)),
-  );
-  const pages = Math.max(1, Math.ceil(matching.length / pageSize));
+  const totalItems = total ?? items.length;
+  const pages = Math.max(1, Math.ceil(totalItems / pageSize));
   const current = Math.min(Math.max(1, page), pages);
   const first = (current - 1) * pageSize;
-  const visible = matching.slice(first, first + pageSize);
+  const visible = items;
   return (
     <section className="mh-principles" aria-label="Principles library">
       <header className="mh-principles__toolbar">
@@ -200,7 +201,7 @@ export function PrinciplesView({
         )}
       </div>
       <Pagination
-        total={matching.length}
+        total={totalItems}
         units={countUnit}
         page={current}
         pageSize={pageSize}

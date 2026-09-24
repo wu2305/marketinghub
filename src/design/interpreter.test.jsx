@@ -1,8 +1,8 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
-import { useBusinessTermDemo } from "./demo/business-term-demo.js";
+import { useInterpreterDemo } from "./demo/interpreter-demo.js";
 import { INTERPRETER } from "./content.js";
 
 const baseProps = {
@@ -10,18 +10,25 @@ const baseProps = {
   overviewItem: INTERPRETER.overview,
   sidebarTitle: INTERPRETER.sidebarTitle,
   types: INTERPRETER.types,
+};
+
+const demoInputs = {
+  types: INTERPRETER.types,
   records: INTERPRETER.records,
   principles: {
     items: INTERPRETER.principles,
     strings: INTERPRETER.principlesLibrary,
   },
+  businessTermLibrary: INTERPRETER.businessTermLibrary,
 };
 
-/* The dedicated Business Term view needs its page-level container (same
-   wiring as the pages--interpreter story). */
+/* The dedicated views need the page-level container (same wiring as the
+   pages--interpreter story): useInterpreterDemo holds the filter/search/page
+   state and produces `views` + `library`. */
 function Page(props) {
-  const businessTerms = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
-  return <AiInterpreterPage {...baseProps} businessTerms={businessTerms} {...props} />;
+  const { activeType: initialType = "overview", ...rest } = props;
+  const demo = useInterpreterDemo({ ...demoInputs, ...rest, activeType: initialType });
+  return <AiInterpreterPage {...baseProps} {...demo} {...rest} activeType={initialType} />;
 }
 
 function renderPage(props = {}) {
@@ -32,42 +39,23 @@ function renderPage(props = {}) {
 // UI exercise the real filtering path.
 function Harness({ onSelectType, ...rest }) {
   const [activeType, setActiveType] = React.useState(rest.activeType ?? "overview");
-  const [query, setQuery] = React.useState(rest.query ?? "");
-  const [filterValues, setFilterValues] = React.useState(rest.filterValues ?? {});
-  const [selectedCategories, setSelectedCategories] = React.useState([]);
-  const [expanded, setExpanded] = React.useState([]);
-  const businessTerms = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
+  const demo = useInterpreterDemo({
+    ...demoInputs,
+    activeType,
+    query: rest.query,
+    filterValues: rest.filterValues,
+    principles: { ...demoInputs.principles, ...rest.principles },
+  });
   return (
     <AiInterpreterPage
       {...baseProps}
       {...rest}
-      businessTerms={businessTerms}
+      {...demo}
       activeType={activeType}
-      query={query}
-      filterValues={filterValues}
-      principles={{
-        ...baseProps.principles,
-        ...rest.principles,
-        selectedCategories,
-        expanded,
-        onToggleCategory: (event) =>
-          setSelectedCategories(
-            event.checked
-              ? [...selectedCategories, event.id]
-              : selectedCategories.filter((id) => id !== event.id),
-          ),
-        onToggleExpand: (event) =>
-          setExpanded(
-            event.expanded ? [...expanded, event.id] : expanded.filter((id) => id !== event.id),
-          ),
-      }}
       onSelectType={(event) => {
         setActiveType(event.id);
-        setFilterValues({});
         onSelectType?.(event);
       }}
-      onQueryChange={(event) => setQuery(event.value)}
-      onFilterChange={(event) => setFilterValues((values) => ({ ...values, [event.id]: event.value }))}
     />
   );
 }
@@ -190,5 +178,25 @@ describe("AI Interpreter type contract", () => {
     expect(document.querySelectorAll(".mh-principle").length).toBe(1);
     expect(document.querySelector(".mh-principle").textContent).toContain("Handle Runtime Context Carefully");
     expect(screen.getByText("1 selected")).toBeTruthy();
+  });
+
+  it("scopes the '/' shortcut to one instance when two pages are mounted", () => {
+    render(
+      <>
+        <Harness activeType="Principles" />
+        <Harness activeType="Principles" />
+      </>,
+    );
+    const searches = screen.getAllByLabelText("Search knowledge");
+    expect(searches.length).toBe(2);
+    /* Focus on body: only the most recently mounted instance answers. */
+    fireEvent.keyDown(document, { key: "/" });
+    expect(document.activeElement).toBe(searches[1]);
+
+    /* Focus inside the first instance routes the keypress back to it. */
+    const firstSidebarItem = document.querySelectorAll(".mh-interpreter")[0].querySelector("button");
+    firstSidebarItem.focus();
+    fireEvent.keyDown(document, { key: "/" });
+    expect(document.activeElement).toBe(searches[0]);
   });
 });
