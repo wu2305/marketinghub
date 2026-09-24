@@ -75,7 +75,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 ### 3.2 样式
 
 - 每个组件的样式写在其目录的 `<Name>.css` 中，随组件 import；组件的修饰类（`--*`）规则必须放在基类组件自己的 css 里，不能散落到使用方——构建期 CSS chunk 顺序不保证源 import 序。禁止整包引入 `assets/css`，禁止依赖 `knowledge-v4` 这类页面父级 class。
-- 颜色、字体、圆角、阴影、间距必须引用 `tokens.css` 中的变量。新增色值先加 token 再使用。目标：组件 CSS 中直接十六进制色值降为 0（渐变端点亦需 token 化）。
+- 颜色、字体、圆角、阴影、间距必须引用 `tokens.css` 中的变量。新增色值先查现有 token，同值同义时复用；确需新增时按语义命名（不按组件命名），同一取值不得挂多个同义 token 名。目标：组件 CSS 中直接十六进制色值降为 0（渐变端点亦需 token 化）。
 - 每个有布局的有机体与页面组件必须提供至少一档 `@media` 断点，以原始 CSS 的断点为参照。
 - 可交互元素必须有 `:focus-visible` 样式。
 - 组件 CSS 类名以 `mh-` 前缀、BEM 风格命名。
@@ -87,7 +87,9 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 3.4 故事与文档
 
-- Atoms、Molecules、Organisms 每个导出组件至少一个故事，配 Controls 与 Actions。
+- 每个导出组件至少一个故事，配 Controls 与 Actions。
+- 故事同样遵守奥卡姆剃刀：每个原始可达状态恰好一个命名故事；不为同一状态写重复故事，不为不可达或隐藏的残留 DOM 写故事；组件形态的差异优先用 Controls 切换枚举，只有原始页面中真实出现的组合才单独成故事。
+- 组件同样遵守奥卡姆剃刀：不写只转发 props 的包装组件；同义组件合并为一个并以 `variant`/`tone`/`size` 区分；新组件先放 `features/<page>/`，被第二个真实页面使用时才提升到 `components/`；不预建通用渲染器；没有页面或故事之外使用者的导出、props 与分支应删除。新增前先确认现有组件或 prop 无法覆盖。
 - Pages 故事的渲染树只允许出现 `src/design` 内的组件。
 - 所有故事文件启用 `tags: ["autodocs"]`。每个组件用 JSDoc 或 PropTypes 声明 props 的类型与取值；若引入 TypeScript，一次性迁移整个 `src/design`。
 - 提供 `src/design/index.js` 作为唯一公共导出入口。
@@ -105,7 +107,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 每次修改 `src/design` 或 `.storybook`，提交前必须完成：
 
-1. `npm run build-storybook` 通过，且 `storybook-static/index.json` 中故事数不减少。
+1. `npm run build-storybook` 通过，且 `storybook-static/index.json` 中故事数不减少；唯一例外是按 §3.4 奥卡姆剃刀删除重复或无使用者的故事/组件，须在 handover 列出被删 story id 及其状态仍在哪个故事中可见。
 2. 对受影响的页面故事与对应原始页面在 1440px 下截图并肉眼对照。步骤：
    - 静态服务：`(cd storybook-static && python3 -m http.server 6007)`；仓库根目录 `python3 -m http.server 4173`。
    - 截图：`google-chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars --user-data-dir=/tmp/chrome-<name> --window-size=1440,1400 --virtual-time-budget=5000 --screenshot=<name>.png <url>`。多张截图必须串行执行并使用不同 `--user-data-dir`。
@@ -147,7 +149,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 4. 本地状态演示原始前端流程，不依赖 assets/js 或生产服务；组件接入新宿主无需复制原始页面、原始业务脚本或中间 DOM 数据。
 5. handover 登记准确的状态与证据；受阻项保持未完成并继续独立工作。一个样板、若干截图、故事数量或测试通过不能替代全量验收。
 
-顺序：M0 → M1 最小闭环 → M2 → M3 → M4 → M5 → M6 → M7。已证明共性可提前提取，遇依赖可调整局部顺序并记录原因；不得把全量任务缩减为首个里程碑。每个提交/PR仍只包含一个可独立验收的条目。
+顺序：M0 → M1 最小闭环 → M2 → M3 → M4 → M5 → M6 → M7。2026-09-25 用户确认最终目标为从原始包提取完整 Storybook，采用广度优先：M3–M6 各页先做到结构正确、全部可达状态有故事与配对基线，像素收敛作为第二轮；结构整改只把直接阻碍覆盖的条目设为前置，其余与页面并行或推迟到 M7（具体条目与顺序见 `handover/structural-review.md` “第二轮决策”）。已证明共性可提前提取，遇依赖可调整局部顺序并记录原因；不得把全量任务缩减为首个里程碑。每个提交/PR仍只包含一个可独立验收的条目。
 
 ## 6. 分支与 PR 规则
 

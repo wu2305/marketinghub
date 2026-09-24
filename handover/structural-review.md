@@ -78,7 +78,7 @@
 
 ## 目标偏离
 
-- [ ] **A1 保真深度远超覆盖广度**
+- [x] **A1 保真深度远超覆盖广度**（2026-09-25 用户决定采纳，见“第二轮决策”D1）
   - 现状：P02 做到 74 个配对场景，逐 bug 复刻；而 17 页中有 10 页未开始，P07 八类里 6 类仍是占位。AGENTS.md §1 的首要目标是全量覆盖。
   - 建议：S1–S8 完成后切到广度优先。每个未开始的页面先做一遍结构正确、主要状态可达的实现，配对截图作为基线；像素级收敛放到第二轮。
   - 需要用户在 AGENTS.md §5 的顺序说明里确认。
@@ -309,3 +309,269 @@ S5：
 - **基线 CSS 中 tokens.css 被内联 4 份**：拆分前 atoms/molecules/organisms/pages.css 各自 `@import "./tokens.css"`，最终样式表含 4 份 `:root`/reset/`@font-face`；拆分后各组件统一经 JS 层 import，每份只出现一次。`:where()` reset 零特异度，无行为差异。
 - **`index.js` 的 `export * as demoContent from "./content.js"` 属命名空间导出**，静态导出对比脚本若只认 named-export 语法会误报缺失。
 - **`.design-sync/sb-reference/` 是拆分前的旧 Storybook 快照**（已 gitignore，不影响构建）；下次 design-sync 运行时会自然刷新，无需手工维护。
+
+## 第二轮对抗审查（2026-09-25，基于 `structural/s1-file-split` 1dd1d7d）
+
+范围：S1 搬迁后的 `src/design`、`examples/host`、`scripts`、`.storybook`、handover 与原始参照物交叉核对。只列上文 S1–S8 / A1–A4 **没有覆盖或覆盖不足**的问题；与已有条目重叠处写明“并入 Sx”，由原条目的执行者一并处理。复核时 `npx vitest run` 64/64 通过。
+
+### 发现
+
+- [ ] **R1 S1 未合入 main，而全部后续提示词要求“从最新 main 开分支”（阻断）**
+  - 证据：`origin/main` = `github/main` = 2daa11e；`structural/s1-file-split` 领先 3 个提交（d652fd8、ad7ba3a、1dd1d7d），无 PR。AGENTS.md §2.3/§2.4 已按拆分后的目录描述代码并引用 ad7ba3a，main 上的规则与 main 上的代码不一致。
+  - 后果：波次 2 的 agent 按通用前言 `git switch -c <分支> origin/main` 会拿到拆分前的 `organisms.jsx` 单文件，要么在旧结构上开发，要么与 S1 大面积冲突。
+  - 处理：先为 S1 开 PR 并合入 main（快进即可），之后才启动任何波次 2 条目。顺带：`origin` 上仍有 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 等 7 个 cursor/* 旧分支（AGENTS.md §2.2 要求关闭 #1、#5），由用户决定是否删除远端分支。
+
+- [ ] **R2 P03 Self-Service 与 P07 AI Interpreter 的助手面板丢失（可达状态缺口，未登记）**
+  - 原始：`assets/pages/flexible.html:196–211` 与 `assets/pages/knowledge.html:1705` 起都有 `#aiEntry` + 完整 `#assistantPanel`；`assets/js/self-service/workspace.js:554` 点击调用 `openAssistant("report")`，`assets/js/knowledge/workspace.js:2682` 调用 `openAssistant("knowledge")`（`overview-home.js:57` 另有程序化触发）。
+  - React：`pages/SelfServicePage/index.jsx:80` 与 `pages/AiInterpreterPage/index.jsx:187` 的 launcher 只发 `onNavigate({ id: "assistant" })`，页面没有任何 assistant props，故事和宿主也没有面板状态。
+  - 这违反 AGENTS.md §5 共同完成标准 1，且 handover §4 与有意差异表都未记录。同页全盘点：原始有 launcher+panel 的页面是 index、reports、flexible、knowledge、campaign、feedback-quality；其余页若有助手，由 `assistant-panel-lite.js` 动态注入（P05 已按此重建），P12–P17 盘点时须按同一口径核实。
+  - 处理：作为 M3（P03）与 M4（P07）各一个条目补建，复用 `AssistantPanel`，状态进 demo hook（与 S4 一致）。
+
+- [ ] **R3 页面助手预设的归属不一致，宿主被迫知道原始 quirk 开关**（并入 S3/S4）
+  - Home、Campaign、MediaTracking 在页面组件内部写死 `showPicks={false}`、`enterToSubmit={false}`；Cockpit 却要求调用方通过 `assistant` 传入 `showScopes:false, showPicks:false, hideStageOnAnswers:true, enterToSubmit:false`，`src/design/pages.stories.jsx:92` 与 `examples/host/main.jsx:191` 逐字重复这一行。
+  - 后果：新宿主必须抄写这些行为开关才能得到正确的 Cockpit 助手，这正是 AGENTS.md §1“只 import 组件即可搭页面”要避免的。
+  - 处理：页面自己知道自己是哪种助手，预设放在页面组件内（或其 demo hook 的默认值），调用方只传内容；验收时宿主与故事中不再出现上述开关名。
+
+- [ ] **R4 Interpreter 列表筛选有三种所有权模式**（并入 S8，必须在 M4 其余六类之前定）
+  - 通用类型：`AiInterpreterPage` 在页面内对 `records` 做 query + filter（`pages/AiInterpreterPage/index.jsx:90–98`），再把 `rows` 传给 `KnowledgeLibrary`。
+  - Principles：页面只传 `query`，`PrinciplesView` 拿未过滤的 `items` 自己过滤。
+  - Business Term：搜索/筛选/分页全在 `useBusinessTermDemo`，页面只透传 `businessTerms`。
+  - 另外页面在 `document` 上注册 “/” 与 Cmd/Ctrl+K 快捷键（:72–88），同页两个实例会互抢焦点。
+  - S8 的“统一 props 契约”没有规定谁负责筛选。建议：视图组件接收已过滤结果 + 受控 `query/filters/page` + 回调，过滤逻辑是纯函数，放在 `demo/` 的 hook 里；页面只负责注册表分派和外壳。快捷键改为只作用于当前实例（绑定到页面根元素或由 hook 提供）。
+
+- [ ] **R5 公共入口把演示层当库 API 导出；组件层存在越层 import，且没有检测**（并入 S7，边界检测可提前做）
+  - `src/design/index.js` 同时导出 `useCockpitDemo`/`useHomeDemo`/`useBusinessTermDemo`（:255–257）、`report-demo.js` 的场景函数（:266）、`report-routes.js` 中写死原始 Demo URL 的路由函数（:253）、`demoContent`（:227），以及 26 个仅服务单页的 feature 模块。S7 的库构建若照此发布，演示夹具和原始 URL 就成了公开契约。
+  - `components/Pagination/index.jsx:2` import 了 Cockpit 专用的 `report-logic.js` 的 `totalLabel`，但在 :31 被同名局部变量遮蔽——是 S1 按符号自动补 import 留下的死依赖，让通用原语依赖单页业务逻辑。按同样方式生成的 import 可能还有其他死依赖，仓库没有 lint，无法发现。
+  - `cx.js` 除 `cx` 外还放了 `normalizeOptions`、`recordMatchesFilter`、`uniqueFilterOptions` 这类领域筛选逻辑；`report-logic.js`、`report-routes.js` 只服务 Cockpit 却位于设计系统根目录。
+  - 处理：（a）现在就加 ESLint（`no-unused-vars`、`import/no-unused-modules` 可选）和一条 import 边界测试：`components/` 不得 import `features/`、`pages/`、`demo/`、`content.js`、`report-*.js`；`features/<p>/` 不得 import 其他 `features/<q>/`；删除 Pagination 的死 import。（b）S7 时拆成两个入口：库入口（components + features + pages + tokens）与 `./demo` 子路径（hooks、fixtures、content、report-demo/routes）；`report-logic.js` 移到 `features/cockpit/lib/`，筛选函数移出 `cx.js`。
+
+- [ ] **R6 导航契约绑定在原始 Demo 的 URL 空间上**（2026-09-25 已决定：新页面用约定，存量迁移推迟到 M7，见 D2）
+  - 默认 href 全是 `/index.html`、`/assets/pages/*.html?…`（`report-routes.js`、`content.js` 的 NAV）。Storybook 要靠 `.storybook/preview.js` 的 `DemoLinkGuard` 吞掉这些点击，宿主要靠 `examples/host/main.jsx:61–75` 的 `ROUTE_MAP`/`mapDemoHref` 逐页翻译。Cockpit 为此开了 `projectHref/liveHref/contextHref/backHref` 四个函数 props，其他页面各有各的做法。
+  - P08–P17 之间交叉链接密集（knowledge-create/view、review-center ↔ knowledge、scenario-*），照现状推进会让每个宿主的翻译表和每个页面的 href props 同步膨胀。
+  - 建议：统一为“路由 id + 参数”——组件发 `onNavigate({ id, params, href })`，href 由一个 `hrefFor(id, params)` 解析器生成（页面一个 prop 或一个 context），原始 Demo URL 的解析器放 `demo/`；Cockpit 的四个 href props 收敛为它。这改变公共接口，需用户确认后作为 M1 条目执行。
+
+- [ ] **R7 共享登记文件是并行冲突热点，波次 2 的“2–3 个 agent 并行”在现状下做不到**
+  - `scripts/visual-check.config.mjs` 3605 行，230 个场景在一个默认导出数组里；`src/design/pages.stories.jsx` 735 行装着全部 7 个页面故事和它们的状态；`content.js` 1703 行；`index.js`。S2–S8、A2 和每个新页面都要改其中至少两个。S1 解决了组件文件的冲突，没有解决这些文件。
+  - 处理（纯搬迁，零行为变化，R1 合入后立刻独占执行）：visual-check 场景按页拆为 `scripts/visual-check/scenarios/p01.mjs … p07.mjs`，由聚合文件按原顺序拼回（`--only`/过滤参数行为不变）；页面故事拆到 `pages/<Page>/<Page>.stories.jsx`，title 与 story id 不变（脚本只引用 `pages--*` id，已核实 115 处）；content.js 的按页拆分仍由 S6 做。
+
+- [ ] **R8 tokens.css 的 reset 会作用到调用方传入的插槽内容**（并入 cleanup 清单或 S7）
+  - `tokens.css:42–57` 用 `:where([class*="mh-"], [class*="mh-"] *)` 重置盒模型、按钮、链接。宿主传给 `Hero`、`Modal`、`Panel` 等的 `children` 都位于 `mh-*` 祖先之内，同样被重置；`host-check` 的哨兵只放在所有 `mh-*` 容器之外，测不到这种情况。
+  - 另外 65 个组件模块各自 `import tokens.css`，只引入一个组件也会注入全部 `@font-face` 与 `:root`。
+  - 处理：在 host compose 页加一个“插槽内哨兵”（宿主按钮/链接放进 Hero 或 Modal 的 children），先用断言确认现状，再决定 reset 改为只命中组件自身元素（例如 `.mh-x` 本身而不是 `[class*="mh-"] *`）还是登记为有意行为。
+
+- [ ] **R9 handover §1 的状态表自相矛盾，而 A3 只允许改排版**
+  - 同一张表里：“最新独立审核 8c93802 … 63 stories + 5 docs”、“构建验证 d6557c3 … 63 stories、5 docs”、“故事数 73 + 61 docs”、“最近视觉对照 105/105”；S1 条目记录的是 115/115。§2.1 M4 行写 Business Term 在 `devin/story-docs-closure` 完成。A3 的约束是“不改任何事实”，所以没人负责刷新这些过时事实。
+  - 处理：R1 合入后，在 main 上跑一次全套验证，用一次运行的结果重写 §1 表格（每项注明提交号），过期行移到 §2.5。
+
+- [ ] **R10 Storybook 分类与代码结构不一致**（低优先级，可与 R7 同做）
+  - 26 个 `features/*` 故事仍以 `Organisms/…` 为 title，读者无法区分可复用组件和单页模块；AGENTS.md §3.4 仍按 Atoms/Molecules/Organisms 表述规则。visual-check 只引用 `pages--*`，改 title 不影响配对；`stories.test.jsx` 可能断言 title，改时同步。
+  - 处理：features 改为 `Features/<Page>/<Name>`，components 保留原 Atoms/Molecules/Organisms 或统一为 `Components/<Name>`（选一，写进 AGENTS.md §3.4）。
+
+- [x] **R11 结构整改队列本身在推迟覆盖**（2026-09-25 用户决定采纳，见 D1/D3）
+  - 现行执行顺序把 S2–S8、A2–A4（10 项以上、4 个波次）全部排在 P08–P17 与 P07 其余六类之前。AGENTS.md §5 M1 明确写“不等待一个预想中的完整框架才开始页面工作”。覆盖现状 7/17 页，P07 八类中六类仍是占位，另有 R2 两处助手缺失。
+  - 建议：只把直接降低广度推进成本的条目设为前置——R1（合入）、R7（拆热点文件）、S8+R4（视图注册与筛选契约）、R6（导航方案决定）。S2、S3、S5、S7、A2、A4 与 P07 其余六类、R2 并行推进；S4 不再单独成波，而是每个页面条目自带自己的 demo hook（新页面从一开始就按 hook 写）。这需要用户在 AGENTS.md §5 的顺序说明中确认（与 A1 一起决定）。
+
+### 修订后的执行顺序（已被下文“第二轮决策”的 D4 表取代，保留作对照）
+
+| 步 | 条目 | 并行性 | 前置 |
+|---|---|---|---|
+| 0 | R1 合入 S1（用户或 lead 执行） | 独占 | — |
+| 1 | R7 拆 visual-check 场景与页面故事（+R10 改 title） | 独占：期间不得改 `scripts/visual-check*`、`pages.stories.jsx` | R1 |
+| 2 | R9 刷新 handover §1；R5(a) lint + import 边界测试 | 可并行（只改 handover / 只加检查与删死 import） | R1 |
+| 3 | S8+R4 注册表与筛选契约；R6 导航方案（先交用户确认） | S8 独占 `pages/AiInterpreterPage` 与 `features/interpreter` | R7 |
+| 4a | 覆盖：P07 其余六类（每类一个提交）、R2 两处助手 | 按页面并行；每项自带 demo hook | S8 |
+| 4b | 结构：S2 → A2 → S3（含 R3）；S5/S6；A4；S7（含 R5(b)、R8） | 各自独立分支；S2/A2/S3 串行 | R7 |
+| 5 | P08–P17 | 按页面并行 | R6、4a |
+
+### 提示词（均以上文“通用前言”开头，并在其后追加下面这一段）
+
+```text
+补充前言（2026-09-25 第二轮）：
+- 开工前确认 S1 已在 main：`git fetch && git merge-base --is-ancestor 1dd1d7d origin/main`，失败则停下并报告，不要在旧结构上开发。
+- 同时阅读 handover/structural-review.md 的“第二轮对抗审查”一节；本条目的范围以该节对应条目为准。
+- 改动涉及 scripts/visual-check 场景或页面故事时，只改自己页面的分文件（R7 之后）。
+```
+
+#### R1 合入 S1（用户 / lead）
+
+```text
+在 /Users/wuhaocheng/Documents/repos/marketinghub：
+1. git fetch --all；确认 structural/s1-file-split 相对 origin/main 仅领先 d652fd8、ad7ba3a、1dd1d7d 三个提交且工作区干净。
+2. 在 github 远端开 PR（base main，head structural/s1-file-split），PR 描述引用 handover/structural-review.md 的 S1 条目证据与映射表；按 AGENTS.md §6 附组件列表、visual-check 输出路径和有意差异（无）。
+3. 合入前在该分支重跑：npm test、npm run build-storybook（index.json 故事数不少于 73）、node scripts/visual-check.mjs（全套）与 --negative、npm run build:host && node scripts/host-check.mjs。任一失败则停下报告。
+4. 快进合入 main，同步两个远端（github 与 origin）。
+5. 在 handover/README.md §5 维护日志记一行（合入提交号），把 §4 中 “S1 未合入 main” 的描述改为已合入。在本节 R1 勾选并写证据。
+6. 远端旧分支（origin 上 cursor/* 7 个）只列出清单交用户决定，不自行删除。
+```
+
+#### R7 拆分共享热点文件（+R10）
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md 第二轮 R7 与 R10。纯搬迁，零行为变化，独占执行。
+1. scripts/visual-check.config.mjs：保留 BASELINE、CONSOLE_ALLOW 等共享导出在一个 common 模块；场景按页面前缀拆到 scripts/visual-check/scenarios/p01.mjs … p07.mjs（未来 p08+ 按同一规则新增），聚合文件按原数组顺序拼回并保持默认导出形状。visual-check.mjs、visual-check.negative.mjs、fingerprint.mjs 的引用路径同步更新。
+   - 验证：写一个一次性脚本，对比拆分前后默认导出的场景数组（JSON.stringify 深比较，函数用 toString），必须完全一致；脚本输出放 /tmp，不入库。
+2. src/design/pages.stories.jsx：每个页面故事移到 src/design/pages/<Page>/<Page>.stories.jsx。共享的 useSynced、shell 等放 src/design/lib/story-helpers.js。meta title 仍为 "Pages"、导出名不变，确保 story id（pages--home 等）逐一不变；如果 Storybook 不允许多个文件共用同一 title，就用 title "Pages/<Name>" 并给每个故事写死 id 使 id 保持不变，先在 index.json 验证。
+3. R10：features/* 的故事 title 改为 "Features/<Page>/<Name>"。先 grep scripts/ 与 src/design/stories.test.jsx 中对这些 id 的引用并同步；在 handover/README.md 登记 id 变更表（旧 id → 新 id）。AGENTS.md §3.4 对应表述改写（不追加）。
+4. 验证：通用前言全部；另外 index.json 中 pages--* 的 id 集合与拆分前完全一致；visual-check 全套机器结果与拆分前逐场景一致。
+一个提交做 R7 的 visual-check 拆分，一个提交做页面故事拆分，一个提交做 R10。
+```
+
+#### R9 刷新 handover 状态表 + R5(a) 边界检测
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md 第二轮 R9 与 R5(a)，两个提交。
+R9：
+1. 在 main 最新提交上跑全套：npm test、npm run build-storybook、node scripts/visual-check.mjs 与 --negative、npm run build:host && node scripts/host-check.mjs。
+2. 用这一次运行的结果重写 handover/README.md §1 表格；每一行都写明对应的提交号和证据路径。与之矛盾的旧数字（8c93802/d6557c3 的 63 stories、105/105 等）连同原文移到 §2.5，不删除。§2.1 各行的分支名改为已合入的提交号。
+3. 不改事实判断；只刷新数字并去掉矛盾。
+R5(a)：
+1. 加 ESLint（flat config，只开 react/jsx 解析、no-unused-vars、react-hooks 两条规则），npm run lint 脚本；修掉新暴露的未用 import（例如 components/Pagination/index.jsx:2 的 totalLabel），不做其他风格改动。
+2. 新增 src/design/boundaries.test.js：解析 src/design 下所有非 stories、非 test 模块的 import，断言 components/ 不 import features/、pages/、demo/、content.js、report-logic.js、report-routes.js；features/<p>/ 不 import 其他 features/<q>/ 与 demo/、content.js；pages/ 不 import demo/、content.js。现有违规要么修掉，要么在测试里显式列入白名单并写原因（白名单每项在 handover §4 登记）。
+3. 把 lint 加进 A4 计划中的 CI 步骤说明（如果 A4 已落地，直接加进 workflow）。
+```
+
+#### S8 + R4 视图注册表与筛选契约（替换上文 S8 提示中的 S8 部分）
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md 的 S8，并解决第二轮 R4。
+1. 先把现状写进 S8 条目：三种筛选所有权（页面过滤通用类型、PrinciplesView 自过滤、useBusinessTermDemo 过滤）以及各自的原始来源（types.js、principles-library.js、business-term-library.js）。
+2. 定一个统一契约并写进 S8 条目：类型视图组件接收 { rows/items（已过滤、已分页）, total, query, filters, filterValues, page, pageSize, 回调 onQueryChange/onFilterChange/onPageChange/onSelect/onCreate/..., searchRef }；过滤/分页是 demo/ 下的纯函数，由 useInterpreterDemo（新建）或各类型的 hook 调用。原始行为不同的地方（例如 Principles 的分类筛选、BT 的权限矩阵）作为视图自己的额外 props，不强行统一。
+3. AiInterpreterPage 改为注册表分派 views[type.view]；未注册类型回落 KnowledgeLibrary 并加 data-transitional="true"。页面组件内不再做过滤。
+4. “/” 与 Cmd/Ctrl+K 快捷键只作用于当前实例（监听挂在页面根或由 hook 提供），加一条双实例测试：两个页面实例同时挂载时，快捷键只聚焦其中一个。
+5. 故事与 examples/host 改为只调用 hook；visual-check p07 全部场景机器结果不变。
+```
+
+#### R2 P03 / P07 助手面板补建（两个条目，可并行，各一个分支）
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md 第二轮 R2，本条目只做 <P03 flexible.html | P07 knowledge.html> 一页。
+1. 盘点原始行为并写进 handover/README.md §2.3 该页台账：
+   - P03：assets/pages/flexible.html:196 起的 #assistantPanel 结构，assets/js/self-service/workspace.js:309–560 附近的 openAssistant("report")/closeAssistant、提交、建议、历史、技能菜单（assistant-skill-menu.js）等全部可达状态；
+   - P07：assets/pages/knowledge.html:1705 起的面板，assets/js/knowledge/workspace.js:2432–2700 附近的 openAssistant("knowledge")，以及 overview-home.js:57 的程序化触发入口。
+   - 同时核实 scrim 是否存在（handover §3 有意差异表中 “AssistantPanel backdrop” 一行要求接入 P03/P06 时按页核验）。
+2. 复用 AssistantPanel，不新建助手组件；本页的助手预设（showPicks、enterToSubmit 等）写在页面组件内部，不要求调用方传（见 R3）。页面新增 assistantOpen/answers/prompt 等 props 时按 S4 的分组方式放进一个 assistant 对象。
+3. 状态放进 demo/<page>-demo.js（该页若还没有 hook，就在本条目新建，只覆盖助手相关状态并预留扩展），故事与 examples/host 只调用 hook；host 加该页路由与 host-check 检查。
+4. visual-check 为该页新增至少：面板打开、提交一次后的答案态、Escape 关闭后焦点回到 launcher；各配一个负向用例。
+5. handover：§2.2 该页状态、§4 移除 R2 对应缺口、§5 日志；本节 R2 勾选对应页面。
+```
+
+#### R6 导航方案（先交用户决定，再实施）
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md 第二轮 R6。第一阶段只写方案，不改代码。
+1. 盘点：列出 src/design 中所有生成 href 或发出 onNavigate 的位置（grep href、Href、onNavigate），以及每个位置的默认 URL 来源（content.js NAV、report-routes.js、组件内字符串）。列出 P08–P17 原始页面之间的全部跨页链接（assets/pages/*.html 与 assets/js 中的 location.href / href 拼接），按“路由 id + 参数”归类。
+2. 写方案进 R6 条目：路由 id 清单、onNavigate 载荷形状、hrefFor(id, params) 的注入方式（页面 prop 还是 context，二选一并说明理由）、原始 Demo URL 解析器放在 demo/、Storybook DemoLinkGuard 与 host mapDemoHref 如何简化、Cockpit 四个 href props 的迁移与兼容期。
+3. 停下，把方案交给用户确认。确认后再按一个页面一个提交迁移，每步 visual-check 与 host-check 通过。
+```
+
+#### R3 / R5(b) / R8 —— 不单独开条目
+
+- R3 追加到 S3 与 S4 提示词末尾：“验收时 `pages.stories.jsx`（或 R7 之后的页面故事文件）与 `examples/host/main.jsx` 中不得再出现 `showScopes`、`showPicks`、`hideStageOnAnswers`、`enterToSubmit`、`submitDisabled` 这些开关名；每个页面的助手预设由页面组件自身持有。”
+- R5(b) 追加到 S7 提示词第 3 步：“`package.json` 的 `exports` 分为 `.`（组件、feature、页面、tokens.css）与 `./demo`（demo hooks、fixtures、content、report-demo、原始 Demo 路由解析器）；`report-logic.js` 移到 `features/cockpit/lib/`，`cx.js` 只保留 `cx`，筛选函数移到使用方或 `lib/filters.js`。在 /tmp 的验证项目中断言只 import `.` 时产物不包含任何 fixture 文案。”
+- R8 追加到 S7 或 `design-system-cleanup.md`（取先执行者）：“在 examples/host 的 compose 页加插槽内哨兵（宿主按钮/链接作为 Hero 与 Modal 的 children），host-check 断言其计算样式与页外哨兵一致；不一致时修 reset 选择器或登记为有意行为。”
+
+## 第二轮决策（2026-09-25，用户确认的目标）
+
+用户目标：**从原始 HTML+CSS+JS 包中提取完整的 Storybook**——17 个页面的全部可达状态都能在 Storybook 中以组件组合 + 故事参数复现，组件接口可查、可操作。判断标准：一个条目能否让更多原始可达状态出现在 Storybook 中、或阻止已提取的状态出错。只服务于“在 Storybook 之外发布/复用”的工作排到 M7。
+
+- **D1 广度优先（采纳 A1、R11）**。未开始的页面与 P07 其余六类先做“结构正确 + 全部可达状态有故事 + 默认态与每个交互 prop 至少一个非默认态的配对基线”；像素收敛作为第二轮，人工 fail 如实登记，不阻塞下一页。结构整改只前置三项：R1（合入 S1）、R7（拆热点文件，含 R10）、S8+R4（Interpreter 视图注册与筛选契约，六类型的直接前提）。
+- **D2 导航（R6）不做重设计**。Storybook 只需现有 `DemoLinkGuard`，URL 翻译是宿主问题。约定仅对新页面生效：可导航元素仍渲染真实 `<a href>`；页面组件接收一个 `hrefFor(id, params)` prop，默认值是 `demo/` 中按原始 Demo URL 生成的解析器；回调载荷 `onNavigate({ id, params, href })`。Cockpit 的四个 href props 与宿主 `mapDemoHref` 的收敛推迟到 M7。上文 R6 提示词作废，由 A1 提示词中的约定取代。
+- **D3 其余条目按 Storybook 价值分三类**：
+  - 与覆盖并行（影响故事中状态的正确性）：A2 缺陷回退（组件内的缺陷会让故事展示错误状态）→ S2 覆盖层栈（Escape/焦点在故事里可见）→ S3 助手合并（含 R3；须在 P12–P14 大量接入 lite 助手之前完成）；R2 两处助手面板补建；R9 状态表刷新；R5(a) lint 与 import 边界测试；A4 仓库卫生与最小 CI（成本低，保护构建）。
+  - 随页面条目完成，不单独成波：S4（每个页面条目自带 `demo/<page>-demo.js`，新页面一开始就这样写；存量页面在被修改时迁移）；S5（新页面零写死文案，存量页面被修改时补齐）；S6（新页面的内容直接写进 `demo/content/<page>.js`）。
+  - 推迟到 M7：S7 自包含资源与库构建、R5(b) 入口拆分、R8 reset 插槽问题、R6 存量迁移。Storybook 通过 `staticDirs` 已能加载 `assets/`，这些不影响故事完整性。
+- **D4 执行顺序（取代上文两张表）**
+
+| 步 | 条目 | 并行性 | 前置 |
+|---|---|---|---|
+| 0 | R1 合入 S1 | 独占 | — |
+| 1 | R7（+R10）拆热点文件 | 独占 | R1 |
+| 2 | S8+R4；R9；R5(a)；A4 | S8 独占 interpreter 目录，其余并行 | R7 |
+| 3 | 覆盖：P07 六类（每类一个提交）→ P08/P09 → P10/P11 → P12–P14 → P15–P17；R2 两页 | 按页面并行（每页一个 agent/分支） | S8（P07 六类）；R7（其余） |
+| 3′ | 质量：A2 → S2 → S3 | 串行，一个 agent，与第 3 步并行 | R7；S3 须在 P12–P14 开工前合入 |
+| 4 | 第二轮：人工审图 fail 项的像素收敛；M7（S7、R5b、R8、R6 存量迁移、独立宿主全页覆盖） | 按页面并行 | 3 全部完成 |
+
+冲突规则：第 3 与 3′ 同时改到同一组件（例如 AssistantPanel）时，3′ 优先合入，第 3 步的 agent rebase 后继续；页面 agent 不改共享组件的接口，需要新变体时在 handover“新发现”登记，由 3′ 的 agent 统一加。
+
+### A1 广度推进提示词（取代上文 A1 提示词）
+
+```text
+[通用前言 + 补充前言]
+任务：按 handover/structural-review.md “第二轮决策” D1/D4 推进 <页面或 P07 类型名>。目标是让该页原始 Demo 的全部可达状态出现在 Storybook 中。
+1. 盘点：按 handover/README.md §2.3 格式补全该页台账——URL/query/hash/storage 种子、区块、每个交互状态（默认/非默认/空/错误/禁用/覆盖层/窄屏），每条标明原始源码位置（assets/js/…:行号）与“已验证可达 / 待查 / 隐藏残留”。助手：核实该页是否有 #assistantPanel 或 assistant-panel-lite.js 注入的面板。
+2. 组合：优先复用 src/design/components 与已有 features；新组件放 features/<page>/，被第二个页面用到时才提升到 components/（提升算共享接口变更，登记“新发现”交 3′ agent）。页面组件完全受控、零写死文案、props 按区域分组；原始逻辑缺陷按 AGENTS.md §3.5 不进组件。
+3. 导航：按 D2 约定——页面接收 hrefFor(id, params)，默认解析器放 demo/，onNavigate({ id, params, href })。
+4. 状态：新建 demo/<page>-demo.js（内容参数注入，返回页面 props）；文案与数据放 demo/content/<page>.js。故事只调用 hook；每个交互 prop 至少一个非默认态的命名故事（Storybook 左栏能直接点到每个状态，不必改 Controls）。
+5. 验证：scripts/visual-check/scenarios/<page>.mjs 为默认态和每个非默认态建配对场景，至少一个负向用例；机器结果与人工审图分别登记，人工 fail 列入第二轮，不在本条修像素。npm test、build-storybook（故事数只增不减）、host-check 通过（宿主暂只需一个挂载路由证明可渲染）。
+6. 一页（或一类）一个提交；完成后更新 handover §2.2 该行状态、§5 日志，立即进入下一页。
+```
+
+## 第三轮：奥卡姆剃刀审查（2026-09-25，1dd1d7d）
+
+依据：AGENTS.md §3.4 新增的奥卡姆剃刀规则（2026-09-25 用户确认）。方法：统计每个组件在 `src/design` 内的实际使用者（不含自身目录与故事）、导出面、重复结构、布尔开关组合、token 取值重复。只列可执行的删减或合并；真实差异（例如 WorkspaceCard / ProjectCard / ActionCard / TypeCard 四种卡片的结构与视觉各不相同）不合并。
+
+### 实测
+
+| 项 | 数值 |
+|---|---|
+| 零使用者的导出组件 | 3：`Link`、`FilterActions`、`BusinessTermForm` |
+| 只有一个使用者、且是某个组件内部子件却放在 `components/` 并公开导出 | 4：`ScopeOption`、`Suggestion`（仅 AssistantPanel）、`SidebarItem`（仅 KnowledgeSidebar）、`CategoryHeading`（仅 ProjectCatalog） |
+| `components/` 中只被一个页面使用 | 9：ColumnChart、DataTable、ProgressList、Toast、ViewHeading（均仅 Campaign）、FileDropzone（DataUpload）、FilterPills（SelfService）、SectionHeading（Home）、ConfirmDialog（BusinessTermView） |
+| tokens.css | 345 个变量：10 个未使用，205 个只被使用一次；45 个取值被 2–4 个不同名字重复定义（105 个变量），例如 `#141414` = `--mh-ink-ai-strong`/`--mh-live-back-hover`/`--mh-copilot-ink`/`--mh-pagination-active` |
+
+### 发现
+
+- [ ] **O1 删除零使用者组件**
+  - `Link`（`components/Link`）：45 处 `<a>` 都是直接写的，没有一处用它。
+  - `FilterActions`（`components/FilterActions`）：没有使用者；CampaignPage 在 `pages/CampaignPage/index.jsx:215–228` 自己写了同样的 Filter/Reset 两个按钮。两按钮包装本身没有行为，按规则删除 `FilterActions`，保留页面内写法。
+  - `BusinessTermForm`（`features/interpreter/BusinessTermForm`）：为 M5 预建、至今无页面使用，属于“预建”。不在本条删除；交给 P08 knowledge-create 条目：要么被真实使用，要么删除，二者必居其一。
+  - 删除时同步删掉故事、CSS、`index.js` 导出、`.design-sync/config.json` 的映射，并在 handover 按 AGENTS.md §4 的例外登记被删 story id。
+
+- [ ] **O2 内部子件收回为私有**
+  - `ScopeOption`、`Suggestion` 移入 `components/AssistantPanel/`，`SidebarItem` 移入 `features/interpreter/KnowledgeSidebar/`，`CategoryHeading` 并入 `features/cockpit/ProjectCatalog/`（它只渲染一个 `<header><h2>`）。取消这些公共导出，删除各自的独立故事——它们的状态已在父组件故事中可见，登记“被删 id → 父故事 id”。
+  - 另外 9 个只被一个页面使用的 `components/*` 暂不移动：P08–P17 很可能复用 DataTable、Toast、ConfirmDialog、Tabs 等，现在搬过去再搬回来是无效劳动。M6 结束时重跑使用者统计，仍只有一个使用者的降级到 `features/<page>/`。
+
+- [ ] **O3 合并同义标题组件**
+  - `SectionHeading`（Home）与 `ViewHeading`（Campaign）结构相同：eyebrow + 标题 + 说明，ViewHeading 只多一个右侧 `children` 插槽。合并为一个 `SectionHeading`，用导出的 `sectionHeadingVariants`（例如 `"home"`、`"view"`）区分样式，`children` 作为可选动作插槽；类名与 CSS 修饰类随之收敛（修饰类放在基类 css 中，见 §3.2）。
+  - `CategoryHeading` 按 O2 并入 ProjectCatalog。
+  - `features/campaign/Panel` 的头部同样是 eyebrow + 标题 + 动作，但标题层级（h3）和容器语义不同，保持独立，只在 handover 记一句“已比较，不合并”。
+
+- [ ] **O4 删除只转发 props 的包装组件**
+  - `WorkspaceGrid`（`features/home/WorkspaceGrid`，21 行）：只包一层 grid `div` 并把 props 原样转给 `WorkspaceCard`，唯一使用者是 HomePage。并入 HomePage（grid 样式移入 HomePage.css），删除其故事与导出。
+  - `TypeGrid` 有计数格式化与选中态计算，而且是 S8 注册表里的 overview 视图，保留。`ProjectCatalog` 有分组逻辑，保留。
+
+- [ ] **O5 AssistantPanel 的布尔开关合并为变体**（并入 S3，与 R3 一起做）
+  - `showScopes`、`showPicks`、`enterToSubmit`、`hideStageOnAnswers`、`lite` 五个布尔开关实际只出现 4 种组合，每种对应一个页面：Home（`showPicks=false`）、Cockpit 目录（四项全关/开 hideStage）、Campaign（`enterToSubmit=false`、`showPicks=false`）、MediaTracking（`lite` + 同类）。改为一个导出枚举 `assistantVariants` 并在 argTypes 引用；页面只传 `variant`。
+  - 答案卡的渲染形态用两个不同字段区分（`answer.variant: "compact"|"workspace"` 与 `answer.simple: true`，见 `content.js:216/228/1702`），合并为一个 `answer.variant` 枚举（`default`/`compact`/`workspace`/`simple`）。
+  - `submitDisabled` 由 A2 删除（缺陷复刻），不在本条处理。
+
+- [ ] **O6 token 去重**（并入 `design-system-cleanup.md` 的 “P2 Token 膨胀”，按 AGENTS.md §3.2 已改写的规则执行）
+  - 删除 10 个未使用变量；45 组同值多名的变量，语义相同的合并为一个语义名（例如把 4 个 `#141414` 收敛到 `--mh-ink-strong`），语义确实不同的保留并在 tokens.css 用注释写明区别；按组件命名的前缀（`--mh-copilot-*`、`--mh-pagination-*` 等）在合并时改为语义名。
+  - 视觉零回归；证据为 visual-check 全套机器结果不变与 tokens 数量前后对比。
+
+- [ ] **O7 规则冲突已修正（本轮完成）**
+  - AGENTS.md §4 第 1 条“故事数不减少”会阻止 O1–O4 的删除；已改写为：按 §3.4 删除重复或无使用者的故事/组件是唯一例外，须在 handover 列出被删 story id 及其状态仍在哪个故事中可见。
+  - AGENTS.md §3.2 “新增色值先加 token” 是 token 膨胀的直接来源；已改写为先复用同值同义 token、按语义命名、同值不得挂多个同义名。
+
+### 放入执行顺序（补充 D4）
+
+- O1、O2、O3、O4 由一个 agent 在 R7 之后、第 3 步页面推进开始前做完（它们改 Home、Cockpit、Campaign、AssistantPanel、KnowledgeSidebar，与 P07 六类型和 P08+ 新页面基本不相交；先做可以让新页面直接用收敛后的组件）。每条一个提交。
+- O5 随 S3；O6 随 cleanup P2（可与第 3 步并行）。
+- M6 结束时加一步“使用者复查”：重跑本节统计，单一使用者的 `components/*` 降级，零使用者的删除。
+
+### 提示词
+
+```text
+[通用前言 + 补充前言]
+任务：handover/structural-review.md “第三轮：奥卡姆剃刀审查”的 O1–O4，按 O1 → O2 → O3 → O4 每条一个提交。
+1. 每条开工前重新统计使用者（grep "/<Name>/index.jsx" 于 src/design 的 components、features、pages、lib，排除自身目录与 *.stories.jsx；examples/host 与 .design-sync/config.json 也要查），与本节数据不符时以实测为准并在条目里更正。
+2. 删除或收回私有时同步：故事、CSS（修饰类随基类，AGENTS.md §3.2）、src/design/index.js 导出、examples/host、.design-sync/config.json componentSrcMap、stories.test.jsx 中的相关断言。
+3. O3 合并后的 SectionHeading：导出 sectionHeadingVariants 并在 argTypes 引用；Home 与 Campaign 渲染结果与合并前像素一致。
+4. 验证：通用前言全部。故事数允许下降，但必须在 handover/README.md 维护日志中列出“被删 story id → 该状态仍可见的故事 id”（AGENTS.md §4 第 1 条的例外）；visual-check 全套机器结果与改动前逐场景一致。
+5. 不做本节以外的合并；发现新的奥卡姆候选写进本节末尾，由用户或下一轮决定。
+```
