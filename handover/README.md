@@ -11,9 +11,9 @@
 | 设计系统位置 | `src/design` |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
 | 故事数 | 63 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 29、Pages 7）+ 5 docs；2026-09-24 新构建 index.json 实数 |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），10 条行为测试通过（2026-09-24 本次复跑） |
-| 构建验证 | 通过（2026-09-24，`npm run build-storybook -- --disable-telemetry`，68 entries：63 stories、5 docs；02918b5 + 审核前已有工作区修改） |
-| 最近视觉对照 | 2026-09-24，1440×1400：P07 十场景加载/断言通过；人工审核 Principles 默认态未通过，Hero/侧栏整体布局不同。证据 `/tmp/mh-audit-20260924-p07`；未复跑全站视觉验收 |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），29 条通过（interpreter 10、cockpit-demo 替换夹具 7、lifecycle 11、assetUrl 1；2026-09-24 d6557c3） |
+| 构建验证 | 通过（2026-09-24 d6557c3，`npm run build-storybook -- --disable-telemetry` 现经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；63 stories、5 docs）；独立宿主 `npm run build:host` + `node scripts/host-check.mjs` 通过 |
+| 最近视觉对照 | 2026-09-24（d6557c3 构建）：全套 `node scripts/visual-check.mjs` 105/105 机器通过（`/tmp/mh-e-full`），`--negative` 6/6 按预期失败；机器通过≠人工通过。人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；Business Term fail（过渡通用列表）；其余场景人工 pending |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -32,13 +32,13 @@ npm test               # vitest 行为测试
 | 阶段 | 条目 | 状态 | PR |
 |---|---|---|---|
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
-| M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。仍缺：token 化、@media、独立宿主、键盘验证 |
+| M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | a9542f7 改善类型接口，未完成专用视图提取 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
-| M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 未开始 | — |
+| M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -54,7 +54,7 @@ npm test               # vitest 行为测试
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
-| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——Principles 卡片实现及 10/10 场景断言通过，整体视觉未通过（2026-09-24 复核）；其余七类仍用通用列表待提取 |
+| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——类型页外壳按原页重建（a7cc1d0/d6557c3），14 场景机器通过含几何；overview 与 Principles 视图人工审图通过；其余七类仍为过渡通用列表（人工 fail），专用视图未提取 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
@@ -250,8 +250,17 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P02 详情抽屉标题 | React `ReportDetailsDrawer` 渲染当前报表真实标题；原始 `openDetails()` 从不写 `#detailsTitle`，恒为静态 "Invest City Strategy Analysis"（demo 缺陷，且该函数无调用方） | 不逐 bug 复刻；抽屉本身在原页不可达，组件按 props 驱动保留 | devin/interpreter-type-contract |
 | P02 Report Copilot History 弹层 | React 版弹层锚定在 head-actions 栏内、紧贴 History 按钮下方可见；原始 `#aiReportHistoryPopup` 是 `.ai-workspace-head-actions`（无 position）的 absolute 子节点，`top:calc(100%+8px)` 相对 fixed 抽屉解析为视口下方（实测 top≈1408@1400 高），任何视口下不可见 | 原实现为恒不可达的 demo 缺陷；修复锚定而非复刻 bug。弹层内 prompt 文本的大写渲染来自 `.ai-workspace-head span` 级联泄漏，React 版仍复刻该视觉效果 | devin/interpreter-type-contract |
 | AssistantPanel `+` → Upload File | React 版点击 Upload File 打开真实文件选择器（`onAttach` 回调）；原始 `openCategory("Upload")` 在 `assistant-skill-menu.js:401` 早退，`renderDetail` 的 Upload 分支与 `#aiAttachmentInput` 恒不可达——点击只钉住详情面板无任何效果 | 实现的是明显意图（菜单文案/accept 列表齐全），原始为死代码；登记差异而非复刻无效路径 | devin/interpreter-type-contract |
+| P02 Report Copilot 关闭焦点 | 关闭后焦点还原到打开者（共享 `useFocusRestore`） | 无障碍调整；原 `closeAi()` 不还原焦点，不影响可见状态 | devin/structural-repair |
 
 ## 4. 已知缺口
+
+2026-09-24 结构纠偏批 A–E 结果（devin/structural-repair，13dacf2→d6557c3）：下方 2026-09-24 审核条目中验收误判、数据接口耦合、Campaign 重开丢值、Copilot 流全局令牌、tokens 全局 reset、Interpreter 外壳布局均已修复（状态归属见 §2.6）。仍存：
+- 七类知识类型专用视图（M4）、M5/M6 全部未开始；宿主只覆盖 Home/Cockpit/compose，其他页为显式覆盖缺口。
+- 嵌套覆盖层：一次 Escape 触发所有文档级监听层（原生 `<dialog>` 只关顶层）；原页中能否同时打开尚未核实，未改。
+- ReportCopilot 关闭后还原焦点属无障碍调整（原 `closeAi()` 不还原），需登记为有意差异。
+- CityInvestDashboard 在窄容器（宿主 compose 右栏）筛选行横向溢出；缺容器级响应式。
+- visual-check：截图 hash 有渲染噪声，人工审核易转 stale；`results.json` 每次运行覆盖，`--review` 需在包含该场景的最近一次运行目录上执行。
+- 全场景人工审图未完成（除上文 P07 六项外均 pending）；Controls 全枚举未复跑。
 
 2026-09-24 对抗审核新增/纠正（02918b5 + 工作区）：
 - **根因评估补充**：展示接口、演示数据和流程状态的依赖边界尚不稳定；CockpitStory 部分处理直接读 COCKPIT.projects 而非 args.projects，换内容可能造成展示与动作使用不同数据；导航回调更新故事状态的同时 `<a>` 仍指向原 HTML，需在独立 React 宿主实测连续导航，不能把原 HTML 当成 React 完成证据。此补充为静态审查，未新增浏览器复现。纠偏指令在 `handover/structural-repair-prompt.md`；本次仅生成指令，尚未实施其中批次。
@@ -328,3 +337,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | 结构修复批 D P07 页壳：`AiInterpreterPage` 改 `tone="interpreter"` + 类型态 `mh-page--interpreter-type`（Shell 增 className 透传），页面级 CSS 镜像原 `body:has(.business-type-page)` 覆盖——侧栏 `position:fixed` top:56/bottom:0/left:max(44px,(100vw-1500px)/2) w240 滚轴，Hero 压至 170px 入内容列 `margin-left:max(284px,(100vw-1500px)/2+240px)` `width:min(1260px,100%-328px)`（eyebrow 8px/h1 45px/下划线 51×6/描述 14px max384），`.mh-interpreter__main--type` `grid-column:2` 占位 + 背景改 `--mh-page-bg`（原最终生效 #f6f7f8），`.mh-interpreter` `min-height:calc(100vh-24px)`（business-term-reference.css 生效规则）；页 `min-width:1180px` + ≤1240（inner 100%-64/侧栏 left32/Hero ml272 w100%-304）与 ≤760 断点镜像；侧栏项字号/内距对齐（14px、10px 12px）；可管理三类型 Hero stats 末尾补 `mh-rules-hint` "!" + Operation Reminder tooltip（types.js renderManagementRulesHint）；`content.js` Report Context 补 3 条缺漏记录对齐原 6 行。场景扩展：全 p07 layout 加主列 + w/h 维，新增 p07-principles-long（滚动到底验证 fixed 栏）、overview/principles 1024 窄屏对、report-context 对（原专用 fm-report-card 对 React 过渡通用表）；负向 `neg-p07-hero-fullwidth`（eval 打满 Hero 验 layout 咬）6/6 负。npm test 28/28、build 63 stories、visual-check p07 14/14（含 layout）、p01 6/6、p02-cockpit 9/9 | Devin |
 | 2026-09-24 | 批 D 人工复核修正（同批未提交）：Hero eyebrow 8px 规则被同块 `p` 选择器反超 → 改 `> p:last-of-type`；Header 增 `highlightCurrent` prop（`aria-current` 恒写，下划线可按页关断——原始 home/knowledge 有 aria-current 无视觉，self-service/media-tracking 两者皆无，reports/campaign/data-upload/flexible 均有）；侧栏节奏对齐原 `.sidebar-nav`——brand mb 18/lh1.2、Overview mb 10、分组去 border-top 改 8/12 padding + 2px pitch、类型页分组右缩 16px（项宽 215→199）；`.mh-principles`/`.mh-library` 类型页去白面板（原 `.knowledge-library` 平铺灰底，仅分页白条）；≤1100 Hero stats `flex-basis:420 + minmax(160,1fr)`、卡 112px/18px。layout 断言补 eyebrow 框、首个类型侧栏项框、1024 统计卡框。npm test 28/28、p07 14/14、p01 6/6、p03 3/3、p04 4/4、p05 10/10、p06 17/17、p02-cockpit 9/9、negatives 6/6 | Devin |
 | 2026-09-24 | 结构修复批 D 尾项 + 批 E 独立宿主：D 尾项——overview 主列 padding 改 `28 0 42 34`（原 `.knowledge-main` 无右 padding，卡列宽 251→260.5 对齐）、`.mh-type-card.is-manageable` 金边实线纠为原 `border-top 1px #e6e1d8`（移除 pill 背景覆盖）、overview layout 加首/末 TypeCard 框断言。批 E——新增 `src/design/asset-url.js`（BASE_URL 拼接 + document.baseURI 兜底成绝对 URL，因 css 自定义属性里的 url() 按消费样式表解析），content.js/report-fixtures.js/alt-cockpit.js/organisms.jsx(ART+默认 logo) 的 `/assets/images` 全改走它；tokens.css 全局 reset 收编为零优先级 `:where([class*="mh-"], [class*="mh-"] *)` 范围（组件无 body/html 样式可迁——Storybook 自带 body margin:0）；`.storybook/preview.jsx` 加 DemoLinkGuard 装饰器（仅拦截 `/index.html`、`/assets/pages/` 纯左键）；`examples/host/` 独立宿主（vite base `/mh-host/`、自管 router+委托点击+popstate、`/mh-host/` Home、`/mh-host/cockpit` 由 query 驱动 project/dashboard、`/mh-host/compose` 双实例+sentinel、`/mh-host/sentinel` 裸页、其余→Coverage gap 明示）；`scripts/build-host.mjs`（拷贝 assets/images+fonts→public、vite build、指纹 stamp）+ `scripts/host-check.mjs`（字体/img/背景、导航环+reload 标记、sentinel 双页 computed 一致性、双实例隔离、coverage 不落原路由）；fingerprint.mjs 参数化。验证：npm test 29/29、build 63 stories、visual-check 全量 105/105、negatives 6/6、host-check 5/5 | Devin |
+| 2026-09-24 | 结构纠偏收尾：D 复审后修 overview 卡片网格/边框并人工审图通过 P07 overview 与 Principles 四态；E 独立宿主（`examples/host`、`scripts/build-host.mjs`、`scripts/host-check.mjs`）、`assetUrl` 资源约定、`:where()` 作用域 reset、Storybook 显式链接适配（点击不再把 iframe 导到原 HTML）。npm test 29/29，63 stories/5 docs，visual-check 105/105 机器通过，negative 6/6，host-check 通过。更新 AGENTS 2.4/§5 与本台账 §1/§2/§4 | Devin |
