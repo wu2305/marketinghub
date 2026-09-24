@@ -152,7 +152,7 @@ describe("useCockpitDemo + MarketingCockpitPage with replacement fixtures", () =
         },
       },
     });
-    const { container } = render(
+    render(
       <div>
         <div data-testid="a">
           <Harness {...baseProps()} />

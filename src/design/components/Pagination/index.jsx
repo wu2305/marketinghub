@@ -1,5 +1,4 @@
 import "../../tokens.css";
-import { totalLabel } from "../../report-logic.js";
 import "./Pagination.css";
 
 

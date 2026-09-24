@@ -198,7 +198,7 @@ function useStream(total, stream, interval, scrollSelector) {
 function HolisticReport({ data, stream = true }) {
   const blocks = data.blocks;
   const { hostRef, shown, streaming } = useStream(blocks.length, stream, COPILOT_STREAM_MS.holistic, ".mh-copilot__answer");
-  const renderBlock = (block, index) => {
+  const renderBlock = (block) => {
     switch (block.type) {
       case "meta":
         return (
@@ -281,7 +281,7 @@ function HolisticReport({ data, stream = true }) {
     <div className="mh-holistic" ref={hostRef}>
       {blocks.slice(0, shown).map((block, index) => (
         <StreamBlock key={index} animate={stream}>
-          {renderBlock(block, index)}
+          {renderBlock(block)}
         </StreamBlock>
       ))}
       {streaming ? <span className="mh-stream-cursor" /> : null}

@@ -9,6 +9,7 @@
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "build-storybook": "node scripts/build-storybook.mjs",
     "test": "vitest run",
+    "lint": "eslint src/design",
     "build:host": "node scripts/build-host.mjs",
     "preview:host": "vite preview --config examples/host/vite.config.js"
   },
@@ -23,6 +24,8 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^29.1.1",
     "playwright": "^1.63.0",
     "sirv": "^3.0.2",

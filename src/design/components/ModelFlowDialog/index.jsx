@@ -1,6 +1,5 @@
 import "../../tokens.css";
 import React from "react";
-import { Select } from "../../components/Select/index.jsx";
 import { cx } from "../../cx.js";
 import "./ModelFlowDialog.css";
 

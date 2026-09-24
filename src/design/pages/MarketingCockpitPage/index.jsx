@@ -74,7 +74,7 @@ export function MarketingCockpitPage({
   groups = [],
   projects = {},
   project = "all",
-  view = "catalog",
+  view: _view = "catalog",
   dashboard = null,
   details = null,
   detailsSections = [],
