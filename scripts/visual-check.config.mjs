@@ -2845,8 +2845,9 @@ export default [
   {
     id: "p07-interpreter-overview",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html",
@@ -2868,8 +2869,9 @@ export default [
   {
     id: "p07-interpreter-business-term",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: { url: "/assets/pages/knowledge.html?type=Business%20Term", expect: [{ sel: ".bt-term-card", count: 6, text: "GMV (Gross Merchandise Value)" }] },
     story: {
@@ -2881,8 +2883,9 @@ export default [
   {
     id: "p07-interpreter-scenario",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card", count: 3, text: "Channel Performance Analysis" }] },
     story: {
@@ -2896,8 +2899,11 @@ export default [
        grid; the "Showing X of Y" count line is display:none on type pages. */
     id: "p07-interpreter-principles",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center .eyebrow", story: ".mh-hero__eyebrow", props: ["x", "y", "height"], tol: 8 },
+      { orig: ".business-type-nav button", story: ".mh-sidebar__group .mh-sidebar-item", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -2924,8 +2930,9 @@ export default [
   {
     id: "p07-principles-category-open",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -2956,8 +2963,9 @@ export default [
        open, updates the summary to "{n} selected" and re-renders the cards. */
     id: "p07-principles-category-filter",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -2996,8 +3004,9 @@ export default [
        list update live ("Match the Requested Scope" contains "boundary"). */
     id: "p07-principles-search",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -3022,8 +3031,9 @@ export default [
   {
     id: "p07-principles-empty",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -3042,8 +3052,9 @@ export default [
        (toggle only renders when the measured text overflows). */
     id: "p07-principles-expand",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -3075,8 +3086,9 @@ export default [
     /* types.js: "/" focuses the visible type-page search (not while editing). */
     id: "p07-principles-slash",
     layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
@@ -3099,6 +3111,98 @@ export default [
         { sel: ".mh-principles input[type='search']:focus" },
         { sel: ".mh-pagination", text: "10 principles" },
       ],
+    },
+  },
+  {
+    /* Long page scrolled to the bottom: the fixed sidebar rail must still sit
+       at y=56 under the header (the layout check proves it stays fixed). */
+    id: "p07-principles-long",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      actions: [{ eval: "window.scrollTo(0, document.body.scrollHeight)" }, { waitMs: 300 }],
+      expect: [
+        { sel: ".principle-list-item:has-text('Respect Session Guidance')" },
+        { sel: "#businessPagination", text: "10 principles" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      actions: [{ eval: "window.scrollTo(0, document.body.scrollHeight)" }, { waitMs: 300 }],
+      expect: [
+        { sel: ".mh-principle:has-text('Respect Session Guidance')", text: "Respect Session Guidance" },
+        { sel: ".mh-pagination", text: "10 principles" },
+      ],
+    },
+  },
+  {
+    /* The original's min-width:1180 document + ≤1240 breakpoint: the fixed
+       rail moves to left:32 and the hero takes margin-left:272/width:876 at
+       a 1024 viewport (the document stays 1180 wide). */
+    id: "p07-interpreter-overview-narrow",
+    viewport: { width: 1024, height: 1400 },
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html",
+      expect: [{ sel: ".v20-type-card", count: 8 }, { sel: "h1", text: "AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter",
+      expect: [{ sel: ".mh-type-card", count: 8 }, { sel: ".mh-hero h1", text: "AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-interpreter-principles-narrow",
+    viewport: { width: 1024, height: 1400 },
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Principles",
+      expect: [
+        { sel: ".principle-list-item", text: "Interactive Agent for Business Questions" },
+        { sel: "#businessPagination", text: "10 principles" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Principles" },
+      expect: [
+        { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-pagination", text: "10 principles" },
+      ],
+    },
+  },
+  {
+    /* Report Context's original view renders dedicated .fm-report-card shells
+       (the generic .asset-rows are present but 0-height); React still shows the
+       transitional generic list of the same six records. The pair asserts the
+       shared shell geometry plus each side's own six items. */
+    id: "p07-interpreter-report-context",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Report%20Context",
+      expect: [{ sel: ".fm-report-card", count: 6, text: "Invest City Strategy Analysis" }],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Report Context" },
+      expect: [{ sel: ".mh-asset", count: 6, text: "City Strategy report context" }],
     },
   },
 ];

@@ -105,6 +105,7 @@ a {
   --mh-scrim-deep: rgba(15, 18, 24, 0.55);
   --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
   --mh-line-faint: #eef1f4;
+  --mh-line-warm: #e7e3dc;
   --mh-row-hover: #fafbfc;
   --mh-hover-warm: #fffbeb;
   --mh-subtle: #4a5260;

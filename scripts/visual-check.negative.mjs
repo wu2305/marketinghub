@@ -50,4 +50,12 @@ export default [
     story: { actions: [] },
     reason: "default Monthly tab must not satisfy Daily active-tab assertion",
   },
+  {
+    // Proves the layout check bites: restoring the pre-Batch-D full-width hero
+    // on a type page must fail the sidebar/hero/main geometry assertions.
+    id: "neg-p07-hero-fullwidth",
+    base: "p07-interpreter-principles",
+    story: { actions: [{ eval: "document.querySelector('.mh-hero').style.cssText = 'margin-left:0;width:100%'" }] },
+    reason: "full-width hero must fail the layout geometry assertions",
+  },
 ];

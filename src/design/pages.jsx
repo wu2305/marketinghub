@@ -45,8 +45,8 @@ import {
   reportContextHref,
 } from "./report-routes.js";
 
-function Shell({ tone = "workspace", children }) {
-  return <div className={`mh-page mh-page--${tone}`}>{children}</div>;
+function Shell({ tone = "workspace", className, children }) {
+  return <div className={cx("mh-page", `mh-page--${tone}`, className)}>{children}</div>;
 }
 
 /**
@@ -105,7 +105,7 @@ export function HomePage({
 }) {
   return (
     <Shell tone="home">
-      <Header logo={logo} items={navigation} current={current} position="fixed" tone="overlay" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" tone="overlay" onNavigate={onNavigate} />
       <Hero image={hero.image} title={hero.title} description={hero.description} height={300} variant="home" scrim="home">
         {hero.stats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" />
@@ -400,7 +400,7 @@ export function MarketingCockpitPage({
 /**
  * Self-Service Center: analysis/upload tabs, category pills, entry cards.
  * @param {object} props
- * @param {string} [props.current="self-service"]
+ * @param {string} [props.current] nav id for aria-current; the original self-service page marks no item
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
@@ -421,7 +421,7 @@ export function MarketingCockpitPage({
  * @param {(row: object) => void} [props.onDownloadFile]
  */
 export function SelfServicePage({
-  current = "self-service",
+  current,
   logo,
   navigation = [],
   hero = {},
@@ -528,6 +528,7 @@ export function AiInterpreterPage({
   const type = types.find((item) => item.id === activeType);
   const known = overview || Boolean(type);
   const searchRef = React.useRef(null);
+  const rulesHintId = React.useId();
 
   // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages.
   React.useEffect(() => {
@@ -572,13 +573,33 @@ export function AiInterpreterPage({
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
 
   return (
-    <Shell>
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+    /* Type pages rearrange the shell like the original's
+       body:has(.business-type-page) rules: the sidebar becomes a fixed rail
+       from under the header to the viewport bottom and the hero compresses
+       into the content column (170px, right of the rail). */
+    <Shell tone="interpreter" className={type ? "mh-page--interpreter-type" : undefined}>
+      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
-      <Hero {...heroProps} height={260} variant="knowledge" scrim="knowledge" asideLabel={`${type ? type.title : "All types"} knowledge statistics`}>
+      <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={`${type ? type.title : "All types"} knowledge statistics`}>
         {heroStats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" compact />
         ))}
+        {/* types.js renderManagementRulesHint: the "!" rules hint only exists
+            for manageable types (Business Term / Analytical Model / Scenario). */}
+        {type?.manageable ? (
+          <div className="mh-rules-hint">
+            <button className="mh-rules-hint__trigger" type="button" aria-label="Management rules" aria-describedby={rulesHintId}>!</button>
+            <section className="mh-rules-hint__tooltip" id={rulesHintId} role="tooltip">
+              <h3>Operation Reminder</h3>
+              <ol>
+                <li>Only knowledge created by you can be managed.</li>
+                <li>Disable knowledge before editing or deleting it.</li>
+                <li>Deletion is permanent and cannot be undone.</li>
+                <li>Disabled knowledge is unavailable for AI use and can be enabled again.</li>
+              </ol>
+            </section>
+          </div>
+        ) : null}
       </Hero>
       <div className="mh-interpreter">
         <KnowledgeSidebar
@@ -1091,7 +1112,7 @@ export function DataUploadPage({
  * table. The assistant is the lite drawer variant (scope row, skill "+"
  * trigger, simple answer cards, "Recent Chats" popover).
  * @param {object} props
- * @param {string} [props.current="self-service"]
+ * @param {string} [props.current] nav id for aria-current; the original media-tracking page marks no item
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {{ backHref?: string, backLabel?: string }} [props.toolbar={}]
@@ -1123,7 +1144,7 @@ export function DataUploadPage({
  * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction]
  */
 export function MediaTrackingDetailPage({
-  current = "self-service",
+  current,
   logo,
   navigation = [],
   toolbar = {},
