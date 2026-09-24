@@ -527,17 +527,17 @@ R5(a)：
 
 ### 发现
 
-- [ ] **O1 删除零使用者组件**
+- [x] **O1 删除零使用者组件** —— 2026-09-25 完成（137c971，`structural/r7-split-hotspots`）：`Link` 与 `FilterActions` 连同故事/CSS/导出/.design-sync 映射删除；`BusinessTermForm` 保留归 P08。删 id：`atoms-link--default`、`molecules-filter-actions--default`。npm test 63/63、build 71+59。
   - `Link`（`components/Link`）：45 处 `<a>` 都是直接写的，没有一处用它。
   - `FilterActions`（`components/FilterActions`）：没有使用者；CampaignPage 在 `pages/CampaignPage/index.jsx:215–228` 自己写了同样的 Filter/Reset 两个按钮。两按钮包装本身没有行为，按规则删除 `FilterActions`，保留页面内写法。
   - `BusinessTermForm`（`features/interpreter/BusinessTermForm`）：为 M5 预建、至今无页面使用，属于“预建”。不在本条删除；交给 P08 knowledge-create 条目：要么被真实使用，要么删除，二者必居其一。
   - 删除时同步删掉故事、CSS、`index.js` 导出、`.design-sync/config.json` 的映射，并在 handover 按 AGENTS.md §4 的例外登记被删 story id。
 
-- [ ] **O2 内部子件收回为私有**
+- [x] **O2 内部子件收回为私有** —— 2026-09-25 完成（18a7f13）：`ScopeOption`/`Suggestion` 移入 `components/AssistantPanel/`、`SidebarItem` 移入 `features/interpreter/KnowledgeSidebar/`、`CategoryHeading` 内联进 `ProjectCatalog`（CSS 并入）。删 id→父故事：`molecules-scope-option--default`/`molecules-suggestion--default`→`organisms-assistant-panel--ask-panel`、`molecules-sidebar-item--default`→`features-interpreter-knowledge-sidebar--default`、`molecules-category-heading--default`→`features-cockpit-project-catalog--default`。npm test 63/63、build 67+55、host-check 7/7。
   - `ScopeOption`、`Suggestion` 移入 `components/AssistantPanel/`，`SidebarItem` 移入 `features/interpreter/KnowledgeSidebar/`，`CategoryHeading` 并入 `features/cockpit/ProjectCatalog/`（它只渲染一个 `<header><h2>`）。取消这些公共导出，删除各自的独立故事——它们的状态已在父组件故事中可见，登记“被删 id → 父故事 id”。
   - 另外 9 个只被一个页面使用的 `components/*` 暂不移动：P08–P17 很可能复用 DataTable、Toast、ConfirmDialog、Tabs 等，现在搬过去再搬回来是无效劳动。M6 结束时重跑使用者统计，仍只有一个使用者的降级到 `features/<page>/`。
 
-- [ ] **O3 合并同义标题组件**
+- [x] **O3 合并同义标题组件** —— 2026-09-25 完成（`structural/r7-split-hotspots`）：`ViewHeading` 并入 `SectionHeading` 为 `variant="view"`（导出 `sectionHeadingVariants = ["home","view"]`），`.mh-view-heading*` 规则迁入 `SectionHeading.css` 的 `.mh-heading--view` 修饰块，CampaignPage 五处改 `variant="view"`；删 `molecules-view-heading--default`，该态由 `molecules-section-heading--view` 与 `pages--campaign` 呈现。`features/campaign/Panel` 已比较不合并（h3 层级 + 容器语义不同）。
   - `SectionHeading`（Home）与 `ViewHeading`（Campaign）结构相同：eyebrow + 标题 + 说明，ViewHeading 只多一个右侧 `children` 插槽。合并为一个 `SectionHeading`，用导出的 `sectionHeadingVariants`（例如 `"home"`、`"view"`）区分样式，`children` 作为可选动作插槽；类名与 CSS 修饰类随之收敛（修饰类放在基类 css 中，见 §3.2）。
   - `CategoryHeading` 按 O2 并入 ProjectCatalog。
   - `features/campaign/Panel` 的头部同样是 eyebrow + 标题 + 动作，但标题层级（h3）和容器语义不同，保持独立，只在 handover 记一句“已比较，不合并”。

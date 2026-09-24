@@ -44,10 +44,8 @@ export {
 export {
   SectionHeading,
   headingLevels,
+  sectionHeadingVariants,
 } from "./components/SectionHeading/index.jsx";
-export {
-  ViewHeading,
-} from "./components/ViewHeading/index.jsx";
 export {
   FilterPills,
 } from "./components/FilterPills/index.jsx";

@@ -45,7 +45,7 @@ const components = [
 const ATOM_MODULES = ["Button", "TextInput", "TextArea", "Select", "StatusBadge"];
 const MOLECULE_MODULES = [
   "SearchField", "CheckboxFilter", "Pagination", "MetricStat", "SectionHeading",
-  "ViewHeading", "FilterPills", "Tabs", "FormField",
+  "FilterPills", "Tabs", "FormField",
   "ProgressList", "ColumnChart", "DataTable",
   "FileDropzone", "Toast",
 ];

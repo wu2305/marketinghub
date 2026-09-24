@@ -49,3 +49,40 @@ max-width: 640px;
   text-align: left;
   font-size: 13px;
 }
+
+.mh-heading--view {
+min-height: 104px;
+  padding: 4px 0 19px;
+  border-bottom: 1px solid var(--mh-line);
+}
+
+.mh-heading--view h1,
+.mh-heading--view h2,
+.mh-heading--view h3 {
+margin: 5px 0 0;
+  color: var(--mh-ink);
+  font-family: var(--mh-font);
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.02;
+}
+
+.mh-heading--view .mh-heading__desc {
+max-width: 720px;
+  margin: 9px 0 0;
+  color: var(--mh-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mh-heading--view .mh-heading__kicker {
+max-width: none;
+  margin: 0;
+  color: var(--mh-faint);
+  letter-spacing: normal;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}

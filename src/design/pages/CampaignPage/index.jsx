@@ -15,7 +15,7 @@ import { SearchField } from "../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Tabs } from "../../components/Tabs/index.jsx";
 import { Toast } from "../../components/Toast/index.jsx";
-import { ViewHeading } from "../../components/ViewHeading/index.jsx";
+import { SectionHeading } from "../../components/SectionHeading/index.jsx";
 import { CampaignRail } from "../../features/campaign/CampaignRail/index.jsx";
 import { Panel } from "../../features/campaign/Panel/index.jsx";
 import { SummaryStrip } from "../../features/campaign/SummaryStrip/index.jsx";
@@ -193,9 +193,9 @@ export function CampaignPage({
         <main>
           {section === "overview" ? (
             <>
-              <ViewHeading eyebrow={overviewHeading.eyebrow} title={overviewHeading.title} description={overviewHeading.description}>
+              <SectionHeading variant="view" eyebrow={overviewHeading.eyebrow} title={overviewHeading.title} description={overviewHeading.description}>
                 <Tabs label="Channel view" variant="segmented" items={channels} value={channel} onChange={onChannelChange} />
-              </ViewHeading>
+              </SectionHeading>
               <div className="mh-campaign__metrics">
                 {metrics.map((metric) => (
                   <MetricStat key={metric.label} {...metric} variant="card" />
@@ -238,11 +238,11 @@ export function CampaignPage({
           ) : null}
           {section === "execution" ? (
             <div className="mh-stack">
-              <ViewHeading eyebrow={executionHeading.eyebrow} title={executionHeading.title} description={executionHeading.description}>
+              <SectionHeading variant="view" eyebrow={executionHeading.eyebrow} title={executionHeading.title} description={executionHeading.description}>
                 <Button variant="primary" onClick={() => onCreateTask?.({ reason: "button" })}>
                   {executionHeading.action}
                 </Button>
-              </ViewHeading>
+              </SectionHeading>
               <SummaryStrip items={executionSummary} />
               <div className="mh-campaign__split">
                 <Panel eyebrow={queuePanel.eyebrow} title={queuePanel.title} meta={queuePanel.meta}>
@@ -256,9 +256,9 @@ export function CampaignPage({
           ) : null}
           {section === "assets" ? (
             <div className="mh-stack">
-              <ViewHeading eyebrow={assetsHeading.eyebrow} title={assetsHeading.title} description={assetsHeading.description}>
+              <SectionHeading variant="view" eyebrow={assetsHeading.eyebrow} title={assetsHeading.title} description={assetsHeading.description}>
                 <span className="mh-health">{assetsHeading.badge}</span>
-              </ViewHeading>
+              </SectionHeading>
               <Panel eyebrow={creativePanel.eyebrow} title={creativePanel.title} meta={creativePanel.meta}>
                 <DataTable columns={creativeColumns} rows={creativeRows} />
               </Panel>
@@ -266,11 +266,11 @@ export function CampaignPage({
           ) : null}
           {section === "analytics" ? (
             <div className="mh-stack">
-              <ViewHeading eyebrow={analyticsHeading.eyebrow} title={analyticsHeading.title} description={analyticsHeading.description}>
+              <SectionHeading variant="view" eyebrow={analyticsHeading.eyebrow} title={analyticsHeading.title} description={analyticsHeading.description}>
                 <span className="mh-health">
                   <i /> {analyticsHeading.status}
                 </span>
-              </ViewHeading>
+              </SectionHeading>
               <div className="mh-campaign__split">
                 <Panel eyebrow={efficiencyPanel.eyebrow} title={efficiencyPanel.title} meta={efficiencyPanel.meta}>
                   <div className="mh-efficiency">
@@ -300,11 +300,11 @@ export function CampaignPage({
           ) : null}
           {section === "accounts" ? (
             <div className="mh-stack">
-              <ViewHeading eyebrow={accountsHeading.eyebrow} title={accountsHeading.title} description={accountsHeading.description}>
+              <SectionHeading variant="view" eyebrow={accountsHeading.eyebrow} title={accountsHeading.title} description={accountsHeading.description}>
                 <Button variant="primary" onClick={() => onBindAccount?.({ reason: "button" })}>
                   {accountsHeading.action}
                 </Button>
-              </ViewHeading>
+              </SectionHeading>
               <Panel eyebrow={bindingPanel.eyebrow} title={bindingPanel.title} meta={bindingPanel.meta}>
                 <DataTable columns={bindingColumns} rows={bindingRows} />
               </Panel>
