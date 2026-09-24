@@ -40,20 +40,20 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 2.3 当前方案（PR #6 起，main）
 
-- 代码位于 `src/design`：`tokens.css`；`atoms`、`molecules`、`organisms`、`pages` 各含 `.jsx` / `.css`；逐组件故事在 `stories/<层>/<组件>.stories.jsx`，页面故事在 `pages.stories.jsx`；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
+- 代码位于 `src/design`：`tokens.css`；通用组件在 `components/<Name>/`，单页功能模块在 `features/<page>/<Name>/`，页面组件在 `pages/<Page>/`，跨组件共享的私有模块在 `lib/`；每个组件目录内为 `index.jsx` + `<Name>.css` + `<Name>.stories.jsx`，页面故事仍在 `pages.stories.jsx`；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
 - Storybook 8.6，`@storybook/react-vite`，`.storybook/main.js` 以 `esbuild.jsx = "automatic"` 编译 JSX，`staticDirs` 把 `assets/` 映射到 `/assets`。
 - 独立宿主 `examples/host`（base `/mh-host/`）由 `scripts/host-check.mjs` 验证；配对视觉对照由 `scripts/visual-check.mjs` 执行（绑定构建戳，含 `--negative` 负向变异）。
 - 故事数、测试数、构建与对照结论只记在 `handover/README.md` §1，本文件不写这些数字。
 
 ### 2.4 当前仍成立的结构性事实
 
-本节只列约束后续工作方式的现存事实（截至 2026-09-24，4d14e32）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
+本节只列约束后续工作方式的现存事实（截至 2026-09-24，ad7ba3a）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
 - **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类中 overview、Principles、Business Term 有专用视图并通过人工审图（Business Term 的 M5 创建/编辑入口未建）；其余六类仍是过渡通用列表（人工 fail）。
 - **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于 `pages.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
 - **覆盖层**：滚动锁与焦点还原已共享，但 Escape 与焦点环由各组件自行实现：嵌套时一次 Escape 会关闭所有层，ModelFlowDialog 不响应 Escape，只有 Modal 有焦点环。
-- **组件边界**：`organisms.jsx` 同时容纳设计系统原语和单页功能模块；AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
+- **组件边界**：AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
 - **文案**：AiInterpreterPage 写死统计标签、管理规则与未知类型文案；有机体可见文案有的走 props，有的写死，规则不统一。
 - **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
 - **资源与交付**：字体和图片依赖参照物 `assets/`；没有正式库构建和 CI；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
@@ -70,11 +70,11 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 回调统一命名：`onClick`、`onChange`、`onNavigate`、`onOpen`、`onSelect`、`onSubmit`、`onSave`、`onCancel`。回调参数为带具名字段的对象，不直接传 DOM event。
 - 可导航元素渲染为 `<a href>`；触发动作的元素渲染为 `<button type="button">`。不得用 `<button>` 代替导航，也不得对所有 `<a>` 无条件 `preventDefault`。
 - 组件内不得写死 `id`。需要 `aria-labelledby` 时由调用方传入或使用 `React.useId()`。
-- 页面级组件（`src/design/pages.jsx`）必须通过 props 接收全部数据与文案。`content.js` 只作为故事的默认 args，不得被页面组件直接 import。
+- 页面级组件（`src/design/pages/<Page>/`）必须通过 props 接收全部数据与文案。`content.js` 只作为故事的默认 args，不得被页面组件直接 import。
 
 ### 3.2 样式
 
-- 每个组件的样式写在同层 `.css` 中，随组件 import。禁止整包引入 `assets/css`，禁止依赖 `knowledge-v4` 这类页面父级 class。
+- 每个组件的样式写在其目录的 `<Name>.css` 中，随组件 import；组件的修饰类（`--*`）规则必须放在基类组件自己的 css 里，不能散落到使用方——构建期 CSS chunk 顺序不保证源 import 序。禁止整包引入 `assets/css`，禁止依赖 `knowledge-v4` 这类页面父级 class。
 - 颜色、字体、圆角、阴影、间距必须引用 `tokens.css` 中的变量。新增色值先加 token 再使用。目标：组件 CSS 中直接十六进制色值降为 0（渐变端点亦需 token 化）。
 - 每个有布局的有机体与页面组件必须提供至少一档 `@media` 断点，以原始 CSS 的断点为参照。
 - 可交互元素必须有 `:focus-visible` 样式。

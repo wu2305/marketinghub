@@ -8,10 +8,10 @@
 
 | 项 | 值 |
 |---|---|
-| 设计系统位置 | `src/design` |
+| 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-24，8c93802：Storybook/host 新构建通过，63 stories + 5 docs，29/29 单测，P07 14/14、host 6/6；负向变异 6/6 如期失败（`/tmp/mh-audit-8c93802-negative`）。人工 Principles 默认态 pass、Business Term fail；新增故事输入/宿主历史/逐组件文档缺口见 §4。仅审核文档变更 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 73 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 39、Pages 7）+ 61 docs；2026-09-24 Business Term 条目新构建 index.json 实数（条目 A 后为 66+59）。Atoms/Molecules/Organisms 已拆为逐组件 CSF（`src/design/stories/<层>/<组件>.stories.jsx`，meta 声明 `component`），每组件一页 Docs |
+| 故事数 | 73 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 39、Pages 7）+ 61 docs；2026-09-24 Business Term 条目新构建 index.json 实数（条目 A 后为 66+59）。Atoms/Molecules/Organisms 已拆为逐组件 CSF（故事文件随组件目录，meta 声明 `component`），每组件一页 Docs |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），64 条通过（interpreter 10、cockpit-demo 替换夹具 7、home-demo 7、business-term-demo 14、lifecycle 11、assetUrl 1、stories 14：逐组件 meta/component/autodocs 覆盖、Atoms/Molecules/Icon/ReportRow 文档完整性、受控故事回写与回调载荷；2026-09-24 条目 A） |
 | 构建验证 | 通过（2026-09-24 d6557c3，`npm run build-storybook -- --disable-telemetry` 现经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；63 stories、5 docs）；独立宿主 `npm run build:host` + `node scripts/host-check.mjs` 通过 |
 | 最近视觉对照 | 2026-09-24（d6557c3 构建）：全套 `node scripts/visual-check.mjs` 105/105 机器通过（`/tmp/mh-e-full`），`--negative` 6/6 按预期失败；机器通过≠人工通过。人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；Business Term fail（过渡通用列表）；其余场景人工 pending |
@@ -168,7 +168,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前基线**：2026-09-24 本地分支 `devin/story-docs-closure`，自 `devin/structural-repair`（8c93802 + 0b61ccb 审核文档提交）派生，依赖的纠偏 A–E 均未合入 origin/main（main 仍为 2555d8a）。未跟踪 `.commandcode/` 不属本仓库工作，未动。
+- **当前基线**：2026-09-24 分支 `structural/s1-file-split`（自 origin/main 2daa11e 派生，已推送 origin 与 github，未合入 main）：S1 文件拆分完成——`src/design/{atoms,molecules,organisms,pages}.{jsx,css}` 已拆为 `components/`（32）+`features/<page>/`（26）+`pages/`（7 页 + Shell）+`lib/`（overlay、SkillMenu、story-helpers），逐组件故事随目录，`pages.stories.jsx` 未拆，`index.js` 导出 125 项不变。方案 d652fd8、搬迁 ad7ba3a；验证：npm test 64/64、build-storybook 134 entries（73 stories + 61 docs，id 集合与基线一致）、visual-check 115/115 机器通过且与 `/tmp/mh-s1-baseline/` 逐场景一致（截图无真实差异）、negative 7/7、host-check 7/7；发现记录于 structural-review.md 末尾“新发现”。此前基线见下条。
 - **条目 A（基础故事与文档闭环）完成**：见 §5 同日日志；Atoms/Molecules/Icon/ReportRow 逐 prop 文档（类型、实际默认值、枚举来自导出常量、回调签名+示例载荷）、受控故事画布回写、ReportRow/ProjectDirectory/LiveOverview 补故事、Button 回调改具名 `{ label }`。其余有机体仅有 `component` + 组件说明，逐 prop 文档未完成（§4）。
 - **已验证**：结构纠偏 A–E 已落地；本轮重新构建 63 stories + 5 docs，29/29 单测、P07 14/14 机器场景、独立宿主 6/6 检查通过。人工签收本轮 Principles 默认态 pass、Business Term fail，其余本轮场景 pending；历史全套 105/105 与其他人工记录见 §1，不当成本轮复跑。
 - **条目 B（Home 演示流程可移植）完成**：`src/design/demo/home-demo.js` `useHomeDemo(props)`（仿 useCockpitDemo：页面数据+初态+宿主回调入，完整 HomePage props 出；`demo = { answerFor(text, scope), modelFlow, modelDraftFor }` 全注入，缺省不回落内置 Demo 内容）；`content.js` 新增 `buildHomeAssistantAnswer`（portal.js scope→context 映射）；`pages--home` 故事与 `examples/host` HomeRoute 均改用同一容器，删除重复接线；`onFlowSave`/`onFlowSubmit` 改具名 `{ values }`。状态归属：drawer 开合、prompt、scope、answers（关闭重开保留）、历史回填后 ASK 禁用（portal.js 未调 updateSendState）、技能选择、模型流步骤/线程/规则/草稿均属容器实例。
@@ -419,3 +419,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | 结构与目标偏离审查：新增 `handover/structural-review.md`（S1–S8、A1–A4、执行波次、提示词）；§4 增加指针。仅文档，未改实现 | Claude Code |
 | 2026-09-24 | M4 Business Term 专用视图：BusinessTermView/ConfirmDialog 有机体、Modal drawer+initialFocus、Pagination compact、useBusinessTermDemo 容器、content `INTERPRETER.businessTermLibrary` 逐字种子、AiInterpreterPage `businessTerms`、z-index token；新增 BT 故事（全 prop 文档）、14 条容器测试、10 个 p07 配对场景与 1 个负向用例、宿主双实例隔离检查。验证与人工结论见 §4 同日条目 | Devin |
 | 2026-09-24 | 精简 AGENTS.md（A3）：§2.3 改为不含数字的现状描述；§2.4 由审核流水改为“当前仍成立的结构性事实”；新增 §3.5 参照物缺陷规则（A2，用户确认：视觉复刻，逻辑缺陷不进入组件，只在 demo 层重现）；§5 导语浓缩为执行要点并标注各 prompt 文件的角色；§7 改为审核结果只写入 handover。原 §2.4 与 §5 导语原文迁入本文件 §2.5 | Claude Code |
+| 2026-09-24 | S1 文件拆分（`structural/s1-file-split`，未合入 main）：`src/design/{atoms,molecules,organisms,pages}.{jsx,css}` 拆为 `components/`（32 个共享组件）+`features/<page>/`（home 2、cockpit 9、interpreter 9、self-service 2、campaign 4）+`pages/`（7 页 + 私有 Shell）+`lib/`（overlay.js/.css、SkillMenu、story-helpers.js）；59 个逐组件故事迁入组件目录，`pages.stories.jsx` 未拆；`index.js` 公共导出 125 项逐一比对不变；`.design-sync/config.json` 的 componentSrcMap（57 项）与 storyImports.shim（76 项）全部指向新路径。方案提交 d652fd8、搬迁 ad7ba3a、文档本提交。验证：npm test 64/64；build-storybook 后 index.json 134 entries 与 `/tmp/mh-s1-baseline/` 逐 id 一致；visual-check 115/115 机器通过（`/tmp/mh-s1-after2`），230 对截图 180 字节相同、48 仅 ±1 噪声、2 张 maxΔ9（原始侧同幅，渲染噪声）；negative 7/7；build:host + host-check 7/7。修复中发现并解决的真实回归：Vite dep 数组不按源 css import 排序，`.mh-select--sm`/`.mh-button--md`/`.mh-button--gold*` 从使用方 css 移回基类组件 css（约定写入 AGENTS.md §3.2）；其余新发现见 structural-review.md 末尾 | Devin |

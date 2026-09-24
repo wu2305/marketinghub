@@ -21,7 +21,7 @@
 
 ## 结构问题
 
-- [ ] **S1 按原子层级分文件，导致设计系统原语和页面功能模块混在一起**
+- [x] **S1 按原子层级分文件，导致设计系统原语和页面功能模块混在一起** —— 已于 `structural/s1-file-split` 完成：方案提交 d652fd8、搬迁 ad7ba3a。验证：npm test 64/64；build-storybook 通过，storybook-static/index.json 134 个 entry（73 stories + 61 docs）与基线逐 id 一致；`index.js` 导出 125 项与基线完全一致；visual-check 全量 115/115 机器通过（`/tmp/mh-s1-after2`），与 `/tmp/mh-s1-baseline/` 逐场景一致——230 对截图中 180 张字节相同、48 张仅 ±1 抗锯齿噪声、2 张 maxΔ9（原始侧同幅复现，属渲染噪声）；`--negative` 7/7 如期失败；`build:host` + `host-check` 7/7 通过；CSS 顺序对比输出 `/tmp/mh-s1-css-order/`。修复中发现并已解决：修饰类规则须随基类组件（`.mh-select--sm`→Select.css、`.mh-button--md/--gold`→Button.css），详见末尾“新发现”。
   - 现状：`organisms.jsx` 同时装着通用覆盖层、Header 这类原语，以及只服务一个页面的功能模块。例如 ReportCopilot 带 HolisticReport、PilotSalesBody、Hr* 等 11 个私有组件；还有 CityInvestDashboard、BusinessTermView、PrinciplesView。
   - 后果：文件无法按组件定位，design-sync 为此不得不手工维护 57 项 `componentSrcMap`；多个 agent 并行时反复冲突在同一文件上。
   - 方向：通用组件放 `src/design/components/<Name>/{index.jsx,<Name>.css,<Name>.stories.jsx}`，单页功能放 `src/design/features/<page>/`（例如 `features/cockpit/ReportCopilot/`）。`index.js` 仍是唯一公共入口，导出名不变。
@@ -299,3 +299,13 @@ S5：
 4. visual-check 增加默认态加一个非默认态的配对场景，作为基线；人工审图结果如实登记 pass/fail，fail 的像素收敛列入第二轮。
 每页一个提交。一页完成后立即进入下一页，不要在同一页上追求像素级收敛。
 ```
+
+## 新发现（S1 执行期间，2026-09-24）
+
+以下问题在 S1 搬迁中暴露；第一条已在 S1 内修复（不修则视觉回归），其余登记备查，不在本条修复。
+
+- **构建期 CSS chunk 顺序不保持源 `import "*.css"` 语句顺序（已随 S1 修复）**。Vite/Rollup 对 story 这类动态入口生成 dep 数组时，组件自身 css 排在它 import 的跨组件 css 之前。结果：`.mh-select`（13px）反超 `.mh-select--sm`（12px），Interpreter 工具栏 select 文字变宽约 6%——像素对比实测捕获，机器断言与几何检查均不能发现。约定（已写入 AGENTS.md §3.2）：`mh-x--*` 修饰类规则必须放在基类组件自己的 css 里。已修正：`.mh-select--sm`→`Select.css`；`.mh-button--md`、`.mh-button--gold`/`:hover`/`:focus-visible`→`Button.css`（原 atoms.css 本就如此归属）。
+- **拆分私有声明时的隐性跨模块依赖**：`Shell`（7 页共用）、`SkillMenu`（AssistantPanel/ReportCopilot 共用）、`useBodyScrollLock`/`useFocusRestore`（4 个覆盖层共用）在单文件里是私有顶层声明，拆分后必须显式 export + import；静态 import 推导只看导出符号会漏掉它们（已补，归入 `pages/Shell/` 与 `lib/`）。
+- **基线 CSS 中 tokens.css 被内联 4 份**：拆分前 atoms/molecules/organisms/pages.css 各自 `@import "./tokens.css"`，最终样式表含 4 份 `:root`/reset/`@font-face`；拆分后各组件统一经 JS 层 import，每份只出现一次。`:where()` reset 零特异度，无行为差异。
+- **`index.js` 的 `export * as demoContent from "./content.js"` 属命名空间导出**，静态导出对比脚本若只认 named-export 语法会误报缺失。
+- **`.design-sync/sb-reference/` 是拆分前的旧 Storybook 快照**（已 gitignore，不影响构建）；下次 design-sync 运行时会自然刷新，无需手工维护。
