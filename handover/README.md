@@ -9,6 +9,7 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design` |
+| 最新独立审核 | 2026-09-24，8c93802：Storybook/host 新构建通过，63 stories + 5 docs，29/29 单测，P07 14/14、host 6/6；负向变异 6/6 如期失败（`/tmp/mh-audit-8c93802-negative`）。人工 Principles 默认态 pass、Business Term fail；新增故事输入/宿主历史/逐组件文档缺口见 §4。仅审核文档变更 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
 | 故事数 | 63 stories（Foundations 1、Atoms 7、Molecules 19、Organisms 29、Pages 7）+ 5 docs；2026-09-24 新构建 index.json 实数 |
 | 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），29 条通过（interpreter 10、cockpit-demo 替换夹具 7、lifecycle 11、assetUrl 1；2026-09-24 d6557c3） |
@@ -167,12 +168,12 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ### 2.4 接续点
 
-- **当前目标**：M4 P07 推进中——Principles 专用视图已有实现；类型页壳已按原始重建（批 D：fixed 侧栏栏轨 + 压缩 Hero + 主列对齐，含 ≤1240/≤760 断点与 `min-width:1180` 横向滚动）。本轮新增：`PrinciplesView` 有机体（300px 搜索 + 220px 分类 CheckboxFilter disclosure + 编号卡片 01–10 + 两线 clamp 按需展开钮 + 空态 + 共享 Pagination 10/20/50）、`data-active-type` 类型页壳（padding/背景差异、隐藏 `.library-search-actions`/`.business-overview-head`/countline 死 chrome）、Hero 按活动类型动态统计（单复数 caption）、`/` 与 Cmd/Ctrl+K 搜索聚焦（TextInput/SearchField 增 `inputRef`）、侧栏 plural 标签 + `navCount` tooltip（countForType 值 10/6/1/3/1/1/2/3 ≠ typeMeta total）+ 计数 chip 恒 `display:none`（与原始一致，含 overview）。`globalPrinciples` 十条由 types.js 逐字生成（`type`→`category`）。修复 clamp 字体竞态：`PrincipleDescription` 在 `document.fonts.ready` 与 resize 后重测，避免按回退字体误截（原 02 卡无展开钮）。死代码登记：`#principleVersionDrawer`/`#principleVersionScrim` 被 shared-controls.js 运行时移除、`data-principle-versions` 无生产者、`patchRows` 找不存在的 `.asset-stage`——均不建。新增 CheckboxFilter/Pagination molecules 与独立故事；10 个 p07 配对场景全过。
-- **下一步**：M4 P07 继续——按台账推进剩余七类专用视图（Report Context、Data Model、Metric Dictionary、Business Term、Analytical Model、Scenario Reporting、Email Reports），逐类核实 types.js 行渲染/动作/筛选差异后提取。M1 余项并行欠账：色值 token 化余量、`@media`/`:focus-visible` 覆盖、独立 React 宿主。工作分支 `devin/interpreter-type-contract`（…→ 2d87dd9 → 13ce501 → 88cbaaf → f777199），未合入 main。P06 批次对抗审核（698769bf）在途，P07 Principles 批次审核随提交启动；返回结果在下轮处理。
-- **未提交改动**：2026-09-24 审核基线 HEAD 为 02918b5；审核开始时已有 handover、visual-check.config、atoms、content、organisms CSS/JSX、pages.stories、tokens 共 8 个 tracked 修改及未跟踪 `.commandcode/`。本次仅补审核文档，不覆盖这些实现改动。
-- **已有验证**：2026-09-24 `build-storybook` 68 stories（65→68）；`node scripts/visual-check.mjs --only p07` 10/10 PASS（principles/category-open/category-filter/search/empty/expand/slash + overview/business-term/scenario 回归）；`npm test` 10/10（interpreter.test.jsx 更新为 Principles 卡片契约）。历史人工结论曾称 Principles“像素一致”，2026-09-24 新构建复核撤销：原始侧栏从页头下贯穿、Hero 位于右侧；React Hero 横跨顶部、侧栏从 Hero 下开始。场景选择器经验：`.principle-list-item`/`.mh-principle` 裸选择器在筛选后仍命中剩余卡，detached 断言须 `:has-text()` 具体化；`/` 聚焦场景须先等 input 挂载。全套件 `node scripts/visual-check.mjs` 99/99 PASS（P01–P07）。此前验证：2026-09-23 `npm test` 9/9、visual-check 34/34（P05 十场景明细见历史行）。
-- **长程维护**：每条完成后在此写当前分支/提交、已完成状态 ID、命令/产物、具体失败与最小下一步。上下文压缩或换模型后从本节继续，不重做已验证事项，不把最后一条聊天误当成全新目标。
-- **阻塞处理**：记录阻塞原因和未验证范围，继续独立条目；缺真实后端/发布权限不阻塞组件与本地演示建设。跨未合并提交的分支依赖先核实并明确记录，不能声称已合入 main。
+- **当前基线**：2026-09-24 本地分支 `devin/structural-repair`，HEAD `8c93802`。审核开始 tracked 工作区干净，未跟踪 `.commandcode/` 未改；本轮仅更新 AGENTS 与 handover。不据本地分支推断远端合并状态。
+- **已验证**：结构纠偏 A–E 已落地；本轮重新构建 63 stories + 5 docs，29/29 单测、P07 14/14 机器场景、独立宿主 6/6 检查通过。人工签收本轮 Principles 默认态 pass、Business Term fail，其余本轮场景 pending；历史全套 105/105 与其他人工记录见 §1，不当成本轮复跑。
+- **下一条**：M4 P07 按原始差异逐类提取剩余七类专用视图，继续 M5/M6 全量范围。类型页外壳已修复，无需重做旧外壳专项；Business Term 的卡片/同义词/管理动作/分页仍是明确未完成项。
+- **穿插当前条目的 M1/M2 欠账**：Input 等受控故事需回写；逐组件接口文档与 ReportRow 独立故事需补齐；Home/Campaign/MediaTracking 的跨宿主演示流程需按实际共性从故事中提取，使用同一容器在宿主验证。Home History 宿主不回填已运行时复现。保留 token、回调具名对象、页面文案 props、容器响应式/键盘验证欠账。
+- **证据**：`/tmp/mh-audit-8c93802-p07`（配对及 reviews）、`/tmp/mh-audit-8c93802-host`、`/tmp/mh-audit-8c93802-probe`（输入、Home 历史、Atoms docs）。未复跑全站 105 场景、全部 Controls 或所有页面人工验收。
+- **接续规则**：每条完成后更新当前提交、状态 ID、证据及最小下一步；不能从旧分支记录恢复已删除路线，也不以单页或机器 PASS 替代全量完成。
 
 ### 2.5 旧阶段历史记录（不作为新里程碑验收结论）
 
@@ -253,6 +254,14 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P02 Report Copilot 关闭焦点 | 关闭后焦点还原到打开者（共享 `useFocusRestore`） | 无障碍调整；原 `closeAi()` 不还原焦点，不影响可见状态 | devin/structural-repair |
 
 ## 4. 已知缺口
+
+2026-09-24 纠偏后对抗审核（8c93802，以下为当前新增/复核事实）：
+- **P1 流程可移植性不完整**：`pages.stories.jsx:56` HomeStory 持有历史选择/技能/模型流状态，`examples/host/main.jsx:144` HomeRoute 重写部分接线。实测相同 History 首条，故事 prompt 非空、宿主 prompt 为空；宿主缺 onHistorySelect，也未接模型流。Cockpit 的 useCockpitDemo 是已有正确边界，其他页面尚未推广；不是禁止故事持有任何状态。
+- **P1 可操作故事与文档缺口**：`atoms--input` fill AUDIT 后 inputValue 仍为空（受控 value=""，onChange 仅 Action）；Search 等故事静态同样未回写。Atoms docs 仅首故事参数表，描述为推断 string/boolean、默认值为横杠，未展示各组件 JSDoc 契约；故事 meta 无 component，ReportRow 公共导出无独立故事。autodocs 标签与 5 个 docs 不能证明组件档案完成。
+- **P1 覆盖缺口继续成立**：Business Term 人工 fail，原三列卡含同义词、管理操作与分页，React 通用列表；P07 14/14 机器通过只证明配置中的断言，不能提升 M4 为完成。P08–P17 仍未开始，7 个页面故事不能换算成 17 页全状态完成率。
+- **P2 接口规则未收敛**：Button `onClick={onClick}` 仍传 DOM event；AiInterpreterPage 的统计标题/规则提示文案内置，不满足全部文案 props 契约。不是已修复的 Cockpit 数据耦合复发。
+- **P2 状态记录失真已文档纠正**：原 §2.4 仍标旧分支、68 stories、旧外壳缺陷及未做独立宿主，与 §1/§4 矛盾；本轮重写接续点。P04 的“15/15”、P05 的“26/26”保留为历史批次口径，当前配置分别只有 4、10 个场景，不能解释为各页完整状态覆盖数。
+- **本轮证据边界**：Browser plugin not available，使用现有 Playwright（Chromium 需沙箱外启动）。目标页非空、未见框架错误，专项 input/Home/docs pageerror 与 console.error 为空；P07 场景含 1440px 和 1024px。29 单测通过（有 jsdom navigation not implemented 提示），Storybook/host 构建通过，P07 14/14 与 host 6/6；人工只审 Principles 默认态与 Business Term。证据 `/tmp/mh-audit-8c93802-{p07,host,probe}`。仅更改审核文档，无实现修复。
 
 2026-09-24 结构纠偏批 A–E 结果（devin/structural-repair，13dacf2→d6557c3）：下方 2026-09-24 审核条目中验收误判、数据接口耦合、Campaign 重开丢值、Copilot 流全局令牌、tokens 全局 reset、Interpreter 外壳布局均已修复（状态归属见 §2.6）。仍存：
 - 七类知识类型专用视图（M4）、M5/M6 全部未开始；宿主只覆盖 Home/Cockpit/compose，其他页为显式覆盖缺口。
@@ -338,3 +347,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | 批 D 人工复核修正（同批未提交）：Hero eyebrow 8px 规则被同块 `p` 选择器反超 → 改 `> p:last-of-type`；Header 增 `highlightCurrent` prop（`aria-current` 恒写，下划线可按页关断——原始 home/knowledge 有 aria-current 无视觉，self-service/media-tracking 两者皆无，reports/campaign/data-upload/flexible 均有）；侧栏节奏对齐原 `.sidebar-nav`——brand mb 18/lh1.2、Overview mb 10、分组去 border-top 改 8/12 padding + 2px pitch、类型页分组右缩 16px（项宽 215→199）；`.mh-principles`/`.mh-library` 类型页去白面板（原 `.knowledge-library` 平铺灰底，仅分页白条）；≤1100 Hero stats `flex-basis:420 + minmax(160,1fr)`、卡 112px/18px。layout 断言补 eyebrow 框、首个类型侧栏项框、1024 统计卡框。npm test 28/28、p07 14/14、p01 6/6、p03 3/3、p04 4/4、p05 10/10、p06 17/17、p02-cockpit 9/9、negatives 6/6 | Devin |
 | 2026-09-24 | 结构修复批 D 尾项 + 批 E 独立宿主：D 尾项——overview 主列 padding 改 `28 0 42 34`（原 `.knowledge-main` 无右 padding，卡列宽 251→260.5 对齐）、`.mh-type-card.is-manageable` 金边实线纠为原 `border-top 1px #e6e1d8`（移除 pill 背景覆盖）、overview layout 加首/末 TypeCard 框断言。批 E——新增 `src/design/asset-url.js`（BASE_URL 拼接 + document.baseURI 兜底成绝对 URL，因 css 自定义属性里的 url() 按消费样式表解析），content.js/report-fixtures.js/alt-cockpit.js/organisms.jsx(ART+默认 logo) 的 `/assets/images` 全改走它；tokens.css 全局 reset 收编为零优先级 `:where([class*="mh-"], [class*="mh-"] *)` 范围（组件无 body/html 样式可迁——Storybook 自带 body margin:0）；`.storybook/preview.jsx` 加 DemoLinkGuard 装饰器（仅拦截 `/index.html`、`/assets/pages/` 纯左键）；`examples/host/` 独立宿主（vite base `/mh-host/`、自管 router+委托点击+popstate、`/mh-host/` Home、`/mh-host/cockpit` 由 query 驱动 project/dashboard、`/mh-host/compose` 双实例+sentinel、`/mh-host/sentinel` 裸页、其余→Coverage gap 明示）；`scripts/build-host.mjs`（拷贝 assets/images+fonts→public、vite build、指纹 stamp）+ `scripts/host-check.mjs`（字体/img/背景、导航环+reload 标记、sentinel 双页 computed 一致性、双实例隔离、coverage 不落原路由）；fingerprint.mjs 参数化。验证：npm test 29/29、build 63 stories、visual-check 全量 105/105、negatives 6/6、host-check 5/5 | Devin |
 | 2026-09-24 | 结构纠偏收尾：D 复审后修 overview 卡片网格/边框并人工审图通过 P07 overview 与 Principles 四态；E 独立宿主（`examples/host`、`scripts/build-host.mjs`、`scripts/host-check.mjs`）、`assetUrl` 资源约定、`:where()` 作用域 reset、Storybook 显式链接适配（点击不再把 iframe 导到原 HTML）。npm test 29/29，63 stories/5 docs，visual-check 105/105 机器通过，negative 6/6，host-check 通过。更新 AGENTS 2.4/§5 与本台账 §1/§2/§4 | Devin |
+
+| 2026-09-24 | 8c93802 纠偏后对抗审核：复跑构建、29 单测、P07 14 场景与宿主 6 项；人工 Principles 默认态 pass、Business Term fail；复现 Input 故事输入不回写及 Home History 宿主不回填，核查 autodocs 不足、ReportRow 缺故事、接口残留；先补 AGENTS 2.4/5，再纠正本台账接续点与缺口。仅改文档，未修组件。证据 /tmp/mh-audit-8c93802-* | Codex |

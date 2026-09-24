@@ -47,6 +47,8 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 2.4 2026-09-23 审核确认的缺口
 
+2026-09-24 纠偏后对抗审核（`devin/structural-repair`，8c93802；初始 tracked 工作区干净，未跟踪 `.commandcode/` 未动）：重新构建 63 stories + 5 docs，29/29 单测，P07 14/14 机器场景、独立宿主 6/6 检查通过。人工复核 Principles 1440px 默认态主体布局基本一致、Business Term fail（原三列术语卡含同义词/管理动作/分页，React 通用列表缺失）；其余本轮截图未人工签收。新实证：`atoms--input` 输入 AUDIT 后值仍为空（受控 args 仅记 Action）；Home History 选同一条记录，故事填入 prompt，独立宿主为空（HomeRoute 未接 onHistorySelect），Home/ Campaign/MediaTracking 等流程仍主要宿于 stories，Cockpit 的 useCockpitDemo 边界尚未推广。Atoms docs 实际仅首故事 args 表，缺逐组件 props 说明、默认值与回调载荷；全部故事 meta 未声明 component，ReportRow 公共导出无独立故事。静态残留：Button 仍直传 DOM event、AiInterpreterPage 写死统计/规则文案。handover §2.4 接续点仍写旧分支、68 stories、修复前外壳结论，本轮同步纠正。结论：主架构方向可继续，尚不是完整组件库；不能用宿主冒烟/故事数替代流程可移植性和逐组件文档验收。证据 `/tmp/mh-audit-8c93802-{p07,host,probe}`；未复跑全站 105 场景或 Controls 全枚举，未改组件实现。
+
 2026-09-24 结构纠偏（`devin/structural-repair`：ed76de1 基线提交，13dacf2 A、8e51103 B、2ccd473 C、a7cc1d0 D、d6557c3 E）：visual-check 现绑定源指纹构建戳（过期构建 exit 2），逐场景分列 load/behavior/manual，manual 仅由人工 `--review` 写入且绑定截图 hash；弱断言、console error、Storybook 错误页均判失败；`--negative` 6 例变异必须失败；P07 加侧栏/Hero/主栏/卡片几何对照。上文“Accounts 错参数”“Campaign 重开丢值”“activeCopilotStream 模块全局”“CityInvest/报表搜索/Copilot 固定读 Demo 数据”“CockpitStory 旁路 args.projects”“tokens 全局 reset”“TypeCard 根路径 /assets”“Interpreter 外壳布局不符”诸条已修复，以 handover 为准。人工审图（lead）通过：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏；Business Term 等七类仍是过渡通用列表（人工 fail，M4 未完成）。独立宿主 `examples/host`（base `/mh-host/`）经 `scripts/host-check.mjs` 验证资源、导航闭环不整页刷新、宿主哨兵样式不受污染、双实例隔离。已知残留：截图 hash 存在渲染噪声，人工审核较易转为 stale（安全方向）；嵌套覆盖层一次 Escape 会关闭所有文档级监听层，原生 `<dialog>` 仅关顶层，未改；ReportCopilot 关闭后还原焦点为无障碍调整（原 closeAi 无）；宿主 compose 窄栏中 CityInvestDashboard 筛选行溢出，组件缺容器级响应式。
 
 2026-09-24 增量对抗审核（02918b5 + 审核开始时已有的 8 个 tracked 工作区修改）：重新构建通过，实际索引为 63 stories + 5 docs（不是 68 stories），单测 10/10；P07 配对脚本 10/10 断言通过，但人工查看 Principles 配对截图确认整体 Hero/侧栏布局仍显著不同，撤销 handover“像素一致”的结论。Campaign 创建任务输入 Object 后 Cancel→重开，原始保留输入，React 回到 `341 plans`；此前将丢值登记为生命周期有意差异不能抵消可达流程缺口。结构性风险：CityInvestDashboard 无内容/数据 props、报表搜索依赖固定 KNOWLEDGE_ASSETS、Copilot 流取消令牌为模块全局、tokens 存在宿主全局 reset；独立宿主复用未得到证明。Accounts 错参数负向复核已能拒绝 overview，应不再沿用旧漏洞仍存在的结论。证据：`/tmp/mh-audit-20260924-p07`、`/tmp/mh-audit-20260924-runtime/results.json`。未复跑全套场景或 Controls 全枚举，未修改实现。
@@ -120,6 +122,8 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 对照脚本落地为 `scripts/visual-check.mjs` 后，以脚本输出替代第 2、3 步的手工操作；脚本产出保存到 `/tmp`，不入库。
 
 ## 5. 长期规划（2026-09-23 全量重建里程碑）
+
+2026-09-24 纠偏后审核补充：后续条目同时验证「原始可达状态完整重建」与「可导入的组件/流程及可操作、可查阅的故事档案」。将 Cockpit 已验证的流程容器边界按实际需要推广到其他页面，宿主验证须包含同一流程结果对照；基础输入故事必须真实回写，组件文档须能查到各自接口与回调载荷。沿现有 M0–M7 推进，不为这些欠账重启总架构；接续点只记录当前状态，旧分支和旧验收数字留在历史日志。
 
 本节取代旧 A–E 的机械串行安排；旧进度保留作历史证据，不自动等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 handover/README.md 维护。执行指令模板见 handover/execution-prompt.md。
 
