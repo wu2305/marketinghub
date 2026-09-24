@@ -6,3 +6,18 @@ storybook-static/
 
 examples/host/dist/
 examples/host/public/
+
+# design-sync (claude.ai/design) working state
+dist/
+ds-bundle/
+.ds-sync/
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.design-sync/sb-build.log
+.design-sync/*.log
+.design-sync/*.out
+
+# local tool state (not project files)
+.commandcode/

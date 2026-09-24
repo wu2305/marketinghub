@@ -1,0 +1,183 @@
+{
+  "projectId": "f1ea05d3-f479-445b-a873-e80ff2866cac",
+  "shape": "storybook",
+  "pkg": "marketing-hub",
+  "globalName": "MarketingHub",
+  "storybookStatic": ".design-sync/sb-reference",
+  "buildCmd": "node .design-sync/build-dist.mjs",
+  "cssEntry": "dist/index.css",
+  "titleMap": {
+    "Foundations": null,
+    "Statusbadge": "StatusBadge",
+    "Textarea": "TextArea",
+    "Textinput": "TextInput",
+    "Categoryheading": "CategoryHeading",
+    "Checkboxfilter": "CheckboxFilter",
+    "Columnchart": "ColumnChart",
+    "Datatable": "DataTable",
+    "Filedropzone": "FileDropzone",
+    "Filteractions": "FilterActions",
+    "Filterpills": "FilterPills",
+    "Formfield": "FormField",
+    "Metricstat": "MetricStat",
+    "Progresslist": "ProgressList",
+    "Scopeoption": "ScopeOption",
+    "Searchfield": "SearchField",
+    "Sectionheading": "SectionHeading",
+    "Sidebaritem": "SidebarItem",
+    "Viewheading": "ViewHeading",
+    "Actioncard": "ActionCard",
+    "Assetrow": "AssetRow",
+    "Assistantlauncher": "AssistantLauncher",
+    "Assistantpanel": "AssistantPanel",
+    "Businesstermform": "BusinessTermForm",
+    "Campaignrail": "CampaignRail",
+    "Six-cityinvestanalysis": "CityInvestDashboard",
+    "Knowledgelibrary": "KnowledgeLibrary",
+    "Knowledgesidebar": "KnowledgeSidebar",
+    "Librarytoolbar": "LibraryToolbar",
+    "Liveoverview": "LiveOverview",
+    "Livereportview": "LiveReportView",
+    "Modelflowdialog": "ModelFlowDialog",
+    "Principleslibrary": "PrinciplesView",
+    "Projectcard": "ProjectCard",
+    "Projectcatalog": "ProjectCatalog",
+    "Projectdirectory": "ProjectDirectory",
+    "ReportCopilotworkspace": "ReportCopilot",
+    "Reportdetailsdrawer": "ReportDetailsDrawer",
+    "Reportrow": "ReportRow",
+    "Summarystrip": "SummaryStrip",
+    "Tasklist": "TaskList",
+    "Typecard": "TypeCard",
+    "Typegrid": "TypeGrid",
+    "Uploadhistory": "UploadHistory",
+    "Workspacecard": "WorkspaceCard",
+    "Workspacegrid": "WorkspaceGrid",
+    "Pages": null
+  },
+  "runtimeFontPrefixes": [
+    "Microsoft YaHei",
+    "PingFang SC"
+  ],
+  "overrides": {
+    "Toast": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "AssistantLauncher": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "ModelFlowDialog": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "ReportCopilot": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "ReportDetailsDrawer": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "UploadHistory": {
+      "cardMode": "single",
+      "primaryStory": "Default"
+    },
+    "AssistantPanel": {
+      "cardMode": "single",
+      "primaryStory": "AskPanel"
+    },
+    "AssetRow": {
+      "cardMode": "column"
+    },
+    "CityInvestDashboard": {
+      "cardMode": "column"
+    },
+    "Header": {
+      "cardMode": "column"
+    },
+    "ProjectDirectory": {
+      "cardMode": "column"
+    },
+    "ReportRow": {
+      "cardMode": "column"
+    }
+  },
+  "componentSrcMap": {
+    "Button": "src/design/atoms.jsx",
+    "Icon": "src/design/icons.jsx",
+    "Link": "src/design/atoms.jsx",
+    "Select": "src/design/atoms.jsx",
+    "StatusBadge": "src/design/atoms.jsx",
+    "TextInput": "src/design/atoms.jsx",
+    "CategoryHeading": "src/design/molecules.jsx",
+    "CheckboxFilter": "src/design/molecules.jsx",
+    "ColumnChart": "src/design/molecules.jsx",
+    "DataTable": "src/design/molecules.jsx",
+    "FileDropzone": "src/design/molecules.jsx",
+    "FilterActions": "src/design/molecules.jsx",
+    "FilterPills": "src/design/molecules.jsx",
+    "FormField": "src/design/molecules.jsx",
+    "MetricStat": "src/design/molecules.jsx",
+    "Pagination": "src/design/molecules.jsx",
+    "ProgressList": "src/design/molecules.jsx",
+    "ScopeOption": "src/design/molecules.jsx",
+    "SearchField": "src/design/molecules.jsx",
+    "SectionHeading": "src/design/molecules.jsx",
+    "SidebarItem": "src/design/molecules.jsx",
+    "Suggestion": "src/design/molecules.jsx",
+    "Tabs": "src/design/molecules.jsx",
+    "Toast": "src/design/molecules.jsx",
+    "ViewHeading": "src/design/molecules.jsx",
+    "ActionCard": "src/design/organisms.jsx",
+    "AssetRow": "src/design/organisms.jsx",
+    "AssistantLauncher": "src/design/organisms.jsx",
+    "AssistantPanel": "src/design/organisms.jsx",
+    "BusinessTermForm": "src/design/organisms.jsx",
+    "CampaignRail": "src/design/organisms.jsx",
+    "CityInvestDashboard": "src/design/organisms.jsx",
+    "Header": "src/design/organisms.jsx",
+    "Hero": "src/design/organisms.jsx",
+    "KnowledgeLibrary": "src/design/organisms.jsx",
+    "KnowledgeSidebar": "src/design/organisms.jsx",
+    "LibraryToolbar": "src/design/organisms.jsx",
+    "LiveOverview": "src/design/organisms.jsx",
+    "LiveReportView": "src/design/organisms.jsx",
+    "Modal": "src/design/organisms.jsx",
+    "ModelFlowDialog": "src/design/organisms.jsx",
+    "Panel": "src/design/organisms.jsx",
+    "PrinciplesView": "src/design/organisms.jsx",
+    "ProjectCard": "src/design/organisms.jsx",
+    "ProjectCatalog": "src/design/organisms.jsx",
+    "ProjectDirectory": "src/design/organisms.jsx",
+    "ReportCopilot": "src/design/organisms.jsx",
+    "ReportDetailsDrawer": "src/design/organisms.jsx",
+    "ReportRow": "src/design/organisms.jsx",
+    "SummaryStrip": "src/design/organisms.jsx",
+    "TaskList": "src/design/organisms.jsx",
+    "TypeCard": "src/design/organisms.jsx",
+    "TypeGrid": "src/design/organisms.jsx",
+    "UploadHistory": "src/design/organisms.jsx",
+    "WorkspaceCard": "src/design/organisms.jsx",
+    "WorkspaceGrid": "src/design/organisms.jsx",
+    "TextArea": "src/design/atoms.jsx"
+  },
+  "storyImports": {
+    "shim": [
+      "src/design/atoms.jsx",
+      "src/design/molecules.jsx",
+      "src/design/organisms.jsx",
+      "src/design/pages.jsx",
+      "src/design/icons.jsx",
+      "src/design/asset-url.js",
+      "src/design/cx.js",
+      "src/design/report-logic.js",
+      "src/design/report-routes.js",
+      "src/design/demo/cockpit-demo.js",
+      "src/design/demo/home-demo.js",
+      "src/design/demo/report-demo.js"
+    ]
+  },
+  "readmeHeader": ".design-sync/conventions.md"
+}
