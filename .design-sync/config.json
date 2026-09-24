@@ -47,7 +47,6 @@
     "Typegrid": "TypeGrid",
     "Uploadhistory": "UploadHistory",
     "Workspacecard": "WorkspaceCard",
-    "Workspacegrid": "WorkspaceGrid",
     "Pages": null
   },
   "runtimeFontPrefixes": [
@@ -148,7 +147,6 @@
     "TypeGrid": "src/design/features/interpreter/TypeGrid/index.jsx",
     "UploadHistory": "src/design/features/self-service/UploadHistory/index.jsx",
     "WorkspaceCard": "src/design/features/home/WorkspaceCard/index.jsx",
-    "WorkspaceGrid": "src/design/features/home/WorkspaceGrid/index.jsx",
     "TextArea": "src/design/components/TextArea/index.jsx"
   },
   "storyImports": {
@@ -192,7 +190,6 @@
       "src/design/features/cockpit/ReportDetailsDrawer/index.jsx",
       "src/design/features/cockpit/ReportRow/index.jsx",
       "src/design/features/home/WorkspaceCard/index.jsx",
-      "src/design/features/home/WorkspaceGrid/index.jsx",
       "src/design/features/interpreter/AssetRow/index.jsx",
       "src/design/features/interpreter/BusinessTermForm/index.jsx",
       "src/design/features/interpreter/BusinessTermView/index.jsx",

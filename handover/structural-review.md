@@ -542,7 +542,7 @@ R5(a)：
   - `CategoryHeading` 按 O2 并入 ProjectCatalog。
   - `features/campaign/Panel` 的头部同样是 eyebrow + 标题 + 动作，但标题层级（h3）和容器语义不同，保持独立，只在 handover 记一句“已比较，不合并”。
 
-- [ ] **O4 删除只转发 props 的包装组件**
+- [x] **O4 删除只转发 props 的包装组件** —— 2026-09-25 完成（`structural/r7-split-hotspots`）：`WorkspaceGrid`（21 行纯转发）并入 `HomePage`，`.mh-workspace-grid` 规则移入 `HomePage.css`；导出/.design-sync 同步，删 `features-home-workspace-grid--default`（该态仍见于 `pages--home`）。`TypeGrid`/`ProjectCatalog` 保留（各有计数/分组逻辑）。
   - `WorkspaceGrid`（`features/home/WorkspaceGrid`，21 行）：只包一层 grid `div` 并把 props 原样转给 `WorkspaceCard`，唯一使用者是 HomePage。并入 HomePage（grid 样式移入 HomePage.css），删除其故事与导出。
   - `TypeGrid` 有计数格式化与选中态计算，而且是 S8 注册表里的 overview 视图，保留。`ProjectCatalog` 有分组逻辑，保留。
 

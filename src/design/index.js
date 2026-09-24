@@ -86,9 +86,6 @@ export {
   WorkspaceCard,
 } from "./features/home/WorkspaceCard/index.jsx";
 export {
-  WorkspaceGrid,
-} from "./features/home/WorkspaceGrid/index.jsx";
-export {
   ProjectCard,
 } from "./features/cockpit/ProjectCard/index.jsx";
 export {

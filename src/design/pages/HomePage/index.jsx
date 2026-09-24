@@ -6,7 +6,7 @@ import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { SectionHeading } from "../../components/SectionHeading/index.jsx";
-import { WorkspaceGrid } from "../../features/home/WorkspaceGrid/index.jsx";
+import { WorkspaceCard } from "../../features/home/WorkspaceCard/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./HomePage.css";
 
@@ -75,7 +75,11 @@ export function HomePage({
       </Hero>
       <div className="mh-page__inset">
         <SectionHeading {...heading} />
-        <WorkspaceGrid cards={cards} onOpen={onOpen} onNavigate={onNavigate} />
+        <div className="mh-workspace-grid">
+          {cards.map((card) => (
+            <WorkspaceCard key={card.title} {...card} onOpen={onOpen} onNavigate={onNavigate} />
+          ))}
+        </div>
       </div>
       <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
       <AssistantPanel
