@@ -72,9 +72,8 @@
   - 同时建立正式的库构建（vite lib mode + `exports`/`types`），把 `.design-sync/build-dist.mjs` 的临时方案收回仓库构建。
   - 合并 cleanup 清单的两条 P2：“图片依赖宿主 `/assets`” 和 “公共入口不完整”。
 
-- [ ] **S8 Interpreter 类型视图靠三元链分派**
-  - 现状：`pages.jsx` 中 AiInterpreterPage 的写法是 `type.view === "principles" ? … : "business-term" ? … : KnowledgeLibrary`，每个视图的 props 也不统一（`principles={}`、`businessTerms={}`）。M4 还要再加 6 类。
-  - 方向：在 M4 继续之前，先改为视图注册表 `{ principles: PrinciplesView, "business-term": BusinessTermView, … }` 加统一的 `views[type.view]` props 契约。未注册的类型回落到通用列表，并显式标记为过渡实现。
+- [x] **S8 Interpreter 类型视图靠三元链分派** —— 2026-09-25 完成（df06211）：`AiInterpreterPage` 改 `typeViews[type.view]` 注册表分派（principles→PrinciplesView、"business-term"→BusinessTermView），未注册类型回落 `KnowledgeLibrary` + `data-transitional="true"`；统一 props 契约落地——视图收已过滤/已分页数据 + 受控状态 + 回调，筛选/分页为 `demo/interpreter-demo.js` 的导出纯函数，由 `useInterpreterDemo` 驱动；快捷键改 `lib/search-shortcut.js` 实例级分派 + 双实例测试。
+  - 原现状：`pages.jsx` 中 AiInterpreterPage 的写法是 `type.view === "principles" ? … : "business-term" ? … : KnowledgeLibrary`，每个视图的 props 也不统一（`principles={}`、`businessTerms={}`）。M4 还要再加 6 类。
 
 ## 目标偏离
 
@@ -96,11 +95,7 @@
   - 已完成：AGENTS.md §2.4 改为 “当前仍成立的结构性事实”，原审核流水原文迁入 handover/README.md §2.5；§5 导语浓缩为执行要点并标注各 prompt 文件的角色（structural-repair-prompt 标为历史）；§7 改为审核结果只写 handover，AGENTS 只在事实或规则改变时改写（25.4 KB → 19.7 KB）。
   - 待做：`handover/README.md`（迁入历史后约 420 行）中单行超过约 400 字的段落拆成列表；§2.3 逐页盘点保持在原位置，但每页压缩为 “可达状态 / 已实现 / 缺口” 三段；不改变 AGENTS.md §7 规定的五节结构。
 
-- [ ] **A4 仓库卫生**
-  - 根目录 `README.md` 仍以 “Marketing Hub AI v20.11 静态基线” 为主体，并称 Pages 有 5 个故事（实际 7 个）。
-  - `docs/cleanup-manifest.json` 含其他工具的 Windows 绝对路径（`D:/公司文件/...`、`C:\Users\Admin\.codex\...`）。
-  - 已入库 `.cursor/environment.json` 和 `assets/.codebuddy/memory/*.md`。后者在参照物目录内，按 AGENTS.md §6 删除需在 PR 中单列说明。
-  - 没有 CI。建议最小的 GitHub Actions：`npm ci && npm test && npm run build-storybook`。远端已在 https://github.com/wu2305/marketinghub。
+- [x] **A4 仓库卫生** —— 2026-09-25 完成（8601270 + 898ab8d CI 修复）：README 重写为 React 设计系统主体（静态 Demo 降为“参照物”节，故事数不写死）；`cleanup-manifest.json` 去除 Windows 绝对路径（映射/哈希保留为溯源）；`.cursor/environment.json` 取消跟踪 + gitignore；`assets/.codebuddy/memory/*.md` 删除（§6 要求已在提交说明单列）；新增 `.github/workflows/ci.yml`（npm ci→lint→test→build-storybook→build:host→playwright→host-check），首个通过 run https://github.com/wu2305/marketinghub/actions/runs/36060649232；visual-check 留本地（README 注明）。
 
 ## 执行顺序
 
@@ -332,18 +327,14 @@ S5：
   - 后果：新宿主必须抄写这些行为开关才能得到正确的 Cockpit 助手，这正是 AGENTS.md §1“只 import 组件即可搭页面”要避免的。
   - 处理：页面自己知道自己是哪种助手，预设放在页面组件内（或其 demo hook 的默认值），调用方只传内容；验收时宿主与故事中不再出现上述开关名。
 
-- [ ] **R4 Interpreter 列表筛选有三种所有权模式**（并入 S8，必须在 M4 其余六类之前定）
-  - 通用类型：`AiInterpreterPage` 在页面内对 `records` 做 query + filter（`pages/AiInterpreterPage/index.jsx:90–98`），再把 `rows` 传给 `KnowledgeLibrary`。
-  - Principles：页面只传 `query`，`PrinciplesView` 拿未过滤的 `items` 自己过滤。
-  - Business Term：搜索/筛选/分页全在 `useBusinessTermDemo`，页面只透传 `businessTerms`。
-  - 另外页面在 `document` 上注册 “/” 与 Cmd/Ctrl+K 快捷键（:72–88），同页两个实例会互抢焦点。
-  - S8 的“统一 props 契约”没有规定谁负责筛选。建议：视图组件接收已过滤结果 + 受控 `query/filters/page` + 回调，过滤逻辑是纯函数，放在 `demo/` 的 hook 里；页面只负责注册表分派和外壳。快捷键改为只作用于当前实例（绑定到页面根元素或由 hook 提供）。
+- [x] **R4 Interpreter 列表筛选有三种所有权模式**（并入 S8）—— 2026-09-25 随 df06211 完成：筛选/分页统一归 `demo/interpreter-demo.js`（纯函数 + `useInterpreterDemo`），页面组件零过滤；视图收已过滤结果 + 受控 `query/filters/page` + 回调；“/”与 Cmd/Ctrl+K 改 `lib/search-shortcut.js` 实例级（焦点所在实例优先，否则最近挂载），双实例测试覆盖。
+  - 原状存档：通用类型由页面内过滤、Principles 视图自过滤、Business Term 由 `useBusinessTermDemo` 过滤；`document` 级快捷键使两个实例互抢焦点。
 
 - [ ] **R5 公共入口把演示层当库 API 导出；组件层存在越层 import，且没有检测**（并入 S7，边界检测可提前做）
+  - **(a) 已完成 2026-09-25（eec96d3）**：`eslint.config.js`（flat：JSX 解析 + `no-unused-vars` + react-hooks 两规则）与 `npm run lint`；`src/design/boundaries.test.js` 断言三层 import 边界（components/ 不碰 features|pages|demo|content.js|report-logic|report-routes；features/<p>/ 不跨页不碰 demo/content；pages/ 不碰 demo/content），当前零违规零白名单。死 import 已清：`Pagination` 的 `totalLabel`、`ModelFlowDialog` 的 `Select` 等。5 条既有 exhaustive-deps 警告保留可见。
   - `src/design/index.js` 同时导出 `useCockpitDemo`/`useHomeDemo`/`useBusinessTermDemo`（:255–257）、`report-demo.js` 的场景函数（:266）、`report-routes.js` 中写死原始 Demo URL 的路由函数（:253）、`demoContent`（:227），以及 26 个仅服务单页的 feature 模块。S7 的库构建若照此发布，演示夹具和原始 URL 就成了公开契约。
-  - `components/Pagination/index.jsx:2` import 了 Cockpit 专用的 `report-logic.js` 的 `totalLabel`，但在 :31 被同名局部变量遮蔽——是 S1 按符号自动补 import 留下的死依赖，让通用原语依赖单页业务逻辑。按同样方式生成的 import 可能还有其他死依赖，仓库没有 lint，无法发现。
   - `cx.js` 除 `cx` 外还放了 `normalizeOptions`、`recordMatchesFilter`、`uniqueFilterOptions` 这类领域筛选逻辑；`report-logic.js`、`report-routes.js` 只服务 Cockpit 却位于设计系统根目录。
-  - 处理：（a）现在就加 ESLint（`no-unused-vars`、`import/no-unused-modules` 可选）和一条 import 边界测试：`components/` 不得 import `features/`、`pages/`、`demo/`、`content.js`、`report-*.js`；`features/<p>/` 不得 import 其他 `features/<q>/`；删除 Pagination 的死 import。（b）S7 时拆成两个入口：库入口（components + features + pages + tokens）与 `./demo` 子路径（hooks、fixtures、content、report-demo/routes）；`report-logic.js` 移到 `features/cockpit/lib/`，筛选函数移出 `cx.js`。
+  - 待做（b，S7 时）：拆成两个入口——库入口（components + features + pages + tokens）与 `./demo` 子路径（hooks、fixtures、content、report-demo/routes）；`report-logic.js` 移到 `features/cockpit/lib/`，筛选函数移出 `cx.js`。
 
 - [ ] **R6 导航契约绑定在原始 Demo 的 URL 空间上**（2026-09-25 已决定：新页面用约定，存量迁移推迟到 M7，见 D2）
   - 默认 href 全是 `/index.html`、`/assets/pages/*.html?…`（`report-routes.js`、`content.js` 的 NAV）。Storybook 要靠 `.storybook/preview.js` 的 `DemoLinkGuard` 吞掉这些点击，宿主要靠 `examples/host/main.jsx:61–75` 的 `ROUTE_MAP`/`mapDemoHref` 逐页翻译。Cockpit 为此开了 `projectHref/liveHref/contextHref/backHref` 四个函数 props，其他页面各有各的做法。
@@ -360,9 +351,8 @@ S5：
   - 另外 65 个组件模块各自 `import tokens.css`，只引入一个组件也会注入全部 `@font-face` 与 `:root`。
   - 处理：在 host compose 页加一个“插槽内哨兵”（宿主按钮/链接放进 Hero 或 Modal 的 children），先用断言确认现状，再决定 reset 改为只命中组件自身元素（例如 `.mh-x` 本身而不是 `[class*="mh-"] *`）还是登记为有意行为。
 
-- [ ] **R9 handover §1 的状态表自相矛盾，而 A3 只允许改排版**
-  - 同一张表里：“最新独立审核 8c93802 … 63 stories + 5 docs”、“构建验证 d6557c3 … 63 stories、5 docs”、“故事数 73 + 61 docs”、“最近视觉对照 105/105”；S1 条目记录的是 115/115。§2.1 M4 行写 Business Term 在 `devin/story-docs-closure` 完成。A3 的约束是“不改任何事实”，所以没人负责刷新这些过时事实。
-  - 处理：R1 合入后，在 main 上跑一次全套验证，用一次运行的结果重写 §1 表格（每项注明提交号），过期行移到 §2.5。
+- [x] **R9 handover §1 的状态表自相矛盾，而 A3 只允许改排版** —— 2026-09-25 完成：全套验证在 898ab8d 对应内容上跑过一遍（npm test 65/65、lint 0 errors/5 warnings、build-storybook 66+53、host-check 7/7、visual-check 115/115 + negative 7/7、CI 绿 run 36060649232）；§1 各行按本次结果重写并注明提交号与证据路径，过期行原文移 §2.5；§2.1 的 `devin/story-docs-closure` 改为合入提交 4d14e32。
+  - 原状存档：同一张表里“63 stories + 5 docs”“73 + 61 docs”“105/105”“115/115”并存；M4 行写分支名。
 
 - [x] **R10 Storybook 分类与代码结构不一致**（与 R7 同做）—— 2026-09-25 完成：26 个 `features/*` 故事 title 由 `Organisms/…` 改为 `Features/<Page>/<Name>`（共享组件保留 Atoms/Molecules/Organisms）。visual-check 只引用 `pages--*`，配对不受影响；`stories.test.jsx` 不按 title 断言。AGENTS.md §3.4 增补 title 约定，§2.3/§2.4 改为页面故事在 `pages/<Page>/<Page>.stories.jsx`。story id 映射：`organisms-<slug>--default` → `features-<page>-<slug>--default`（26 条，逐条见 handover §2.5 日志）。
   - 26 个 `features/*` 故事原以 `Organisms/…` 为 title，读者无法区分可复用组件和单页模块；AGENTS.md §3.4 仍按 Atoms/Molecules/Organisms 表述规则。visual-check 只引用 `pages--*`，改 title 不影响配对；`stories.test.jsx` 可能断言 title，改时同步。
