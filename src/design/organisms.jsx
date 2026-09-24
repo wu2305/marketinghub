@@ -26,8 +26,9 @@ import {
   Suggestion,
   Tabs,
 } from "./molecules.jsx";
+import { assetUrl } from "./asset-url.js";
 
-const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("/assets/images/knowledge-card-icons/layer-${index}.png")`);
+const ART = [1, 2, 3, 4, 5, 6, 7, 8].map((index) => `url("${assetUrl(`assets/images/knowledge-card-icons/layer-${index}.png`)}")`);
 
 export const assistantPlacements = ["modal", "drawer"];
 export const headerTones = ["solid", "overlay"];
@@ -92,7 +93,7 @@ function useFocusRestore(active, layerRef) {
  * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
  */
 export function Header({
-  logo = { src: "/assets/images/tapestry-logo.png", alt: "Tapestry" },
+  logo = { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry" },
   items = [],
   current,
   highlightCurrent = true,

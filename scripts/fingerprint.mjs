@@ -24,8 +24,8 @@ function git(args) {
   return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" });
 }
 
-export function sourceFiles() {
-  const out = git(["ls-files", "-co", "--exclude-standard", "--", ...SOURCE_PATHS]);
+export function sourceFiles(paths = SOURCE_PATHS) {
+  const out = git(["ls-files", "-co", "--exclude-standard", "--", ...paths]);
   // ls-files -c lists index entries, including tracked files deleted in the
   // working tree — those are covered by the hash via their absence from the
   // list, and reading them would crash.
@@ -36,8 +36,8 @@ export function sourceFiles() {
     .sort();
 }
 
-export function sourceFingerprint() {
-  const files = sourceFiles();
+export function sourceFingerprint(paths = SOURCE_PATHS) {
+  const files = sourceFiles(paths);
   const hash = createHash("sha256");
   for (const file of files) {
     hash.update(file);
@@ -48,9 +48,9 @@ export function sourceFingerprint() {
   return { hash: hash.digest("hex"), files };
 }
 
-export function gitInfo() {
+export function gitInfo(paths = SOURCE_PATHS) {
   const head = git(["rev-parse", "HEAD"]).trim();
-  const out = git(["status", "--porcelain", "--", ...SOURCE_PATHS]);
+  const out = git(["status", "--porcelain", "--", ...paths]);
   const dirtyPaths = out
     .split("\n")
     .filter(Boolean)

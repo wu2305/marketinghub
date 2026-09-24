@@ -6,7 +6,9 @@
     "preview:html": "vite --config vite.reference.config.js --host 127.0.0.1",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
     "build-storybook": "node scripts/build-storybook.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:host": "node scripts/build-host.mjs",
+    "preview:host": "vite preview --config examples/host/vite.config.js"
   },
   "dependencies": {
     "react": "^18.3.1",

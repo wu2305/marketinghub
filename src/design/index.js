@@ -74,6 +74,7 @@ export {
 } from "./organisms.jsx";
 export { HomePage, MarketingCockpitPage, SelfServicePage, AiInterpreterPage, CampaignPage, DataUploadPage, MediaTrackingDetailPage, cockpitViews } from "./pages.jsx";
 export { Icon } from "./icons.jsx";
+export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
 export * as demoContent from "./content.js";
 /* Pure report/knowledge logic — all inputs explicit. */

@@ -1017,12 +1017,10 @@
   }
 }
 
+/* The original's `.v20-type-card.is-manageable` only gets a warmer top border
+   (#e6e1d8) at rest — same count pill and other sides as every card. */
 .mh-type-card.is-manageable {
-  border-color: #e3d3b3;
-}
-
-.mh-type-card.is-manageable .mh-type-card__count {
-  background: #f7ead2;
+  border-top-color: var(--mh-line-warm-strong);
 }
 
 .mh-launcher[hidden] {

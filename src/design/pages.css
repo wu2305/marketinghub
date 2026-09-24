@@ -89,9 +89,11 @@
   background: var(--mh-page-bg);
 }
 
+/* Original overview `.knowledge-main`: padding 28px 0 42px 34px — no right
+   padding, so the card grid runs to the column's right edge. */
 .mh-interpreter__main {
   min-width: 0;
-  padding: 36px 36px 40px;
+  padding: 28px 0 42px 34px;
 }
 
 /* Type pages flush the library toolbar to the hero edge
