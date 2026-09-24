@@ -21,3 +21,6 @@ ds-bundle/
 
 # local tool state (not project files)
 .commandcode/
+
+# local editor/tool state
+.cursor/

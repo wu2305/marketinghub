@@ -1,51 +1,62 @@
-# Marketing Hub AI · v20.11
+# Marketing Hub — React design system
 
-This is a cleaned, behavior-preserving baseline generated from `marketing-hub-ai-v20.10.05` before the AI Interpreter visual refresh.
+A React + Storybook extraction of the Marketing Hub static HTML/CSS/JS demo.
+Components under `src/design` take semantic props and children; every page,
+view, dialog and reachable state of the original demo is being rebuilt as
+composable components with operable stories.
 
-## Start here
-
-- Open `index.html` for the portal home.
-- Open `assets/pages/knowledge.html` for AI Interpreter.
-- Each page remains a standalone static HTML entry point; no build or package-install step is required to view the Demo.
-
-## Structure
-
-- `assets/css/base/` contains shared fonts, tokens, workspace foundations, and scrolling.
-- `assets/css/components/` contains shared assistant components.
-- `assets/css/home/`, `reports/`, `self-service/`, `campaign/`, `knowledge/`, and `governance/` contain module styles.
-- `assets/css/pages/` contains styles extracted from page markup.
-- `assets/js/data/` contains demo records.
-- `assets/js/shared/` contains common portal behavior.
-- `assets/js/knowledge/` and `assets/js/governance/` contain module behavior.
-- `docs/cleanup-manifest.json` records the source-to-output mapping and removal rationale.
-
-## Baseline notes
-
-- The original duplicate ` (2)` resources, desktop metadata, debug screenshots, and unreferenced files were omitted.
-- Query-string cache suffixes were removed from local CSS and JavaScript references.
-- CSS was formatted and declarations proven overwritten by a later rule in the same cascade context were removed.
-- Malformed source HTML was normalized through the browser parser before formatting, preserving browser-rendered output.
-- The common assistant script now skips pages that do not contain the assistant UI. This fixes the original console errors on Feedback & Quality and Media Tracking Detail without changing their visible UI.
-
-## Validation
-
-The cleaned baseline was rendered at 1440px width across all canonical pages, all eight AI Interpreter types, and the supported knowledge creation states. The original and cleaned page screenshots were compared pixel by pixel. See the validation artifacts outside this deliverable when working in the Codex task workspace.
-## Storybook
-
-The React Storybook in `src/design` is the design system. Components take semantic props and children. The static HTML under `index.html` and `assets/pages` remains the visual reference and is not the component runtime.
+## Quick start
 
 ```bash
-npm install
-npm run preview:html
-npm run storybook
+npm ci
+npm run storybook        # Storybook on http://127.0.0.1:6006
 ```
 
-- Original pages: [http://127.0.0.1:4173](http://127.0.0.1:4173)
-- Storybook: [http://127.0.0.1:6006](http://127.0.0.1:6006)
+Stories are grouped as Foundations, Atoms, Molecules, Organisms, Features and
+Pages. `src/design/index.js` is the single public entry point — components,
+per-page feature modules (`features/<page>/`), page components (`pages/`), and
+deterministic demo containers (`demo/useXxxDemo`) for hosts and tests.
 
-Stories are grouped as Foundations, Atoms, Molecules, Organisms, and Pages. Page stories compose the components for Home, Marketing Cockpit, Self-Service Center, AI Interpreter, and RedNote Campaign Tool. Handover notes are in `handover/`.
+## Verify
 
-## v20.11.01 AI Interpreter refresh
+```bash
+npm run lint             # ESLint: unused vars + react-hooks rules on src/design
+npm test                 # Vitest unit tests incl. the import-boundary guard
+npm run build-storybook  # static build into storybook-static/ (stamped)
+npm run build:host       # standalone host app into examples/host/dist
+node scripts/host-check.mjs   # host smoke checks (serves + asserts)
+```
 
-This version is copied from `marketing-hub-ai-v20.11` and adds a scoped AI Interpreter visual refresh in `assets/css/knowledge/ai-interpreter-refresh.css`. The refresh aligns the module with the shared DIN typography, grey-white workspace, black/gold action language, compact cards, restrained table styling, and consistent 6-8px control radius used by the rest of the demo.
+`scripts/visual-check.mjs` runs the paired visual comparison between original
+pages and their stories. It serves the repo root and `storybook-static`
+locally and drives a real browser, so it stays a local tool and is not part of
+CI — run `node scripts/visual-check.mjs [--only SUBSTR] [--negative]` and keep
+output under `/tmp`.
 
+## Project layout
+
+- `src/design` — tokens, components, features, pages, demo state, `index.js`
+- `.storybook` — Storybook 8 config (`@storybook/react-vite`)
+- `examples/host` — standalone host consuming the public entry (base `/mh-host/`)
+- `scripts/` — build stamps, host-check, visual-check (+ per-page scenarios)
+- `handover/` — `README.md` status source of truth, `structural-review.md` work items
+- `AGENTS.md` — binding working rules (read first; wins any conflict)
+
+## CI
+
+`.github/workflows/ci.yml` runs `npm ci`, lint, tests, the Storybook build and
+the host build + checks on every push and pull request. The paired visual
+check intentionally stays local (needs the reference server and a browser).
+
+## The static demo (reference)
+
+`index.html` and `assets/` are the original static demo — the visual and
+interaction reference for this extraction. It is reference material, not the
+component runtime: React components never import `assets/js`, and page stories
+never embed the original markup. Preview it with `npm run preview:html`
+(http://127.0.0.1:4173).
+
+`docs/cleanup-manifest.json` records the provenance of an earlier
+source-to-cleaned-baseline pass over the reference files (file mapping and
+hashes; machine-local paths removed under A4). Per `AGENTS.md` §6 the
+reference is not modified except for documented fixes.
