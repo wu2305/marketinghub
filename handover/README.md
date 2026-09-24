@@ -215,6 +215,51 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Cloud Agent 环境（`npm ci`，4173 / 6006） | 完成 | #2 → #6 |
 
 
+#### 自 AGENTS.md 迁入的审核记录（2026-09-22～24，原文保留）
+
+2026-09-24 精简 AGENTS.md 时，从其 §2.4 与 §5 原样迁入以下内容。它们是历史记录，不是当前结论；当前事实见 AGENTS.md §2.4。
+
+##### 原 AGENTS.md §2.4「2026-09-23 审核确认的缺口」
+
+2026-09-24 `devin/story-docs-closure`（基于 8c93802，未合入 main）三条目：A af0dab5——逐组件 CSF（meta `component`）、Atoms/Molecules/Icon/ReportRow 逐 prop 文档、受控故事回写、Button 回调 `{ label }`；故事 ID 由 `atoms--input` 类改为 `atoms-text-input--default` 类（`pages--*` 不变）。B d48fc17——`useHomeDemo` 供故事与宿主共用，宿主历史回填修复，三端对照一致。M4 Business Term——专用视图与 `useBusinessTermDemo`，p07 24/24、全站 115/115 机器通过，BT 六个核心场景人工 pass；M5 创建/编辑入口未建。下述 8c93802 审核中“Input 不回写/逐组件文档缺失/ReportRow 无故事/Home 宿主不回填/Business Term 通用列表”已修复，其余照旧；当前状态以 handover 为准。
+
+2026-09-24 纠偏后对抗审核（`devin/structural-repair`，8c93802；初始 tracked 工作区干净，未跟踪 `.commandcode/` 未动）：重新构建 63 stories + 5 docs，29/29 单测，P07 14/14 机器场景、独立宿主 6/6 检查通过。人工复核 Principles 1440px 默认态主体布局基本一致、Business Term fail（原三列术语卡含同义词/管理动作/分页，React 通用列表缺失）；其余本轮截图未人工签收。新实证：`atoms--input` 输入 AUDIT 后值仍为空（受控 args 仅记 Action）；Home History 选同一条记录，故事填入 prompt，独立宿主为空（HomeRoute 未接 onHistorySelect），Home/ Campaign/MediaTracking 等流程仍主要宿于 stories，Cockpit 的 useCockpitDemo 边界尚未推广。Atoms docs 实际仅首故事 args 表，缺逐组件 props 说明、默认值与回调载荷；全部故事 meta 未声明 component，ReportRow 公共导出无独立故事。静态残留：Button 仍直传 DOM event、AiInterpreterPage 写死统计/规则文案。handover §2.4 接续点仍写旧分支、68 stories、修复前外壳结论，本轮同步纠正。结论：主架构方向可继续，尚不是完整组件库；不能用宿主冒烟/故事数替代流程可移植性和逐组件文档验收。证据 `/tmp/mh-audit-8c93802-{p07,host,probe}`；未复跑全站 105 场景或 Controls 全枚举，未改组件实现。
+
+2026-09-24 结构纠偏（`devin/structural-repair`：ed76de1 基线提交，13dacf2 A、8e51103 B、2ccd473 C、a7cc1d0 D、d6557c3 E）：visual-check 现绑定源指纹构建戳（过期构建 exit 2），逐场景分列 load/behavior/manual，manual 仅由人工 `--review` 写入且绑定截图 hash；弱断言、console error、Storybook 错误页均判失败；`--negative` 6 例变异必须失败；P07 加侧栏/Hero/主栏/卡片几何对照。上文“Accounts 错参数”“Campaign 重开丢值”“activeCopilotStream 模块全局”“CityInvest/报表搜索/Copilot 固定读 Demo 数据”“CockpitStory 旁路 args.projects”“tokens 全局 reset”“TypeCard 根路径 /assets”“Interpreter 外壳布局不符”诸条已修复，以 handover 为准。人工审图（lead）通过：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏；Business Term 等七类仍是过渡通用列表（人工 fail，M4 未完成）。独立宿主 `examples/host`（base `/mh-host/`）经 `scripts/host-check.mjs` 验证资源、导航闭环不整页刷新、宿主哨兵样式不受污染、双实例隔离。已知残留：截图 hash 存在渲染噪声，人工审核较易转为 stale（安全方向）；嵌套覆盖层一次 Escape 会关闭所有文档级监听层，原生 `<dialog>` 仅关顶层，未改；ReportCopilot 关闭后还原焦点为无障碍调整（原 closeAi 无）；宿主 compose 窄栏中 CityInvestDashboard 筛选行溢出，组件缺容器级响应式。
+
+2026-09-24 增量对抗审核（02918b5 + 审核开始时已有的 8 个 tracked 工作区修改）：重新构建通过，实际索引为 63 stories + 5 docs（不是 68 stories），单测 10/10；P07 配对脚本 10/10 断言通过，但人工查看 Principles 配对截图确认整体 Hero/侧栏布局仍显著不同，撤销 handover“像素一致”的结论。Campaign 创建任务输入 Object 后 Cancel→重开，原始保留输入，React 回到 `341 plans`；此前将丢值登记为生命周期有意差异不能抵消可达流程缺口。结构性风险：CityInvestDashboard 无内容/数据 props、报表搜索依赖固定 KNOWLEDGE_ASSETS、Copilot 流取消令牌为模块全局、tokens 存在宿主全局 reset；独立宿主复用未得到证明。Accounts 错参数负向复核已能拒绝 overview，应不再沿用旧漏洞仍存在的结论。证据：`/tmp/mh-audit-20260924-p07`、`/tmp/mh-audit-20260924-runtime/results.json`。未复跑全套场景或 Controls 全枚举，未修改实现。
+
+对抗性复核（888177a + 当时工作区，其他模型仍在补 JSDoc）：9/9 单测复跑通过，已生成索引仍为 38 stories。临时副本将 p06-campaign-accounts 的故事参数故意改成 overview，实际故事截图为 Overview Dashboard，脚本仍 PASS；当前选择器主要证明外壳存在，未证明场景状态正确。另在首页打开助手，model/mode/suggest/attach picker 与 platformGuideTrigger 五个节点均存在但不可见，assistant-panel.css:802–810 强制隐藏；M0 把源码节点直接列为待实现功能存在恢复旧界面的风险。脚本扫描盘点、运行时可达盘点与完成验收必须区分。证据在 /tmp/mh-adversarial-wrong-state 和 /tmp/mh-adversarial-home，未修改组件实现。
+
+增量复核（a9542f7）：稳定类型标识、未知类型空态、只读创建入口、双维状态已修正，npm test 9/9 复跑通过。下表部分条目为修复前历史事实，当前状态以 handover 为准。新发现：Principles 示例未取实际生效的 globalPrinciples；Data Model 混用资产/模型源/domain 且补写原文不存在的说明和状态；Library 独立故事仍不回写输入或执行筛选；多选筛选被单选取代，搜索缺同义词/范围/创建者。现存原始截图只有 overview、Principles、Business Term、Scenario，不能支持八类型完整对照结论；实际 Principles 对照仍有 Hero/侧栏布局和数据内容差异。
+
+本次基于本地 `main`（2555d8a，含 #8）静态代码审查，并运行 `npm run build-storybook -- --disable-telemetry`：构建通过，38 stories、0 docs。未重跑浏览器截图、Controls 全枚举或全交互验收；2026-09-22 的截图结论保留为历史记录。
+
+| 类别 | 事实 |
+|---|---|
+| 已修正 | #8 已补 Cockpit 箭头与搜索符、Interpreter 侧栏图标/分组/Manage/计数，Campaign 四个 section 数据已改 props，Header 导航项已改链接，Hero 已使用 useId。Home 原始 CSS 最终覆盖为右侧抽屉，撤销旧审核“应为居中弹窗”的判断。 |
+| 覆盖深度 | 17 个 HTML、47 个 JS、50 个 CSS；当前仅 5 个页面故事。Interpreter 非 overview 仍共用通用行列表，Actions 列为空；类型专属列表、创建/编辑、详情与治理流程未完整提取。BusinessTermForm 已有独立故事，但未接入页面创建流程。 |
+| 交互 | BusinessTermForm 的 required 仅渲染星号，空值仍调用 Save/Submit；TermForm 故事仅记录 onChange，未更新受控值。AssistantPanel 缺少进入/限制/恢复焦点与 Escape 关闭；Tabs 无方向键处理，DataTable 点击行无键盘入口。 |
+| 内容与接口 | 页面仍写死搜索/筛选等文案；知识类型通过显示标题和 startsWith 匹配；StatusBadge 通过字符串包含推导 tone；Button 等直接透传 DOM event，与具名对象约定不一致。 |
+| Token 与样式 | tokens.css 现有 27 个变量；四个组件 CSS 共 169 个十六进制色值（155 行）。间距、圆角等仍大量直接赋值；tokens.css 混入全局元素 reset，会影响宿主页面。 |
+| 响应式 | 四个组件 CSS 仍无 @media；多列网格、固定宽度搜索框与侧栏未提供窄屏布局。基础控件已有部分 focus-visible，有机体覆盖不足。 |
+| 导航 | Header 导航使用 content.js 中不存在的 /home、/cockpit 等路由；logo、Link、WorkspaceCard 仍阻止默认跳转，WorkspaceCard 的 href 直接使用 title。 |
+| 文档与验证 | 无 autodocs、组件 props 类型声明、公共 index.js、测试/lint/视觉对照脚本/CI。故事数不能代表所有导出组件均有独立故事，也不能证明完整状态覆盖。 |
+| 深审：数据契约 | React 服务端渲染确认：只改 Business Terms 显示标题，列表由 1 条变 0；未知 activeType 显示全部 6 条。概览合计 35，示例仅 6 条；model/metrics/email 均为空列表。Principles 等只读类型仍出现 Create New Knowledge。 |
+| 深审：状态与字段 | 原始 Analytical Model 可 Published 且 Disabled；Scenario 区分 Draft/Queued/Building/Published 与 AI 可用性，当前单 status 与统一过滤器不能完整表达。BusinessTermForm 缺少原始 Data Model 多选关联，回调也不携带 scope。 |
+| 深审：故事与可移植性 | 受控值不回写并非仅 TermForm，Input/Area/Dropdown/Search/Tabs/Pills/Field/Scope 等故事同样只记录 Action。TypeCard 图像写死根路径 /assets，依赖 Storybook staticDirs；尚无独立宿主验证。 |
+| 深审：参照与验收 | types.js 的 Scenario 旧状态与后加载 scenario-reports.js 的状态映射不同；typeMeta 仅解决计数来源。需逐特性记录实际生效脚本/样式、文档规则、存储初态与冲突取舍。单纯故事数、颜色扫描、每页一个故事不能证明完整提取。 |
+
+##### 原 AGENTS.md §5 导语
+
+2026-09-24 纠偏后审核补充：后续条目同时验证「原始可达状态完整重建」与「可导入的组件/流程及可操作、可查阅的故事档案」。将 Cockpit 已验证的流程容器边界按实际需要推广到其他页面，宿主验证须包含同一流程结果对照；基础输入故事必须真实回写，组件文档须能查到各自接口与回调载荷。沿现有 M0–M7 推进，不为这些欠账重启总架构；接续点只记录当前状态，旧分支和旧验收数字留在历史日志。
+
+本节取代旧 A–E 的机械串行安排；旧进度保留作历史证据，不自动等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 handover/README.md 维护。执行指令模板见 handover/execution-prompt.md。
+
+2026-09-24 审核执行纠偏：后续复制 P07 类型视图前先验收 Interpreter 专用外壳；M1 的不同内容注入与同页多实例检查应穿插当前条目，及早暴露固定 Demo 数据/全局状态耦合。配对脚本断言通过与人工视觉通过分别登记；可达状态丢失继续作为未完成项，不得用“组件生命周期”理由永久豁免。全量里程碑范围与顺序不变。
+
+同日根因评估：优先明确展示组件、演示数据/纯计算、流程状态宿主三者的依赖与责任，再用不同内容、生命周期、多实例和独立宿主导航验证边界。故事内持有本地状态本身不违规；需要跨宿主重用的流程不能只能从 stories 复制。专项执行指令见 `handover/structural-repair-prompt.md`，它不维护第二份进度，也不取代 M0–M7 全量目标。纠偏批 A–E 已于 2026-09-24 实施（见 2.4）；后续恢复 `handover/execution-prompt.md` 的全量推进：剩余七类知识视图（M4）、M5/M6、全站收敛。新页面沿用同一边界：展示组件只收 props，fixture 与确定性模拟放 `src/design/demo/`，跨宿主流程用 `useXxxDemo` 容器，经 `examples/host` 与替换夹具测试验证。
+
 ### 2.6 状态归属表（结构修复批 C，2026-09-24）
 
 | 状态 | 持有者 | 修改途径 | 关闭时 | New Session | 受控/非受控 |
@@ -258,6 +303,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P02 Report Copilot 关闭焦点 | 关闭后焦点还原到打开者（共享 `useFocusRestore`） | 无障碍调整；原 `closeAi()` 不还原焦点，不影响可见状态 | devin/structural-repair |
 
 ## 4. 已知缺口
+
+2026-09-24 结构与目标偏离审查（d48fc17 + 工作区）：`handover/structural-review.md`。结构 S1–S8：原子层级单文件混装原语与页面功能模块；覆盖层无统一层栈（仅 Modal 有焦点环，ModelFlowDialog 无 Escape）；AssistantPanel 与 ReportCopilot 重复实现助手外壳；5 个页面的流程状态仅在 stories，宿主复制 copilot 逻辑；页面/有机体文案归属不一致；演示数据两处存放；字体与图片依赖只读 `assets/`；Interpreter 类型视图三元分派。目标偏离 A1–A4：保真深度远超覆盖广度（10 页未开始）；原始逻辑缺陷固化进组件（待用户决策）；AGENTS §2.4 与本文件膨胀；仓库卫生与无 CI。含执行波次与逐条 agent 提示。
+
+2026-09-24 claude.ai/design 同步（57 组件均与 Storybook 配对截图 match）暴露的源码问题，已整理为清单与执行提示：`handover/design-system-cleanup.md`。要点：19 个故事文字回退为浏览器默认衬线（`scripts/font-probe.mjs`）；LiveReportView 粘性条遮挡标题；TypeGrid 标题与计数徽标重叠；组件 CSS 146 处裸十六进制、tokens.css 338 变量/220 色值；枚举 props 生成类型为 `string`；图片依赖宿主 `/assets`；无库构建且入口不含 tokens.css；巨型单文件；故事标题与导出名不一致。
 
 2026-09-24 M4 Business Term 结果（依据 business-term-library.js 在 types.js 之后加载、business-term-reference.css 与 assistant-panel.css 最终层叠实测）：
 - 已实现并对照：卡片/工具栏/分页/详情抽屉/确认与信息对话；权限矩阵（非本人→Permission denied 信息框；启用中 edit/delete→“Confirm Offline”确认后仅置 Disable；已停用 edit→`onNavigate({ href: knowledge-create.html?type=Business%20Term&mode=edit&id })`；已停用 delete→Confirm Delete 移除并关闭对应详情；已停用 disable→Knowledge already disabled）。
@@ -366,4 +415,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-24 | 8c93802 纠偏后对抗审核：复跑构建、29 单测、P07 14 场景与宿主 6 项；人工 Principles 默认态 pass、Business Term fail；复现 Input 故事输入不回写及 Home History 宿主不回填，核查 autodocs 不足、ReportRow 缺故事、接口残留；先补 AGENTS 2.4/5，再纠正本台账接续点与缺口。仅改文档，未修组件。证据 /tmp/mh-audit-8c93802-* | Codex |
 | 2026-09-24 | 条目 A 基础故事与文档闭环：三层故事拆为 57 个逐组件 CSF（meta `component`+autodocs+组件说明），`story-helpers.js`（useSynced/prop/enumProp/callbackProp）；Atoms/Molecules/Icon/ReportRow 全 prop 文档；新增导出常量 `buttonTypes`、`searchVariants`、`formFieldControls`、`headingLevels`、`iconNames`；受控故事画布回写（TextInput/TextArea/Select/SearchField/Tabs/FilterPills/FormField/ScopeOption/CheckboxFilter/Pagination/FileDropzone/BusinessTermForm 及 Header/KnowledgeSidebar/TypeGrid/CampaignRail 等）；补 ReportRow/ProjectDirectory/LiveOverview 故事；Button onClick 改 `{ label }`（消费方审计：均不用 event）。验证：npm test 43/43；build 66 stories + 59 docs；Playwright 画布探针与 args 枚举截图、Docs 截图、0 console/pageerror（`/tmp/mh-itemA`）；visual-check 105/105 机器通过（`/tmp/mh-itemA-visual`，未新增人工审图）、negative 6/6 如期失败、host-check 6/6。人工（lead）审 Button/ReportRow Docs 页 pass | Devin |
 | 2026-09-24 | 条目 B Home 流程可移植：新增 `useHomeDemo`（demo/home-demo.js）与 `buildHomeAssistantAnswer`，故事与独立宿主共用，宿主补齐历史回填/ASK 禁用/模型流/新会话清空 prompt；onFlowSave/onFlowSubmit 改 `{ values }`；新增 home-demo.test.jsx 7 条（历史、提交用注入 answerFor+scope、空提交、关闭重开、新会话、模型流 `{ values }`、替换内容无默认文案泄漏、双实例隔离）；host-check 增 home-flow。验证：npm test 50/50；build 66 stories + 59 docs；visual-check p01 6/6 机器通过（`/tmp/mh-itemB-visual-p01`）；host-check 7/7（`/tmp/mh-itemB-host`）；三端对照 `/tmp/mh-itemB/parity.json` 一致、0 console/pageerror。人工：p01-home-history-quirk fail（仅既有 Header 差异，流程一致），其余 p01 场景人工 pending | Devin |
+| 2026-09-24 | claude.ai/design 首次同步：新建项目 “Marketing Hub”，57 个组件（Pages/Foundations 除外）逐一与 Storybook 配对截图评为 match 并上传；新增 `.design-sync/`（config、NOTES、conventions、6 个固定定位组件的自有预览、`build-dist.mjs` 库构建）、`package.json` `module`/`types` 指向 `dist/`、.gitignore 同步产物；新增 `scripts/font-probe.mjs` 与 `handover/design-system-cleanup.md`（源码问题清单 + 下一个 agent 的执行提示）。未修改组件实现 | Claude Code |
+| 2026-09-24 | 结构与目标偏离审查：新增 `handover/structural-review.md`（S1–S8、A1–A4、执行波次、提示词）；§4 增加指针。仅文档，未改实现 | Claude Code |
 | 2026-09-24 | M4 Business Term 专用视图：BusinessTermView/ConfirmDialog 有机体、Modal drawer+initialFocus、Pagination compact、useBusinessTermDemo 容器、content `INTERPRETER.businessTermLibrary` 逐字种子、AiInterpreterPage `businessTerms`、z-index token；新增 BT 故事（全 prop 文档）、14 条容器测试、10 个 p07 配对场景与 1 个负向用例、宿主双实例隔离检查。验证与人工结论见 §4 同日条目 | Devin |
+| 2026-09-24 | 精简 AGENTS.md（A3）：§2.3 改为不含数字的现状描述；§2.4 由审核流水改为“当前仍成立的结构性事实”；新增 §3.5 参照物缺陷规则（A2，用户确认：视觉复刻，逻辑缺陷不进入组件，只在 demo 层重现）；§5 导语浓缩为执行要点并标注各 prompt 文件的角色；§7 改为审核结果只写入 handover。原 §2.4 与 §5 导语原文迁入本文件 §2.5 | Claude Code |

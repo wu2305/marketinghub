@@ -38,44 +38,27 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）仍建在已删除的文件上，与 `main` 架构互斥。它们应被关闭，不得合并，也不得在其上继续开发。
 
-### 2.3 当前方案（PR #6，已合入 main）
+### 2.3 当前方案（PR #6 起，main）
 
-- 代码位于 `src/design`：`tokens.css`、`atoms`、`molecules`、`organisms`、`pages` 各含 `.jsx` / `.css` / `.stories.jsx`；`content.js` 为页面文案与示例数据；`icons.jsx`、`cx.js` 为工具。
+- 代码位于 `src/design`：`tokens.css`；`atoms`、`molecules`、`organisms`、`pages` 各含 `.jsx` / `.css`；逐组件故事在 `stories/<层>/<组件>.stories.jsx`，页面故事在 `pages.stories.jsx`；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
 - Storybook 8.6，`@storybook/react-vite`，`.storybook/main.js` 以 `esbuild.jsx = "automatic"` 编译 JSX，`staticDirs` 把 `assets/` 映射到 `/assets`。
-- `npm run build-storybook` 通过；38 个故事全部可渲染。
-- 五个页面故事（Home、Marketing Cockpit、Self-Service Center、AI Interpreter、RedNote Campaign Tool）在 1440px 下首屏与原始页面基本一致。
+- 独立宿主 `examples/host`（base `/mh-host/`）由 `scripts/host-check.mjs` 验证；配对视觉对照由 `scripts/visual-check.mjs` 执行（绑定构建戳，含 `--negative` 负向变异）。
+- 故事数、测试数、构建与对照结论只记在 `handover/README.md` §1，本文件不写这些数字。
 
-### 2.4 2026-09-23 审核确认的缺口
+### 2.4 当前仍成立的结构性事实
 
-2026-09-24 `devin/story-docs-closure`（基于 8c93802，未合入 main）三条目：A af0dab5——逐组件 CSF（meta `component`）、Atoms/Molecules/Icon/ReportRow 逐 prop 文档、受控故事回写、Button 回调 `{ label }`；故事 ID 由 `atoms--input` 类改为 `atoms-text-input--default` 类（`pages--*` 不变）。B d48fc17——`useHomeDemo` 供故事与宿主共用，宿主历史回填修复，三端对照一致。M4 Business Term——专用视图与 `useBusinessTermDemo`，p07 24/24、全站 115/115 机器通过，BT 六个核心场景人工 pass；M5 创建/编辑入口未建。下述 8c93802 审核中“Input 不回写/逐组件文档缺失/ReportRow 无故事/Home 宿主不回填/Business Term 通用列表”已修复，其余照旧；当前状态以 handover 为准。
+本节只列约束后续工作方式的现存事实（截至 2026-09-24，4d14e32）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
 
-2026-09-24 纠偏后对抗审核（`devin/structural-repair`，8c93802；初始 tracked 工作区干净，未跟踪 `.commandcode/` 未动）：重新构建 63 stories + 5 docs，29/29 单测，P07 14/14 机器场景、独立宿主 6/6 检查通过。人工复核 Principles 1440px 默认态主体布局基本一致、Business Term fail（原三列术语卡含同义词/管理动作/分页，React 通用列表缺失）；其余本轮截图未人工签收。新实证：`atoms--input` 输入 AUDIT 后值仍为空（受控 args 仅记 Action）；Home History 选同一条记录，故事填入 prompt，独立宿主为空（HomeRoute 未接 onHistorySelect），Home/ Campaign/MediaTracking 等流程仍主要宿于 stories，Cockpit 的 useCockpitDemo 边界尚未推广。Atoms docs 实际仅首故事 args 表，缺逐组件 props 说明、默认值与回调载荷；全部故事 meta 未声明 component，ReportRow 公共导出无独立故事。静态残留：Button 仍直传 DOM event、AiInterpreterPage 写死统计/规则文案。handover §2.4 接续点仍写旧分支、68 stories、修复前外壳结论，本轮同步纠正。结论：主架构方向可继续，尚不是完整组件库；不能用宿主冒烟/故事数替代流程可移植性和逐组件文档验收。证据 `/tmp/mh-audit-8c93802-{p07,host,probe}`；未复跑全站 105 场景或 Controls 全枚举，未改组件实现。
-
-2026-09-24 结构纠偏（`devin/structural-repair`：ed76de1 基线提交，13dacf2 A、8e51103 B、2ccd473 C、a7cc1d0 D、d6557c3 E）：visual-check 现绑定源指纹构建戳（过期构建 exit 2），逐场景分列 load/behavior/manual，manual 仅由人工 `--review` 写入且绑定截图 hash；弱断言、console error、Storybook 错误页均判失败；`--negative` 6 例变异必须失败；P07 加侧栏/Hero/主栏/卡片几何对照。上文“Accounts 错参数”“Campaign 重开丢值”“activeCopilotStream 模块全局”“CityInvest/报表搜索/Copilot 固定读 Demo 数据”“CockpitStory 旁路 args.projects”“tokens 全局 reset”“TypeCard 根路径 /assets”“Interpreter 外壳布局不符”诸条已修复，以 handover 为准。人工审图（lead）通过：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏；Business Term 等七类仍是过渡通用列表（人工 fail，M4 未完成）。独立宿主 `examples/host`（base `/mh-host/`）经 `scripts/host-check.mjs` 验证资源、导航闭环不整页刷新、宿主哨兵样式不受污染、双实例隔离。已知残留：截图 hash 存在渲染噪声，人工审核较易转为 stale（安全方向）；嵌套覆盖层一次 Escape 会关闭所有文档级监听层，原生 `<dialog>` 仅关顶层，未改；ReportCopilot 关闭后还原焦点为无障碍调整（原 closeAi 无）；宿主 compose 窄栏中 CityInvestDashboard 筛选行溢出，组件缺容器级响应式。
-
-2026-09-24 增量对抗审核（02918b5 + 审核开始时已有的 8 个 tracked 工作区修改）：重新构建通过，实际索引为 63 stories + 5 docs（不是 68 stories），单测 10/10；P07 配对脚本 10/10 断言通过，但人工查看 Principles 配对截图确认整体 Hero/侧栏布局仍显著不同，撤销 handover“像素一致”的结论。Campaign 创建任务输入 Object 后 Cancel→重开，原始保留输入，React 回到 `341 plans`；此前将丢值登记为生命周期有意差异不能抵消可达流程缺口。结构性风险：CityInvestDashboard 无内容/数据 props、报表搜索依赖固定 KNOWLEDGE_ASSETS、Copilot 流取消令牌为模块全局、tokens 存在宿主全局 reset；独立宿主复用未得到证明。Accounts 错参数负向复核已能拒绝 overview，应不再沿用旧漏洞仍存在的结论。证据：`/tmp/mh-audit-20260924-p07`、`/tmp/mh-audit-20260924-runtime/results.json`。未复跑全套场景或 Controls 全枚举，未修改实现。
-
-对抗性复核（888177a + 当时工作区，其他模型仍在补 JSDoc）：9/9 单测复跑通过，已生成索引仍为 38 stories。临时副本将 p06-campaign-accounts 的故事参数故意改成 overview，实际故事截图为 Overview Dashboard，脚本仍 PASS；当前选择器主要证明外壳存在，未证明场景状态正确。另在首页打开助手，model/mode/suggest/attach picker 与 platformGuideTrigger 五个节点均存在但不可见，assistant-panel.css:802–810 强制隐藏；M0 把源码节点直接列为待实现功能存在恢复旧界面的风险。脚本扫描盘点、运行时可达盘点与完成验收必须区分。证据在 /tmp/mh-adversarial-wrong-state 和 /tmp/mh-adversarial-home，未修改组件实现。
-
-增量复核（a9542f7）：稳定类型标识、未知类型空态、只读创建入口、双维状态已修正，npm test 9/9 复跑通过。下表部分条目为修复前历史事实，当前状态以 handover 为准。新发现：Principles 示例未取实际生效的 globalPrinciples；Data Model 混用资产/模型源/domain 且补写原文不存在的说明和状态；Library 独立故事仍不回写输入或执行筛选；多选筛选被单选取代，搜索缺同义词/范围/创建者。现存原始截图只有 overview、Principles、Business Term、Scenario，不能支持八类型完整对照结论；实际 Principles 对照仍有 Hero/侧栏布局和数据内容差异。
-
-本次基于本地 `main`（2555d8a，含 #8）静态代码审查，并运行 `npm run build-storybook -- --disable-telemetry`：构建通过，38 stories、0 docs。未重跑浏览器截图、Controls 全枚举或全交互验收；2026-09-22 的截图结论保留为历史记录。
-
-| 类别 | 事实 |
-|---|---|
-| 已修正 | #8 已补 Cockpit 箭头与搜索符、Interpreter 侧栏图标/分组/Manage/计数，Campaign 四个 section 数据已改 props，Header 导航项已改链接，Hero 已使用 useId。Home 原始 CSS 最终覆盖为右侧抽屉，撤销旧审核“应为居中弹窗”的判断。 |
-| 覆盖深度 | 17 个 HTML、47 个 JS、50 个 CSS；当前仅 5 个页面故事。Interpreter 非 overview 仍共用通用行列表，Actions 列为空；类型专属列表、创建/编辑、详情与治理流程未完整提取。BusinessTermForm 已有独立故事，但未接入页面创建流程。 |
-| 交互 | BusinessTermForm 的 required 仅渲染星号，空值仍调用 Save/Submit；TermForm 故事仅记录 onChange，未更新受控值。AssistantPanel 缺少进入/限制/恢复焦点与 Escape 关闭；Tabs 无方向键处理，DataTable 点击行无键盘入口。 |
-| 内容与接口 | 页面仍写死搜索/筛选等文案；知识类型通过显示标题和 startsWith 匹配；StatusBadge 通过字符串包含推导 tone；Button 等直接透传 DOM event，与具名对象约定不一致。 |
-| Token 与样式 | tokens.css 现有 27 个变量；四个组件 CSS 共 169 个十六进制色值（155 行）。间距、圆角等仍大量直接赋值；tokens.css 混入全局元素 reset，会影响宿主页面。 |
-| 响应式 | 四个组件 CSS 仍无 @media；多列网格、固定宽度搜索框与侧栏未提供窄屏布局。基础控件已有部分 focus-visible，有机体覆盖不足。 |
-| 导航 | Header 导航使用 content.js 中不存在的 /home、/cockpit 等路由；logo、Link、WorkspaceCard 仍阻止默认跳转，WorkspaceCard 的 href 直接使用 title。 |
-| 文档与验证 | 无 autodocs、组件 props 类型声明、公共 index.js、测试/lint/视觉对照脚本/CI。故事数不能代表所有导出组件均有独立故事，也不能证明完整状态覆盖。 |
-| 深审：数据契约 | React 服务端渲染确认：只改 Business Terms 显示标题，列表由 1 条变 0；未知 activeType 显示全部 6 条。概览合计 35，示例仅 6 条；model/metrics/email 均为空列表。Principles 等只读类型仍出现 Create New Knowledge。 |
-| 深审：状态与字段 | 原始 Analytical Model 可 Published 且 Disabled；Scenario 区分 Draft/Queued/Building/Published 与 AI 可用性，当前单 status 与统一过滤器不能完整表达。BusinessTermForm 缺少原始 Data Model 多选关联，回调也不携带 scope。 |
-| 深审：故事与可移植性 | 受控值不回写并非仅 TermForm，Input/Area/Dropdown/Search/Tabs/Pills/Field/Scope 等故事同样只记录 Action。TypeCard 图像写死根路径 /assets，依赖 Storybook staticDirs；尚无独立宿主验证。 |
-| 深审：参照与验收 | types.js 的 Scenario 旧状态与后加载 scenario-reports.js 的状态映射不同；typeMeta 仅解决计数来源。需逐特性记录实际生效脚本/样式、文档规则、存储初态与冲突取舍。单纯故事数、颜色扫描、每页一个故事不能证明完整提取。 |
-
+- **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
+- **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类中 overview、Principles、Business Term 有专用视图并通过人工审图（Business Term 的 M5 创建/编辑入口未建）；其余六类仍是过渡通用列表（人工 fail）。
+- **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于 `pages.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
+- **覆盖层**：滚动锁与焦点还原已共享，但 Escape 与焦点环由各组件自行实现：嵌套时一次 Escape 会关闭所有层，ModelFlowDialog 不响应 Escape，只有 Modal 有焦点环。
+- **组件边界**：`organisms.jsx` 同时容纳设计系统原语和单页功能模块；AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
+- **文案**：AiInterpreterPage 写死统计标签、管理规则与未知类型文案；有机体可见文案有的走 props，有的写死，规则不统一。
+- **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
+- **资源与交付**：字体和图片依赖参照物 `assets/`；没有正式库构建和 CI；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
+- **参照物缺陷已进入组件**（按 §3.5 回退）：CityInvestDashboard 的城市筛选恒显 “All Stores”、`isDefault` 永假导致默认态也走种子扰动、空选回 “Total”；Home 历史回填后 ASK 保持禁用（`AssistantPanel` 的 `submitDisabled` 为此而加）；ReportCopilot History 条目因 `.ai-workspace-head span` 级联泄漏被大写；Campaign 答案卡 “AI ResponseContext” 横幅缺样式；AssistantPanel 关闭时只按变体复位 expanded（closeAi quirk）。
+- **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 
 ## 3. 组件与样式规则
 
@@ -109,6 +92,15 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 所有故事文件启用 `tags: ["autodocs"]`。每个组件用 JSDoc 或 PropTypes 声明 props 的类型与取值；若引入 TypeScript，一次性迁移整个 `src/design`。
 - 提供 `src/design/index.js` 作为唯一公共导出入口。
 
+### 3.5 参照物缺陷
+
+- 视觉（布局、尺寸、颜色、字体、文案、动效）按原始页面实际生效的效果复刻，这是验收依据。
+- 原始 Demo 的**逻辑缺陷不进入 `src/design` 组件**。组件实现明显的设计意图。缺陷包括：错误的计算或判定（永假条件、错误回退）、状态 quirk（例如回填后按钮不恢复）、定位错误或恒不可达的界面、CSS 级联泄漏造成的非设计效果、死代码路径。
+- 判定为缺陷必须写明原始源码位置与证据。原始行为合理但少见的，不算缺陷，照常复刻。拿不准时登记为待决，不自行决定。
+- 需要在故事中重现原始缺陷（例如做配对截图）时，只能通过 `demo/` 层的 fixture 或 hook 参数表达；组件不为复刻缺陷新增专用 props 或分支。
+- 每条缺陷的处理登记在 handover 有意差异表：位置、原始行为、React 行为、理由。visual-check 场景断言正确行为，不断言缺陷。
+- 本规则不豁免可达状态：原始可达的功能状态仍必须重建（§5 共同完成标准 1）。
+
 ## 4. 验证要求
 
 每次修改 `src/design` 或 `.storybook`，提交前必须完成：
@@ -125,13 +117,16 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ## 5. 长期规划（2026-09-23 全量重建里程碑）
 
-2026-09-24 纠偏后审核补充：后续条目同时验证「原始可达状态完整重建」与「可导入的组件/流程及可操作、可查阅的故事档案」。将 Cockpit 已验证的流程容器边界按实际需要推广到其他页面，宿主验证须包含同一流程结果对照；基础输入故事必须真实回写，组件文档须能查到各自接口与回调载荷。沿现有 M0–M7 推进，不为这些欠账重启总架构；接续点只记录当前状态，旧分支和旧验收数字留在历史日志。
+本节取代旧 A–E 的机械串行安排；旧进度仅作历史证据，不等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 `handover/README.md` 维护。
 
-本节取代旧 A–E 的机械串行安排；旧进度保留作历史证据，不自动等同于新里程碑完成。当前状态、分解条目、覆盖台账与接续点只在 handover/README.md 维护。执行指令模板见 handover/execution-prompt.md。
+执行要点（由 2026-09-24 各轮审核沉淀）：
 
-2026-09-24 审核执行纠偏：后续复制 P07 类型视图前先验收 Interpreter 专用外壳；M1 的不同内容注入与同页多实例检查应穿插当前条目，及早暴露固定 Demo 数据/全局状态耦合。配对脚本断言通过与人工视觉通过分别登记；可达状态丢失继续作为未完成项，不得用“组件生命周期”理由永久豁免。全量里程碑范围与顺序不变。
-
-同日根因评估：优先明确展示组件、演示数据/纯计算、流程状态宿主三者的依赖与责任，再用不同内容、生命周期、多实例和独立宿主导航验证边界。故事内持有本地状态本身不违规；需要跨宿主重用的流程不能只能从 stories 复制。专项执行指令见 `handover/structural-repair-prompt.md`，它不维护第二份进度，也不取代 M0–M7 全量目标。纠偏批 A–E 已于 2026-09-24 实施（见 2.4）；后续恢复 `handover/execution-prompt.md` 的全量推进：剩余七类知识视图（M4）、M5/M6、全站收敛。新页面沿用同一边界：展示组件只收 props，fixture 与确定性模拟放 `src/design/demo/`，跨宿主流程用 `useXxxDemo` 容器，经 `examples/host` 与替换夹具测试验证。
+- 每个条目同时验证两件事：原始可达状态完整重建；可导入的组件或流程，以及可操作、可查阅的故事档案。基础输入故事必须真实回写，组件文档必须能查到接口与回调载荷。
+- 分层边界：展示组件只接收 props；fixture 与确定性模拟放 `src/design/demo/`；跨宿主流程用 `useXxxDemo` 容器，并经 `examples/host` 与替换夹具测试验证（不同内容、生命周期、多实例、宿主导航，宿主须对照同一流程的结果）。故事内持有本地状态不违规，但需要跨宿主重用的流程不能只存在于 stories。
+- 复制某类视图的模式之前，先验收它所依赖的外壳。不同内容注入和同页多实例检查穿插在各条目中进行，以便及早暴露固定 Demo 数据或全局状态耦合。
+- 配对脚本断言通过与人工视觉通过分别登记；可达状态丢失是未完成项，不得以“组件生命周期”为由永久豁免。
+- 接续点只记录当前状态；旧分支与旧验收数字留在历史日志。
+- 任务来源：全量推进用 `handover/execution-prompt.md`；结构整改用 `handover/structural-review.md`，按其波次执行；视觉与 token 清理用 `handover/design-system-cleanup.md`。`handover/structural-repair-prompt.md`（纠偏批 A–E）已完成，仅作历史。新页面沿用同一边界。
 
 - **M0 全量盘点与参照基线**：核对 17 个 HTML 及 URL 参数、hash、脚本加载和覆盖关系；列出所有页内视图/状态/动作、组件候选与来源冲突。每个入口有台账，未知细节显式待查；完成首轮后即开始实现，后续随发现补充，不无限审查。
 - **M1 最小工程底座与公共基础**：可重复构建/交互验证/视觉对照、公共导出、props 声明与 autodocs、token/样式隔离、资源与导航约定、可操作的故事。先建立后续实施所需的最小闭环，其余基础组件随真实页面需求提取；不等待一个预想中的完整框架才开始页面工作。
@@ -173,4 +168,4 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 `handover/component-plan.md` 只保留接口规则的摘要并指向本文件，不再单独维护规划。
 
-每次审核或阶段结束，先更新本文件第 2.4 节与第 5 节，再更新 `handover/README.md`。
+审核与阶段结果写入 `handover/README.md`（状态、已知缺口、维护日志）。只有当结构性事实或规则本身改变时，才修改本文件的 §2.4 或 §3–§6，并且是改写现有条目，不追加。本文件不记录审核流水、构建数字或证据路径。
