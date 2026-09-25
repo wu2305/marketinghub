@@ -566,3 +566,20 @@ R5(a)：
 4. 验证：通用前言全部。故事数允许下降，但必须在 handover/README.md 维护日志中列出“被删 story id → 该状态仍可见的故事 id”（AGENTS.md §4 第 1 条的例外）；visual-check 全套机器结果与改动前逐场景一致。
 5. 不做本节以外的合并；发现新的奥卡姆候选写进本节末尾，由用户或下一轮决定。
 ```
+
+
+## 本轮集成工作包（2026-09-25，用户指定）
+
+各包从 WP0 验证后同步的 `origin/main` 开独立 worktree/分支；每个部分接受对抗性审核，PR 逐个 rebase、全套验证、合并。仅 integrator 更新 README §1 和本节勾选。WP3 按三条依次提交 PR，其余一包一 PR；用户最新指示保留现有 `scripts/font-probe.mjs`，新临时探针仍放 `/tmp`。
+
+- [x] **WP0 基线集成**：结构分支增加 `scripts/.*.tmp.mjs` 忽略规则；全套验证后 main 快进并同步 github/origin，保留已提交 P07 工作。7cb768e 源码全套验证通过（证据与实数见 README §1/§5），独立对抗审核完成。
+- [ ] **WP1 CSS budget ratchet**：裸十六进制、token 定义数、同值多名数量上限；组件前缀新增禁令和仅可缩减豁免；负向变异证明；AGENTS §4 临时脚本位置。
+- [ ] **WP2 P07 closeout**：管理动作/状态/确认流程共性；active-view 注册契约和 overlay slot；删除无使用者过渡组件；fl/dm/sr 语义 token；P07 八类状态只维护 §2.2。
+- [ ] **WP3.1 A2**：参照物逻辑缺陷退出组件，demo 层按需重现。
+- [ ] **WP3.2 S2**：统一覆盖层栈、Escape 与焦点环。
+- [ ] **WP3.3 S3 + R3 + O5**：共用助手外壳、页面预设与变体枚举、答案变体收敛。
+- [ ] **WP4 export-surface guard**：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
+- [ ] **WP5 P08**：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
+- [ ] **P09 / P10 / P11**：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
+- [ ] **WP6 R2**：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
+- [ ] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。

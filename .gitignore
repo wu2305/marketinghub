@@ -24,3 +24,6 @@ ds-bundle/
 
 # local editor/tool state
 .cursor/
+
+# temporary investigation scripts belong in /tmp
+scripts/.*.tmp.mjs
