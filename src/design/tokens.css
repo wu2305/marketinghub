@@ -424,6 +424,63 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-confirm-btn-ink: #2e3948;
   --mh-bt-confirm-primary: #cf8a20;
   --mh-bt-pag-ink: #6c7785;
+  /* Field-mapping library shared view — Report Context, Metric Dictionary,
+     Analytical Model, Email Reports (field-library.js / field-components.css /
+     ai-interpreter-overview.css / library.css). Effective values probed from
+     the rendered type pages; the toolbar/search/filter chrome reuses the
+     SearchField "plain" pill + boxed CheckboxFilter tokens. */
+  --mh-fl-title: #1d1c1b;
+  --mh-fl-empty: #8f9aa5;
+  --mh-fl-empty-rc: #778391;
+  --mh-fl-empty-line: #d9e1e8;
+  --mh-fl-rc-line: #e6e2db;
+  --mh-fl-rc-hover-line: #d69b3d;
+  --mh-fl-rc-hover-shadow: 0 14px 32px rgba(31, 41, 55, 0.08);
+  --mh-fl-rc-focus-shadow: 0 0 0 3px rgba(214, 155, 61, 0.18);
+  --mh-fl-card-hover-line: #d9aa63;
+  --mh-fl-card-hover-shadow: 0 14px 28px rgba(31, 41, 55, 0.08), 0 0 0 3px rgba(217, 170, 99, 0.12);
+  --mh-fl-er-hover-line: #d8a24f;
+  --mh-fl-er-hover-shadow: 0 10px 26px rgba(31, 41, 55, 0.08);
+  --mh-fl-domain-line: rgba(183, 122, 39, 0.28);
+  --mh-fl-action-off: #aeb7c1;
+  --mh-fl-recipient-bg: #f4f1eb;
+  --mh-fl-recipient-ink: #2d2b29;
+  --mh-fl-meta-label: #697789;
+  --mh-fl-state-ink: #25313d;
+  --mh-fl-desc-copy: #6b7787;
+  --mh-fl-thumb-line: #dfe5ec;
+  --mh-fl-overview-line: #e6eaf0;
+  --mh-fl-edit-bg: #fff8ec;
+  --mh-fl-edit-ink: #d09135;
+  --mh-fl-edit-hover-bg: #f9ead1;
+  --mh-fl-edit-hover-ink: #a96c16;
+  --mh-fl-scenario-hover-bg: #f7dfb4;
+  --mh-fl-scenario-hover-ink: #6f3f12;
+  --mh-fl-scenario-hover-line: rgba(183, 122, 39, 0.5);
+  --mh-fl-scenario-focus: #b67a27;
+  --mh-fl-btn-line: #d7dee5;
+  --mh-fl-btn-ink: #303d4c;
+  --mh-fl-dash-bg: #f4c766;
+  --mh-fl-dash-line: #d6a447;
+  --mh-fl-dash-ink: #1c2630;
+  --mh-fl-dash-hover-bg: #ecc05c;
+  --mh-fl-dash-hover-line: #bd8624;
+  --mh-fl-dialog-eyebrow: #a96c16;
+  --mh-fl-dialog-title: #243143;
+  --mh-fl-dialog-label: #5a6778;
+  --mh-fl-dialog-area-line: #cfd9e5;
+  --mh-fl-dialog-area-ink: #2b394a;
+  --mh-fl-dialog-area-focus: #c99a4a;
+  --mh-fl-dialog-head-line: #e8edf3;
+  --mh-fl-dialog-close-line: #d8e0ea;
+  --mh-fl-dialog-bg: #fbfcfe;
+  --mh-fl-dialog-shadow: 0 24px 70px rgba(23, 34, 50, 0.22);
+  --mh-fl-dialog-btn-bg: #d3ad78;
+  --mh-fl-dialog-btn-line: #c79652;
+  --mh-fl-dialog-btn-hover: #bf8f50;
+  --mh-fl-dialog-btn-hover-line: #b7813f;
+  --mh-fl-dialog-btn-off-bg: #dbc19b;
+  --mh-fl-dialog-btn-off-line: #e1c9a7;
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;

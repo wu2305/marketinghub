@@ -173,6 +173,10 @@ export {
   BusinessTermView,
 } from "./features/interpreter/BusinessTermView/index.jsx";
 export {
+  FieldLibraryView,
+  fieldLibraryTypes,
+} from "./features/interpreter/FieldLibraryView/index.jsx";
+export {
   ConfirmDialog,
   confirmDialogTones,
 } from "./components/ConfirmDialog/index.jsx";
@@ -232,6 +236,7 @@ export {
 export { useCockpitDemo } from "./demo/cockpit-demo.js";
 export { useHomeDemo } from "./demo/home-demo.js";
 export { useBusinessTermDemo } from "./demo/business-term-demo.js";
+export { useFieldLibraryDemo, normalizeFieldRecord } from "./demo/field-library-demo.js";
 export { useInterpreterDemo } from "./demo/interpreter-demo.js";
 export {
   generateCityInvestScenario,

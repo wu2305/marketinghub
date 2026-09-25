@@ -1,0 +1,1093 @@
+/* ── FieldLibraryView — field-library.js #fmLibrary shared view ─────────
+   Report Context / Metric Dictionary / Analytical Model / Email Reports on
+   the AI Interpreter type pages. All values probed from the rendered
+   original (the unified-type-toolbar + ai-interpreter-overview cascades
+   normalize the fm chrome to the same look as the Business Term view). */
+
+.mh-flview {
+min-width: 0;
+}
+
+/* `.fm-tools` — transparent strip; search is DOM-last but visually first
+   (order:-1); filters are the shared 180px box (CheckboxFilter.css). */
+
+.mh-flview__tools {
+display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  min-height: 71px;
+  padding: 13px 0 14px;
+}
+
+.mh-flview__search {
+order: -1;
+  flex: 0 0 300px;
+  width: 300px;
+}
+
+/* `.knowledge-add-button` — gold gradient pill (AM only). */
+
+.mh-flview__create {
+display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 15px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  box-shadow: var(--mh-bt-create-shadow);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mh-flview__create:hover {
+background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+}
+
+.mh-flview__create:focus-visible {
+outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-flview__create > span {
+font-size: 12px;
+  line-height: 1;
+}
+
+.mh-flview__countline {
+font-size: 12px;
+  color: var(--mh-bt-countline);
+}
+
+/* `.fm-card-wrap` — every fm type is a 3-column grid at desktop (2 ≤980px,
+   1 ≤760px); the RC/MD/AM/ER padding/background variants are all normalized
+   away by the overview cascade. */
+
+.mh-flview__cards {
+display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 980px) {
+  .mh-flview__cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-flview__cards {
+  grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mh-flview__card {
+position: relative;
+  min-width: 0;
+  border: 1px solid var(--mh-principle-line);
+  background: #fff;
+  box-shadow: var(--mh-principle-shadow);
+  color: #2f3a45;
+  cursor: pointer;
+  outline: 0;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.mh-flview__card:hover {
+transform: translateY(-1px);
+  border-color: var(--mh-fl-card-hover-line);
+  box-shadow: var(--mh-fl-card-hover-shadow);
+}
+
+.mh-flview__card:focus-visible {
+border-color: var(--mh-fl-card-hover-line);
+  box-shadow: var(--mh-fl-card-hover-shadow);
+}
+
+.mh-flview__card h3 {
+min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--mh-fl-title);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Shared status capsule — 76×20 Enabled/Disabled pill on every fm card and
+   the drawer title. */
+
+.mh-flview__state {
+display: inline-flex;
+  width: 76px;
+  height: 20px;
+  min-height: 20px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0;
+  border-radius: 5px;
+  background: var(--mh-bt-state-bg);
+  color: var(--mh-bt-state-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mh-flview__state i {
+width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.mh-flview__state.is-off {
+background: var(--mh-bt-state-off-bg);
+  color: var(--mh-bt-state-off-ink);
+}
+
+/* ── fm-report-card (Report Context) ─────────────────────────────────── */
+
+.mh-flview__report-card {
+display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 16px;
+  border-color: var(--mh-fl-rc-line);
+  border-radius: 12px;
+  box-shadow: none;
+  color: #344054;
+}
+
+.mh-flview__report-card:hover {
+border-color: var(--mh-fl-rc-hover-line);
+  box-shadow: var(--mh-fl-rc-hover-shadow);
+}
+
+.mh-flview__report-card:focus-visible {
+border-color: var(--mh-fl-rc-hover-line);
+  box-shadow: var(--mh-fl-rc-focus-shadow), var(--mh-fl-rc-hover-shadow);
+}
+
+.mh-flview__report-title-row {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mh-flview__report-title-row h3 {
+flex: 1 1 auto;
+}
+
+.mh-flview__report-card p {
+display: -webkit-box;
+  max-width: 100%;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mh-flview__report-meta {
+display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.mh-flview__report-meta > div {
+display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.mh-flview__report-meta dt {
+color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-flview__report-meta dd {
+min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  .mh-flview__report-meta > div {
+  grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+/* ── fm-metric-card (Metric Dictionary) ──────────────────────────────── */
+
+.mh-flview__metric-card {
+display: block;
+  padding: 16px;
+  border-radius: 12px;
+  color: #343230;
+}
+
+.mh-flview__metric-head {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mh-flview__metric-head h3 {
+flex: 1 1 auto;
+}
+
+.mh-flview__metric-definition {
+display: -webkit-box;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mh-flview__metric-meta {
+display: grid;
+  grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.mh-flview__metric-meta > div {
+display: flex;
+  height: 24px;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.mh-flview__metric-meta dt {
+flex: 0 0 auto;
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-flview__metric-meta dd {
+min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-flview__metric-data-model {
+grid-column: 1 / -1;
+}
+
+.mh-flview__metric-synonyms {
+display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.mh-flview__metric-synonyms > span {
+flex: 0 0 auto;
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-flview__metric-synonyms > div {
+display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.mh-flview__synonym {
+display: inline-flex;
+  flex: 0 0 auto;
+  height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  min-width: 0;
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--mh-bt-tag-bg);
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-flview__synonym--more {
+padding: 0 11px;
+}
+
+@media (max-width: 1180px) {
+  .mh-flview__metric-meta {
+  grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
+
+/* ── fm-analysis-card (Analytical Model) ─────────────────────────────── */
+
+.mh-flview__analysis-card {
+display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.mh-flview__analysis-head {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.mh-flview__analysis-title {
+display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+}
+
+.mh-flview__analysis-title h3 {
+flex: 1 1 auto;
+}
+
+.mh-flview__analysis-description {
+display: -webkit-box;
+  margin: 10px 0 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mh-flview__analysis-meta {
+display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.mh-flview__analysis-meta > div {
+display: flex;
+  height: 24px;
+  margin: 0;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.mh-flview__analysis-meta span {
+flex: 0 0 auto;
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-flview__analysis-meta strong {
+min-width: 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-flview__analysis-ref-tags {
+display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.mh-flview__analysis-ref-chip {
+display: inline-flex;
+  flex: 0 0 auto;
+  height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  max-width: calc(100% - 42px);
+  padding: 0 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--mh-bt-tag-bg);
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-flview__analysis-ref-chip:only-child {
+max-width: 100%;
+}
+
+.mh-flview__analysis-footer {
+display: flex;
+  width: 100%;
+  min-height: 24px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.mh-flview__analysis-creator {
+display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+.mh-flview__analysis-creator span {
+flex: 0 0 auto;
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.mh-flview__analysis-creator strong {
+min-width: 0;
+  overflow: hidden;
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 24px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* fm icon actions — 30px transparent gold buttons on the card, 28px in the
+   drawer footer; blocked ones render `disabled` (clicks never reach the
+   handler in the original either). */
+
+.mh-flview__action-row {
+display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mh-flview__action {
+display: grid;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mh-bt-action);
+  cursor: pointer;
+}
+
+.mh-flview__action svg {
+width: 15px;
+  height: 15px;
+  stroke: var(--mh-bt-action);
+}
+
+.mh-flview__action:hover:not(:disabled),
+.mh-flview__action:focus-visible:not(:disabled) {
+background: var(--mh-bt-action-hover-bg);
+}
+
+.mh-flview__action:disabled {
+color: var(--mh-fl-action-off);
+  cursor: not-allowed;
+}
+
+.mh-flview__action:disabled svg {
+stroke: var(--mh-fl-action-off);
+}
+
+.mh-modal__foot .mh-flview__action {
+width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+/* ── fm-email-card (Email Reports) ───────────────────────────────────── */
+
+.mh-flview__email-card {
+display: block;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.mh-flview__email-card:hover,
+.mh-flview__email-card:focus-visible {
+border-color: var(--mh-fl-er-hover-line);
+  box-shadow: var(--mh-fl-er-hover-shadow);
+}
+
+.mh-flview__email-titleline {
+display: block;
+  min-width: 0;
+}
+
+.mh-flview__email-titleline h3 {
+max-width: 100%;
+}
+
+.mh-flview__email-meta {
+display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.mh-flview__email-meta > div {
+display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.mh-flview__email-meta > div > span:first-child {
+flex: 0 0 auto;
+  color: var(--mh-bt-label);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.mh-flview__email-meta strong {
+min-width: 0;
+  overflow: hidden;
+  color: var(--mh-fl-title);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-flview__email-recipients {
+align-items: flex-start;
+}
+
+.mh-flview__email-recipient-tags {
+display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--mh-bt-tag-bg);
+  color: var(--mh-bt-copy);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.mh-flview__email-recipient-tags span {
+flex: 0 1 auto;
+  min-width: 0;
+  padding: 5px 9px;
+  overflow: hidden;
+  background: var(--mh-fl-recipient-bg);
+  color: var(--mh-fl-recipient-ink);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Empty states — fm-card-empty (RC) vs fm-email-empty (the rest). Both sit
+   inside the card grid. */
+
+.mh-flview__empty {
+grid-column: 1 / -1;
+  padding: 36px 20px;
+  color: var(--mh-fl-empty);
+  font-size: 13px;
+  text-align: center;
+}
+
+.mh-flview__empty--card {
+grid-column: auto;
+  padding: 34px 18px;
+  border: 1px dashed var(--mh-fl-empty-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--mh-fl-empty-rc);
+}
+
+/* fm-pagination padding — AM/ER flush with the grid, RC/MD keep the 20px
+   side inset (the original's per-type rules survive the cascade). */
+
+.mh-flview .mh-pagination {
+padding: 16px 0 0;
+}
+
+.mh-flview[data-fl-type="Report Context"] .mh-pagination,
+.mh-flview[data-fl-type="Metric Dictionary"] .mh-pagination {
+padding: 16px 20px;
+}
+
+/* ── Drawer body — the RC variant re-pads to 22/24/30; the shared
+   scenario-report-detail sections serve MD/AM/ER. ─────────────────────── */
+
+.mh-flview__drawer--rc .mh-modal__body {
+padding: 22px 24px 30px;
+}
+
+.mh-flview__foot-btn {
+display: inline-flex;
+  align-items: center;
+  min-height: 33px;
+  padding: 7px 10px;
+  border: 1px solid var(--mh-fl-btn-line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--mh-fl-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mh-flview__foot-btn:hover,
+.mh-flview__foot-btn:focus-visible {
+border-color: var(--mh-bt-action);
+  background: var(--mh-bt-action-hover-bg);
+}
+
+.mh-flview__open-dashboard {
+border-color: var(--mh-fl-dash-line);
+  background: var(--mh-fl-dash-bg);
+  color: var(--mh-fl-dash-ink);
+  font-weight: 700;
+}
+
+.mh-flview__open-dashboard:hover,
+.mh-flview__open-dashboard:focus-visible {
+border-color: var(--mh-fl-dash-hover-line);
+  background: var(--mh-fl-dash-hover-bg);
+  color: var(--mh-fl-dash-ink);
+}
+
+/* Detail sections — library.css `.scenario-report-detail`. */
+
+.mh-flview__detail {
+display: grid;
+  gap: 18px;
+}
+
+.mh-flview__section {
+display: grid;
+  gap: 8px;
+}
+
+.mh-flview__section h3 {
+margin: 0;
+  color: var(--mh-bt-section-title);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mh-flview__section p {
+margin: 0;
+  color: var(--mh-bt-section-copy);
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.mh-flview__prewrap {
+white-space: pre-wrap;
+}
+
+/* AM created-by/at meta — plain inline dl (the bordered meta cells are
+   normalized away on the fm drawer). */
+
+.mh-flview__detail-meta {
+display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+}
+
+.mh-flview__detail-meta > div {
+display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.mh-flview__detail-meta dt,
+.mh-flview__detail-meta dd {
+margin: 0;
+  color: var(--mh-faint);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.mh-flview__detail-meta dt::after {
+content: ":";
+}
+
+/* fm chips — .fm-chip base + the gold domain variant. */
+
+.mh-flview__tags {
+display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mh-flview__chip {
+display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: var(--mh-bt-chip-bg);
+  color: var(--mh-bt-chip-ink);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.mh-flview__domain {
+border: 1px solid var(--mh-fl-domain-line);
+  background: var(--mh-bt-status-on-bg);
+  color: var(--mh-bt-status-on-ink);
+}
+
+.mh-flview__dash {
+color: var(--mh-faint);
+}
+
+/* Report Context drawer body. */
+
+.mh-flview__rc-thumb {
+width: 100%;
+  min-height: 70px;
+  overflow: hidden;
+  border: 1px solid var(--mh-fl-thumb-line);
+  border-radius: 9px;
+  background: var(--mh-bt-drawer-bg);
+  color: #788493;
+  font-size: 13px;
+}
+
+.mh-flview__rc-thumb img {
+display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.mh-flview__rc-overview {
+padding: 19px 0 22px;
+  border-bottom: 1px solid var(--mh-fl-overview-line);
+}
+
+.mh-flview__rc-desc-title {
+display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0 0 18px;
+  color: var(--mh-fl-state-ink);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.mh-flview__rc-edit {
+display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: var(--mh-fl-edit-bg);
+  color: var(--mh-fl-edit-ink);
+  cursor: pointer;
+}
+
+.mh-flview__rc-edit:hover,
+.mh-flview__rc-edit:focus-visible {
+background: var(--mh-fl-edit-hover-bg);
+  color: var(--mh-fl-edit-hover-ink);
+}
+
+.mh-flview__rc-edit svg {
+width: 15px;
+  height: 15px;
+}
+
+.mh-flview__rc-overview p {
+margin: 0;
+  color: var(--mh-fl-desc-copy);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.mh-flview__rc-meta {
+display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.mh-flview__rc-meta > div {
+display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+}
+
+.mh-flview__rc-meta > div > span:first-child {
+color: var(--mh-fl-meta-label);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.mh-flview__state-text {
+display: inline;
+  color: var(--mh-fl-state-ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.mh-flview__rc-section {
+margin-top: 24px;
+}
+
+.mh-flview__rc-linked {
+display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.mh-flview__rc-heading {
+flex-shrink: 0;
+  margin: 0 0 10px;
+  color: #20272e;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.mh-flview__rc-linked > .mh-flview__rc-heading {
+margin: 0;
+}
+
+.mh-flview__rc-linked > .mh-flview__tags {
+gap: 8px;
+}
+
+.mh-flview__scenario-link {
+border: 1px solid var(--mh-fl-domain-line);
+  background: var(--mh-bt-status-on-bg);
+  box-shadow: 0 1px 0 rgba(183, 122, 39, 0.08);
+  color: var(--mh-bt-status-on-ink);
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mh-flview__scenario-link:hover,
+.mh-flview__scenario-link:focus-visible {
+border-color: var(--mh-fl-scenario-hover-line);
+  background: var(--mh-fl-scenario-hover-bg);
+  color: var(--mh-fl-scenario-hover-ink);
+}
+
+.mh-flview__scenario-link:focus-visible {
+outline: 2px solid var(--mh-fl-scenario-focus);
+  outline-offset: 2px;
+}
+
+.mh-flview__rc-scope {
+margin: 0;
+  color: var(--mh-fl-meta-label);
+  font-size: 14px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+/* ── Report Description edit dialog (editReportDescriptionDialog) ────── */
+
+.mh-flview__edit {
+width: min(560px, calc(100vw - 32px));
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(205, 215, 225, 0.95);
+  border-radius: 14px;
+  background: var(--mh-fl-dialog-bg);
+  box-shadow: var(--mh-fl-dialog-shadow);
+}
+
+.mh-flview__edit .mh-modal__header {
+padding: 26px 28px 18px;
+  border-bottom: 1px solid var(--mh-fl-dialog-head-line);
+  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+}
+
+.mh-flview__edit .mh-modal__eyebrow {
+color: var(--mh-fl-dialog-eyebrow);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.mh-flview__edit .mh-modal__title {
+margin: 6px 0 0;
+  color: var(--mh-fl-dialog-title);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.mh-flview__edit .mh-modal__close {
+width: 34px;
+  height: 34px;
+  border: 1px solid var(--mh-fl-dialog-close-line);
+  border-radius: 9px;
+  background: #fff;
+  color: #334155;
+  font-size: 20px;
+}
+
+.mh-flview__edit .mh-modal__close:hover,
+.mh-flview__edit .mh-modal__close:focus-visible {
+border-color: var(--mh-fl-scenario-focus);
+  background: var(--mh-fl-edit-bg);
+  color: var(--mh-bt-status-on-ink);
+}
+
+.mh-flview__edit-field {
+display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 28px 0;
+  color: var(--mh-fl-dialog-label);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.mh-flview__edit-field > span {
+font-size: 12px;
+  line-height: 1.2;
+}
+
+.mh-flview__edit-field textarea {
+width: 100%;
+  min-height: 164px;
+  box-sizing: border-box;
+  padding: 15px 16px;
+  border: 1px solid var(--mh-fl-dialog-area-line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 2px rgba(23, 34, 50, 0.04);
+  color: var(--mh-fl-dialog-area-ink);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.mh-flview__edit-field textarea:focus {
+border-color: var(--mh-fl-dialog-area-focus);
+  outline: 3px solid rgba(214, 155, 61, 0.18);
+  outline-offset: 0;
+}
+
+.mh-flview__edit-foot {
+display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 18px 28px 24px;
+  border-top: 1px solid var(--mh-fl-dialog-head-line);
+  background: #fff;
+}
+
+.mh-flview__edit-btn {
+min-width: 88px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--mh-fl-btn-line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--mh-fl-btn-ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.mh-flview__edit-btn--primary {
+border-color: var(--mh-fl-dialog-btn-line);
+  background: var(--mh-fl-dialog-btn-bg);
+  color: #fff;
+}
+
+.mh-flview__edit-btn--primary:not(:disabled):hover,
+.mh-flview__edit-btn--primary:not(:disabled):focus-visible {
+border-color: var(--mh-fl-dialog-btn-hover-line);
+  background: var(--mh-fl-dialog-btn-hover);
+}
+
+.mh-flview__edit-btn--primary:disabled {
+border-color: var(--mh-fl-dialog-btn-off-line);
+  background: var(--mh-fl-dialog-btn-off-bg);
+  color: rgba(255, 255, 255, 0.72);
+  cursor: not-allowed;
+}

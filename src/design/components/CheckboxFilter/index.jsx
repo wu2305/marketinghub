@@ -10,13 +10,19 @@ import "./CheckboxFilter.css";
  * @param {object} props
  * @param {string} props.label field label, e.g. "Category"
  * @param {string} [props.allLabel="All"] summary when nothing is selected
- * @param {string} [props.selectedLabel="{count} selected"] summary template once options are checked
+ * @param {string} [props.selectedLabel="{count} selected"] summary template once options are
+ *   checked; `{count}` substitutes the selection size and `{labels}` the joined
+ *   selected option labels (the fm libraries' "Enabled, 4P" style summary)
  * @param {Array<{ id: string, label: string }>} [props.options=[]]
  * @param {Array<string>} [props.selected=[]] checked option ids
  * @param {(event: { id: string, checked: boolean }) => void} [props.onToggle]
  */
 export function CheckboxFilter({ label, allLabel = "All", selectedLabel = "{count} selected", options = [], selected = [], onToggle }) {
-  const summary = selected.length ? selectedLabel.replace("{count}", String(selected.length)) : allLabel;
+  const summary = selected.length
+    ? selectedLabel
+        .replace("{count}", String(selected.length))
+        .replace("{labels}", options.filter((option) => selected.includes(option.id)).map((option) => option.label).join(", "))
+    : allLabel;
   return (
     <div className="mh-check-filter">
       <span className="mh-check-filter__label">{label}</span>

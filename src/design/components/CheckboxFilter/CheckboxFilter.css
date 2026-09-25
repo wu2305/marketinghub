@@ -116,9 +116,12 @@ background: var(--mh-check-filter-checked-bg);
   color: var(--mh-check-filter-checked-ink);
 }
 
-/* `.business-multi-filter` — the shared multi-select disclosure field. */
+/* `.business-multi-filter` — the shared multi-select disclosure field.
+   The fm field libraries (`.mh-flview`) get the identical 180px boxed
+   treatment — unified-type-toolbar.css normalizes `.fm-filter` to the same
+   box on every type page. */
 
-.mh-btview .mh-check-filter {
+:is(.mh-btview, .mh-flview) .mh-check-filter {
 width: 180px;
   min-width: 180px;
   flex: 0 0 180px;
@@ -126,10 +129,10 @@ width: 180px;
   padding: 0 13px;
 }
 
-.mh-btview .mh-check-filter__label {
+:is(.mh-btview, .mh-flview) .mh-check-filter__label {
 font-size: 11px;
 }
 
-.mh-btview .mh-check-filter__options {
+:is(.mh-btview, .mh-flview) .mh-check-filter__options {
 min-width: 240px;
 }

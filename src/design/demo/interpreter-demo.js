@@ -10,6 +10,7 @@
 import React from "react";
 import { recordMatchesFilter, uniqueFilterOptions } from "../cx.js";
 import { useBusinessTermDemo } from "./business-term-demo.js";
+import { useFieldLibraryDemo } from "./field-library-demo.js";
 
 const EMPTY_OBJECT = {};
 const EMPTY_ARRAY = [];
@@ -65,14 +66,15 @@ export function filterLibraryRows(records, { query = "", filterValues = {}, filt
  *   `types`, `records`, `activeType` (controlled — the host owns the `?type=`
  *   mapping), initial `query`/`filterValues`, `principles` = { items, strings,
  *   selectedCategories, page, pageSize, expanded }, `businessTermLibrary`
- *   (useBusinessTermDemo inputs), and host callbacks (`onNavigate`,
+ *   (useBusinessTermDemo inputs), `fieldLibrary` (useFieldLibraryDemo
+ *   inputs), and host callbacks (`onNavigate`,
  *   `onSelectType`, `onQueryChange`, `onFilterChange`, `onCreate`,
  *   `onSelectAsset`, `onToggleCategory`, `onPage`, `onPageSize`,
- *   `onToggleExpand`, plus the BusinessTermView callback set).
+ *   `onToggleExpand`, plus the BusinessTermView/FieldLibraryView callback set).
  * @returns {object} AiInterpreterPage props: `query`, `filterValues`,
  *   `library` = { rows, filters } for the transitional generic list, `views`
- *   keyed by `type.view` (`principles`, `business-term`), and the wired
- *   callbacks.
+ *   keyed by `type.view` (`principles`, `business-term`, `field-library`),
+ *   and the wired callbacks.
  */
 export function useInterpreterDemo(props) {
   const [query, setQuery] = useSynced(props.query ?? "");
@@ -112,6 +114,28 @@ export function useInterpreterDemo(props) {
   const typeRecords = type ? (props.records || []).filter((record) => record.typeId === type.id) : [];
   const filters = libraryFilters(type, typeRecords);
   const rows = filterLibraryRows(typeRecords, { query, filterValues, filters });
+
+  /* field-library.js #fmLibrary — the shared card-grid view serving the four
+     field-mapping types; type.id is the fm type label ("Report Context"…). */
+  const fieldLibrary = useFieldLibraryDemo({
+    ...(props.fieldLibrary || {}),
+    type: type?.view === "field-library" ? type.id : undefined,
+    records: props.records,
+    onNavigate: props.onNavigate,
+    onQueryChange: props.onQueryChange,
+    onFilterToggle: props.onFilterToggle,
+    onPage: props.onPage,
+    onPageSize: props.onPageSize,
+    onOpen: props.onOpen,
+    onCloseDetail: props.onCloseDetail,
+    onAction: props.onAction,
+    onDialogConfirm: props.onDialogConfirm,
+    onDialogCancel: props.onDialogCancel,
+    onCreate: props.onCreate,
+    onDescriptionChange: props.onDescriptionChange,
+    onDescriptionConfirm: props.onDescriptionConfirm,
+    onDescriptionCancel: props.onDescriptionCancel,
+  });
 
   const principleFiltered = filterPrinciples(props.principles?.items, { query, selectedCategories });
   const principleWindow = paginateRows(principleFiltered, { page: principlePage, pageSize: principlePageSize });
@@ -170,6 +194,7 @@ export function useInterpreterDemo(props) {
         },
       },
       "business-term": businessTerms,
+      "field-library": fieldLibrary,
     },
     onQueryChange,
     onFilterChange: (event) => {

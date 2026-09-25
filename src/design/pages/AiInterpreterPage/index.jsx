@@ -6,6 +6,7 @@ import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
+import { FieldLibraryView } from "../../features/interpreter/FieldLibraryView/index.jsx";
 import { KnowledgeLibrary } from "../../features/interpreter/KnowledgeLibrary/index.jsx";
 import { KnowledgeSidebar } from "../../features/interpreter/KnowledgeSidebar/index.jsx";
 import { PrinciplesView } from "../../features/interpreter/PrinciplesView/index.jsx";
@@ -22,6 +23,7 @@ import "./AiInterpreterPage.css";
 const typeViews = {
   principles: PrinciplesView,
   "business-term": BusinessTermView,
+  "field-library": FieldLibraryView,
 };
 
 /**

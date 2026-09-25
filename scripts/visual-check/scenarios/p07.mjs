@@ -739,24 +739,382 @@ export default [
     },
   },
   {
-    /* Report Context's original view renders dedicated .fm-report-card shells
-       (the generic .asset-rows are present but 0-height); React still shows the
-       transitional generic list of the same six records. The pair asserts the
-       shared shell geometry plus each side's own six items. */
+    /* field-library.js #fmLibrary: the unified toolbar (300px gold search
+       pill visually first + 180px Project disclosure) over a three-column
+       .fm-report-card grid and fm-pagination. */
     id: "p07-interpreter-report-context",
     layout: [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: "#fmLibrary .fm-tools", story: ".mh-flview__tools", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: "#fmLibrary .fm-search-field", story: ".mh-flview__search", props: ["x", "width"], tol: 8 },
+      { orig: "#fmLibrary .fm-report-card", story: ".mh-flview__report-card", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: "#fmLibrary .fm-pagination", story: ".mh-flview .mh-pagination", props: ["x", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Report%20Context",
-      expect: [{ sel: ".fm-report-card", count: 6, text: "Invest City Strategy Analysis" }],
+      expect: [
+        { sel: ".fm-report-card", count: 6, text: "Invest City Strategy Analysis" },
+        { sel: "#fmLibrary .fm-search", attr: { name: "placeholder", value: "Search knowledge..." } },
+        { sel: "#fmLibrary .fm-filter summary", text: "All projects" },
+        { sel: ".fm-report-card[data-fm-id='city-report-context'] .fm-report-card-status", text: "Enabled" },
+        { sel: ".fm-pagination", text: "6 records" },
+      ],
     },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Report Context" },
-      expect: [{ sel: ".mh-asset", count: 6, text: "City Strategy report context" }],
+      expect: [
+        { sel: ".mh-flview__report-card", count: 6, text: "Invest City Strategy Analysis" },
+        { sel: ".mh-flview__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
+        { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All projects" },
+        { sel: ".mh-flview__card[data-id='city-report-context'] .mh-flview__state", text: "Enabled" },
+        { sel: ".mh-flview .mh-pagination", text: "6 records" },
+        { sel: ".mh-asset", state: "detached" },
+      ],
+    },
+  },
+  {
+    /* RC Project disclosure: checking D2C Insights keeps the three D2C
+       contexts and the summary shows the joined label (not "1 selected"). */
+    id: "p07-field-library-project-filter",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Report%20Context",
+      actions: [
+        { waitMs: 800 },
+        { click: "#fmLibrary .fm-filter summary" },
+        { wait: "#fmLibrary .fm-filter details[open]" },
+        { click: "#fmLibrary .fm-options label:has-text('D2C Insights')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: "#fmLibrary .fm-filter summary", text: "D2C Insights" },
+        { sel: ".fm-report-card", count: 3 },
+        { sel: ".fm-report-card[data-fm-id='abo-report-context']", state: "detached" },
+        { sel: ".fm-pagination", text: "3 records" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Report Context" },
+      actions: [
+        { click: ".mh-flview .mh-check-filter__summary" },
+        { wait: ".mh-flview .mh-check-filter__details[open]" },
+        { click: ".mh-flview .mh-check-filter__option:has-text('D2C Insights')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-flview .mh-check-filter__summary", text: "D2C Insights" },
+        { sel: ".mh-flview__card", count: 3 },
+        { sel: ".mh-flview__card[data-id='abo-report-context']", state: "detached" },
+        { sel: ".mh-flview .mh-pagination", text: "3 records" },
+      ],
+    },
+  },
+  {
+    /* RC card click opens the 820px drawer: eyebrow + title + Enabled pill,
+       thumbnail, Report Description with the gold pencil, project chip, AI
+       status rows, linked-scenario chips, scope and Close/Open Dashboard. */
+    /* NB: two .fm-overlay drawers live in the document — the fm library's
+       (#fmDrawerTitle) and the Business Term one (#btDrawerTitle). Original
+       selectors must scope to the open overlay. */
+    id: "p07-field-library-rc-drawer",
+    layout: [
+      { orig: ".fm-overlay:not([hidden]) .fm-drawer", story: ".mh-modal--drawer .mh-modal__dialog", props: ["y", "height"], tol: 8 },
+      { orig: ".fm-overlay:not([hidden]) .fm-drawer-head", story: ".mh-modal--drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
+      { orig: "#fmDrawerTitle", story: ".mh-modal--drawer .mh-modal__title", props: ["x", "y", "height"], tol: 8 },
+      { orig: ".fm-overlay:not([hidden]) .fm-rc-thumbnail", story: ".mh-flview__rc-thumb", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".fm-overlay:not([hidden]) .fm-drawer-foot", story: ".mh-modal--drawer .mh-modal__foot", props: ["height"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Report%20Context",
+      actions: [{ waitMs: 800 }, { click: ".fm-report-card[data-fm-id='city-report-context']" }, { wait: ".fm-overlay:not([hidden])" }],
+      expect: [
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-head small", text: "Report Context" },
+        { sel: "#fmDrawerTitle", text: "Invest City Strategy Analysis" },
+        { sel: "#fmDrawerStatus", text: "Enabled" },
+        { sel: ".fm-overlay:not([hidden]) .fm-rc-meta [class*='fm-domain-']", text: "D2C Insights" },
+        { sel: ".fm-overlay:not([hidden]) .fm-scenario-link", count: 2, text: "Channel Performance Analysis" },
+        { sel: ".fm-overlay:not([hidden]) .fm-open-dashboard", text: "Open Dashboard" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Report Context" },
+      actions: [{ click: ".mh-flview__report-card[data-id='city-report-context']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      expect: [
+        { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Report Context" },
+        { sel: ".mh-modal--drawer .mh-modal__title", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-modal--drawer .mh-flview__state", text: "Enabled" },
+        { sel: ".mh-modal--drawer .mh-flview__domain", text: "D2C Insights" },
+        { sel: ".mh-modal--drawer .mh-flview__scenario-link", count: 2, text: "Channel Performance Analysis" },
+        { sel: ".mh-flview__open-dashboard", text: "Open Dashboard" },
+      ],
+    },
+  },
+  {
+    /* RC description dialog: Confirm stays disabled until the text differs
+       from the stored description; confirming rewrites the card/drawer copy
+       and appends a history entry (the standalone history dialog is dead
+       code in the original — not reproduced). */
+    id: "p07-field-library-rc-description",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Report%20Context",
+      actions: [
+        { waitMs: 800 },
+        { click: ".fm-report-card[data-fm-id='city-report-context']" },
+        { wait: ".fm-overlay:not([hidden])" },
+        { click: ".fm-overlay:not([hidden]) .fm-rc-description-edit" },
+        { wait: "dialog.rc-description-edit-dialog" },
+        { fill: [".rc-description-edit-field textarea", "Updated description."] },
+        { waitMs: 200 },
+        { click: "dialog.rc-description-edit-dialog button.primary" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".fm-report-card[data-fm-id='city-report-context'] p", text: "Updated description." },
+        { sel: ".fm-overlay:not([hidden]) .fm-rc-overview > p", text: "Updated description." },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Report Context" },
+      actions: [
+        { click: ".mh-flview__report-card[data-id='city-report-context']" },
+        { wait: ".mh-modal--drawer .mh-modal__dialog" },
+        { click: ".mh-flview__rc-edit" },
+        { wait: ".mh-flview__edit textarea" },
+        { fill: [".mh-flview__edit textarea", "Updated description."] },
+        { waitMs: 200 },
+        { click: ".mh-flview__edit-btn--primary" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-flview__report-card[data-id='city-report-context'] p", text: "Updated description." },
+        { sel: ".mh-modal--drawer .mh-flview__rc-overview p", text: "Updated description." },
+      ],
+    },
+  },
+  {
+    /* Metric Dictionary: 3-column fm-metric-card grid with the definition
+       clamp, Unit/Type/Data-model meta and the synonym + "…" chips; the card
+       opens the governed-fields drawer (Metric Name through Calculation
+       Rules) with an empty footer strip. */
+    id: "p07-field-library-metric-dictionary",
+    layout: [
+      { orig: "#fmLibrary .fm-metric-card", story: ".mh-flview__metric-card", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: "#fmLibrary .fm-metric-meta", story: ".mh-flview__metric-meta", props: ["x", "y"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Metric%20Dictionary",
+      actions: [{ waitMs: 800 }, { click: ".fm-metric-card[data-fm-id='metric-dictionary-member-conversion']" }, { wait: ".fm-overlay:not([hidden])" }],
+      expect: [
+        { sel: ".fm-metric-card", count: 3, text: "Member conversion" },
+        { sel: "#fmLibrary .fm-filter summary", text: "All models" },
+        { sel: ".fm-metric-synonym.fm-metric-more", count: 3 },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-head small", text: "Metric Dictionary" },
+        { sel: ".fm-overlay:not([hidden]) .scenario-report-section:has(h3:text-is('Calculation Rules')) .scenario-report-prewrap", text: "Qualified member transactions" },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-foot .fm-icon-action", count: 0, state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Metric Dictionary" },
+      actions: [{ click: ".mh-flview__metric-card[data-id='metric-dictionary-member-conversion']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      expect: [
+        { sel: ".mh-flview__metric-card", count: 3, text: "Member conversion" },
+        { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All models" },
+        { sel: ".mh-flview__synonym--more", count: 3 },
+        { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Metric Dictionary" },
+        { sel: ".mh-modal--drawer .mh-flview__section:has(h3:text-is('Calculation Rules')) .mh-flview__prewrap", text: "Qualified member transactions" },
+        { sel: ".mh-modal--drawer .mh-modal__foot .mh-flview__action", count: 0, state: "detached" },
+      ],
+    },
+  },
+  {
+    /* Analytical Model: single playbook card with the 3-filter toolbar +
+       gold create link; owner+Enabled gates edit/delete to `disabled` while
+       Disable stays live; the card drawer re-lists the gated actions in its
+       footer. */
+    id: "p07-field-library-analytical-model",
+    layout: [
+      { orig: "#fmLibrary .fm-tools", story: ".mh-flview__tools", props: ["x", "y", "width"], tol: 8 },
+      { orig: "#fmLibrary .knowledge-add-button", story: ".mh-flview__create", props: ["x", "y"], tol: 10 },
+      { orig: "#fmLibrary .fm-analysis-card", story: ".mh-flview__analysis-card", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: "#fmLibrary .fm-analysis-card-footer", story: ".mh-flview__analysis-footer", props: ["x", "y"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Analytical%20Model",
+      expect: [
+        { sel: ".fm-analysis-card", count: 1, text: "Opportunity scan playbook" },
+        { sel: "#fmLibrary .knowledge-add-button", text: "Add Analytical Model" },
+        { sel: "#fmLibrary .fm-filter", count: 3 },
+        { sel: ".fm-analysis-card [data-fm-action='edit']", attr: { name: "disabled", value: "" } },
+        { sel: ".fm-analysis-card [data-fm-action='delete']", attr: { name: "disabled", value: "" } },
+        { sel: ".fm-analysis-card [data-fm-action='disable']:not([disabled])" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Analytical Model" },
+      expect: [
+        { sel: ".mh-flview__analysis-card", count: 1, text: "Opportunity scan playbook" },
+        { sel: ".mh-flview__create", text: "Add Analytical Model" },
+        { sel: ".mh-flview .mh-check-filter", count: 3 },
+        { sel: ".mh-flview__analysis-card [aria-label='Edit']", attr: { name: "disabled", value: "" } },
+        { sel: ".mh-flview__analysis-card [aria-label='Delete']", attr: { name: "disabled", value: "" } },
+        { sel: ".mh-flview__analysis-card [aria-label='Disable']:not([disabled])" },
+      ],
+    },
+  },
+  {
+    /* AM disable flow: "Disable" → "Confirm Offline" flips the card pill to
+       Disabled and unlocks edit/delete (status gate is `Disabled` only). */
+    id: "p07-field-library-am-disable",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Analytical%20Model",
+      actions: [
+        { waitMs: 800 },
+        { click: ".fm-analysis-card [data-fm-action='disable']" },
+        { wait: "dialog.fm-dialog" },
+        { click: "dialog.fm-dialog button:has-text('Confirm Offline')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".fm-analysis-card .fm-state", text: "Disabled" },
+        { sel: ".fm-analysis-card [data-fm-action='edit']:not([disabled])" },
+        { sel: ".fm-analysis-card [data-fm-action='delete']:not([disabled])" },
+        { sel: ".fm-analysis-card [data-fm-action='disable']", attr: { name: "disabled", value: "" } },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Analytical Model" },
+      actions: [
+        { click: ".mh-flview__analysis-card [aria-label='Disable']" },
+        { wait: ".mh-confirm--confirm" },
+        { click: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-flview__analysis-card .mh-flview__state", text: "Disabled" },
+        { sel: ".mh-flview__analysis-card [aria-label='Edit']:not([disabled])" },
+        { sel: ".mh-flview__analysis-card [aria-label='Delete']:not([disabled])" },
+        { sel: ".mh-flview__analysis-card [aria-label='Disable']", attr: { name: "disabled", value: "" } },
+      ],
+    },
+  },
+  {
+    /* AM delete on a referenced (now-disabled) record opens the info dialog —
+       the record stays in the grid. */
+    id: "p07-field-library-am-delete-blocked",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Analytical%20Model",
+      actions: [
+        { waitMs: 800 },
+        { click: ".fm-analysis-card [data-fm-action='disable']" },
+        { wait: "dialog.fm-dialog" },
+        { click: "dialog.fm-dialog button:has-text('Confirm Offline')" },
+        { waitMs: 300 },
+        { click: ".fm-analysis-card [data-fm-action='delete']" },
+        { wait: "dialog.fm-dialog" },
+      ],
+      expect: [
+        { sel: "dialog.fm-dialog h3", text: "Deletion blocked" },
+        { sel: "dialog.fm-dialog", text: "City Strategy Dashboard" },
+        { sel: ".fm-analysis-card", count: 1 },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Analytical Model" },
+      actions: [
+        { click: ".mh-flview__analysis-card [aria-label='Disable']" },
+        { wait: ".mh-confirm--confirm" },
+        { click: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
+        { waitMs: 300 },
+        { click: ".mh-flview__analysis-card [aria-label='Delete']" },
+        { wait: ".mh-confirm--info" },
+      ],
+      expect: [
+        { sel: ".mh-confirm--info .mh-modal__title", text: "Deletion blocked" },
+        { sel: ".mh-confirm--info", text: "City Strategy Dashboard" },
+        { sel: ".mh-flview__analysis-card", count: 1 },
+      ],
+    },
+  },
+  {
+    /* Email Reports: fm-email-card grid (send time, recipient chips, Data
+       Model); the third report is Disabled. The card drawer lists subject,
+       trigger, to/cc recipients, related report and last sent, and hides the
+       footer entirely. */
+    id: "p07-field-library-email-reports",
+    layout: [
+      { orig: "#fmLibrary .fm-email-card", story: ".mh-flview__email-card", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: "#fmLibrary .fm-email-recipient-tags", story: ".mh-flview__email-recipient-tags", props: ["x", "y"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Email%20Reports",
+      actions: [{ waitMs: 800 }, { click: ".fm-email-card[data-fm-id='email-report-campaign-alert']" }, { wait: ".fm-overlay:not([hidden])" }],
+      expect: [
+        { sel: ".fm-email-card", count: 3, text: "Weekly Marketing Performance" },
+        { sel: ".fm-email-card.is-disabled", text: "Monthly Customer Growth Review" },
+        { sel: "#fmLibrary .fm-filter summary", text: "All statuses" },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-head small", text: "Email Reports" },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer", text: "Noah Wang" },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-foot", state: "hidden" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Email Reports" },
+      actions: [{ click: ".mh-flview__email-card[data-id='email-report-campaign-alert']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      expect: [
+        { sel: ".mh-flview__email-card", count: 3, text: "Weekly Marketing Performance" },
+        { sel: ".mh-flview__email-card.is-disabled", text: "Monthly Customer Growth Review" },
+        { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All statuses" },
+        { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Email Reports" },
+        { sel: ".mh-modal--drawer", text: "Noah Wang" },
+        { sel: ".mh-modal--drawer .mh-modal__foot", state: "detached" },
+      ],
+    },
+  },
+  {
+    /* fm pagination + search on RC: 5/page splits the grid, search "4P"
+       collapses to one page. */
+    id: "p07-field-library-pagination",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Report%20Context",
+      actions: [
+        { waitMs: 800 },
+        { select: ["#fmLibrary .fm-pagination select", "5"] },
+        { waitMs: 200 },
+        { click: "#fmLibrary .fm-pagination [data-page='next']" },
+        { waitMs: 200 },
+        { fill: ["#fmLibrary .fm-search", "4P"] },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".fm-report-card", count: 1 },
+        { sel: ".fm-pagination", text: "1 / 1" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Report Context" },
+      actions: [
+        { select: [".mh-flview .mh-pagination__size select", "5"] },
+        { waitMs: 200 },
+        { click: ".mh-flview .mh-pagination__next" },
+        { waitMs: 200 },
+        { fill: [".mh-flview__search input[type='search']", "4P"] },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-flview__report-card", count: 1 },
+        { sel: ".mh-flview .mh-pagination", text: "1 / 1" },
+      ],
     },
   }
 ];

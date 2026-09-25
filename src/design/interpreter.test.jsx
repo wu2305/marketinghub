@@ -117,6 +117,14 @@ describe("AI Interpreter type contract", () => {
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
       }
+      // field-library.js swaps in #fmLibrary's per-type card grid.
+      if (type.view === "field-library") {
+        const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
+        const cards = document.querySelectorAll(".mh-flview__card");
+        expect(cards.length).toBe(expected.length);
+        expect(document.querySelector(".mh-asset")).toBeNull();
+        continue;
+      }
       const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
       const titles = rowTitles();
       expect(titles.length).toBe(expected.length);

@@ -30,6 +30,7 @@ export const Interpreter = {
       pageSize: 10,
       expanded: [],
     },
+    fieldLibrary: INTERPRETER.fieldLibrary,
   },
   argTypes: {
     activeType: {
@@ -52,6 +53,9 @@ export const Interpreter = {
     onAction: { action: "onAction" },
     onDialogConfirm: { action: "onDialogConfirm" },
     onDialogCancel: { action: "onDialogCancel" },
+    onDescriptionChange: { action: "onDescriptionChange" },
+    onDescriptionConfirm: { action: "onDescriptionConfirm" },
+    onDescriptionCancel: { action: "onDescriptionCancel" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
@@ -69,6 +73,7 @@ export const Interpreter = {
       filterValues: args.filterValues,
       principles: args.principles,
       businessTermLibrary: INTERPRETER.businessTermLibrary,
+      fieldLibrary: args.fieldLibrary,
       onNavigate: args.onNavigate,
       onQueryChange: args.onQueryChange,
       onFilterChange: args.onFilterChange,
@@ -84,6 +89,9 @@ export const Interpreter = {
       onAction: args.onAction,
       onDialogConfirm: args.onDialogConfirm,
       onDialogCancel: args.onDialogCancel,
+      onDescriptionChange: args.onDescriptionChange,
+      onDescriptionConfirm: args.onDescriptionConfirm,
+      onDescriptionCancel: args.onDescriptionCancel,
     });
     return <AiInterpreterPage {...args} activeType={activeType} {...demo} onSelectType={onSelectType} />;
   },
