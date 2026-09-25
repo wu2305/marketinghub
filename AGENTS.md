@@ -116,7 +116,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 3. 页面故事中的每个交互 props（tab、section、activeType、assistantOpen 等）至少各截一个非默认状态，与原始页面对应状态对照。
 4. 新增或修改的组件在 Controls 中切换全部枚举值，无报错、无布局崩坏。
 
-对照脚本落地为 `scripts/visual-check.mjs` 后，以脚本输出替代第 2、3 步的手工操作；脚本产出保存到 `/tmp`，不入库。
+对照脚本落地为 `scripts/visual-check.mjs` 后，以脚本输出替代第 2、3 步的手工操作；脚本产出和新建的临时探针脚本均保存到 `/tmp`，不入库。
 
 ## 5. 长期规划（2026-09-23 全量重建里程碑）
 
