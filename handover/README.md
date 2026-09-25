@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-25 WP4 PR #3 对抗审核通过：补齐解析器直接依赖，命名空间保留成员身份，导出解构明确拒绝；八种临时导出变异均被拦截。无 UI 改动，本次不扩大人工视觉结论。历史审核见 §2.5，其余缺口见 §4 |
+| 最新独立审核 | 2026-09-25 WP2 PR #4 对抗审核完成：保留原始动作门控差异，活动视图惰性派生与 typeId 载荷有回归测试，移除无使用者过渡组件，页壳文案完全注入；语义 token 预算取舍见 structural-review。局部截图未发现 WP2 新回归，不扩大整页人工结论 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 89 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 51、Pages 7）+ 57 docs；2026-09-25（b609c84 构建）index.json 实数。Atoms/Molecules/Organisms/Features 为逐组件 CSF（故事文件随组件目录，meta 声明 `component`），每组件一页 Docs |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），13 文件 108 条通过（2026-09-25 b609c84 实数） |
-| lint | `npm run lint`（eslint@10.11.0 flat config + eslint-plugin-react-hooks@7.1.1）：0 errors / 4 warnings（均为既有 exhaustive-deps 有意省略，见 R5(a) 条目），b609c84 |
-| 构建验证 | `npm run build-storybook`（经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；89 stories、57 docs）与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-wp4-integrate-host`），b609c84 工作区干净；CI 同一链路见下行 |
+| 故事数 | 87 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 49、Pages 7）+ 55 docs；2026-09-25（a8d53f1 构建）index.json 实数。按 AGENTS §4 例外删除三个无使用者故事并新增私有动作行故事，映射见 §5 |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），14 文件 114 条通过（2026-09-25 a8d53f1 实数） |
+| lint | `npm run lint`：0 errors / 4 既有 warnings，a8d53f1 |
+| 构建验证 | `npm run build-storybook` 87 stories/55 docs 与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-wp2-final-integrate-host`）；a8d53f1 工作区干净，源指纹构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-25（stamp b609c84，工作区干净）：全套 `node scripts/visual-check.mjs` 133/133 机器通过（`/tmp/mh-wp4-integrate-visual`），`--negative` 7/7 按预期失败（`/tmp/mh-wp4-integrate-negative`）；机器通过≠人工通过，本次 133 个场景人工 pending；历史人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；其余场景（含 Business Term、field-library 四类、Data Model、Scenario）人工 pending。Data Model 默认态目视：结构一致，域搜索框宽高（story 通栏 40px vs 原约 180×32px）与 tab/域卡纵向偏移 8–13px 属第二轮像素收敛 |
+| 最近视觉对照 | 2026-09-25（stamp a8d53f1，工作区干净）：全套配对 133/133 机器通过（`/tmp/mh-wp2-final-integrate-visual`），负向 7/7 按预期失败（`/tmp/mh-wp2-final-integrate-negative`）。机器通过≠人工通过，本次 133 场景人工 pending；历史人工与各类型状态只见 §2.2 P07。有限前后抽查 BT/Report Context/Data Model/Scenario 未见 WP2 新回归；既有 Data Model 域搜索框与纵向偏移等像素债仍待第二轮收敛 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -123,7 +123,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 **P07 knowledge.html** — 脚本 data/knowledge.js + knowledge-fields.js + workspace.js(2787L) + types.js(998L) + 内嵌 `#dataModelSources` JSON + data-model-browser.js(1447L) + principles-library + business-term-library + scenario-reports(1124L) + email-library + field-library(962L) + shared-controls + skill-menu；20+ CSS。
 - URL：`?type=<8 类>`、`?report=city&category=…&asset=…`、`?detail=`；storage `pendingRestorations`。`?status=changes-required|submitted` 链接存在于 `business-my-tasks` 容器内，但该容器 `hidden` + `display:none` 且无任何脚本读取 `status`——死标记，不列为可达状态。
 - 视图：overview（businessOverviewNav 8 类、hero stats、管理规则 `!` 提示）；八类型专用视图由后加载库渲染——Principles 卡片+类目筛选、Report Context 卡、Data Model 浏览器（域列表/图谱缩放/表抽屉/预览弹窗）、Metric 列表、Business Term 卡+多选筛选+分页、Analytical Model、Scenario 卡+分页+逐卡动作+详情、Email 10 列表；覆盖层：detailScrim 抽屉、editPanel（editAiReviewView/editApprovalView/footer）、versionPanel、createPanel（多步：表单→AI Review→Confirm Scope→Submit，含 data-model tabs、derived 公式构建器、Test）。
-- 现状：`pages--interpreter` 有 overview + 通用行表（过渡实现）+ Unknown 空态；八类专用视图与全部覆盖层未提取。
+- 组合契约：`pages--interpreter` 通过活动 `view` 注册分派和独立 `overlay` 插槽组合；八类型实现与人工审图状态只维护 §2.2 P07 行。上列历史覆盖层节点是盘点线索，未验证触发路径的部分仍待核实，不能直接认定为已实现或必建。
 - 组件候选：KnowledgeSidebar(有)、TypeCard(有)、OverviewHero、PrincipleCard+类目筛选、ReportContextCard、DataModelBrowser(域/图/抽屉/预览)、MetricList、BusinessTermCardGrid(多选筛选/分页/synonym clamp)、ScenarioCard+分页+Detail、EmailTable、DetailDrawer、EditPanel(AI review/approval)、VersionPanel、CreateWizard(按类型分步表单+AI Review+Confirm Scope)。
 
 **P08 knowledge-create.html** — 脚本 editor-runtime(1144L) + business-term-form + approach-form + analytical-model-form + scenario-report-form(724L) + report-context-form + create-navigation。
@@ -298,7 +298,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Interpreter 侧栏/卡片计数 | 侧栏条目与 TypeCard 显示 `typeMeta.stats.total`（3 models / 3 scenarios）；原 sidebar `countForType` 数 `demoAssets` 实数（1 model / 2 scenarios） | `AGENTS.md` 3.3：计数以 `typeMeta` 为准；`demoAssets` 与 `typeMeta` 冲突属原文自身不一致 | devin/interpreter-type-contract |
 | Interpreter 创建按钮文案 | 使用 `Add X`（`Add Business Term` / `Add Analytical Model` / `Add Scenario Reporting`）；通用 `types.js` 为 `Create X`，生效专用视图为 `Add X` | 以后加载的专用视图为准（业务覆盖规则）；原文 `Add Scenario reporting` 小写 r 属笔误，已规范化 | devin/interpreter-type-contract |
 | Interpreter 未知类型 | 原 `?type=` 非法值回退 `all` 显示概览；本实现改为显式 Unknown 空态，不渲染任何记录 | 防止非法类型意外展示全量记录的实现选择；用户并未禁止回退概览，此差异须在最终参照验收中重新评估 | devin/interpreter-type-contract |
-| Interpreter 列表形态 | 类型页为通用行表（Title/Type/Creator/Process/AI Status 双状态列）；原专用视图为卡片网格、专属列（Email 10 列、BT 同义词卡、Scenario 卡 + 分页 + 逐卡动作） | 本轮只修数据契约与动作入口；逐类型视图属阶段 C | devin/interpreter-type-contract |
+| ~~Interpreter 过渡列表形态~~ | 通用列表已由专用视图取代；WP2 删除无使用者过渡组件及故事，状态映射见 §5 | 此历史差异已消除，各类型审图状态见 §2.2 P07 | #4 |
 | Interpreter Hero | 选中类型时 Hero 标题/描述/统计切换为该类型（对齐原文逐类型 hero） | types.js 注释确认每类型有独立 hero statistics | devin/interpreter-type-contract |
 | Home 助手历史弹窗 | React 版 popover 含 × 关闭按钮；原始 `#homeHistoryPopup` 无关闭按钮（CSS 为死代码）。锚定已按原始复刻：home 位于按钮左侧顶对齐，非 home 面板 `right:66px` 锚于 actions 容器 | × 仅为可达性便利 | devin/interpreter-type-contract |
 | ~~Modal 表单值（撤销豁免）~~ | ~~Campaign Object 输入→Cancel→重开：原始保留输入，React 恢复 `341 plans`~~ 已修复（批 C）：`CampaignPage` 持有任务草稿（`taskDraft`/`onTaskDraftChange` 可控），Cancel/×/scrim/Escape/Submit 后重开均保留 | 原生 `<dialog>` 不重置表单；场景 p06-campaign-task-draft 双侧通过 | devin/structural-repair |
@@ -322,12 +322,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
-2026-09-25 P07(b)/(c)（d8da807）遗留：
-- **token 债**：`DataModelView.css` 82 处、`ScenarioReportsView.css` 47 处裸十六进制（仅替换了与语义 token 同值的 10 处）。刻意没有新增组件前缀别名，留给 design-system-cleanup P2 token 收敛（语义调色板）一次处理；组件 CSS 裸十六进制总数因此由 183 升至 312。
-- **重复**：edit/delete/disable 图标动作（图标路径与可用性规则）在 BusinessTermView、FieldLibraryView、ScenarioReportsView 及各自 demo 中三处实现；Scenario 自带状态 pill 而非 StatusBadge。
-- **耦合**：`AiInterpreterPage` 读取 `views["field-library"].peek` 并自行渲染 `FieldLibraryDrawer`；`useInterpreterDemo` 把同一组回调扇出给每个类型 hook。
-- **零使用者**：八类型全部注册后 `KnowledgeLibrary`/`LibraryToolbar`/`AssetRow` 只在宿主传入无 `view` 的类型时才会渲染，内置内容中已无使用者，按 AGENTS §3.4 待删或收回。
-- **公共入口**：`index.js` 新增演示层导出 `DATA_MODEL_DOMAINS`、`dataModelFieldFormat`、`normalizeScenarioRecord`。
+2026-09-25 WP2 后 P07 剩余事项（类型状态只维护 §2.2 P07）：
+- **状态显示保留差异**：BT/Field 共用 `StatusBadge` knowledge；Scenario 卡片无圆点 76×20、流程状态 24px/999px，抽屉有圆点可用性与流程状态为 22px，保持私有组合。来源：`assets/css/knowledge/ai-interpreter-overview.css:2809–2840,1113–1144`、`assets/css/knowledge/shared-controls.css:441–468,484–501`；为单页差异扩展公共组件的形状/圆点/阶段组合不符合最小抽象。
+- **公共入口**：既有演示层导出保留至 M7 R5(b)，WP4 守卫禁止增加；包含 `DATA_MODEL_DOMAINS`、`dataModelFieldFormat`、`normalizeScenarioRecord`。
+- FL/DM/SR 裸色、管理动作/确认重复、页面 peek 耦合与无使用者过渡组件已在 WP2 消除；全库其余 token 清理仍按预算棘轮和 cleanup P2 继续。
 
 2026-09-25 第二轮对抗审查（1dd1d7d）：`handover/structural-review.md` “第二轮对抗审查”一节，R1–R11。要点：S1 仍未合入 main，而全部提示词从 main 开分支（R1，阻断）；**P03 Self-Service 与 P07 AI Interpreter 的助手面板未重建**——原始 flexible.html/knowledge.html 有完整 `#assistantPanel`（self-service/workspace.js:554、knowledge/workspace.js:2682），React launcher 仅发 `onNavigate({id:"assistant"})`（R2，可达状态缺口）；助手预设开关由调用方重复传入（R3）；Interpreter 列表筛选三种所有权（R4）；公共入口导出演示层、Pagination 越层死 import、无 lint/边界检测（R5）；导航绑定原始 Demo URL 空间（R6，待用户定方案）；visual-check 配置与页面故事单文件为并行冲突热点（R7）；tokens.css reset 命中插槽内容（R8）；本文件 §1 状态表自相矛盾（R9）；features 故事仍标为 Organisms（R10）；结构整改队列推迟覆盖，建议改为只前置 R1/R7/S8+R4/R6（R11，待用户决定）。
 
@@ -470,3 +468,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-25 | WP4 PR #3（https://github.com/wu2305/marketinghub/pull/3）集成：候选 b609c84 rebase origin/main bcce895 后，干净工作区通过 lint 0 errors/4 warnings、13 文件 108 测试、89 stories/57 docs、host 7/7、visual 133/133、negative 7/7 预期失败（/tmp/mh-wp4-integrate-*）。对抗审核修复直接依赖声明与 namespace/destructuring 漏检；冻结 47 个公共演示导出身份，删除允许，新增失败，保持至 M7 R5(b)。未改 UI，无新增人工通过结论。 | Codex integrator |
 | 2026-09-25 | WP2 P07 收口：`demo/knowledge-actions.js` 统一三类知识管理门控并保留 BT Draft、Field Library 点击后引用阻断及按钮禁用语义差异；私有 `KnowledgeActions`、共享确认 hook、`StatusBadge` knowledge 变体；`useInterpreterDemo` 只派生活动视图及打开的 Report Context overlay，所有宿主回调带 `typeId`，Data Model 相关报表抽屉保留。删除过渡 `KnowledgeLibrary`/`LibraryToolbar`/`AssetRow`、通用筛选及零使用者元数据。**删除 story id**：`features-interpreter-knowledge-library--default`→`pages--interpreter` 八类专用视图；`features-interpreter-library-toolbar--default`→`features-interpreter-business-term-view--default`/`features-interpreter-field-library-view--report-context`/`features-interpreter-scenario-reports-view--default`；`features-interpreter-asset-row--default`→`pages--interpreter` 专用卡片。FL/DM/SR CSS 十六进制与 52 个 `--mh-fl-*` 清零；对 origin/main 8f45c9d 的定义 397→456（净 +59），68 个新增取值均来自原 CSS，移除 7 个授权零用 token，精确映射 `/tmp/mh-wp2-token-audit.json`。按用户委托对原 CSS 既有精确色值作一次性 definition 上限调整，不跨语义角色强并：WP1 guard 快照裸色 310→148、定义 397→456、同值组 47→42、旧前缀豁免 316→256。设计源码验证基线 `3001cc1`（tracked 工作区干净）：lint 0 error/既有 4 warnings、112/112 测试、Storybook 87 stories/55 docs、宿主 7/7（`/tmp/mh-wp2-integrated-host`）、全站配对 133/133（P07 40/40；`/tmp/mh-wp2-integrated-visual`）、负向变异 7/7 按预期失败（`/tmp/mh-wp2-integrated-negative`）；StatusBadge 两变体和 KnowledgeActions 三变体的 Controls 均实际渲染通过。人工抽看 Data Model 默认/相关报表抽屉及 Analytical Model 默认/删除阻断，无新 WP2 偏差；P07 非 overview/Principles 全量人工结论仍 pending。 | Codex WP2 |
 | 2026-09-25 | WP2 合并前对抗复核补齐页壳文案注入：统计、管理提示、未知类型和助手标签通过 INTERPRETER.copy 传入，宿主可替换格式化文案；默认视觉不变。新增替换文案测试，定向 15/15 与 lint 0 errors/4 既有 warnings 通过；最终全套验证待集成者执行。 | Codex integrator |
+| 2026-09-25 | WP2 PR #4（https://github.com/wu2305/marketinghub/pull/4）合并为 1d39a5d；最终候选 a8d53f1 已 rebase origin/main 后通过 lint 0 errors/4 warnings、14 文件 114 测试、87 stories/55 docs、host 7/7、visual 133/133、negative 7/7（/tmp/mh-wp2-final-integrate-*）。对抗审核补齐活动视图惰性派生、Controls 和页壳替换文案测试；原始规则差异保留：business-term-library.js:108–126（Draft/aria-disabled 提示）、field-library.js:96–107,702–710（native disabled/引用删除阻断）、scenario-reports.js:191–211,1019–1079（原有门控及确认，无新增引用规则）。详情见 PR 与本节前述映射。用户委托一次性 token cap 取舍：裸色 310→148、定义 397→456、重复值组 47→42、前缀豁免 316→256；限原有精确色值，之后继续棘轮。局部配对图已看，整页人工审图不扩大。 | Codex integrator |
