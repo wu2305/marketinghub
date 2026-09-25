@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 S2 PR #5 对抗审核完成：初始嵌套/StrictMode、隐藏控件、独立根、跨文档、底层卸载均有回归；实际 Chromium 证明可见顶层与键盘目标一致、隐藏启动按钮的双实例焦点正确还原。全页人工审图仍 pending |
+| 最新独立审核 | 2026-09-26 S3/R3/O5 PR #6 对抗审核完成：共享外壳保留真实 feed/composer 差异，历史载荷与真实启动按钮重开行为已核，八个枚举状态浏览器无错误；全页人工审图仍 pending |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 87 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 49、Pages 7）+ 55 docs；2026-09-25（9816ba0 构建）index.json 实数；本包未增删 story id，WP2 删除映射见 §5 |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），14 文件 131 条通过（2026-09-25 9816ba0 实数） |
-| lint | `npm run lint`：0 errors / 0 warnings，9816ba0 |
-| 构建验证 | `npm run build-storybook` 87 stories/55 docs 与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-wp3-s2-integrate-host`）；9816ba0 工作区干净，源指纹构建戳匹配 |
+| 故事数 | 87 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 49、Pages 7）+ 55 docs；2026-09-26 7085890 构建 index.json 实数；本包无 story id 增删 |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），15 文件 139 条通过（2026-09-26 7085890 实数） |
+| lint | `npm run lint`：0 errors / 0 warnings，7085890 |
+| 构建验证 | `npm run build-storybook` 87 stories/55 docs 与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-wp3-s3-integrate-host`）；7085890 rebase origin/main 后工作区干净，源指纹构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-25（stamp 9816ba0，工作区干净）：配对 133/133 机器通过（`/tmp/mh-wp3-s2-integrate-visual`），负向 7/7 按预期失败（`/tmp/mh-wp3-s2-integrate-negative`）。机器通过≠人工通过，本次 133 场景人工 pending；P07 类型审图只见 §2.2。S2 局部覆盖层几何/chrome 已抽看，未扩大整页人工结论 |
+| 最近视觉对照 | 2026-09-26（stamp 7085890，工作区干净）：配对 133/133 机器通过（`/tmp/mh-wp3-s3-integrate-visual`），负向 7/7 按预期失败（`/tmp/mh-wp3-s3-integrate-negative`）。全页人工 133 pending，P07 类型状态只见 §2.2；S3 助手/开放历史局部几何与 S2 对照稳定，不能扩大为全页人工通过 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -45,7 +45,7 @@ npm test               # vitest 行为测试
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 
-| M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 进行中（候选待独立验收） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR 待创建，证据见 §5 |
+| M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -323,8 +323,11 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | A2 Campaign reopen, `assets/js/campaign/workspace.js:279–284`; Home `assets/js/shared/portal.js:588–596`; lite `assets/js/shared/assistant-panel-lite.js:44–48` | 原始：Campaign close hides panel but retains expansion; Home/lite reset it. React：AssistantPanel consistently reopens at drawer size; p06-assistant-expand-reset. | Inconsistent state quirk listed in A2. | #2 |
 | A2 Copilot View more, `assets/js/reports/report-core.js:4498–4508` | 原始：Second click returns before stopPropagation and collapses parent. React：Second click leaves recommendations expanded; p02-copilot-more. | Source explicitly specifies one-way expansion. | #2 |
 | S2 嵌套助手/ModelFlow Escape | 原始打开流程后一次 Escape 留下流程、关闭下层助手；React 先关闭顶层 ModelFlow，保持助手焦点与滚动锁，第二次关闭助手并回到该实例的启动按钮。 | 用户要求统一层栈。源码 `assets/js/shared/assistant-skill-menu.js:470–506,846–855` 与 `assets/js/shared/portal.js:846–850`；原始/React Chromium 证据 `/tmp/mh-wp3-s2-original-escape.json`、`/tmp/wp3s2home-browser.json`，双根绘制层级与双启动按钮证据 `/tmp/wp3s2paint-browser.json`。 | #5 |
+| S3 助手历史与隐藏控件 | 共用真实头部/历史/覆盖层行为，保留各自答案与输入结构。历史点击边界限于按钮和弹层，关闭后重开复位；移除实际被 CSS 隐藏的 Scope/picker 与无消费者 body class。 | 原始 report-core.js:2222–2225,3365–3388；assistant-panel.css:495–500,795–813。实际启动按钮重开证据 `/tmp/mh-s3-root-history.json`；不为不可达隐藏状态增设配置。现有 page stories 保留，没有删除可达状态。 | #6 |
 
 ## 4. 已知缺口
+
+2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2 的 P03/P07 助手覆盖与其他页面流程仍需推进。
 
 2026-09-25 WP2 后 P07 剩余事项（类型状态只维护 §2.2 P07）：
 - **状态显示保留差异**：BT/Field 共用 `StatusBadge` knowledge；Scenario 卡片无圆点 76×20、流程状态 24px/999px，抽屉有圆点可用性与流程状态为 22px，保持私有组合。来源：`assets/css/knowledge/ai-interpreter-overview.css:2809–2840,1113–1144`、`assets/css/knowledge/shared-controls.css:441–468,484–501`；为单页差异扩展公共组件的形状/圆点/阶段组合不符合最小抽象。
@@ -475,3 +478,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-25 | S2（`wp3/s2-overlay-stack`）：`useOverlayLayer` 按 document 管理栈顶 Escape/Tab 焦点环/滚动锁/焦点还原；同任务初开按包含关系→原 CSS z-index→DOM 顺序，后开层优先并同步可见绘制顺序。Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog、DataModelView 表详情共用此生命周期，保留原有不同外壳 DOM/CSS；AssistantLauncher ref 解决隐藏按钮关闭后焦点丢失，SkillMenu 文档监听限定 ownerDocument。ModelFlow 原页 Escape 关助手却留下模型弹窗（源码行号与浏览器证据见 `/tmp/mh-wp3-s2-ledger.md`），React 首次只关模型流、再次关助手。验证：lint 0/0、14 文件 131 测试、Storybook 87 stories/55 docs、宿主 7/7（`/tmp/mh-wp3-s2-host`）、配对 133/133 机器通过（`/tmp/mh-wp3-s2-visual-final`）、负向 7/7 按预期失败（`/tmp/mh-wp3-s2-negative-final`）；Chromium 双 root 混合 z-index/两启动按钮焦点见 `/tmp/wp3s2paint-browser.json`，P02 模型流及 P07 表详情仅局部审图，整页人工仍 pending。 | Codex WP3 |
 | 2026-09-26 | S2 PR #5（https://github.com/wu2305/marketinghub/pull/5）合并为 e76fedd；候选 9816ba0 rebase origin/main 后干净工作区通过 lint 0 errors/0 warnings、14 文件 131 测试、87 stories/55 docs、host 7/7、visual 133/133、negative 7/7（/tmp/mh-wp3-s2-integrate-*）。八处覆盖层共享生命周期 hook，保留真实外壳；对抗复核补齐初始同时打开/StrictMode、隐藏祖先、跨根绘制顺序、底层卸载、跨文档和真实隐藏启动按钮焦点恢复。浏览器证据与源行为差异见 §3；整页人工结论仍 pending。 | Codex integrator |
 | 2026-09-26 | S3 + R3 + O5 候选：AssistantShell 私有共享头部、四动作、历史与覆盖层行为；AssistantPanel 保留问答 feed/composer，ReportCopilot 保留报表上下文/推荐/流式 feed/composer，外层 DOM 由调用方组合。来源 portal.js:577–596,777–834、assistant-panel-lite.js:20–57,121–132、campaign/workspace.js:266–387,434–440、reports/report-core.js:2166–2225。assistantVariants=home/cockpit/campaign/lite，assistantAnswerVariants=default/compact/workspace/simple；页面内部选预设，宿主不传旧布尔开关。assistant-panel.css:495–500,795–813 明确隐藏 Home/非 Home Scope 与 picker，删除无可达使用者 ScopeOption/CSS（无独立故事被删）；撤掉无 CSS/JS 消费者的 ai-workspace-expanded 全局 body class。Panel 历史回调保持 {label,prompt}，Copilot 保持原 item。统一 button+popup 内部点击范围，原报告脚本 :2222–2225 与 :3365–3388 证明真实启动按钮重开前历史关闭；无额外隐藏状态配置。对抗证据 /tmp/mh-s3-root-history.json；预审43配对/8枚举浏览器检查及开放历史截图见 /tmp/mh-wp3-s3-{assistant-preview,copilot-preview,controls,host-preview}，41/43截图与S2逐字节一致，其余两张Escape背景抽看稳定。这些是修前/脏工作区定位证据，最终干净提交全套数由 integrator 在合并后登记；全页人工仍 pending。 | Codex WP3 + integrator |
+| 2026-09-26 | S3/R3/O5 PR #6（https://github.com/wu2305/marketinghub/pull/6）合并为 442af01；最终候选 7085890 rebase origin/main 后由 integrator 在干净工作区完成 lint 0/0、15 文件139测试、87 stories/55 docs、host7/7、visual133/133、negative7/7；证据 /tmp/mh-wp3-s3-integrate-*，CI 同提交通过。源码/浏览器对抗项见本包上行；WP2+WP3 串行门槛现已满足，可启动 WP6 R2，随后P12–P17；P08/P09/P10/P11独立推进。 | Codex integrator |

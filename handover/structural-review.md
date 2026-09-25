@@ -44,7 +44,7 @@
   - 方向：写一个 `useOverlayLayer({ open, onClose, layerRef, trapFocus })`。它维护全局层栈，只有栈顶响应 Escape；统一处理滚动锁、焦点进入、焦点环和焦点还原。
   - 7 个覆盖层全部改用它。ReportDetailsDrawer、ReportCopilot、AssistantPanel 的抽屉外壳改为组合 `Modal variant="drawer"`，或改为一个共享的 `OverlaySurface`。
 
-- [ ] **S3 两套助手实现同一个概念，违反奥卡姆剃刀**
+- [x] **S3 两套助手实现同一个概念，违反奥卡姆剃刀**（PR #6，442af01；对抗审核与全套验证见 README §1/§5）
   - 现状：AssistantPanel 和 ReportCopilot 各自实现了抽屉外壳、头部动作（History / New Session / Maximize / Close）、历史弹层、composer、答案卡反馈、技能菜单入口。
   - 方向：提取私有的 `AssistantShell`（外壳 + 头部动作 + 历史弹层 + composer 插槽）。两个导出组件只保留各自真实不同的内容渲染：答案 feed，或 summary / scenario / holistic 流。
   - 保持导出名和 props 不变。以 visual-check 的 p01、p02-copilot、p05、p06 助手场景全部复跑作为验收。
@@ -322,7 +322,7 @@ S5：
   - 这违反 AGENTS.md §5 共同完成标准 1，且 handover §4 与有意差异表都未记录。同页全盘点：原始有 launcher+panel 的页面是 index、reports、flexible、knowledge、campaign、feedback-quality；其余页若有助手，由 `assistant-panel-lite.js` 动态注入（P05 已按此重建），P12–P17 盘点时须按同一口径核实。
   - 处理：作为 M3（P03）与 M4（P07）各一个条目补建，复用 `AssistantPanel`，状态进 demo hook（与 S4 一致）。
 
-- [ ] **R3 页面助手预设的归属不一致，宿主被迫知道原始 quirk 开关**（并入 S3/S4）
+- [x] **R3 页面助手预设的归属不一致，宿主被迫知道原始 quirk 开关**（PR #6，442af01；对抗审核与全套验证见 README §1/§5）（并入 S3/S4）
   - Home、Campaign、MediaTracking 在页面组件内部写死 `showPicks={false}`、`enterToSubmit={false}`；Cockpit 却要求调用方通过 `assistant` 传入 `showScopes:false, showPicks:false, hideStageOnAnswers:true, enterToSubmit:false`，`src/design/pages.stories.jsx:92` 与 `examples/host/main.jsx:191` 逐字重复这一行。
   - 后果：新宿主必须抄写这些行为开关才能得到正确的 Cockpit 助手，这正是 AGENTS.md §1“只 import 组件即可搭页面”要避免的。
   - 处理：页面自己知道自己是哪种助手，预设放在页面组件内（或其 demo hook 的默认值），调用方只传内容；验收时宿主与故事中不再出现上述开关名。
@@ -536,7 +536,7 @@ R5(a)：
   - `WorkspaceGrid`（`features/home/WorkspaceGrid`，21 行）：只包一层 grid `div` 并把 props 原样转给 `WorkspaceCard`，唯一使用者是 HomePage。并入 HomePage（grid 样式移入 HomePage.css），删除其故事与导出。
   - `TypeGrid` 有计数格式化与选中态计算，而且是 S8 注册表里的 overview 视图，保留。`ProjectCatalog` 有分组逻辑，保留。
 
-- [ ] **O5 AssistantPanel 的布尔开关合并为变体**（并入 S3，与 R3 一起做）
+- [x] **O5 AssistantPanel 的布尔开关合并为变体**（PR #6，442af01；对抗审核与全套验证见 README §1/§5）（并入 S3，与 R3 一起做）
   - `showScopes`、`showPicks`、`enterToSubmit`、`hideStageOnAnswers`、`lite` 五个布尔开关实际只出现 4 种组合，每种对应一个页面：Home（`showPicks=false`）、Cockpit 目录（四项全关/开 hideStage）、Campaign（`enterToSubmit=false`、`showPicks=false`）、MediaTracking（`lite` + 同类）。改为一个导出枚举 `assistantVariants` 并在 argTypes 引用；页面只传 `variant`。
   - 答案卡的渲染形态用两个不同字段区分（`answer.variant: "compact"|"workspace"` 与 `answer.simple: true`，见 `content.js:216/228/1702`），合并为一个 `answer.variant` 枚举（`default`/`compact`/`workspace`/`simple`）。
   - `submitDisabled` 由 A2 删除（缺陷复刻），不在本条处理。
@@ -577,7 +577,7 @@ R5(a)：
 - [x] **WP2 P07 closeout**（PR #4，1d39a5d；对抗审核与最终全套验证见 README §1/§5）：管理动作/状态/确认流程共性；active-view 注册契约和 overlay slot；删除无使用者过渡组件；fl/dm/sr 语义 token；P07 八类状态只维护 §2.2。
 - [x] **WP3.1 A2**（PR #2；对抗审核及全套验证通过，实数见 README §1/§5）：参照物逻辑缺陷退出组件，demo 层按需重现。
 - [x] **WP3.2 S2**（PR #5，e76fedd；对抗审核和全套验证见 README §1/§5）：统一覆盖层栈、Escape 与焦点环。
-- [ ] **WP3.3 S3 + R3 + O5**：共用助手外壳、页面预设与变体枚举、答案变体收敛。
+- [x] **WP3.3 S3 + R3 + O5**（PR #6，442af01；对抗审核与全套验证见 README §1/§5）：共用助手外壳、页面预设与变体枚举、答案变体收敛。
 - [x] **WP4 export-surface guard**（PR #3；对抗审核及全套验证通过，实数见 README §1/§5）：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
 - [ ] **WP5 P08**：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
 - [ ] **P09 / P10 / P11**：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
