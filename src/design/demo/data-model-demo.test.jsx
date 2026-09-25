@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useDataModelDemo } from "./data-model-demo.js";
+import { useDataModelDemo, dataModelFieldFormat } from "./data-model-demo.js";
 import { DataModelView } from "../features/interpreter/DataModelView/index.jsx";
 
 function Harness(props) {
@@ -29,6 +29,40 @@ describe("useDataModelDemo + DataModelView", () => {
     fireEvent.change(screen.getByLabelText("Search data model"), { target: { value: "growth" } });
     expect(domainCards().length).toBe(0);
     expect(screen.getByText("No matching data models.")).toBeTruthy();
+  });
+
+  it("moves to the first filtered domain and keeps it after clearing search", () => {
+    render(<Harness selectedDomainId="business-data" />);
+    const input = screen.getByLabelText("Search data model");
+    fireEvent.change(input, { target: { value: "ABO" } });
+    expect(domainCards()).toHaveLength(1);
+    expect(domainCards()[0].getAttribute("aria-selected")).toBe("true");
+    expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+    fireEvent.change(input, { target: { value: "NO_SUCH_MODEL_123" } });
+    expect(domainCards()).toHaveLength(0);
+    expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+    fireEvent.change(input, { target: { value: "" } });
+    expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+  });
+
+  it("keeps an initially filtered domain selected when search is cleared", () => {
+    for (const selectedDomainId of [undefined, "business-data"]) {
+      const { unmount } = render(<Harness query="ABO" selectedDomainId={selectedDomainId} />);
+      expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+      fireEvent.change(screen.getByLabelText("Search data model"), { target: { value: "NO_SUCH_MODEL_123" } });
+      expect(domainCards()).toHaveLength(0);
+      expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+      fireEvent.change(screen.getByLabelText("Search data model"), { target: { value: "" } });
+      expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
+      expect(domainCards()[1].getAttribute("aria-selected")).toBe("true");
+      unmount();
+    }
+  });
+
+  it("formats source measure types exactly in graph nodes", () => {
+    expect(dataModelFieldFormat({ field: "sales_amount", fieldType: "Measure", unit: "CNY" })).toBe("decimal(12,2)");
+    expect(dataModelFieldFormat({ field: "quantity", fieldType: "Measure", unit: "Count" })).toBe("bigint");
+    expect(dataModelFieldFormat({ field: "conversion_rate", fieldType: "Measure", unit: "%" })).toBe("decimal(8,2)");
   });
 
   it("switches domains and resets to the basic tab", () => {

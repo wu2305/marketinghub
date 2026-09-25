@@ -422,6 +422,37 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P11: standalone Data Model, normalized URL and live browser ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}data-model?foo=kept&type=Other`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".mh-dmview__domain", { timeout: 10000 });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  const current = new URL(page.url());
+  if (current.searchParams.get("type") !== "Data Model" || current.searchParams.get("foo") !== "kept") notes.push(`type normalization lost parameters: ${current.search}`);
+  if ((await page.locator(".mh-dmview__domain").count()) !== 3) notes.push("expected three visible domains");
+  await page.locator(".mh-dmview__domain").nth(1).click();
+  if (!(await page.locator(".mh-dmview__basic-name strong").innerText()).includes("DC Media Performance")) notes.push("selected domain not reflected in Basic card");
+  await page.locator(".mh-dmview__search input").fill("NO_SUCH_MODEL_123");
+  if (!(await page.locator(".mh-dmview__empty").innerText()).includes("No matching")) notes.push("empty search not rendered");
+  await page.locator(".mh-dmview__search input").fill("");
+  await page.locator(".mh-dmview__report").first().click();
+  if (await page.locator(".mh-dmview__dialog").count()) notes.push("standalone related report invented a drawer");
+  await page.locator(".mh-dmview__tab:has-text('Relationship graph')").click();
+  await page.locator(".mh-dmview__node.is-fact").first().click();
+  if (!(await page.locator(".mh-dmview__dialog").innerText()).includes("Finance Margin Fact")) notes.push("fact table dialog missing");
+  await page.locator(".mh-dmview__dialog-tab:has-text('Data Preview')").click();
+  if ((await page.locator(".mh-dmview__dialog tbody tr").count()) !== 10) notes.push("preview row count mismatch");
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-dmview__dialog").count()) notes.push("Escape did not close table detail");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Data Model route reloaded host");
+  await page.screenshot({ path: path.join(OUT, "p11-data-model.png"), fullPage: true });
+  notes.push(...errors);
+  record("p11-data-model", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 

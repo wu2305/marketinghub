@@ -46,7 +46,8 @@ export function dataModelFieldFormat(field) {
   if (field.fieldType === "Identifier" || /_id$|id$/.test(key)) return "bigint";
   if (field.fieldType === "Measure") {
     if (field.unit === "%") return "decimal(8,2)";
-    return "decimal(16,2)";
+    if (field.unit === "CNY") return "decimal(12,2)";
+    return "bigint";
   }
   return "varchar(64)";
 }
@@ -64,7 +65,13 @@ const GRAPH_WIDTH = 1200;
 const GRAPH_HEIGHT = 920;
 const PREVIEW_ROWS = 10;
 
-const DEFAULT_STRINGS = {
+const matchesDomain = (domain, queryText) =>
+  [domain.name, domain.description, domain.businessDescription, (domain.synonyms || []).join(" ")]
+    .join(" ")
+    .toLowerCase()
+    .includes(queryText);
+
+export const DATA_MODEL_STRINGS = {
   searchLabel: "Search data model",
   searchPlaceholder: "Search data model",
   basicTab: "Basic information",
@@ -114,7 +121,7 @@ const DEFAULT_STRINGS = {
  * @param {(tab: string) => void} [props.onDrawerTab]
  */
 export function useDataModelDemo(props = {}) {
-  const strings = { ...DEFAULT_STRINGS, ...(props.strings || {}) };
+  const strings = { ...DATA_MODEL_STRINGS, ...(props.strings || {}) };
   const domains = React.useMemo(
     () => props.active === false ? [] : (props.domains || DATA_MODEL_DOMAINS).filter((domain) => !domain.hidden),
     [props.domains, props.active],
@@ -154,17 +161,11 @@ export function useDataModelDemo(props = {}) {
   if (props.active === false) return null;
 
   const queryText = query.trim().toLowerCase();
-  const visibleDomains = queryText
-    ? domains.filter((domain) =>
-        [domain.name, domain.description, domain.businessDescription, (domain.synonyms || []).join(" ")]
-          .join(" ")
-          .toLowerCase()
-          .includes(queryText),
-      )
-    : domains;
+  const visibleDomains = queryText ? domains.filter((domain) => matchesDomain(domain, queryText)) : domains;
 
   const domain =
-    domains.find((item) => item.id === selectedDomainId) || visibleDomains[0] || domains[0] || null;
+    visibleDomains.find((item) => item.id === selectedDomainId) || visibleDomains[0] ||
+    domains.find((item) => item.id === selectedDomainId) || domains[0] || null;
   const table =
     (domain?.tables || []).find((item) => item.id === tableId) || null;
   const drawerTable = tableId ? table || domain?.tables?.[0] || null : null;
@@ -207,6 +208,13 @@ export function useDataModelDemo(props = {}) {
     onQueryChange: (value) => {
       const next = typeof value === "string" ? value : value?.value || "";
       setQuery(next);
+      const nextText = next.trim().toLowerCase();
+      const matches = nextText ? domains.filter((item) => matchesDomain(item, nextText)) : domains;
+      setSelectedDomainId((current) => {
+        const effectiveId = visibleDomains.some((item) => item.id === current) ? current : domain?.id;
+        if (!matches.length) return effectiveId;
+        return matches.some((item) => item.id === effectiveId) ? effectiveId : matches[0].id;
+      });
       props.onQueryChange?.({ value: next });
     },
     onSelectDomain: selectDomain,

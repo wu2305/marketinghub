@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
-| P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 未开始 |
+| P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，待最终全套验证；复用 DataModelView 与 demo hook，8 个页面状态故事及 15 个定向配对已通过，人工整页 pending |
 | P12 | assets/pages/review-center.html | 审核列表、筛选、详情、决策反馈等实际状态 | M6 | 未开始 |
 | P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 未开始 |
 | P14 | assets/pages/personal-memory.html | 记忆列表与管理状态 | M6 | 未开始 |
@@ -144,7 +144,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 **P11 data-model.html** — 脚本 inline-1(7L) + data-model-browser.js；无 assistant/skill-menu。
 - 行为：`?type` 缺省时 inline-1 执行 `location.replace` 重定向到 `data-model.html?type=Data%20Model`——URL 重写须登记为可达行为。
 - 视图：独立 Data Model 浏览器（#dataModelOverview + businessKnowledgeLibrary 容器全由 JS 渲染）。
-- 现状：无故事。与 P07 内嵌浏览器同组件。
+- 现状：DataModelPage 复用 P07 DataModelView/useDataModelDemo；8 个页面故事覆盖默认、域切换、搜索命中/空态、关系图、Fact/Dimension 字段和预览。URL 规范化保留其他参数，相关报表仅派发事件（独立页无监听者）；缩放/适配/拖动及关闭/Escape 有配对动作断言，隐藏 library/tasks 不建故事。
 
 **P12 review-center.html** — 脚本 data/reviews.js + governance/review.js + lite panel + skill-menu。
 - 视图：pending/approved tabs+计数、search/type/time 筛选、reviewAssetList、详情面板（AI check/suggestions/warning/source/submitter）、Approve→riskModal(Approve Anyway)、Reject→rejectPanel(reason)；storage pendingRestorations 与 P07 联动。
@@ -479,3 +479,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | S2 PR #5（https://github.com/wu2305/marketinghub/pull/5）合并为 e76fedd；候选 9816ba0 rebase origin/main 后干净工作区通过 lint 0 errors/0 warnings、14 文件 131 测试、87 stories/55 docs、host 7/7、visual 133/133、negative 7/7（/tmp/mh-wp3-s2-integrate-*）。八处覆盖层共享生命周期 hook，保留真实外壳；对抗复核补齐初始同时打开/StrictMode、隐藏祖先、跨根绘制顺序、底层卸载、跨文档和真实隐藏启动按钮焦点恢复。浏览器证据与源行为差异见 §3；整页人工结论仍 pending。 | Codex integrator |
 | 2026-09-26 | S3 + R3 + O5 候选：AssistantShell 私有共享头部、四动作、历史与覆盖层行为；AssistantPanel 保留问答 feed/composer，ReportCopilot 保留报表上下文/推荐/流式 feed/composer，外层 DOM 由调用方组合。来源 portal.js:577–596,777–834、assistant-panel-lite.js:20–57,121–132、campaign/workspace.js:266–387,434–440、reports/report-core.js:2166–2225。assistantVariants=home/cockpit/campaign/lite，assistantAnswerVariants=default/compact/workspace/simple；页面内部选预设，宿主不传旧布尔开关。assistant-panel.css:495–500,795–813 明确隐藏 Home/非 Home Scope 与 picker，删除无可达使用者 ScopeOption/CSS（无独立故事被删）；撤掉无 CSS/JS 消费者的 ai-workspace-expanded 全局 body class。Panel 历史回调保持 {label,prompt}，Copilot 保持原 item。统一 button+popup 内部点击范围，原报告脚本 :2222–2225 与 :3365–3388 证明真实启动按钮重开前历史关闭；无额外隐藏状态配置。对抗证据 /tmp/mh-s3-root-history.json；预审43配对/8枚举浏览器检查及开放历史截图见 /tmp/mh-wp3-s3-{assistant-preview,copilot-preview,controls,host-preview}，41/43截图与S2逐字节一致，其余两张Escape背景抽看稳定。这些是修前/脏工作区定位证据，最终干净提交全套数由 integrator 在合并后登记；全页人工仍 pending。 | Codex WP3 + integrator |
 | 2026-09-26 | S3/R3/O5 PR #6（https://github.com/wu2305/marketinghub/pull/6）合并为 442af01；最终候选 7085890 rebase origin/main 后由 integrator 在干净工作区完成 lint 0/0、15 文件139测试、87 stories/55 docs、host7/7、visual133/133、negative7/7；证据 /tmp/mh-wp3-s3-integrate-*，CI 同提交通过。源码/浏览器对抗项见本包上行；WP2+WP3 串行门槛现已满足，可启动 WP6 R2，随后P12–P17；P08/P09/P10/P11独立推进。 | Codex integrator |
+
+| 2026-09-26 | P11 独立 Data Model 页候选：复用 DataModelView/useDataModelDemo 与既有数据；修正搜索命中后、空结果及清空的域选择保持，Measure 类型格式对齐 data-model-browser.js:995–1005。8 个页面故事，15/15 定向配对通过（/tmp/mh-p11-preview，脏工作区定位证据，非最终验收）；zoom/fit/pan 断言真实变换。最终全套与人工结论由 integrator 登记。 | Codex P11 + integrator |

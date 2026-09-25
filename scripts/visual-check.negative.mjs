@@ -59,6 +59,18 @@ export default [
     reason: "default Monthly tab must not satisfy Daily active-tab assertion",
   },
   {
+    id: "neg-p11-wrong-tab",
+    base: "p11-graph",
+    story: { id: "pages--data-model-default" },
+    reason: "default Basic information cannot satisfy relationship graph assertions",
+  },
+  {
+    id: "neg-p11-wrong-search",
+    base: "p11-search-hit",
+    story: { args: { query: "NO_SUCH_MODEL_123" } },
+    reason: "empty search cannot satisfy filtered DC Media result and Basic card assertions",
+  },
+  {
     // Proves the layout check bites: restoring the pre-Batch-D full-width hero
     // on a type page must fail the sidebar/hero/main geometry assertions.
     id: "neg-p07-hero-fullwidth",
