@@ -1,5 +1,5 @@
-import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildModelDraft, buildLiteAssistantAnswer } from "../../content.js";
-import { METRIC_DICTIONARY } from "../../demo/content/metric-dictionary.js";
+import { LOGO, NAV, MODEL_FLOW, buildModelDraft, buildLiteAssistantAnswer } from "../../content.js";
+import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../demo/content/metric-dictionary.js";
 import { useMetricDictionaryDemo } from "../../demo/metric-dictionary-demo.js";
 import { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./index.jsx";
 
@@ -12,7 +12,7 @@ export default {
     logo: LOGO,
     navigation: NAV,
     content: METRIC_DICTIONARY,
-    assistant: LITE_ASSISTANT,
+    assistant: METRIC_ASSISTANT,
     category: "Basic",
     tab: "definition",
     panelOpen: false,
@@ -46,11 +46,24 @@ export default {
         constantOpen: args.constantOpen, metricId: args.metricId,
         tokens: args.tokens, draft: args.draft, notice: args.notice, extraMetrics: args.extraMetrics,
         assistantOpen: args.assistantOpen, assistantPrompt: args.assistantPrompt,
+        assistantAnswers: args.assistantAnswers, selectedSkill: args.selectedSkill, flow: args.flow,
       },
       onNavigate: args.onNavigate,
       modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, assistantAnswerFor: buildLiteAssistantAnswer,
     });
-    return <MetricDictionaryPage {...args} {...demo} onCategoryChange={(event) => { demo.onCategoryChange(event); args.onCategoryChange?.(event); }} onSelect={(event) => { demo.onSelect(event); args.onSelect?.(event); }} onTabChange={(event) => { demo.onTabChange(event); args.onTabChange?.(event); }} onOpen={() => { demo.onOpen(); args.onOpen?.(); }} onCancel={(event) => { demo.onCancel(event); args.onCancel?.(event); }} onDraftChange={(event) => { demo.onDraftChange(event); args.onDraftChange?.(event); }} onOperator={(event) => { demo.onOperator(event); args.onOperator?.(event); }} onReference={(event) => { demo.onReference(event); args.onReference?.(event); }} onRemoveToken={(event) => { demo.onRemoveToken(event); args.onRemoveToken?.(event); }} onConstantAdd={(event) => { demo.onConstantAdd(event); args.onConstantAdd?.(event); }} onTest={() => { demo.onTest(); args.onTest?.(); }} onSave={() => { demo.onSave(); args.onSave?.(); }} />;
+    const derivedEditor = {
+      ...demo.derivedEditor,
+      onOpen: () => { demo.derivedEditor.onOpen(); args.onOpen?.(); },
+      onCancel: (event) => { demo.derivedEditor.onCancel(event); args.onCancel?.(event); },
+      onDraftChange: (event) => { demo.derivedEditor.onDraftChange(event); args.onDraftChange?.(event); },
+      onOperator: (event) => { demo.derivedEditor.onOperator(event); args.onOperator?.(event); },
+      onReference: (event) => { demo.derivedEditor.onReference(event); args.onReference?.(event); },
+      onRemoveToken: (event) => { demo.derivedEditor.onRemoveToken(event); args.onRemoveToken?.(event); },
+      onConstantAdd: (event) => { demo.derivedEditor.onConstantAdd(event); args.onConstantAdd?.(event); },
+      onTest: () => { demo.derivedEditor.onTest(); args.onTest?.(); },
+      onSave: () => { demo.derivedEditor.onSave(); args.onSave?.(); },
+    };
+    return <MetricDictionaryPage {...args} {...demo} derivedEditor={derivedEditor} assistant={{ copy: args.assistant, ...demo.assistantState }} onCategoryChange={(event) => { demo.onCategoryChange(event); args.onCategoryChange?.(event); }} onSelect={(event) => { demo.onSelect(event); args.onSelect?.(event); }} onTabChange={(event) => { demo.onTabChange(event); args.onTabChange?.(event); }} />;
   },
 };
 
@@ -60,10 +73,22 @@ export const MetricDictionaryFormula = { name: "Metric Dictionary · Formula", a
 export const MetricDictionaryDimensions = { name: "Metric Dictionary · Dimensions", args: { tab: "dimensions" } };
 export const MetricDictionaryDerivedDetail = { name: "Metric Dictionary · Derived detail", args: { category: "Derived", metricId: "effective-traffic" } };
 export const MetricDictionaryAddDerived = { name: "Metric Dictionary · Add derived", args: { panelOpen: true } };
-export const MetricDictionaryFormulaTokens = { name: "Metric Dictionary · Formula tokens", args: { panelOpen: true, tokens: [{ type: "metric", value: "fact_promotion_daily.exposure_count", label: "Exposure Count" }, { type: "operator", value: "+", label: "+" }, { type: "constant", value: 100, label: "100" }] } };
+export const MetricDictionaryFormulaTokens = { name: "Metric Dictionary · Formula tokens", args: { panelOpen: true, tokens: [{ type: "metric", value: "fact_promotion_daily.exposure_count", label: "Exposure Count" }, { type: "operator", value: "+", label: "+" }] } };
 export const MetricDictionaryConstant = { name: "Metric Dictionary · Add constant", args: { panelOpen: true, constantOpen: true } };
 export const MetricDictionaryNameRequired = { name: "Metric Dictionary · Name required", args: { panelOpen: true, notice: METRIC_DICTIONARY.derivedPanel.nameError } };
 export const MetricDictionaryTestEmpty = { name: "Metric Dictionary · Test without formula", args: { panelOpen: true, notice: METRIC_DICTIONARY.derivedPanel.formulaError } };
 export const MetricDictionaryTestResult = { name: "Metric Dictionary · Test result", args: { panelOpen: true, tokens: [{ type: "metric", value: "fact_promotion_daily.exposure_count", label: "Exposure Count" }], notice: METRIC_DICTIONARY.derivedPanel.testResult } };
 export const MetricDictionarySaved = { name: "Metric Dictionary · Saved Draft", args: { category: "Derived", metricId: "derived-local-10", extraMetrics: [{ id: "derived-local-10", name: "New metric", category: "Derived", desc: "New metric", owner: "Current User", unit: "Count", precision: "2 decimals", status: "Draft", formula: "", synonyms: [] }], notice: METRIC_DICTIONARY.derivedPanel.savedMetric("New metric") } };
 export const MetricDictionaryAssistant = { name: "Metric Dictionary · Assistant", args: { assistantOpen: true } };
+export const MetricDictionaryAssistantPrompt = { name: "Metric Dictionary · Assistant prompt", args: { assistantOpen: true, assistantPrompt: "Definition of Attributed ROI" } };
+export const MetricDictionaryAssistantAnswer = { name: "Metric Dictionary · Assistant answer", args: { assistantOpen: true, assistantAnswers: [buildLiteAssistantAnswer("Definition of Attributed ROI")] } };
+export const MetricDictionaryAssistantHistory = { name: "Metric Dictionary · Assistant history", args: { assistantOpen: true }, play: async ({ canvasElement }) => { canvasElement.ownerDocument.querySelector('.mh-assistant [aria-label="History"]')?.click(); } };
+export const MetricDictionaryAssistantHistoryPick = { name: "Metric Dictionary · Assistant history pick", args: { assistantOpen: true, assistantPrompt: METRIC_ASSISTANT.history[0].prompt } };
+export const MetricDictionaryAssistantExpanded = { name: "Metric Dictionary · Assistant expanded", args: { assistantOpen: true }, play: async ({ canvasElement }) => { canvasElement.ownerDocument.querySelector('.mh-assistant [aria-label="Maximize"]')?.click(); } };
+export const MetricDictionaryAssistantSkillMenu = { name: "Metric Dictionary · Assistant skill menu", args: { assistantOpen: true }, play: async ({ canvasElement }) => { canvasElement.ownerDocument.querySelector('.mh-assistant [aria-label="Choose AI skill"]')?.click(); } };
+export const MetricDictionaryAssistantSkillSelected = { name: "Metric Dictionary · Assistant skill selected", args: { assistantOpen: true, selectedSkill: { id: "playbook-opportunity-scan", type: "Analytical Model", title: "Opportunity scan playbook" } } };
+export const MetricDictionaryModelHistory = { name: "Metric Dictionary · Generate model", args: { assistantOpen: true, flow: { step: "history", threads: MODEL_FLOW.threads, rule: "", draft: {} } } };
+export const MetricDictionaryModelManual = { name: "Metric Dictionary · Manual model", args: { assistantOpen: true, flow: { step: "manual", threads: MODEL_FLOW.threads, rule: "", draft: {} } } };
+export const MetricDictionaryModelGenerated = { name: "Metric Dictionary · Generated model", args: { assistantOpen: true, flow: { step: "generated", threads: MODEL_FLOW.threads, rule: "", draft: buildModelDraft([], "") } } };
+export const MetricDictionaryQaDisabled = { name: "Metric Dictionary · Q&A disabled", play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-metric-page__toggle input")?.click(); } };
+export const MetricDictionaryDimensionDisabled = { name: "Metric Dictionary · Dimension disabled", args: { tab: "dimensions" }, play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-metric-page__dimension-grid input")?.click(); } };

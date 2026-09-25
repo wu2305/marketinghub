@@ -37,12 +37,25 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   const [assistantPrompt, setAssistantPrompt] = React.useState(initial.assistantPrompt || "");
   const [assistantAnswers, setAssistantAnswers] = React.useState(initial.assistantAnswers || []);
   const [selectedSkill, setSelectedSkill] = React.useState(initial.selectedSkill || null);
-  const [flow, setFlow] = React.useState(null);
+  const [flow, setFlow] = React.useState(initial.flow || null);
 
   React.useEffect(() => setCategory(initial.category || "Basic"), [initial.category]);
   React.useEffect(() => setTab(initial.tab || "definition"), [initial.tab]);
   React.useEffect(() => setPanelOpen(Boolean(initial.panelOpen)), [initial.panelOpen]);
-  React.useEffect(() => setMetricId(initial.metricId || content.metrics[0]?.id), [initial.metricId, content.metrics]);
+  // A new fixture is a new dataset: discard local derived records and select a
+  // valid metric from it. Ordinary user edits keep their records until then.
+  const sourceMetricsRef = React.useRef(content.metrics);
+  React.useEffect(() => {
+    if (sourceMetricsRef.current === content.metrics) return;
+    sourceMetricsRef.current = content.metrics;
+    setCategory(initial.category || "Basic");
+    setMetrics([...content.metrics, ...(initial.extraMetrics || [])].map((metric) => ({ ...metric })));
+    setMetricId(content.metrics.some((metric) => metric.id === initial.metricId) ? initial.metricId : content.metrics[0]?.id);
+  }, [content.metrics, initial.category, initial.extraMetrics, initial.metricId]);
+  React.useEffect(() => {
+    if (!initial.metricId) return;
+    setMetricId(initial.metricId);
+  }, [initial.metricId]);
   React.useEffect(() => setConstantOpen(Boolean(initial.constantOpen)), [initial.constantOpen]);
 
   const closePanel = () => {
@@ -95,65 +108,68 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   const handleNavigate = ({ id, params = {}, href }) => onNavigate?.({ id, params, href: href || hrefFor(id, params) });
 
   return {
-    hrefFor, metrics, category, metricId, tab, panelOpen, draft, tokens, constantOpen, notice,
-    assistantOpen, assistantPrompt, assistantAnswers, selectedSkill,
-    skillFlow: flow ? {
-      step: flow.step, threads: flow.threads, rule: flow.rule, draft: flow.draft,
-      sections: modelFlow?.sections || [],
-      onToggleMessage: ({ threadIndex, messageIndex, checked }) => setFlow((current) => ({
-        ...current, threads: current.threads.map((thread, ti) => ti === threadIndex
-          ? { ...thread, messages: thread.messages.map((message, mi) => mi === messageIndex ? { ...message, checked } : message) }
-          : thread),
-      })),
-      onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-      onGenerate: ({ messages, rule }) => setFlow((current) => ({ ...current, step: "generated", rule, draft: modelDraftFor?.(messages, rule) || {} })),
-      onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-      onClose: () => setFlow(null),
-      onSave: () => setFlow(null),
-      onSubmit: () => setFlow(null),
-    } : null,
+    hrefFor, metrics, category, metricId, tab,
     onNavigate: handleNavigate,
     onSelect: ({ id }) => setMetricId(id),
     onCategoryChange: ({ category: next }) => setCategory(next),
     onTabChange: ({ tab: next }) => setTab(next),
-    onOpen: () => { setPanelOpen(true); setNotice(""); },
-    onCancel: closePanel,
-    onDraftChange: ({ field, value }) => setDraft((current) => ({ ...current, [field]: value })),
-    onOperator,
-    onReference,
-    onRemoveToken: ({ index }) => setTokens((current) => current.filter((_, i) => i !== index)),
-    onConstantCancel: () => setConstantOpen(false),
-    onConstantAdd: ({ value }) => {
-      const number = Number.parseFloat(value);
-      if (Number.isFinite(number)) addToken({ type: "constant", value: number, label: String(number) });
-      setConstantOpen(false);
+    derivedEditor: {
+      open: panelOpen, draft, tokens, constantOpen, notice,
+      onOpen: () => { setPanelOpen(true); setNotice(""); },
+      onCancel: closePanel,
+      onDraftChange: ({ field, value }) => setDraft((current) => ({ ...current, [field]: value })),
+      onOperator,
+      onReference,
+      onRemoveToken: ({ index }) => setTokens((current) => current.filter((_, i) => i !== index)),
+      onConstantCancel: () => setConstantOpen(false),
+      onConstantAdd: ({ value }) => {
+        const number = Number.parseFloat(value);
+        if (Number.isFinite(number)) addToken({ type: "constant", value: number, label: String(number) });
+        setConstantOpen(false);
+      },
+      onTest,
+      onSave,
+      onDismissNotice: () => setNotice(""),
     },
-    onTest,
-    onSave,
-    onDismissNotice: () => setNotice(""),
-    onOpenAssistant: () => setAssistantOpen(true),
-    onCloseAssistant: () => setAssistantOpen(false),
-    onAssistantPromptChange: ({ value }) => setAssistantPrompt(value),
-    onAssistantSuggestion: ({ prompt }) => setAssistantPrompt(prompt),
-    onAssistantHistorySelect: ({ prompt }) => setAssistantPrompt(prompt),
-    onAssistantSelectSkill: ({ id, type, title }) => setSelectedSkill({ id, type, title }),
-    onAssistantClearSkill: () => setSelectedSkill(null),
-    onAssistantSkillAction: ({ action }) => {
-      if (!modelFlow) return;
-      setFlow({
-        step: action === "history" ? "history" : "manual",
-        threads: (modelFlow.threads || []).map((thread) => ({
-          ...thread, messages: thread.messages.map((message) => ({ ...message })),
+    assistantState: {
+      open: assistantOpen, prompt: assistantPrompt, answers: assistantAnswers, selectedSkill,
+      skillFlow: flow ? {
+        step: flow.step, threads: flow.threads, rule: flow.rule, draft: flow.draft,
+        sections: modelFlow?.sections || [],
+        onToggleMessage: ({ threadIndex, messageIndex, checked }) => setFlow((current) => ({
+          ...current, threads: current.threads.map((thread, ti) => ti === threadIndex
+            ? { ...thread, messages: thread.messages.map((message, mi) => mi === messageIndex ? { ...message, checked } : message) }
+            : thread),
         })),
-        rule: "", draft: {},
-      });
+        onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
+        onGenerate: ({ messages, rule }) => setFlow((current) => ({ ...current, step: "generated", rule, draft: modelDraftFor?.(messages, rule) || {} })),
+        onBack: () => setFlow((current) => ({ ...current, step: "history" })),
+        onClose: () => setFlow(null),
+      } : null,
+      onOpen: () => setAssistantOpen(true),
+      onClose: () => setAssistantOpen(false),
+      onPromptChange: ({ value }) => setAssistantPrompt(value),
+      onSuggestion: ({ prompt }) => setAssistantPrompt(prompt),
+      onHistorySelect: ({ prompt }) => setAssistantPrompt(prompt),
+      onSelectSkill: ({ id, type, title }) => setSelectedSkill({ id, type, title }),
+      onClearSkill: () => setSelectedSkill(null),
+      onSkillAction: ({ action }) => {
+        if (!modelFlow) return;
+        setFlow({
+          step: action === "history" ? "history" : "manual",
+          threads: (modelFlow.threads || []).map((thread) => ({
+            ...thread, messages: thread.messages.map((message) => ({ ...message })),
+          })),
+          rule: "", draft: {},
+        });
+      },
+      onSubmit: ({ prompt }) => {
+        const query = (prompt || assistantPrompt).trim();
+        if (!query) return;
+        setAssistantAnswers([assistantAnswerFor?.(query) || { query, variant: "simple", lead: "I will use the AI Interpreter knowledge context to answer:" }]);
+        setAssistantPrompt("");
+      },
+      onNewSession: () => { setAssistantPrompt(""); setAssistantAnswers([]); },
     },
-    onAssistantSubmit: ({ value }) => {
-      const query = (value || assistantPrompt).trim();
-      if (!query) return;
-      setAssistantAnswers([assistantAnswerFor?.(query) || { query, variant: "simple", lead: "I will use the AI Interpreter knowledge context to answer:" }]);
-      setAssistantPrompt("");
-    },
-    onAssistantNewSession: () => { setAssistantPrompt(""); setAssistantAnswers([]); },
   };
 }

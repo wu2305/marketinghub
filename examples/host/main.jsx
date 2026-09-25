@@ -49,7 +49,7 @@ import {
   buildModelDraft,
   buildReportAssistantAnswer,
 } from "../../src/design/content.js";
-import { METRIC_DICTIONARY } from "../../src/design/demo/content/metric-dictionary.js";
+import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../src/design/demo/content/metric-dictionary.js";
 import { metricDictionaryHrefFor, useMetricDictionaryDemo } from "../../src/design/demo/metric-dictionary-demo.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "../../src/design/demo/report-demo.js";
@@ -307,7 +307,7 @@ function MetricDictionaryRoute() {
     modelDraftFor: buildModelDraft,
     assistantAnswerFor: buildLiteAssistantAnswer,
   });
-  return <MetricDictionaryPage {...props} logo={hostLogo} navigation={hostNav()} content={METRIC_DICTIONARY} assistant={LITE_ASSISTANT} />;
+  return <MetricDictionaryPage {...props} logo={hostLogo} navigation={hostNav()} content={METRIC_DICTIONARY} assistant={{ copy: METRIC_ASSISTANT, ...props.assistantState }} />;
 }
 
 /* ------------------------------------------------------------------ */

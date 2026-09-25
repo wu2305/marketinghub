@@ -1,4 +1,12 @@
 /** P10 fixture: effective metric-dictionary.html copy and knowledge.js Measure fields. */
+import { COCKPIT_SKILL_MENU, LITE_ASSISTANT } from "../../content.js";
+
+// P10 loads knowledge.js, so assistant-skill-menu.js reads its single actual
+// Analytical Model instead of the three fallback items used on lite-only pages.
+export const METRIC_ASSISTANT = {
+  ...LITE_ASSISTANT,
+  skillMenu: { ...LITE_ASSISTANT.skillMenu, items: COCKPIT_SKILL_MENU.items },
+};
 export const METRIC_DICTIONARY = {
   header: {
     breadcrumb: ["AI Interpreter", "Metric Dictionary"],
@@ -21,6 +29,7 @@ export const METRIC_DICTIONARY = {
   },
   detail: {
     tabs: { definition: "Definition", formula: "Formula", dimensions: "Dimensions" },
+    formulaCount: 1,
     preview: "Preview Data",
     fields: { name: "Metric Name", definition: "Business Definition", category: "Category", owner: "Owner", unit: "Unit", precision: "Precision", synonyms: "Synonyms", qa: "Participate in Q&A" },
     categories: ["Conversion", "Traffic", "Revenue", "Engagement"],

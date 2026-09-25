@@ -11,8 +11,7 @@ export const metricCategories = ["Basic", "Derived"];
 export const metricDetailTabs = ["definition", "formula", "dimensions"];
 
 /**
- * Standalone Metric Dictionary page. Copy, records and state arrive from props;
- * useMetricDictionaryDemo supplies the original local Demo flow to stories/hosts.
+ * Standalone Metric Dictionary page. All copy, records and state arrive from props.
  * @param {object} props
  * @param {object} props.logo
  * @param {Array<{id:string,label:string,href:string}>} props.navigation
@@ -21,11 +20,8 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  * @param {typeof metricCategories[number]} props.category
  * @param {string} props.metricId
  * @param {typeof metricDetailTabs[number]} props.tab
- * @param {boolean} props.panelOpen
- * @param {object} props.draft
- * @param {Array<object>} props.tokens
- * @param {boolean} props.constantOpen
- * @param {string} props.notice
+ * @param {object} props.derivedEditor open, draft, tokens, constantOpen, notice and editor callbacks
+ * @param {object} props.assistant copy, open, prompt, answers, selectedSkill, skillFlow and callbacks
  * @param {(id:string,params?:object)=>string} props.hrefFor
  * @param {(target:{id:string,params:object,href:string})=>void} props.onNavigate
  * @param {(event:{category:string})=>void} props.onCategoryChange
@@ -34,14 +30,22 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  */
 export function MetricDictionaryPage({
   logo, navigation = [], content, metrics = [], category = "Basic", metricId, tab = "definition",
-  panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "",
-  assistant = {}, assistantOpen = false, assistantPrompt = "", assistantAnswers = [], selectedSkill, skillFlow,
-  hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
-  onOpen, onCancel, onDraftChange, onOperator, onReference, onRemoveToken,
-  onConstantAdd, onConstantCancel, onTest, onSave,
-  onOpenAssistant, onCloseAssistant, onAssistantPromptChange, onAssistantSubmit, onAssistantNewSession,
-  onAssistantSuggestion, onAssistantHistorySelect, onAssistantSelectSkill, onAssistantClearSkill, onAssistantSkillAction,
+  derivedEditor = {}, assistant = {}, hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
 }) {
+  const {
+    open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "",
+    onOpen, onCancel, onDraftChange, onOperator, onReference, onRemoveToken,
+    onConstantAdd, onConstantCancel, onTest, onSave,
+  } = derivedEditor;
+  const {
+    copy: assistantCopy = {}, open: assistantOpen = false, prompt: assistantPrompt = "",
+    answers: assistantAnswers = [], selectedSkill, skillFlow,
+    onOpen: onOpenAssistant, onClose: onCloseAssistant,
+    onPromptChange: onAssistantPromptChange, onSubmit: onAssistantSubmit,
+    onNewSession: onAssistantNewSession, onSuggestion: onAssistantSuggestion,
+    onHistorySelect: onAssistantHistorySelect, onSelectSkill: onAssistantSelectSkill,
+    onClearSkill: onAssistantClearSkill, onSkillAction: onAssistantSkillAction,
+  } = assistant;
   const { header, sidebar, detail, derivedPanel } = content;
   const metric = metrics.find((entry) => entry.id === metricId) || metrics[0];
   const visible = metrics.filter((entry) => entry.category === category);
@@ -55,11 +59,11 @@ export function MetricDictionaryPage({
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     onNavigate?.(navigate(id, params));
   };
-  const field = (label, value, type = "text") => <label className="mh-metric-page__field"><span>{label}</span><input key={metric?.id + label} type={type} defaultValue={value} /></label>;
+  const field = (label, value, type = "text") => <label className="mh-metric-page__field"><span>{label}</span><input key={`${metric?.id}:${label}:${value}`} type={type} defaultValue={value} /></label>;
   return (
     <Shell>
       <Header logo={{ ...logo, href: hrefFor("home") }} items={headerItems} current="interpreter" highlightCurrent={false} onNavigate={handleHeaderNavigate} />
-      <AssistantLauncher ref={launcherRef} label={assistant.launcherLabel} hidden={assistantOpen} onOpen={onOpenAssistant} />
+      <AssistantLauncher ref={launcherRef} label={assistantCopy.launcherLabel} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <main className="mh-metric-page">
         <header className="mh-metric-page__header">
           <div>
@@ -96,23 +100,23 @@ export function MetricDictionaryPage({
           <section className="mh-metric-page__detail" aria-label={metric?.name}>
             <header className="mh-metric-page__detail-head">
               <div className="mh-metric-page__detail-tabs">
-                {metricDetailTabs.map((item) => <button key={item} type="button" className={tab === item ? "is-active" : ""} aria-pressed={tab === item} onClick={() => onTabChange?.({ tab: item })}>{detail.tabs[item]}{item === "formula" ? " · 1" : item === "dimensions" ? ` · ${detail.dimensions.length}` : ""}</button>)}
+                {metricDetailTabs.map((item) => <button key={item} type="button" className={tab === item ? "is-active" : ""} aria-pressed={tab === item} onClick={() => onTabChange?.({ tab: item })}>{detail.tabs[item]}{item === "formula" ? ` · ${detail.formulaCount}` : item === "dimensions" ? ` · ${detail.dimensions.length}` : ""}</button>)}
               </div>
               <button type="button" className="mh-metric-page__preview">◎ {detail.preview}</button>
             </header>
-            {tab === "definition" ? <div className="mh-metric-page__content">
+            <div className="mh-metric-page__content" hidden={tab !== "definition"}>
               <div className="mh-metric-page__definition-grid">
                 <div className="mh-metric-page__card mh-metric-page__card--wide">
                   {field(detail.fields.name, metric?.name)}
-                  <label className="mh-metric-page__field"><span>{detail.fields.definition}</span><textarea key={metric?.id + "definition"} defaultValue={metric?.desc} rows="3" /></label>
+                  <label className="mh-metric-page__field"><span>{detail.fields.definition}</span><textarea key={`${metric?.id}:definition:${metric?.desc}`} defaultValue={metric?.desc} rows="3" /></label>
                 </div>
                 <div className="mh-metric-page__card">
                   <label className="mh-metric-page__field"><span>{detail.fields.category}</span><select defaultValue={detail.categories[0]}>{detail.categories.map((item) => <option key={item}>{item}</option>)}</select></label>
                   {field(detail.fields.owner, metric?.owner)}
                 </div>
                 <div className="mh-metric-page__card">
-                  <label className="mh-metric-page__field"><span>{detail.fields.unit}</span><select key={metric?.id + "unit"} defaultValue={detail.units.includes(metric?.unit) ? metric.unit : detail.units[0]}>{detail.units.map((item) => <option key={item}>{item}</option>)}</select></label>
-                  <label className="mh-metric-page__field"><span>{detail.fields.precision}</span><select key={metric?.id + "precision"} defaultValue={metric?.precision}>{detail.precisions.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label className="mh-metric-page__field"><span>{detail.fields.unit}</span><select key={`${metric?.id}:unit:${metric?.unit}`} defaultValue={detail.units.includes(metric?.unit) ? metric.unit : detail.units[0]}>{detail.units.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label className="mh-metric-page__field"><span>{detail.fields.precision}</span><select key={`${metric?.id}:precision:${metric?.precision}`} defaultValue={metric?.precision}>{detail.precisions.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
                 <div className="mh-metric-page__card mh-metric-page__card--wide">
                   <span className="mh-metric-page__label">{detail.fields.synonyms}</span>
@@ -121,22 +125,22 @@ export function MetricDictionaryPage({
                 </div>
                 <div className="mh-metric-page__card mh-metric-page__card--wide mh-metric-page__toggle"><div><strong>{detail.fields.qa}</strong><p className="mh-metric-page__hint">{detail.qaHint}</p></div><input type="checkbox" defaultChecked aria-label={detail.fields.qa} /></div>
               </div>
-            </div> : null}
-            {tab === "formula" ? <div className="mh-metric-page__content mh-metric-page__formula-grid">
+            </div>
+            <div className="mh-metric-page__content mh-metric-page__formula-grid" hidden={tab !== "formula"}>
               <div className="mh-metric-page__card mh-metric-page__card--wide"><div className="mh-metric-page__card-head"><strong>{detail.formulaLabel}</strong><button type="button">{detail.formulaEdit}</button></div><code className="mh-metric-page__formula">{metric?.category === "Basic" ? metric.source : metric?.formula || detail.noFormula}</code><div className="mh-metric-page__formula-desc">{detail.formulaDescriptions.map((line) => <p key={line}>{line}</p>)}</div></div>
               <div className="mh-metric-page__card"><div className="mh-metric-page__card-head"><strong>{detail.sourceLabel}</strong></div>{detail.sources.map((source) => <div className="mh-metric-page__data-row" key={source.name}><strong>{source.name}</strong><code>{source.field}</code></div>)}</div>
               <div className="mh-metric-page__card"><div className="mh-metric-page__card-head"><strong>{detail.aggregationLabel}</strong></div>{detail.aggregations.map((entry) => <div className="mh-metric-page__data-row" key={entry.label}><strong>{entry.label}</strong><code>{entry.value}</code></div>)}</div>
-            </div> : null}
-            {tab === "dimensions" ? <div className="mh-metric-page__content mh-metric-page__dimension-grid">
+            </div>
+            <div className="mh-metric-page__content mh-metric-page__dimension-grid" hidden={tab !== "dimensions"}>
               <div className="mh-metric-page__card"><div className="mh-metric-page__card-head"><strong>{detail.dimensionLabel}</strong><small>{detail.dimensions.length} {detail.dimensionCount}</small></div>{detail.dimensions.map((entry) => <label className="mh-metric-page__data-row" key={entry.name}><span><strong>{entry.name}</strong><small>{entry.path}</small></span><input type="checkbox" defaultChecked /></label>)}</div>
               <div className="mh-metric-page__card"><div className="mh-metric-page__card-head"><strong>{detail.timeLabel}</strong></div>{detail.timeGranularities.map((entry) => <label className="mh-metric-page__data-row" key={entry}><strong>{entry}</strong><input type="checkbox" defaultChecked /></label>)}</div>
-            </div> : null}
+            </div>
           </section>
         </div>
       </main>
       <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
       {!panelOpen && notice ? <div className="mh-metric-page__toast" role="status">{notice}</div> : null}
-      <AssistantPanel open={assistantOpen} returnFocusRef={launcherRef} placement="drawer" lite {...assistant} prompt={assistantPrompt} answers={assistantAnswers} selectedSkill={selectedSkill} onClose={onCloseAssistant} onPromptChange={onAssistantPromptChange} onSubmit={onAssistantSubmit} onNewSession={onAssistantNewSession} onSuggestion={onAssistantSuggestion} onHistorySelect={onAssistantHistorySelect} onSelectSkill={onAssistantSelectSkill} onClearSkill={onAssistantClearSkill} onSkillAction={onAssistantSkillAction} />
+      <AssistantPanel open={assistantOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...assistantCopy} prompt={assistantPrompt} answers={assistantAnswers} selectedSkill={selectedSkill} onClose={onCloseAssistant} onPromptChange={onAssistantPromptChange} onSubmit={onAssistantSubmit} onNewSession={onAssistantNewSession} onSuggestion={onAssistantSuggestion} onHistorySelect={onAssistantHistorySelect} onSelectSkill={onAssistantSelectSkill} onClearSkill={onAssistantClearSkill} onSkillAction={onAssistantSkillAction} />
       {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );

@@ -44,6 +44,7 @@
 .mh-metric-page__detail-tabs button.is-active { border-color: var(--mh-line); background: var(--mh-surface); color: var(--mh-ink-strong); }
 .mh-metric-page__preview { height: 32px; font-size: 12px; }
 .mh-metric-page__content { padding: 20px; }
+.mh-metric-page__content[hidden] { display: none; }
 .mh-metric-page__definition-grid, .mh-metric-page__formula-grid, .mh-metric-page__dimension-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
 .mh-metric-page__card { padding: 16px; border: 1px solid var(--mh-line); border-radius: 8px; background: var(--mh-surface-ai); }
 .mh-metric-page__card--wide { grid-column: 1 / -1; }
