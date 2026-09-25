@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 S3/R3/O5 PR #6 对抗审核完成：共享外壳保留真实 feed/composer 差异，历史载荷与真实启动按钮重开行为已核，八个枚举状态浏览器无错误；全页人工审图仍 pending |
+| 最新独立审核 | 2026-09-26 P11 PR #7 对抗审核完成：复用既有模型浏览器；补强搜索选择保持、真实 zoom/fit/pan 和 URL 参数断言。默认页人工 fail，第二轮视觉收敛待办 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 87 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 49、Pages 7）+ 55 docs；2026-09-26 7085890 构建 index.json 实数；本包无 story id 增删 |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），15 文件 139 条通过（2026-09-26 7085890 实数） |
-| lint | `npm run lint`：0 errors / 0 warnings，7085890 |
-| 构建验证 | `npm run build-storybook` 87 stories/55 docs 与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-wp3-s3-integrate-host`）；7085890 rebase origin/main 后工作区干净，源指纹构建戳匹配 |
+| 故事数 | 95 stories + 55 docs；2026-09-26 0c5bffb 构建 index.json 实数；P11 新增 8 个页面故事，无删除 |
+| 测试 | `npm test`：16 文件 147 条通过（2026-09-26 0c5bffb） |
+| lint | `npm run lint`：0 errors / 0 warnings，0c5bffb |
+| 构建验证 | `npm run build-storybook` 95 stories/55 docs；`npm run build:host` + host-check 8/8 通过（`/tmp/mh-p11-integrate-host`）；候选 rebase origin/main 后工作区干净，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 7085890，工作区干净）：配对 133/133 机器通过（`/tmp/mh-wp3-s3-integrate-visual`），负向 7/7 按预期失败（`/tmp/mh-wp3-s3-integrate-negative`）。全页人工 133 pending，P07 类型状态只见 §2.2；S3 助手/开放历史局部几何与 S2 对照稳定，不能扩大为全页人工通过 |
+| 最近视觉对照 | 2026-09-26（stamp 0c5bffb，工作区干净）：全站 148/148 机器通过（`/tmp/mh-p11-integrate-visual`），负向 9/9 按预期失败（`/tmp/mh-p11-integrate-negative`）。默认 P11 人工 fail 已绑定截图 hash 登记，其他 147 场景人工 pending；P07 逐类型状态仅见 §2.2 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -39,7 +39,7 @@ npm test               # vitest 行为测试
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
-| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
+| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P11 独立模型浏览器已实现并完成机器验证；P08/P09/P10 候选推进中，人工视觉收敛仍待办 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
-| P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，待最终全套验证；复用 DataModelView 与 demo hook，8 个页面状态故事及 15 个定向配对已通过，人工整页 pending |
+| P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
 | P12 | assets/pages/review-center.html | 审核列表、筛选、详情、决策反馈等实际状态 | M6 | 未开始 |
 | P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 未开始 |
 | P14 | assets/pages/personal-memory.html | 记忆列表与管理状态 | M6 | 未开始 |
@@ -325,6 +325,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | S2 嵌套助手/ModelFlow Escape | 原始打开流程后一次 Escape 留下流程、关闭下层助手；React 先关闭顶层 ModelFlow，保持助手焦点与滚动锁，第二次关闭助手并回到该实例的启动按钮。 | 用户要求统一层栈。源码 `assets/js/shared/assistant-skill-menu.js:470–506,846–855` 与 `assets/js/shared/portal.js:846–850`；原始/React Chromium 证据 `/tmp/mh-wp3-s2-original-escape.json`、`/tmp/wp3s2home-browser.json`，双根绘制层级与双启动按钮证据 `/tmp/wp3s2paint-browser.json`。 | #5 |
 | S3 助手历史与隐藏控件 | 共用真实头部/历史/覆盖层行为，保留各自答案与输入结构。历史点击边界限于按钮和弹层，关闭后重开复位；移除实际被 CSS 隐藏的 Scope/picker 与无消费者 body class。 | 原始 report-core.js:2222–2225,3365–3388；assistant-panel.css:495–500,795–813。实际启动按钮重开证据 `/tmp/mh-s3-root-history.json`；不为不可达隐藏状态增设配置。现有 page stories 保留，没有删除可达状态。 | #6 |
 
+| P11 独立 Header / graph tab | 原 data-model.html:29–44、theme.css:37–43 与 data-model-inline-1.css:5–7 使固定 Header 覆盖无避让的页体；鼠标不能点图页签，Tab+Enter 可达。React 使用文档流内 sticky Header，使页签可点击 | AGENTS §3.5 明显定位缺陷；保留图本体和真实键盘路径。源证据 /tmp/mh-p11-runtime-inventory.json，配对 p11-graph；其余视觉差异仍为 fail 待收敛 | #7 |
+
 ## 4. 已知缺口
 
 2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2 的 P03/P07 助手覆盖与其他页面流程仍需推进。
@@ -481,3 +483,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | S3/R3/O5 PR #6（https://github.com/wu2305/marketinghub/pull/6）合并为 442af01；最终候选 7085890 rebase origin/main 后由 integrator 在干净工作区完成 lint 0/0、15 文件139测试、87 stories/55 docs、host7/7、visual133/133、negative7/7；证据 /tmp/mh-wp3-s3-integrate-*，CI 同提交通过。源码/浏览器对抗项见本包上行；WP2+WP3 串行门槛现已满足，可启动 WP6 R2，随后P12–P17；P08/P09/P10/P11独立推进。 | Codex integrator |
 
 | 2026-09-26 | P11 独立 Data Model 页候选：复用 DataModelView/useDataModelDemo 与既有数据；修正搜索命中后、空结果及清空的域选择保持，Measure 类型格式对齐 data-model-browser.js:995–1005。8 个页面故事，15/15 定向配对通过（/tmp/mh-p11-preview，脏工作区定位证据，非最终验收）；zoom/fit/pan 断言真实变换。最终全套与人工结论由 integrator 登记。 | Codex P11 + integrator |
+| 2026-09-26 | P11 PR #7（https://github.com/wu2305/marketinghub/pull/7）合并为 582f2ae；最终候选 0c5bffb rebase origin/main 后干净工作区通过 lint 0/0、16 文件147测试、95 stories/55 docs、host8/8、visual148/148、negative9/9（/tmp/mh-p11-integrate-*）。对抗审核将宽松 scale 存在检查改为真实缩放变化、fit复位和pointer拖动，覆盖初始过滤→无匹配→清空的实际选中域；Measure格式按原源码修正。默认P11人工fail已用 --review 绑定最终截图hash（与预审逐字节相同），其余pending。原固定页头遮挡更正见§3；徽标/圆角/阴影/图标色与间距留第二轮。 | Codex integrator |

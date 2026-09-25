@@ -581,6 +581,8 @@ R5(a)：
 - [x] **WP4 export-surface guard**（PR #3；对抗审核及全套验证通过，实数见 README §1/§5）：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
 - [ ] **WP5 P08**：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
 - [ ] **P09 / P10 / P11**：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
+  - [x] P11 独立 Data Model（PR #7，582f2ae；全套实数与人工 fail 见 README §1/§5）。
+  - [ ] P09 / P10 继续各自候选集成。
 - [ ] **WP6 R2**：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
 - [ ] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。
 
