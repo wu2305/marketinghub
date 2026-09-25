@@ -393,6 +393,65 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P08 route: controlled form, validation, editing, navigation ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create`, { waitUntil: "networkidle" });
+  await page.locator('.mh-kcreate[data-kc-type="Business Term"]').waitFor();
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.locator('.mh-btform button:has-text("Submit")').click();
+  if ((await page.locator('.mh-btform__fields>label.is-invalid').count()) !== 2) notes.push("Business Term required errors missing");
+  await page.locator('input[name="title"]').fill("New governed term");
+  await page.locator('textarea[name="description"]').fill("A deterministic local description.");
+  await page.locator('.mh-btform__scope>button').click();
+  await page.locator('.mh-btform__scope-menu label:has-text("Marketing")').first().click();
+  if (!(await page.locator('.mh-btform__scope>button').innerText()).includes("Marketing")) notes.push("Data Model link selection not reflected");
+  await page.locator('.mh-btform__scope>button').click();
+  await page.screenshot({ path: path.join(OUT, "knowledge-create.png"), fullPage: true });
+  await page.locator('.mh-btform button:has-text("Save")').click();
+  await page.locator('.host-coverage').waitFor();
+  if (!page.url().includes("coverage/assets/pages/knowledge.html?type=Business+Term&notice=saved")) notes.push("BT Save did not navigate to the scoped library with saved notice");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("P08 form reloaded host");
+  notes.push(...errors);
+  record("knowledge-create", notes.length === 0, notes);
+  await page.close();
+}
+
+/* The original Data Model Enter handler double-saves on blur and throws. React
+   keeps a single new chip; Escape cancels without a second tag or page error. */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create?type=Data%20Model`, { waitUntil: "networkidle" });
+  const row = page.locator(".mh-kcf__table-scroll tbody tr:first-child");
+  await row.locator('button[aria-label="Add synonym to channel_id"]').click();
+  await row.locator('input[aria-label="New synonym"]').fill("Customer Channel");
+  await row.locator('input[aria-label="New synonym"]').press("Enter");
+  if ((await row.locator(".mh-kcf__chip").count()) !== 2) notes.push("Enter did not add exactly one synonym chip");
+  if (!(await row.innerText()).includes("Customer Channel")) notes.push("entered synonym missing");
+  await row.locator('button[aria-label="Add synonym to channel_id"]').click();
+  await row.locator('input[aria-label="New synonym"]').fill("Discard me");
+  await row.locator('input[aria-label="New synonym"]').press("Escape");
+  if ((await row.locator(".mh-kcf__chip").count()) !== 2) notes.push("Escape changed synonym chips");
+  if ((await row.locator('input[aria-label="New synonym"]').count()) !== 0) notes.push("Escape left synonym editor open");
+  notes.push(...errors);
+  record("knowledge-create-synonym-keys", notes.length === 0, notes);
+  await page.close();
+}
+
+/* P09 copy link has no type parameter; the host must resolve the record. */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create?copy=investment-principles`, { waitUntil: "networkidle" });
+  if ((await page.locator('.mh-kcreate[data-kc-type="Principles"][data-kc-mode="copy"]').count()) !== 1) notes.push("copy record did not resolve Principles form");
+  if (!(await page.locator('.mh-kcreate h1').innerText()).includes("Copy Knowledge")) notes.push("copy heading missing");
+  notes.push(...errors);
+  record("knowledge-create-copy", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- unmapped demo link: raw /assets/pages href → coverage under the base ---- */
 {
   const { page, errors } = await newPage();

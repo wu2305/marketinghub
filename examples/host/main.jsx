@@ -23,6 +23,7 @@ import {
   useBusinessTermDemo,
   BusinessTermView,
   DataModelPage,
+  KnowledgeCreatePage,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -52,6 +53,8 @@ import {
 import { ALT_BUSINESS_TERMS } from "../../src/design/demo/__fixtures__/alt-business-terms.js";
 import { useDataModelPageDemo, dataModelPageHrefFor, normalizedDataModelSearch } from "../../src/design/demo/data-model-page-demo.js";
 import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.js";
+import { KNOWLEDGE_CREATE } from "../../src/design/demo/content/knowledge-create.js";
+import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -66,6 +69,7 @@ const ROUTE_MAP = {
   "/index.html": "",
   "/assets/pages/reports.html": "cockpit",
   "/assets/pages/data-model.html": "data-model",
+  "/assets/pages/knowledge-create.html": "knowledge-create",
 };
 
 function mapDemoHref(href) {
@@ -106,6 +110,7 @@ function routeOf(loc) {
   if (rest === "") return { name: "home", params };
   if (rest === "cockpit") return { name: "cockpit", params };
   if (rest === "data-model") return { name: "data-model", params };
+  if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -197,6 +202,26 @@ function CockpitRoute({ params }) {
     ...cockpitRoutes,
   });
   return <MarketingCockpitPage {...props} />;
+}
+
+function KnowledgeCreateRoute({ params }) {
+  const props = useKnowledgeCreateDemo({
+    content: KNOWLEDGE_CREATE,
+    type: params.get("type") || "Business Term",
+    mode: params.get("copy") ? "copy" : params.get("mode") || "create",
+    id: params.get("copy") || params.get("id") || undefined,
+    onNavigate: ({ href }) => {
+      if (href === window.location.pathname + window.location.search) return;
+      window.history.pushState(null, "", href);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    },
+    hrefFor: (id, values = {}) => {
+      if (id === "knowledgeCreate") return `${hostHref("knowledge-create")}?${new URLSearchParams(values)}`;
+      if (id === "interpreter") return hostHref(`coverage/assets/pages/knowledge.html${Object.keys(values).length ? `?${new URLSearchParams(values)}` : ""}`);
+      return mapDemoHref(({ home: "/index.html", cockpit: "/assets/pages/reports.html", selfService: "/assets/pages/flexible.html", campaign: "/assets/pages/campaign.html" })[id] || "/assets/pages/knowledge.html");
+    },
+  });
+  return <KnowledgeCreatePage {...props} logo={hostLogo} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -323,6 +348,7 @@ function App() {
   }
   if (route.name === "cockpit") return <CockpitRoute params={route.params} />;
   if (route.name === "data-model") return <DataModelRoute params={route.params} />;
+  if (route.name === "knowledge-create") return <KnowledgeCreateRoute params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

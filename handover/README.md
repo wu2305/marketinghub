@@ -39,7 +39,7 @@ npm test               # vitest 行为测试
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
-| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P11 独立模型浏览器已实现并完成机器验证；P08/P09/P10 候选推进中，人工视觉收敛仍待办 |
+| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P11 独立模型浏览器已实现并完成机器验证；P08 八类型创建/编辑候选已重建，P09/P10 候选推进中，人工视觉收敛仍待办 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
@@ -62,7 +62,7 @@ npm test               # vitest 行为测试
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——概览：类型导航与 Hero，人工 pass。八类型：Principles（类目、搜索、展开、分页，人工 pass）；Report Context（卡片、项目筛选、详情抽屉、描述编辑，机器 pass/人工 pending）；Data Model（域搜索、Basic/关系图、表抽屉与预览、相关报表抽屉，机器 pass/人工 pending）；Metric Dictionary（专用列表与详情，机器 pass/人工 pending）；Business Term（三列卡、筛选、分页、详情、权限/禁用/确认，机器 pass/人工 pending）；Analytical Model（卡片、管理动作、删除被引用阻断，机器 pass/人工 pending）；Scenario Reporting（状态/流程筛选、卡片、详情抽屉与管理确认，机器 pass/人工 pending）；Email Reports（专用表格与分页，机器 pass/人工 pending）。三类管理动作共享纯规则和演示确认 hook，保留各自权限、Draft 与引用差异；相关报表经 overlay slot 呈现。M5 创建/编辑表单仍未建，不能计为 P07 全量完成。机器证据与人工抽看见 §5 WP2 行 |
-| P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
+| P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 已实现，配对与人工最终核验中——受控 `KnowledgeCreatePage`、`KnowledgeCreateFields`、`BusinessTermForm`、`useKnowledgeCreateDemo`；可达专用与通用表单、Data Model/Metric 细项、RC 版本/确认、Synonyms 最终表格、Save/Submit/Cancel 与原始缺陷修正均有故事和场景；Email Reports 创建/编辑触发路径未证实，保留待查 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
@@ -484,3 +484,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 2026-09-26 | P11 独立 Data Model 页候选：复用 DataModelView/useDataModelDemo 与既有数据；修正搜索命中后、空结果及清空的域选择保持，Measure 类型格式对齐 data-model-browser.js:995–1005。8 个页面故事，15/15 定向配对通过（/tmp/mh-p11-preview，脏工作区定位证据，非最终验收）；zoom/fit/pan 断言真实变换。最终全套与人工结论由 integrator 登记。 | Codex P11 + integrator |
 | 2026-09-26 | P11 PR #7（https://github.com/wu2305/marketinghub/pull/7）合并为 582f2ae；最终候选 0c5bffb rebase origin/main 后干净工作区通过 lint 0/0、16 文件147测试、95 stories/55 docs、host8/8、visual148/148、negative9/9（/tmp/mh-p11-integrate-*）。对抗审核将宽松 scale 存在检查改为真实缩放变化、fit复位和pointer拖动，覆盖初始过滤→无匹配→清空的实际选中域；Measure格式按原源码修正。默认P11人工fail已用 --review 绑定最终截图hash（与预审逐字节相同），其余pending。原固定页头遮挡更正见§3；徽标/圆角/阴影/图标色与间距留第二轮。 | Codex integrator |
+| 2026-09-25 | WP5 P08（`wp5/p08-knowledge-create`）：按原始可达表单与最终脚本生效顺序重建 knowledge-create，接入受控页/类型专用字段/演示容器、原始 URL 适配、独立宿主和配对场景；源证据与错类型路由、Data Model 表身份/字段、Metric token/同义词 Enter 缺陷见本 PR 说明。提交前 focused tests、构建、宿主和配对已验证；最终合入基线验证数字由整合者更新 §1，人工审图保持 pending。 | Codex WP5 |
