@@ -59,11 +59,12 @@ export function SkillMenu({ config, selectedSkill, composerRef, onAttach, onSele
     const onDocKey = (event) => {
       if (event.key === "Escape") closeMenu();
     };
-    document.addEventListener("click", onDocClick);
-    document.addEventListener("keydown", onDocKey);
+    const doc = rootRef.current?.ownerDocument;
+    doc?.addEventListener("click", onDocClick);
+    doc?.addEventListener("keydown", onDocKey);
     return () => {
-      document.removeEventListener("click", onDocClick);
-      document.removeEventListener("keydown", onDocKey);
+      doc?.removeEventListener("click", onDocClick);
+      doc?.removeEventListener("keydown", onDocKey);
     };
   }, [open, closeMenu]);
 

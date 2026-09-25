@@ -5,7 +5,7 @@ import { TextArea } from "../../../components/TextArea/index.jsx";
 import { cx } from "../../../cx.js";
 import { Icon } from "../../../icons.jsx";
 import { SkillMenu } from "../../../lib/SkillMenu/index.jsx";
-import { useBodyScrollLock, useFocusRestore } from "../../../lib/overlay.js";
+import { useOverlayLayer } from "../../../lib/overlay.js";
 import "./ReportCopilot.css";
 
 
@@ -537,6 +537,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * @param {object} [props.flow] ModelFlowDialog props; renders the flow dialog when set
  * @param {boolean} [props.stream=true]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
+ * @param {React.RefObject<HTMLElement>} [props.returnFocusRef] opener kept when the launcher is hidden during this workspace
  * @param {(event: { reason: "back" }) => void} [props.onBack] back to the start/context view
  * @param {(event: { reason: "new-session" }) => void} [props.onNewSession]
  * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
@@ -571,6 +572,7 @@ export function ReportCopilot({
   flow,
   stream = true,
   onClose,
+  returnFocusRef,
   onBack,
   onNewSession,
   onMaximize,
@@ -614,26 +616,13 @@ export function ReportCopilot({
   /* openAi(): focus the close control and lock page scroll (ref-counted
      `dialog-open`). `ai-workspace-expanded` mirrors the demo's body hook so
      host pages can react to the expanded state. */
-  useBodyScrollLock(open);
-  useFocusRestore(open, layerRef);
-  React.useEffect(() => {
-    if (open) closeRef.current?.focus();
-  }, [open]);
+  useOverlayLayer({ open, onClose, layerRef, initialFocusRef: closeRef, returnFocusRef });
 
   React.useEffect(() => {
-    document.body.classList.toggle("ai-workspace-expanded", open && expanded);
-    return () => document.body.classList.remove("ai-workspace-expanded");
+    const body = layerRef.current?.ownerDocument.body;
+    body?.classList.toggle("ai-workspace-expanded", open && expanded);
+    return () => body?.classList.remove("ai-workspace-expanded");
   }, [open, expanded]);
-
-  /* Escape closes the whole workspace (the demo has no popup-level handling). */
-  React.useEffect(() => {
-    if (!open) return undefined;
-    const onKey = (event) => {
-      if (event.key === "Escape") onClose?.({ reason: "escape" });
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
 
   /* Recent-chats popup closes on outside click. */
   React.useEffect(() => {
@@ -641,8 +630,9 @@ export function ReportCopilot({
     const onDocClick = (event) => {
       if (!headActionsRef.current?.contains(event.target)) setHistoryOpen(false);
     };
-    document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
+    const doc = layerRef.current?.ownerDocument;
+    doc?.addEventListener("click", onDocClick);
+    return () => doc?.removeEventListener("click", onDocClick);
   }, [historyOpen]);
 
   /* New answers reset the answer scroll + feedback (resetAiFeedback). */
@@ -790,12 +780,16 @@ export function ReportCopilot({
 
   return (
     <CopilotStreamContext.Provider value={streamRegistry}>
-      <div className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
+      <div data-mh-overlay-scrim className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
       <aside
         ref={layerRef}
+        data-mh-overlay-surface
         className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")}
         aria-hidden={!open}
         aria-label="Report AI workspace"
+        role="dialog"
+        aria-modal={open}
+        tabIndex={-1}
       >
         <header className="mh-copilot__head">
           <div className="mh-copilot__head-title">

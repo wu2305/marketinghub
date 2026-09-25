@@ -126,6 +126,7 @@ export function MarketingCockpitPage({
     const detailReport = detailProject.reports[details.index];
     if (detailReport) detailsTarget = { project: detailProject, report: detailReport };
   }
+  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="cockpit">
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
@@ -259,10 +260,11 @@ export function MarketingCockpitPage({
         onOpenLive={onOpenLive}
       />
       {/* body:has(#aiWorkspace.open) hides the launcher in the original too */}
-      <AssistantLauncher hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />
-      <ReportCopilot open={workspaceOpen} {...workspace} />
+      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />
+      <ReportCopilot open={workspaceOpen} {...workspace} returnFocusRef={assistantLauncherRef} />
       <AssistantPanel
         open={assistantOpen}
+        returnFocusRef={assistantLauncherRef}
         placement="drawer"
         {...assistant}
         prompt={prompt}

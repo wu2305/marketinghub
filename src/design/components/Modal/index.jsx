@@ -1,7 +1,7 @@
 import "../../tokens.css";
 import React from "react";
 import { cx } from "../../cx.js";
-import { useBodyScrollLock, useFocusRestore } from "../../lib/overlay.js";
+import { useOverlayLayer } from "../../lib/overlay.js";
 import "./Modal.css";
 
 export const modalVariants = ["modal", "sheet", "drawer"];
@@ -29,41 +29,11 @@ export const modalVariants = ["modal", "sheet", "drawer"];
 export function Modal({ open = false, eyebrow, title, children, className, closeLabel = "Close", titleId, variant = "modal", titleExtra, footer, initialFocus, onClose }) {
   const generatedTitleId = React.useId();
   const dialogRef = React.useRef(null);
-  const onCloseRef = React.useRef(onClose);
-  onCloseRef.current = onClose;
-  useBodyScrollLock(open);
-  useFocusRestore(open, dialogRef);
-  React.useEffect(() => {
-    if (!open) return undefined;
-    (initialFocus?.current ?? dialogRef.current)?.focus();
-    const onKey = (event) => {
-      if (event.key === "Escape") {
-        onCloseRef.current?.({ reason: "escape" });
-        return;
-      }
-      if (event.key === "Tab" && dialogRef.current) {
-        const focusables = dialogRef.current.querySelectorAll(
-          "a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex='-1'])",
-        );
-        if (!focusables.length) {
-          event.preventDefault();
-          return;
-        }
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (event.shiftKey ? document.activeElement === first || !dialogRef.current.contains(document.activeElement) : document.activeElement === last) {
-          event.preventDefault();
-          (event.shiftKey ? last : first).focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
+  useOverlayLayer({ open, onClose, layerRef: dialogRef, initialFocusRef: initialFocus });
   if (!open) return null;
   const isDrawer = variant === "drawer";
   return (
-    <div className={cx("mh-modal", variant === "sheet" && "mh-modal--sheet", isDrawer && "mh-modal--drawer")}>
+    <div data-mh-overlay-surface className={cx("mh-modal", variant === "sheet" && "mh-modal--sheet", isDrawer && "mh-modal--drawer")}>
       <div className="mh-modal__scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <div
         className={cx("mh-modal__dialog", className)}

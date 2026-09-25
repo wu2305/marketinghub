@@ -1,6 +1,7 @@
 import "../../tokens.css";
 import React from "react";
 import { cx } from "../../cx.js";
+import { useOverlayLayer } from "../../lib/overlay.js";
 import "./ModelFlowDialog.css";
 
 
@@ -79,7 +80,7 @@ const MODEL_FLOW_SECTIONS = [
  * @param {(event: { value: string }) => void} [props.onRuleChange]
  * @param {(event: { messages: Array<object>, rule: string }) => void} [props.onGenerate]
  * @param {(event: { reason: "back" }) => void} [props.onBack]
- * @param {(event: { reason: "button"|"cancel"|"save"|"submit" }) => void} [props.onClose]
+ * @param {(event: { reason: "button"|"cancel"|"escape"|"save"|"submit" }) => void} [props.onClose]
  * @param {boolean} [props.submitFirst=false] report variant orders Submit before Save
  * @param {(event: { values: object }) => void} [props.onSave]
  * @param {(event: { values: object }) => void} [props.onSubmit]
@@ -102,12 +103,15 @@ export function ModelFlowDialog({
 }) {
   const copy = { ...MODEL_FLOW_LABELS, ...labels };
   const titleId = React.useId();
+  const layerRef = React.useRef(null);
+  const closeRef = React.useRef(null);
   const formRef = React.useRef(null);
   const ruleRef = React.useRef(null);
   const doneTimer = React.useRef(null);
   const [error, setError] = React.useState(false);
   const [invalid, setInvalid] = React.useState({});
   const [done, setDone] = React.useState(null);
+  useOverlayLayer({ open: Boolean(step), onClose, layerRef, initialFocusRef: closeRef });
   React.useEffect(() => () => window.clearTimeout(doneTimer.current), []);
   React.useEffect(() => {
     setError(false);
@@ -173,19 +177,21 @@ export function ModelFlowDialog({
       : copy.manualSubtitle;
 
   return (
-    <div className="mh-flow">
+    <div data-mh-overlay-surface className="mh-flow">
       <div
+        ref={layerRef}
         className={cx("mh-flow__card", isHistory ? "mh-flow__card--history" : "mh-flow__card--form")}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
+        tabIndex={-1}
       >
         <header className="mh-flow__head">
           <div>
             <strong id={titleId}>{title}</strong>
             <span>{subtitle}</span>
           </div>
-          <button type="button" aria-label="Close" onClick={() => onClose?.({ reason: "button" })}>
+          <button ref={closeRef} type="button" aria-label="Close" onClick={() => onClose?.({ reason: "button" })}>
             ×
           </button>
         </header>

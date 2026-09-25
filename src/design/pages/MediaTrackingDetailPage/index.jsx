@@ -82,6 +82,7 @@ export function MediaTrackingDetailPage({
   onClearSkill,
   onSkillAction,
 }) {
+  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="tracking">
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
@@ -150,9 +151,10 @@ export function MediaTrackingDetailPage({
           </div>
         </section>
       </main>
-      <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
+      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <AssistantPanel
         open={assistantOpen}
+        returnFocusRef={assistantLauncherRef}
         placement="drawer"
         enterToSubmit={false}
         lite

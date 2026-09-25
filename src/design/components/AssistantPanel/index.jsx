@@ -7,7 +7,7 @@ import { TextArea } from "../../components/TextArea/index.jsx";
 import { cx } from "../../cx.js";
 import { Icon } from "../../icons.jsx";
 import { SkillMenu } from "../../lib/SkillMenu/index.jsx";
-import { useBodyScrollLock, useFocusRestore } from "../../lib/overlay.js";
+import { useOverlayLayer } from "../../lib/overlay.js";
 import "./AssistantPanel.css";
 
 
@@ -200,6 +200,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {() => void} [props.onClearSkill]
  * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction] model-creation menu entries
  * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onClose]
+ * @param {React.RefObject<HTMLElement>} [props.returnFocusRef] opener kept when the launcher is hidden during this panel
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
  * @param {(event: { prompt: string, scope?: string, model?: string, mode?: string }) => void} [props.onSubmit] model/mode are sent only when `showPicks` is on
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
@@ -239,6 +240,7 @@ export function AssistantPanel({
   onClearSkill,
   onSkillAction,
   onClose,
+  returnFocusRef,
   onPromptChange,
   onSubmit,
   onSuggestion,
@@ -255,30 +257,15 @@ export function AssistantPanel({
   const layerRef = React.useRef(null);
   const mainRef = React.useRef(null);
   const promptRef = React.useRef(null);
-  const onCloseRef = React.useRef(onClose);
-  onCloseRef.current = onClose;
-
-  useBodyScrollLock(open);
-  useFocusRestore(open, layerRef);
+  useOverlayLayer({ open, onClose: (event) => {
+    setHistoryOpen(false);
+    onClose?.(event);
+  }, layerRef, initialFocusRef: promptRef, returnFocusRef });
   React.useEffect(() => {
     if (!open) {
       setExpanded(false);
       setHistoryOpen(false);
-      return undefined;
     }
-    const timer = window.setTimeout(() => promptRef.current?.focus(), 80);
-    return () => window.clearTimeout(timer);
-  }, [open]);
-
-  React.useEffect(() => {
-    if (!open) return undefined;
-    const onKeydown = (event) => {
-      if (event.key !== "Escape") return;
-      setHistoryOpen(false);
-      onCloseRef.current?.({ reason: "escape" });
-    };
-    document.addEventListener("keydown", onKeydown);
-    return () => document.removeEventListener("keydown", onKeydown);
   }, [open]);
 
   React.useEffect(() => {
@@ -286,8 +273,9 @@ export function AssistantPanel({
     const onPointerDown = (event) => {
       if (!event.target.closest(".mh-assistant__history")) setHistoryOpen(false);
     };
-    document.addEventListener("click", onPointerDown);
-    return () => document.removeEventListener("click", onPointerDown);
+    const doc = layerRef.current?.ownerDocument;
+    doc?.addEventListener("click", onPointerDown);
+    return () => doc?.removeEventListener("click", onPointerDown);
   }, [historyOpen]);
 
   React.useEffect(() => {
@@ -309,10 +297,12 @@ export function AssistantPanel({
   return (
     <section
       ref={layerRef}
+      data-mh-overlay-surface
       className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")}
       aria-label={lite ? "AI Interpreter" : title}
+      tabIndex={-1}
     >
-      <button className="mh-assistant__backdrop" type="button" aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
+      <button className="mh-assistant__backdrop" type="button" tabIndex={-1} aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
       <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
         <header className="mh-assistant__header">
           <div className="mh-assistant__identity">

@@ -52,7 +52,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
 - **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类全部有专用视图并经 `typeViews` 注册分派（Report Context/Metric Dictionary/Analytical Model/Email Reports 共用 FieldLibraryView）；overview 与 Principles 通过人工审图，其余人工 pending；各类创建/编辑入口（M5）未建。
 - **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于各自的 `pages/<Page>/<Page>.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
-- **覆盖层**：滚动锁与焦点还原已共享，但 Escape 与焦点环由各组件自行实现：嵌套时一次 Escape 会关闭所有层，ModelFlowDialog 不响应 Escape，只有 Modal 有焦点环。
+- **覆盖层**：Modal（含 ConfirmDialog、UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；仅栈顶响应 Escape 与焦点环，滚动锁在最后一层关闭时释放，ModelFlowDialog 可用 Escape 关闭。原有不同覆盖层外壳保持各自真实视觉形态。
 - **组件边界**：AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
 - **文案**：AiInterpreterPage 页壳文案已由 props 注入；部分存量有机体仍含写死可见文案，随页面改动继续补齐。
 - **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
