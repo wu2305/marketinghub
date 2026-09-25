@@ -164,7 +164,7 @@ export default [
   },
   {
     /* workspace.js createAnswer: suggestion click submits immediately; the feed
-       renders the workspace card (flush banner, findings, source chips) below
+       renders the workspace card (banner, findings, source chips) below
        the always-visible ask stage. */
     id: "p06-assistant-answer",
     original: {
@@ -191,9 +191,14 @@ export default [
     story: {
       id: "pages--campaign",
       args: { assistantOpen: true },
-      actions: [{ click: ".mh-assistant__suggestions button" }, { wait: ".mh-assistant__answer--workspace" }],
+      actions: [
+        { click: ".mh-assistant__suggestions button" },
+        { wait: ".mh-assistant__answer--workspace" },
+        { eval: "(() => { const banner = document.querySelector('.mh-assistant__answer-banner'); const style = getComputedStyle(banner); if (style.display !== 'grid' || style.borderBottomStyle !== 'solid') throw new Error('response header not styled'); })()" },
+      ],
       expect: [
-        { sel: ".mh-assistant__answer-banner", text: "AI ResponseContext: Campaigns" },
+        { sel: ".mh-assistant__answer-banner strong", text: "AI Response" },
+        { sel: ".mh-assistant__answer-banner span", text: "Context: Campaigns" },
         { sel: ".mh-assistant__answer-body > p", text: "Based on current campaign data, here are the key findings." },
         { sel: ".mh-assistant__finding", text: "ROI Trend" },
         { sel: ".mh-assistant__finding:has-text('Budget Alert')" },

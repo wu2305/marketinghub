@@ -75,8 +75,6 @@ function AssistantAnswer({ answer, onFeedback }) {
           <span className="mh-assistant__bubble">{answer.query}</span>
         </div>
         <article className="mh-assistant__answer mh-assistant__answer--workspace" ref={cardRef}>
-          {/* Original quirk: `.answer-card-header` matches no stylesheet rule,
-              so banner strong+span render as flush inline text. */}
           <div className="mh-assistant__answer-banner">
             <strong>{answer.banner}</strong>
             <span>{answer.context}</span>
