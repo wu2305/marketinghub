@@ -230,7 +230,7 @@ async function newPage() {
   await page.close();
 }
 
-/* ---- home-flow: assistant history fill → disabled ASK → submit → session ---- */
+/* ---- home-flow: assistant history fill → enabled ASK → submit → session ---- */
 {
   const { page, errors } = await newPage();
   const notes = [];
@@ -250,7 +250,7 @@ async function newPage() {
   if (filled !== expectedPrompt) {
     notes.push(`history pick filled "${filled.slice(0, 60)}" — expected "${expectedPrompt.slice(0, 60)}"`);
   }
-  if (!(await ask.isDisabled())) notes.push("ASK not disabled after history pick");
+  if (await ask.isDisabled()) notes.push("ASK disabled after history pick");
   await box.fill("typed follow-up");
   if (await ask.isDisabled()) notes.push("ASK still disabled after typing");
   await ask.click();

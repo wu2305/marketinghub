@@ -197,7 +197,6 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
  * @param {boolean} [props.lite=false] lite variant (original `data-lite-panel`): short maximize labels
  * @param {boolean} [props.hideStageOnAnswers=false] true mirrors the reports panel where the ask stage hides once the feed has entries
- * @param {boolean} [props.submitDisabled=false] force-disables ASK — the home history pick fills the composer without updateSendState, leaving ASK off until the user types
  * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -237,7 +236,6 @@ export function AssistantPanel({
   enterToSubmit = true,
   lite = false,
   hideStageOnAnswers = false,
-  submitDisabled = false,
   onAttach,
   onSelectSkill,
   onClearSkill,
@@ -499,7 +497,7 @@ export function AssistantPanel({
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">
-                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={submitDisabled || !String(prompt).trim()}>
+                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={!String(prompt).trim()}>
                   ASK
                 </Button>
               </span>
