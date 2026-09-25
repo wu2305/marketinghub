@@ -84,4 +84,22 @@ export default [
     story: { actions: [{ eval: "document.querySelector('.mh-hero').style.cssText = 'margin-left:0;width:100%'" }] },
     reason: "full-width hero must fail the layout geometry assertions",
   },
+  {
+    id: "neg-p03-assistant-missing-answer",
+    base: "p03-assistant-answer",
+    story: { id: "pages--self-service-assistant" },
+    reason: "open assistant without a submitted suggestion must not satisfy report-answer assertions",
+  },
+  {
+    id: "neg-p03-assistant-closed",
+    base: "p03-assistant-open",
+    story: { id: "pages--self-service" },
+    reason: "closed Self-Service page must not satisfy open assistant and drawer assertions",
+  },
+  {
+    id: "neg-p03-assistant-escape-left-open",
+    base: "p03-assistant-escape-focus",
+    story: { id: "pages--self-service-assistant", actions: [] },
+    reason: "assistant left open must not satisfy Escape closure and launcher-focus assertions",
+  },
 ];

@@ -283,6 +283,22 @@ export const COCKPIT = {
 };
 
 export const SELF_SERVICE = {
+  assistant: {
+    title: "Ask AI Interpreter",
+    headline: "Ask a question",
+    description: "Your AI partner for every marketing task",
+    suggestions: [
+      { label: "Compare channel performance for the last 3 campaigns", prompt: "Compare channel performance for the last 3 campaigns and identify top performers." },
+      { label: "Largest city movement this week", prompt: "Explain the largest city movement in this week's City Strategy report." },
+      { label: "Campaign quality anomalies", prompt: "What anomalies should I review in the Campaign Quality Watch?" },
+    ],
+    historyTitle: "Recent Chats",
+    history: [
+      { title: "Campaign ROI decline", label: "Why did campaign ROI decline last week?", prompt: "Why did campaign ROI decline last week?" },
+      { title: "Conversion drop", label: "Analyze conversion drop by customer segment.", prompt: "Analyze conversion drop by customer segment." },
+      { title: "Data quality issues", label: "Summarize metrics with data quality issues.", prompt: "Summarize metrics with data quality issues." },
+    ],
+  },
   hero: {
     image: assetUrl("assets/images/business-explorer-hero.jpg"),
     eyebrow: "Flexible analysis",

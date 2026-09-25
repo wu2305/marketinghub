@@ -19,6 +19,7 @@ import {
   MarketingCockpitPage,
   CityInvestDashboard,
   ReportCopilot,
+  SelfServicePage,
   useCockpitDemo,
   useHomeDemo,
   useBusinessTermDemo,
@@ -29,6 +30,7 @@ import {
   copilotSkillItems,
   resolveCopilotAnswer,
 } from "../../src/design/index.js";
+import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
 import {
   ASSISTANT,
   ASSISTANT_SKILL_MENU,
@@ -39,6 +41,7 @@ import {
   LOGO,
   MODEL_FLOW,
   NAV,
+  SELF_SERVICE,
   buildHomeAssistantAnswer,
   buildModelDraft,
   buildReportAssistantAnswer,
@@ -73,6 +76,7 @@ const ROUTE_MAP = {
   "/assets/pages/data-model.html": "data-model",
   "/assets/pages/knowledge.html": "interpreter",
   "/assets/pages/knowledge-create.html": "knowledge-create",
+  "/assets/pages/flexible.html": "self-service",
 };
 
 function mapDemoHref(href) {
@@ -122,6 +126,7 @@ function routeOf(loc) {
   if (rest === "data-model") return { name: "data-model", params };
   if (rest === "interpreter") return { name: "interpreter", params };
   if (rest === "knowledge-create") return { name: "knowledge-create", params };
+  if (rest === "self-service") return { name: "self-service", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -247,6 +252,19 @@ function KnowledgeCreateRoute({ params }) {
     },
   });
   return <KnowledgeCreatePage {...props} logo={hostLogo} />;
+}
+
+function SelfServiceRoute({ params }) {
+  const props = useSelfServiceDemo({
+    ...SELF_SERVICE,
+    tab: params.get("tab") === "upload" ? "upload" : "analysis",
+    category: "all",
+    logo: hostLogo,
+    navigation: hostNav(),
+    assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
+    demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
+  });
+  return <SelfServicePage {...props} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -375,6 +393,7 @@ function App() {
   if (route.name === "data-model") return <DataModelRoute params={route.params} />;
   if (route.name === "interpreter") return <InterpreterRoute params={route.params} />;
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
+  if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;
