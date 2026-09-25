@@ -113,6 +113,8 @@ export {
 export {
   AssistantPanel,
   assistantPlacements,
+  assistantVariants,
+  assistantAnswerVariants,
 } from "./components/AssistantPanel/index.jsx";
 export {
   CampaignRail,

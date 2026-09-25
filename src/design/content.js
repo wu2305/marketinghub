@@ -1865,5 +1865,5 @@ export const LITE_ASSISTANT = {
 
 /** Lite-panel answer shape: a single card line, no bubble/sources/actions. */
 export function buildLiteAssistantAnswer(query) {
-  return { query, simple: true, lead: "I will use the AI Interpreter knowledge context to answer:" };
+  return { query, variant: "simple", lead: "I will use the AI Interpreter knowledge context to answer:" };
 }

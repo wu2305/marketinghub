@@ -267,6 +267,7 @@ export function MarketingCockpitPage({
         returnFocusRef={assistantLauncherRef}
         placement="drawer"
         {...assistant}
+        variant="cockpit"
         prompt={prompt}
         onClose={onCloseAssistant}
         onPromptChange={onPromptChange}

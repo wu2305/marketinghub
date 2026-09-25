@@ -1,23 +1,44 @@
 import "../../tokens.css";
 import React from "react";
 import { Button } from "../../components/Button/index.jsx";
-import { ScopeOption } from "./ScopeOption.jsx";
 import { Suggestion } from "./Suggestion.jsx";
 import { TextArea } from "../../components/TextArea/index.jsx";
 import { cx } from "../../cx.js";
 import { Icon } from "../../icons.jsx";
 import { SkillMenu } from "../../lib/SkillMenu/index.jsx";
-import { useOverlayLayer } from "../../lib/overlay.js";
+import { AssistantShell } from "../../lib/AssistantShell.jsx";
 import "./AssistantPanel.css";
 
 
 export const assistantPlacements = ["modal", "drawer"];
+export const assistantVariants = ["home", "cockpit", "campaign", "lite"];
+export const assistantAnswerVariants = ["default", "compact", "workspace", "simple"];
+
+const variantSettings = {
+  home: { enterToSubmit: true, hideStageOnAnswers: false, shortMaximizeLabel: true },
+  cockpit: { enterToSubmit: false, hideStageOnAnswers: true, shortMaximizeLabel: false },
+  campaign: { enterToSubmit: false, hideStageOnAnswers: false, shortMaximizeLabel: false },
+  lite: { enterToSubmit: false, hideStageOnAnswers: false, shortMaximizeLabel: true },
+};
+
+const panelShellClasses = {
+  header: "mh-assistant__header",
+  actions: "mh-assistant__actions",
+  icon: "mh-assistant__icon",
+  historyAnchor: "mh-assistant__history",
+  historyPopup: "mh-assistant__history-pop",
+  historyHead: "mh-assistant__history-head",
+  historyList: "mh-assistant__history-list",
+  historyItem: "mh-assistant__history-item",
+  close: "mh-assistant__close",
+  closeLabel: "Close assistant",
+};
 
 /**
  * One assistant answer entry: user query bubble plus the grounded answer card
  * with sources, related actions and feedback buttons.
  * @param {object} props
- * @param {{ query: string, kicker?: string, title: string, body: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: "compact"|"workspace", banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, simple?: boolean, lead?: string }} props.answer
+ * @param {{ query: string, kicker?: string, title?: string, body?: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: typeof assistantAnswerVariants[number], banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, lead?: string }} props.answer
  * @param {(event: { query: string, feedback: "helpful"|"not-helpful"|"copy"|null }) => void} [props.onFeedback]
  */
 function AssistantAnswer({ answer, onFeedback }) {
@@ -41,7 +62,7 @@ function AssistantAnswer({ answer, onFeedback }) {
     }).catch(() => {});
     onFeedback?.({ query: answer.query, feedback: "copy" });
   };
-  if (answer.simple) {
+  if (answer.variant === "simple") {
     return (
       <div className="mh-assistant__entry">
         <article className="mh-assistant__answer mh-assistant__answer--simple" ref={cardRef}>
@@ -179,22 +200,14 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {string} [props.headline="Ask a question"]
  * @param {string} [props.description]
  * @param {Array<string|{ label: string, prompt: string }>} [props.suggestions=[]]
- * @param {Array<string>} [props.scopes=[]]
- * @param {string} [props.scope] selected scope label
- * @param {boolean} [props.showScopes=false]
- * @param {boolean} [props.showPicks=true] show model/mode pick chips
+ * @param {typeof assistantVariants[number]} [props.variant="campaign"] real page behavior preset
  * @param {string} [props.prompt=""]
- * @param {string} [props.model="Data Model"]
- * @param {string} [props.mode="Analytical Model"]
- * @param {Array<object>} [props.answers=[]] AssistantAnswer entries, oldest first; `{ simple: true, lead, query }` renders the lite single-line card
+ * @param {Array<object>} [props.answers=[]] AssistantAnswer entries, oldest first; `{ variant: "simple", lead, query }` renders the lite single-line card
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
  * @param {string} [props.historyTitle="Recent"]
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"
  * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ triggerLabel?, attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
  * @param {{ id?: string, type: string, title: string }} [props.selectedSkill] chip shown inside the composer when a skill is selected
- * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
- * @param {boolean} [props.lite=false] lite variant (original `data-lite-panel`): short maximize labels
- * @param {boolean} [props.hideStageOnAnswers=false] true mirrors the reports panel where the ask stage hides once the feed has entries
  * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -202,9 +215,8 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onClose]
  * @param {React.RefObject<HTMLElement>} [props.returnFocusRef] opener kept when the launcher is hidden during this panel
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string, scope?: string, model?: string, mode?: string }) => void} [props.onSubmit] model/mode are sent only when `showPicks` is on
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
- * @param {(event: { scope: string }) => void} [props.onScopeChange]
  * @param {() => void} [props.onNewSession]
  * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
  * @param {(event: { open: boolean }) => void} [props.onHistory]
@@ -219,22 +231,14 @@ export function AssistantPanel({
   headline = "Ask a question",
   description = "Your AI partner for every marketing task",
   suggestions = [],
-  scopes = [],
-  scope,
-  showScopes = false,
-  showPicks = true,
+  variant = "campaign",
   prompt = "",
-  model = "Data Model",
-  mode = "Analytical Model",
   answers = [],
   history = [],
   historyTitle = "Recent",
   historyCount,
   skillMenu,
   selectedSkill,
-  enterToSubmit = true,
-  lite = false,
-  hideStageOnAnswers = false,
   onAttach,
   onSelectSkill,
   onClearSkill,
@@ -244,39 +248,17 @@ export function AssistantPanel({
   onPromptChange,
   onSubmit,
   onSuggestion,
-  onScopeChange,
   onNewSession,
   onMaximize,
   onHistory,
   onHistorySelect,
   onFeedback,
 }) {
+  const { enterToSubmit, hideStageOnAnswers, shortMaximizeLabel } = variantSettings[variant] || variantSettings.campaign;
   const titleId = React.useId();
-  const [expanded, setExpanded] = React.useState(false);
-  const [historyOpen, setHistoryOpen] = React.useState(false);
   const layerRef = React.useRef(null);
   const mainRef = React.useRef(null);
   const promptRef = React.useRef(null);
-  useOverlayLayer({ open, onClose: (event) => {
-    setHistoryOpen(false);
-    onClose?.(event);
-  }, layerRef, initialFocusRef: promptRef, returnFocusRef });
-  React.useEffect(() => {
-    if (!open) {
-      setExpanded(false);
-      setHistoryOpen(false);
-    }
-  }, [open]);
-
-  React.useEffect(() => {
-    if (!historyOpen) return undefined;
-    const onPointerDown = (event) => {
-      if (!event.target.closest(".mh-assistant__history")) setHistoryOpen(false);
-    };
-    const doc = layerRef.current?.ownerDocument;
-    doc?.addEventListener("click", onPointerDown);
-    return () => doc?.removeEventListener("click", onPointerDown);
-  }, [historyOpen]);
 
   React.useEffect(() => {
     if (answers.length && mainRef.current) {
@@ -293,97 +275,31 @@ export function AssistantPanel({
     el.style.height = `${el.scrollHeight}px`;
   }, [prompt]);
 
-  if (!open) return null;
   return (
-    <section
-      ref={layerRef}
-      data-mh-overlay-surface
-      className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")}
-      aria-label={lite ? "AI Interpreter" : title}
-      tabIndex={-1}
-    >
-      <button className="mh-assistant__backdrop" type="button" tabIndex={-1} aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
-      <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>
-        <header className="mh-assistant__header">
-          <div className="mh-assistant__identity">
-            <span className="mh-assistant__mark">AI</span>
-            <h2 id={titleId}>{title}</h2>
-          </div>
-          <div className="mh-assistant__actions">
-            <button
-              className="mh-assistant__icon"
-              type="button"
-              aria-label="New session"
-              onClick={() => {
-                onNewSession?.();
-                promptRef.current?.focus();
-              }}
-            >
-              <Icon name="plus" />
-            </button>
-            <button
-              className="mh-assistant__icon"
-              type="button"
-              /* assistant-skill-menu.js cycles the full labels on non-home
-                 panels; portal.js keeps the short labels on the home panel. */
-              aria-label={tone === "home" || lite ? (expanded ? "Restore" : "Maximize") : expanded ? "Restore AI Interpreter panel" : "Maximize AI Interpreter panel"}
-              title={expanded ? "Restore" : "Maximize"}
-              onClick={() => {
-                setExpanded((value) => !value);
-                onMaximize?.({ expanded: !expanded });
-              }}
-            >
-              <Icon name="expand" />
-            </button>
-            <div className="mh-assistant__history">
-              <button
-                className="mh-assistant__icon"
-                type="button"
-                aria-label="History"
-                aria-expanded={historyOpen}
-                onClick={() => {
-                  setHistoryOpen((value) => !value);
-                  onHistory?.({ open: !historyOpen });
-                }}
-              >
-                <Icon name="history" />
-              </button>
-              {historyOpen ? (
-                <div className="mh-assistant__history-pop" role="dialog" aria-label="Recent conversations">
-                  <div className="mh-assistant__history-head">
-                    <h4>
-                      {historyTitle}
-                      {historyCount != null ? <span className="mh-assistant__history-count"> {historyCount}</span> : null}
-                    </h4>
-                    <button type="button" aria-label="Close" onClick={() => setHistoryOpen(false)}>
-                      ×
-                    </button>
-                  </div>
-                  <div className="mh-assistant__history-list">
-                    {history.map((item) => (
-                      <button
-                        key={item.id || item.label}
-                        className="mh-assistant__history-item"
-                        type="button"
-                        onClick={() => {
-                          setHistoryOpen(false);
-                          onHistorySelect?.({ label: item.label, prompt: item.prompt });
-                          promptRef.current?.focus();
-                        }}
-                      >
-                        <strong>{item.title ?? item.label}</strong>
-                        <span>{item.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-            <button className="mh-assistant__close" type="button" aria-label="Close assistant" onClick={() => onClose?.({ reason: "button" })}>
-              ×
-            </button>
-          </div>
-        </header>
+    <AssistantShell
+      open={open}
+      title={<div className="mh-assistant__identity"><span className="mh-assistant__mark">AI</span><h2 id={titleId}>{title}</h2></div>}
+      classes={panelShellClasses}
+      shortMaximizeLabel={shortMaximizeLabel}
+      history={history.map((item) => ({ id: item.id, title: item.title ?? item.label, subtitle: item.label, source: item }))}
+      historyHeading={<h4>{historyTitle}{historyCount != null ? <span className="mh-assistant__history-count"> {historyCount}</span> : null}</h4>}
+      historyAriaLabel="Recent conversations"
+      historyCloseLabel="Close"
+      layerRef={layerRef}
+      initialFocusRef={promptRef}
+      returnFocusRef={returnFocusRef}
+      onClose={onClose}
+      onNewSession={onNewSession}
+      onMaximize={onMaximize}
+      onHistory={onHistory}
+      onHistorySelect={(item) => onHistorySelect?.({ label: item.label, prompt: item.prompt })}
+      renderSurface={({ header, body, composer, expanded }) => open ? (
+        <section ref={layerRef} data-mh-overlay-surface className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")} aria-label={variant === "lite" ? "AI Interpreter" : title} tabIndex={-1}>
+          <button className="mh-assistant__backdrop" type="button" tabIndex={-1} aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
+          <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>{header}{body}{composer}</div>
+        </section>
+      ) : null}
+      body={
         <div className="mh-assistant__main" ref={mainRef}>
           {hideStageOnAnswers && answers.length ? null : (
             <div className="mh-assistant__stage">
@@ -414,28 +330,17 @@ export function AssistantPanel({
             </div>
           ) : null}
         </div>
+      }
+      composer={
         <form
           className="mh-assistant__ask"
           aria-label="Ask AI Interpreter AI"
           onSubmit={(event) => {
             event.preventDefault();
-            onSubmit?.({
-              prompt,
-              ...(showScopes ? { scope } : {}),
-              ...(showPicks ? { model, mode } : {}),
-            });
+            onSubmit?.({ prompt });
           }}
         >
-          {showScopes ? (
-            <div className="mh-assistant__scopes" role="group" aria-label="Response scope">
-              <span>Scope</span>
-              {scopes.map((item) => (
-                <ScopeOption key={item} label={item} pressed={item === scope} onChange={() => onScopeChange?.({ scope: item })} />
-              ))}
-            </div>
-          ) : placement === "drawer" ? (
-            <div className="mh-assistant__scope-reserve" aria-hidden="true" />
-          ) : null}
+          {placement === "drawer" ? <div className="mh-assistant__scope-reserve" aria-hidden="true" /> : null}
           <div className="mh-assistant__box">
             {selectedSkill ? (
               <span className="mh-assistant__chip">
@@ -479,8 +384,6 @@ export function AssistantPanel({
                   onAction={onSkillAction}
                 />
               ) : null}
-              {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
-              {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">
                 <Button variant="gold" size="sm" type="submit" label="Ask" disabled={!String(prompt).trim()}>
                   ASK
@@ -489,7 +392,7 @@ export function AssistantPanel({
             </div>
           </div>
         </form>
-      </div>
-    </section>
+      }
+    />
   );
 }

@@ -188,7 +188,7 @@ function CockpitRoute({ params }) {
     cityInvest: { ...CITY_INVEST_VIEW, getScenario: cityInvestScenarioSource(CITY_INVEST) },
     demo: { copilot: COPILOT, modelFlow: MODEL_FLOW, reportAnswerFor: buildReportAssistantAnswer },
     detailsSections: COCKPIT.detailsSections,
-    assistant: { ...COCKPIT.assistant, showScopes: false, showPicks: false, hideStageOnAnswers: true, enterToSubmit: false, skillMenu: COCKPIT_SKILL_MENU },
+    assistant: { ...COCKPIT.assistant, skillMenu: COCKPIT_SKILL_MENU },
     ...cockpitRoutes,
   });
   return <MarketingCockpitPage {...props} />;

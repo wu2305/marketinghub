@@ -318,9 +318,8 @@ export function CampaignPage({
         open={assistantOpen}
         returnFocusRef={assistantLauncherRef}
         placement="drawer"
-        enterToSubmit={false}
-        showPicks={false}
         {...assistant}
+        variant="campaign"
         prompt={prompt}
         onClose={onCloseAssistant}
         onPromptChange={onPromptChange}

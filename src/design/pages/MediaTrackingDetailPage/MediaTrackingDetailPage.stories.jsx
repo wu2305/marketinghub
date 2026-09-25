@@ -20,7 +20,7 @@ export const MediaTrackingDetail = {
     filters: MEDIA_TRACKING.filters,
     notes: MEDIA_TRACKING.notes,
     table: MEDIA_TRACKING.table,
-    assistant: { ...LITE_ASSISTANT, showScopes: false, showPicks: false },
+    assistant: LITE_ASSISTANT,
     assistantOpen: false,
     prompt: "",
   },

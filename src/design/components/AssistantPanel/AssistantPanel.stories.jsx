@@ -1,6 +1,6 @@
 import React from "react";
-import { AssistantPanel, assistantPlacements } from "./index.jsx";
-import { ASSISTANT, LITE_ASSISTANT, buildLiteAssistantAnswer } from "../../content.js";
+import { AssistantPanel, assistantAnswerVariants, assistantPlacements, assistantVariants } from "./index.jsx";
+import { ASSISTANT, LITE_ASSISTANT, buildAssistantAnswer, buildCampaignAnswer, buildLiteAssistantAnswer, buildReportAssistantAnswer } from "../../content.js";
 import { useSynced } from "../../lib/story-helpers.js";
 
 export default {
@@ -19,28 +19,33 @@ export default {
 };
 
 export const AskPanel = {
-  args: { open: true, placement: "modal", showScopes: true, scope: "All", prompt: "" },
+  args: { open: true, placement: "drawer", variant: "campaign", answerVariant: "default", prompt: "" },
   argTypes: {
     placement: { control: "inline-radio", options: assistantPlacements },
-    showScopes: { control: "boolean" },
-    scope: { control: "select", options: ASSISTANT.scopes },
+    variant: { control: "inline-radio", options: assistantVariants },
+    answerVariant: { control: "select", options: assistantAnswerVariants, description: "Story preview of answer.variant; submitting still uses onSubmit." },
     onClose: { action: "onClose" },
     onSubmit: { action: "onSubmit" },
     onPromptChange: { action: "onPromptChange" },
     onSuggestion: { action: "onSuggestion" },
-    onScopeChange: { action: "onScopeChange" },
   },
   render: function AskPanelStory(args) {
     const [open, setOpen] = useSynced(args.open);
-    const [scope, setScope] = useSynced(args.scope);
     const [prompt, setPrompt] = useSynced(args.prompt);
+    const query = "What's the ROI trend across my active campaigns?";
+    const answerByVariant = {
+      default: buildAssistantAnswer(query),
+      compact: buildReportAssistantAnswer(query),
+      workspace: buildCampaignAnswer(query),
+      simple: buildLiteAssistantAnswer(query),
+    };
     return (
       <AssistantPanel
         {...ASSISTANT}
         {...args}
         open={open}
-        scope={scope}
         prompt={prompt}
+        answers={[answerByVariant[args.answerVariant]]}
         onClose={(event) => {
           setOpen(false);
           args.onClose?.(event);
@@ -53,10 +58,6 @@ export const AskPanel = {
           setPrompt(event.prompt);
           args.onSuggestion?.(event);
         }}
-        onScopeChange={(event) => {
-          setScope(event.scope);
-          args.onScopeChange?.(event);
-        }}
         onSubmit={(event) => {
           setPrompt("");
           args.onSubmit?.(event);
@@ -67,9 +68,10 @@ export const AskPanel = {
 };
 
 export const LiteAskPanel = {
-  args: { open: true },
+  args: { open: true, variant: "lite" },
   argTypes: {
     open: { control: "boolean" },
+    variant: { control: "inline-radio", options: assistantVariants },
     onClose: { action: "onClose" },
     onSubmit: { action: "onSubmit" },
     onAttach: { action: "onAttach" },
@@ -88,8 +90,6 @@ export const LiteAskPanel = {
         {...args}
         open={open}
         placement="drawer"
-        showPicks={false}
-        enterToSubmit={false}
         prompt={prompt}
         answers={answers}
         selectedSkill={skill}

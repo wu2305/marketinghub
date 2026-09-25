@@ -5,7 +5,7 @@ import { TextArea } from "../../../components/TextArea/index.jsx";
 import { cx } from "../../../cx.js";
 import { Icon } from "../../../icons.jsx";
 import { SkillMenu } from "../../../lib/SkillMenu/index.jsx";
-import { useOverlayLayer } from "../../../lib/overlay.js";
+import { AssistantShell } from "../../../lib/AssistantShell.jsx";
 import "./ReportCopilot.css";
 
 
@@ -17,6 +17,18 @@ import "./ReportCopilot.css";
    ============================================================ */
 
 const COPILOT_STREAM_MS = { holistic: 110, rich: 140 };
+const copilotShellClasses = {
+  header: "mh-copilot__head",
+  actions: "mh-copilot__head-actions",
+  icon: "mh-copilot__icon",
+  historyAnchor: "mh-copilot__history-anchor",
+  historyPopup: "mh-copilot__history",
+  historyHead: "mh-copilot__history-head",
+  historyList: "mh-copilot__history-list",
+  historyItem: "mh-copilot__history-item",
+  close: "mh-copilot__close",
+  closeLabel: "Close AI workspace",
+};
 
 /** Inline segment renderer shared by copilot content (text/bold/signed value/badge/break). */
 function CopilotSegments({ segments }) {
@@ -588,8 +600,6 @@ export function ReportCopilot({
   onSelectSkill,
   onSkillAction,
 }) {
-  const [expanded, setExpanded] = React.useState(false);
-  const [historyOpen, setHistoryOpen] = React.useState(false);
   const [dock, setDock] = React.useState(null);
   const [collapsed, setCollapsed] = React.useState({});
   const [showAll, setShowAll] = React.useState(false);
@@ -597,7 +607,6 @@ export function ReportCopilot({
   const inputRef = React.useRef(null);
   const closeRef = React.useRef(null);
   const layerRef = React.useRef(null);
-  const headActionsRef = React.useRef(null);
   const answerRef = React.useRef(null);
   /* Per-instance stream registry: cards inside this copilot cancel each other
      mid-stream, but a stream in another ReportCopilot is unaffected. */
@@ -606,34 +615,6 @@ export function ReportCopilot({
   const answerOpen = Boolean(answer) || chat.length > 0;
   const chatMode = !answer && chat.length > 0;
 
-  /* The report workspace closes its expanded layout on every close. The
-     other local choices remain available when the workspace is reopened. */
-  React.useEffect(() => {
-    if (open) return;
-    setExpanded(false);
-  }, [open]);
-
-  /* openAi(): focus the close control and lock page scroll (ref-counted
-     `dialog-open`). `ai-workspace-expanded` mirrors the demo's body hook so
-     host pages can react to the expanded state. */
-  useOverlayLayer({ open, onClose, layerRef, initialFocusRef: closeRef, returnFocusRef });
-
-  React.useEffect(() => {
-    const body = layerRef.current?.ownerDocument.body;
-    body?.classList.toggle("ai-workspace-expanded", open && expanded);
-    return () => body?.classList.remove("ai-workspace-expanded");
-  }, [open, expanded]);
-
-  /* Recent-chats popup closes on outside click. */
-  React.useEffect(() => {
-    if (!historyOpen) return undefined;
-    const onDocClick = (event) => {
-      if (!headActionsRef.current?.contains(event.target)) setHistoryOpen(false);
-    };
-    const doc = layerRef.current?.ownerDocument;
-    doc?.addEventListener("click", onDocClick);
-    return () => doc?.removeEventListener("click", onDocClick);
-  }, [historyOpen]);
 
   /* New answers reset the answer scroll + feedback (resetAiFeedback). */
   React.useEffect(() => {
@@ -670,18 +651,9 @@ export function ReportCopilot({
   const newSession = () => {
     setDock(null);
     setShowAll(false);
-    setHistoryOpen(false);
     onNewSession?.({ reason: "new-session" });
     onPromptChange?.({ value: "" });
     inputRef.current?.focus();
-  };
-
-  const maximize = () => {
-    setExpanded((value) => {
-      const next = !value;
-      onMaximize?.({ expanded: next });
-      return next;
-    });
   };
 
   const backToStart = () => {
@@ -780,77 +752,37 @@ export function ReportCopilot({
 
   return (
     <CopilotStreamContext.Provider value={streamRegistry}>
-      <div data-mh-overlay-scrim className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
-      <aside
-        ref={layerRef}
-        data-mh-overlay-surface
-        className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")}
-        aria-hidden={!open}
-        aria-label="Report AI workspace"
-        role="dialog"
-        aria-modal={open}
-        tabIndex={-1}
-      >
-        <header className="mh-copilot__head">
-          <div className="mh-copilot__head-title">
-            <span>{eyebrow}</span>
-            <h2>{title}</h2>
-          </div>
-          <div className="mh-copilot__head-actions" ref={headActionsRef}>
-            <button type="button" className="mh-copilot__icon" aria-label="New session" onClick={newSession}>
-              <Icon name="plus" />
-            </button>
-            <button
-              type="button"
-              className="mh-copilot__icon"
-              aria-label={expanded ? "Restore" : "Maximize"}
-              title={expanded ? "Restore" : "Maximize"}
-              onClick={maximize}
-            >
-              <Icon name="expand" />
-            </button>
-            <button
-              type="button"
-              className="mh-copilot__icon"
-              aria-label="History"
-              aria-expanded={historyOpen}
-              onClick={(event) => {
-                event.stopPropagation();
-                setHistoryOpen((value) => !value);
-              }}
-            >
-              <Icon name="history" />
-            </button>
-            <button ref={closeRef} type="button" className="mh-copilot__close" aria-label="Close AI workspace" onClick={() => onClose?.({ reason: "button" })}>
-              ×
-            </button>
-            {historyOpen ? (
-              <div className="mh-copilot__history">
-                <div className="mh-copilot__history-head">
-                  <strong>Recent Chats</strong>
-                  <button type="button" aria-label="Close recent chats" onClick={() => setHistoryOpen(false)}>
-                    ×
-                  </button>
-                </div>
-                {history.map((item) => (
-                  <button
-                    key={item.title}
-                    type="button"
-                    className="mh-copilot__history-item"
-                    onClick={() => {
-                      setHistoryOpen(false);
-                      onHistorySelect?.(item);
-                      fillPrompt(item.prompt);
-                    }}
-                  >
-                    <strong>{item.title}</strong>
-                    <span>{item.prompt}</span>
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-        </header>
+      <AssistantShell
+        open={open}
+        layerRef={layerRef}
+        initialFocusRef={closeRef}
+        actionFocusRef={inputRef}
+        closeRef={closeRef}
+        returnFocusRef={returnFocusRef}
+        title={<div className="mh-copilot__head-title"><span>{eyebrow}</span><h2>{title}</h2></div>}
+        classes={copilotShellClasses}
+        history={history.map((item) => ({ id: item.id, title: item.title, subtitle: item.prompt, source: item }))}
+        historyHeading={<strong>Recent Chats</strong>}
+        historyAriaLabel="Recent Chats"
+        historyCloseLabel="Close recent chats"
+        shortMaximizeLabel
+        onClose={onClose}
+        onNewSession={newSession}
+        onMaximize={onMaximize}
+        onHistorySelect={(item) => {
+          onHistorySelect?.(item);
+          fillPrompt(item.prompt);
+        }}
+        renderSurface={({ header, body, composer, expanded }) => (
+          <React.Fragment>
+            <div data-mh-overlay-scrim className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
+            <aside ref={layerRef} data-mh-overlay-surface className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")} aria-hidden={!open} aria-label="Report AI workspace" role="dialog" aria-modal={open} tabIndex={-1}>
+              {header}{body}{composer}
+            </aside>
+          </React.Fragment>
+        )}
+        body={
+          <React.Fragment>
         {answerOpen ? (
           <div className="mh-copilot__tools" aria-label="Report context shortcuts">
             <button
@@ -971,6 +903,9 @@ export function ReportCopilot({
             ) : null}
           </section>
         ) : null}
+          </React.Fragment>
+        }
+        composer={
         <form className="mh-copilot__command" onSubmit={submit}>
           <p className="mh-copilot__command-hint">{commandHint}</p>
           <div className="mh-copilot__command-box">
@@ -1007,7 +942,8 @@ export function ReportCopilot({
             </div>
           </div>
         </form>
-      </aside>
+        }
+      />
       {flow ? <ModelFlowDialog {...flow} /> : null}
     </CopilotStreamContext.Provider>
   );
