@@ -44,10 +44,10 @@ export default [
   {
     id: "p08-business-edit",
     original: { url: `${url}?type=Business%20Term&mode=edit&id=business-term-gmv`, expect: [
-      { sel: "h1", text: "Edit" }, { sel: "body", text: "GMV (Gross Merchandise Value)" },
+      { sel: "h1", text: "Edit GMV (Gross Merchandise Value)" }, { sel: ".fm-breadcrumb a", count: 4 }, { sel: "body", text: "GMV (Gross Merchandise Value)" },
     ] },
     story: { id: "pages--knowledge-create-business-edit", expect: [
-      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcreate h1", text: "GMV" },
+      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcreate h1", text: "Edit GMV (Gross Merchandise Value)" }, { sel: ".mh-kcreate__breadcrumb a", count: 4 },
     ] },
   },
   generic("p08-principles", "Principles", "pages--knowledge-create-principles", "Core Description", "Core Description"),
@@ -85,10 +85,10 @@ export default [
   {
     id: "p08-analysis-edit",
     original: { url: `${url}?type=Analytical%20Model&mode=edit&id=playbook-opportunity-scan`, expect: [
-      { sel: "h1", text: "Edit Analysis" }, { sel: "body", text: "Opportunity scan playbook" },
+      { sel: "h1", text: "Edit Analysis" }, { sel: ".fm-breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".fm-tag-editor", text: "City Strategy" }, { sel: ".v20-multi-display", text: "Member conversion" },
     ] },
     story: { id: "pages--knowledge-create-analysis-edit", expect: [
-      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcf__analysis input[name='analysis_name']", count: 1 }, { sel: ".mh-kcreate h1", text: "Edit Analysis" },
+      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcf__analysis input[name='analysis_name']", count: 1 }, { sel: ".mh-kcreate h1", text: "Edit Analysis" }, { sel: ".mh-kcreate__breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".mh-kcf__tag-input", text: "City Strategy" }, { sel: ".mh-kcf__multi-trigger", text: "Member conversion" },
     ] },
   },
   {
@@ -103,10 +103,10 @@ export default [
   {
     id: "p08-metric-test",
     original: { url: `${url}?type=Principles`, actions: [...select("Metric Dictionary"), { click: ".v20-basic-metric[data-metric='Visit Count']" }, { click: ".v20-test-run button" }], expect: [
-      { sel: "#resultDialog[open]", text: "Test completed" }, { sel: "#resultDialog", text: "1,284.60" },
+      { sel: "#resultDialog[open]", text: "Test completed" }, { sel: "#resultDialog", text: "1,284.60" }, { sel: ".v20-token-formula .v20-formula-token", count: 1 }, { sel: "#dialogClose", text: "Back to Knowledge Management" },
     ] },
     story: { id: "pages--knowledge-create-metric-test", expect: [
-      { sel: ".mh-confirm[role='dialog']", text: "Test completed" }, { sel: ".mh-confirm", text: "1,284.60" },
+      { sel: ".mh-confirm[role='dialog']", text: "Test completed" }, { sel: ".mh-confirm", text: "1,284.60" }, { sel: ".mh-kcf__formula .mh-kcf__formula-token", count: 1 }, { sel: ".mh-confirm__btn", text: "Back to Knowledge Management" },
     ] },
   },
   {
@@ -247,10 +247,10 @@ export default [
   {
     id: "p08-model-preview",
     original: { url: `${url}?type=Principles`, actions: [...select("Data Model"), { waitMs: 350 }, { click: ".v20-dm-config header .v20-secondary" }], expect: [
-      { sel: "#resultDialog[open]", text: "Preview data is ready for this model." },
+      { sel: "#resultDialog[open]", text: "Preview data is ready for this model." }, { sel: "#dialogClose", text: "Back to Knowledge Management" },
     ] },
     story: { id: "pages--knowledge-create-data-model-preview", expect: [
-      { sel: ".mh-confirm[role='dialog']", text: "Preview data is ready for this model." },
+      { sel: ".mh-confirm[role='dialog']", text: "Preview data is ready for this model." }, { sel: ".mh-confirm__btn", text: "Back to Knowledge Management" },
     ] },
   },
   {

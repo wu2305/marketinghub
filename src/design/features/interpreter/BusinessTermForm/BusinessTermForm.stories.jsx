@@ -15,7 +15,7 @@ export default {
     scopeOptions: prop("string[]", { description: "Available Data Model links." }),
     invalid: prop("string[]", { description: "Required field names in error state." }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "GMV" }),
-    onCancel: callbackProp("onCancel", "() => void"),
+    onCancel: callbackProp("onCancel", "({values}) => void", { values: { title: "GMV" } }),
     onSave: callbackProp("onSave", "({values}) => void", { values: { title: "GMV" } }),
     onSubmit: callbackProp("onSubmit", "({values}) => void", { values: { title: "GMV" } }),
   },

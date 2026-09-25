@@ -206,6 +206,55 @@ describe("P08 demo flow", () => {
     generic.unmount();
   });
 
+  it("prefills Analytical Model edit from source-linked record values and only source metrics", () => {
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", mode: "edit", id: "playbook-opportunity-scan" })} />; }
+    const { container } = render(<Test />);
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Edit Analysis");
+    expect(container.querySelector(".mh-kcreate__breadcrumb b")?.textContent).toBe("Opportunity scan playbook");
+    expect(screen.getByRole("textbox", { name: "Description" }).value).toBe("Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.");
+    expect(screen.getByRole("textbox", { name: /Trigger When/ }).value).toBe("When a user request matches this analysis approach and its supported business context.");
+    expect(screen.getByRole("textbox", { name: /Structure & Guidance/ }).value).toBe("Start with an executive summary, then list evidence, prioritized opportunities, limitations and recommended actions.");
+    expect(container.querySelector(".mh-kcf__tag-input")?.textContent).toContain("City Strategy");
+    expect(container.querySelector(".mh-kcf__tag-input")?.textContent).toContain("4P");
+    expect(screen.getByRole("button", { name: /Member conversion, Campaign ROI/ })).toBeTruthy();
+    expect(screen.queryByRole("checkbox")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: /Member conversion, Campaign ROI/ }));
+    expect(screen.getByRole("checkbox", { name: "Promotion lift" })).toBeTruthy();
+    expect(screen.queryByRole("checkbox", { name: "Exposure Count" })).toBeNull();
+  });
+
+  it("uses the source Business Term edit heading and preserves its breadcrumb links", () => {
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, mode: "edit", id: "business-term-gmv" })} />; }
+    const { container } = render(<Test />);
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Edit GMV (Gross Merchandise Value)");
+    expect(container.querySelectorAll(".mh-kcreate__breadcrumb a")).toHaveLength(4);
+    expect(container.querySelector(".mh-kcreate__breadcrumb b")?.textContent).toBe("Edit GMV (Gross Merchandise Value)");
+  });
+
+  it("returns to Knowledge Management only from the result button, while Escape dismisses in place", () => {
+    const navigate = vi.fn();
+    const test = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Data Model", onNavigate: navigate }));
+    act(() => test.result.current.onDialog({ kind: "preview" }));
+    act(() => test.result.current.onDialogClose({ reason: "escape" }));
+    expect(test.result.current.dialog).toBeNull();
+    expect(navigate).not.toHaveBeenCalled();
+    act(() => test.result.current.onDialog({ kind: "smart" }));
+    act(() => test.result.current.onDialogClose({ reason: "close" }));
+    expect(navigate).toHaveBeenCalledWith({ id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" });
+    test.unmount();
+
+    navigate.mockClear();
+    const generic = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Principles", onNavigate: navigate }));
+    act(() => generic.result.current.onSave());
+    expect(generic.result.current.result?.action).toBe("save");
+    act(() => generic.result.current.onResultClose({ reason: "escape" }));
+    expect(navigate).not.toHaveBeenCalled();
+    act(() => generic.result.current.onSave());
+    act(() => generic.result.current.onResultClose({ reason: "close" }));
+    expect(navigate).toHaveBeenCalledWith({ id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" });
+    generic.unmount();
+  });
+
   it("leaves modified header and breadcrumb clicks to native link navigation", () => {
     const navigate = vi.fn();
     const { container } = render(<><Header logo={{ src: "/logo.png", href: "#home" }} items={[{ id: "interpreter", label: "AI Interpreter", href: "#interpreter" }]} onNavigate={navigate} /><KnowledgeCreatePage content={KNOWLEDGE_CREATE} type="Scenario Reporting" values={{}} hrefFor={() => "#breadcrumb"} onNavigate={navigate} /></>);

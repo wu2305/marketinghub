@@ -30,9 +30,9 @@ import "./KnowledgeCreatePage.css";
  * @param {() => void} [props.onSave]
  * @param {() => void} [props.onSubmit]
  * @param {() => void} [props.onCancel]
- * @param {() => void} [props.onResultClose]
+ * @param {(event:{reason:string}) => void} [props.onResultClose]
  * @param {(event:{kind:string}) => void} [props.onDialog]
- * @param {() => void} [props.onDialogClose]
+ * @param {(event?:{reason:string}) => void} [props.onDialogClose]
  * @param {(event:{name:string}) => void} [props.onMenu]
  */
 export function KnowledgeCreatePage({
@@ -66,7 +66,7 @@ export function KnowledgeCreatePage({
         <a href={hrefFor("interpreter")} onClick={(event) => followLink(event, "interpreter")}>{labels.interpreter}</a><span>/</span>
         <a href={hrefFor("interpreter")} onClick={(event) => followLink(event, "interpreter")}>{labels.management}</a><span>/</span>
         {(isTerm || isAnalysis || isScenario) && <><a href={hrefFor("interpreter", typeParam)} onClick={(event) => followLink(event, "interpreter", typeParam)}>{type}</a><span>/</span></>}
-        <b>{title}</b>
+        <b>{isAnalysis && mode === "edit" ? values.analysis_name || title : title}</b>
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
       <section className="mh-kcreate__card">
@@ -82,7 +82,7 @@ export function KnowledgeCreatePage({
     </main>
     <ConfirmDialog open={Boolean(result)} tone="info" title={resultTitle} message={resultText} closeLabel={labels.back} onCancel={onResultClose} />
     <ConfirmDialog open={dialog === "confirm"} title={labels.confirmTitle} message={labels.confirmText} cancelLabel={labels.cancel} confirmLabel={labels.submit} onCancel={onDialogClose} onConfirm={() => { onDialogClose?.(); onSubmit?.(); }} />
-    <ConfirmDialog open={["test", "smart", "preview"].includes(dialog)} tone="info" title={dialog === "test" ? values.metricFormula ? labels.testSuccessTitle : labels.testEmptyTitle : dialog === "smart" ? labels.smartTitle : labels.previewTitle} message={dialog === "test" ? values.metricFormula ? labels.testSuccess : labels.testEmpty : dialog === "smart" ? labels.smartText : labels.previewText} closeLabel={labels.close} onCancel={onDialogClose} />
+    <ConfirmDialog open={["test", "smart", "preview"].includes(dialog)} tone="info" title={dialog === "test" ? values.metricFormula ? labels.testSuccessTitle : labels.testEmptyTitle : dialog === "smart" ? labels.smartTitle : labels.previewTitle} message={dialog === "test" ? values.metricFormula ? labels.testSuccess : labels.testEmpty : dialog === "smart" ? labels.smartText : labels.previewText} closeLabel={labels.back} onCancel={onDialogClose} />
     <Modal open={dialog === "history"} title={labels.historyTitle} className="mh-kcreate__history" closeLabel={labels.close} onClose={onDialogClose}><p><b>{labels.currentVersion}</b> · {content.reportHistory.author} · {values.updatedAt}</p><p>{values.originalDescription}</p><p><b>{labels.previousVersion}</b> · {content.reportHistory.priorAuthor} · {content.reportHistory.priorDate}</p><p>{content.reportHistory.priorDescription}</p></Modal>
   </div>;
 }

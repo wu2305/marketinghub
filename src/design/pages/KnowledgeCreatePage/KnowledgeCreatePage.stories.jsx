@@ -17,11 +17,12 @@ export default {
     onNavigate: callbackProp("onNavigate", "({id, params, href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }),
     onTypeChange: callbackProp("onTypeChange", "({value}) => void", { value: "Data Model" }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "New term" }),
-    onSave: callbackProp("onSave", "({type, mode, id, values, stage}) => void", { type: "Business Term", mode: "create", values: { title: "New term" }, stage: "Draft" }),
-    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage}) => void", { type: "Business Term", mode: "create", values: { title: "New term" }, stage: "Published" }),
+    onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", values: { title: "New term" }, stage: "Draft" }),
+    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", values: { title: "New term" }, stage: "Published" }),
     onCancel: callbackProp("onCancel", "({type}) => void", { type: "Business Term" }),
     onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "guidance" }),
-    onDialogClose: callbackProp("onDialogClose", "() => void"),
+    onDialogClose: callbackProp("onDialogClose", "({reason}) => void", { reason: "close" }),
+    onResultClose: callbackProp("onResultClose", "({reason}) => void", { reason: "close" }),
     onMenu: callbackProp("onMenu", "({name}) => void", { name: "businessDomain" }),
   },
   render: (args) => <Demo key={`${args.type}:${args.mode}:${args.id}:${JSON.stringify(args.initial)}:${JSON.stringify(args.state)}`} args={args} />,
@@ -30,7 +31,7 @@ export default {
 function Demo({ args }) {
   const props = useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: args.type, mode: args.mode, id: args.id || undefined, initial: args.initial, state: args.state,
     onNavigate: args.onNavigate, onSave: args.onSave, onSubmit: args.onSubmit });
-  return <KnowledgeCreatePage {...props} onTypeChange={(event) => { props.onTypeChange(event); args.onTypeChange?.(event); }} onChange={(event) => { props.onChange(event); args.onChange?.(event); }} onCancel={() => { props.onCancel(); args.onCancel?.({ type: props.type }); }} onDialog={(event) => { props.onDialog(event); args.onDialog?.(event); }} onDialogClose={() => { props.onDialogClose(); args.onDialogClose?.({}); }} onMenu={(event) => { props.onMenu(event); args.onMenu?.(event); }} />;
+  return <KnowledgeCreatePage {...props} onTypeChange={(event) => { props.onTypeChange(event); args.onTypeChange?.(event); }} onChange={(event) => { props.onChange(event); args.onChange?.(event); }} onCancel={() => { props.onCancel(); args.onCancel?.({ type: props.type }); }} onDialog={(event) => { props.onDialog(event); args.onDialog?.(event); }} onDialogClose={(event) => { props.onDialogClose(event); args.onDialogClose?.(event); }} onResultClose={(event) => { props.onResultClose(event); args.onResultClose?.(event); }} onMenu={(event) => { props.onMenu(event); args.onMenu?.(event); }} />;
 }
 
 export const KnowledgeCreate = { name: "P08 · Business Term create" };
@@ -58,7 +59,7 @@ export const KnowledgeCreateDataModelSearchEmpty = { name: "P08 · Data Model se
 export const KnowledgeCreateDataModelSynonymSaved = { name: "P08 · Data Model added synonym", args: { type: "Data Model", initial: { "table:dim_channel:field:channel_id:synonyms": ["Customer Channel"] } } };
 export const KnowledgeCreateDataModelSmart = { name: "P08 · Smart Modeling result", args: { type: "Data Model", state: { dialog: "smart" } } };
 export const KnowledgeCreateMetric = { name: "P08 · Metric Dictionary formula", args: { type: "Metric Dictionary" } };
-export const KnowledgeCreateMetricTest = { name: "P08 · Metric Test success", args: { type: "Metric Dictionary", initial: { metricName: "Conversion Rate", metricTokens: [{ kind: "metric", value: "Visit Count" }, { kind: "operator", value: "÷" }, { kind: "metric", value: "Exposure Count" }], metricFormula: "Visit Count ÷ Exposure Count" }, state: { dialog: "test" } } };
+export const KnowledgeCreateMetricTest = { name: "P08 · Metric Test success", args: { type: "Metric Dictionary", initial: { metricTokens: [{ kind: "metric", value: "Visit Count" }], metricFormula: "Visit Count" }, state: { dialog: "test" } } };
 export const KnowledgeCreateMetricRequired = { name: "P08 · Metric required name and formula", args: { type: "Metric Dictionary", state: { invalid: ["metricName", "metricFormula"] } } };
 export const KnowledgeCreateMetricTestEmpty = { name: "P08 · Metric Test formula required", args: { type: "Metric Dictionary", state: { dialog: "test", invalid: ["metricFormula"] } } };
 export const KnowledgeCreateMetricToken = { name: "P08 · Metric locked formula token", args: { type: "Metric Dictionary", initial: { metricTokens: [{ kind: "metric", value: "Visit Count" }], metricFormula: "Visit Count" } } };
