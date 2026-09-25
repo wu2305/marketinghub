@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P08 PR #8 对抗审核完成：八类型生效字段/关联/动作、AM不可编辑和RC未知ID、结果按钮与Escape、宿主查询参数重挂载已核；RC编辑页人工fail，其余未审pending |
+| 最新独立审核 | 2026-09-26 P03助手 PR #9 对抗审核完成：源码生效建议/替换答案/历史填充、三模型技能、模型生成与450ms完成、Escape/焦点、替换夹具和双实例已核；人工审图见最近视觉对照 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 141 stories + 56 docs；2026-09-26 8286808 构建 index.json 实数；P08新增45页面状态故事和1个字段组件故事，无删除 |
-| 测试 | `npm test`：17 文件 166 条通过（2026-09-26 8286808） |
-| lint | `npm run lint`：0 errors / 0 warnings，8286808 |
-| 构建验证 | `npm run build-storybook` 141 stories/56 docs；`npm run build:host` + host-check 13/13 通过（`/tmp/mh-p08-integrate-host`）；8286808 rebase origin/main 后工作区干净，构建戳匹配 |
+| 故事数 | 155 stories + 56 docs；2026-09-26 10111cf 构建 index.json 实数；P03新增14页面状态故事，无删除 |
+| 测试 | `npm test`：18 文件 171 条通过（2026-09-26 10111cf） |
+| lint | `npm run lint`：0 errors / 0 warnings，10111cf |
+| 构建验证 | `npm run build-storybook` 155 stories/56 docs；`npm run build:host` + host-check 14/14通过（`/tmp/mh-p03-integrate-host`）；10111cf rebase origin/main后干净构建，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 8286808，工作区干净）：全站194/194机器通过，P08 46/46（`/tmp/mh-p08-integrate-visual`）；负向10/10按预期失败（`/tmp/mh-p08-integrate-negative`）。本次P08 Report Context编辑人工fail已绑定最终截图hash，其余193未审pending；此前P11默认人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
+| 最近视觉对照 | 2026-09-26（stamp 10111cf，工作区干净）：全站220/220机器通过，P03 29/29（`/tmp/mh-p03-integrate-visual`）；负向13/13按预期失败（`/tmp/mh-p03-integrate-negative`）。人工审图统计{'pass': 0, 'fail': 2, 'pending': 218}；既有P08 RC编辑/P11默认人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -57,7 +57,7 @@ npm test               # vitest 行为测试
 |---|---|---|---|---|
 | P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 进行中；A2 修正历史回填后 ASK 可提交及关闭后最大化复位 |
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中；A2 修正城市默认计算、全选/空选标签及 Copilot 历史大小写/View more 二次点击 |
-| P03 | assets/pages/flexible.html | Self-Service 页签、筛选、数据视图入口/上传历史及完整工作区助手 | M3 | 助手已接入 `AssistantPanel` campaign 预设，`useSelfServiceDemo` 供故事与宿主共用；建议即提交、回答替换、历史只回填（含非空 prompt 命名故事）、Enter 不提交、新会话、反馈/复制、最大化、技能搜索/选择、模型生成/手动/校验（含零消息命名故事）/完成和覆盖层关闭均有命名故事或交互配对；本轮 P03 29/29 机器配对通过，人工局部审图（答案横幅为 §3.5 已核源码缺陷），全页人工仍 pending |
+| P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | 助手已实现，PR #9；建议即提交、替换答案、历史填充、最大化、技能/模型流、反馈/复制及焦点/Escape；15页面故事、29/29配对；人工像素收敛待办 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
@@ -308,7 +308,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P04 FileDropzone | React 版给 file input 加 `stopPropagation`，点击 dropzone 可正常打开文件选择器；原始 upload.js 同款嵌套结构存在递归调用（`fileInput.click()` 冒泡回 dropzone 处理器）为参照缺陷 | 不逐 bug 复刻参照物；点击崩溃属明确缺陷 | devin/interpreter-type-contract |
 | P04 FileDropzone drop | React 版 drop 即触发 `onSelect` 并显示 "Selected: <file>"；原始 `fileInput.files = dataTransfer.files` 不派发 change，提示不更新（仅文件选择器路径更新） | React 行为更符合原始意图；差异登记 | devin/interpreter-type-contract |
 | ~~P05 导航 active~~ | ~~React `current="self-service"` 渲染导航下划线激活态~~ 已修复（批 D 复核）：原始 media-tracking/self-service 页导航无 `aria-current` 亦无下划线，`current` 默认值已移除；Home/Interpreter 保留 `aria-current` 仅去视觉态（`highlightCurrent={false}`）；reports/campaign/data-upload/flexible 原始确有下划线故保留 | 原始激活样式按页生效，页面 props 复刻 | devin/structural-repair |
-| AssistantPanel backdrop | React 面板打开恒渲染 backdrop；原始仅 P05 有 `.ai-assistant-backdrop` 节点（P03/P06 等页无 scrim） | 单一组件一处渲染；接入 P03/P06 助手时按页核验 scrim 取舍 | devin/interpreter-type-contract |
+| AssistantPanel backdrop | 原旧盘点称P03无scrim，现核实flexible.html:203有panel-backdrop，workspace.js:462–486控制显隐；React保持原抽屉scrim | P03已按最终生效DOM/样式核验；旧判断撤销，其他页各自核验 | #9 |
 | AssistantPanel 菜单态 | React 关闭即卸载，重开后技能菜单/选中芯片复位；原始仅隐藏面板，隐藏期间菜单 DOM 状态保留 | 受控组件生命周期差异；原始无可达的“关后保留菜单再复用”验收路径，登记不改架构 | devin/interpreter-type-contract |
 | P02 详情抽屉标题 | React `ReportDetailsDrawer` 渲染当前报表真实标题；原始 `openDetails()` 从不写 `#detailsTitle`，恒为静态 "Invest City Strategy Analysis"（demo 缺陷，且该函数无调用方） | 不逐 bug 复刻；抽屉本身在原页不可达，组件按 props 驱动保留 | devin/interpreter-type-contract |
 | P02 Report Copilot History 弹层 | React 版弹层锚定在 head-actions 栏内、紧贴 History 按钮下方可见；原始 `#aiReportHistoryPopup` 是 `.ai-workspace-head-actions`（无 position）的 absolute 子节点，`top:calc(100%+8px)` 相对 fixed 抽屉解析为视口下方（实测 top≈1408@1400 高），任何视口下不可见 | 原实现为恒不可达的 demo 缺陷；修复锚定而非复刻 bug。弹层内 prompt 文本的大写渲染来自 `.ai-workspace-head span` 级联泄漏，React 版已在 A2（PR #2）移除此级联泄漏 | devin/interpreter-type-contract |
@@ -332,9 +332,11 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P08 已知记录无类型编辑/复制（business-term-form.js:7–14、editor-runtime.js:197–198） | 原类型缺省会被Business Term专用脚本接管；React从已知记录类型恢复正确表单，未知记录仍走默认创建路径 | 修正错误类型回退，避免跨页编辑把其他知识误作Business Term；对应edit/copy宿主检查 | #8 |
 | P08 Data Model同义词Enter（editor-runtime.js:552–559） | 原keydown提交后blur再次操作已移除节点，可重复插入并抛DOMException；React一次保存，Escape取消，blur正常保存 | AGENTS §3.5复现明显意图；Enter/blur/Escape定向行为测试 | #8 |
 
+| P03 answer header（self-service/workspace.js:520–532；assistant-panel.css:2267） | 原脚本输出answer-card-header，CSS只匹配answer-card-head，答案标题无预期样式；React复用workspace答案横幅 | 与P06 A2同类源码类名失配，AGENTS §3.5；不向共享组件添加缺陷开关 | #9 |
+
 ## 4. 已知缺口
 
-2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2 的 P03/P07 助手覆盖与其他页面流程仍需推进。
+2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2的P03助手已补齐，P07助手覆盖与其他页面流程仍需推进。
 
 2026-09-25 WP2 后 P07 剩余事项（类型状态只维护 §2.2 P07）：
 - **状态显示保留差异**：BT/Field 共用 `StatusBadge` knowledge；Scenario 卡片无圆点 76×20、流程状态 24px/999px，抽屉有圆点可用性与流程状态为 22px，保持私有组合。来源：`assets/css/knowledge/ai-interpreter-overview.css:2809–2840,1113–1144`、`assets/css/knowledge/shared-controls.css:441–468,484–501`；为单页差异扩展公共组件的形状/圆点/阶段组合不符合最小抽象。
@@ -492,3 +494,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-25 | WP5 P08（`wp5/p08-knowledge-create`）：按原始可达表单与最终脚本生效顺序重建 knowledge-create，接入受控页/类型专用字段/演示容器、原始 URL 适配、独立宿主和配对场景；源证据与错类型路由、Data Model 表身份/字段、Metric token/同义词 Enter/Preview 残留标题缺陷、八类型编辑夹具与关系核对见本 PR 说明。提交前 focused tests、构建、宿主和配对已验证；最终合入基线验证数字由整合者更新 §1。人工对照 P08 Report Context 编辑态为 fail：页头/面包屑高度、元数据布局、场景标签、背景和文字间距仍需第二轮像素收敛；未审场景 pending，不能以机器通过代替视觉验收。 | Codex WP5 |
 | 2026-09-26 | P08 PR #8（https://github.com/wu2305/marketinghub/pull/8）合并为 33047ad；候选8286808在最新main上干净验证：lint0/0、17文件166测试、141stories/56docs、host13/13、全站visual194/194（P08 46）、negative10/10，证据/tmp/mh-p08-integrate-*。对抗审核修正AM真实关联/描述与不存在记录态、BT编辑标题/面包屑、RC描述规则/结果按钮导航/Escape、Metric整体token与单位状态、DM Enter同义词一次保存、上传和查询参数变更宿主重挂载。Email创建分支在原HTML选择器51–63不可达，不恢复隐藏残留。RC编辑人工fail：元数据布局、页头/面包屑高度、场景标签、背景和字体间距待第二轮；其他未审pending。 | Codex integrator |
 | 2026-09-26 | WP6 R2 P03 候选：`SelfServicePage` 接入共享 `AssistantPanel` campaign 预设及 `ModelFlowDialog`；`useSelfServiceDemo` 统一页签/上传历史与助手确定性状态，`SELF_SERVICE.assistant` 注入原始 report 建议、三个 Recent Chats 与来源答案；故事与 `/mh-host/self-service` 共用 hook。原始 `flexible.html`/`self-service/workspace.js:309–680`/`shared/assistant-skill-menu.js:9–920` 的助手路径台账 `/tmp/mh-wp6-p03-source-matrix.md`；15 个 P03 页面故事，定向测试 5/5（替换答案回调生命周期和双实例），lint 0/0、Storybook 109 stories/55 docs、host 8/8（`/tmp/mh-wp6-p03-host`，较早候选）、P03 配对 29/29 机器通过（`/tmp/mh-wp6-p03-visual-final`，较早候选），新增命名故事定向配对 4/4（`/tmp/mh-wp6-p03-history-audit`、`/tmp/mh-wp6-p03-empty-selection-audit`）。人工抽看打开/答案/历史/技能/最大化/模型流：历史文案偏差已修；答案横幅沿用 A2 已确认的 `.answer-card-header`/`.answer-card-head` 原始 CSS 缺陷修正；全页人工结论仍 pending。最终 rebase 后全站套件与负向结果由集成者登记。 | Codex WP6 |
+| 2026-09-26 | P03助手 PR #9（https://github.com/wu2305/marketinghub/pull/9）合并483bc1b；候选10111cf最新main干净全套：lint0/0、18文件171测试、155stories/56docs、host14/14、visual220/220（P03 29）、negative13/13，证据/tmp/mh-p03-integrate-*。复用AssistantPanel campaign变体与ModelFlowDialog，无新增布尔开关；useSelfServiceDemo供故事/宿主复用。对抗审核核实建议即提交、历史只填充、答案替换、Enter换行、3个fallback模型、空选择/必填校验、Save/Submit延迟完成、夹具替换/多实例。P03 open/answer人工fail：头部工具边框、建议区间距、Hero背景缩放、CTA边框及答案卡宽/纵向位置仍待第二轮；P07助手及P12–P17继续。 | Codex integrator |
