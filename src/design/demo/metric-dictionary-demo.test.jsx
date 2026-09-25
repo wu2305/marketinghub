@@ -21,6 +21,17 @@ describe("P10 metric dictionary process", () => {
     expect(screen.getByRole("heading", { name: "Exposure Count" })).toBeTruthy();
   });
 
+  it("shows an arbitrary unit saved on a derived metric in its detail selector", () => {
+    render(<Harness />);
+    fireEvent.click(screen.getByRole("button", { name: /Add Derived Metric/ }));
+    fireEvent.change(screen.getByPlaceholderText("Enter metric name..."), { target: { value: "Custom Unit Metric" } });
+    fireEvent.change(screen.getByPlaceholderText("e.g. yuan, %, unit"), { target: { value: "yuan" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(screen.getByRole("heading", { name: "Custom Unit Metric" })).toBeTruthy();
+    expect(screen.getByRole("combobox", { name: "Unit" }).value).toBe("yuan");
+    expect(screen.getByRole("option", { name: "yuan" })).toBeTruthy();
+  });
+
   it("switches detail tabs and uses the selected derived formula", () => {
     render(<Harness initial={{ category: "Derived", metricId: "effective-traffic" }} />);
     fireEvent.click(screen.getByRole("button", { name: "Formula · 1" }));

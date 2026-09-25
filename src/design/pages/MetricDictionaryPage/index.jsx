@@ -51,6 +51,7 @@ export function MetricDictionaryPage({
   const visible = metrics.filter((entry) => entry.category === category);
   const basic = metrics.filter((entry) => entry.category === "Basic");
   const counts = { Basic: basic.length, Derived: metrics.length - basic.length };
+  const unitOptions = metric?.unit && !detail.units.includes(metric.unit) ? [...detail.units, metric.unit] : detail.units;
   const launcherRef = React.useRef(null);
   const navigate = (id, params = {}) => ({ id, params, href: hrefFor(id, params) });
   const headerItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id) }));
@@ -115,7 +116,7 @@ export function MetricDictionaryPage({
                   {field(detail.fields.owner, metric?.owner)}
                 </div>
                 <div className="mh-metric-page__card">
-                  <label className="mh-metric-page__field"><span>{detail.fields.unit}</span><select key={`${metric?.id}:unit:${metric?.unit}`} defaultValue={detail.units.includes(metric?.unit) ? metric.unit : detail.units[0]}>{detail.units.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <label className="mh-metric-page__field"><span>{detail.fields.unit}</span><select key={`${metric?.id}:unit:${metric?.unit}`} defaultValue={metric?.unit || detail.units[0]}>{unitOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
                   <label className="mh-metric-page__field"><span>{detail.fields.precision}</span><select key={`${metric?.id}:precision:${metric?.precision}`} defaultValue={metric?.precision}>{detail.precisions.map((item) => <option key={item}>{item}</option>)}</select></label>
                 </div>
                 <div className="mh-metric-page__card mh-metric-page__card--wide">
