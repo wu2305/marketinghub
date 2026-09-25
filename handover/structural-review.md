@@ -578,7 +578,7 @@ R5(a)：
 - [x] **WP3.1 A2**（PR #2；对抗审核及全套验证通过，实数见 README §1/§5）：参照物逻辑缺陷退出组件，demo 层按需重现。
 - [ ] **WP3.2 S2**：统一覆盖层栈、Escape 与焦点环。
 - [ ] **WP3.3 S3 + R3 + O5**：共用助手外壳、页面预设与变体枚举、答案变体收敛。
-- [ ] **WP4 export-surface guard**：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
+- [x] **WP4 export-surface guard**（PR #3；对抗审核及全套验证通过，实数见 README §1/§5）：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
 - [ ] **WP5 P08**：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
 - [ ] **P09 / P10 / P11**：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
 - [ ] **WP6 R2**：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
