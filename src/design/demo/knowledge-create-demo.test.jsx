@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { KNOWLEDGE_CREATE } from "./content/knowledge-create.js";
 import { knowledgeCreateHrefFor, useKnowledgeCreateDemo, validateKnowledgeCreate } from "./knowledge-create-demo.js";
 import { KnowledgeCreatePage } from "../pages/KnowledgeCreatePage/index.jsx";
+import { Header } from "../components/Header/index.jsx";
 
 describe("P08 demo flow", () => {
   it("validates the dedicated required fields while a generic draft can be saved incomplete", () => {
@@ -147,5 +148,46 @@ describe("P08 demo flow", () => {
     const { container } = render(<Test />);
     expect(screen.getByRole("textbox", { name: "channel_id name" }).value).toBe("");
     expect(container.querySelectorAll(".mh-kcf__table-scroll tbody tr:first-child .mh-kcf__chip")).toHaveLength(0);
+  });
+
+  it("keeps Report Context submit available after a changed description is cleared and locked again", () => {
+    const submitted = vi.fn();
+    const navigate = vi.fn();
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "city-report-context", onSubmit: submitted, onNavigate: navigate })} />; }
+    render(<Test />);
+    const submit = screen.getByRole("button", { name: "Submit" });
+    expect(submit.disabled).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: "Unlock report description" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Report description" }), { target: { value: "" } });
+    expect(submit.disabled).toBe(false);
+    fireEvent.click(screen.getByRole("button", { name: "Lock report description" }));
+    expect(submit.disabled).toBe(false);
+    fireEvent.click(screen.getByRole("button", { name: "Version history" }));
+    expect(screen.getByText(KNOWLEDGE_CREATE.records["city-report-context"].originalDescription)).toBeTruthy();
+    expect(screen.getByText(/3 days ago/)).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    fireEvent.click(submit);
+    expect(screen.getByText("Submit description update?")).toBeTruthy();
+    fireEvent.click(screen.getAllByRole("button", { name: "Submit" }).at(-1));
+    expect(submitted).toHaveBeenCalledWith(expect.objectContaining({ type: "Report Context", values: expect.objectContaining({ description: "" }) }));
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Report Context" } }));
+  });
+
+  it("routes Report Context edit Cancel to its scoped library", () => {
+    const navigate = vi.fn();
+    const { result } = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "city-report-context", onNavigate: navigate }));
+    act(() => result.current.onCancel());
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Report Context" } }));
+  });
+
+  it("leaves modified header and breadcrumb clicks to native link navigation", () => {
+    const navigate = vi.fn();
+    const { container } = render(<><Header logo={{ src: "/logo.png", href: "#home" }} items={[{ id: "interpreter", label: "AI Interpreter", href: "#interpreter" }]} onNavigate={navigate} /><KnowledgeCreatePage content={KNOWLEDGE_CREATE} type="Scenario Reporting" values={{}} hrefFor={() => "#breadcrumb"} onNavigate={navigate} /></>);
+    fireEvent.click(container.querySelector(".mh-header__logo"), { metaKey: true });
+    fireEvent.click(container.querySelector(".mh-header__link"), { ctrlKey: true });
+    fireEvent.click(container.querySelector(".mh-kcreate__breadcrumb a"), { shiftKey: true });
+    expect(navigate).not.toHaveBeenCalled();
+    fireEvent.click(container.querySelector(".mh-kcreate__breadcrumb a"));
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "home" }));
   });
 });

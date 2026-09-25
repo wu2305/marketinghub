@@ -67,7 +67,7 @@ export function useKnowledgeCreateDemo({
     return href;
   };
   const persist = (action) => {
-    const shouldValidate = action === "submit" || ["Business Term", "Analytical Model", "Metric Dictionary"].includes(type);
+    const shouldValidate = !(type === "Report Context" && mode === "edit") && (action === "submit" || ["Business Term", "Analytical Model", "Metric Dictionary"].includes(type));
     const missing = shouldValidate ? validateKnowledgeCreate(type, values) : [];
     if (missing.length) { setInvalid(missing); return false; }
     const payload = { type, mode, id, values: { ...values }, stage: action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : "Published" };
@@ -85,7 +85,7 @@ export function useKnowledgeCreateDemo({
     type, mode, id, values, invalid, result, dialog, menu, hrefFor,
     onNavigate: navigate, onTypeChange: selectType, onChange: update,
     onSave: () => persist("save"), onSubmit: () => persist("submit"),
-    onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" ? { type } : {} }),
+    onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || (type === "Report Context" && mode === "edit") ? { type } : {} }),
     onResultClose: () => { setResult(null); navigate({ id: "interpreter", params: { type, notice: result?.action === "save" ? "saved" : "published" } }); },
     onDialog: ({ kind }) => setDialog(kind), onDialogClose: () => setDialog(null),
     onMenu: ({ name }) => setMenu((prior) => prior === name ? null : name),

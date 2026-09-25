@@ -217,7 +217,7 @@ async function newPage() {
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-header__link", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  await page.click('.mh-header__link:has-text("AI Interpreter")');
+  await page.click('.mh-header__link:has-text("RedNote Campaign Tool")');
   await page.waitForSelector(".host-coverage", { timeout: 5000 });
   const loc = page.url();
   if (!new URL(loc).pathname.startsWith(BASE)) notes.push(`coverage left base: ${loc}`);
@@ -410,8 +410,9 @@ async function newPage() {
   await page.locator('.mh-btform__scope>button').click();
   await page.screenshot({ path: path.join(OUT, "knowledge-create.png"), fullPage: true });
   await page.locator('.mh-btform button:has-text("Save")').click();
-  await page.locator('.host-coverage').waitFor();
-  if (!page.url().includes("coverage/assets/pages/knowledge.html?type=Business+Term&notice=saved")) notes.push("BT Save did not navigate to the scoped library with saved notice");
+  await page.locator('.mh-interpreter__main[data-active-type="Business Term"]').waitFor();
+  if (!page.url().includes("interpreter?type=Business+Term&notice=saved")) notes.push("BT Save did not navigate to the scoped library with saved notice");
+  if (!(await page.locator('.mh-btview').count())) notes.push("BT Save destination did not render its type view");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("P08 form reloaded host");
   notes.push(...errors);
   record("knowledge-create", notes.length === 0, notes);
@@ -452,16 +453,47 @@ async function newPage() {
   await page.close();
 }
 
-/* ---- unmapped demo link: raw /assets/pages href → coverage under the base ---- */
+/* The host router retains one App instance. Query-only P09 edit/copy links
+   must remount the form seed so a previous record never leaks into the next. */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create?copy=investment-principles`, { waitUntil: "networkidle" });
+  await page.evaluate((next) => { history.pushState(null, "", next); dispatchEvent(new PopStateEvent("popstate")); }, `${BASE}knowledge-create?mode=edit&id=business-term-gmv`);
+  await page.locator('.mh-kcreate[data-kc-type="Business Term"][data-kc-mode="edit"]').waitFor();
+  if (!(await page.locator('input[name="title"]').inputValue()).includes("GMV")) notes.push("query-only edit retained the previous Principles copy");
+  await page.evaluate((next) => { history.pushState(null, "", next); dispatchEvent(new PopStateEvent("popstate")); }, `${BASE}knowledge-create?copy=investment-principles`);
+  await page.locator('.mh-kcreate[data-kc-type="Principles"][data-kc-mode="copy"]').waitFor();
+  if (!(await page.locator('input[name="title"]').inputValue()).includes("Campaign investment")) notes.push("query-only copy retained the previous Business Term edit");
+  notes.push(...errors);
+  record("knowledge-create-query-seed", notes.length === 0, notes);
+  await page.close();
+}
+
+/* Scenario attachment state must come from an actual file input action,
+   rather than only a prefilled story value. */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create?type=Scenario%20Reporting`, { waitUntil: "networkidle" });
+  await page.locator('.mh-kcf__upload input[type="file"]').setInputFiles({ name: "brief.pdf", mimeType: "application/pdf", buffer: Buffer.from("local demo") });
+  if (!(await page.locator(".mh-kcf__upload").innerText()).includes("brief.pdf")) notes.push("Scenario upload did not render an attachment chip");
+  await page.locator('button[aria-label="Remove brief.pdf"]').click();
+  if ((await page.locator(".mh-kcf__upload").innerText()).includes("brief.pdf")) notes.push("Scenario attachment removal did not update the form");
+  notes.push(...errors);
+  record("knowledge-create-attachment", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- raw demo href still resolves to the rebuilt P07 route under the base ---- */
 {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
   await page.waitForSelector(".host-copilot .mh-copilot", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  /* The generic chat entry renders "Open report context" with the original
-     knowledge.html href — a raw demo route that never passes through the
-     page-level href builders. */
+  /* The generic chat entry renders "Open report context" with an original
+     knowledge.html href that bypasses page-level href builders. */
   const copA = page.locator('.host-copilot[data-instance="a"] .mh-copilot');
   await copA.locator("textarea").fill("what drove this?");
   await copA.locator(".mh-copilot__send").click();
@@ -470,14 +502,13 @@ async function newPage() {
   const href = await link.getAttribute("href");
   if (!href || !href.includes("/assets/pages/")) notes.push(`expected a raw demo href, got ${href}`);
   await link.click();
-  await page.waitForSelector(".host-coverage", { timeout: 5000 });
+  await page.waitForSelector(".mh-interpreter__main", { timeout: 5000 });
   const loc = new URL(page.url());
-  if (!loc.pathname.startsWith(`${BASE}coverage/`)) notes.push(`unmapped link landed off-base: ${loc.pathname}`);
-  if (loc.pathname.startsWith("/assets/pages/")) notes.push(`unmapped link hit the original route: ${loc.pathname}`);
-  if (!(await page.locator(".host-coverage").innerText()).match(/not yet rebuilt/i)) notes.push("coverage notice missing");
-  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("unmapped link reloaded the page");
+  if (loc.pathname !== `${BASE}interpreter`) notes.push(`raw knowledge link missed InterpreterRoute: ${loc.pathname}`);
+  if (loc.pathname.startsWith("/assets/pages/")) notes.push(`raw knowledge link hit the original route: ${loc.pathname}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("raw knowledge link reloaded the page");
   notes.push(...errors);
-  record("coverage-unmapped", notes.length === 0, notes);
+  record("raw-knowledge-link", notes.length === 0, notes);
   await page.close();
 }
 
