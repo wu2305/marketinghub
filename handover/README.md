@@ -11,12 +11,12 @@
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-24 8c93802 审核原文移 §2.5（其故事/测试数字已过期）；人工审图结论并入本表“最近视觉对照”行，其余缺口见 §4 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 66 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 28、Pages 7）+ 53 docs；2026-09-25（eec96d3 构建）index.json 实数。Atoms/Molecules/Organisms/Features 已拆为逐组件 CSF（故事文件随组件目录，meta 声明 `component`），每组件一页 Docs |
-| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），8 文件 65 条通过（interpreter 11 含双实例快捷键、cockpit-demo 7、home-demo 7、business-term-demo 14、lifecycle 11、assetUrl 1、stories 13、boundaries 1；2026-09-25 eec96d3 实数） |
-| lint | `npm run lint`（eslint@10.11.0 flat config + eslint-plugin-react-hooks@7.1.1；JSX 解析 + `no-unused-vars` + `rules-of-hooks`/`exhaustive-deps`）：0 errors / 5 warnings（均为既有 exhaustive-deps 有意省略，见 R5(a) 条目），eec96d3 |
-| 构建验证 | `npm run build-storybook`（经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；66 stories、53 docs）与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过；CI 同一链路见下行 |
+| 故事数 | 89 stories（Foundations 1、Atoms 6、Molecules 15、Organisms 9、Features 51、Pages 7）+ 57 docs；2026-09-25（d8da807 构建）index.json 实数。Atoms/Molecules/Organisms/Features 为逐组件 CSF（故事文件随组件目录，meta 声明 `component`），每组件一页 Docs |
+| 测试 | `npm test`（vitest@4.1.11 + @testing-library/react@16.3.3 + jsdom），11 文件 100 条通过（2026-09-25 d8da807 实数） |
+| lint | `npm run lint`（eslint@10.11.0 flat config + eslint-plugin-react-hooks@7.1.1）：0 errors / 5 warnings（均为既有 exhaustive-deps 有意省略，见 R5(a) 条目），d8da807 |
+| 构建验证 | `npm run build-storybook`（经 `scripts/build-storybook.mjs` 写 `mh-build-stamp.json` 源指纹戳；89 stories、57 docs）与 `npm run build:host` + `node scripts/host-check.mjs` 7/7 通过（`/tmp/mh-p07bc-host`），d8da807 干净工作区；CI 同一链路见下行 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-25（S8+R4 树，stamp f71d7c1+18 dirty，内容即 df06211+eec96d3）：全套 `node scripts/visual-check.mjs` 115/115 机器通过（`/tmp/mh-visual-s8-final`），`--negative` 7/7 按预期失败（`/tmp/mh-visual-s8-final-neg`）；机器通过≠人工通过。人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；Business Term fail（原判于过渡通用列表；专用视图已建，人工复核仍 pending）；其余场景人工 pending |
+| 最近视觉对照 | 2026-09-25（stamp d8da807，干净工作区）：全套 `node scripts/visual-check.mjs` 131/131 机器通过（`/tmp/mh-p07bc-visual`），`--negative` 7/7 按预期失败（`/tmp/mh-p07bc-visual-neg`）；机器通过≠人工通过。人工审图（lead，`/tmp/mh-d-p07/reviews.json`、`/tmp/mh-final-p07/reviews.json`）：P07 overview、Principles 默认/长页/分类筛选/1024 窄屏 pass；其余场景（含 Business Term、field-library 四类、Data Model、Scenario）人工 pending。Data Model 默认态目视：结构一致，域搜索框宽高（story 通栏 40px vs 原约 180×32px）与 tab/域卡纵向偏移 8–13px 属第二轮像素收敛 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -38,7 +38,7 @@ npm test               # vitest 行为测试
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
-| M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | Principles、Business Term 专用视图完成（BT：4d14e32）；视图注册表与统一筛选契约落地（df06211）；Report Context、Data Model、Metric Dictionary、Analytical Model、Scenario Reporting、Email Reports 仍为通用过渡列表 |
+| M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类全部有专用视图并注册到 `typeViews`：Principles、Business Term（4d14e32）；Report Context、Metric Dictionary、Analytical Model、Email Reports 共用 `FieldLibraryView`（f6f42b0）；Data Model（`DataModelView`）与 Scenario Reporting（`ScenarioReportsView`）（d8da807，`p07/bc-data-model-scenario`）。视图注册表与统一筛选契约（df06211）。未完成：除 overview/Principles 外人工审图 pending；创建/编辑入口依赖 M5；动作按钮/状态 pill 三处重复与 token 债见 §4 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
@@ -57,7 +57,7 @@ npm test               # vitest 行为测试
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
-| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——类型页外壳按原页重建（a7cc1d0/d6557c3），14 场景机器通过含几何；overview 与 Principles 视图人工审图通过；其余七类仍为过渡通用列表（人工 fail），专用视图未提取 |
+| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——八类型均为专用视图（通用 `KnowledgeLibrary` 已无注册类型使用）；Data Model 含域侧栏搜索/Basic information/关系图/表详情弹窗（Field Details、Data Preview）与相关报表→Report Context 抽屉（reportcontext:view）；Scenario 含双下拉筛选/三列卡/详情抽屉/确认弹窗。overview 与 Principles 人工审图 pass，其余 pending；M5 表单未建 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
@@ -313,6 +313,13 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+2026-09-25 P07(b)/(c)（d8da807）遗留：
+- **token 债**：`DataModelView.css` 82 处、`ScenarioReportsView.css` 47 处裸十六进制（仅替换了与语义 token 同值的 10 处）。刻意没有新增组件前缀别名，留给 design-system-cleanup P2 token 收敛（语义调色板）一次处理；组件 CSS 裸十六进制总数因此由 183 升至 312。
+- **重复**：edit/delete/disable 图标动作（图标路径与可用性规则）在 BusinessTermView、FieldLibraryView、ScenarioReportsView 及各自 demo 中三处实现；Scenario 自带状态 pill 而非 StatusBadge。
+- **耦合**：`AiInterpreterPage` 读取 `views["field-library"].peek` 并自行渲染 `FieldLibraryDrawer`；`useInterpreterDemo` 把同一组回调扇出给每个类型 hook。
+- **零使用者**：八类型全部注册后 `KnowledgeLibrary`/`LibraryToolbar`/`AssetRow` 只在宿主传入无 `view` 的类型时才会渲染，内置内容中已无使用者，按 AGENTS §3.4 待删或收回。
+- **公共入口**：`index.js` 新增演示层导出 `DATA_MODEL_DOMAINS`、`dataModelFieldFormat`、`normalizeScenarioRecord`。
+
 2026-09-25 第二轮对抗审查（1dd1d7d）：`handover/structural-review.md` “第二轮对抗审查”一节，R1–R11。要点：S1 仍未合入 main，而全部提示词从 main 开分支（R1，阻断）；**P03 Self-Service 与 P07 AI Interpreter 的助手面板未重建**——原始 flexible.html/knowledge.html 有完整 `#assistantPanel`（self-service/workspace.js:554、knowledge/workspace.js:2682），React launcher 仅发 `onNavigate({id:"assistant"})`（R2，可达状态缺口）；助手预设开关由调用方重复传入（R3）；Interpreter 列表筛选三种所有权（R4）；公共入口导出演示层、Pagination 越层死 import、无 lint/边界检测（R5）；导航绑定原始 Demo URL 空间（R6，待用户定方案）；visual-check 配置与页面故事单文件为并行冲突热点（R7）；tokens.css reset 命中插槽内容（R8）；本文件 §1 状态表自相矛盾（R9）；features 故事仍标为 Organisms（R10）；结构整改队列推迟覆盖，建议改为只前置 R1/R7/S8+R4/R6（R11，待用户决定）。
 
 2026-09-24 结构与目标偏离审查（d48fc17 + 工作区）：`handover/structural-review.md`。结构 S1–S8：原子层级单文件混装原语与页面功能模块；覆盖层无统一层栈（仅 Modal 有焦点环，ModelFlowDialog 无 Escape）；AssistantPanel 与 ReportCopilot 重复实现助手外壳；5 个页面的流程状态仅在 stories，宿主复制 copilot 逻辑；页面/有机体文案归属不一致；演示数据两处存放；字体与图片依赖只读 `assets/`；Interpreter 类型视图三元分派。目标偏离 A1–A4：保真深度远超覆盖广度（10 页未开始）；原始逻辑缺陷固化进组件（待用户决策）；AGENTS §2.4 与本文件膨胀；仓库卫生与无 CI。含执行波次与逐条 agent 提示。
@@ -444,3 +451,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-25 | R5(a)（eec96d3）：新增 `eslint.config.js`（flat：JSX 解析、`no-unused-vars`、`react-hooks/rules-of-hooks` error、`exhaustive-deps` warn）+ `npm run lint`（eslint 10.11.0、eslint-plugin-react-hooks 7.1.1）；新增 `src/design/boundaries.test.js`——解析全部非 stories/test 模块的 import，断言 components/ 不越层（features|pages|demo|content.js|report-logic|report-routes）、features/<p>/ 不跨页不碰 demo/content、pages/ 不碰 demo/content，白名单机制内置、当前零条目（无违规）。lint 暴露死代码清除：`Pagination` 的 `totalLabel` 死 import（R5 条目已知）、`ModelFlowDialog` 的 `Select`、测试/故事里 `container`/`index`/`within` 未用变量；`MarketingCockpitPage` 的 advisory `view` prop 更名 `_view`（接口不变）。5 条既有 exhaustive-deps 警告保留可见（AssistantPanel lite/tone、Modal initialFocus、ReportDetailsDrawer onClose、overlay.js×2）。验证：lint 0 errors/5 warnings、npm test 65/65、build 66+53 | Devin |
 | 2026-09-25 | A4（8601270、898ab8d）：README.md 重写为以 React 设计系统为主体（安装/Storybook/验证命令含 lint/宿主示例/公共入口/handover 位置），静态 Demo 降为“参照物”一节，故事数不写死；`.github/workflows/ci.yml`（node 24：`npm ci`→lint→test→build-storybook→build:host→playwright chromium→host-check），visual-check 依赖本地参照与浏览器不入 CI（README 注明）；`docs/cleanup-manifest.json` 删除机器绝对路径（`D:/…`、`C:\…`），文件映射/哈希/修复日志保留为参照物清理溯源；`.cursor/environment.json` 取消跟踪 + `.cursor/` 入 gitignore；`assets/.codebuddy/memory/*.md` 删除（CodeBuddy 工具记忆文件，按 AGENTS.md §6 在本提交说明中单列）。首个 CI run 通过：https://github.com/wu2305/marketinghub/actions/runs/36060649232 | Devin |
 | 2026-09-25 | R9：在 898ab8d 对应的工作区内容上重跑全套（npm test 65/65、lint 0/5、build-storybook 66+53、host-check 7/7、visual-check 115/115 + negative 7/7、CI 绿），§1 各行改为本次运行结果并注明提交号与证据路径；过期行原文移 §2.5；§2.1 的 `devin/story-docs-closure` 分支名改为合入提交 4d14e32。不改事实判断 | Devin |
+| 2026-09-25 | P07(b)/(c)（d8da807，`p07/bc-data-model-scenario`，接手 Codex 未提交工作区）：`DataModelView`（域侧栏+搜索、Basic information、关系图、表详情弹窗 Field Details/Data Preview）+ `useDataModelDemo`/`data-model-domains.js`；`ScenarioReportsView`（Status/Process 下拉、三列卡、所有者/状态门控图标动作、详情抽屉、确认弹窗）+ `useScenarioDemo`、`INTERPRETER.scenarioReports` 逐字种子；`FieldLibraryDrawer` 从 FieldLibraryView 拆出供 Data Model 相关报表 peek Report Context（reportcontext:view）；两类注册进 `typeViews`，八类型全部为专用视图。新增 p07 场景 7 条。接手时仅把与语义 token 同值的 10 处十六进制替换为 token，余 129 处登记 §4。验证：lint 0/5、npm test 100/100、build 89 stories + 57 docs、host-check 7/7、visual-check 131/131、negative 7/7；人工审图 pending | Claude Code |

@@ -50,7 +50,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 本节只列约束后续工作方式的现存事实（截至 2026-09-24，ad7ba3a）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
-- **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类中 overview、Principles、Business Term 有专用视图并通过人工审图（Business Term 的 M5 创建/编辑入口未建）；其余六类仍是过渡通用列表（人工 fail）。
+- **覆盖**：17 个原始页面对应 7 个页面组件，P08–P17 未开始。P07 八类全部有专用视图并经 `typeViews` 注册分派（Report Context/Metric Dictionary/Analytical Model/Email Reports 共用 FieldLibraryView）；overview 与 Principles 通过人工审图，其余人工 pending；各类创建/编辑入口（M5）未建。
 - **流程宿主**：只有 Home、Cockpit、Business Term 有 `useXxxDemo`；其他页面的流程状态只存在于各自的 `pages/<Page>/<Page>.stories.jsx`；`examples/host` 的 `useCopilotInstance` 复制了 Cockpit copilot 逻辑。
 - **覆盖层**：滚动锁与焦点还原已共享，但 Escape 与焦点环由各组件自行实现：嵌套时一次 Escape 会关闭所有层，ModelFlowDialog 不响应 Escape，只有 Modal 有焦点环。
 - **组件边界**：AssistantPanel 与 ReportCopilot 重复实现助手外壳；页面组件 props 平铺（最多 49 个）。
