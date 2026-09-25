@@ -316,7 +316,7 @@ S5：
   - 后果：波次 2 的 agent 按通用前言 `git switch -c <分支> origin/main` 会拿到拆分前的 `organisms.jsx` 单文件，要么在旧结构上开发，要么与 S1 大面积冲突。
   - 处理：先为 S1 开 PR 并合入 main（快进即可），之后才启动任何波次 2 条目。顺带：`origin` 上仍有 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 等 7 个 cursor/* 旧分支（AGENTS.md §2.2 要求关闭 #1、#5），由用户决定是否删除远端分支。
 
-- [ ] **R2 P03 Self-Service 与 P07 AI Interpreter 的助手面板丢失（可达状态缺口，未登记）**
+- [x] **R2 P03 Self-Service 与 P07 AI Interpreter 助手面板**（PR #9及#12已补齐，实数与人工债见README）
   - 原始：`assets/pages/flexible.html:196–211` 与 `assets/pages/knowledge.html:1705` 起都有 `#aiEntry` + 完整 `#assistantPanel`；`assets/js/self-service/workspace.js:554` 点击调用 `openAssistant("report")`，`assets/js/knowledge/workspace.js:2682` 调用 `openAssistant("knowledge")`（`overview-home.js:57` 另有程序化触发）。
   - React：`pages/SelfServicePage/index.jsx:80` 与 `pages/AiInterpreterPage/index.jsx:187` 的 launcher 只发 `onNavigate({ id: "assistant" })`，页面没有任何 assistant props，故事和宿主也没有面板状态。
   - 这违反 AGENTS.md §5 共同完成标准 1，且 handover §4 与有意差异表都未记录。同页全盘点：原始有 launcher+panel 的页面是 index、reports、flexible、knowledge、campaign、feedback-quality；其余页若有助手，由 `assistant-panel-lite.js` 动态注入（P05 已按此重建），P12–P17 盘点时须按同一口径核实。
@@ -584,9 +584,9 @@ R5(a)：
   - [x] P11 独立 Data Model（PR #7，582f2ae；全套实数与人工 fail 见 README §1/§5）。
   - [x] P10独立Metric Dictionary（PR #10，c6d5dcd；实数及人工fail见README §1/§5）。
   - [x] P09知识详情（PR #11，6d483c4；全套实数/人工fail见README §1/§5）。
-- [ ] **WP6 R2**：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
+- [x] **WP6 R2**（PR #9及#12；机器验证通过，人工收敛见README）：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
   - [x] P03（PR #9，483bc1b；全套实数见README §1/§5）。
-  - [ ] P07助手继续。
+  - [x] P07（PR #12，122e125；全套实数见README §1/§5）。
 - [ ] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。
 
 ### WP2 token 预算冲突决策

@@ -56,7 +56,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **组件边界**：AssistantPanel 与 ReportCopilot 共用私有 AssistantShell 的头部、历史与覆盖层行为，各自保留真实不同的外层布局、答案与输入组合；页面持有助手变体预设。页面组件 props 平铺（最多 49 个）仍待后续流程收敛。
 - **文案**：AiInterpreterPage 页壳文案已由 props 注入；部分存量有机体仍含写死可见文案，随页面改动继续补齐。
 - **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
-- **资源与交付**：字体和图片依赖参照物 `assets/`；没有正式库构建和 CI；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
+- **资源与交付**：字体和图片依赖参照物 `assets/`；已有最小 CI，但尚无正式库构建；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
 - **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 
 ## 3. 组件与样式规则
