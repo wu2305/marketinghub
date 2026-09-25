@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P11 PR #7 对抗审核完成：复用既有模型浏览器；补强搜索选择保持、真实 zoom/fit/pan 和 URL 参数断言。默认页人工 fail，第二轮视觉收敛待办 |
+| 最新独立审核 | 2026-09-26 P08 PR #8 对抗审核完成：八类型生效字段/关联/动作、AM不可编辑和RC未知ID、结果按钮与Escape、宿主查询参数重挂载已核；RC编辑页人工fail，其余未审pending |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 95 stories + 55 docs；2026-09-26 0c5bffb 构建 index.json 实数；P11 新增 8 个页面故事，无删除 |
-| 测试 | `npm test`：16 文件 147 条通过（2026-09-26 0c5bffb） |
-| lint | `npm run lint`：0 errors / 0 warnings，0c5bffb |
-| 构建验证 | `npm run build-storybook` 95 stories/55 docs；`npm run build:host` + host-check 8/8 通过（`/tmp/mh-p11-integrate-host`）；候选 rebase origin/main 后工作区干净，构建戳匹配 |
+| 故事数 | 141 stories + 56 docs；2026-09-26 8286808 构建 index.json 实数；P08新增45页面状态故事和1个字段组件故事，无删除 |
+| 测试 | `npm test`：17 文件 166 条通过（2026-09-26 8286808） |
+| lint | `npm run lint`：0 errors / 0 warnings，8286808 |
+| 构建验证 | `npm run build-storybook` 141 stories/56 docs；`npm run build:host` + host-check 13/13 通过（`/tmp/mh-p08-integrate-host`）；8286808 rebase origin/main 后工作区干净，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 0c5bffb，工作区干净）：全站 148/148 机器通过（`/tmp/mh-p11-integrate-visual`），负向 9/9 按预期失败（`/tmp/mh-p11-integrate-negative`）。默认 P11 人工 fail 已绑定截图 hash 登记，其他 147 场景人工 pending；P07 逐类型状态仅见 §2.2 |
+| 最近视觉对照 | 2026-09-26（stamp 8286808，工作区干净）：全站194/194机器通过，P08 46/46（`/tmp/mh-p08-integrate-visual`）；负向10/10按预期失败（`/tmp/mh-p08-integrate-negative`）。本次P08 Report Context编辑人工fail已绑定最终截图hash，其余193未审pending；此前P11默认人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -39,7 +39,7 @@ npm test               # vitest 行为测试
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
-| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P11 独立模型浏览器已实现并完成机器验证；P08 八类型创建/编辑候选已重建，P09/P10 候选推进中，人工视觉收敛仍待办 |
+| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08八类型表单及P11独立模型浏览器已实现并完成机器验证；P09/P10候选继续，人工视觉收敛仍待办 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
@@ -61,8 +61,8 @@ npm test               # vitest 行为测试
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
-| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——概览：类型导航与 Hero，人工 pass。八类型：Principles（类目、搜索、展开、分页，人工 pass）；Report Context（卡片、项目筛选、详情抽屉、描述编辑，机器 pass/人工 pending）；Data Model（域搜索、Basic/关系图、表抽屉与预览、相关报表抽屉，机器 pass/人工 pending）；Metric Dictionary（专用列表与详情，机器 pass/人工 pending）；Business Term（三列卡、筛选、分页、详情、权限/禁用/确认，机器 pass/人工 pending）；Analytical Model（卡片、管理动作、删除被引用阻断，机器 pass/人工 pending）；Scenario Reporting（状态/流程筛选、卡片、详情抽屉与管理确认，机器 pass/人工 pending）；Email Reports（专用表格与分页，机器 pass/人工 pending）。三类管理动作共享纯规则和演示确认 hook，保留各自权限、Draft 与引用差异；相关报表经 overlay slot 呈现。M5 创建/编辑表单仍未建，不能计为 P07 全量完成。机器证据与人工抽看见 §5 WP2 行 |
-| P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 已实现，配对与人工最终核验中——受控 `KnowledgeCreatePage`、`KnowledgeCreateFields`、`BusinessTermForm`、`useKnowledgeCreateDemo`；可达专用与通用表单、Data Model/Metric 细项、RC 版本/确认、Synonyms 最终表格、Save/Submit/Cancel 与原始缺陷修正均有故事和场景；Email Reports 创建/编辑触发路径未证实，保留待查 |
+| P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——概览：类型导航与 Hero，人工 pass。八类型：Principles（类目、搜索、展开、分页，人工 pass）；Report Context（卡片、项目筛选、详情抽屉、描述编辑，机器 pass/人工 pending）；Data Model（域搜索、Basic/关系图、表抽屉与预览、相关报表抽屉，机器 pass/人工 pending）；Metric Dictionary（专用列表与详情，机器 pass/人工 pending）；Business Term（三列卡、筛选、分页、详情、权限/禁用/确认，机器 pass/人工 pending）；Analytical Model（卡片、管理动作、删除被引用阻断，机器 pass/人工 pending）；Scenario Reporting（状态/流程筛选、卡片、详情抽屉与管理确认，机器 pass/人工 pending）；Email Reports（专用表格与分页，机器 pass/人工 pending）。三类管理动作共享纯规则和演示确认 hook，保留各自权限、Draft 与引用差异；相关报表经 overlay slot 呈现。M5 独立创建/编辑已由 P08 实现，P07跨页入口和助手等仍不能计为全量完成。机器证据与人工抽看见 §5 WP2 行 |
+| P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 已实现，PR #8；八个可选择类型、45页面状态故事、46/46本页配对与全套机器验证；BusinessTermForm已实际复用。AM不可编辑/RC未知ID、表单联动/附件/版本/公式及宿主导航已核；RC编辑人工fail，其余pending，像素收敛仍待办 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
 | P10 | assets/pages/metric-dictionary.html | 指标结构、公式及实际可达交互 | M5 | 未开始 |
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
@@ -322,12 +322,15 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | A2 Campaign answer, `assets/js/campaign/workspace.js:314–316` | 原始：No loaded rule styles answer-card-header; AI Response and Context concatenate. React：Existing-token grid banner; p06-assistant-answer. | Missing header styling listed in A2. | #2 |
 | A2 Campaign reopen, `assets/js/campaign/workspace.js:279–284`; Home `assets/js/shared/portal.js:588–596`; lite `assets/js/shared/assistant-panel-lite.js:44–48` | 原始：Campaign close hides panel but retains expansion; Home/lite reset it. React：AssistantPanel consistently reopens at drawer size; p06-assistant-expand-reset. | Inconsistent state quirk listed in A2. | #2 |
 | A2 Copilot View more, `assets/js/reports/report-core.js:4498–4508` | 原始：Second click returns before stopPropagation and collapses parent. React：Second click leaves recommendations expanded; p02-copilot-more. | Source explicitly specifies one-way expansion. | #2 |
-| P08 Data Model Preview/Smart Modeling 提示（`assets/js/knowledge/editor-runtime.js:402–410`、`assets/pages/knowledge-create.html:74–77`） | 原始 notify 只改 `#dialogText`，标题沿用 “Saved successfully”；React 显示与动作相符的 “Preview Data” / “Smart Modeling”。结果按钮仍回 Knowledge Management，Escape 仅关闭覆盖层 | 旧标题是结果框复用造成的残留状态，不把错误成功语义放入组件；P08 配对场景保留来源截图 | wp5/p08-knowledge-create |
-| P08 未知 Report Context 编辑 ID（`assets/js/knowledge/editor-runtime.js:4–9,170–184`、`assets/js/knowledge/report-context-form.js:3–11`） | 原始缺 ID 时回退到第一条 Principles，故 URL 标为 Report Context 却显示 Principles 通用编辑字段；React 保留 URL 的 Report Context 类型，走其通用表单，不伪造专用记录或描述历史 | 第一条资产回退是错误类型判定；已知记录仍使用专用描述编辑，未知 ID 的通用状态以单独故事/配对记录 | wp5/p08-knowledge-create |
+| P08 Data Model Preview/Smart Modeling 提示（`assets/js/knowledge/editor-runtime.js:402–410`、`assets/pages/knowledge-create.html:74–77`） | 原始 notify 只改 `#dialogText`，标题沿用 “Saved successfully”；React 显示与动作相符的 “Preview Data” / “Smart Modeling”。结果按钮仍回 Knowledge Management，Escape 仅关闭覆盖层 | 旧标题是结果框复用造成的残留状态，不把错误成功语义放入组件；P08 配对场景保留来源截图 | #8 |
+| P08 未知 Report Context 编辑 ID（`assets/js/knowledge/editor-runtime.js:4–9,170–184`、`assets/js/knowledge/report-context-form.js:3–11`） | 原始缺 ID 时回退到第一条 Principles，故 URL 标为 Report Context 却显示 Principles 通用编辑字段；React 保留 URL 的 Report Context 类型，走其通用表单，不伪造专用记录或描述历史 | 第一条资产回退是错误类型判定；已知记录仍使用专用描述编辑，未知 ID 的通用状态以单独故事/配对记录 | #8 |
 | S2 嵌套助手/ModelFlow Escape | 原始打开流程后一次 Escape 留下流程、关闭下层助手；React 先关闭顶层 ModelFlow，保持助手焦点与滚动锁，第二次关闭助手并回到该实例的启动按钮。 | 用户要求统一层栈。源码 `assets/js/shared/assistant-skill-menu.js:470–506,846–855` 与 `assets/js/shared/portal.js:846–850`；原始/React Chromium 证据 `/tmp/mh-wp3-s2-original-escape.json`、`/tmp/wp3s2home-browser.json`，双根绘制层级与双启动按钮证据 `/tmp/wp3s2paint-browser.json`。 | #5 |
 | S3 助手历史与隐藏控件 | 共用真实头部/历史/覆盖层行为，保留各自答案与输入结构。历史点击边界限于按钮和弹层，关闭后重开复位；移除实际被 CSS 隐藏的 Scope/picker 与无消费者 body class。 | 原始 report-core.js:2222–2225,3365–3388；assistant-panel.css:495–500,795–813。实际启动按钮重开证据 `/tmp/mh-s3-root-history.json`；不为不可达隐藏状态增设配置。现有 page stories 保留，没有删除可达状态。 | #6 |
 
 | P11 独立 Header / graph tab | 原 data-model.html:29–44、theme.css:37–43 与 data-model-inline-1.css:5–7 使固定 Header 覆盖无避让的页体；鼠标不能点图页签，Tab+Enter 可达。React 使用文档流内 sticky Header，使页签可点击 | AGENTS §3.5 明显定位缺陷；保留图本体和真实键盘路径。源证据 /tmp/mh-p11-runtime-inventory.json，配对 p11-graph；其余视觉差异仍为 fail 待收敛 | #7 |
+
+| P08 已知记录无类型编辑/复制（business-term-form.js:7–14、editor-runtime.js:197–198） | 原类型缺省会被Business Term专用脚本接管；React从已知记录类型恢复正确表单，未知记录仍走默认创建路径 | 修正错误类型回退，避免跨页编辑把其他知识误作Business Term；对应edit/copy宿主检查 | #8 |
+| P08 Data Model同义词Enter（editor-runtime.js:552–559） | 原keydown提交后blur再次操作已移除节点，可重复插入并抛DOMException；React一次保存，Escape取消，blur正常保存 | AGENTS §3.5复现明显意图；Enter/blur/Escape定向行为测试 | #8 |
 
 ## 4. 已知缺口
 
@@ -487,3 +490,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P11 独立 Data Model 页候选：复用 DataModelView/useDataModelDemo 与既有数据；修正搜索命中后、空结果及清空的域选择保持，Measure 类型格式对齐 data-model-browser.js:995–1005。8 个页面故事，15/15 定向配对通过（/tmp/mh-p11-preview，脏工作区定位证据，非最终验收）；zoom/fit/pan 断言真实变换。最终全套与人工结论由 integrator 登记。 | Codex P11 + integrator |
 | 2026-09-26 | P11 PR #7（https://github.com/wu2305/marketinghub/pull/7）合并为 582f2ae；最终候选 0c5bffb rebase origin/main 后干净工作区通过 lint 0/0、16 文件147测试、95 stories/55 docs、host8/8、visual148/148、negative9/9（/tmp/mh-p11-integrate-*）。对抗审核将宽松 scale 存在检查改为真实缩放变化、fit复位和pointer拖动，覆盖初始过滤→无匹配→清空的实际选中域；Measure格式按原源码修正。默认P11人工fail已用 --review 绑定最终截图hash（与预审逐字节相同），其余pending。原固定页头遮挡更正见§3；徽标/圆角/阴影/图标色与间距留第二轮。 | Codex integrator |
 | 2026-09-25 | WP5 P08（`wp5/p08-knowledge-create`）：按原始可达表单与最终脚本生效顺序重建 knowledge-create，接入受控页/类型专用字段/演示容器、原始 URL 适配、独立宿主和配对场景；源证据与错类型路由、Data Model 表身份/字段、Metric token/同义词 Enter/Preview 残留标题缺陷、八类型编辑夹具与关系核对见本 PR 说明。提交前 focused tests、构建、宿主和配对已验证；最终合入基线验证数字由整合者更新 §1。人工对照 P08 Report Context 编辑态为 fail：页头/面包屑高度、元数据布局、场景标签、背景和文字间距仍需第二轮像素收敛；未审场景 pending，不能以机器通过代替视觉验收。 | Codex WP5 |
+| 2026-09-26 | P08 PR #8（https://github.com/wu2305/marketinghub/pull/8）合并为 33047ad；候选8286808在最新main上干净验证：lint0/0、17文件166测试、141stories/56docs、host13/13、全站visual194/194（P08 46）、negative10/10，证据/tmp/mh-p08-integrate-*。对抗审核修正AM真实关联/描述与不存在记录态、BT编辑标题/面包屑、RC描述规则/结果按钮导航/Escape、Metric整体token与单位状态、DM Enter同义词一次保存、上传和查询参数变更宿主重挂载。Email创建分支在原HTML选择器51–63不可达，不恢复隐藏残留。RC编辑人工fail：元数据布局、页头/面包屑高度、场景标签、背景和字体间距待第二轮；其他未审pending。 | Codex integrator |
