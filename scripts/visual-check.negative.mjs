@@ -86,7 +86,7 @@ export default [
     id: "neg-p09-wrong-record",
     base: "p09-business-empty-assets",
     story: { id: "pages--knowledge-view-business-term" },
-    reason: "GMV has three related rows and cannot satisfy the empty-assets assertion",
+    reason: "Paid Customer has two related rows and cannot satisfy GMV's empty-assets assertion",
   },
   {
     id: "neg-p09-wrong-action",

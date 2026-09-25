@@ -12,6 +12,13 @@ function Fixture({ content, recordId, hrefFor, onNavigate, onAction, onOpen, onC
 }
 
 describe("P09 knowledge detail flow", () => {
+  it("falls back to GMV for missing and unknown IDs, as the effective source does", () => {
+    const { rerender } = render(<Fixture />);
+    expect(screen.getByRole("heading", { name: /^GMV/ })).toBeTruthy();
+    rerender(<Fixture recordId="unknown-record" />);
+    expect(screen.getByRole("heading", { name: /^GMV/ })).toBeTruthy();
+  });
+
   it("uses source Edit URL params and emits the same named navigation payload", () => {
     const onNavigate = vi.fn();
     render(<Fixture recordId="business-term-gmv" onNavigate={onNavigate} />);
