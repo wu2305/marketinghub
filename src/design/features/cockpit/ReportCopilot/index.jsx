@@ -604,9 +604,8 @@ export function ReportCopilot({
   const answerOpen = Boolean(answer) || chat.length > 0;
   const chatMode = !answer && chat.length > 0;
 
-  /* closeAi() strips only is-ai-expanded — collapsed sections, the show-all
-     list, feedback pressed state, dock and the history popup all persist into
-     the next open. */
+  /* The report workspace closes its expanded layout on every close. The
+     other local choices remain available when the workspace is reopened. */
   React.useEffect(() => {
     if (open) return;
     setExpanded(false);

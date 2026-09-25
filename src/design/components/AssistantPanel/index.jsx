@@ -262,10 +262,7 @@ export function AssistantPanel({
   useFocusRestore(open, layerRef);
   React.useEffect(() => {
     if (!open) {
-      // Quirk parity: home (portal.js) and lite (assistant-panel-lite.js) reset
-      // `is-ai-expanded` on close, but the shared workspace panel's close only
-      // sets `hidden` — the expanded modal persists across close→reopen there.
-      if (tone === "home" || lite) setExpanded(false);
+      setExpanded(false);
       setHistoryOpen(false);
       return undefined;
     }

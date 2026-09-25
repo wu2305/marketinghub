@@ -340,9 +340,9 @@ export default [
     },
   },
   {
-    /* Quirk: the shared workspace panel's closeAssistant only sets `hidden` —
-       `is-ai-expanded` survives close→reopen (home/lite reset it instead). */
-    id: "p06-assistant-expand-persist",
+    /* The original shared panel retains expansion after close. A fresh React
+       opening returns to the drawer layout. */
+    id: "p06-assistant-expand-reset",
     original: {
       url: "/assets/pages/campaign.html",
       actions: [
@@ -356,8 +356,7 @@ export default [
         { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
       ],
       expect: [
-        { sel: ".assistant-panel.is-ai-expanded .assistant-modal", text: "Ask AI Interpreter" },
-        { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
+        { sel: ".assistant-panel:not([hidden]) .assistant-modal", text: "Ask AI Interpreter" },
       ],
     },
     story: {
@@ -372,8 +371,8 @@ export default [
         { wait: ".mh-assistant" },
       ],
       expect: [
-        { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
-        { sel: "button[aria-label='Restore AI Interpreter panel']", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
+        { sel: ".mh-assistant--drawer", text: "Ask AI Interpreter" },
+        { sel: "button[aria-label='Maximize AI Interpreter panel']", attr: { name: "aria-label", value: "Maximize AI Interpreter panel" } },
       ],
     },
   },
