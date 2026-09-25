@@ -573,7 +573,7 @@ R5(a)：
 各包从 WP0 验证后同步的 `origin/main` 开独立 worktree/分支；每个部分接受对抗性审核，PR 逐个 rebase、全套验证、合并。仅 integrator 更新 README §1 和本节勾选。WP3 按三条依次提交 PR，其余一包一 PR；用户最新指示保留现有 `scripts/font-probe.mjs`，新临时探针仍放 `/tmp`。
 
 - [x] **WP0 基线集成**：结构分支增加 `scripts/.*.tmp.mjs` 忽略规则；全套验证后 main 快进并同步 github/origin，保留已提交 P07 工作。7cb768e 源码全套验证通过（证据与实数见 README §1/§5），独立对抗审核完成。
-- [ ] **WP1 CSS budget ratchet**：裸十六进制、token 定义数、同值多名数量上限；组件前缀新增禁令和仅可缩减豁免；负向变异证明；AGENTS §4 临时脚本位置。
+- [x] **WP1 CSS budget ratchet**（PR #1，36959e7；独立对抗审核与全套验证通过，实数见 README §1/§5）：裸十六进制、token 定义数、同值多名数量上限；组件前缀新增禁令和仅可缩减豁免；负向变异证明；AGENTS §4 临时脚本位置。
 - [ ] **WP2 P07 closeout**：管理动作/状态/确认流程共性；active-view 注册契约和 overlay slot；删除无使用者过渡组件；fl/dm/sr 语义 token；P07 八类状态只维护 §2.2。
 - [ ] **WP3.1 A2**：参照物逻辑缺陷退出组件，demo 层按需重现。
 - [ ] **WP3.2 S2**：统一覆盖层栈、Escape 与焦点环。
