@@ -336,6 +336,26 @@ describe("AI Interpreter type contract", () => {
 });
 
 describe("AI Interpreter assistant demo", () => {
+  it("resubmitting the same knowledge question starts with fresh answer feedback", () => {
+    const onFeedback = vi.fn();
+    const answerFor = vi.fn((query) => ({ id: "stable-answer-id", query, variant: "workspace", banner: "Knowledge answer", context: "Knowledge Base", body: "Repeated answer", findings: [] }));
+    renderPage({ activeType: "Business Term", assistant: { ...INTERPRETER.assistant, onFeedback }, demo: { answerFor } });
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    const send = () => {
+      fireEvent.change(screen.getByRole("textbox", { name: "Ask AI Interpreter AI" }), { target: { value: "Same knowledge question" } });
+      fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    };
+    send();
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']"));
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']").getAttribute("aria-pressed")).toBe("true");
+    send();
+    expect(answerFor).toHaveBeenCalledTimes(2);
+    expect(document.querySelectorAll(".mh-assistant__answer")).toHaveLength(1);
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']").getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']"));
+    expect(onFeedback).toHaveBeenLastCalledWith({ query: "Same knowledge question", feedback: "not-helpful", typeId: "Business Term" });
+  });
+
   it("uses knowledge suggestions, replaces answers, and types every host callback", () => {
     const onOpen = vi.fn();
     const onSuggestion = vi.fn();

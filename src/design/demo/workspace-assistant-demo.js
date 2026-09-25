@@ -14,6 +14,7 @@ export function useWorkspaceAssistantDemo(props) {
   const [open, setOpen] = React.useState(Boolean(source.open));
   const [prompt, setPrompt] = React.useState(source.prompt || "");
   const [answers, setAnswers] = React.useState(source.answers || EMPTY_ANSWERS);
+  const answerSequence = React.useRef(0);
   const [skill, setSkill] = React.useState(null);
   const [flow, setFlow] = React.useState(null);
 
@@ -30,7 +31,9 @@ export function useWorkspaceAssistantDemo(props) {
     const query = String(value || "").trim();
     if (!query) return;
     const answer = props.demo?.answerFor?.(query);
-    if (answer) setAnswers([answer]);
+    // The source replaces its answer markup on every send, including repeated
+    // identical prompts. A fresh key also resets local feedback/copy state.
+    if (answer) setAnswers([{ ...answer, id: `workspace-answer-${++answerSequence.current}` }]);
     setPrompt("");
   };
   const modelFlow = props.demo?.modelFlow;
