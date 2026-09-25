@@ -7,11 +7,10 @@ import { isPilotCitySalesQuestion, resolveReportAssets } from "../report-logic.j
 import { copilotSourceHref } from "../report-routes.js";
 
 /* ---------------------------------------------------------------------------
- * Six-city scenario generator — verbatim port of the original seeded RNG and
- * scGenScenario in assets/js/reports/report-core.js, parameterized on the
- * city-invest data block. The `isDefault` quirk is kept: the city filter
- * carries city names, never the copy's total label, so every render — default
- * state included — takes the seeded-variation branch.
+ * Six-city scenario generator — the original seeded RNG and scGenScenario in
+ * assets/js/reports/report-core.js, parameterized on the city-invest data
+ * block. Default filters use the baseline; changed filters take the seeded
+ * variation branch.
  * ------------------------------------------------------------------------- */
 
 function scHashStr(s) {
@@ -41,7 +40,13 @@ export function generateCityInvestScenario(cityInvest, filters) {
   const f = filters;
   const defaults = cityInvest.defaultFilters || {};
   const isDefault =
-    f.channel === defaults.channel && f.pilot === defaults.pilot && f.city.includes(cityInvest.copy.total) && f.end === defaults.end;
+    f.channel === defaults.channel &&
+    f.pilot === defaults.pilot &&
+    f.end === defaults.end &&
+    f.city.length === (defaults.cities || []).length &&
+    (defaults.cities || []).every((city) => f.city.includes(city)) &&
+    f.store.length === (defaults.stores || []).length &&
+    (defaults.stores || []).every((store) => f.store.includes(store));
   const seedStr = [f.channel, f.pilot, f.city.slice().sort().join(","), f.store.slice().sort().join(","), f.end].join("|");
   const rng = scMulberry32(scHashStr(seedStr));
   const endIdx = cityInvest.endIndex[f.end] ?? 14;
