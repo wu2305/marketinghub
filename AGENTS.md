@@ -57,7 +57,6 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **文案**：AiInterpreterPage 写死统计标签、管理规则与未知类型文案；有机体可见文案有的走 props，有的写死，规则不统一。
 - **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
 - **资源与交付**：字体和图片依赖参照物 `assets/`；没有正式库构建和 CI；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
-- **参照物缺陷已进入组件**（按 §3.5 回退）：CityInvestDashboard 的城市筛选恒显 “All Stores”、`isDefault` 永假导致默认态也走种子扰动、空选回 “Total”；Home 历史回填后 ASK 保持禁用（`AssistantPanel` 的 `submitDisabled` 为此而加）；ReportCopilot History 条目因 `.ai-workspace-head span` 级联泄漏被大写；Campaign 答案卡 “AI ResponseContext” 横幅缺样式；AssistantPanel 关闭时只按变体复位 expanded（closeAi quirk）。
 - **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 
 ## 3. 组件与样式规则

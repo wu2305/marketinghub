@@ -295,12 +295,12 @@ export default [
         { sel: ".mh-sixcity" },
         { sel: ".mh-sc-title", text: "Invest City Strategy Analysis（6 Cities）" },
         { sel: ".mh-sc-filters", text: "FY25 P4–P9" },
-        { sel: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('City')) .mh-sc-fval__txt", text: "All Stores" },
+        { sel: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('City')) .mh-sc-fval__txt", text: "Total" },
         { sel: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('Store')) .mh-sc-fval__txt", text: "All Stores · 6 Cities" },
         { sel: ".mh-sc-kpi:has-text('Avg Daily Traffic')" },
-        { sel: ".mh-sc-kpi:has-text('+14%')" },
-        { sel: ".mh-sc-kpi:has-text('After 0.3K')" },
-        { sel: ".mh-sc-kpi:has-text('5,121')" },
+        { sel: ".mh-sc-kpi:has-text('+10%')" },
+        { sel: ".mh-sc-kpi:has-text('After 0.4K')" },
+        { sel: ".mh-sc-kpi:has-text('4,581')" },
         { sel: ".mh-sc-sec-title", text: "Total Monthly Key Indicator Trend vs. Non Invest City" },
         { sel: ".mh-sc-chart svg" },
       ],
@@ -337,6 +337,34 @@ export default [
         { sel: ".mh-sc-kpi:has-text('+15%')" },
         { sel: ".mh-sc-kpi:has-text('After 0.4K')" },
         { sel: ".mh-sc-kpi:has-text('4,565')" },
+      ],
+    },
+  },
+  {
+    id: "p02-live-city-empty",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#sc-cityCtrl" },
+        { click: "#sc-cityCtrl .sc-none" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: "#sc-cityCtrl .sc-fval-txt", text: "(None)" },
+        { sel: ".sc-sec-title", text: "Total Monthly Key Indicator Trend vs. Non Invest City" },
+      ],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('City')) .mh-sc-fval" },
+        { click: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('City')) .mh-sc-phead button:has-text('Clear')" },
+        { waitMs: 300 },
+      ],
+      expect: [
+        { sel: ".mh-sc-fitem:has(.mh-sc-flabel:text-is('City')) .mh-sc-fval__txt", text: "(None)" },
+        { sel: ".mh-sc-sec-title", text: "(None) Monthly Key Indicator Trend vs. Non Invest City" },
       ],
     },
   },
@@ -776,6 +804,7 @@ export default [
         { click: ".mh-launcher" },
         { wait: ".mh-copilot.is-open" },
         { click: ".mh-copilot__view-more" },
+        { click: ".mh-copilot__view-more" },
       ],
       expect: [
         { sel: ".mh-copilot__recs.is-show-all" },
@@ -1047,7 +1076,6 @@ export default [
       ],
       expect: [
         { sel: "#aiReportHistoryPopup", state: "attached", text: "Recent Chats" },
-        { sel: "#aiReportHistoryPopup .ai-recent-chat >> nth=2", state: "attached", text: "FIND CONVERSION GAPS" },
       ],
     },
     story: {
@@ -1068,6 +1096,31 @@ export default [
         { sel: ".mh-copilot__history", state: "detached" },
         { sel: ".mh-copilot", text: "Data Analysis Assistant" },
       ],
+    },
+  },
+  {
+    id: "p02-copilot-history-case",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiWorkspace #aiHistory" },
+        { wait: "#aiReportHistoryPopup:not([hidden])" },
+      ],
+      expect: [{ sel: "#aiReportHistoryPopup", state: "attached", text: "Recent Chats" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-copilot__history" },
+        { eval: "(() => { const item = document.querySelector('.mh-copilot__history-item span'); if (getComputedStyle(item).textTransform !== 'none') throw new Error('history prompt still transformed'); })()" },
+      ],
+      expect: [{ sel: ".mh-copilot__history-item span >> nth=2", text: "Find conversion gaps in this scenario report." }],
     },
   },
   {

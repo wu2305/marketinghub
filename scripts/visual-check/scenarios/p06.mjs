@@ -164,7 +164,7 @@ export default [
   },
   {
     /* workspace.js createAnswer: suggestion click submits immediately; the feed
-       renders the workspace card (flush banner, findings, source chips) below
+       renders the workspace card (banner, findings, source chips) below
        the always-visible ask stage. */
     id: "p06-assistant-answer",
     original: {
@@ -191,9 +191,14 @@ export default [
     story: {
       id: "pages--campaign",
       args: { assistantOpen: true },
-      actions: [{ click: ".mh-assistant__suggestions button" }, { wait: ".mh-assistant__answer--workspace" }],
+      actions: [
+        { click: ".mh-assistant__suggestions button" },
+        { wait: ".mh-assistant__answer--workspace" },
+        { eval: "(() => { const banner = document.querySelector('.mh-assistant__answer-banner'); const style = getComputedStyle(banner); if (style.display !== 'grid' || style.borderBottomStyle !== 'solid') throw new Error('response header not styled'); })()" },
+      ],
       expect: [
-        { sel: ".mh-assistant__answer-banner", text: "AI ResponseContext: Campaigns" },
+        { sel: ".mh-assistant__answer-banner strong", text: "AI Response" },
+        { sel: ".mh-assistant__answer-banner span", text: "Context: Campaigns" },
         { sel: ".mh-assistant__answer-body > p", text: "Based on current campaign data, here are the key findings." },
         { sel: ".mh-assistant__finding", text: "ROI Trend" },
         { sel: ".mh-assistant__finding:has-text('Budget Alert')" },
@@ -335,9 +340,9 @@ export default [
     },
   },
   {
-    /* Quirk: the shared workspace panel's closeAssistant only sets `hidden` —
-       `is-ai-expanded` survives close→reopen (home/lite reset it instead). */
-    id: "p06-assistant-expand-persist",
+    /* The original shared panel retains expansion after close. A fresh React
+       opening returns to the drawer layout. */
+    id: "p06-assistant-expand-reset",
     original: {
       url: "/assets/pages/campaign.html",
       actions: [
@@ -351,8 +356,7 @@ export default [
         { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
       ],
       expect: [
-        { sel: ".assistant-panel.is-ai-expanded .assistant-modal", text: "Ask AI Interpreter" },
-        { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
+        { sel: ".assistant-panel:not([hidden]) .assistant-modal", text: "Ask AI Interpreter" },
       ],
     },
     story: {
@@ -367,8 +371,8 @@ export default [
         { wait: ".mh-assistant" },
       ],
       expect: [
-        { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
-        { sel: "button[aria-label='Restore AI Interpreter panel']", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
+        { sel: ".mh-assistant--drawer", text: "Ask AI Interpreter" },
+        { sel: "button[aria-label='Maximize AI Interpreter panel']", attr: { name: "aria-label", value: "Maximize AI Interpreter panel" } },
       ],
     },
   },

@@ -52,7 +52,7 @@ function openHistoryAndPickFirst() {
 }
 
 describe("useHomeDemo", () => {
-  it("history pick fills the prompt and keeps ASK disabled until typing", () => {
+  it("history pick fills the prompt and enables ASK immediately", () => {
     const onHistorySelect = vi.fn();
     renderHome({ onHistorySelect });
     openAssistant();
@@ -60,7 +60,7 @@ describe("useHomeDemo", () => {
     const record = ASSISTANT.history[0];
     expect(promptBox().value).toBe(record.prompt);
     expect(onHistorySelect).toHaveBeenLastCalledWith({ label: record.label, prompt: record.prompt });
-    expect(askButton().disabled).toBe(true);
+    expect(askButton().disabled).toBe(false);
     fireEvent.change(promptBox(), { target: { value: record.prompt + "?" } });
     expect(askButton().disabled).toBe(false);
   });

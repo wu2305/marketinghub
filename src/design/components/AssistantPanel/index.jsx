@@ -75,8 +75,6 @@ function AssistantAnswer({ answer, onFeedback }) {
           <span className="mh-assistant__bubble">{answer.query}</span>
         </div>
         <article className="mh-assistant__answer mh-assistant__answer--workspace" ref={cardRef}>
-          {/* Original quirk: `.answer-card-header` matches no stylesheet rule,
-              so banner strong+span render as flush inline text. */}
           <div className="mh-assistant__answer-banner">
             <strong>{answer.banner}</strong>
             <span>{answer.context}</span>
@@ -197,7 +195,6 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {boolean} [props.enterToSubmit=true] false mirrors the lite panel where Enter inserts a newline
  * @param {boolean} [props.lite=false] lite variant (original `data-lite-panel`): short maximize labels
  * @param {boolean} [props.hideStageOnAnswers=false] true mirrors the reports panel where the ask stage hides once the feed has entries
- * @param {boolean} [props.submitDisabled=false] force-disables ASK — the home history pick fills the composer without updateSendState, leaving ASK off until the user types
  * @param {(event: { names: string[] }) => void} [props.onAttach] fired after "Upload File" picks files
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -237,7 +234,6 @@ export function AssistantPanel({
   enterToSubmit = true,
   lite = false,
   hideStageOnAnswers = false,
-  submitDisabled = false,
   onAttach,
   onSelectSkill,
   onClearSkill,
@@ -266,10 +262,7 @@ export function AssistantPanel({
   useFocusRestore(open, layerRef);
   React.useEffect(() => {
     if (!open) {
-      // Quirk parity: home (portal.js) and lite (assistant-panel-lite.js) reset
-      // `is-ai-expanded` on close, but the shared workspace panel's close only
-      // sets `hidden` — the expanded modal persists across close→reopen there.
-      if (tone === "home" || lite) setExpanded(false);
+      setExpanded(false);
       setHistoryOpen(false);
       return undefined;
     }
@@ -499,7 +492,7 @@ export function AssistantPanel({
               {showPicks ? <span className="mh-assistant__pick">{model}</span> : null}
               {showPicks ? <span className="mh-assistant__pick">{mode}</span> : null}
               <span className="mh-assistant__send">
-                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={submitDisabled || !String(prompt).trim()}>
+                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={!String(prompt).trim()}>
                   ASK
                 </Button>
               </span>

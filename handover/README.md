@@ -42,6 +42,7 @@ npm test               # vitest 行为测试
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 未开始 | BusinessTermForm 仅已有雏形，不算完成 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
+| M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | WP3 A2 PR（待合入）；原始证据与有意差异交由集成者登记 §3 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -51,12 +52,12 @@ npm test               # vitest 行为测试
 
 | ID | 原始入口 | 主要待覆盖范围（以实际生效内容补全） | 里程碑 | 状态 |
 |---|---|---|---|---|
-| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 进行中 |
-| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中 |
+| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 进行中；A2 修正历史回填后 ASK 可提交及关闭后最大化复位 |
+| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中；A2 修正城市默认计算、全选/空选标签及 Copilot 历史大小写/View more 二次点击 |
 | P03 | assets/pages/flexible.html | Self-Service 页签、筛选、数据视图入口及状态 | M3 | 进行中 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
-| P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中 |
+| P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——八类型均为专用视图（通用 `KnowledgeLibrary` 已无注册类型使用）；Data Model 含域侧栏搜索/Basic information/关系图/表详情弹窗（Field Details、Data Preview）与相关报表→Report Context 抽屉（reportcontext:view）；Scenario 含双下拉筛选/三列卡/详情抽屉/确认弹窗。overview 与 Principles 人工审图 pass，其余 pending；M5 表单未建 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 未开始 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
@@ -455,3 +456,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-25 | WP0：确认 P07 工作已提交且工作区干净后，将 structural/r7-split-hotspots 快进至 7cb768e；增加 scripts/.*.tmp.mjs 忽略规则。按用户最新指示保留并直接使用 scripts/font-probe.mjs，未迁移现有脚本。对 7cb768e 设计源码完成 lint 0 errors/5 warnings、11 文件 100 测试、Storybook 89 stories/57 docs、host 7/7（/tmp/mh-wp0-host）、visual 131/131（/tmp/mh-wp0-visual）、negative 7/7 预期失败（/tmp/mh-wp0-negative）；构建戳设计源码 dirtyPaths=[]，工作区仅本轮忽略规则/文档修改。gpt-6-sol high 独立对抗审核确认提交链完整、原始 Demo 未改、忽略规则生效；本轮不新增人工视觉通过结论。 | Codex integrator |
 | 2026-09-25 | WP1 CSS budget ratchet（`wp1/css-budget`）：以 WP0 `8f45c9d` 量得的 310 处组件 CSS 裸十六进制（排除注释）、397 个 token 定义、47 组同值多名为上限；316 个旧组件/页面前缀名进入可缩减豁免，测试固定 WP0 名单并扫描当前及新目录前缀。`AGENTS.md` §4 补充新临时探针脚本存 `/tmp`。独立负向变异：新增 `#123abc` 使 311>310（`/tmp/mh-wp1-raw-hex-negative.log`）；同一行新增 `--mh-fl-x` 使 398>397 且独立前缀断言失败（`/tmp/mh-wp1-prefix-negative.log`），两处变异均已撤销。验证：lint 0 errors/5 warnings、12 文件 105 测试、Storybook 89 stories/57 docs、host 7/7（`/tmp/mh-wp1-host`）、visual 131/131 机器通过（`/tmp/mh-wp1-visual`）、negative 7/7 按预期失败（`/tmp/mh-wp1-negative`），构建/对照源指纹一致；本次人工审图 pending。历史豁免名单若未来删除后同名重加，需在 PR diff 审核中拒绝；静态测试只自动拒绝 WP0 名单以外的新增豁免。 | Codex WP1 |
 | 2026-09-25 | WP1 PR #1（https://github.com/wu2305/marketinghub/pull/1）合并为 36959e7；候选 a109402 已 rebase origin/main，干净工作区完成 lint 0 errors/5 warnings、12 文件 105 测试、89 stories/57 docs、host 7/7、visual 131/131、negative 7/7 预期失败，证据 /tmp/mh-wp1-integrate-*。预算为裸色 310、定义 397、同值多名组 47，前缀豁免 316；两项负向变异证明见 /tmp/mh-wp1-raw-hex-negative.log 和 /tmp/mh-wp1-prefix-negative.log。对抗审核修复同行定义漏检；固定历史豁免集合防止新增名称，已删历史名称的重新加入仍须 PR 审核拦截。本次无 UI 改动，人工视觉结论未扩大。 | Codex integrator |
+| 2026-09-25 | A2（`wp3/a2-demo-defects`）：按原始源码证据回退城市全选/默认基线/空选标签、Home 历史 ASK、Report Copilot 历史大写泄漏和 View more 冒泡、Campaign 答案横幅与助手关闭后最大化残留；八项原始行号、分类与场景映射见 `/tmp/mh-wp3-a2-ledger.md`，有意差异由集成者登记 §3。验证：lint 0 errors/4 既有 warnings、12 文件 102 测试、Storybook 89 stories+57 docs（未增删 story id）、host 7/7（`/tmp/mh-wp3-a2-host`）、visual 133/133 机器通过（`/tmp/mh-wp3-a2-final-visual`）、negative 7/7 预期失败（`/tmp/mh-wp3-a2-negative`）；实际查看 P01 历史、P02 城市默认/空选与 Copilot、P06 横幅与关闭重开配对截图，局部改动符合预期，整页人工审图仍 pending。 | Codex WP3 |

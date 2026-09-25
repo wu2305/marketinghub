@@ -443,8 +443,12 @@ margin: 0;
   line-height: 1.5;
 }
 
-/* workspace answer card (campaign/self-service): `.answer-card-header` matches
-   no rule in the original, so the banner renders as flush inline text. */
+/* Workspace answers identify the response and its context as a header. */
+.mh-assistant__answer--workspace .mh-assistant__answer-banner {
+  display: grid;
+  border-bottom: 1px solid var(--mh-line-strong-ai);
+  background: var(--mh-surface-ai);
+}
 
 .mh-assistant__answer--workspace .mh-assistant__answer-banner strong {
 color: var(--mh-ink-ai-strong);

@@ -93,19 +93,19 @@ export function storeScopeSuffix(cities, copy) {
   return "· " + cities.length + " " + copy.cities;
 }
 
-/** Total-scope label: "Total" when all cities (or none) are selected, else the city names. */
+/** Total-scope label: "Total" when all cities are selected, else the selected scope. */
 export function totalLabel(cities, allCities, copy) {
-  if (cities.length === 0) return copy.total;
+  if (cities.length === 0) return copy.none;
   const full = cities.length === allCities.length && allCities.every(function (x) { return cities.includes(x); });
   if (full) return copy.total;
   if (cities.length <= 2) return cities.join(" + ");
   return cities.length + " " + copy.cities;
 }
 
-/** Multi-select display label — the original refresh() branch (no "All" sentinel option). */
-export function selectionLabel(selected, optionCount, copy) {
+/** Multi-select display label with a scope-specific all-selected label. */
+export function selectionLabel(selected, optionCount, copy, allLabel = copy.allStores) {
   if (selected.length === 0) return copy.none;
-  if (selected.length === optionCount) return copy.allStores;
+  if (selected.length === optionCount) return allLabel;
   return selected.length > 2
     ? selected.slice(0, 2).join(", ") + " +" + (selected.length - 2)
     : selected.join(", ");

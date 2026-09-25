@@ -41,9 +41,6 @@ export function useHomeDemo(props) {
   const [answers, setAnswers] = React.useState([]);
   const [skill, setSkill] = React.useState(null);
   const [flow, setFlow] = React.useState(null);
-  /* portal.js home-history pick writes promptCanvas.textContent without
-     updateSendState() — ASK stays disabled until the user types. */
-  const [historyFilled, setHistoryFilled] = React.useState(false);
 
   return {
     ...props,
@@ -51,7 +48,6 @@ export function useHomeDemo(props) {
       ...props.assistant,
       answers,
       selectedSkill: skill,
-      submitDisabled: historyFilled,
       onAttach: props.onAttach,
       onSelectSkill: (event) => {
         setSkill({ id: event.id, type: event.type, title: event.title });
@@ -112,12 +108,10 @@ export function useHomeDemo(props) {
     },
     onPromptChange: (event) => {
       setPrompt(event.value);
-      setHistoryFilled(false);
       props.onPromptChange?.(event);
     },
     onSuggestion: (event) => {
       setPrompt(event.prompt);
-      setHistoryFilled(false);
       props.onSuggestion?.(event);
     },
     onScopeChange: (event) => {
@@ -130,21 +124,18 @@ export function useHomeDemo(props) {
         const entry = answerFor?.(text, scope);
         if (entry) setAnswers([entry]);
         setPrompt("");
-        setHistoryFilled(false);
       }
       props.onSubmit?.(event);
     },
     onNewSession: () => {
       setAnswers([]);
       setPrompt("");
-      setHistoryFilled(false);
       props.onNewSession?.();
     },
     onMaximize: props.onMaximize,
     onHistory: props.onHistory,
     onHistorySelect: (event) => {
       setPrompt(event.prompt);
-      setHistoryFilled(true);
       props.onHistorySelect?.(event);
     },
     onFeedback: props.onFeedback,

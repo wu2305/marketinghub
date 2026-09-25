@@ -11,9 +11,9 @@ import "./CityInvestDashboard.css";
  * scenario generator lives in demo/report-demo.js.
  * ---------------------------------------------------------------------- */
 
-function ScFilterDropdown({ label, options, selected, multi = false, suffix = "", copy, open = false, onToggle, onChange }) {
+function ScFilterDropdown({ label, options, selected, multi = false, allLabel, suffix = "", copy, open = false, onToggle, onChange }) {
   const name = React.useId();
-  const text = multi ? selectionLabel(selected, options.length, copy) : selected[0];
+  const text = multi ? selectionLabel(selected, options.length, copy, allLabel) : selected[0];
   const pick = (option, checked) => {
     if (multi) {
       onChange?.(checked ? [...selected, option] : selected.filter((item) => item !== option));
@@ -336,6 +336,7 @@ export function CityInvestDashboard({ copy, periods, startIndex, options, kpis, 
             options={options.cities}
             selected={cities}
             multi
+            allLabel={copy.total}
             copy={copy}
             open={openFilter === "city"}
             onToggle={() => toggleFilter("city")}

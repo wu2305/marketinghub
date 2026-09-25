@@ -103,9 +103,9 @@ export default [
     },
   },
   {
-    /* Home history pick fills promptCanvas WITHOUT updateSendState — the ASK
-       button stays disabled until the next input event (original quirk). */
-    id: "p01-home-history-quirk",
+    /* The source fills the composer without updating ASK. The React story
+       enables it immediately; both sides can still submit the same prompt. */
+    id: "p01-home-history-pick",
     original: {
       url: "/index.html",
       actions: [
@@ -114,15 +114,12 @@ export default [
         { click: "#homeHistory" },
         { wait: "#homeHistoryPopup:not([hidden])" },
         { click: ".home-history-item" },
-        // The quirk is only proven if the composer actually received the prompt
-        // while ASK stayed disabled — and Enter still submits from that state.
-        { eval: "(() => { const c = document.querySelector('#promptCanvas'); if (!c.textContent.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + c.textContent); if (!document.querySelector('#sendQuery').disabled) throw new Error('ASK enabled after history fill'); })()" },
+        { eval: "(() => { const c = document.querySelector('#promptCanvas'); if (!c.textContent.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + c.textContent); })()" },
         { press: ["#promptCanvas", "Enter"] },
         { wait: "#answerFeed .answer-entry" },
       ],
       expect: [
         { sel: "#homeHistoryPopup", state: "hidden" },
-        { sel: "#sendQuery[disabled]" },
         { sel: "#answerFeed .answer-entry", text: "Recommended next move." },
       ],
     },
@@ -133,8 +130,8 @@ export default [
         { click: "button[aria-label='History']" },
         { wait: ".mh-assistant__history-pop" },
         { click: ".mh-assistant__history-item" },
-        { eval: "(() => { const t = document.querySelector('.mh-assistant__box .mh-textarea'); if (!t.value.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + t.value); if (!document.querySelector('.mh-assistant__send .mh-button').disabled) throw new Error('ASK enabled after history fill'); })()" },
-        { press: [".mh-assistant__box .mh-textarea", "Enter"] },
+        { eval: "(() => { const t = document.querySelector('.mh-assistant__box .mh-textarea'); if (!t.value.includes('ROI trend across my active campaigns')) throw new Error('history fill missing: ' + t.value); if (document.querySelector('.mh-assistant__send .mh-button').disabled) throw new Error('ASK disabled after history fill'); })()" },
+        { click: ".mh-assistant__send .mh-button" },
         { wait: ".mh-assistant__entry" },
       ],
       expect: [
