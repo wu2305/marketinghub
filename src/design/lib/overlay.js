@@ -10,6 +10,7 @@ const FOCUSABLE = "a[href], button:not([disabled]), input:not([disabled]), selec
 function focusables(layer) {
   const view = layer.ownerDocument.defaultView;
   return [...layer.querySelectorAll(FOCUSABLE)].filter((element) => {
+    if (element.tabIndex < 0) return false;
     for (let node = element; node && layer.contains(node); node = node.parentElement) {
       if (node.hidden || node.hasAttribute("inert") || node.getAttribute("aria-hidden") === "true") return false;
       const style = view?.getComputedStyle(node);

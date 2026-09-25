@@ -364,6 +364,21 @@ describe("nested overlays", () => {
     expect(document.activeElement).toBe(visible);
   });
 
+  it("cycles the AssistantPanel from its last control to its first without entering the backdrop", () => {
+    render(<AssistantPanel open title="Panel" prompt="" onClose={() => {}} />);
+    const panel = document.querySelector(".mh-assistant");
+    const backdrop = panel.querySelector(".mh-assistant__backdrop");
+    const first = within(panel).getByLabelText("New session");
+    const last = panel.querySelector(".mh-assistant__box textarea");
+    expect(backdrop.tabIndex).toBe(-1);
+    last.focus();
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(document.activeElement).toBe(first);
+    expect(document.activeElement).not.toBe(backdrop);
+    fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(last);
+  });
+
   it("orders nested layers opened in the same initial render, including StrictMode replay", () => {
     function Host() {
       const [outerOpen, setOuterOpen] = React.useState(true);
