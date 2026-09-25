@@ -42,7 +42,12 @@ const initialValues = {
   modelTab: "fields", synonymRows: [],
 };
 
-/** Deterministic P08 flow: no assets/js, storage, server, or AI calls. */
+/**
+ * Deterministic P08 flow: no assets/js, storage, server, or AI calls.
+ * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`. `stage` is
+ * present only when the original UI names a draft or dedicated workflow state;
+ * generic submit and Report Context description review have no invented stage.
+ */
 export function useKnowledgeCreateDemo({
   content = KNOWLEDGE_CREATE, type: initialType = "Business Term", mode = "create", id,
   initial = {}, state = {}, hrefFor = knowledgeCreateHrefFor, onNavigate, onSave, onSubmit,
@@ -70,7 +75,12 @@ export function useKnowledgeCreateDemo({
     const shouldValidate = !(type === "Report Context" && mode === "edit") && (action === "submit" || ["Business Term", "Analytical Model", "Metric Dictionary"].includes(type));
     const missing = shouldValidate ? validateKnowledgeCreate(type, values) : [];
     if (missing.length) { setInvalid(missing); return false; }
-    const payload = { type, mode, id, values: { ...values }, stage: action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : "Published" };
+    const persistedValues = { ...values };
+    if (type === "Business Term") persistedValues.status = persistedValues.enabled = action === "submit";
+    if (type === "Analytical Model") persistedValues.status = persistedValues.enabled = action === "submit" && Boolean(values.status);
+    if (type === "Scenario Reporting") persistedValues.status = persistedValues.enabled = false;
+    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : ["Business Term", "Analytical Model"].includes(type) ? "Published" : undefined;
+    const payload = { type, mode, id, values: persistedValues, ...(stage ? { stage } : {}) };
     (action === "save" ? onSave : onSubmit)?.(payload);
     if (["Business Term", "Analytical Model", "Scenario Reporting"].includes(type) || (type === "Report Context" && mode === "edit")) {
       navigate({ id: "interpreter", params: type === "Report Context" ? { type } : { type, notice: action === "save" ? "saved" : "published" } });

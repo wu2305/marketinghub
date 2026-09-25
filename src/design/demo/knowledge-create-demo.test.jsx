@@ -27,6 +27,8 @@ describe("P08 demo flow", () => {
     fireEvent.click(screen.getByRole("checkbox", { name: "Marketing" }));
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     expect(saved).toHaveBeenCalledWith(expect.objectContaining({ type: "Business Term", stage: "Draft", values: expect.objectContaining({ title: "Local term", scope: ["Marketing"] }) }));
+    expect(saved.mock.calls[0][0].values.status).toBe(false);
+    expect(saved.mock.calls[0][0].values.enabled).toBe(false);
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Business Term", notice: "saved" } }));
   });
 
@@ -170,6 +172,7 @@ describe("P08 demo flow", () => {
     expect(screen.getByText("Submit description update?")).toBeTruthy();
     fireEvent.click(screen.getAllByRole("button", { name: "Submit" }).at(-1));
     expect(submitted).toHaveBeenCalledWith(expect.objectContaining({ type: "Report Context", values: expect.objectContaining({ description: "" }) }));
+    expect(submitted.mock.calls[0][0]).not.toHaveProperty("stage");
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Report Context" } }));
   });
 
@@ -178,6 +181,29 @@ describe("P08 demo flow", () => {
     const { result } = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "city-report-context", onNavigate: navigate }));
     act(() => result.current.onCancel());
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Report Context" } }));
+  });
+
+  it("only exposes source-backed workflow stages and persisted availability", () => {
+    const analysisSave = vi.fn();
+    const analysisSubmit = vi.fn();
+    const analysis = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", trigger_when: "T", output_requirements: "O", status: true }, onSave: analysisSave, onSubmit: analysisSubmit }));
+    act(() => analysis.result.current.onSave());
+    expect(analysisSave.mock.calls[0][0]).toMatchObject({ stage: "Draft", values: { status: false, enabled: false } });
+    act(() => analysis.result.current.onSubmit());
+    expect(analysisSubmit.mock.calls[0][0]).toMatchObject({ stage: "Published", values: { status: true, enabled: true } });
+    analysis.unmount();
+
+    const scenarioSubmit = vi.fn();
+    const scenario = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Scenario Reporting", initial: { scenario_report_title: "S", scenario_report_linked: "R", scenario_report_description: "D", scenario_report_blueprint: "B" }, onSubmit: scenarioSubmit }));
+    act(() => scenario.result.current.onSubmit());
+    expect(scenarioSubmit.mock.calls[0][0]).toMatchObject({ stage: "Queued", values: { status: false, enabled: false } });
+    scenario.unmount();
+
+    const genericSubmit = vi.fn();
+    const generic = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Principles", initial: { title: "Rule", description: "Detail" }, onSubmit: genericSubmit }));
+    act(() => generic.result.current.onSubmit());
+    expect(genericSubmit.mock.calls[0][0]).not.toHaveProperty("stage");
+    generic.unmount();
   });
 
   it("leaves modified header and breadcrumb clicks to native link navigation", () => {
