@@ -87,6 +87,56 @@ describe("P08 demo flow", () => {
     unknown.unmount();
   });
 
+  it("shows the final Analytical Model unavailable state for a missing or other-owner edit only", () => {
+    const missing = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", mode: "edit", id: "missing-analysis" }));
+    expect(missing.result.current.unavailable).toBe(true);
+    const { unmount } = render(<KnowledgeCreatePage {...missing.result.current} />);
+    expect(screen.getByText(KNOWLEDGE_CREATE.analysis.unavailable)).toBeTruthy();
+    expect(screen.queryByRole("textbox", { name: /Analysis Name/ })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Submit" })).toBeNull();
+    unmount();
+    missing.unmount();
+
+    const foreignContent = {
+      ...KNOWLEDGE_CREATE,
+      records: { ...KNOWLEDGE_CREATE.records,
+        "foreign-analysis": { type: "Analytical Model", created_by: "Another User", analysis_name: "Foreign" } },
+    };
+    const foreign = renderHook(() => useKnowledgeCreateDemo({ content: foreignContent, type: "Analytical Model", mode: "edit", id: "foreign-analysis" }));
+    expect(foreign.result.current.unavailable).toBe(true);
+    foreign.unmount();
+
+    const own = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", mode: "edit", id: "playbook-opportunity-scan" }));
+    expect(own.result.current.unavailable).toBe(false);
+    own.unmount();
+    const create = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model" }));
+    expect(create.result.current.unavailable).toBe(false);
+    create.unmount();
+  });
+
+  it("keeps an unknown Report Context edit in generic form rather than fabricating a record", () => {
+    const navigate = vi.fn();
+    const flow = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "missing-report-context", onNavigate: navigate }));
+    expect(flow.result.current.mode).toBe("edit");
+    expect(flow.result.current.reportEditAvailable).toBe(false);
+    const page = render(<KnowledgeCreatePage {...flow.result.current} />);
+    expect(screen.getByRole("heading", { name: "Edit Knowledge" })).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: "Dashboard Description" })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Version history" })).toBeNull();
+    act(() => flow.result.current.onChange({ name: "description", value: "Local report description" }));
+    act(() => flow.result.current.onSubmit());
+    expect(flow.result.current.result?.action).toBe("submit");
+    expect(navigate).not.toHaveBeenCalled();
+    act(() => flow.result.current.onCancel());
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "interpreter", params: {} }));
+    page.unmount();
+    flow.unmount();
+
+    const known = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "city-report-context" }));
+    expect(known.result.current.reportEditAvailable).toBe(true);
+    known.unmount();
+  });
+
   it("keeps the final Metric formula locked and treats a multiword metric as one token", () => {
     function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Metric Dictionary" })} />; }
     render(<Test />);

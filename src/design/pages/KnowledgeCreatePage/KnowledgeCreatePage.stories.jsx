@@ -45,6 +45,7 @@ export const KnowledgeCreatePrinciplesCopy = { name: "P08 · Principles copy", a
 export const KnowledgeCreateReportContext = { name: "P08 · Report Context", args: { type: "Report Context" } };
 export const KnowledgeCreateReportAiOff = { name: "P08 · Report Context AI Overview off", args: { type: "Report Context", initial: { aiOverview: false } } };
 export const KnowledgeCreateReportEdit = { name: "P08 · Report Context edit locked", args: { type: "Report Context", mode: "edit", id: "city-report-context" } };
+export const KnowledgeCreateReportUnknownEdit = { name: "P08 · Report Context unknown edit", args: { type: "Report Context", mode: "edit", id: "missing-report-context" } };
 export const KnowledgeCreateReportUnlocked = { name: "P08 · Report description unlocked", args: { type: "Report Context", mode: "edit", id: "city-report-context", initial: { unlocked: true } } };
 export const KnowledgeCreateReportHistory = { name: "P08 · Report description history", args: { type: "Report Context", mode: "edit", id: "city-report-context", state: { dialog: "history" } } };
 export const KnowledgeCreateReportConfirm = { name: "P08 · Report description confirmation", args: { type: "Report Context", mode: "edit", id: "city-report-context", initial: { unlocked: true, description: "Updated city strategy report description." }, state: { dialog: "confirm" } } };
@@ -70,6 +71,7 @@ export const KnowledgeCreateAnalysis = { name: "P08 · Analytical Model create",
 export const KnowledgeCreateAnalysisRequired = { name: "P08 · Analytical Model required errors", args: { type: "Analytical Model", state: { invalid: ["analysis_name", "trigger_when", "output_requirements"] } } };
 export const KnowledgeCreateAnalysisGuidance = { name: "P08 · Analytical Model guidance", args: { type: "Analytical Model" }, play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-kcf__help")?.focus(); } };
 export const KnowledgeCreateAnalysisEdit = { name: "P08 · Analytical Model edit", args: { type: "Analytical Model", mode: "edit", id: "playbook-opportunity-scan" } };
+export const KnowledgeCreateAnalysisUnavailable = { name: "P08 · Analytical Model edit unavailable", args: { type: "Analytical Model", mode: "edit", id: "missing-analysis" } };
 export const KnowledgeCreateScenario = { name: "P08 · Scenario Reporting create", args: { type: "Scenario Reporting" } };
 export const KnowledgeCreateScenarioGuidance = { name: "P08 · Scenario Reporting guidance", args: { type: "Scenario Reporting" }, play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-kcf__help")?.focus(); } };
 export const KnowledgeCreateScenarioRequired = { name: "P08 · Scenario Reporting required errors", args: { type: "Scenario Reporting", state: { invalid: ["scenario_report_title", "scenario_report_linked", "scenario_report_description", "scenario_report_blueprint"] } } };

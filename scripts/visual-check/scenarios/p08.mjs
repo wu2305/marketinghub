@@ -83,12 +83,39 @@ export default [
     ] },
   },
   {
+    id: "p08-report-unknown-edit",
+    original: { url: `${url}?type=Report%20Context&mode=edit&id=missing-report-context`, expect: [
+      { sel: "#pageTitle", text: "Edit Knowledge" },
+      { sel: "#typeFields", text: "Knowledge Title" },
+      { sel: ".rc-edit-overview", count: 0, state: "detached" },
+    ] },
+    story: { id: "pages--knowledge-create-report-unknown-edit", expect: [
+      { sel: ".mh-kcreate[data-kc-type='Report Context'][data-kc-mode='edit']" },
+      { sel: ".mh-kcreate h1", text: "Edit Knowledge" },
+      { sel: ".mh-kcf__generic", text: "Dashboard Description" },
+      { sel: ".mh-kcf__rc-edit", count: 0, state: "detached" },
+    ] },
+  },
+  {
     id: "p08-analysis-edit",
     original: { url: `${url}?type=Analytical%20Model&mode=edit&id=playbook-opportunity-scan`, expect: [
-      { sel: "h1", text: "Edit Analysis" }, { sel: ".fm-breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".fm-tag-editor", text: "City Strategy" }, { sel: ".v20-multi-display", text: "Member conversion" },
+      { sel: "h1", text: "Edit Analysis" }, { sel: ".fm-breadcrumb > span:last-child", text: "Opportunity scan playbook" }, { sel: ".fm-tag-editor", text: "City Strategy" }, { sel: ".v20-multi-display", text: "Member conversion" },
     ] },
     story: { id: "pages--knowledge-create-analysis-edit", expect: [
       { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcf__analysis input[name='analysis_name']", count: 1 }, { sel: ".mh-kcreate h1", text: "Edit Analysis" }, { sel: ".mh-kcreate__breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".mh-kcf__tag-input", text: "City Strategy" }, { sel: ".mh-kcf__multi-trigger", text: "Member conversion" },
+    ] },
+  },
+  {
+    id: "p08-analysis-unavailable",
+    original: { url: `${url}?type=Analytical%20Model&mode=edit&id=missing-analysis`, expect: [
+      { sel: "h1", text: "Edit Analysis" },
+      { sel: "#fmAnalysisForm .fm-feedback", text: "This analysis is unavailable or you do not have permission to edit it." },
+      { sel: "#fmAnalysisForm input", count: 0, state: "detached" },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-unavailable", expect: [
+      { sel: ".mh-kcreate[data-kc-type='Analytical Model'][data-kc-mode='edit']" },
+      { sel: ".mh-kcreate__unavailable", text: "This analysis is unavailable or you do not have permission to edit it." },
+      { sel: ".mh-kcf__analysis", count: 0, state: "detached" },
     ] },
   },
   {

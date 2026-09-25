@@ -11,6 +11,7 @@ export const KNOWLEDGE_CREATE = {
     { id: "campaign", label: "RedNote Campaign Tool" },
   ],
   types: knowledgeCreateTypes,
+  identity: { currentUser: "Current User" },
   labels: {
     management: "Knowledge Management", eyebrow: "KNOWLEDGE MANAGEMENT", create: "Create New Knowledge",
     genericDescription: "Create governed knowledge using a structured form.", draft: "Draft", type: "Knowledge Type",
@@ -106,6 +107,7 @@ export const KNOWLEDGE_CREATE = {
   },
   analysis: {
     title: "Create Analysis", description: "Describe a reusable analysis framework.",
+    unavailable: "This analysis is unavailable or you do not have permission to edit it. Return to Analytical Model to select another record.",
     guidance: "Describe the analysis logic and reasoning path. Focus on how to analyze the question and what final result should be returned. Do not ask AI to create charts or extra report sections.\n\nFor example:\n1. Confirm the user's business question, analysis period, target scope and comparison baseline.\n2. Check whether the selected metrics changed materially, and identify the main direction of the change.\n3. Compare related dimensions or segments to locate the most likely driver of the change.\n4. Judge whether the evidence supports a clear cause. If not, explain the limitation.\n5. Return one concise analysis result with the key finding, reason and recommended next action.",
     reminder: "Operation reminder: Save keeps this model disabled. Submit publishes it using the selected AI Interpreter Status.",
     metrics: ["Member conversion", "Campaign ROI", "Promotion lift"],
@@ -120,7 +122,7 @@ export const KNOWLEDGE_CREATE = {
     "business-term-gmv": { type: "Business Term", title: "GMV (Gross Merchandise Value)", kind: "Business Term", description: "Total value of merchandise sold through the platform before deductions.", synonyms: "Gross Sales, Merchandise Value, Gross Merchandise Sales", scope: ["Commerce", "Revenue Dashboard", "Sales Performance"] },
     "global-synonym-revenue": { type: "Business Term", title: "Revenue", kind: "Global Synonym", description: "Global aliases used to recognize governed revenue-related questions.", synonyms: "Sales, Turnover, Income", scope: [] },
     "city-report-context": { type: "Report Context", title: "Invest City Strategy Analysis", description: "Purpose, audience, comparison logic, and guardrails for the Invest City Strategy report.", originalDescription: "Purpose, audience, comparison logic, and guardrails for the Invest City Strategy report.", updatedAt: "3 days ago", businessDomain: ["City Strategy"], status: true, thumbnail: assetUrl("assets/images/project-city-tabby.png"), scenarioReports: ["scenario-channel-performance", "scenario-campaign-review"], reportScope: "Covers the selected invest cities, reporting period and comparable stores. Includes governed traffic, sales, conversion and basket metrics. Excludes test stores, cancelled transactions and returns; incomplete periods must be identified." },
-    "playbook-opportunity-scan": { type: "Analytical Model", analysis_name: "Opportunity scan playbook", description: "Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.", trigger_when: "When a user request matches this analysis approach and its supported business context.", businessDomain: ["City Strategy", "4P"], metrics: ["Member conversion", "Campaign ROI"], output_requirements: "Start with an executive summary, then list evidence, prioritized opportunities, limitations and recommended actions.", analysis_constraints: "Do not infer causality from correlation or analyze dimensions without supporting data.", status: true },
+    "playbook-opportunity-scan": { type: "Analytical Model", created_by: "Current User", analysis_name: "Opportunity scan playbook", description: "Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.", trigger_when: "When a user request matches this analysis approach and its supported business context.", businessDomain: ["City Strategy", "4P"], metrics: ["Member conversion", "Campaign ROI"], output_requirements: "Start with an executive summary, then list evidence, prioritized opportunities, limitations and recommended actions.", analysis_constraints: "Do not infer causality from correlation or analyze dimensions without supporting data.", status: true },
     "scenario-channel-performance": { type: "Scenario Reporting", scenario_report_title: "Channel Performance Analysis", scenario_report_linked: "Invest City Strategy Analysis", scenario_report_description: "Channel efficiency, drivers and recommended actions", scenario_report_blueprint: "Summarize channel performance.", attachments: ["channel-report.pdf"] },
   },
 };

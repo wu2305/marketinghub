@@ -54,6 +54,9 @@ export function useKnowledgeCreateDemo({
 } = {}) {
   const record = content.records?.[id] || {};
   const [type, setType] = useState(record.type || initialType);
+  const unavailable = mode === "edit" && type === "Analytical Model" &&
+    (!record.type || record.created_by !== content.identity.currentUser);
+  const reportEditAvailable = type === "Report Context" && mode === "edit" && record.type === "Report Context";
   const [values, setValues] = useState(() => ({ ...initialValues, ...record, ...initial }));
   const [invalid, setInvalid] = useState(state.invalid || []);
   const [result, setResult] = useState(state.result || null);
@@ -72,7 +75,7 @@ export function useKnowledgeCreateDemo({
     return href;
   };
   const persist = (action) => {
-    const shouldValidate = !(type === "Report Context" && mode === "edit") && (action === "submit" || ["Business Term", "Analytical Model", "Metric Dictionary"].includes(type));
+    const shouldValidate = !reportEditAvailable && (action === "submit" || ["Business Term", "Analytical Model", "Metric Dictionary"].includes(type));
     const missing = shouldValidate ? validateKnowledgeCreate(type, values) : [];
     if (missing.length) { setInvalid(missing); return false; }
     const persistedValues = { ...values };
@@ -82,7 +85,7 @@ export function useKnowledgeCreateDemo({
     const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : ["Business Term", "Analytical Model"].includes(type) ? "Published" : undefined;
     const payload = { type, mode, id, values: persistedValues, ...(stage ? { stage } : {}) };
     (action === "save" ? onSave : onSubmit)?.(payload);
-    if (["Business Term", "Analytical Model", "Scenario Reporting"].includes(type) || (type === "Report Context" && mode === "edit")) {
+    if (["Business Term", "Analytical Model", "Scenario Reporting"].includes(type) || reportEditAvailable) {
       navigate({ id: "interpreter", params: type === "Report Context" ? { type } : { type, notice: action === "save" ? "saved" : "published" } });
     } else {
       setResult({ action, ...payload });
@@ -92,10 +95,10 @@ export function useKnowledgeCreateDemo({
   return {
     content, logo: { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry", href: hrefFor("home") },
     navigation: content.navigation.map((item) => ({ ...item, href: hrefFor(item.id) })),
-    type, mode, id, values, invalid, result, dialog, menu, hrefFor,
+    type, mode, id, values, invalid, result, dialog, menu, unavailable, reportEditAvailable, hrefFor,
     onNavigate: navigate, onTypeChange: selectType, onChange: update,
     onSave: () => persist("save"), onSubmit: () => persist("submit"),
-    onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || (type === "Report Context" && mode === "edit") ? { type } : {} }),
+    onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || reportEditAvailable ? { type } : {} }),
     onResultClose: ({ reason } = {}) => { setResult(null); if (reason === "close") navigate({ id: "interpreter" }); },
     onDialog: ({ kind }) => setDialog(kind), onDialogClose: ({ reason } = {}) => { setDialog(null); if (reason === "close" && ["test", "smart", "preview"].includes(dialog)) navigate({ id: "interpreter" }); },
     onMenu: ({ name }) => setMenu((prior) => prior === name ? null : name),

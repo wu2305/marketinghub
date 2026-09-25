@@ -23,6 +23,8 @@ import "./KnowledgeCreatePage.css";
  * @param {object|null} props.result Save/submit confirmation state.
  * @param {string|null} props.dialog Active guidance, history, test, or confirm dialog.
  * @param {string|null} props.menu Open picker name.
+ * @param {boolean} [props.unavailable] Analytical Model edit has no editable record or creator access.
+ * @param {boolean} [props.reportEditAvailable] A Report Context edit ID resolves to its dedicated record.
  * @param {(id:string, params?:object) => string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params:object,href:string}) => void} [props.onNavigate]
  * @param {(event:{value:string}) => void} [props.onTypeChange]
@@ -36,14 +38,14 @@ import "./KnowledgeCreatePage.css";
  * @param {(event:{name:string}) => void} [props.onMenu]
  */
 export function KnowledgeCreatePage({
-  content, logo, navigation = [], type, mode = "create", values = {}, invalid = [], result, dialog, menu,
+  content, logo, navigation = [], type, mode = "create", values = {}, invalid = [], result, dialog, menu, unavailable = false, reportEditAvailable = false,
   hrefFor, onNavigate, onTypeChange, onChange, onSave, onSubmit, onCancel, onResultClose, onDialog, onDialogClose, onMenu,
 }) {
   const labels = content.labels;
   const isTerm = type === "Business Term";
   const isAnalysis = type === "Analytical Model";
   const isScenario = type === "Scenario Reporting";
-  const isReportEdit = type === "Report Context" && mode === "edit";
+  const isReportEdit = type === "Report Context" && mode === "edit" && reportEditAvailable;
   const title = isTerm ? mode === "edit" ? `${labels.editTerm} ${values.title || ""}`.trim() : content.businessTerm.title
     : isAnalysis ? mode === "edit" ? labels.editAnalysis : content.analysis.title
       : isScenario ? mode === "edit" ? labels.editScenario : content.scenario.title
@@ -70,11 +72,11 @@ export function KnowledgeCreatePage({
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
       <section className="mh-kcreate__card">
-        {isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={values.synonyms || ""} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={onCancel} onSave={onSave} onSubmit={onSubmit} />
+        {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={values.synonyms || ""} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={onCancel} onSave={onSave} onSubmit={onSubmit} />
           : <>
             {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
             <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : onSubmit?.(); }}>
-              <KnowledgeCreateFields type={type} mode={mode} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
+              <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
               <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={onCancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={onSave}>{labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{labels.submit}</Button></div>{isAnalysis && <p>ⓘ {content.analysis.reminder}</p>}{isScenario && <p>ⓘ {content.scenario.reminder}</p>}</footer>
             </form>
           </>}

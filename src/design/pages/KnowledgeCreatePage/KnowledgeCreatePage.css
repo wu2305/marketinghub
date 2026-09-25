@@ -5,3 +5,5 @@
 .mh-kcreate__history{max-width:520px;padding:22px}.mh-kcreate__history p{color:var(--mh-copy);line-height:1.5}
 .mh-kcreate--term .mh-kcreate__main:before{background:linear-gradient(90deg,var(--mh-surface) 38%,transparent 75%),url("../../../../assets/images/business-term-create-hero.png") right top/cover no-repeat}
 .mh-kcreate--report-edit .mh-kcreate__card{max-width:780px}
+
+.mh-kcreate__unavailable{margin:0;color:var(--mh-amber);font-size:13px;line-height:1.6}
