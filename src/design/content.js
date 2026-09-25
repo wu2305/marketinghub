@@ -417,6 +417,7 @@ export const INTERPRETER = {
       summary: "Entities, attributes, and relationships.",
       action: "View models",
       manageable: false,
+      view: "data-model",
       stats: { units: ["model", "models"], total: 3, monthly: 1 },
       statusFilters: [],
     },
@@ -477,6 +478,7 @@ export const INTERPRETER = {
       action: "Manage scenarios",
       manageable: true,
       createLabel: "Add Scenario Reporting",
+      view: "scenario-reports",
       stats: { units: ["scenario", "scenarios"], total: 3, monthly: 2 },
       statusFilters: [
         availabilityFilter(),
@@ -851,6 +853,60 @@ export const INTERPRETER = {
         metaLabels: { createdBy: "Created By", createdAt: "Created At", updatedAt: "Updated At" },
       },
     },
+  },
+  /* Scenario Reporting — baseRecords[] in assets/js/knowledge/scenario-reports.js,
+     verbatim (report hrefs repointed at /assets/pages). */
+  scenarioReports: {
+    records: [
+      {
+        id: "scenario-channel-performance",
+        title: "Channel Performance Analysis",
+        description:
+          "A reusable reporting scenario for channel efficiency, drivers, and recommendation-style summaries.",
+        report: "Invest City Strategy Analysis",
+        reportHref: "/assets/pages/reports.html?project=city&dashboard=0",
+        creator: "Emily Wang",
+        owner: "Emily Wang",
+        updated: "Sep 3, 2026",
+        workflow_status: "Building",
+        ai_interpreter_enabled: false,
+        structure_guidance:
+          "1. Open with the main conclusion and the key business change.\n2. Break down the movement by city, channel, and period.\n3. Explain exceptions and the most likely drivers.\n4. End with actions, ownership, and timing.",
+        attachments: ["City strategy briefing"],
+      },
+      {
+        id: "scenario-campaign-review",
+        title: "Campaign Review Reporting",
+        description:
+          "A structured reporting scenario that reviews delivery, engagement, conversion, and return.",
+        report: "Campaign Quality Watch",
+        reportHref: "/assets/pages/reports.html?project=abo&dashboard=1",
+        creator: "Marco Li",
+        owner: "Marco Li",
+        updated: "Aug 31, 2026",
+        workflow_status: "Published",
+        ai_interpreter_enabled: true,
+        structure_guidance:
+          "1. Summarize delivery and performance.\n2. Identify abnormal campaigns or channels.\n3. Explain changes by mix, spend, and conversion.\n4. Highlight actions for the next cycle.",
+        attachments: ["Campaign review template", "Reference screenshot"],
+      },
+      {
+        id: "scenario-channel-exceptions",
+        title: "Channel Exception Watch",
+        description:
+          "A short-form scenario for monitoring channel anomalies, queue state and release readiness.",
+        report: "Source Integrity Monitor",
+        reportHref: "/assets/pages/reports.html?project=ottolv&dashboard=1",
+        creator: "Sophie Chen",
+        owner: "Sophie Chen",
+        updated: "Sep 1, 2026",
+        workflow_status: "Queued",
+        ai_interpreter_enabled: false,
+        structure_guidance:
+          "1. Check the current queue status.\n2. Surface rule breaches and blocked items.\n3. Separate release blockers from normal fluctuations.\n4. List the items that need follow-up.",
+        attachments: ["Exception checklist"],
+      },
+    ],
   },
   records: [
     {

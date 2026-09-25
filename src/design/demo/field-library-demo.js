@@ -396,14 +396,16 @@ export function useFieldLibraryDemo(props) {
   const detail = detailId ? typeRecords.find((record) => record.id === detailId) || null : null;
 
   const act = ({ action, id }) => {
-    const record = typeRecords.find((item) => item.id === id);
+    /* Resolve across `all` — the drawer can be peeked for a Report Context
+       record from another type page (reportcontext:view). */
+    const record = all.find((item) => item.id === id);
     if (!record) return;
     props.onAction?.({ action, id });
-    if (action === "edit-description" && type === "Report Context") {
+    if (action === "edit-description" && record.type === "Report Context") {
       setDescriptionEdit({ id, value: record.report_description || "" });
       return;
     }
-    if (type !== "Analytical Model") return;
+    if (record.type !== "Analytical Model") return;
     /* Non-owner and wrong-status clicks are unreachable in the original (the
        buttons render `disabled`), so only the live paths remain: disable
        confirm, delete-blocked / delete confirm, and edit navigation. */
@@ -499,31 +501,35 @@ export function useFieldLibraryDemo(props) {
       projectLabels: type === "Report Context" ? reportContextProjectLabels(record) : undefined,
       actions: type === "Analytical Model" ? analysisActions(record, currentUser, strings) : [],
     }));
-  /* field-library.js open(): drawer title + status pill per type. */
+  /* field-library.js open(): drawer title + status pill per record type —
+     keyed off record.type so the peeked detail resolves the same on any page. */
   const drawerStatus = (record) => {
     const raw =
-      type === "Report Context"
+      record.type === "Report Context"
         ? record.ai_interpretation_enabled
           ? "Enable"
           : "Disable"
-        : type === "Analytical Model"
+        : record.type === "Analytical Model"
           ? record.status || record.stage
           : record.status;
     return raw === "Enable" ? "Enabled" : raw === "Disable" ? "Disabled" : raw || "";
   };
-  const detailRecord = detail
-    ? {
-        ...detail,
-        detailTitle: detail.report_name || detail.metric_name || detail.analysis_name || detail.email_subject,
-        detailStatus: drawerStatus(detail),
-        projectLabels: type === "Report Context" ? reportContextProjectLabels(detail) : undefined,
-        actions: type === "Analytical Model" ? analysisActions(detail, currentUser, strings) : [],
-        scenarioLinks: (detail.scenario_report_ids || [])
-          .map((id) => (props.records || []).find((record) => record.id === id && record.typeId === "Scenario Reporting"))
-          .filter(Boolean)
-          .map((asset) => ({ id: asset.id, title: asset.title, href: props.scenarioHref ? props.scenarioHref(asset.id) : undefined })),
-      }
-    : null;
+  const toDetailRecord = (record) => ({
+    ...record,
+    detailTitle: record.report_name || record.metric_name || record.analysis_name || record.email_subject,
+    detailStatus: drawerStatus(record),
+    projectLabels: record.type === "Report Context" ? reportContextProjectLabels(record) : undefined,
+    actions: record.type === "Analytical Model" ? analysisActions(record, currentUser, strings) : [],
+    scenarioLinks: (record.scenario_report_ids || [])
+      .map((id) => (props.records || []).find((item) => item.id === id && item.typeId === "Scenario Reporting"))
+      .filter(Boolean)
+      .map((asset) => ({ id: asset.id, title: asset.title, href: props.scenarioHref ? props.scenarioHref(asset.id) : undefined })),
+  });
+  const detailRecord = detail ? toDetailRecord(detail) : null;
+  /* reportcontext:view — a peeked record from a non-fm page (the Data Model
+     related-report buttons). Same drawer, record-typed. */
+  const peeked = props.peek ? all.find((record) => record.id === props.peek) || null : null;
+  const peekDetail = peeked ? toDetailRecord(peeked) : null;
 
   return {
     type,
@@ -540,6 +546,7 @@ export function useFieldLibraryDemo(props) {
     createLabel: (strings.createLabels || {})[type],
     dashboardHref: props.dashboardHref,
     detail: detailRecord,
+    peek: peekDetail ? { type: peeked.type, detail: peekDetail } : null,
     dialog: dialog
       ? {
           tone: dialog.tone,

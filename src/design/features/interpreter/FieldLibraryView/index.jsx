@@ -472,11 +472,7 @@ export function FieldLibraryView({
     rowsPerPageLabel = "Rows per page",
     previousLabel = "Previous",
     nextLabel = "Next",
-    detailCloseLabel = "Close details",
-    drawer: drawerStrings = {},
   } = strings;
-  const editStrings = drawerStrings.editDialog || {};
-  const descriptionAreaRef = React.useRef(null);
   const Card =
     type === "Report Context"
       ? ReportContextCard
@@ -485,7 +481,6 @@ export function FieldLibraryView({
         : type === "Analytical Model"
           ? AnalysisCard
           : EmailCard;
-  const drawerStatusOn = detail ? String(detail.detailStatus || "").toLowerCase().startsWith("enable") : false;
   return (
     <section className="mh-flview" data-fl-type={type} aria-label={`${type} library`}>
       {/* unified-type-toolbar.css order: the search pill is DOM-last but
@@ -538,6 +533,58 @@ export function FieldLibraryView({
         onPage={onPage}
         onPageSize={onPageSize}
       />
+      <FieldLibraryDrawer
+        type={type}
+        strings={strings}
+        detail={detail}
+        dialog={dialog}
+        descriptionEdit={descriptionEdit}
+        dashboardHref={dashboardHref}
+        onAction={onAction}
+        onCloseDetail={onCloseDetail}
+        onDialogConfirm={onDialogConfirm}
+        onDialogCancel={onDialogCancel}
+        onDescriptionChange={onDescriptionChange}
+        onDescriptionConfirm={onDescriptionConfirm}
+        onDescriptionCancel={onDescriptionCancel}
+      />
+    </section>
+  );
+}
+
+/**
+ * The fm detail drawer + dialogs as a standalone layer — the original
+ * `reportcontext:view` event opens the Report Context drawer from *any* type
+ * page (Data Model's related-report buttons, the generic asset list), so the
+ * page composes this separately when a record is peeked outside its own view.
+ * `detail` is the normalized record the container prepared (with detailTitle,
+ * detailStatus, projectLabels, actions, scenarioLinks).
+ * @param {object} props
+ */
+export function FieldLibraryDrawer({
+  type,
+  strings = {},
+  detail = null,
+  dialog = null,
+  descriptionEdit = null,
+  dashboardHref,
+  onAction,
+  onCloseDetail,
+  onDialogConfirm,
+  onDialogCancel,
+  onDescriptionChange,
+  onDescriptionConfirm,
+  onDescriptionCancel,
+}) {
+  const {
+    detailCloseLabel = "Close details",
+    drawer: drawerStrings = {},
+  } = strings;
+  const editStrings = drawerStrings.editDialog || {};
+  const descriptionAreaRef = React.useRef(null);
+  const drawerStatusOn = detail ? String(detail.detailStatus || "").toLowerCase().startsWith("enable") : false;
+  return (
+    <>
       <Modal
         open={Boolean(detail)}
         variant="drawer"
@@ -618,6 +665,6 @@ export function FieldLibraryView({
           </>
         ) : null}
       </Modal>
-    </section>
+    </>
   );
 }

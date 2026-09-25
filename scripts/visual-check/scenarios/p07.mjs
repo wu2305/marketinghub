@@ -435,17 +435,80 @@ export default [
     },
   },
   {
+    /* scenario-reports.js #scenarioReportOverview — the toolbar is normalized
+       to the unified look (300px search first via order:-1, two 180px boxed
+       selects, gold create pushed right) and the card grid to 3 columns. */
     id: "p07-interpreter-scenario",
     layout: [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".scenario-report-toolbar", story: ".mh-srview__tools", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".scenario-report-toolbar .overview-global-search", story: ".mh-srview__search", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".scenario-report-card", story: ".mh-srview__card", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".scenario-report-card .bt-flow-status", story: ".mh-srview__card .mh-srview__flow", props: ["x", "y", "height"], tol: 8 },
+      { orig: ".scenario-report-pagination", story: ".mh-srview__pagination", props: ["x", "y"], tol: 8 },
     ],
-    original: { url: "/assets/pages/knowledge.html?type=Scenario%20Reporting", expect: [{ sel: ".scenario-report-card", count: 3, text: "Channel Performance Analysis" }] },
+    original: {
+      url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
+      expect: [
+        { sel: ".scenario-report-card", count: 3, text: "Channel Performance Analysis" },
+        { sel: ".scenario-report-card .fm-state.off", count: 2, text: "Disabled" },
+        { sel: ".scenario-report-card [data-sr-action='edit']", count: 3 },
+        { sel: "#scenarioReportOverview .fm-overview-countline", state: "hidden" },
+        { sel: ".scenario-report-pagination", text: "3 records" },
+        { sel: "#scenarioAvailabilityFilter" },
+        { sel: "#scenarioWorkflowFilter" },
+      ],
+    },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Scenario Reporting" },
-      expect: [{ sel: ".mh-library", text: "Channel Performance Analysis" }, { sel: ".mh-asset", count: 3 }],
+      expect: [
+        { sel: ".mh-srview__card", count: 3, text: "Channel Performance Analysis" },
+        { sel: ".mh-srview__state.is-off", count: 2, text: "Disabled" },
+        { sel: ".mh-srview__card .mh-srview__icon", count: 9 },
+        { sel: ".mh-srview__countline", state: "hidden" },
+        { sel: ".mh-srview__pagination", text: "3 records" },
+        { sel: ".mh-srview__filter", count: 2 },
+      ],
+    },
+  },
+  {
+    /* The card click opens the shared #knowledgeDetail drawer: label + title +
+       availability/workflow pills, sectioned body, icon-action footer. The
+       drawer sits below the 56px header (unlike the fm overlay). */
+    id: "p07-scenario-report-drawer",
+    layout: [
+      { orig: "#knowledgeDetail", story: ".mh-srview__drawer", props: ["x", "y", "width"], tol: 8 },
+      { orig: "#knowledgeDetail .detail-drawer-head", story: ".mh-srview__drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
+      actions: [{ waitMs: 800 }, { click: ".scenario-report-card[data-sr-id='scenario-channel-performance'] h3" }, { wait: "#knowledgeDetail.open" }],
+      expect: [
+        { sel: "#knowledgeDetail .detail-drawer-head span", text: "SCENARIO REPORTING" },
+        { sel: "#knowledgeDetail .detail-drawer-head strong", text: "Channel Performance Analysis" },
+        { sel: "#knowledgeDetail .scenario-title-status", text: "Disabled" },
+        { sel: "#knowledgeDetail .scenario-header-status", text: "Building" },
+        { sel: "#knowledgeDetail .scenario-report-link", text: "Invest City Strategy Analysis" },
+        { sel: "#knowledgeDetail .scenario-report-workflow-note", text: "AI Interpreter is enabled automatically" },
+        { sel: "#knowledgeDetail .scenario-drawer-actions .fm-icon-action", count: 3 },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Scenario Reporting" },
+      actions: [{ click: ".mh-srview__card[data-id='scenario-channel-performance'] h3" }, { wait: ".mh-srview__drawer" }],
+      expect: [
+        { sel: ".mh-srview__drawer .mh-modal__eyebrow", text: "SCENARIO REPORTING" },
+        { sel: ".mh-srview__drawer .mh-modal__title", text: "Channel Performance Analysis" },
+        { sel: ".mh-srview__drawer .mh-srview__title-pill", text: "Disabled" },
+        { sel: ".mh-srview__drawer .mh-srview__flow--head", text: "Building" },
+        { sel: ".mh-srview__drawer .mh-srview__detail-link", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-srview__drawer .mh-srview__note", text: "AI Interpreter is enabled automatically" },
+        { sel: ".mh-srview__drawer .mh-srview__icon", count: 3 },
+      ],
     },
   },
   {
@@ -1116,5 +1179,222 @@ export default [
         { sel: ".mh-flview .mh-pagination", text: "1 / 1" },
       ],
     },
-  }
+  },
+  {
+    /* data-model-browser.js #dataModelOverview — domain sidebar (search +
+       domain cards, Customer Growth hidden) + tab strip + Basic information
+       card (name + Enabled pill, synonym chips, related-report buttons). */
+    id: "p07-data-model-basic",
+    layout: [
+      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".dm-domain-shell", story: ".mh-dmview__shell", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-domain-sidebar", story: ".mh-dmview__sidebar", props: ["x", "width"], tol: 8 },
+      { orig: ".dm-search-wrap", story: ".mh-dmview__search", props: ["x", "y", "height"], tol: 8 },
+      { orig: ".dm-domain-card", story: ".mh-dmview__domain", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".dm-domain-tabs", story: ".mh-dmview__tabs", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-basic-card", story: ".mh-dmview__basic", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic-status", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-related-report", story: ".mh-dmview__report", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      expect: [
+        { sel: ".dm-domain-card", count: 3 },
+        { sel: ".dm-domain-card:has-text(\"Customer Growth\")", count: 0, state: "detached" },
+        { sel: ".dm-domain-card.active", text: "D2C Insight" },
+        { sel: ".dm-domain-tab.active", text: "Basic information" },
+        { sel: ".dm-basic-card .dm-basic-name-row strong", text: "D2C Insight" },
+        { sel: ".dm-basic-card .fm-report-card-status", text: "Enabled" },
+        { sel: ".dm-basic-card .dm-tag", count: 5 },
+        { sel: ".dm-related-report", count: 3 },
+        { sel: ".dm-related-report:has-text(\"4P Report\")" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      expect: [
+        { sel: ".mh-dmview__domain", count: 3 },
+        { sel: ".mh-dmview__domain:has-text(\"Customer Growth\")", count: 0, state: "detached" },
+        { sel: ".mh-dmview__domain.is-active", text: "D2C Insight" },
+        { sel: ".mh-dmview__tab.is-active", text: "Basic information" },
+        { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
+        { sel: ".mh-dmview__basic-status", text: "Enabled" },
+        { sel: ".mh-dmview__synonym", count: 5 },
+        { sel: ".mh-dmview__report", count: 3 },
+        { sel: ".mh-dmview__report:has-text(\"4P Report\")" },
+      ],
+    },
+  },
+  {
+    /* Relationship graph tab — fact + 5 dimension nodes on the fixed-slot
+       canvas, dashed bezier links, zoom tools. */
+    id: "p07-data-model-graph",
+    layout: [
+      { orig: ".dm-graph-canvas", story: ".mh-dmview__canvas", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-graph-node.dm-node-1", story: ".mh-dmview__node--1", props: ["x", "y", "width"], tol: 12 },
+      { orig: ".dm-graph-node.dm-node-5", story: ".mh-dmview__node--5", props: ["x", "y", "width"], tol: 12 },
+      { orig: ".dm-graph-tools", story: ".mh-dmview__graph-tools", props: ["x", "y"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      actions: [{ waitMs: 800 }, { click: ".dm-domain-tab[data-tab='graph']" }, { waitMs: 400 }],
+      expect: [
+        { sel: ".dm-graph-node", count: 6 },
+        { sel: ".dm-graph-node.is-fact", count: 1, text: "Sales Order Detail" },
+        { sel: ".dm-graph-links" },
+        { sel: ".dm-graph-links path.dm-graph-link", count: 5, state: "detached" },
+        { sel: ".dm-graph-tools button", count: 3 },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      actions: [{ click: ".mh-dmview__tab:last-child" }, { waitMs: 400 }],
+      expect: [
+        { sel: ".mh-dmview__node", count: 6 },
+        { sel: ".mh-dmview__node.is-fact", count: 1, text: "Sales Order Detail" },
+        { sel: ".mh-dmview__links" },
+        { sel: ".mh-dmview__links path.mh-dmview__link", count: 5, state: "detached" },
+        { sel: ".mh-dmview__graph-tools button", count: 3 },
+      ],
+    },
+  },
+  {
+    /* Graph node click → the restyled centered table dialog (1120px, title +
+       Fact mark + description head, segmented Field Details/Data Preview
+       tabs, gold-header field table with the fact-only Unit column). */
+    id: "p07-data-model-table-drawer",
+    layout: [
+      { orig: ".dm-table-dialog", story: ".mh-dmview__dialog", props: ["x", "y", "width"], tol: 12 },
+      { orig: ".dm-table-dialog-tabs", story: ".mh-dmview__dialog-tabs", props: ["x", "y"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      actions: [
+        { waitMs: 800 },
+        { click: ".dm-domain-tab[data-tab='graph']" },
+        { waitMs: 400 },
+        { click: ".dm-graph-node.is-fact" },
+        { wait: ".dm-table-drawer.open" },
+      ],
+      expect: [
+        { sel: ".dm-table-drawer-head strong", text: "Sales Order Detail" },
+        { sel: ".dm-table-type.is-fact", text: "Fact" },
+        { sel: ".dm-table-dialog-tab.is-active", text: "Field Details" },
+        { sel: ".dm-fields-table th:has-text(\"Unit\")" },
+        { sel: ".dm-fields-table .dm-field-code:has-text(\"sales_amount\")" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      actions: [
+        { click: ".mh-dmview__tab:last-child" },
+        { waitMs: 400 },
+        { click: ".mh-dmview__node.is-fact" },
+        { wait: ".mh-dmview__dialog" },
+      ],
+      expect: [
+        { sel: ".mh-dmview__dialog-titleline strong", text: "Sales Order Detail" },
+        { sel: ".mh-dmview__table-type.is-fact", text: "Fact" },
+        { sel: ".mh-dmview__dialog-tab.is-active", text: "Field Details" },
+        { sel: ".mh-dmview__table th:has-text(\"Unit\")" },
+        { sel: ".mh-dmview__field-code:has-text(\"sales_amount\")" },
+      ],
+    },
+  },
+  {
+    /* Data Preview tab — 10 deterministic rows; Escape closes the dialog. */
+    id: "p07-data-model-preview-close",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      actions: [
+        { waitMs: 800 },
+        { click: ".dm-domain-tab[data-tab='graph']" },
+        { waitMs: 400 },
+        { click: ".dm-graph-node.is-fact" },
+        { wait: ".dm-table-drawer.open" },
+        { click: ".dm-table-dialog-tab[data-dm-table-tab='preview']" },
+        { waitMs: 200 },
+      ],
+      expect: [
+        { sel: ".dm-table-dialog-tab.is-active", text: "Data Preview" },
+        { sel: ".dm-preview-table tbody tr", count: 10 },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      actions: [
+        { click: ".mh-dmview__tab:last-child" },
+        { waitMs: 400 },
+        { click: ".mh-dmview__node.is-fact" },
+        { wait: ".mh-dmview__dialog" },
+        { click: ".mh-dmview__dialog-tab:last-child" },
+        { waitMs: 200 },
+      ],
+      expect: [
+        { sel: ".mh-dmview__dialog-tab.is-active", text: "Data Preview" },
+        { sel: ".mh-dmview__table tbody tr", count: 10 },
+      ],
+    },
+  },
+  {
+    /* Domain search filters the sidebar (hidden Customer Growth never
+       surfaces) + a related-report button opens the fm RC drawer over the
+       Data Model page (reportcontext:view). */
+    id: "p07-data-model-search-peek",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      actions: [
+        { waitMs: 800 },
+        { fill: ["#dmDomainSearch", "audience"] },
+        { waitMs: 300 },
+      ],
+      expect: [{ sel: ".dm-domain-card", count: 1, text: "DC Media Performance" }],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      actions: [
+        { fill: [".mh-dmview__search input[type='search']", "audience"] },
+        { waitMs: 300 },
+      ],
+      expect: [{ sel: ".mh-dmview__domain", count: 1, text: "DC Media Performance" }],
+    },
+  },
+  {
+    id: "p07-data-model-rc-peek",
+    layout: [
+      { orig: ".fm-overlay:not([hidden]) .fm-drawer", story: ".mh-modal--drawer .mh-modal__dialog", props: ["x", "y", "width"], tol: 8 },
+    ],
+    original: {
+      url: "/assets/pages/knowledge.html?type=Data%20Model",
+      actions: [
+        { waitMs: 800 },
+        { click: ".dm-related-report[data-report-context-id='fourp-report-context']" },
+        { wait: ".fm-overlay:not([hidden]) .fm-drawer" },
+      ],
+      expect: [
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer-head small", text: "Report Context" },
+        { sel: ".fm-overlay:not([hidden]) .fm-drawer:has-text(\"4P Executive Overview\")" },
+        { sel: ".dm-domain-shell" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter",
+      args: { activeType: "Data Model" },
+      actions: [
+        { click: ".mh-dmview__report[aria-label='Open 4P Report Report Context']" },
+        { wait: ".mh-modal--drawer .mh-modal__dialog" },
+      ],
+      expect: [
+        { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Report Context" },
+        { sel: ".mh-modal--drawer:has-text(\"4P Executive Overview\")" },
+        { sel: ".mh-dmview__shell" },
+      ],
+    },
+  },
 ];

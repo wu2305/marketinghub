@@ -10,7 +10,9 @@
 import React from "react";
 import { recordMatchesFilter, uniqueFilterOptions } from "../cx.js";
 import { useBusinessTermDemo } from "./business-term-demo.js";
+import { useDataModelDemo } from "./data-model-demo.js";
 import { useFieldLibraryDemo } from "./field-library-demo.js";
+import { useScenarioDemo } from "./scenario-demo.js";
 
 const EMPTY_OBJECT = {};
 const EMPTY_ARRAY = [];
@@ -83,6 +85,9 @@ export function useInterpreterDemo(props) {
   const [principlePage, setPrinciplePage] = useSynced(props.principles?.page ?? 1);
   const [principlePageSize, setPrinciplePageSize] = useSynced(props.principles?.pageSize ?? 10);
   const [principleExpanded, setPrincipleExpanded] = useSynced(props.principles?.expanded ?? EMPTY_ARRAY);
+  /* reportcontext:view — the Data Model related-report buttons peek the fm
+     Report Context drawer without leaving the active type page. */
+  const [rcPeek, setRcPeek] = React.useState(null);
 
   /* types.js: switching knowledge types resets the library filters and the
      principles page (query and category picks persist). */
@@ -93,6 +98,7 @@ export function useInterpreterDemo(props) {
     prevType.current = activeType;
     setFilterValues({});
     setPrinciplePage(1);
+    setRcPeek(null);
   }, [activeType, setFilterValues, setPrinciplePage]);
 
   const businessTerms = useBusinessTermDemo({
@@ -121,9 +127,34 @@ export function useInterpreterDemo(props) {
     ...(props.fieldLibrary || {}),
     type: type?.view === "field-library" ? type.id : undefined,
     records: props.records,
+    peek: rcPeek,
     onNavigate: props.onNavigate,
     onQueryChange: props.onQueryChange,
     onFilterToggle: props.onFilterToggle,
+    onPage: props.onPage,
+    onPageSize: props.onPageSize,
+    onOpen: props.onOpen,
+    onCloseDetail: (event) => {
+      setRcPeek(null);
+      props.onCloseDetail?.(event);
+    },
+    onAction: props.onAction,
+    onDialogConfirm: props.onDialogConfirm,
+    onDialogCancel: props.onDialogCancel,
+    onCreate: props.onCreate,
+    onDescriptionChange: props.onDescriptionChange,
+    onDescriptionConfirm: props.onDescriptionConfirm,
+    onDescriptionCancel: props.onDescriptionCancel,
+  });
+
+  /* scenario-reports.js #scenarioReportOverview — the dedicated Scenario
+     Reporting card grid + shared knowledge-detail drawer. */
+  const scenarioReports = useScenarioDemo({
+    ...(props.scenarioReports || {}),
+    records: props.scenarioReports?.records,
+    onNavigate: props.onNavigate,
+    onQueryChange: props.onQueryChange,
+    onFilterChange: props.onFilterChange,
     onPage: props.onPage,
     onPageSize: props.onPageSize,
     onOpen: props.onOpen,
@@ -132,9 +163,21 @@ export function useInterpreterDemo(props) {
     onDialogConfirm: props.onDialogConfirm,
     onDialogCancel: props.onDialogCancel,
     onCreate: props.onCreate,
-    onDescriptionChange: props.onDescriptionChange,
-    onDescriptionConfirm: props.onDescriptionConfirm,
-    onDescriptionCancel: props.onDescriptionCancel,
+  });
+
+  /* data-model-browser.js #dataModelOverview — domain sidebar + Basic
+     information / Relationship graph tabs + the table detail dialog. */
+  const dataModel = useDataModelDemo({
+    ...(props.dataModel || {}),
+    onOpenReportContext: (id) => {
+      setRcPeek(id);
+      props.onOpenReportContext?.(id);
+    },
+    onSelectDomain: props.onSelectDomain,
+    onTabChange: props.onTabChange,
+    onOpenTable: props.onOpenTable,
+    onCloseTable: props.onCloseTable,
+    onDrawerTab: props.onDrawerTab,
   });
 
   const principleFiltered = filterPrinciples(props.principles?.items, { query, selectedCategories });
@@ -194,7 +237,9 @@ export function useInterpreterDemo(props) {
         },
       },
       "business-term": businessTerms,
+      "data-model": dataModel,
       "field-library": fieldLibrary,
+      "scenario-reports": scenarioReports,
     },
     onQueryChange,
     onFilterChange: (event) => {

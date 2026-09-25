@@ -173,9 +173,15 @@ export {
   BusinessTermView,
 } from "./features/interpreter/BusinessTermView/index.jsx";
 export {
+  DataModelView,
+} from "./features/interpreter/DataModelView/index.jsx";
+export {
   FieldLibraryView,
   fieldLibraryTypes,
 } from "./features/interpreter/FieldLibraryView/index.jsx";
+export {
+  ScenarioReportsView,
+} from "./features/interpreter/ScenarioReportsView/index.jsx";
 export {
   ConfirmDialog,
   confirmDialogTones,
@@ -236,7 +242,10 @@ export {
 export { useCockpitDemo } from "./demo/cockpit-demo.js";
 export { useHomeDemo } from "./demo/home-demo.js";
 export { useBusinessTermDemo } from "./demo/business-term-demo.js";
+export { useDataModelDemo, dataModelFieldFormat } from "./demo/data-model-demo.js";
+export { DATA_MODEL_DOMAINS } from "./demo/data-model-domains.js";
 export { useFieldLibraryDemo, normalizeFieldRecord } from "./demo/field-library-demo.js";
+export { useScenarioDemo, normalizeScenarioRecord } from "./demo/scenario-demo.js";
 export { useInterpreterDemo } from "./demo/interpreter-demo.js";
 export {
   generateCityInvestScenario,

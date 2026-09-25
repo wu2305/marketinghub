@@ -6,10 +6,12 @@ import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
-import { FieldLibraryView } from "../../features/interpreter/FieldLibraryView/index.jsx";
+import { DataModelView } from "../../features/interpreter/DataModelView/index.jsx";
+import { FieldLibraryDrawer, FieldLibraryView } from "../../features/interpreter/FieldLibraryView/index.jsx";
 import { KnowledgeLibrary } from "../../features/interpreter/KnowledgeLibrary/index.jsx";
 import { KnowledgeSidebar } from "../../features/interpreter/KnowledgeSidebar/index.jsx";
 import { PrinciplesView } from "../../features/interpreter/PrinciplesView/index.jsx";
+import { ScenarioReportsView } from "../../features/interpreter/ScenarioReportsView/index.jsx";
 import { TypeGrid } from "../../features/interpreter/TypeGrid/index.jsx";
 import { useSearchShortcut } from "../../lib/search-shortcut.js";
 import { Shell } from "../../pages/Shell/index.jsx";
@@ -23,7 +25,9 @@ import "./AiInterpreterPage.css";
 const typeViews = {
   principles: PrinciplesView,
   "business-term": BusinessTermView,
+  "data-model": DataModelView,
   "field-library": FieldLibraryView,
+  "scenario-reports": ScenarioReportsView,
 };
 
 /**
@@ -94,6 +98,10 @@ export function AiInterpreterPage({
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
 
   const View = type ? typeViews[type.view] : undefined;
+  /* reportcontext:view — the fm drawer peeks a Report Context record from any
+     non-fm type page (Data Model's related-report buttons). */
+  const fmView = views["field-library"];
+  const peek = type?.view !== "field-library" ? fmView?.peek : null;
 
   return (
     /* Type pages rearrange the shell like the original's
@@ -165,6 +173,13 @@ export function AiInterpreterPage({
           )}
         </div>
       </div>
+      {peek ? (
+        <FieldLibraryDrawer
+          {...fmView}
+          type={peek.type}
+          detail={peek.detail}
+        />
+      ) : null}
       <AssistantLauncher onOpen={() => onNavigate?.({ id: "assistant", label: "AI Interpreter" })} />
     </Shell>
   );

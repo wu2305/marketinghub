@@ -20,6 +20,7 @@ const demoInputs = {
     strings: INTERPRETER.principlesLibrary,
   },
   businessTermLibrary: INTERPRETER.businessTermLibrary,
+  scenarioReports: INTERPRETER.scenarioReports,
 };
 
 /* The dedicated views need the page-level container (same wiring as the
@@ -68,7 +69,8 @@ describe("AI Interpreter type contract", () => {
       type.id === "Scenario Reporting" ? { ...type, title: "Renamed Scenarios" } : type,
     );
     renderPage({ types: renamed, activeType: "Scenario Reporting" });
-    const titles = rowTitles();
+    /* scenario-reports.js swaps in its own card grid — assert on the cards. */
+    const titles = [...document.querySelectorAll(".mh-srview__card h3")].map((el) => el.textContent);
     expect(titles.some((text) => text.includes("Channel Performance Analysis"))).toBe(true);
     expect(titles.every((text) => !text.includes("GMV (Gross Merchandise Value)"))).toBe(true);
     expect(screen.getAllByText("Renamed Scenarios").length).toBeGreaterThan(0);
@@ -125,6 +127,21 @@ describe("AI Interpreter type contract", () => {
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
       }
+      // scenario-reports.js swaps in #scenarioReportOverview's two-column cards.
+      if (type.view === "scenario-reports") {
+        const cards = document.querySelectorAll(".mh-srview__card");
+        expect(cards.length).toBe(INTERPRETER.scenarioReports.records.length);
+        expect(document.querySelector(".mh-asset")).toBeNull();
+        continue;
+      }
+      // data-model-browser.js swaps in #dataModelOverview's domain browser —
+      // the hidden "Customer Growth" domain never renders.
+      if (type.view === "data-model") {
+        const cards = document.querySelectorAll(".mh-dmview__domain");
+        expect(cards.length).toBe(3);
+        expect(document.querySelector(".mh-asset")).toBeNull();
+        continue;
+      }
       const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
       const titles = rowTitles();
       expect(titles.length).toBe(expected.length);
@@ -132,6 +149,18 @@ describe("AI Interpreter type contract", () => {
         expect(titles.some((text) => text.includes(record.title))).toBe(true);
       }
     }
+  });
+
+  it("peeks the Report Context drawer from the Data Model related reports", () => {
+    /* data-model-browser.js related-report buttons dispatch reportcontext:view
+       → field-library.js opens the fm drawer over the current type page. */
+    render(<Harness activeType="Data Model" />);
+    fireEvent.click(screen.getByRole("button", { name: "Open 4P Report Report Context" }));
+    const drawer = document.querySelector(".mh-modal--drawer");
+    expect(drawer).toBeTruthy();
+    expect(drawer.querySelector(".mh-modal__eyebrow").textContent).toBe("Report Context");
+    /* stays on the Data Model page — the type view is still the domain shell */
+    expect(document.querySelector(".mh-dmview__shell")).toBeTruthy();
   });
 
   it("fires onSelectType with the stable type id", () => {
@@ -143,16 +172,17 @@ describe("AI Interpreter type contract", () => {
 
   it("filters scenario records by process stage and AI availability independently", () => {
     render(<Harness activeType="Scenario Reporting" />);
+    const cardTitles = () => [...document.querySelectorAll(".mh-srview__card h3")].map((el) => el.textContent);
     const process = screen.getByLabelText("Process");
-    fireEvent.change(process, { target: { value: "queued" } });
-    let titles = rowTitles();
+    fireEvent.change(process, { target: { value: "Queued" } });
+    let titles = cardTitles();
     expect(titles.length).toBe(1);
     expect(titles[0]).toContain("Channel Exception Watch");
 
     fireEvent.change(process, { target: { value: "" } });
     const status = screen.getByLabelText("Status");
-    fireEvent.change(status, { target: { value: "disabled" } });
-    titles = rowTitles();
+    fireEvent.change(status, { target: { value: "Disabled" } });
+    titles = cardTitles();
     expect(titles.length).toBe(2);
     expect(titles.some((text) => text.includes("Channel Performance Analysis"))).toBe(true);
     expect(titles.some((text) => text.includes("Channel Exception Watch"))).toBe(true);

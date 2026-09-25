@@ -33,6 +33,12 @@ min-width: 0;
   background: var(--mh-page-bg);
 }
 
+/* ai-interpreter-overview.css gives the Data Model main an extra 20px top
+   padding (`body:has(.business-type-page)` for the dm overview only). */
+.mh-interpreter__main--type[data-active-type="Data Model"] {
+  padding-top: 20px;
+}
+
 @media (max-width: 1240px) {
   .mh-interpreter__main--type {
   padding-right: 32px;

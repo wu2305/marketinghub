@@ -31,6 +31,7 @@ export const Interpreter = {
       expanded: [],
     },
     fieldLibrary: INTERPRETER.fieldLibrary,
+    scenarioReports: INTERPRETER.scenarioReports,
   },
   argTypes: {
     activeType: {
@@ -56,6 +57,12 @@ export const Interpreter = {
     onDescriptionChange: { action: "onDescriptionChange" },
     onDescriptionConfirm: { action: "onDescriptionConfirm" },
     onDescriptionCancel: { action: "onDescriptionCancel" },
+    onOpenReportContext: { action: "onOpenReportContext" },
+    onSelectDomain: { action: "onSelectDomain" },
+    onTabChange: { action: "onTabChange" },
+    onOpenTable: { action: "onOpenTable" },
+    onCloseTable: { action: "onCloseTable" },
+    onDrawerTab: { action: "onDrawerTab" },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);
@@ -74,6 +81,7 @@ export const Interpreter = {
       principles: args.principles,
       businessTermLibrary: INTERPRETER.businessTermLibrary,
       fieldLibrary: args.fieldLibrary,
+      scenarioReports: args.scenarioReports,
       onNavigate: args.onNavigate,
       onQueryChange: args.onQueryChange,
       onFilterChange: args.onFilterChange,
@@ -92,6 +100,12 @@ export const Interpreter = {
       onDescriptionChange: args.onDescriptionChange,
       onDescriptionConfirm: args.onDescriptionConfirm,
       onDescriptionCancel: args.onDescriptionCancel,
+      onOpenReportContext: args.onOpenReportContext,
+      onSelectDomain: args.onSelectDomain,
+      onTabChange: args.onTabChange,
+      onOpenTable: args.onOpenTable,
+      onCloseTable: args.onCloseTable,
+      onDrawerTab: args.onDrawerTab,
     });
     return <AiInterpreterPage {...args} activeType={activeType} {...demo} onSelectType={onSelectType} />;
   },
