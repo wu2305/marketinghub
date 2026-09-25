@@ -287,6 +287,30 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- Self-Service: query route, shared demo hook, answer and model flow ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}self-service?tab=upload`, { waitUntil: "networkidle" });
+  if (!page.url().includes("/mh-host/self-service?tab=upload")) notes.push("query route left host base");
+  if (!(await page.locator(".mh-page__cards--upload").count())) notes.push("upload tab did not render");
+  await page.locator(".mh-launcher").click();
+  await page.waitForSelector(".mh-assistant--drawer", { timeout: 5000 });
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  await page.waitForSelector(".mh-assistant__answer--workspace", { timeout: 5000 });
+  if (!(await page.locator(".mh-assistant__answer-banner").innerText()).includes("Context: Reports")) notes.push("report answer context missing");
+  await page.screenshot({ path: path.join(OUT, "self-service-answer.png") });
+  await page.locator(".mh-assistant__skill").click();
+  await page.locator(".mh-skill__category", { hasText: "Analytical Model" }).click();
+  await page.locator(".mh-skill__action", { hasText: "Create Analytical Model Manually" }).click();
+  await page.waitForSelector(".mh-flow__card--form", { timeout: 5000 });
+  if (!(await page.locator(".mh-flow__card--form").innerText()).includes("Create Analytical Model Manually")) notes.push("manual model flow missing");
+  await page.locator(".mh-flow button[aria-label='Close']").click();
+  notes.push(...errors);
+  record("self-service-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- sentinel: host elements identical with and without the design system ---- */
 {
   const props = ["fontFamily", "boxSizing", "padding", "border", "backgroundColor", "color", "textDecorationLine"];
