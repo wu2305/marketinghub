@@ -653,6 +653,14 @@ async function newPage() {
   await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
   if (new URL(page.url()).searchParams.get("detail") !== "city-report-context") notes.push("in-host redirect lost detail ID");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("in-host detail redirect reloaded the host");
+  await page.evaluate((next) => {
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `${BASE}interpreter?type=Metric%20Dictionary&detail=metric-dictionary-member-conversion`);
+  await page.locator(".mh-flview[data-fl-type='Metric Dictionary']").waitFor({ timeout: 10000 });
+  await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+  if (!(await page.locator(".mh-modal__title").innerText()).includes("Member conversion")) notes.push("same-instance type switch lost Metric detail drawer");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("same-instance type switch reloaded the host");
   notes.push(...errors);
   record("p09-detail-redirects", notes.length === 0, notes);
   await page.close();

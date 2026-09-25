@@ -323,9 +323,9 @@ export function useFieldLibraryDemo(props) {
     props.descriptionEdit ? { id: props.descriptionEdit, value: null } : null,
   );
 
-  /* field-library.js sync(): a knowledge type change closes overlays and
-     clears the search/filter/page state (the library itself keeps its
-     module-level record state — our normalized list). */
+  /* field-library.js sync(): a knowledge type change clears local overlays,
+     search/filter/page state; a new URL detail remains open on its target type.
+     The library itself keeps its module-level record state — our normalized list. */
   const prevType = React.useRef(type);
   React.useEffect(() => {
     if (prevType.current === type) return undefined;
@@ -333,11 +333,11 @@ export function useFieldLibraryDemo(props) {
     setQuery("");
     setSelected({});
     setPage(1);
-    setDetailId(null);
+    setDetailId(props.detail ?? null);
     clearDialog();
     setDescriptionEdit(null);
     return undefined;
-  }, [type, setQuery, setSelected, setPage, setDetailId, clearDialog]);
+  }, [type, props.detail, setQuery, setSelected, setPage, setDetailId, clearDialog]);
 
   if (props.active === false && !props.peek) return null;
 
