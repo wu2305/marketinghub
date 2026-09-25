@@ -254,3 +254,5 @@ export {
   buildCopilotChatEntry,
   copilotSkillItems,
 } from "./demo/report-demo.js";
+
+export { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./pages/MetricDictionaryPage/index.jsx";

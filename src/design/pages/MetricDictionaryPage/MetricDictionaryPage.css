@@ -1,0 +1,73 @@
+.mh-metric-page { padding: 24px 44px 44px; min-height: calc(100vh - 64px); color: var(--mh-ink-strong); font-family: var(--mh-font); background: var(--mh-surface); }
+.mh-metric-page button, .mh-metric-page input, .mh-metric-page select, .mh-metric-page textarea { font-family: inherit; }
+.mh-metric-page__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 20px; }
+.mh-metric-page__breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: var(--mh-ai-chip-copy); }
+.mh-metric-page__breadcrumb a { color: inherit; text-decoration: none; }
+.mh-metric-page__breadcrumb a:hover { text-decoration: underline; }
+.mh-metric-page__breadcrumb strong { color: var(--mh-ink-strong); }
+.mh-metric-page__header h1 { margin: 0 0 6px; font-size: 28px; }
+.mh-metric-page__header p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--mh-ai-chip-copy); }
+.mh-metric-page__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.mh-metric-page__status, .mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.mh-metric-page__status { height: 32px; padding: 0 12px; font-size: 12px; background: var(--mh-ai-chip-pos-bg); color: var(--mh-ai-chip-pos); }
+.mh-metric-page__status--draft { background: var(--mh-surface-warning-soft); color: var(--mh-ink-warning-brown); }
+.mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { border: 1px solid var(--mh-copilot-box-line); background: var(--mh-surface); color: var(--mh-ink-copy-dark); cursor: pointer; }
+.mh-metric-page__action--primary { border-color: var(--mh-ink-strong); background: var(--mh-ink-strong); color: var(--mh-surface); }
+.mh-metric-page__banner { display: flex; align-items: center; gap: 14px; padding: 16px 20px; margin-bottom: 20px; border: 1px solid var(--mh-line); border-radius: 8px; }
+.mh-metric-page__banner-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 8px; color: var(--mh-gold-rule); background: var(--mh-surface-warning-soft); font-size: 22px; }
+.mh-metric-page__banner-copy { flex: 1; }
+.mh-metric-page__banner-copy div { display: flex; align-items: center; gap: 8px; }
+.mh-metric-page__banner-copy strong { font-size: 14px; }
+.mh-metric-page__banner-copy span { padding: 3px 6px; background: var(--mh-surface-warning-soft); border-radius: 4px; color: var(--mh-gold-rule); font-size: 10px; font-weight: 700; }
+.mh-metric-page__banner-copy p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--mh-ai-chip-copy); }
+.mh-metric-page__layout { display: grid; grid-template-columns: 280px minmax(0,1fr); align-items: start; gap: 20px; }
+.mh-metric-page__sidebar, .mh-metric-page__detail { border: 1px solid var(--mh-line); border-radius: 8px; background: var(--mh-surface); overflow: hidden; }
+.mh-metric-page__search { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--mh-line); color: var(--mh-faint); }
+.mh-metric-page__search input { width: 100%; border: 0; outline: 0; font-size: 13px; }
+.mh-metric-page__category-tabs { display: flex; border-bottom: 1px solid var(--mh-line); }
+.mh-metric-page__category-tabs button { flex: 1; border: 0; background: var(--mh-surface); color: var(--mh-ai-chip-copy); padding: 11px; font-size: 13px; cursor: pointer; }
+.mh-metric-page__category-tabs button.is-active { color: var(--mh-ink-strong); font-weight: 700; box-shadow: inset 0 -2px var(--mh-gold-rule); }
+.mh-metric-page__list { min-height: 300px; max-height: 440px; overflow-y: auto; }
+.mh-metric-page__list button { display: grid; width: 100%; gap: 4px; text-align: left; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--mh-line-faintest); background: var(--mh-surface); cursor: pointer; }
+.mh-metric-page__list button.is-active { background: var(--mh-surface-warning-soft); box-shadow: inset 3px 0 var(--mh-gold-rule); }
+.mh-metric-page__list strong { font-size: 13px; color: var(--mh-ink-strong); }
+.mh-metric-page__list small { color: var(--mh-faint); font-size: 11px; }
+.mh-metric-page__empty { padding: 40px 20px; text-align: center; color: var(--mh-faint); font-size: 13px; }
+.mh-metric-page__sidebar-foot { padding: 14px; border-top: 1px solid var(--mh-line); }
+.mh-metric-page__sidebar-foot > small { display: block; margin-bottom: 8px; color: var(--mh-faint); font-size: 11px; }
+.mh-metric-page__sidebar-foot div { display: flex; align-items: center; justify-content: space-between; font-size: 12px; }
+.mh-metric-page__sidebar-foot span { color: var(--mh-ai-chip-pos); }
+.mh-metric-page__sidebar-foot p { margin: 12px 0 0; color: var(--mh-faint); font-size: 11px; }
+.mh-metric-page__detail-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--mh-line); background: var(--mh-surface-ai); }
+.mh-metric-page__detail-tabs { display: flex; gap: 4px; }
+.mh-metric-page__detail-tabs button { border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--mh-ai-chip-copy); padding: 8px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.mh-metric-page__detail-tabs button.is-active { border-color: var(--mh-line); background: var(--mh-surface); color: var(--mh-ink-strong); }
+.mh-metric-page__preview { height: 32px; font-size: 12px; }
+.mh-metric-page__content { padding: 20px; }
+.mh-metric-page__definition-grid, .mh-metric-page__formula-grid, .mh-metric-page__dimension-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.mh-metric-page__card { padding: 16px; border: 1px solid var(--mh-line); border-radius: 8px; background: var(--mh-surface-ai); }
+.mh-metric-page__card--wide { grid-column: 1 / -1; }
+.mh-metric-page__field { display: grid; gap: 6px; color: var(--mh-ai-chip-copy); font-size: 12px; font-weight: 600; }
+.mh-metric-page__field + .mh-metric-page__field { margin-top: 14px; }
+.mh-metric-page__field input, .mh-metric-page__field textarea, .mh-metric-page__field select { width: 100%; border: 1px solid var(--mh-copilot-box-line); border-radius: 6px; background: var(--mh-surface); padding: 8px 10px; font-size: 13px; font-weight: 400; color: var(--mh-ink-strong); }
+.mh-metric-page__field textarea { min-height: 60px; resize: vertical; line-height: 1.5; }
+.mh-metric-page__label { display: block; margin-bottom: 6px; color: var(--mh-ai-chip-copy); font-size: 12px; font-weight: 600; }
+.mh-metric-page__synonyms { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.mh-metric-page__synonyms span { padding: 6px 10px; border-radius: 6px; color: var(--mh-blue); background: var(--mh-surface-info); font-size: 12px; }
+.mh-metric-page__synonyms button { height: 28px; width: 28px; border: 1px dashed var(--mh-copilot-box-line); border-radius: 6px; background: transparent; color: var(--mh-faint); cursor: pointer; }
+.mh-metric-page__hint { margin: 6px 0 0; color: var(--mh-faint); font-size: 11px; }
+.mh-metric-page__toggle { display: flex; align-items: center; justify-content: space-between; }
+.mh-metric-page__toggle strong { color: var(--mh-ai-chip-copy); font-size: 12px; }
+.mh-metric-page__toggle input, .mh-metric-page__data-row input { height: 22px; width: 40px; accent-color: var(--mh-ai-chip-pos); cursor: pointer; }
+.mh-metric-page__card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; color: var(--mh-ai-chip-copy); text-transform: uppercase; font-size: 12px; }
+.mh-metric-page__card-head button { border: 1px solid var(--mh-copilot-box-line); border-radius: 6px; padding: 6px 10px; background: var(--mh-surface); color: var(--mh-ink-copy-dark); cursor: pointer; font-size: 12px; text-transform: none; }
+.mh-metric-page__formula { display: block; padding: 12px 14px; border-radius: 6px; color: var(--mh-surface); background: var(--mh-ink-strong); font-size: 13px; overflow-wrap: anywhere; }
+.mh-metric-page__formula-desc p { margin: 8px 0 0; color: var(--mh-ai-chip-copy); font-size: 12px; }
+.mh-metric-page__data-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 6px; padding: 10px 12px; border: 1px solid var(--mh-line); border-radius: 6px; background: var(--mh-surface); }
+.mh-metric-page__data-row strong { font-size: 13px; }
+.mh-metric-page__data-row code, .mh-metric-page__data-row small { color: var(--mh-faint); font-size: 11px; }
+.mh-metric-page__data-row span { display: grid; gap: 2px; }
+.mh-metric-page__toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: var(--mh-z-modal); padding: 12px 20px; border-radius: 8px; background: var(--mh-ink-strong); color: var(--mh-surface); font-size: 13px; font-weight: 600; }
+.mh-metric-page button:focus-visible, .mh-metric-page a:focus-visible, .mh-metric-page input:focus-visible, .mh-metric-page textarea:focus-visible, .mh-metric-page select:focus-visible { outline: 2px solid var(--mh-gold-rule); outline-offset: 2px; }
+@media (max-width: 960px) { .mh-metric-page { padding: 20px; } .mh-metric-page__header { flex-wrap: wrap; } .mh-metric-page__layout { grid-template-columns: 1fr; } }
+@media (max-width: 620px) { .mh-metric-page__banner, .mh-metric-page__detail-head { flex-wrap: wrap; } .mh-metric-page__definition-grid, .mh-metric-page__formula-grid, .mh-metric-page__dimension-grid { grid-template-columns: 1fr; } .mh-metric-page__card--wide { grid-column: auto; } .mh-metric-page__actions { flex-wrap: wrap; } }
