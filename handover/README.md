@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P10 PR #10 对抗审核完成：原生tab状态保留、任意派生单位、3秒通知、模型450ms完成、夹具替换/双实例及实际加载数据已核；默认态人工fail，其余pending |
+| 最新独立审核 | 2026-09-26 P09 PR #11 独立对抗审核完成：四类最终重定向、类型+detail同实例切换、通知关闭与Back导航、GMV缺省ID编辑及实际源码覆盖已核；BT默认人工fail，其余pending |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 181 stories + 57 docs；2026-09-26 67bba5c 构建 index.json 实数；P10新增25页面状态故事和1个功能组件故事，无删除 |
-| 测试 | `npm test`：19 文件 185 条通过（2026-09-26 67bba5c） |
-| lint | `npm run lint`：0 errors / 0 warnings，67bba5c |
-| 构建验证 | `npm run build-storybook` 181 stories/57 docs；`npm run build:host` + host-check 15/15通过（`/tmp/mh-p10-integrate-r2-host`）；67bba5c rebase origin/main后干净构建，构建戳匹配 |
+| 故事数 | 200 stories + 58 docs；2026-09-26 ec248b6 构建 index.json 实数；P09新增18页面状态故事和1个功能组件故事，无删除 |
+| 测试 | `npm test`：20 文件 199 条通过（2026-09-26 ec248b6） |
+| lint | `npm run lint`：0 errors / 0 warnings，ec248b6 |
+| 构建验证 | `npm run build-storybook` 200 stories/58 docs；`npm run build:host` + host-check 19/19通过（`/tmp/mh-p09-integrate-host`）；ec248b6 rebase origin/main后干净构建，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 67bba5c，工作区干净）：全站245/245机器通过，P10 25/25（`/tmp/mh-p10-integrate-r2-visual`）；负向14/14按预期失败（`/tmp/mh-p10-integrate-r2-negative`）。P10默认人工fail已绑定最终截图hash，其余244未审pending；既有P03/P08/P11人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
+| 最近视觉对照 | 2026-09-26（stamp ec248b6，工作区干净）：全站267/267机器通过，P09 22/22（`/tmp/mh-p09-integrate-visual`）；负向16/16按预期失败（`/tmp/mh-p09-integrate-negative`）。P09 Business Term默认人工fail已绑定最终截图hash，其余266未审pending；既有P03/P08/P10/P11人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -39,7 +39,7 @@ npm test               # vitest 行为测试
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
-| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08八类型表单、P10独立指标详情和P11模型浏览器已实现并完成机器验证；P09候选继续，人工视觉收敛仍待办 |
+| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
@@ -63,7 +63,7 @@ npm test               # vitest 行为测试
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——概览：类型导航与 Hero，人工 pass。八类型：Principles（类目、搜索、展开、分页，人工 pass）；Report Context（卡片、项目筛选、详情抽屉、描述编辑，机器 pass/人工 pending）；Data Model（域搜索、Basic/关系图、表抽屉与预览、相关报表抽屉，机器 pass/人工 pending）；Metric Dictionary（专用列表与详情，机器 pass/人工 pending）；Business Term（三列卡、筛选、分页、详情、权限/禁用/确认，机器 pass/人工 pending）；Analytical Model（卡片、管理动作、删除被引用阻断，机器 pass/人工 pending）；Scenario Reporting（状态/流程筛选、卡片、详情抽屉与管理确认，机器 pass/人工 pending）；Email Reports（专用表格与分页，机器 pass/人工 pending）。三类管理动作共享纯规则和演示确认 hook，保留各自权限、Draft 与引用差异；相关报表经 overlay slot 呈现。M5 独立创建/编辑已由 P08 实现，P07跨页入口和助手等仍不能计为全量完成。机器证据与人工抽看见 §5 WP2 行 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 已实现，PR #8；八个可选择类型、45页面状态故事、46/46本页配对与全套机器验证；BusinessTermForm已实际复用。AM不可编辑/RC未知ID、表单联动/附件/版本/公式及宿主导航已核；RC编辑人工fail，其余pending，像素收敛仍待办 |
-| P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 进行中；BT/Scenario 稳定详情、Principles/Data Model 源码门控视图按 §3.5 修正晚加载 BT 劫持；四类 detail-routing 在宿主最终跳至 P07 对应类型并打开现有详情抽屉，未知 email-report-* 保留最终 URL 而无虚构详情；同一宿主实例切换知识类型时新详情继续打开。Scenario 版本与 Data Model 通知的 ×/Escape 仅关闭，正文 Back 真正导航；无/未知 ID 展示 GMV 时 Edit 指向该记录（原始错误回退见 §5 最新 P09 行）。22/22 P09 定向配对、宿主 17/17 机器通过；Business Term 默认页人工 fail（面包屑字重、区块纵向间距），其余 pending；全套验收待最新 main 集成 |
+| P09 | assets/pages/knowledge-view.html | 四类详情/版本/模型只读工具及四类重定向 | M5 | 已实现，PR #11；18页面故事、22/22配对、跨页抽屉/编辑/通知Back真实宿主导航及全套机器验证。已修同实例type+detail重置、通知关闭标签；Business Term默认人工fail（面包屑字重/纵向间距、标签颜色与粗细、卡片阴影和表格边框），其余pending，第二轮收敛 |
 | P10 | assets/pages/metric-dictionary.html | 独立指标详情、Basic/Derived三tab、派生公式/校验/保存及lite助手模型流 | M5 | 已实现，PR #10；25页面状态故事、25/25配对和全套机器验证；tab原生输入/勾选保留、任意单位及3秒通知已核。默认人工fail（背景、侧栏/tab/footer、Q&A开关、图标间距），其余pending，第二轮收敛 |
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
 | P12 | assets/pages/review-center.html | 审核列表、筛选、详情、决策反馈等实际状态 | M6 | 未开始 |
@@ -340,6 +340,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P10 派生面板Save遮挡（assistant-launcher.css:1–5、metric-detail.css:906–913） | 原launcher z880遮住面板z120的Save；React保持操作按钮可达 | 原始定位缺陷，保留保存能力 | #10 |
 | P10 浏览器prompt/alert与本地ID（metric-detail.js:349–354、415–417、428、456–458） | 常量prompt改可查阅dialog，校验alert改inline反馈，Date.now ID改确定性本地ID | 保留数值与必填规则，提供可查阅故事与确定性demo；不引入后端或持久化 | #10 |
 
+| P09 Principles/Data Model（business-term-view.js:97–98、115；editor-runtime.js:367–396；principles-view.js:4–6） | 原后载Business Term脚本不按类型守卫，覆盖已知Principles/Data Model视图；React按注入类型显示对应原始专用结构 | 修正错误类型回退；隐藏Principles模块2–6仍不恢复，P09模型不混入P08编辑增强 | #11 |
+| P09 Scenario版本/编辑（approach.css:143–150、approach-view.js:134–147） | 原pointer-events:none阻止鼠标但键盘Tab+Enter仍可触发；React保留动作并允许鼠标/键盘 | 明显CSS可用性缺陷；原页配对通过真实键盘激活，不虚构不可达版本结构 | #11 |
+| P09 缺失/未知ID的GMV编辑（business-term-view.js:97–98、262–267） | 原显示GMV但Edit保留空/未知ID；React编辑实际显示的GMV记录 | 源记录回退后未同步动作ID；不添加复刻错误ID的组件开关，测试明确href与显示记录一致 | #11 |
+
 ## 4. 已知缺口
 
 2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2的P03助手已补齐，P07助手覆盖与其他页面流程仍需推进。
@@ -507,3 +511,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P09 接入 P08 已合并的 InterpreterRoute：`knowledgeViewRedirectFor` 按 `INTERPRETER.records` 解析四类最终 URL，`fieldLibrary.detail` 消费深链接并打开 P07 现有抽屉；宿主首屏子 effect 先于路由监听注册导致空白页，路由监听建立时同步当前地址修复。无 ID、未知 Data Model ID 依原始 `business-term-view.js:97–98` 落 GMV；未知 `email-report-*` 依 `detail-routing.js:2–10` 跳 Email Reports 列表但不生成详情。定向 11 测试、lint 0、Storybook 160 stories/57 docs、宿主 16/16（`/tmp/mh-p09-host-crosspage`，含四类最终抽屉与 BT/Scenario → P08 编辑）、P09 定向配对 22/22（`/tmp/mh-p09-p08-pairs`）；BT 默认页人工 fail 已绑定与前次逐字节相同的截图 hash，其余 pending。最终干净提交全套由 integrator 复核。 | Codex P09 |
 | 2026-09-26 | P09 对抗复核：同一 InterpreterRoute 由 RC `?detail=city-report-context` 切至 Metric `?detail=metric-dictionary-member-conversion` 时，`field-library-demo.js:329–337` 旧类型切换 effect 在受控值同步后再次置空详情，URL 正确而抽屉消失。先以 Playwright 和新测试复现失败（`/tmp/mh-p09-type-switch-before.log`），再仅把类型切换重置改为新 `props.detail ?? null`；无 detail 的普通类型切换仍关闭抽屉。定向测试 26/26、lint0、Storybook 160/57、宿主 16/16（`/tmp/mh-p09-type-switch-host`，保持 boot 的 RC→Metric 断言）、受影响 P07 Field Library 配对 9/9（`/tmp/mh-p09-type-switch-p07`）；机器结果不替代人工审图，P09 默认人工 fail 与其余 pending 维持。最终干净提交全套由 integrator 复核。 | Codex P09 |
 | 2026-09-26 | P09 结果弹窗对抗修正：Scenario 版本与四种 Data Model 操作通知的 × 采用注入的 `Close dialog` 标签，仅关闭；正文 `Back to Knowledge Management` 链接依 `knowledge-view.html:44–47`、`editor-runtime.js:206–208` 导航 Interpreter。单测断言 ×/Escape 不触发导航、正文 Back 的具名载荷；宿主断言 Scenario 与 Data Model Back 均在同一实例抵达 Interpreter。无/未知 ID 仍展示 GMV，但 Edit 指向实际展示的 `business-term-gmv`：原始 `business-term-view.js:97–98` 回退 GMV 后，`:262–267` 用 `asset.id || id` 沿用空/未知 ID，导致显示记录与编辑目标不一致；按 AGENTS §3.5 判为错误回退，未加复刻缺陷的组件分支。定向测试 13/13、lint 0/0、Storybook 160 stories/57 docs、P09 配对 22/22（`/tmp/mh-p09-notice-pairs`）、宿主 17/17（`/tmp/mh-p09-notice-host`）；BT 默认人工 fail 及其他 pending 沿用，最终全套待最新 main 集成。 | Codex P09 |
+| 2026-09-26 | P09 PR #11（https://github.com/wu2305/marketinghub/pull/11）合并6d483c4；候选ec248b6最新main干净验证：lint0/0、20文件199测试、200stories/58docs、host19/19、visual267/267（P09 22）、negative16/16，证据/tmp/mh-p09-integrate-*。独立对抗审核发现并修正field-library类型重置吞URL detail及通知×误标Back且测试点错目标；宿主核对四类重定向、type+detail同实例切换、未知Email不虚构抽屉、BT/Scenario Edit至P08、Scenario/DM通知Back至P07。源码矩阵/tmp/mh-p09-source-state-matrix.md；BT默认人工fail（字重/纵向间距、标签颜色/粗细、卡片阴影和表格边框），其余pending。 | Codex integrator |

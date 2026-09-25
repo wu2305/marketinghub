@@ -580,10 +580,10 @@ R5(a)：
 - [x] **WP3.3 S3 + R3 + O5**（PR #6，442af01；对抗审核与全套验证见 README §1/§5）：共用助手外壳、页面预设与变体枚举、答案变体收敛。
 - [x] **WP4 export-surface guard**（PR #3；对抗审核及全套验证通过，实数见 README §1/§5）：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
 - [x] **WP5 P08**（PR #8，33047ad；全套机器验证及RC编辑人工fail见README §1/§5）：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
-- [ ] **P09 / P10 / P11**：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
+- [x] **P09 / P10 / P11**（P09 PR #11 完成本组机器集成，人工收敛仍见README）：仅 WP2 合并后启动，每页独立 PR，按 D1/D2/A1 执行。
   - [x] P11 独立 Data Model（PR #7，582f2ae；全套实数与人工 fail 见 README §1/§5）。
   - [x] P10独立Metric Dictionary（PR #10，c6d5dcd；实数及人工fail见README §1/§5）。
-  - [ ] P09继续候选集成。
+  - [x] P09知识详情（PR #11，6d483c4；全套实数/人工fail见README §1/§5）。
 - [ ] **WP6 R2**：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
   - [x] P03（PR #9，483bc1b；全套实数见README §1/§5）。
   - [ ] P07助手继续。
