@@ -1,4 +1,6 @@
 import React from "react";
+import { knowledgeActions, knowledgeStatus } from "./knowledge-actions.js";
+import { useKnowledgeDialog } from "./knowledge-dialog.js";
 
 /**
  * Deterministic demo state for the Scenario Reporting library —
@@ -71,7 +73,7 @@ export function normalizeScenarioRecord(asset) {
     updated: asset.updated || asset.update || "Not recorded",
     workflow_status: workflow,
     ai_interpreter_enabled: Boolean(enabled),
-    status: Boolean(enabled) ? "Enable" : "Disable",
+    status: knowledgeStatus({ ...asset, ai_interpreter_enabled: Boolean(enabled) }),
     stage: workflow,
     statusDisplay: workflow,
     structure_guidance: structureGuidance,
@@ -173,7 +175,7 @@ export function useScenarioDemo(props = {}) {
   const strings = { ...DEFAULT_STRINGS, ...(props.strings || {}) };
   const pageSizes = props.pageSizes || [5, 10, 20];
   const currentUser = props.currentUser || "Current User";
-  const all = React.useMemo(() => (props.records || []).map(normalizeScenarioRecord), [props.records]);
+  const all = React.useMemo(() => props.active === false ? [] : (props.records || []).map(normalizeScenarioRecord), [props.records, props.active]);
 
   const [query, setQuery] = useSynced(props.query || "");
   const [selected, setSelected] = useSynced(props.filterValues || EMPTY_SELECTED);
@@ -185,9 +187,55 @@ export function useScenarioDemo(props = {}) {
   const [records, setRecords] = React.useState(null);
   const list = records || all;
 
+  const statusPick = props.active === false ? undefined : selected.status;
+  const processPick = props.active === false ? undefined : selected.process;
   React.useEffect(() => {
-    setPage(1);
-  }, [query, selected.status, selected.process, pageSize, setPage]);
+    if (props.active !== false) setPage(1);
+  }, [props.active, query, statusPick, processPick, pageSize, setPage]);
+
+  const patch = (id, next) =>
+    setRecords((prev) => (prev || all).map((item) => (item.id === id ? { ...item, ...next } : item)));
+
+  /* Seeded shape is light: `{ kind, record: { id } }` resolves to the
+     normalized record, matching how stories seed the dialog. */
+  const management = useKnowledgeDialog({
+    seed: props.dialog,
+    resolveSeed: (seedDialog) => all.find((item) => item.id === seedDialog.record?.id),
+    buildDialog: (kind, record) => ({
+      kind, record,
+      title: strings.confirmTitle,
+      message: kind === "delete-confirm" ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
+      confirmLabel: kind === "delete-confirm" ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
+      cancelLabel: strings.cancelLabel,
+    }),
+    onDisable: (record) => patch(record.id, { ai_interpreter_enabled: false, status: "Disable" }),
+    onDelete: (record) => {
+      setRecords((prev) => (prev || all).filter((item) => item.id !== record.id));
+      if (detailId === record.id) {
+        setDetailId(null);
+        props.onCloseDetail?.();
+      }
+    },
+    onEdit: (record) => props.onNavigate?.(editScenarioHref(record)),
+    onConfirm: (_event, pending) => props.onDialogConfirm?.({
+      ...pending, ...({ title: strings.confirmTitle }),
+    }),
+    onCancel: (_event, pending) => props.onDialogCancel?.(pending),
+  });
+  const actionPolicy = { currentUser, strings: { draftCannotDisable: false,
+    actions: { edit: strings.editLabel, delete: strings.deleteLabel, disable: strings.disableLabel },
+    tooltips: {
+      permission: strings.permissionTitle,
+      alreadyDisabled: strings.alreadyDisabled,
+      offlineFirst: strings.disableFirstTitle,
+    },
+  } };
+  const act = (action, record) => {
+    props.onAction?.({ action, record });
+    management.request(action, record, actionPolicy);
+  };
+
+  if (props.active === false) return null;
 
   const isOwn = (item) => (item.creator || item.owner) === currentUser;
   const queryText = query.trim().toLowerCase();
@@ -218,63 +266,6 @@ export function useScenarioDemo(props = {}) {
   const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const detailRecord = list.find((record) => record.id === detailId) || null;
 
-  const patch = (id, next) =>
-    setRecords((prev) => (prev || all).map((item) => (item.id === id ? { ...item, ...next } : item)));
-
-  /* Seeded shape is light: `{ kind, record: { id } }` resolves to the
-     normalized record, matching how stories seed the dialog. */
-  const dialogFor = (kind, record) => ({
-    kind,
-    record,
-    title: strings.confirmTitle,
-    message:
-      kind === "delete-confirm" ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
-    confirmLabel:
-      kind === "delete-confirm" ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
-    cancelLabel: strings.cancelLabel,
-  });
-  const [dialog, setDialog] = React.useState(() =>
-    props.dialog
-      ? dialogFor(props.dialog.kind, all.find((item) => item.id === props.dialog.record?.id) || props.dialog.record)
-      : null,
-  );
-
-  /* Only the non-blocked branches are reachable: the original renders blocked
-     actions with a real `disabled` attribute, so the permission and
-     "disable knowledge first" dialogs in scenario-reports.js never fire. */
-  const act = (action, record) => {
-    props.onAction?.({ action, record });
-    if (!isOwn(record)) return;
-    if (action === "edit" && !record.ai_interpreter_enabled) {
-      props.onNavigate?.(editScenarioHref(record));
-      return;
-    }
-    if (action === "delete" && !record.ai_interpreter_enabled) {
-      setDialog(dialogFor("delete-confirm", record));
-      return;
-    }
-    if (action === "disable" && record.ai_interpreter_enabled) {
-      setDialog(dialogFor("disable-confirm", record));
-    }
-  };
-
-  const onDialogConfirm = () => {
-    const current = dialog;
-    if (!current) return;
-    props.onDialogConfirm?.(current);
-    setDialog(null);
-    if (current.kind === "delete-confirm") {
-      setRecords((prev) => (prev || all).filter((item) => item.id !== current.record.id));
-      if (detailId === current.record.id) {
-        setDetailId(null);
-        props.onCloseDetail?.();
-      }
-      return;
-    }
-    /* the original's "Knowledge disabled" notice is a no-op toast call. */
-    patch(current.record.id, { ai_interpreter_enabled: false, status: "Disable" });
-  };
-
   const openDetail = (record) => {
     setDetailId(record.id);
     props.onOpen?.(record);
@@ -285,35 +276,7 @@ export function useScenarioDemo(props = {}) {
   };
 
   /** Card/drawer action buttons — identical gating to the original. */
-  const actionsFor = (record) => {
-    const owner = isOwn(record);
-    const disabled = !record.ai_interpreter_enabled;
-    return ["edit", "delete", "disable"].map((action) => {
-      const permissionBlocked = !owner;
-      const statusBlocked = (disabled && action === "disable") || (!disabled && action !== "disable");
-      const blocked = permissionBlocked || statusBlocked;
-      const label = action === "edit" ? strings.editLabel : action === "delete" ? strings.deleteLabel : strings.disableLabel;
-      return {
-        id: action,
-        label,
-        ariaLabel: `${label} ${record.title}`,
-        danger: action === "delete",
-        disabled: blocked,
-        title: permissionBlocked
-          ? strings.permissionTitle
-          : blocked
-            ? disabled && action === "disable"
-              ? strings.alreadyDisabled
-              : strings.disableFirstTitle
-            : label,
-        tooltip: permissionBlocked
-          ? strings.permissionTitle
-          : disabled && action === "disable"
-            ? strings.alreadyDisabled
-            : "",
-      };
-    });
-  };
+  const actionsFor = (record) => knowledgeActions(record, actionPolicy);
 
   return {
     strings,
@@ -352,12 +315,9 @@ export function useScenarioDemo(props = {}) {
       : false,
     onOpen: openDetail,
     onCloseDetail: closeDetail,
-    dialog,
-    onDialogConfirm,
-    onDialogCancel: () => {
-      props.onDialogCancel?.(dialog);
-      setDialog(null);
-    },
+    dialog: management.dialog,
+    onDialogConfirm: management.confirm,
+    onDialogCancel: management.cancel,
     createHref: props.createHref || "/assets/pages/knowledge-create.html?type=Scenario%20Reporting",
     onCreate: props.onCreate,
   };

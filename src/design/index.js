@@ -23,6 +23,7 @@ export {
 } from "./components/Select/index.jsx";
 export {
   StatusBadge,
+  statusBadgeVariants,
 } from "./components/StatusBadge/index.jsx";
 export {
   SearchField,
@@ -103,15 +104,6 @@ export {
 export {
   TypeGrid,
 } from "./features/interpreter/TypeGrid/index.jsx";
-export {
-  LibraryToolbar,
-} from "./features/interpreter/LibraryToolbar/index.jsx";
-export {
-  AssetRow,
-} from "./features/interpreter/AssetRow/index.jsx";
-export {
-  KnowledgeLibrary,
-} from "./features/interpreter/KnowledgeLibrary/index.jsx";
 export {
   PrinciplesView,
 } from "./features/interpreter/PrinciplesView/index.jsx";

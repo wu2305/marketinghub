@@ -19,7 +19,7 @@ Target: claude.ai/design project "Marketing Hub" (`projectId` in config.json).
 - [GENERAL] Owned previews for every `position:fixed` component — AssistantPanel, UploadHistory, ModelFlowDialog, ReportDetailsDrawer, Toast, AssistantLauncher — wrap each story in a `height:100vh` frame. The single-card wrapper is a transform containing block with zero height, so fixed overlays collapsed to the top / off-screen. Any new overlay component needs the same owned preview.
 - Known validate warn: `[RENDER_THIN] Icon` — the story is one 24px glyph; graded match. Not a regression.
 - Serif text inside some previews is faithful: 19 stories render text in the browser default serif in Storybook too (components don't set `font-family` on every text node). Tracked in handover/design-system-cleanup.md, not a sync defect.
-- Overlay components use `cardMode: "single"`; wide ones (Header, AssetRow, ReportRow, ProjectDirectory, CityInvestDashboard) use `cardMode: "column"`.
+- Overlay components use `cardMode: "single"`; wide ones (Header, ReportRow, ProjectDirectory, CityInvestDashboard) use `cardMode: "column"`.
 - `runtimeFontPrefixes`: "PingFang SC"/"Microsoft YaHei" are a CJK system-font stack in organisms.css, never shipped.
 
 ## Re-sync risks

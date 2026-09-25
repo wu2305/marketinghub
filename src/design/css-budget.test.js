@@ -337,10 +337,12 @@ const BASELINE_PREFIX_EXEMPTIONS = new Set(`
 // These are design concepts, not names of a page or a component. A future
 // semantic family can be added deliberately; an unknown root cannot silently
 // become a new component alias such as --mh-new-widget-*.
+// WP2 maps existing colors: indicator = status dots, shadow = elevation,
+// stroke = graph lines. These roles are independent of the consuming page.
 const SEMANTIC_FAMILIES = new Set(`
   amber bg blue bubble copy danger disabled display empty eyebrow faint field
-  fill focus font gold green hover icon index info ink kicker line muted page
-  placeholder red required row scrim search slate subtle surface tooltip warn z
+  fill focus font gold green hover icon index indicator info ink kicker line muted page
+  placeholder red required row scrim search shadow slate stroke subtle surface tooltip warn z
 `.trim().split(/\s+/));
 
 // Historical short aliases are reserved even when they do not resemble the

@@ -1,6 +1,12 @@
 import React from "react";
 
 /** Registered icon names — the values `Icon`'s `name` prop accepts. */
+export const knowledgeActionIconPaths = {
+  edit: "M12 20H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L12 14l-4 1 1-4 7.5-7.5z",
+  delete: "M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5",
+  disable: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M6 6l12 12",
+};
+
 export const iconNames = [
   "search",
   "plus",

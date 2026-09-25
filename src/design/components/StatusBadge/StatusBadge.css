@@ -47,3 +47,31 @@ background: #faeff1;
 border: 1px solid currentColor;
   background: #fff;
 }
+
+/* P07 field-mapping and Business Term availability capsule, 76×20 with dot. */
+.mh-badge--knowledge {
+  width: 76px;
+  height: 20px;
+  min-height: 20px;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  gap: 7px;
+  padding: 0;
+  border-radius: 5px;
+  background: var(--mh-bt-state-bg);
+  color: var(--mh-bt-state-ink);
+  font-size: 12px;
+  font-weight: 500;
+}
+.mh-badge--knowledge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.mh-badge--knowledge.mh-badge--paused {
+  background: var(--mh-bt-state-off-bg);
+  color: var(--mh-bt-state-off-ink);
+}

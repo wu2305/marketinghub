@@ -37,7 +37,7 @@ display: inline-flex;
   border-radius: 9px;
   background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
   box-shadow: var(--mh-bt-create-shadow);
-  color: #fff;
+  color: var(--mh-surface);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -90,9 +90,9 @@ display: grid;
 position: relative;
   min-width: 0;
   border: 1px solid var(--mh-principle-line);
-  background: #fff;
+  background: var(--mh-surface);
   box-shadow: var(--mh-principle-shadow);
-  color: #2f3a45;
+  color: var(--mh-ink-card-copy);
   cursor: pointer;
   outline: 0;
   transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
@@ -100,20 +100,20 @@ position: relative;
 
 .mh-flview__card:hover {
 transform: translateY(-1px);
-  border-color: var(--mh-fl-card-hover-line);
-  box-shadow: var(--mh-fl-card-hover-shadow);
+  border-color: var(--mh-line-card-hover-gold);
+  box-shadow: var(--mh-shadow-card-hover-gold);
 }
 
 .mh-flview__card:focus-visible {
-border-color: var(--mh-fl-card-hover-line);
-  box-shadow: var(--mh-fl-card-hover-shadow);
+border-color: var(--mh-line-card-hover-gold);
+  box-shadow: var(--mh-shadow-card-hover-gold);
 }
 
 .mh-flview__card h3 {
 min-width: 0;
   margin: 0;
   overflow: hidden;
-  color: var(--mh-fl-title);
+  color: var(--mh-ink-heading-warm);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
@@ -124,59 +124,26 @@ min-width: 0;
 /* Shared status capsule — 76×20 Enabled/Disabled pill on every fm card and
    the drawer title. */
 
-.mh-flview__state {
-display: inline-flex;
-  width: 76px;
-  height: 20px;
-  min-height: 20px;
-  box-sizing: border-box;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 0;
-  border-radius: 5px;
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.mh-flview__state i {
-width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.mh-flview__state.is-off {
-background: var(--mh-bt-state-off-bg);
-  color: var(--mh-bt-state-off-ink);
-}
-
 /* ── fm-report-card (Report Context) ─────────────────────────────────── */
 
 .mh-flview__report-card {
 display: grid;
   grid-template-columns: minmax(0, 1fr);
   padding: 16px;
-  border-color: var(--mh-fl-rc-line);
+  border-color: var(--mh-line-card-warm);
   border-radius: 12px;
   box-shadow: none;
-  color: #344054;
+  color: var(--mh-ink-report-copy);
 }
 
 .mh-flview__report-card:hover {
-border-color: var(--mh-fl-rc-hover-line);
-  box-shadow: var(--mh-fl-rc-hover-shadow);
+border-color: var(--mh-line-card-active);
+  box-shadow: var(--mh-shadow-card-active);
 }
 
 .mh-flview__report-card:focus-visible {
-border-color: var(--mh-fl-rc-hover-line);
-  box-shadow: var(--mh-fl-rc-focus-shadow), var(--mh-fl-rc-hover-shadow);
+border-color: var(--mh-line-card-active);
+  box-shadow: var(--mh-shadow-card-focus), var(--mh-shadow-card-active);
 }
 
 .mh-flview__report-title-row {
@@ -247,7 +214,7 @@ min-width: 0;
 display: block;
   padding: 16px;
   border-radius: 12px;
-  color: #343230;
+  color: var(--mh-ink-metric-copy);
 }
 
 .mh-flview__metric-head {
@@ -508,51 +475,6 @@ min-width: 0;
    drawer footer; blocked ones render `disabled` (clicks never reach the
    handler in the original either). */
 
-.mh-flview__action-row {
-display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.mh-flview__action {
-display: grid;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--mh-bt-action);
-  cursor: pointer;
-}
-
-.mh-flview__action svg {
-width: 15px;
-  height: 15px;
-  stroke: var(--mh-bt-action);
-}
-
-.mh-flview__action:hover:not(:disabled),
-.mh-flview__action:focus-visible:not(:disabled) {
-background: var(--mh-bt-action-hover-bg);
-}
-
-.mh-flview__action:disabled {
-color: var(--mh-fl-action-off);
-  cursor: not-allowed;
-}
-
-.mh-flview__action:disabled svg {
-stroke: var(--mh-fl-action-off);
-}
-
-.mh-modal__foot .mh-flview__action {
-width: 28px;
-  height: 28px;
-  border-radius: 6px;
-}
-
 /* ── fm-email-card (Email Reports) ───────────────────────────────────── */
 
 .mh-flview__email-card {
@@ -563,8 +485,8 @@ display: block;
 
 .mh-flview__email-card:hover,
 .mh-flview__email-card:focus-visible {
-border-color: var(--mh-fl-er-hover-line);
-  box-shadow: var(--mh-fl-er-hover-shadow);
+border-color: var(--mh-line-card-hover-warm);
+  box-shadow: var(--mh-shadow-card-hover-warm);
 }
 
 .mh-flview__email-titleline {
@@ -601,7 +523,7 @@ flex: 0 0 auto;
 .mh-flview__email-meta strong {
 min-width: 0;
   overflow: hidden;
-  color: var(--mh-fl-title);
+  color: var(--mh-ink-heading-warm);
   font-size: 12px;
   font-weight: 400;
   text-overflow: ellipsis;
@@ -632,8 +554,8 @@ flex: 0 1 auto;
   min-width: 0;
   padding: 5px 9px;
   overflow: hidden;
-  background: var(--mh-fl-recipient-bg);
-  color: var(--mh-fl-recipient-ink);
+  background: var(--mh-surface-recipient);
+  color: var(--mh-ink-recipient);
   font-size: 12px;
   font-weight: 400;
   text-overflow: ellipsis;
@@ -646,7 +568,7 @@ flex: 0 1 auto;
 .mh-flview__empty {
 grid-column: 1 / -1;
   padding: 36px 20px;
-  color: var(--mh-fl-empty);
+  color: var(--mh-ink-empty);
   font-size: 13px;
   text-align: center;
 }
@@ -654,10 +576,10 @@ grid-column: 1 / -1;
 .mh-flview__empty--card {
 grid-column: auto;
   padding: 34px 18px;
-  border: 1px dashed var(--mh-fl-empty-line);
+  border: 1px dashed var(--mh-line-empty);
   border-radius: 8px;
-  background: #fff;
-  color: var(--mh-fl-empty-rc);
+  background: var(--mh-surface);
+  color: var(--mh-ink-empty-report);
 }
 
 /* fm-pagination padding — AM/ER flush with the grid, RC/MD keep the 20px
@@ -684,10 +606,10 @@ display: inline-flex;
   align-items: center;
   min-height: 33px;
   padding: 7px 10px;
-  border: 1px solid var(--mh-fl-btn-line);
+  border: 1px solid var(--mh-line-secondary-button);
   border-radius: 6px;
-  background: #fff;
-  color: var(--mh-fl-btn-ink);
+  background: var(--mh-surface);
+  color: var(--mh-ink-secondary-button);
   font: inherit;
   font-size: 12px;
   text-decoration: none;
@@ -701,17 +623,17 @@ border-color: var(--mh-bt-action);
 }
 
 .mh-flview__open-dashboard {
-border-color: var(--mh-fl-dash-line);
-  background: var(--mh-fl-dash-bg);
-  color: var(--mh-fl-dash-ink);
+border-color: var(--mh-line-primary-button);
+  background: var(--mh-surface-primary-button);
+  color: var(--mh-ink-primary-button);
   font-weight: 700;
 }
 
 .mh-flview__open-dashboard:hover,
 .mh-flview__open-dashboard:focus-visible {
-border-color: var(--mh-fl-dash-hover-line);
-  background: var(--mh-fl-dash-hover-bg);
-  color: var(--mh-fl-dash-ink);
+border-color: var(--mh-line-primary-button-hover);
+  background: var(--mh-surface-primary-button-hover);
+  color: var(--mh-ink-primary-button);
 }
 
 /* Detail sections — library.css `.scenario-report-detail`. */
@@ -798,7 +720,7 @@ display: inline-flex;
 }
 
 .mh-flview__domain {
-border: 1px solid var(--mh-fl-domain-line);
+border: 1px solid var(--mh-line-domain-warm);
   background: var(--mh-bt-status-on-bg);
   color: var(--mh-bt-status-on-ink);
 }
@@ -813,10 +735,10 @@ color: var(--mh-faint);
 width: 100%;
   min-height: 70px;
   overflow: hidden;
-  border: 1px solid var(--mh-fl-thumb-line);
+  border: 1px solid var(--mh-line-thumbnail);
   border-radius: 9px;
   background: var(--mh-bt-drawer-bg);
-  color: #788493;
+  color: var(--mh-ink-thumbnail-muted);
   font-size: 13px;
 }
 
@@ -829,7 +751,7 @@ display: block;
 
 .mh-flview__rc-overview {
 padding: 19px 0 22px;
-  border-bottom: 1px solid var(--mh-fl-overview-line);
+  border-bottom: 1px solid var(--mh-line-overview);
 }
 
 .mh-flview__rc-desc-title {
@@ -838,7 +760,7 @@ display: flex;
   justify-content: space-between;
   gap: 14px;
   margin: 0 0 18px;
-  color: var(--mh-fl-state-ink);
+  color: var(--mh-ink-state);
   font-size: 15px;
   font-weight: 750;
   line-height: 1.35;
@@ -853,15 +775,15 @@ display: grid;
   place-items: center;
   border: 0;
   border-radius: 8px;
-  background: var(--mh-fl-edit-bg);
-  color: var(--mh-fl-edit-ink);
+  background: var(--mh-surface-edit);
+  color: var(--mh-ink-edit);
   cursor: pointer;
 }
 
 .mh-flview__rc-edit:hover,
 .mh-flview__rc-edit:focus-visible {
-background: var(--mh-fl-edit-hover-bg);
-  color: var(--mh-fl-edit-hover-ink);
+background: var(--mh-surface-edit-hover);
+  color: var(--mh-ink-edit-hover);
 }
 
 .mh-flview__rc-edit svg {
@@ -871,7 +793,7 @@ width: 15px;
 
 .mh-flview__rc-overview p {
 margin: 0;
-  color: var(--mh-fl-desc-copy);
+  color: var(--mh-ink-description);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -892,14 +814,14 @@ display: flex;
 }
 
 .mh-flview__rc-meta > div > span:first-child {
-color: var(--mh-fl-meta-label);
+color: var(--mh-ink-meta-label);
   font-size: 11px;
   font-weight: 650;
 }
 
 .mh-flview__state-text {
 display: inline;
-  color: var(--mh-fl-state-ink);
+  color: var(--mh-ink-state);
   font-size: 12px;
   font-weight: 500;
   line-height: 1.35;
@@ -918,7 +840,7 @@ display: flex;
 .mh-flview__rc-heading {
 flex-shrink: 0;
   margin: 0 0 10px;
-  color: #20272e;
+  color: var(--mh-ink-section-deep);
   font-size: 15px;
   font-weight: 700;
 }
@@ -932,7 +854,7 @@ gap: 8px;
 }
 
 .mh-flview__scenario-link {
-border: 1px solid var(--mh-fl-domain-line);
+border: 1px solid var(--mh-line-domain-warm);
   background: var(--mh-bt-status-on-bg);
   box-shadow: 0 1px 0 rgba(183, 122, 39, 0.08);
   color: var(--mh-bt-status-on-ink);
@@ -943,19 +865,19 @@ border: 1px solid var(--mh-fl-domain-line);
 
 .mh-flview__scenario-link:hover,
 .mh-flview__scenario-link:focus-visible {
-border-color: var(--mh-fl-scenario-hover-line);
-  background: var(--mh-fl-scenario-hover-bg);
-  color: var(--mh-fl-scenario-hover-ink);
+border-color: var(--mh-line-scenario-hover);
+  background: var(--mh-surface-scenario-hover);
+  color: var(--mh-ink-scenario-hover);
 }
 
 .mh-flview__scenario-link:focus-visible {
-outline: 2px solid var(--mh-fl-scenario-focus);
+outline: 2px solid var(--mh-line-scenario-focus);
   outline-offset: 2px;
 }
 
 .mh-flview__rc-scope {
 margin: 0;
-  color: var(--mh-fl-meta-label);
+  color: var(--mh-ink-meta-label);
   font-size: 14px;
   line-height: 1.8;
   white-space: pre-wrap;
@@ -970,18 +892,18 @@ width: min(560px, calc(100vw - 32px));
   overflow: hidden;
   border: 1px solid rgba(205, 215, 225, 0.95);
   border-radius: 14px;
-  background: var(--mh-fl-dialog-bg);
-  box-shadow: var(--mh-fl-dialog-shadow);
+  background: var(--mh-surface-dialog);
+  box-shadow: var(--mh-shadow-dialog);
 }
 
 .mh-flview__edit .mh-modal__header {
 padding: 26px 28px 18px;
-  border-bottom: 1px solid var(--mh-fl-dialog-head-line);
-  background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+  border-bottom: 1px solid var(--mh-line-dialog-header);
+  background: linear-gradient(180deg, var(--mh-surface) 0%, var(--mh-surface-dialog-tint) 100%);
 }
 
 .mh-flview__edit .mh-modal__eyebrow {
-color: var(--mh-fl-dialog-eyebrow);
+color: var(--mh-ink-edit-hover);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -989,7 +911,7 @@ color: var(--mh-fl-dialog-eyebrow);
 
 .mh-flview__edit .mh-modal__title {
 margin: 6px 0 0;
-  color: var(--mh-fl-dialog-title);
+  color: var(--mh-ink-dialog-title);
   font-size: 20px;
   font-weight: 700;
   line-height: 1.25;
@@ -998,17 +920,17 @@ margin: 6px 0 0;
 .mh-flview__edit .mh-modal__close {
 width: 34px;
   height: 34px;
-  border: 1px solid var(--mh-fl-dialog-close-line);
+  border: 1px solid var(--mh-line-dialog-close);
   border-radius: 9px;
-  background: #fff;
-  color: #334155;
+  background: var(--mh-surface);
+  color: var(--mh-ink-control-slate);
   font-size: 20px;
 }
 
 .mh-flview__edit .mh-modal__close:hover,
 .mh-flview__edit .mh-modal__close:focus-visible {
-border-color: var(--mh-fl-scenario-focus);
-  background: var(--mh-fl-edit-bg);
+border-color: var(--mh-line-scenario-focus);
+  background: var(--mh-surface-edit);
   color: var(--mh-bt-status-on-ink);
 }
 
@@ -1017,7 +939,7 @@ display: flex;
   flex-direction: column;
   gap: 10px;
   margin: 24px 28px 0;
-  color: var(--mh-fl-dialog-label);
+  color: var(--mh-ink-dialog-label);
   font-size: 12px;
   font-weight: 650;
 }
@@ -1032,11 +954,11 @@ width: 100%;
   min-height: 164px;
   box-sizing: border-box;
   padding: 15px 16px;
-  border: 1px solid var(--mh-fl-dialog-area-line);
+  border: 1px solid var(--mh-line-dialog-input);
   border-radius: 12px;
-  background: #fff;
+  background: var(--mh-surface);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 2px rgba(23, 34, 50, 0.04);
-  color: var(--mh-fl-dialog-area-ink);
+  color: var(--mh-ink-dialog-input);
   font: inherit;
   font-size: 14px;
   line-height: 1.7;
@@ -1044,7 +966,7 @@ width: 100%;
 }
 
 .mh-flview__edit-field textarea:focus {
-border-color: var(--mh-fl-dialog-area-focus);
+border-color: var(--mh-line-dialog-input-focus);
   outline: 3px solid rgba(214, 155, 61, 0.18);
   outline-offset: 0;
 }
@@ -1055,18 +977,18 @@ display: flex;
   gap: 10px;
   margin: 24px 0 0;
   padding: 18px 28px 24px;
-  border-top: 1px solid var(--mh-fl-dialog-head-line);
-  background: #fff;
+  border-top: 1px solid var(--mh-line-dialog-header);
+  background: var(--mh-surface);
 }
 
 .mh-flview__edit-btn {
 min-width: 88px;
   height: 38px;
   padding: 0 14px;
-  border: 1px solid var(--mh-fl-btn-line);
+  border: 1px solid var(--mh-line-secondary-button);
   border-radius: 9px;
-  background: #fff;
-  color: var(--mh-fl-btn-ink);
+  background: var(--mh-surface);
+  color: var(--mh-ink-secondary-button);
   font: inherit;
   font-size: 12px;
   font-weight: 650;
@@ -1074,20 +996,20 @@ min-width: 88px;
 }
 
 .mh-flview__edit-btn--primary {
-border-color: var(--mh-fl-dialog-btn-line);
-  background: var(--mh-fl-dialog-btn-bg);
-  color: #fff;
+border-color: var(--mh-line-dialog-button);
+  background: var(--mh-surface-dialog-button);
+  color: var(--mh-surface);
 }
 
 .mh-flview__edit-btn--primary:not(:disabled):hover,
 .mh-flview__edit-btn--primary:not(:disabled):focus-visible {
-border-color: var(--mh-fl-dialog-btn-hover-line);
-  background: var(--mh-fl-dialog-btn-hover);
+border-color: var(--mh-line-dialog-button-hover);
+  background: var(--mh-surface-dialog-button-hover);
 }
 
 .mh-flview__edit-btn--primary:disabled {
-border-color: var(--mh-fl-dialog-btn-off-line);
-  background: var(--mh-fl-dialog-btn-off-bg);
+border-color: var(--mh-line-dialog-button-disabled);
+  background: var(--mh-surface-dialog-button-disabled);
   color: rgba(255, 255, 255, 0.72);
   cursor: not-allowed;
 }

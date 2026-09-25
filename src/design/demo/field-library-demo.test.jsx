@@ -140,7 +140,7 @@ describe("FieldLibraryView", () => {
 
     fireEvent.click(disable);
     fireEvent.click(screen.getByRole("button", { name: "Confirm Offline" }));
-    expect(cards()[0].querySelector(".mh-flview__state").textContent).toBe("Disabled");
+    expect(cards()[0].querySelector(".mh-badge--knowledge").textContent).toBe("Disabled");
 
     /* Now disabled: edit navigates, delete hits the references guard. */
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));

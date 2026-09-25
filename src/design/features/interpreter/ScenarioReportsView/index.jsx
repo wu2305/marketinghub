@@ -3,37 +3,9 @@ import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
-import { Icon } from "../../../icons.jsx";
+import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
 import { cx } from "../../../cx.js";
 import "./ScenarioReportsView.css";
-
-const ACTION_ICONS = {
-  edit: "M12 20H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L12 14l-4 1 1-4 7.5-7.5z",
-  delete: "M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5",
-  disable: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M6 6l12 12",
-};
-
-const SrActions = ({ actions, record, onAction }) => (
-  <div className="mh-srview__actions">
-    {actions.map((action) => (
-      <button
-        key={action.id}
-        type="button"
-        className={cx("mh-srview__icon", action.danger && "is-danger")}
-        title={action.title}
-        aria-label={action.ariaLabel}
-        disabled={action.disabled}
-        data-action-disabled={action.tooltip || undefined}
-        onClick={(event) => {
-          event.stopPropagation();
-          onAction?.(action.id, record);
-        }}
-      >
-        <Icon path={ACTION_ICONS[action.id]} />
-      </button>
-    ))}
-  </div>
-);
 
 /**
  * Scenario Reporting knowledge type — `scenario-reports.js`
@@ -165,7 +137,7 @@ export function ScenarioReportsView({
                   </span>
                 </div>
                 <div className="mh-srview__card-actions">
-                  <SrActions actions={actionsFor(record)} record={record} onAction={onAction} />
+                  <KnowledgeActions variant="scenario" actions={actionsFor(record)} record={record} onAction={({ action }) => onAction?.(action, record)} />
                 </div>
               </article>
             ))}
@@ -210,7 +182,7 @@ export function ScenarioReportsView({
             </>
           ) : null
         }
-        footer={detail ? <SrActions actions={actionsFor(detail)} record={detail} onAction={onAction} /> : null}
+        footer={detail ? <KnowledgeActions variant="scenario" actions={actionsFor(detail)} record={detail} onAction={({ action }) => onAction?.(action, detail)} /> : null}
       >
         {detail ? (
           <div className="mh-srview__detail">

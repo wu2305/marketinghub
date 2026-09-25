@@ -106,7 +106,7 @@ outline: 2px solid var(--mh-principle-focus-ring);
 margin: 0;
   max-width: calc(100% - 112px);
   overflow: hidden;
-  color: var(--mh-bt-title);
+  color: var(--mh-ink-heading-warm);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.3;
@@ -217,38 +217,6 @@ position: absolute;
   right: 18px;
 }
 
-.mh-btview__state {
-display: inline-flex;
-  width: 76px;
-  height: 20px;
-  min-height: 20px;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 0;
-  border-radius: 5px;
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.mh-btview__state::before {
-content: "";
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.mh-btview__state.is-off {
-background: var(--mh-bt-state-off-bg);
-  color: var(--mh-bt-state-off-ink);
-}
-
 /* `.bt-term-card-actions` — final cascade pins them bottom-right; the
    original's --bt-actions-top synonym alignment is dead code. */
 
@@ -257,43 +225,6 @@ position: absolute;
   right: 16px;
   bottom: 10px;
   display: flex;
-}
-
-.mh-btview__action-row {
-display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.mh-btview__action {
-display: grid;
-  width: 28px;
-  height: 28px;
-  padding: 5px;
-  place-items: center;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--mh-bt-action);
-  font-size: 11px;
-  cursor: pointer;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.mh-btview__action svg {
-width: 15px;
-  height: 15px;
-}
-
-.mh-btview__action:hover:not(.is-disabled):not([aria-disabled="true"]),
-.mh-btview__action:focus-visible:not(.is-disabled):not([aria-disabled="true"]) {
-background: var(--mh-bt-action-hover-bg);
-}
-
-.mh-btview__action.is-disabled,
-.mh-btview__action[aria-disabled="true"] {
-color: var(--mh-bt-action-disabled);
-  cursor: not-allowed;
 }
 
 .mh-btview__empty {
@@ -398,25 +329,3 @@ display: inline-flex;
 }
 
 /* The drawer's footer actions use the bordered control look. */
-
-.mh-modal--drawer .mh-modal__foot .mh-btview__action {
-border-color: var(--mh-line);
-  background: var(--mh-surface);
-  color: var(--mh-copy);
-}
-
-.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-danger {
-color: var(--mh-bt-confirm-copy);
-}
-
-.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):hover,
-.mh-modal--drawer .mh-modal__foot .mh-btview__action:not(.is-disabled):focus-visible {
-border-color: var(--mh-bt-action);
-  background: var(--mh-bt-action-hover-bg);
-  color: var(--mh-ink);
-}
-
-.mh-modal--drawer .mh-modal__foot .mh-btview__action.is-disabled,
-.mh-modal--drawer .mh-modal__foot .mh-btview__action[aria-disabled="true"] {
-color: #aeb7c1;
-}
