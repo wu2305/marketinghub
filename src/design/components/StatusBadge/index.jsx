@@ -3,6 +3,8 @@ import { cx } from "../../cx.js";
 import "./StatusBadge.css";
 
 
+export const statusBadgeVariants = ["default", "knowledge"];
+
 /**
  * Status pill. `status` is the label; tone is derived by substring/token
  * matching — contains "publish" or equals success/token-valid/enabled →
@@ -12,10 +14,11 @@ import "./StatusBadge.css";
  * so e.g. "Unpublished" still maps to success.
  * @param {object} props
  * @param {string} [props.status="draft"]
+ * @param {"default"|"knowledge"} [props.variant="default"]
  * @param {boolean} [props.outline=false]
  * @param {React.ReactNode} [props.children] overrides `status` as label
  */
-export function StatusBadge({ status = "draft", outline = false, children }) {
+export function StatusBadge({ status = "draft", variant = "default", outline = false, children }) {
   const key = String(status).toLowerCase().replace(/\s+/g, "-");
   const tone =
     key.includes("publish") || key === "success" || key === "token-valid" || key === "enabled"
@@ -29,5 +32,5 @@ export function StatusBadge({ status = "draft", outline = false, children }) {
             : key.includes("draft")
               ? "draft"
               : "draft";
-  return <span className={cx("mh-badge", `mh-badge--${tone}`, outline && "mh-badge--outline")}>{children || status}</span>;
+  return <span className={cx("mh-badge", `mh-badge--${tone}`, variant === "knowledge" && "mh-badge--knowledge", outline && "mh-badge--outline")}>{children || status}</span>;
 }

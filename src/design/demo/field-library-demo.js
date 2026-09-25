@@ -11,6 +11,8 @@
  * state the way the original's sync() does.
  */
 import React from "react";
+import { knowledgeActions, knowledgeStatus } from "./knowledge-actions.js";
+import { useKnowledgeDialog } from "./knowledge-dialog.js";
 
 export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
 
@@ -143,7 +145,7 @@ export function normalizeFieldRecord(asset) {
     business_domain:
       asset.business_domain !== undefined ? list(asset.business_domain) : list(domain).length ? list(domain) : ["Marketing"],
     updated_at: asset.updated_at || asset.updated || "Not recorded",
-    status: legacyDisabled ? "Disable" : "Enable",
+    status: knowledgeStatus({ ...asset, disabled: legacyDisabled }),
   };
   if (asset.typeId === "Report Context" || asset.type === "Report Context") {
     const project = (asset.projects || []).find((key) => REPORT_CONTEXTS[key]);
@@ -235,30 +237,6 @@ function useSynced(value) {
 }
 
 const EMPTY_SELECTED = {};
-const ACTION_IDS = ["edit", "delete", "disable"];
-
-/* field-library.js actions(): per-record button states for Analytical Model.
-   Non-AM types have no card actions (RC returns "", MD/ER return ""). */
-function analysisActions(record, currentUser, strings) {
-  const owner = record.created_by === currentUser;
-  const offline = record.status === "Disable";
-  const labels = strings.actions || {};
-  const tooltips = strings.tooltips || {};
-  return ACTION_IDS.map((action) => {
-    const permissionBlocked = !owner;
-    const statusBlocked = (offline && action === "disable") || (!offline && action !== "disable");
-    const blocked = permissionBlocked || statusBlocked;
-    const title = permissionBlocked
-      ? tooltips.permission || "Knowledge created by others cannot be operated."
-      : blocked
-        ? offline && action === "disable"
-          ? tooltips.alreadyDisabled || "Already disabled"
-          : tooltips.offlineFirst || "Disable knowledge first"
-        : labels[action] || action[0].toUpperCase() + action.slice(1);
-    return { action, disabled: blocked, title, label: labels[action] || action[0].toUpperCase() + action.slice(1) };
-  });
-}
-
 /**
  * @param {object} props FieldLibraryView inputs:
  *   `type` (active knowledge type id), `records` (all page records — fm types
@@ -289,8 +267,14 @@ export function useFieldLibraryDemo(props) {
     () => (props.records || []).filter((record) => fieldLibraryTypes.includes(record.typeId)).map(normalizeFieldRecord),
     [props.records],
   );
-  const [all, setAll] = React.useState(seed);
-  React.useEffect(() => setAll(seed()), [seed]);
+  const shouldDerive = props.active !== false || Boolean(props.peek);
+  const [all, setAll] = React.useState(() => shouldDerive ? seed() : []);
+  const seeded = React.useRef({ active: shouldDerive, records: props.records });
+  React.useEffect(() => {
+    if (!shouldDerive || seeded.current.active && seeded.current.records === props.records) return;
+    seeded.current = { active: true, records: props.records };
+    setAll(seed());
+  }, [shouldDerive, props.records, seed]);
 
   const [query, setQuery] = useSynced(props.query || "");
   const [selected, setSelected] = useSynced(props.selected || EMPTY_SELECTED);
@@ -304,45 +288,37 @@ export function useFieldLibraryDemo(props) {
      disable/delete confirms and the referenced-delete info dialog. `run`
      closures only execute on confirm, so this is safe to call in the lazy
      initializer below even though patchRecord/now are consts. */
-  function dialogFor(kind, record) {
-    if (!record) return null;
-    if (kind === "disable-confirm")
-      return {
-        tone: "confirm",
-        title: dialogs.confirmTitle || "Confirm Operation",
-        message: dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
-        confirmLabel: dialogs.offlineConfirm || "Confirm Offline",
-        cancelLabel: dialogs.cancelLabel || "Cancel",
-        run: () => patchRecord(record.id, { status: "Disable", isDisabled: true, updated_at: now() }),
-      };
-    if (kind === "delete-blocked")
-      return {
+  const management = useKnowledgeDialog({
+    seed: props.dialog,
+    resolveSeed: (seedDialog) => seed().find((record) => record.id === seedDialog.id),
+    blockReferenced: true,
+    buildDialog: (kind, record) => {
+      if (kind === "delete-blocked") return {
         tone: "info",
         title: dialogs.deleteBlockedTitle || "Deletion blocked",
-        message:
-          dialogs.deleteBlocked?.(record.references || []) ||
+        message: dialogs.deleteBlocked?.(record.references || []) ||
           `This analysis is referenced by: ${(record.references || []).join(", ")}. Remove these references before deleting.`,
         closeLabel: dialogs.closeLabel || "Close",
       };
-    if (kind === "delete-confirm")
       return {
         tone: "confirm",
         title: dialogs.confirmTitle || "Confirm Operation",
-        message: dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone.",
-        confirmLabel: dialogs.deleteConfirm || "Confirm Delete",
+        message: kind === "delete-confirm" ? dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
+        confirmLabel: kind === "delete-confirm" ? dialogs.deleteConfirm || "Confirm Delete" : dialogs.offlineConfirm || "Confirm Offline",
         cancelLabel: dialogs.cancelLabel || "Cancel",
-        run: () => {
-          setAll((current) => current.filter((item) => item.id !== record.id));
-          setDetailId((current) => (current === record.id ? null : current));
-        },
       };
-    return null;
-  }
-  /* `props.dialog` seeds an open dialog for stories/tests:
-     { kind: "disable-confirm" | "delete-confirm" | "delete-blocked", id }. */
-  const [dialog, setDialog] = React.useState(() =>
-    props.dialog ? dialogFor(props.dialog.kind, seed().find((record) => record.id === props.dialog.id)) : null,
-  );
+    },
+    onDisable: (record) => patchRecord(record.id, { status: "Disable", isDisabled: true, updated_at: now() }),
+    onDelete: (record) => {
+      setAll((current) => current.filter((item) => item.id !== record.id));
+      setDetailId((current) => current === record.id ? null : current);
+    },
+    onEdit: (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id }),
+    onConfirm: (event) => props.onDialogConfirm?.(event),
+    onCancel: (event) => props.onDialogCancel?.(event),
+  });
+  const actionPolicy = { currentUser, strings: { ...strings, draftCannotDisable: false } };
+  const clearDialog = management.clear;
   const [descriptionEdit, setDescriptionEdit] = React.useState(() =>
     props.descriptionEdit ? { id: props.descriptionEdit, value: null } : null,
   );
@@ -358,10 +334,12 @@ export function useFieldLibraryDemo(props) {
     setSelected({});
     setPage(1);
     setDetailId(null);
-    setDialog(null);
+    clearDialog();
     setDescriptionEdit(null);
     return undefined;
-  }, [type, setQuery, setSelected, setPage, setDetailId]);
+  }, [type, setQuery, setSelected, setPage, setDetailId, clearDialog]);
+
+  if (props.active === false && !props.peek) return null;
 
   const isOwner = (record) => record.created_by === currentUser;
   const typeRecords = all.filter((record) => record.type === type);
@@ -406,20 +384,7 @@ export function useFieldLibraryDemo(props) {
       return;
     }
     if (record.type !== "Analytical Model") return;
-    /* Non-owner and wrong-status clicks are unreachable in the original (the
-       buttons render `disabled`), so only the live paths remain: disable
-       confirm, delete-blocked / delete confirm, and edit navigation. */
-    if (action === "edit") {
-      props.onNavigate?.({ href: props.editHref ? props.editHref(id) : undefined, id });
-      return;
-    }
-    if (action === "disable") {
-      setDialog(dialogFor("disable-confirm", record));
-      return;
-    }
-    if (action === "delete") {
-      setDialog((record.references || []).length ? dialogFor("delete-blocked", record) : dialogFor("delete-confirm", record));
-    }
+    management.request(action, record, actionPolicy);
   };
 
   /* Filter descriptors per type — field-library.js render(): insertion-order
@@ -499,7 +464,7 @@ export function useFieldLibraryDemo(props) {
     .map((record) => ({
       ...record,
       projectLabels: type === "Report Context" ? reportContextProjectLabels(record) : undefined,
-      actions: type === "Analytical Model" ? analysisActions(record, currentUser, strings) : [],
+      actions: type === "Analytical Model" ? knowledgeActions(record, actionPolicy) : [],
     }));
   /* field-library.js open(): drawer title + status pill per record type —
      keyed off record.type so the peeked detail resolves the same on any page. */
@@ -519,7 +484,7 @@ export function useFieldLibraryDemo(props) {
     detailTitle: record.report_name || record.metric_name || record.analysis_name || record.email_subject,
     detailStatus: drawerStatus(record),
     projectLabels: record.type === "Report Context" ? reportContextProjectLabels(record) : undefined,
-    actions: record.type === "Analytical Model" ? analysisActions(record, currentUser, strings) : [],
+    actions: record.type === "Analytical Model" ? knowledgeActions(record, actionPolicy) : [],
     scenarioLinks: (record.scenario_report_ids || [])
       .map((id) => (props.records || []).find((item) => item.id === id && item.typeId === "Scenario Reporting"))
       .filter(Boolean)
@@ -547,16 +512,7 @@ export function useFieldLibraryDemo(props) {
     dashboardHref: props.dashboardHref,
     detail: detailRecord,
     peek: peekDetail ? { type: peeked.type, detail: peekDetail } : null,
-    dialog: dialog
-      ? {
-          tone: dialog.tone,
-          title: dialog.title,
-          message: dialog.message,
-          confirmLabel: dialog.confirmLabel,
-          cancelLabel: dialog.cancelLabel,
-          closeLabel: dialog.closeLabel,
-        }
-      : null,
+    dialog: management.dialog,
     descriptionEdit: descriptionEdit
       ? {
           id: descriptionEdit.id,
@@ -605,15 +561,8 @@ export function useFieldLibraryDemo(props) {
       setDetailId(null);
       props.onCloseDetail?.(event);
     },
-    onDialogConfirm: (event) => {
-      dialog?.run?.();
-      setDialog(null);
-      props.onDialogConfirm?.(event);
-    },
-    onDialogCancel: (event) => {
-      setDialog(null);
-      props.onDialogCancel?.(event);
-    },
+    onDialogConfirm: management.confirm,
+    onDialogCancel: management.cancel,
     onDescriptionChange: (event) => {
       setDescriptionEdit((current) => (current ? { ...current, value: event.value } : current));
       props.onDescriptionChange?.(event);

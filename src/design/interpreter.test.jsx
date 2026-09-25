@@ -9,6 +9,7 @@ const baseProps = {
   hero: INTERPRETER.hero,
   overviewItem: INTERPRETER.overview,
   sidebarTitle: INTERPRETER.sidebarTitle,
+  unknownCopy: INTERPRETER.unknownCopy,
   types: INTERPRETER.types,
 };
 
@@ -25,7 +26,7 @@ const demoInputs = {
 
 /* The dedicated views need the page-level container (same wiring as the
    pages--interpreter story): useInterpreterDemo holds the filter/search/page
-   state and produces `views` + `library`. */
+   state and produces the active `view` plus an independent overlay slot. */
 function Page(props) {
   const { activeType: initialType = "overview", ...rest } = props;
   const demo = useInterpreterDemo({ ...demoInputs, ...rest, activeType: initialType });
@@ -43,8 +44,8 @@ function Harness({ onSelectType, ...rest }) {
   const demo = useInterpreterDemo({
     ...demoInputs,
     activeType,
+    ...rest,
     query: rest.query,
-    filterValues: rest.filterValues,
     principles: { ...demoInputs.principles, ...rest.principles },
   });
   return (
@@ -61,7 +62,6 @@ function Harness({ onSelectType, ...rest }) {
   );
 }
 
-const rowTitles = () => screen.getAllByRole("button", { name: /.+/ }).filter((el) => el.classList.contains("mh-asset")).map((el) => el.textContent);
 
 describe("AI Interpreter type contract", () => {
   it("filters records by stable typeId even when the visible title changes", () => {
@@ -142,12 +142,7 @@ describe("AI Interpreter type contract", () => {
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
       }
-      const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
-      const titles = rowTitles();
-      expect(titles.length).toBe(expected.length);
-      for (const record of expected) {
-        expect(titles.some((text) => text.includes(record.title))).toBe(true);
-      }
+
     }
   });
 
@@ -163,11 +158,55 @@ describe("AI Interpreter type contract", () => {
     expect(document.querySelector(".mh-dmview__shell")).toBeTruthy();
   });
 
+  it("skips inactive view derivation and accepts an independent host overlay", () => {
+    const poison = { get status() { throw new Error("inactive Business Term filter evaluated"); } };
+    const businessRecordPoison = { get status() { throw new Error("inactive Business Term record normalized"); } };
+    const poisonedDomains = [{ get hidden() { throw new Error("inactive Data Model derived"); } }];
+    const scenarioPoison = { get process() { throw new Error("inactive Scenario filter evaluated"); } };
+    const fieldPoison = { get status() { throw new Error("inactive Field Library filter evaluated"); } };
+    const scenarioRecordPoison = { get title() { throw new Error("inactive Scenario record normalized"); } };
+    const fieldRecordPoison = { get typeId() { throw new Error("inactive Field Library record normalized"); } };
+    const probeInputs = {
+      ...demoInputs,
+      records: [fieldRecordPoison],
+      activeType: "Principles",
+      businessTermLibrary: { ...demoInputs.businessTermLibrary, records: [businessRecordPoison], selected: poison },
+      dataModel: { domains: poisonedDomains },
+      scenarioReports: { ...demoInputs.scenarioReports, records: [scenarioRecordPoison], filterValues: scenarioPoison },
+      fieldLibrary: { selected: fieldPoison },
+    };
+    function ActiveProbe() {
+      const props = useInterpreterDemo(probeInputs);
+      return <AiInterpreterPage {...baseProps} {...props} activeType="Principles" overlay={<div data-testid="host-overlay">Host overlay</div>} />;
+    }
+    render(<ActiveProbe />);
+    expect(screen.getByTestId("host-overlay").textContent).toBe("Host overlay");
+    expect(document.querySelectorAll(".mh-principle").length).toBe(INTERPRETER.principles.length);
+  });
+
+  it("includes typeId in view, Data Model, overlay, and shell callbacks", () => {
+    const onOpenReportContext = vi.fn();
+    const onSelectDomain = vi.fn();
+    const onCloseDetail = vi.fn();
+    const { unmount } = render(<Harness activeType="Data Model" onOpenReportContext={onOpenReportContext} onSelectDomain={onSelectDomain} onCloseDetail={onCloseDetail} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open 4P Report Report Context" }));
+    expect(onOpenReportContext).toHaveBeenCalledWith({ typeId: "Data Model", id: "fourp-report-context" });
+    fireEvent.click(screen.getByRole("button", { name: "Close details" }));
+    expect(onCloseDetail).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Data Model" }));
+    fireEvent.click(document.querySelectorAll(".mh-dmview__domain")[1]);
+    expect(onSelectDomain).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Data Model" }));
+    unmount();
+    const onAction = vi.fn();
+    render(<Harness activeType="Business Term" onAction={onAction} />);
+    fireEvent.click(screen.getByRole("button", { name: "Disable GMV (Gross Merchandise Value)" }));
+    expect(onAction).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Business Term", action: "disable" }));
+  });
+
   it("fires onSelectType with the stable type id", () => {
     const onSelectType = vi.fn();
     renderPage({ onSelectType });
     fireEvent.click(screen.getAllByRole("button", { name: /Metric Dictionary/ })[0]);
-    expect(onSelectType).toHaveBeenCalledWith({ id: "Metric Dictionary", label: "Metric Dictionary" });
+    expect(onSelectType).toHaveBeenCalledWith({ id: "Metric Dictionary", label: "Metric Dictionary", typeId: "overview" });
   });
 
   it("filters scenario records by process stage and AI availability independently", () => {

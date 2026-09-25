@@ -116,8 +116,8 @@ const DEFAULT_STRINGS = {
 export function useDataModelDemo(props = {}) {
   const strings = { ...DEFAULT_STRINGS, ...(props.strings || {}) };
   const domains = React.useMemo(
-    () => (props.domains || DATA_MODEL_DOMAINS).filter((domain) => !domain.hidden),
-    [props.domains],
+    () => props.active === false ? [] : (props.domains || DATA_MODEL_DOMAINS).filter((domain) => !domain.hidden),
+    [props.domains, props.active],
   );
 
   const [query, setQuery] = React.useState(props.query || "");
@@ -125,22 +125,6 @@ export function useDataModelDemo(props = {}) {
   const [activeTab, setActiveTab] = React.useState(props.activeTab || "basic");
   const [tableId, setTableId] = React.useState(props.tableId ?? null);
   const [drawerTab, setDrawerTab] = React.useState(props.drawerTab || "fields");
-
-  const queryText = query.trim().toLowerCase();
-  const visibleDomains = queryText
-    ? domains.filter((domain) =>
-        [domain.name, domain.description, domain.businessDescription, (domain.synonyms || []).join(" ")]
-          .join(" ")
-          .toLowerCase()
-          .includes(queryText),
-      )
-    : domains;
-
-  const domain =
-    domains.find((item) => item.id === selectedDomainId) || visibleDomains[0] || domains[0] || null;
-  const table =
-    (domain?.tables || []).find((item) => item.id === tableId) || null;
-  const drawerTable = tableId ? table || domain?.tables?.[0] || null : null;
 
   /* fitGraph(): scale the 1200×920 canvas into the panel — the view measures
      its canvas width and calls fit() on mount/tab switch. */
@@ -166,6 +150,24 @@ export function useDataModelDemo(props = {}) {
   const pan = React.useCallback((dx, dy) => {
     setGraph((prev) => ({ ...prev, x: prev.x + dx, y: prev.y + dy }));
   }, []);
+
+  if (props.active === false) return null;
+
+  const queryText = query.trim().toLowerCase();
+  const visibleDomains = queryText
+    ? domains.filter((domain) =>
+        [domain.name, domain.description, domain.businessDescription, (domain.synonyms || []).join(" ")]
+          .join(" ")
+          .toLowerCase()
+          .includes(queryText),
+      )
+    : domains;
+
+  const domain =
+    domains.find((item) => item.id === selectedDomainId) || visibleDomains[0] || domains[0] || null;
+  const table =
+    (domain?.tables || []).find((item) => item.id === tableId) || null;
+  const drawerTable = tableId ? table || domain?.tables?.[0] || null : null;
 
   const reportContextId = (domainObj, report) =>
     REPORT_CONTEXT_BY_REPORT[report] || REPORT_CONTEXT_BY_DOMAIN[domainObj?.id] || "city-report-context";
@@ -202,7 +204,11 @@ export function useDataModelDemo(props = {}) {
     domains: visibleDomains,
     domain,
     query,
-    onQueryChange: (value) => setQuery(typeof value === "string" ? value : value?.value || ""),
+    onQueryChange: (value) => {
+      const next = typeof value === "string" ? value : value?.value || "";
+      setQuery(next);
+      props.onQueryChange?.({ value: next });
+    },
     onSelectDomain: selectDomain,
     activeTab,
     onTabChange: (tab) => {

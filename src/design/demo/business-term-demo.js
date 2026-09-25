@@ -7,6 +7,8 @@
  * switches, matching the module-level state in the original script.
  */
 import React from "react";
+import { knowledgeActions, knowledgeStatus } from "./knowledge-actions.js";
+import { useKnowledgeDialog } from "./knowledge-dialog.js";
 
 /** Controlled-prop mirror: local state re-syncs when the input value changes. */
 function useSynced(value) {
@@ -20,7 +22,7 @@ function useSynced(value) {
 function normalizeDraft(item, currentUser) {
   return {
     ...item,
-    status: item.status === "Disable" ? "Disable" : "Enable",
+    status: knowledgeStatus(item),
     stage: item.stage || (item.status === "Disable" ? "Draft" : "Published"),
     creator: item.creator || currentUser,
     kind: item.kind || "Business Term",
@@ -32,7 +34,7 @@ function normalizeDraft(item, currentUser) {
 const EMPTY_SELECTED = { status: [], creator: [] };
 
 function cloneRecord(record) {
-  return { ...record, synonyms: [...(record.synonyms || [])], scope: [...(record.scope || [])] };
+  return { ...record, status: knowledgeStatus(record), synonyms: [...(record.synonyms || [])], scope: [...(record.scope || [])] };
 }
 
 function buildList(records, drafts, currentUser) {
@@ -41,33 +43,6 @@ function buildList(records, drafts, currentUser) {
     .filter((item) => item.stage !== "Draft" || item.creator === currentUser)
     .map((item) => normalizeDraft(item, currentUser));
   return [...visibleDrafts, ...(records || []).map(cloneRecord)];
-}
-
-const ACTION_IDS = ["edit", "delete", "disable"];
-
-/* actButtonTooltips() in the original. */
-function actionTooltip(record, action, own, strings) {
-  const labels = strings.actions || {};
-  const tooltips = strings.tooltips || {};
-  if (!own) return tooltips.permission ? tooltips.permission(action) : `You do not have permission to ${action} knowledge created by another user.`;
-  if (action !== "disable" && record.status === "Enable") return tooltips.offlineFirst || "Disable knowledge first";
-  if (action === "disable" && record.stage === "Draft") return tooltips.draftDisabled || "Draft knowledge is already disabled.";
-  if (action === "disable" && record.status === "Disable") return tooltips.alreadyDisabled || "Knowledge is already disabled.";
-  return labels[action] || action;
-}
-
-function recordActions(record, currentUser, strings) {
-  const own = record.creator === currentUser;
-  const labels = strings.actions || {};
-  return ACTION_IDS.map((action) => ({
-    action,
-    disabled:
-      !own ||
-      (action === "disable" && (record.status === "Disable" || record.stage === "Draft")) ||
-      (action !== "disable" && record.status !== "Disable"),
-    title: actionTooltip(record, action, own, strings),
-    label: labels[action] || action,
-  }));
 }
 
 /**
@@ -85,14 +60,40 @@ export function useBusinessTermDemo(props) {
   const dialogCopy = strings.dialogs || {};
   const currentUser = props.currentUser || "Current User";
 
-  const [list, setList] = React.useState(() => buildList(props.records, props.drafts, currentUser));
-  React.useEffect(() => setList(buildList(props.records, props.drafts, currentUser)), [props.records, props.drafts, currentUser]);
+  const shouldDerive = props.active !== false;
+  const [list, setList] = React.useState(() => shouldDerive ? buildList(props.records, props.drafts, currentUser) : []);
+  const seeded = React.useRef({ active: shouldDerive, records: props.records, drafts: props.drafts, currentUser });
+  React.useEffect(() => {
+    if (!shouldDerive || seeded.current.active && seeded.current.records === props.records && seeded.current.drafts === props.drafts && seeded.current.currentUser === currentUser) return;
+    seeded.current = { active: true, records: props.records, drafts: props.drafts, currentUser };
+    setList(buildList(props.records, props.drafts, currentUser));
+  }, [shouldDerive, props.records, props.drafts, currentUser]);
   const [query, setQuery] = useSynced(props.query || "");
   const [selected, setSelected] = useSynced(props.selected || EMPTY_SELECTED);
   const [page, setPage] = useSynced(props.page || 1);
   const [pageSize, setPageSize] = useSynced(props.pageSize || 10);
   const [detailId, setDetailId] = useSynced(props.detail ?? null);
-  const [dialog, setDialog] = React.useState(null);
+  const management = useKnowledgeDialog({
+    buildDialog: (kind) => ({
+      tone: "confirm",
+      title: dialogCopy.confirmTitle || "Confirm Operation",
+      message: kind === "delete-confirm" ? dialogCopy.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogCopy.offlineMessage || "Please confirm whether to offline this knowledge.",
+      confirmLabel: kind === "delete-confirm" ? dialogCopy.deleteConfirm || "Confirm Delete" : dialogCopy.offlineConfirm || "Confirm Offline",
+      cancelLabel: dialogCopy.cancelLabel || "Cancel",
+    }),
+    onDisable: (record) => setList((current) => current.map((item) => item.id === record.id ? { ...item, status: "Disable" } : item)),
+    onDelete: (record) => {
+      setList((current) => current.filter((item) => item.id !== record.id));
+      setDetailId((current) => current === record.id ? null : current);
+    },
+    onEdit: (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id }),
+    onConfirm: (event) => props.onDialogConfirm?.(event),
+    onCancel: (event) => props.onDialogCancel?.(event),
+  });
+  const [info, setInfo] = React.useState(null);
+  const actionPolicy = { currentUser, strings };
+
+  if (props.active === false) return null;
 
   const queryText = query.trim().toLowerCase();
   const matches = (record) =>
@@ -111,78 +112,34 @@ export function useBusinessTermDemo(props) {
   const currentPage = Math.min(Math.max(1, page), totalPages);
   const detail = detailId ? list.find((record) => record.id === detailId) || null : null;
 
-  const infoDialog = (title, message) =>
-    setDialog({ tone: "info", title, message, closeLabel: dialogCopy.closeLabel || "Close" });
-  const confirmDialog = (message, confirmLabel, run) =>
-    setDialog({
-      tone: "confirm",
-      title: dialogCopy.confirmTitle || "Confirm Operation",
-      message,
-      confirmLabel,
-      cancelLabel: dialogCopy.cancelLabel || "Cancel",
-      run,
-    });
-
+  const infoDialog = (title, message) => setInfo({ tone: "info", title, message, closeLabel: dialogCopy.closeLabel || "Close" });
   const act = ({ action, id }) => {
     const record = list.find((item) => item.id === id);
     if (!record) return;
     props.onAction?.({ action, id });
-    const own = record.creator === currentUser;
-    if (!own) {
-      infoDialog(
-        dialogCopy.permissionDeniedTitle || "Permission denied",
-        dialogCopy.permissionDenied
-          ? dialogCopy.permissionDenied(action)
-          : `You do not have permission to ${action} knowledge created by another user.`,
-      );
+    if (record.creator !== currentUser) {
+      infoDialog(dialogCopy.permissionDeniedTitle || "Permission denied",
+        dialogCopy.permissionDenied?.(action) || `You do not have permission to ${action} knowledge created by another user.`);
       return;
     }
-    const enabledEdit = action !== "disable" && record.status === "Enable";
-    if (enabledEdit) {
-      /* The original asks to confirm offlining the knowledge before editing or
-         deleting it. Confirming only flips the status; no toast is emitted
-         (window.showKnowledgeSuccessToast is undefined in the original). */
-      confirmDialog(
-        dialogCopy.offlineMessage || "Please confirm whether to offline this knowledge.",
-        dialogCopy.offlineConfirm || "Confirm Offline",
-        () => setList((current) => current.map((item) => (item.id === id ? { ...item, status: "Disable" } : item))),
-      );
+    if (action !== "disable" && knowledgeStatus(record) === "Enable") {
+      management.request("disable", record, actionPolicy);
       return;
     }
-    if (action === "edit") {
-      /* M5 create page (`mode=edit`) is not built — emit the real navigation
-         target through the host callback instead of rendering a fake editor. */
-      props.onNavigate?.({ href: props.editHref ? props.editHref(id) : undefined, id });
+    if (action === "disable" && (knowledgeStatus(record) === "Disable" || record.stage === "Draft")) {
+      infoDialog(dialogCopy.alreadyDisabledTitle || "Knowledge already disabled",
+        dialogCopy.alreadyDisabledMessage || "This knowledge is already disabled.");
       return;
     }
-    if (action === "delete") {
-      confirmDialog(
-        dialogCopy.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone.",
-        dialogCopy.deleteConfirm || "Confirm Delete",
-        () => {
-          setList((current) => current.filter((item) => item.id !== id));
-          if (detailId === id) setDetailId(null);
-        },
-      );
-      return;
-    }
-    if (record.status === "Disable") {
-      infoDialog(dialogCopy.alreadyDisabledTitle || "Knowledge already disabled", dialogCopy.alreadyDisabledMessage || "This knowledge is already disabled.");
-      return;
-    }
-    confirmDialog(
-      dialogCopy.offlineMessage || "Please confirm whether to offline this knowledge.",
-      dialogCopy.offlineConfirm || "Confirm Offline",
-      () => setList((current) => current.map((item) => (item.id === id ? { ...item, status: "Disable" } : item))),
-    );
+    management.request(action, record, actionPolicy);
   };
 
   const creators = [...new Set(list.map((record) => record.creator))];
   const pageRows = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((record) => ({
     ...record,
-    actions: recordActions(record, currentUser, strings),
+    actions: knowledgeActions(record, actionPolicy),
   }));
-  const detailRow = detail ? { ...detail, actions: recordActions(detail, currentUser, strings) } : null;
+  const detailRow = detail ? { ...detail, actions: knowledgeActions(detail, actionPolicy) } : null;
 
   return {
     records: pageRows,
@@ -213,7 +170,7 @@ export function useBusinessTermDemo(props) {
     strings,
     createHref: props.createHref,
     detail: detailRow,
-    dialog: dialog ? { tone: dialog.tone, title: dialog.title, message: dialog.message, confirmLabel: dialog.confirmLabel, cancelLabel: dialog.cancelLabel, closeLabel: dialog.closeLabel } : null,
+    dialog: info || management.dialog,
     onQueryChange: (event) => {
       setQuery(event.value);
       setPage(1);
@@ -249,13 +206,12 @@ export function useBusinessTermDemo(props) {
       props.onCloseDetail?.(event);
     },
     onDialogConfirm: (event) => {
-      dialog?.run?.();
-      setDialog(null);
-      props.onDialogConfirm?.(event);
+      if (info) { setInfo(null); props.onDialogConfirm?.(event); }
+      else management.confirm(event);
     },
     onDialogCancel: (event) => {
-      setDialog(null);
-      props.onDialogCancel?.(event);
+      if (info) { setInfo(null); props.onDialogCancel?.(event); }
+      else management.cancel(event);
     },
     onCreate: (event) => props.onCreate?.(event),
   };

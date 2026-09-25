@@ -376,7 +376,7 @@ async function newPage() {
   await termsA.locator('[aria-label="Disable GMV (Gross Merchandise Value)"]').click();
   await page.locator(".mh-confirm--confirm").waitFor({ timeout: 8000 });
   await page.locator(".mh-confirm--confirm button:has-text('Confirm Offline')").click();
-  const aGmvPill = await termsA.locator('.mh-btview__card:has-text("GMV") .mh-btview__state').innerText();
+  const aGmvPill = await termsA.locator('.mh-btview__card:has-text("GMV") .mh-badge--knowledge').innerText();
   if (!aGmvPill.includes("Disabled")) notes.push(`terms A: GMV pill still ${aGmvPill}`);
   if (await page.locator(".mh-confirm").count()) notes.push("confirm dialog did not close");
   if (await termsB.locator(".mh-confirm, .mh-modal").count()) notes.push("terms B opened a dialog from A's action");

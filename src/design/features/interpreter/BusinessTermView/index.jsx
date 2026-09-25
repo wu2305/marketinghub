@@ -5,16 +5,11 @@ import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
+import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { cx } from "../../../cx.js";
-import { Icon } from "../../../icons.jsx";
+import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
 import "./BusinessTermView.css";
 
-
-const BT_ACTION_ICONS = {
-  edit: "M12 20H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L12 14l-4 1 1-4 7.5-7.5z",
-  delete: "M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5",
-  disable: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M6 6l12 12",
-};
 
 /** Data-model pill text — business-term-library.js domainTags(). */
 function btDomainTag(record) {
@@ -66,29 +61,6 @@ function SynonymClamp({ tags = [], moreLabel = "More synonyms" }) {
           …
         </span>
       ) : null}
-    </div>
-  );
-}
-
-function BtActionButtons({ actions = [], record, onAction }) {
-  return (
-    <div className="mh-btview__action-row">
-      {actions.map((item) => (
-        <button
-          key={item.action}
-          type="button"
-          className={cx("mh-btview__action", item.action === "delete" && "is-danger", item.disabled && "is-disabled")}
-          aria-disabled={item.disabled}
-          aria-label={`${item.label} ${record.title}`}
-          title={item.title}
-          onClick={(event) => {
-            event.stopPropagation();
-            onAction?.({ action: item.action, id: record.id });
-          }}
-        >
-          <Icon path={BT_ACTION_ICONS[item.action]} />
-        </button>
-      ))}
     </div>
   );
 }
@@ -238,10 +210,10 @@ export function BusinessTermView({
                 </div>
               </div>
               <div className="mh-btview__pills">
-                <span className={cx("mh-btview__state", record.status === "Disable" && "is-off")}>{statusText(record.status)}</span>
+                <StatusBadge variant="knowledge" status={statusText(record.status)} />
               </div>
               <div className="mh-btview__actions">
-                <BtActionButtons actions={record.actions} record={record} onAction={onAction} />
+                <KnowledgeActions variant="business-term" actions={record.actions} record={record} onAction={onAction} />
               </div>
             </article>
           ))}
@@ -273,7 +245,7 @@ export function BusinessTermView({
             <span className={cx("mh-btview__drawer-status", detail.status === "Enable" ? "is-on" : "is-off")}>{statusText(detail.status)}</span>
           ) : undefined
         }
-        footer={detail ? <BtActionButtons actions={detail.actions} record={detail} onAction={onAction} /> : undefined}
+        footer={detail ? <KnowledgeActions variant="business-term" actions={detail.actions} record={detail} onAction={onAction} /> : undefined}
         onClose={(event) => onCloseDetail?.({ reason: event.reason })}
       >
         {detail ? (

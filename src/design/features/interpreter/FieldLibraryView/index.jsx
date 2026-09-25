@@ -5,19 +5,15 @@ import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
+import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { assetUrl } from "../../../asset-url.js";
 import { cx } from "../../../cx.js";
-import { Icon } from "../../../icons.jsx";
+import { Icon, knowledgeActionIconPaths } from "../../../icons.jsx";
+import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
 import "./FieldLibraryView.css";
 
 
 export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
-
-const FL_ACTION_ICONS = {
-  edit: "M12 20H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h9 M16.5 3.5a2.1 2.1 0 0 1 3 3L12 14l-4 1 1-4 7.5-7.5z",
-  delete: "M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5",
-  disable: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M6 6l12 12",
-};
 
 function ChipTags({ values = [], domain = false }) {
   if (!values.length) return <span className="mh-flview__dash">—</span>;
@@ -27,41 +23,6 @@ function ChipTags({ values = [], domain = false }) {
         <span key={value} className={cx("mh-flview__chip", domain && "mh-flview__domain")}>
           {value}
         </span>
-      ))}
-    </div>
-  );
-}
-
-/* Card status capsule — the 76×20 Enabled/Disabled pill shared by every fm
-   card and the drawer title (fm-state / fm-metric-status /
-   fm-report-card-status after the ai-interpreter-overview cascade). */
-function StatusPill({ on, label, className }) {
-  return (
-    <span className={cx("mh-flview__state", !on && "is-off", className)}>
-      <i aria-hidden="true" />
-      {label}
-    </span>
-  );
-}
-
-function FlActionButtons({ actions = [], record, onAction }) {
-  return (
-    <div className="mh-flview__action-row">
-      {actions.map((item) => (
-        <button
-          key={item.action}
-          type="button"
-          className={cx("mh-flview__action", item.action === "delete" && "is-danger")}
-          disabled={item.disabled}
-          aria-label={item.label}
-          title={item.title}
-          onClick={(event) => {
-            event.stopPropagation();
-            onAction?.({ action: item.action, id: record.id });
-          }}
-        >
-          <Icon path={FL_ACTION_ICONS[item.action]} />
-        </button>
       ))}
     </div>
   );
@@ -94,7 +55,7 @@ function ReportContextCard({ record, onOpen, strings }) {
     >
       <div className="mh-flview__report-title-row">
         <h3 title={record.report_name}>{record.report_name}</h3>
-        <StatusPill on={record.ai_interpretation_enabled} label={record.ai_interpretation_enabled ? "Enabled" : "Disabled"} />
+        <StatusBadge variant="knowledge" status={record.ai_interpretation_enabled ? "Enabled" : "Disabled"} />
       </div>
       <p title={record.report_description}>{record.report_description}</p>
       <dl className="mh-flview__report-meta">
@@ -126,7 +87,7 @@ function MetricCard({ record, onOpen, strings }) {
     >
       <header className="mh-flview__metric-head">
         <h3 title={record.metric_name}>{record.metric_name}</h3>
-        <StatusPill on={record.status !== "Disable"} label={record.status === "Disable" ? "Disabled" : "Enabled"} />
+        <StatusBadge variant="knowledge" status={record.status === "Disable" ? "Disabled" : "Enabled"} />
       </header>
       <p className="mh-flview__metric-definition" title={record.business_definition}>
         {record.business_definition || "—"}
@@ -183,7 +144,7 @@ function AnalysisCard({ record, onOpen, onAction, strings }) {
         <div className="mh-flview__analysis-title">
           <h3 title={record.analysis_name}>{record.analysis_name}</h3>
         </div>
-        <StatusPill on={record.status !== "Disable"} label={record.status === "Disable" ? "Disabled" : "Enabled"} />
+        <StatusBadge variant="knowledge" status={record.status === "Disable" ? "Disabled" : "Enabled"} />
       </header>
       <p className="mh-flview__analysis-description" title={record.applicable_scenarios || record.trigger_when || record.summary}>
         {record.applicable_scenarios || record.trigger_when || record.summary || "—"}
@@ -215,7 +176,7 @@ function AnalysisCard({ record, onOpen, onAction, strings }) {
           <strong title={record.created_by}>{record.created_by || "Current User"}</strong>
         </div>
         <div className="mh-flview__analysis-actions">
-          <FlActionButtons actions={record.actions} record={record} onAction={onAction} />
+          <KnowledgeActions variant="field-library" actions={record.actions} record={record} onAction={onAction} />
         </div>
       </footer>
     </article>
@@ -300,7 +261,7 @@ function DetailBody({ type, record, strings, onAction }) {
               title={drawer.editDescription || "Edit report description"}
               onClick={() => onAction?.({ action: "edit-description", id: record.id })}
             >
-              <Icon path={FL_ACTION_ICONS.edit} />
+              <Icon path={knowledgeActionIconPaths.edit} />
             </button>
           </h4>
           <p>{record.report_description}</p>
@@ -592,7 +553,7 @@ export function FieldLibraryDrawer({
         eyebrow={detail?.type}
         title={detail?.detailTitle}
         closeLabel={detailCloseLabel}
-        titleExtra={detail?.detailStatus ? <StatusPill on={drawerStatusOn} label={detail.detailStatus} /> : undefined}
+        titleExtra={detail?.detailStatus ? <StatusBadge variant="knowledge" status={drawerStatusOn ? "Enabled" : "Disabled"}>{detail.detailStatus}</StatusBadge> : undefined}
         footer={
           detail && type === "Report Context" ? (
             <>
@@ -604,7 +565,7 @@ export function FieldLibraryDrawer({
               </a>
             </>
           ) : detail && type === "Analytical Model" ? (
-            <FlActionButtons actions={detail.actions} record={detail} onAction={onAction} />
+            <KnowledgeActions variant="field-library" actions={detail.actions} record={detail} onAction={onAction} />
           ) : detail && type === "Metric Dictionary" ? (
             /* The original leaves the MD footer rendered but empty (only Email
                Reports hides it). */

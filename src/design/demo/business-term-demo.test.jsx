@@ -29,7 +29,7 @@ const cards = () => [...document.querySelectorAll(".mh-btview__card")];
 const cardTitles = () => cards().map((card) => card.querySelector("h3").textContent);
 /* the detail drawer footer renders the same three actions — scope to cards */
 const cardNamed = (name) => within(document.querySelector(".mh-btview__cards")).getByRole("button", { name });
-const statePill = (card) => card.querySelector(".mh-btview__state").textContent;
+const statePill = (card) => card.querySelector(".mh-badge--knowledge").textContent;
 
 describe("useBusinessTermDemo", () => {
   it("filters OR within a filter, AND across filters, with summary labels", () => {

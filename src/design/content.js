@@ -350,20 +350,12 @@ export const SELF_SERVICE = {
 // Knowledge type ids are the typeMeta[].key values from assets/js/knowledge/types.js —
 // the same identifiers the original demo uses in ?type= URLs and asset.type fields.
 // stats mirror typeMeta[].stats (the agreed counting source, see AGENTS.md 3.3).
-// statusFilters mirror each type's own library view:
-//   types.js (generic list + Principles), business-term-library.js, scenario-reports.js,
-//   field-library.js (Report Context / Metric Dictionary / Analytical Model / Email Reports).
-const availabilityFilter = (label = "Status") => ({
-  id: "availability",
-  label,
-  allLabel: "All statuses",
-  options: [
-    { id: "enabled", label: "Enabled" },
-    { id: "disabled", label: "Disabled" },
-  ],
-});
-
 export const INTERPRETER = {
+  unknownCopy: {
+    typeTitle: "Unknown knowledge type",
+    typeDescription: ({ typeId, count }) => `"${typeId}" is not one of the ${count} knowledge types. Pick a type from the navigation.`,
+    viewTitle: "Unknown knowledge view",
+  },
   hero: {
     image: assetUrl("assets/images/knowledge-hero.jpg"),
     eyebrow: "Knowledge management",
@@ -396,7 +388,6 @@ export const INTERPRETER = {
       manageable: false,
       view: "principles",
       stats: { units: ["principle", "principles"], total: 10, monthly: 2 },
-      statusFilters: [],
     },
     {
       id: "Report Context",
@@ -419,7 +410,6 @@ export const INTERPRETER = {
       manageable: false,
       view: "data-model",
       stats: { units: ["model", "models"], total: 3, monthly: 1 },
-      statusFilters: [],
     },
     {
       id: "Metric Dictionary",
@@ -443,19 +433,6 @@ export const INTERPRETER = {
       manageable: true,
       createLabel: "Add Business Term",
       stats: { units: ["term", "terms"], total: 6, monthly: 3 },
-      statusFilters: [
-        {
-          id: "availability",
-          label: "Status",
-          allLabel: "All statuses",
-          options: [
-            { id: "enabled", label: "Enabled" },
-            { id: "disabled", label: "Disabled" },
-            { id: "draft", label: "Draft", field: "stage" },
-          ],
-        },
-        { id: "owner", label: "Creator", allLabel: "All creators" },
-      ],
     },
     {
       id: "Analytical Model",
@@ -480,20 +457,6 @@ export const INTERPRETER = {
       createLabel: "Add Scenario Reporting",
       view: "scenario-reports",
       stats: { units: ["scenario", "scenarios"], total: 3, monthly: 2 },
-      statusFilters: [
-        availabilityFilter(),
-        {
-          id: "stage",
-          label: "Process",
-          allLabel: "All statuses",
-          options: [
-            { id: "draft", label: "Draft" },
-            { id: "queued", label: "Queued" },
-            { id: "building", label: "Building" },
-            { id: "published", label: "Published" },
-          ],
-        },
-      ],
     },
     {
       id: "Email Reports",
