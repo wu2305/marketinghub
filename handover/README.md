@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P03助手 PR #9 对抗审核完成：源码生效建议/替换答案/历史填充、三模型技能、模型生成与450ms完成、Escape/焦点、替换夹具和双实例已核；人工审图见最近视觉对照 |
+| 最新独立审核 | 2026-09-26 P10 PR #10 对抗审核完成：原生tab状态保留、任意派生单位、3秒通知、模型450ms完成、夹具替换/双实例及实际加载数据已核；默认态人工fail，其余pending |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 155 stories + 56 docs；2026-09-26 10111cf 构建 index.json 实数；P03新增14页面状态故事，无删除 |
-| 测试 | `npm test`：18 文件 171 条通过（2026-09-26 10111cf） |
-| lint | `npm run lint`：0 errors / 0 warnings，10111cf |
-| 构建验证 | `npm run build-storybook` 155 stories/56 docs；`npm run build:host` + host-check 14/14通过（`/tmp/mh-p03-integrate-host`）；10111cf rebase origin/main后干净构建，构建戳匹配 |
+| 故事数 | 181 stories + 57 docs；2026-09-26 67bba5c 构建 index.json 实数；P10新增25页面状态故事和1个功能组件故事，无删除 |
+| 测试 | `npm test`：19 文件 185 条通过（2026-09-26 67bba5c） |
+| lint | `npm run lint`：0 errors / 0 warnings，67bba5c |
+| 构建验证 | `npm run build-storybook` 181 stories/57 docs；`npm run build:host` + host-check 15/15通过（`/tmp/mh-p10-integrate-r2-host`）；67bba5c rebase origin/main后干净构建，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 10111cf，工作区干净）：全站220/220机器通过，P03 29/29（`/tmp/mh-p03-integrate-visual`）；负向13/13按预期失败（`/tmp/mh-p03-integrate-negative`）。人工审图统计{'pass': 0, 'fail': 2, 'pending': 218}；既有P08 RC编辑/P11默认人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
+| 最近视觉对照 | 2026-09-26（stamp 67bba5c，工作区干净）：全站245/245机器通过，P10 25/25（`/tmp/mh-p10-integrate-r2-visual`）；负向14/14按预期失败（`/tmp/mh-p10-integrate-r2-negative`）。P10默认人工fail已绑定最终截图hash，其余244未审pending；既有P03/P08/P11人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -39,7 +39,7 @@ npm test               # vitest 行为测试
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
-| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08八类型表单及P11独立模型浏览器已实现并完成机器验证；P09/P10候选继续，人工视觉收敛仍待办 |
+| M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08八类型表单、P10独立指标详情和P11模型浏览器已实现并完成机器验证；P09候选继续，人工视觉收敛仍待办 |
 | M6 | 治理三页与 Scenario Library/Detail/Edit | 未开始 | — |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI、全页宿主覆盖未做 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
@@ -64,7 +64,7 @@ npm test               # vitest 行为测试
 | P07 | assets/pages/knowledge.html | 概览、八类型列表/卡片/筛选/动作、页内覆盖层与分页 | M4/M5 | 进行中——概览：类型导航与 Hero，人工 pass。八类型：Principles（类目、搜索、展开、分页，人工 pass）；Report Context（卡片、项目筛选、详情抽屉、描述编辑，机器 pass/人工 pending）；Data Model（域搜索、Basic/关系图、表抽屉与预览、相关报表抽屉，机器 pass/人工 pending）；Metric Dictionary（专用列表与详情，机器 pass/人工 pending）；Business Term（三列卡、筛选、分页、详情、权限/禁用/确认，机器 pass/人工 pending）；Analytical Model（卡片、管理动作、删除被引用阻断，机器 pass/人工 pending）；Scenario Reporting（状态/流程筛选、卡片、详情抽屉与管理确认，机器 pass/人工 pending）；Email Reports（专用表格与分页，机器 pass/人工 pending）。三类管理动作共享纯规则和演示确认 hook，保留各自权限、Draft 与引用差异；相关报表经 overlay slot 呈现。M5 独立创建/编辑已由 P08 实现，P07跨页入口和助手等仍不能计为全量完成。机器证据与人工抽看见 §5 WP2 行 |
 | P08 | assets/pages/knowledge-create.html | 按类型创建/编辑、全部字段/关联、校验、Save/Submit/Cancel | M5 | 已实现，PR #8；八个可选择类型、45页面状态故事、46/46本页配对与全套机器验证；BusinessTermForm已实际复用。AM不可编辑/RC未知ID、表单联动/附件/版本/公式及宿主导航已核；RC编辑人工fail，其余pending，像素收敛仍待办 |
 | P09 | assets/pages/knowledge-view.html | 按类型详情与原始可达动作/版本等 | M5 | 未开始 |
-| P10 | assets/pages/metric-dictionary.html | 独立指标详情（Basic/Derived、三 tab）、派生公式/保存/校验、lite 助手及模型流程 | M5 | 进行中——25 个页面状态故事与 25 个配对场景已建立；定向 14 项交互测试和原生 tab 保留浏览器探针通过。完整 clean-head 构建/宿主/全站配对/负向待集成验收；默认态人工审图 FAIL（背景、侧栏选中态/底色、数据源 footer、Q&A 开关、图标与间距），其余人工 pending，第二轮像素收敛。源码与差异账本 `/tmp/mh-p10-ledger.md` |
+| P10 | assets/pages/metric-dictionary.html | 独立指标详情、Basic/Derived三tab、派生公式/校验/保存及lite助手模型流 | M5 | 已实现，PR #10；25页面状态故事、25/25配对和全套机器验证；tab原生输入/勾选保留、任意单位及3秒通知已核。默认人工fail（背景、侧栏/tab/footer、Q&A开关、图标间距），其余pending，第二轮收敛 |
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
 | P12 | assets/pages/review-center.html | 审核列表、筛选、详情、决策反馈等实际状态 | M6 | 未开始 |
 | P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 未开始 |
@@ -334,6 +334,12 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | P03 answer header（self-service/workspace.js:520–532；assistant-panel.css:2267） | 原脚本输出answer-card-header，CSS只匹配answer-card-head，答案标题无预期样式；React复用workspace答案横幅 | 与P06 A2同类源码类名失配，AGENTS §3.5；不向共享组件添加缺陷开关 | #9 |
 
+| P10 Unit/Precision（metric-detail.js:191–232，HTML:223–245） | 原切换指标不更新单位/精度，Exposure Count仍显示Percentage/2；React显示记录的Count/0及任意新派生单位 | 原始陈旧字段逻辑缺陷，AGENTS §3.5 | #10 |
+| P10 Derived同义词（metric-detail.js:224–231） | 原仅在synonyms存在时刷新，Derived会保留上一指标标签；React清空不存在的同义词 | 原始陈旧字段逻辑缺陷 | #10 |
+| P10 toast（metric-detail.js:504–507、524–527） | 原全局showToast自递归导致RangeError；React局部通知保留预期3秒消失，新通知重启计时/卸载清理 | 修正递归缺陷；原页配对仅在测试中替换递归函数观察后续状态，组件不加载原脚本 | #10 |
+| P10 派生面板Save遮挡（assistant-launcher.css:1–5、metric-detail.css:906–913） | 原launcher z880遮住面板z120的Save；React保持操作按钮可达 | 原始定位缺陷，保留保存能力 | #10 |
+| P10 浏览器prompt/alert与本地ID（metric-detail.js:349–354、415–417、428、456–458） | 常量prompt改可查阅dialog，校验alert改inline反馈，Date.now ID改确定性本地ID | 保留数值与必填规则，提供可查阅故事与确定性demo；不引入后端或持久化 | #10 |
+
 ## 4. 已知缺口
 
 2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2的P03助手已补齐，P07助手覆盖与其他页面流程仍需推进。
@@ -496,3 +502,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | WP6 R2 P03 候选：`SelfServicePage` 接入共享 `AssistantPanel` campaign 预设及 `ModelFlowDialog`；`useSelfServiceDemo` 统一页签/上传历史与助手确定性状态，`SELF_SERVICE.assistant` 注入原始 report 建议、三个 Recent Chats 与来源答案；故事与 `/mh-host/self-service` 共用 hook。原始 `flexible.html`/`self-service/workspace.js:309–680`/`shared/assistant-skill-menu.js:9–920` 的助手路径台账 `/tmp/mh-wp6-p03-source-matrix.md`；15 个 P03 页面故事，定向测试 5/5（替换答案回调生命周期和双实例），lint 0/0、Storybook 109 stories/55 docs、host 8/8（`/tmp/mh-wp6-p03-host`，较早候选）、P03 配对 29/29 机器通过（`/tmp/mh-wp6-p03-visual-final`，较早候选），新增命名故事定向配对 4/4（`/tmp/mh-wp6-p03-history-audit`、`/tmp/mh-wp6-p03-empty-selection-audit`）。人工抽看打开/答案/历史/技能/最大化/模型流：历史文案偏差已修；答案横幅沿用 A2 已确认的 `.answer-card-header`/`.answer-card-head` 原始 CSS 缺陷修正；全页人工结论仍 pending。最终 rebase 后全站套件与负向结果由集成者登记。 | Codex WP6 |
 | 2026-09-26 | P03助手 PR #9（https://github.com/wu2305/marketinghub/pull/9）合并483bc1b；候选10111cf最新main干净全套：lint0/0、18文件171测试、155stories/56docs、host14/14、visual220/220（P03 29）、negative13/13，证据/tmp/mh-p03-integrate-*。复用AssistantPanel campaign变体与ModelFlowDialog，无新增布尔开关；useSelfServiceDemo供故事/宿主复用。对抗审核核实建议即提交、历史只填充、答案替换、Enter换行、3个fallback模型、空选择/必填校验、Save/Submit延迟完成、夹具替换/多实例。P03 open/answer人工fail：头部工具边框、建议区间距、Hero背景缩放、CTA边框及答案卡宽/纵向位置仍待第二轮；P07助手及P12–P17继续。 | Codex integrator |
 | 2026-09-26 | P10 Metric Dictionary 候选：语义页、派生公式面板、确定性 `useMetricDictionaryDemo`、lite 助手/技能/模型流程与独立宿主路由；25 个唯一页面状态故事、25 组原页配对场景及一项负向变异。对抗复核修正模型 Saved/Published 450ms 反馈、公式 token 状态对齐、页面按 assistant/derivedEditor 分组、tab 原生编辑保留与 fixture 替换/双实例隔离。定向 14/14 交互测试、lint 0/0，Chromium 验证隐藏 tab computed display 和维度勾选保留；完整 clean-head 套件由集成者执行，机器最终数及人工审图分列；默认态人工 FAIL（背景、侧栏选中态/底色、Data Source footer、Q&A 开关、图标与间距），其余 pending，留第二轮像素收敛。源码/差异矩阵 `/tmp/mh-p10-ledger.md`；不把原始 toast 递归/抽屉遮挡/详情陈旧字段复制进组件。 | Codex P10 |
+| 2026-09-26 | P10 PR #10（https://github.com/wu2305/marketinghub/pull/10）合并c6d5dcd；候选67bba5c最新main干净验证：lint0/0、19文件185测试、181stories/57docs、host15/15、visual245/245（P10 25）、negative14/14，证据/tmp/mh-p10-integrate-r2-*。对抗审核修正Tab原生值保留、任意派生单位、3秒通知计时及ModelFlow完成反馈；源7Basic/2Derived、Save只要求name、domain/enable不参与保存、未绑定控件不编造流程。源码矩阵/tmp/mh-p10-ledger.md；默认截图人工fail已绑定hash，其余pending，视觉收敛留第二轮。 | Codex integrator |
