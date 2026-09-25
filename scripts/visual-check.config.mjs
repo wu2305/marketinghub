@@ -18,6 +18,7 @@ import p07 from "./visual-check/scenarios/p07.mjs";
 import p11 from "./visual-check/scenarios/p11.mjs";
 import p08 from "./visual-check/scenarios/p08.mjs";
 import p10 from "./visual-check/scenarios/p10.mjs";
+import p09 from "./visual-check/scenarios/p09.mjs";
 
 export default [
   ...p01,
@@ -27,6 +28,7 @@ export default [
   ...p05,
   ...p06,
   ...p07,
+  ...p09,
   ...p11,
   ...p08,
   ...p10,

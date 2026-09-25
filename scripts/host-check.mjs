@@ -588,6 +588,37 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P09: direct detail URL, source actions, and in-host record switch ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-view?id=business-term-gmv`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".mh-kdetail--business", { timeout: 10000 });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if (!(await page.locator(".mh-kdetail__head h1").innerText()).includes("GMV")) notes.push("GMV title missing");
+  const edit = await page.locator(".mh-kdetail__actions a").getAttribute("href");
+  if (!edit?.includes("mode=edit&id=business-term-gmv")) notes.push(`edit href missing source params: ${edit}`);
+  await page.locator(".mh-kdetail__head button").click();
+  await page.locator(".mh-kdetail__versions[role='dialog']").waitFor({ timeout: 5000 });
+  await page.locator(".mh-kdetail__versions .mh-modal__close").click();
+  if (await page.locator(".mh-kdetail__versions[role='dialog']").count()) notes.push("versions did not close");
+  await page.evaluate((next) => {
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `${BASE}knowledge-view?id=channel-data-model`);
+  await page.waitForSelector(".mh-kdetail--model", { timeout: 10000 });
+  await page.locator(".mh-kdetail__model-tabs button:has-text('Basic Info')").click();
+  if (!(await page.locator(".mh-kdetail__model-tabs button.is-active").innerText()).includes("Basic Info")) notes.push("Basic Info tab did not become active");
+  if ((await page.locator(".mh-kdetail__model-table tbody tr").count()) !== 5) notes.push("highlight-only tab lost field rows");
+  await page.locator(".mh-kdetail__model-export").click();
+  if (!(await page.locator(".mh-modal__dialog").innerText()).includes("The model configuration is ready to export.")) notes.push("Export notice missing");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("detail route reloaded host");
+  await page.screenshot({ path: path.join(OUT, "p09-detail.png"), fullPage: true });
+  notes.push(...errors);
+  record("p09-knowledge-view", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 

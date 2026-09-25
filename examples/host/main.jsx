@@ -20,6 +20,7 @@ import {
   CityInvestDashboard,
   ReportCopilot,
   SelfServicePage,
+  KnowledgeViewPage,
   useCockpitDemo,
   useHomeDemo,
   useBusinessTermDemo,
@@ -53,6 +54,8 @@ import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../src/design/demo/conte
 import { metricDictionaryHrefFor, useMetricDictionaryDemo } from "../../src/design/demo/metric-dictionary-demo.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "../../src/design/demo/report-demo.js";
+import { useKnowledgeViewDemo, knowledgeViewHrefFor } from "../../src/design/demo/knowledge-view-demo.js";
+import { KNOWLEDGE_VIEW } from "../../src/design/demo/content/knowledge-view.js";
 import {
   ALT_CITY_INVEST,
   ALT_COPILOT,
@@ -83,6 +86,7 @@ const ROUTE_MAP = {
   "/assets/pages/knowledge-create.html": "knowledge-create",
   "/assets/pages/flexible.html": "self-service",
   "/assets/pages/metric-dictionary.html": "metric-dictionary",
+  "/assets/pages/knowledge-view.html": "knowledge-view",
 };
 
 function mapDemoHref(href) {
@@ -134,6 +138,7 @@ function routeOf(loc) {
   if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "self-service") return { name: "self-service", params };
   if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
+  if (rest === "knowledge-view") return { name: "knowledge-view", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -311,6 +316,30 @@ function MetricDictionaryRoute() {
 }
 
 /* ------------------------------------------------------------------ */
+/* P09 Knowledge View — direct ID route and injected URL resolver       */
+/* ------------------------------------------------------------------ */
+
+function knowledgeViewHostHrefFor(id, params = {}) {
+  if (id === "knowledgeView") {
+    const query = new URLSearchParams(params).toString();
+    return `${hostHref("knowledge-view")}${query ? `?${query}` : ""}`;
+  }
+  const raw = knowledgeViewHrefFor(id, params);
+  const mapped = mapDemoHref(raw);
+  const query = new URL(raw, "http://host.local").search;
+  return mapped.includes("?") ? mapped : `${mapped}${query}`;
+}
+
+function KnowledgeViewRoute({ params }) {
+  const demo = useKnowledgeViewDemo({
+    content: KNOWLEDGE_VIEW,
+    recordId: params.get("id") || undefined,
+    hrefFor: knowledgeViewHostHrefFor,
+  });
+  return <KnowledgeViewPage {...demo} logo={hostLogo} navigation={hostNav().filter((item) => ["home", "cockpit", "interpreter"].includes(item.id))} />;
+}
+
+/* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
 
@@ -418,6 +447,7 @@ function App() {
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
+  if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

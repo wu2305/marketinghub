@@ -83,6 +83,18 @@ export default [
     reason: "Basic 7-row story must not satisfy Derived 2-row state",
   },
   {
+    id: "neg-p09-wrong-record",
+    base: "p09-business-empty-assets",
+    story: { id: "pages--knowledge-view-business-term" },
+    reason: "GMV has three related rows and cannot satisfy the empty-assets assertion",
+  },
+  {
+    id: "neg-p09-wrong-action",
+    base: "p09-model-export-notice",
+    story: { id: "pages--knowledge-view-data-model-preview" },
+    reason: "Preview notice cannot satisfy Export's result message",
+  },
+  {
     // Proves the layout check bites: restoring the pre-Batch-D full-width hero
     // on a type page must fail the sidebar/hero/main geometry assertions.
     id: "neg-p07-hero-fullwidth",

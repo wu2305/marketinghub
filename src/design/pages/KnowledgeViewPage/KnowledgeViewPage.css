@@ -1,0 +1,4 @@
+.mh-kview { background: var(--mh-page-bg); }
+.mh-kview__main { width: min(1320px, 100%); margin: 0 auto; padding: calc(var(--mh-header) + 34px) 42px 64px; }
+@media (max-width: 900px) { .mh-kview__main { padding: calc(var(--mh-header) + 24px) 24px 50px; } }
+@media (max-width: 600px) { .mh-kview__main { padding-inline: 16px; } }
