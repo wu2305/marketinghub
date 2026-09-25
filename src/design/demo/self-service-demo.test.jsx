@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ASSISTANT_SKILL_MENU, MODEL_FLOW, SELF_SERVICE } from "../content.js";
 import { SelfServicePage } from "../pages/SelfServicePage/index.jsx";
@@ -55,6 +55,36 @@ describe("Self-Service assistant demo", () => {
     fireEvent.click(screen.getByRole("button", { name: "New session" }));
     expect(document.querySelector(".mh-assistant__answer")).toBeNull();
     expect(prompt().value).toBe("");
+  });
+
+  it("resubmitting the same question resets answer feedback and copied state", async () => {
+    const onFeedback = vi.fn();
+    const answerFor = vi.fn((query) => ({ id: "stable-answer-id", query, variant: "workspace", banner: "Report response", context: "Report Context", body: "Fresh response", findings: [] }));
+    const oldClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: vi.fn().mockResolvedValue() } });
+    try {
+      renderPage({ assistant: { ...SELF_SERVICE.assistant, onFeedback }, demo: { answerFor } });
+      open();
+      const send = () => {
+        fireEvent.change(prompt(), { target: { value: "Same report question" } });
+        fireEvent.click(ask());
+      };
+      send();
+      fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']"));
+      expect(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']").getAttribute("aria-pressed")).toBe("true");
+      fireEvent.click(screen.getByRole("button", { name: "Copy answer" }));
+      await waitFor(() => expect(screen.getByText("Copied!")).toBeTruthy());
+      send();
+      expect(answerFor).toHaveBeenCalledTimes(2);
+      expect(document.querySelectorAll(".mh-assistant__answer")).toHaveLength(1);
+      expect(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']").getAttribute("aria-pressed")).toBe("false");
+      expect(screen.queryByText("Copied!")).toBeNull();
+      fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']"));
+      expect(onFeedback).toHaveBeenLastCalledWith({ query: "Same report question", feedback: "helpful" });
+    } finally {
+      if (oldClipboard) Object.defineProperty(navigator, "clipboard", oldClipboard);
+      else delete navigator.clipboard;
+    }
   });
 
   it("skill menu opens manual model flow and file attachment reports names", () => {

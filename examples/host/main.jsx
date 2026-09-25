@@ -67,7 +67,7 @@ import { useDataModelPageDemo, dataModelPageHrefFor, normalizedDataModelSearch }
 import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.js";
 import { KNOWLEDGE_CREATE } from "../../src/design/demo/content/knowledge-create.js";
 import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-demo.js";
-import { useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
+import { buildInterpreterAnswer, useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -241,6 +241,8 @@ function InterpreterRoute({ params }) {
     businessTermLibrary: INTERPRETER.businessTermLibrary,
     fieldLibrary: { ...INTERPRETER.fieldLibrary, detail: params.get("detail") || null },
     scenarioReports: INTERPRETER.scenarioReports,
+    assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
+    demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, answerFor: buildInterpreterAnswer },
     onNavigate: ({ href }) => navigateHost(href),
   });
   return <AiInterpreterPage

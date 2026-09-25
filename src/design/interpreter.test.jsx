@@ -2,8 +2,10 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
-import { useInterpreterDemo } from "./demo/interpreter-demo.js";
-import { INTERPRETER } from "./content.js";
+import { buildInterpreterAnswer, useInterpreterDemo } from "./demo/interpreter-demo.js";
+import { INTERPRETER, MODEL_FLOW, buildModelDraft } from "./content.js";
+
+Element.prototype.scrollTo ??= () => {};
 
 const baseProps = {
   hero: INTERPRETER.hero,
@@ -30,7 +32,7 @@ const demoInputs = {
 function Page(props) {
   const { activeType: initialType = "overview", ...rest } = props;
   const demo = useInterpreterDemo({ ...demoInputs, ...rest, activeType: initialType });
-  return <AiInterpreterPage {...baseProps} {...demo} {...rest} activeType={initialType} />;
+  return <AiInterpreterPage {...baseProps} {...rest} {...demo} activeType={initialType} />;
 }
 
 function renderPage(props = {}) {
@@ -85,6 +87,7 @@ describe("AI Interpreter type contract", () => {
 
   it("uses host copy for every knowledge shell label and callback", () => {
     const onNavigate = vi.fn();
+    const onAssistantOpen = vi.fn();
     const copy = {
       unknown: {
         typeTitle: "Unsupported kind",
@@ -110,7 +113,7 @@ describe("AI Interpreter type contract", () => {
       ? { ...type, stats: { ...type.stats, units: [], total: 1, monthly: 2 } }
       : type);
     const hero = { ...INTERPRETER.hero, stats: [...INTERPRETER.hero.stats].reverse() };
-    const { unmount } = renderPage({ activeType: "Business Term", types, hero, copy, onNavigate });
+    const { unmount } = renderPage({ activeType: "Business Term", types, hero, copy, onNavigate, assistant: { ...INTERPRETER.assistant, onOpen: onAssistantOpen } });
     expect(screen.getByText("Ready items")).toBeTruthy();
     expect(screen.getByText("Fresh items")).toBeTruthy();
     expect(screen.getByText("Governed widget")).toBeTruthy();
@@ -123,7 +126,9 @@ describe("AI Interpreter type contract", () => {
     expect(screen.getByText("Ask your owner before editing.")).toBeTruthy();
     expect(screen.getByText("Keep the record available.")).toBeTruthy();
     fireEvent.click(screen.getByText("Knowledge helper").closest("button"));
-    expect(onNavigate).toHaveBeenCalledWith({ id: "assistant", label: "Knowledge helper", typeId: "Business Term" });
+    expect(screen.getByRole("dialog", { name: "Ask AI Interpreter" })).toBeTruthy();
+    expect(onAssistantOpen).toHaveBeenCalledWith({ reason: "open", typeId: "Business Term" });
+    expect(onNavigate).not.toHaveBeenCalled();
 
     unmount();
     const unknown = renderPage({ activeType: "other", types, hero, copy });
@@ -327,5 +332,175 @@ describe("AI Interpreter type contract", () => {
     firstSidebarItem.focus();
     fireEvent.keyDown(document, { key: "/" });
     expect(document.activeElement).toBe(searches[0]);
+  });
+});
+
+describe("AI Interpreter assistant demo", () => {
+  it("resubmitting the same knowledge question starts with fresh answer feedback", () => {
+    const onFeedback = vi.fn();
+    const answerFor = vi.fn((query) => ({ id: "stable-answer-id", query, variant: "workspace", banner: "Knowledge answer", context: "Knowledge Base", body: "Repeated answer", findings: [] }));
+    renderPage({ activeType: "Business Term", assistant: { ...INTERPRETER.assistant, onFeedback }, demo: { answerFor } });
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    const send = () => {
+      fireEvent.change(screen.getByRole("textbox", { name: "Ask AI Interpreter AI" }), { target: { value: "Same knowledge question" } });
+      fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    };
+    send();
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']"));
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']").getAttribute("aria-pressed")).toBe("true");
+    send();
+    expect(answerFor).toHaveBeenCalledTimes(2);
+    expect(document.querySelectorAll(".mh-assistant__answer")).toHaveLength(1);
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']").getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='not-helpful']"));
+    expect(onFeedback).toHaveBeenLastCalledWith({ query: "Same knowledge question", feedback: "not-helpful", typeId: "Business Term" });
+  });
+
+  it("uses knowledge suggestions, replaces answers, and types every host callback", () => {
+    const onOpen = vi.fn();
+    const onSuggestion = vi.fn();
+    const onSubmit = vi.fn();
+    const onHistorySelect = vi.fn();
+    const onHistory = vi.fn();
+    const onMaximize = vi.fn();
+    const onFeedback = vi.fn();
+    const onNewSession = vi.fn();
+    const onClose = vi.fn();
+    const assistant = { ...INTERPRETER.assistant, onOpen, onSuggestion, onSubmit, onHistorySelect, onHistory, onMaximize, onFeedback, onNewSession, onClose };
+    renderPage({ activeType: "Business Term", assistant, demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft } });
+    const launcher = screen.getByRole("button", { name: "Open AI assistant" });
+    fireEvent.click(launcher);
+    expect(onOpen).toHaveBeenCalledWith({ reason: "open", typeId: "Business Term" });
+    fireEvent.click(screen.getByRole("button", { name: "Definition of Attributed ROI" }));
+    expect(onSuggestion).toHaveBeenCalledWith({ prompt: INTERPRETER.assistant.suggestions[0].prompt, typeId: "Business Term" });
+    expect(screen.getByText("Context: Knowledge Base")).toBeTruthy();
+    expect(document.querySelectorAll(".mh-assistant__finding")).toHaveLength(3);
+    fireEvent.click(screen.getByRole("button", { name: "Maximize AI Interpreter panel" }));
+    expect(onMaximize).toHaveBeenCalledWith({ expanded: true, typeId: "Business Term" });
+    fireEvent.click(screen.getByRole("button", { name: "Restore AI Interpreter panel" }));
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']"));
+    expect(onFeedback).toHaveBeenCalledWith({ query: INTERPRETER.assistant.suggestions[0].prompt, feedback: "helpful", typeId: "Business Term" });
+    const composer = screen.getByRole("textbox", { name: "Ask AI Interpreter AI" });
+    fireEvent.change(composer, { target: { value: "A second knowledge question" } });
+    fireEvent.keyDown(composer, { key: "Enter" });
+    expect(onSubmit).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(onSubmit).toHaveBeenCalledWith({ prompt: "A second knowledge question", typeId: "Business Term" });
+    expect(document.querySelectorAll(".mh-assistant__answer")).toHaveLength(1);
+    expect(screen.getByText("A second knowledge question")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "History" }));
+    expect(onHistory).toHaveBeenCalledWith({ open: true, typeId: "Business Term" });
+    fireEvent.click(document.querySelector(".mh-assistant__history-item"));
+    expect(composer.value).toBe(INTERPRETER.assistant.history[0].prompt);
+    expect(onHistorySelect).toHaveBeenCalledWith({ label: INTERPRETER.assistant.history[0].label, prompt: INTERPRETER.assistant.history[0].prompt, typeId: "Business Term" });
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "New session" }));
+    expect(onNewSession).toHaveBeenCalledWith({ typeId: "Business Term" });
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(document.querySelector(".mh-assistant")).toBeNull();
+    expect(document.activeElement).toBe(launcher);
+    expect(onClose).toHaveBeenCalledWith({ reason: "escape", typeId: "Business Term" });
+  });
+
+  it("uses the one loaded knowledge skill and sends typed skill events", () => {
+    const onSelectSkill = vi.fn();
+    const onSkillAction = vi.fn();
+    const onAttach = vi.fn();
+    const onClearSkill = vi.fn();
+    const onFlowSubmit = vi.fn();
+    renderPage({ activeType: "Analytical Model", assistant: { ...INTERPRETER.assistant, onSelectSkill, onSkillAction, onAttach, onClearSkill }, demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft }, onFlowSubmit });
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    fireEvent.click(screen.getByRole("button", { name: "Choose AI skill" }));
+    const fileInput = document.querySelector('.mh-ai-skill-menu input[type="file"]') || document.querySelector('.mh-assistant input[type="file"]');
+    expect(fileInput).toBeTruthy();
+    fireEvent.change(fileInput, { target: { files: [new File(["x"], "knowledge.csv", { type: "text/csv" })] } });
+    expect(onAttach).toHaveBeenCalledWith({ names: ["knowledge.csv"], typeId: "Analytical Model" });
+    fireEvent.click(screen.getByRole("menuitem", { name: /Analytical Model/ }));
+    expect(document.querySelectorAll(".mh-skill__option")).toHaveLength(1);
+    fireEvent.click(document.querySelector(".mh-skill__option"));
+    expect(onSelectSkill).toHaveBeenCalledWith(expect.objectContaining({ id: "playbook-opportunity-scan", typeId: "Analytical Model" }));
+    fireEvent.click(document.querySelector(".mh-assistant__chip button"));
+    expect(onClearSkill).toHaveBeenCalledWith({ typeId: "Analytical Model" });
+    fireEvent.click(screen.getByRole("button", { name: "Choose AI skill" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Analytical Model/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Create Analytical Model Manually/ }));
+    expect(document.querySelector(".mh-flow")).toBeTruthy();
+    expect(onSkillAction).toHaveBeenCalledWith({ action: "manual", typeId: "Analytical Model" });
+    fireEvent.change(document.querySelector(".mh-flow input[name='name']"), { target: { value: "Knowledge model" } });
+    fireEvent.change(document.querySelector(".mh-flow textarea[name='trigger']"), { target: { value: "Knowledge changes" } });
+    fireEvent.change(document.querySelector(".mh-flow textarea[name='structure']"), { target: { value: "Explain the governed definition" } });
+    fireEvent.click(document.querySelector(".mh-flow__foot .mh-flow__btn--primary"));
+    expect(onFlowSubmit).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Analytical Model", values: expect.objectContaining({ name: "Knowledge model" }) }));
+  });
+
+  it("uses replacement host copy and answer callbacks without stale type context", () => {
+    const first = vi.fn((query) => ({ query, variant: "compact", body: "First knowledge answer", sources: [] }));
+    const second = vi.fn((query) => ({ query, variant: "compact", body: "Second knowledge answer", sources: [] }));
+    const base = { assistant: { ...INTERPRETER.assistant, title: "First helper" }, demo: { answerFor: first, modelFlow: MODEL_FLOW } };
+    const view = render(<Page {...base} activeType="overview" />);
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask AI Interpreter AI" }), { target: { value: "First prompt" } });
+    fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(screen.getByText("First knowledge answer")).toBeTruthy();
+    view.rerender(<Page {...base} activeType="Principles" assistant={{ ...base.assistant, title: "Updated helper" }} demo={{ answerFor: second, modelFlow: MODEL_FLOW }} />);
+    expect(screen.getByText("Updated helper")).toBeTruthy();
+    fireEvent.change(screen.getByRole("textbox", { name: "Ask AI Interpreter AI" }), { target: { value: "Second prompt" } });
+    fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(first).toHaveBeenCalledTimes(1);
+    expect(second).toHaveBeenCalledWith("Second prompt");
+    expect(screen.getByText("Second knowledge answer")).toBeTruthy();
+    expect(screen.queryByText("First knowledge answer")).toBeNull();
+  });
+
+  it("uses the current type after a host switches views while the assistant stays open", () => {
+    const onHistory = vi.fn();
+    const onMaximize = vi.fn();
+    const onFeedback = vi.fn();
+    const onAttach = vi.fn();
+    const onNewSession = vi.fn();
+    const onClose = vi.fn();
+    const assistant = {
+      ...INTERPRETER.assistant,
+      open: true,
+      answers: [buildInterpreterAnswer("A knowledge question")],
+      onHistory, onMaximize, onFeedback, onAttach, onNewSession, onClose,
+    };
+    const view = render(<Page activeType="Business Term" assistant={assistant} demo={{ modelFlow: MODEL_FLOW }} />);
+    view.rerender(<Page activeType="Principles" assistant={assistant} demo={{ modelFlow: MODEL_FLOW }} />);
+    fireEvent.click(screen.getByRole("button", { name: "Maximize AI Interpreter panel" }));
+    expect(onMaximize).toHaveBeenCalledWith({ expanded: true, typeId: "Principles" });
+    fireEvent.click(screen.getByRole("button", { name: "History" }));
+    expect(onHistory).toHaveBeenCalledWith({ open: true, typeId: "Principles" });
+    fireEvent.click(document.querySelector(".mh-assistant__history-head button"));
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']"));
+    expect(onFeedback).toHaveBeenCalledWith({ query: "A knowledge question", feedback: "helpful", typeId: "Principles" });
+    fireEvent.click(screen.getByRole("button", { name: "Choose AI skill" }));
+    const fileInput = document.querySelector('.mh-assistant input[type="file"]');
+    fireEvent.change(fileInput, { target: { files: [new File(["x"], "current.csv", { type: "text/csv" })] } });
+    expect(onAttach).toHaveBeenCalledWith({ names: ["current.csv"], typeId: "Principles" });
+    fireEvent.click(screen.getByRole("button", { name: "New session" }));
+    expect(onNewSession).toHaveBeenCalledWith({ typeId: "Principles" });
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledWith({ reason: "escape", typeId: "Principles" });
+  });
+
+  it.each(["Save", "Submit"])("types model-flow %s with the active host view after switching", (kind) => {
+    const onFlowSave = vi.fn();
+    const onFlowSubmit = vi.fn();
+    const assistant = { ...INTERPRETER.assistant };
+    const demo = { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft };
+    const callbacks = { onFlowSave, onFlowSubmit };
+    const view = render(<Page activeType="Business Term" assistant={assistant} demo={demo} {...callbacks} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open AI assistant" }));
+    fireEvent.click(screen.getByRole("button", { name: "Choose AI skill" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Analytical Model/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Create Analytical Model Manually/ }));
+    view.rerender(<Page activeType="Principles" assistant={assistant} demo={demo} {...callbacks} />);
+    fireEvent.change(document.querySelector(".mh-flow input[name='name']"), { target: { value: "Scoped model" } });
+    fireEvent.change(document.querySelector(".mh-flow textarea[name='trigger']"), { target: { value: "When knowledge changes" } });
+    fireEvent.change(document.querySelector(".mh-flow textarea[name='structure']"), { target: { value: "Explain the governed answer" } });
+    fireEvent.click(screen.getByRole("button", { name: kind }));
+    const callback = kind === "Save" ? onFlowSave : onFlowSubmit;
+    expect(callback).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Principles", values: expect.objectContaining({ name: "Scoped model" }) }));
   });
 });

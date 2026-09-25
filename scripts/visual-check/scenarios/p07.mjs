@@ -1397,4 +1397,449 @@ export default [
       ],
     },
   },
+  {
+    id: "p07-assistant-open",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { wait: "#assistantPanel:not([hidden]) .assistant-modal" }, { waitMs: 450 }],
+      expect: [
+        { sel: ".assistant-ask-stage h3", text: "Ask a question" },
+        { sel: ".ask-suggestion", text: "Attributed ROI" },
+        { sel: ".ask-scope", state: "hidden" },
+        { sel: "#uploadFile[aria-label='Choose AI skill']" },
+        { sel: "#sendQuery[disabled]" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ wait: ".mh-assistant--drawer" }, { waitMs: 450 }],
+      expect: [
+        { sel: ".mh-assistant__stage h3", text: "Ask a question" },
+        { sel: ".mh-assistant__suggestions button", text: "Attributed ROI" },
+        { sel: "button[aria-label='Choose AI skill']" },
+        { sel: ".mh-assistant__send button[disabled]" },
+      ],
+    },
+  },
+  {
+    id: "p07-assistant-answer",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: ".ask-suggestion" }, { wait: "#answerFeed .answer-card" }],
+      expect: [
+        { sel: ".answer-card-header", text: "Context: Knowledge Base" },
+        { sel: ".answer-finding", count: 3 },
+        { sel: ".answer-source-line span", text: "Knowledge Base / Metrics Dictionary" },
+        { sel: ".user-query-bubble", text: "Attributed ROI" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter-assistant-answer",
+      expect: [
+        { sel: ".mh-assistant__answer-banner", text: "Context: Knowledge Base" },
+        { sel: ".mh-assistant__finding", count: 3 },
+        { sel: ".mh-assistant__sources span", text: "Knowledge Base / Metrics Dictionary" },
+        { sel: ".mh-assistant__bubble", text: "Attributed ROI" },
+      ],
+    },
+  },
+  {
+    id: "p07-assistant-replace",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [
+        { click: "#aiEntry" }, { fill: ["#promptCanvas", "First knowledge question"] }, { click: "#sendQuery" },
+        { fill: ["#promptCanvas", "Second knowledge question"] }, { click: "#sendQuery" },
+      ],
+      expect: [{ sel: "#answerFeed .answer-entry", count: 1 }, { sel: ".user-query-bubble", text: "Second knowledge question" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [
+        { fill: [".mh-assistant__box textarea", "First knowledge question"] }, { click: ".mh-assistant__send button" },
+        { fill: [".mh-assistant__box textarea", "Second knowledge question"] }, { click: ".mh-assistant__send button" },
+      ],
+      expect: [{ sel: ".mh-assistant__entry", count: 1 }, { sel: ".mh-assistant__bubble", text: "Second knowledge question" }],
+    },
+  },
+  {
+    id: "p07-assistant-history",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#aiHistory" }, { click: ".ai-recent-chat" }, { eval: "(() => { if (document.querySelector('#promptCanvas').textContent.trim() !== 'Why did campaign ROI decline last week?') throw new Error('history did not fill composer'); })()" }],
+      expect: [{ sel: "#sendQuery:not([disabled])" }, { sel: "#answerFeed .answer-card", state: "detached", count: 0 }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-history-filled",
+      actions: [{ eval: "(() => { if (document.querySelector('.mh-assistant__box textarea').value !== 'Why did campaign ROI decline last week?') throw new Error('history did not fill composer'); })()" }],
+      expect: [{ sel: ".mh-assistant__send button:not([disabled])" }, { sel: ".mh-assistant__answer", state: "detached", count: 0 }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-manual",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='manual']" }],
+      expect: [{ sel: ".ai-model-form-card", text: "Create Analytical Model Manually" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ click: "button[aria-label='Choose AI skill']" }, { click: "[role='menuitem']:has-text('Analytical Model')" }, { click: "button:has-text('Create Analytical Model Manually')" }],
+      expect: [{ sel: ".mh-flow", text: "Create Analytical Model Manually" }],
+    },
+  },
+  {
+    id: "p07-assistant-maximize",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#aiMaximize" }],
+      expect: [{ sel: "#assistantPanel.is-ai-expanded .assistant-modal", text: "Ask AI Interpreter" }, { sel: "#aiMaximize", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-maximized",
+      expect: [{ sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" }, { sel: "button[aria-label='Restore AI Interpreter panel']" }],
+    },
+  },
+  {
+    id: "p07-assistant-newsession",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: ".ask-suggestion" }, { wait: "#answerFeed .answer-card" }, { click: "#newSession" }],
+      expect: [{ sel: "#answerFeed", state: "hidden" }, { sel: ".assistant-ask-stage", text: "Ask a question" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ click: ".mh-assistant__suggestions button" }, { wait: ".mh-assistant__answer" }, { click: "button[aria-label='New session']" }],
+      expect: [{ sel: ".mh-assistant__entry", state: "detached" }, { sel: ".mh-assistant__stage", text: "Ask a question" }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-search",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { fill: [".ai-skill-search input", "no matching model"] }],
+      expect: [{ sel: ".ai-skill-empty", text: "No matching skills" }, { sel: ".ai-skill-detail-panel:not([hidden])" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-skill-search",
+      expect: [{ sel: ".mh-skill__empty", text: "No matching skills" }, { sel: ".mh-skill__detail" }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-pick",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: ".ai-skill-option:has-text('Opportunity scan playbook')" }],
+      expect: [{ sel: ".ai-skill-chip:not([hidden])", text: "Analytical Model: Opportunity scan playbook" }, { sel: "#aiSkillMenu", state: "hidden" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-selected-skill",
+      expect: [{ sel: ".mh-assistant__chip", text: "Analytical Model: Opportunity scan playbook" }, { sel: ".mh-skill", state: "detached" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-history",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='history']" }],
+      expect: [{ sel: "#aiHistoryGenerateDialog", text: "Generate Analytical Model" }, { sel: "[data-ai-history-count]", text: "Selected 4 / 6 messages" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-history",
+      expect: [{ sel: ".mh-flow__card--history", text: "Generate Analytical Model" }, { sel: ".mh-flow__count", text: "Selected 4 / 6 messages" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-generated",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='history']" }, { click: "[data-ai-generate-model]" }],
+      expect: [{ sel: "#aiGeneratedModelDialog", text: "New Analytical Model" }, { sel: "#aiGeneratedModelDialog .ai-model-form", text: "Structure & Guidance" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-generated",
+      expect: [{ sel: ".mh-flow__card--form", text: "New Analytical Model" }, { sel: ".mh-flow__card--form", text: "Structure & Guidance" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-required",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='manual']" }, { click: "[data-ai-submit-model]" }],
+      expect: [{ sel: "#aiGeneratedModelDialog .field-error", text: "Name is required." }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-error",
+      expect: [{ sel: ".mh-flow__field-error", text: "Name is required." }],
+    },
+  },
+  {
+    id: "p07-assistant-enter",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { fill: ["#promptCanvas", "Line one"] }, { press: ["#promptCanvas", "Enter"] }, { eval: "(() => { if (!document.querySelector('#promptCanvas').textContent.includes('Line one')) throw new Error('composer lost text'); })()" }],
+      expect: [{ sel: "#answerFeed .answer-card", state: "detached", count: 0 }, { sel: "#sendQuery:not([disabled])" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ fill: [".mh-assistant__box textarea", "Line one"] }, { press: [".mh-assistant__box textarea", "Enter"] }],
+      expect: [{ sel: ".mh-assistant__answer", state: "detached", count: 0 }, { sel: ".mh-assistant__send button:not([disabled])" }],
+    },
+  },
+  {
+    id: "p07-assistant-scrim",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#assistantPanel .panel-backdrop" }],
+      expect: [{ sel: "#assistantPanel[hidden]", state: "attached" }, { sel: "#aiEntry", text: "AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ click: ".mh-assistant__backdrop" }],
+      expect: [{ sel: ".mh-assistant", state: "detached" }, { sel: ".mh-launcher", text: "AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-assistant-feedback",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: ".ask-suggestion" }, { click: ".answer-feedback-btn[data-feedback='helpful']" }],
+      expect: [{ sel: ".answer-feedback-btn[data-feedback='helpful']", attr: { name: "aria-pressed", value: "true" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-feedback",
+      expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful']", attr: { name: "aria-pressed", value: "true" } }],
+    },
+  },
+  {
+    id: "p07-assistant-feedback-not-helpful",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: ".ask-suggestion" }, { click: ".answer-feedback-btn[data-feedback='not-helpful']" }],
+      expect: [{ sel: ".answer-feedback-btn[data-feedback='not-helpful']", attr: { name: "aria-pressed", value: "true" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-unhelpful-feedback",
+      expect: [{ sel: ".mh-assistant__feedback button[data-kind='not-helpful']", attr: { name: "aria-pressed", value: "true" } }],
+    },
+  },
+  {
+    id: "p07-assistant-history-popup",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#aiHistory" }],
+      expect: [{ sel: "#aiRecentHistoryPopup:not([hidden])", text: "Recent Chats" }, { sel: ".ai-recent-chat", count: 3 }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-history",
+      expect: [{ sel: ".mh-assistant__history-pop", text: "Recent Chats" }, { sel: ".mh-assistant__history-item", count: 3 }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-menu",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }],
+      expect: [{ sel: "#aiSkillMenu:not([hidden])", text: "Analytical Model" }, { sel: ".ai-skill-category", count: 2 }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-skill-menu",
+      expect: [{ sel: ".mh-skill", text: "Analytical Model" }, { sel: ".mh-skill__category", count: 2 }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-clear",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: ".ai-skill-option:has-text('Opportunity scan playbook')" }, { click: ".ai-skill-chip button" }],
+      expect: [{ sel: ".ai-skill-chip", state: "hidden" }, { sel: "#promptCanvas", attr: { name: "aria-label", value: "Ask AI Interpreter AI" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-selected-skill",
+      actions: [{ click: ".mh-assistant__chip button" }],
+      expect: [{ sel: ".mh-assistant__chip", state: "detached" }, { sel: ".mh-assistant__box textarea", attr: { name: "aria-label", value: "Ask AI Interpreter AI" } }],
+    },
+  },
+  {
+    id: "p07-assistant-copy",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [
+        { eval: "Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.__copiedAnswer = text; } } })" },
+        { click: "#aiEntry" }, { click: ".ask-suggestion" }, { click: ".answer-feedback-btn[data-copy]" },
+        { eval: "(() => { if (!window.__copiedAnswer?.includes('Related Assets')) throw new Error('copy missing answer'); })()" },
+      ],
+      expect: [{ sel: ".answer-feedback-btn[data-copy]", text: "Copied!" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-answer",
+      actions: [
+        { eval: "Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.__copiedAnswer = text; } } })" },
+        { click: ".mh-assistant__feedback button[data-kind='copy']" },
+        { eval: "(() => { if (!window.__copiedAnswer?.includes('Related Assets')) throw new Error('copy missing answer'); })()" },
+      ],
+      expect: [{ sel: ".mh-assistant__feedback button[data-kind='copy']", text: "Copied!" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-empty-selection",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [
+        { click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='history']" },
+        { eval: "document.querySelectorAll('#aiHistoryGenerateDialog [data-ai-history-msg]:checked').forEach(el => { el.click(); })" },
+        { click: "[data-ai-generate-model]" },
+      ],
+      expect: [{ sel: "[data-ai-generate-error]:not([hidden])", text: "Select at least one message to continue." }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-empty-selection",
+      expect: [{ sel: ".mh-flow__error", text: "Select at least one message to continue." }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-save",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [
+        { click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='manual']" },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Name']", "Weekly knowledge diagnosis"] },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Trigger When']", "When knowledge metrics move"] },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Structure & Guidance']", "Compare and explain"] },
+        { click: "[data-ai-save-model]" }, { waitMs: 550 },
+      ],
+      expect: [{ sel: "#aiGeneratedModelDialog", state: "detached" }, { sel: "#assistantPanel:not([hidden]) .assistant-modal", text: "Ask AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-manual",
+      actions: [
+        { fill: [".mh-flow input[name='name']", "Weekly knowledge diagnosis"] },
+        { fill: [".mh-flow textarea[name='trigger']", "When knowledge metrics move"] },
+        { fill: [".mh-flow textarea[name='structure']", "Compare and explain"] },
+        { click: ".mh-flow__foot .mh-flow__btn--secondary:has-text('Save')" }, { waitMs: 550 },
+      ],
+      expect: [{ sel: ".mh-flow", state: "detached" }, { sel: ".mh-assistant", text: "Ask AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-assistant-escape-focus",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { press: ["body", "Escape"] }, { eval: "(() => { if (document.activeElement?.id !== 'aiEntry') throw new Error('focus not returned'); })()" }],
+      expect: [{ sel: "#assistantPanel[hidden]", state: "attached" }, { sel: "#aiEntry", text: "AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      actions: [{ press: ["body", "Escape"] }, { eval: "(() => { if (document.activeElement?.getAttribute('aria-label') !== 'Open AI assistant') throw new Error('focus not returned'); })()" }],
+      expect: [{ sel: ".mh-assistant", state: "detached" }, { sel: ".mh-launcher", text: "AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-assistant-maximize-restore",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#aiMaximize" }, { click: "#aiMaximize" }],
+      expect: [{ sel: "#assistantPanel:not(.is-ai-expanded) .assistant-modal", text: "Ask AI Interpreter" }, { sel: "#aiMaximize", attr: { name: "aria-label", value: "Maximize AI Interpreter panel" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-maximized",
+      actions: [{ click: "button[aria-label='Restore AI Interpreter panel']" }],
+      expect: [{ sel: ".mh-assistant--drawer:not(.mh-assistant--expanded)", text: "Ask AI Interpreter" }, { sel: "button[aria-label='Maximize AI Interpreter panel']" }],
+    },
+  },
+  {
+    id: "p07-assistant-history-close",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#aiHistory" }, { click: "#aiRecentHistoryPopup .ai-recent-history-head button" }],
+      expect: [{ sel: "#aiRecentHistoryPopup", state: "hidden" }, { sel: "#aiHistory", attr: { name: "aria-label", value: "History" } }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-history",
+      actions: [{ click: ".mh-assistant__history-head button" }],
+      expect: [{ sel: ".mh-assistant__history-pop", state: "detached" }, { sel: "button[aria-label='History']", attr: { name: "aria-expanded", value: "false" } }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-back",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='history']" }, { fill: ["[data-ai-generation-rule]", "focus on channel"] }, { click: "[data-ai-generate-model]" }, { click: "[data-ai-back-to-history]" }, { eval: "(() => { if (document.querySelector('[data-ai-generation-rule]').value !== 'focus on channel') throw new Error('rule lost on Back'); })()" }],
+      expect: [{ sel: "#aiHistoryGenerateDialog:not([hidden])", text: "Generate Analytical Model" }, { sel: "#aiGeneratedModelDialog", state: "detached" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-history",
+      actions: [{ fill: [".mh-flow__rule", "focus on channel"] }, { click: ".mh-flow__foot .mh-flow__btn--primary" }, { click: ".mh-flow__back" }, { eval: "(() => { if (document.querySelector('.mh-flow__rule').value !== 'focus on channel') throw new Error('rule lost on Back'); })()" }],
+      expect: [{ sel: ".mh-flow__card--history", text: "Generate Analytical Model" }, { sel: ".mh-flow__card--form", state: "detached" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-submit",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [
+        { click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='manual']" },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Name']", "Weekly knowledge diagnosis"] },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Trigger When']", "When knowledge metrics move"] },
+        { fill: ["#aiGeneratedModelDialog [data-ai-required='Structure & Guidance']", "Compare and explain"] },
+        { click: "[data-ai-submit-model]" }, { waitMs: 550 },
+      ],
+      expect: [{ sel: "#aiGeneratedModelDialog", state: "detached" }, { sel: "#assistantPanel:not([hidden]) .assistant-modal", text: "Ask AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-manual",
+      actions: [
+        { fill: [".mh-flow input[name='name']", "Weekly knowledge diagnosis"] },
+        { fill: [".mh-flow textarea[name='trigger']", "When knowledge metrics move"] },
+        { fill: [".mh-flow textarea[name='structure']", "Compare and explain"] },
+        { click: ".mh-flow__foot .mh-flow__btn--primary:has-text('Submit')" }, { waitMs: 550 },
+      ],
+      expect: [{ sel: ".mh-flow", state: "detached" }, { sel: ".mh-assistant", text: "Ask AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-assistant-skill-data-backed",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }],
+      expect: [
+        { sel: ".ai-skill-option", count: 1, text: "Opportunity scan playbook" },
+        { sel: ".ai-skill-option", text: "When a user request matches this analysis approach" },
+      ],
+    },
+    story: {
+      id: "pages--interpreter-assistant-skill-menu",
+      actions: [{ click: ".mh-skill__category:nth-child(2)" }],
+      expect: [
+        { sel: ".mh-skill__option", count: 1, text: "Opportunity scan playbook" },
+        { sel: ".mh-skill__option", text: "When a user request matches this analysis approach" },
+      ],
+    },
+  },
+  {
+    id: "p07-assistant-type-context",
+    original: {
+      url: "/assets/pages/knowledge.html?type=Business%20Term",
+      actions: [{ click: "#aiEntry" }],
+      expect: [{ sel: ".knowledge-main[data-active-type='Business Term']" }, { sel: "#assistantPanel:not([hidden]) .assistant-modal", text: "Ask AI Interpreter" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant",
+      args: { activeType: "Business Term" },
+      expect: [{ sel: ".mh-interpreter__main[data-active-type='Business Term']" }, { sel: ".mh-assistant--drawer", text: "Ask AI Interpreter" }],
+    },
+  },
+  {
+    id: "p07-assistant-flow-escape-top",
+    original: {
+      url: "/assets/pages/knowledge.html",
+      actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" }, { click: "[data-ai-skill-action='history']" }, { press: ["body", "Escape"] }],
+      expect: [{ sel: "#assistantPanel[hidden]", state: "attached" }, { sel: "#aiHistoryGenerateDialog", text: "Generate Analytical Model" }],
+    },
+    story: {
+      id: "pages--interpreter-assistant-model-history",
+      actions: [{ press: ["body", "Escape"] }],
+      expect: [{ sel: ".mh-flow", state: "detached" }, { sel: ".mh-assistant--drawer", text: "Ask AI Interpreter" }],
+    },
+  }
 ];

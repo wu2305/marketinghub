@@ -367,6 +367,38 @@ export const SELF_SERVICE = {
 // the same identifiers the original demo uses in ?type= URLs and asset.type fields.
 // stats mirror typeMeta[].stats (the agreed counting source, see AGENTS.md 3.3).
 export const INTERPRETER = {
+  /* knowledge.html loads knowledge.js + knowledge-fields.js before the shared
+     skill menu. Both supply this id, so readAnalyticalModels dedupes to one
+     model with the field-mapping trigger note (not the fallback three). */
+  assistant: {
+    title: "Ask AI Interpreter",
+    headline: "Ask a question",
+    description: "Your AI partner for every marketing task",
+    suggestions: [
+      { label: "Definition of Attributed ROI", prompt: "What is the governed definition of 'Attributed ROI' and which reports use it?" },
+      { label: "City investment strategy knowledge", prompt: "Show me knowledge assets related to city investment strategy." },
+      { label: "Metrics with data quality issues", prompt: "Which metrics have incomplete backflow and need data quality review?" },
+    ],
+    historyTitle: "Recent Chats",
+    history: [
+      { title: "Campaign ROI decline", label: "Why did campaign ROI decline last week?", prompt: "Why did campaign ROI decline last week?" },
+      { title: "Conversion drop", label: "Analyze conversion drop by customer segment.", prompt: "Analyze conversion drop by customer segment." },
+      { title: "Data quality issues", label: "Summarize metrics with data quality issues.", prompt: "Summarize metrics with data quality issues." },
+    ],
+    skillMenu: {
+      triggerLabel: "Choose AI skill",
+      attachAccept: ".csv,.xlsx,.xls,.pdf,.doc,.docx,.ppt,.pptx,.txt,image/*",
+      categories: [
+        { id: "upload", label: "Upload File", icon: "upload" },
+        { id: "model", label: "Analytical Model", icon: "spokes" },
+      ],
+      searchPlaceholder: "Search Analytical Model",
+      emptyLabel: "No matching skills",
+      items: [{ id: "playbook-opportunity-scan", title: "Opportunity scan playbook", note: "When a user request matches this analysis approach and its supported business context." }],
+      historyLabel: "Add from Chat History",
+      manualLabel: "Create Analytical Model Manually",
+    },
+  },
   copy: {
     unknown: {
       typeTitle: "Unknown knowledge type",
