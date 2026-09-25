@@ -122,8 +122,9 @@ export function useOverlayLayer({ open, onClose, layerRef, initialFocusRef, retu
     const surface = layer.closest("[data-mh-overlay-surface]") ?? layer;
     const scrim = surface.previousElementSibling?.matches("[data-mh-overlay-scrim]") ? surface.previousElementSibling : null;
     // React runs descendant passive effects before ancestor effects. Layers
-    // opened by one render therefore share a batch and follow DOM order; a
-    // later user action starts a new batch and goes on top, even across roots.
+    // opened by one render therefore share a batch and follow their natural
+    // CSS z-index, then DOM order for ties. A later user action starts a new
+    // batch and goes on top, even across roots.
     if (!state.batching) {
       state.batching = true;
       queueMicrotask(() => {
@@ -145,7 +146,15 @@ export function useOverlayLayer({ open, onClose, layerRef, initialFocusRef, retu
       doc.addEventListener("focusin", state.onFocusIn, true);
     }
     const follows = doc.defaultView?.Node?.DOCUMENT_POSITION_FOLLOWING ?? 4;
-    const insertAt = state.stack.findIndex((other) => other.batch === entry.batch && (layer.compareDocumentPosition(other.layer) & follows));
+    const insertAt = state.stack.findIndex((other) => {
+      if (other.batch !== entry.batch) return false;
+      // A descendant is painted inside its parent context regardless of its
+      // own numeric z-index; compare unrelated surfaces by natural CSS z.
+      if (surface.contains(other.surface)) return true;
+      if (other.surface.contains(surface)) return false;
+      return entry.naturalZ < other.naturalZ ||
+        (entry.naturalZ === other.naturalZ && (layer.compareDocumentPosition(other.layer) & follows));
+    });
     if (insertAt < 0) state.stack.push(entry);
     else {
       const upper = state.stack[insertAt];

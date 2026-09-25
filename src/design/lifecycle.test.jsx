@@ -13,6 +13,7 @@ import {
 } from "./index.js";
 import { DataModelView } from "./features/interpreter/DataModelView/index.jsx";
 import { useDataModelDemo } from "./demo/data-model-demo.js";
+import { useOverlayLayer } from "./lib/overlay.js";
 
 // jsdom does not implement scrollIntoView/scrollTo; the copilot chat entry and
 // the assistant scroll effect call them.
@@ -494,6 +495,38 @@ describe("nested overlays", () => {
     rootB.unmount();
     a.remove();
     b.remove();
+  });
+
+  it("uses the higher natural z-index before DOM order for initially open surfaces", () => {
+    function Layer({ name, zIndex, onClose }) {
+      const layerRef = React.useRef(null);
+      useOverlayLayer({ open: true, onClose, layerRef });
+      return <div data-mh-overlay-surface style={{ position: "fixed", zIndex }}><section ref={layerRef} role="dialog" aria-label={name} tabIndex={-1}><button type="button">{name} action</button></section></div>;
+    }
+    const closeHigh = vi.fn();
+    const closeLow = vi.fn();
+    render(<><Layer name="High" zIndex={800} onClose={closeHigh} /><Layer name="Low" zIndex={100} onClose={closeLow} /></>);
+    expect(screen.getByRole("dialog", { name: "High" }).contains(document.activeElement)).toBe(true);
+    const surfaces = document.querySelectorAll("[data-mh-overlay-surface]");
+    expect(Number(surfaces[0].style.zIndex)).toBeGreaterThan(Number(surfaces[1].style.zIndex));
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(closeHigh).toHaveBeenCalledOnce();
+    expect(closeLow).not.toHaveBeenCalled();
+  });
+
+  it("keeps an initially open nested child above its higher-z parent context", () => {
+    function Layer({ name, zIndex, onClose, children }) {
+      const layerRef = React.useRef(null);
+      useOverlayLayer({ open: true, onClose, layerRef });
+      return <div data-mh-overlay-surface style={{ position: "fixed", zIndex }}><section ref={layerRef} role="dialog" aria-label={name} tabIndex={-1}><button type="button">{name} action</button>{children}</section></div>;
+    }
+    const closeParent = vi.fn();
+    const closeChild = vi.fn();
+    render(<Layer name="Parent" zIndex={800} onClose={closeParent}><Layer name="Child" zIndex={100} onClose={closeChild} /></Layer>);
+    expect(screen.getByRole("dialog", { name: "Child" }).contains(document.activeElement)).toBe(true);
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(closeChild).toHaveBeenCalledOnce();
+    expect(closeParent).not.toHaveBeenCalled();
   });
 
   it("keeps focus and the scroll lock on the upper layer when an underlying root unmounts", () => {
