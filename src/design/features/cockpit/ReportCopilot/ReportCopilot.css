@@ -241,7 +241,6 @@ display: none;
 .mh-copilot__history-item span {
 overflow: hidden;
   text-overflow: ellipsis;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 

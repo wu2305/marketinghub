@@ -1075,7 +1075,6 @@ export default [
       ],
       expect: [
         { sel: "#aiReportHistoryPopup", state: "attached", text: "Recent Chats" },
-        { sel: "#aiReportHistoryPopup .ai-recent-chat >> nth=2", state: "attached", text: "FIND CONVERSION GAPS" },
       ],
     },
     story: {
@@ -1096,6 +1095,31 @@ export default [
         { sel: ".mh-copilot__history", state: "detached" },
         { sel: ".mh-copilot", text: "Data Analysis Assistant" },
       ],
+    },
+  },
+  {
+    id: "p02-copilot-history-case",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" },
+        { wait: "#aiWorkspace.open" },
+        { click: "#aiWorkspace #aiHistory" },
+        { wait: "#aiReportHistoryPopup:not([hidden])" },
+      ],
+      expect: [{ sel: "#aiReportHistoryPopup", state: "attached", text: "Recent Chats" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit",
+      args: { project: "city", view: "live", dashboard: 0 },
+      actions: [
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-copilot__history" },
+        { eval: "(() => { const item = document.querySelector('.mh-copilot__history-item span'); if (getComputedStyle(item).textTransform !== 'none') throw new Error('history prompt still transformed'); })()" },
+      ],
+      expect: [{ sel: ".mh-copilot__history-item span >> nth=2", text: "Find conversion gaps in this scenario report." }],
     },
   },
   {
