@@ -33,6 +33,20 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   const [tokens, setTokens] = React.useState(() => initial.tokens || []);
   const [constantOpen, setConstantOpen] = React.useState(Boolean(initial.constantOpen));
   const [notice, setNotice] = React.useState(initial.notice || "");
+  const noticeTimer = React.useRef(null);
+  const clearNoticeTimer = () => {
+    window.clearTimeout(noticeTimer.current);
+    noticeTimer.current = null;
+  };
+  const showNotice = (message, transient = false) => {
+    clearNoticeTimer();
+    setNotice(message);
+    if (transient) noticeTimer.current = window.setTimeout(() => {
+      setNotice("");
+      noticeTimer.current = null;
+    }, 3000);
+  };
+  React.useEffect(() => () => window.clearTimeout(noticeTimer.current), []);
   const [assistantOpen, setAssistantOpen] = React.useState(Boolean(initial.assistantOpen));
   const [assistantPrompt, setAssistantPrompt] = React.useState(initial.assistantPrompt || "");
   const [assistantAnswers, setAssistantAnswers] = React.useState(initial.assistantAnswers || []);
@@ -63,7 +77,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     setDraft(emptyDraft());
     setTokens([]);
     setConstantOpen(false);
-    setNotice("");
+    showNotice("");
   };
   const addToken = ({ type, value, label }) => {
     setTokens((current) => [...current, { type, value, label: label || String(value) }]);
@@ -76,15 +90,15 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   };
   const onReference = ({ metric }) => {
     addToken({ type: "metric", value: metric.source, label: metric.name });
-    setNotice(content.derivedPanel.addedMetric(metric.name));
+    showNotice(content.derivedPanel.addedMetric(metric.name), true);
   };
   const onTest = () => {
-    setNotice(tokens.length ? content.derivedPanel.testResult : content.derivedPanel.formulaError);
+    showNotice(tokens.length ? content.derivedPanel.testResult : content.derivedPanel.formulaError, tokens.length > 0);
   };
   const onSave = () => {
     const name = draft.name.trim();
     if (!name) {
-      setNotice(content.derivedPanel.nameError);
+      showNotice(content.derivedPanel.nameError);
       return;
     }
     const newMetric = {
@@ -103,7 +117,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     setMetricId(newMetric.id);
     setCategory("Derived");
     closePanel();
-    setNotice(content.derivedPanel.savedMetric(name));
+    showNotice(content.derivedPanel.savedMetric(name), true);
   };
   const handleNavigate = ({ id, params = {}, href }) => onNavigate?.({ id, params, href: href || hrefFor(id, params) });
 
@@ -115,7 +129,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     onTabChange: ({ tab: next }) => setTab(next),
     derivedEditor: {
       open: panelOpen, draft, tokens, constantOpen, notice,
-      onOpen: () => { setPanelOpen(true); setNotice(""); },
+      onOpen: () => { setPanelOpen(true); showNotice(""); },
       onCancel: closePanel,
       onDraftChange: ({ field, value }) => setDraft((current) => ({ ...current, [field]: value })),
       onOperator,
@@ -129,7 +143,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
       },
       onTest,
       onSave,
-      onDismissNotice: () => setNotice(""),
+      onDismissNotice: () => showNotice(""),
     },
     assistantState: {
       open: assistantOpen, prompt: assistantPrompt, answers: assistantAnswers, selectedSkill,

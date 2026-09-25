@@ -1,6 +1,6 @@
 import React from "react";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { LOGO, NAV, MODEL_FLOW, buildModelDraft, buildLiteAssistantAnswer } from "../content.js";
 import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "./content/metric-dictionary.js";
 import { useMetricDictionaryDemo } from "./metric-dictionary-demo.js";
@@ -78,6 +78,34 @@ describe("P10 metric dictionary process", () => {
     expect(screen.getByRole("status").textContent).toContain("42.86");
     fireEvent.click(screen.getByRole("button", { name: "Remove Exposure Count" }));
     expect(screen.getByText("Click a metric or operator to build your formula...")).toBeTruthy();
+  });
+
+  it("expires action notices after three seconds without an older timer clearing a newer one", () => {
+    vi.useFakeTimers();
+    try {
+      const { unmount } = render(<Harness />);
+      fireEvent.click(screen.getByRole("button", { name: /Add Derived Metric/ }));
+      fireEvent.click(document.querySelector(".mh-derived-panel__reference"));
+      expect(screen.getByRole("status").textContent).toContain("Added");
+      act(() => vi.advanceTimersByTime(2000));
+      fireEvent.click(screen.getByRole("button", { name: "Test" }));
+      expect(screen.getByRole("status").textContent).toContain("42.86");
+      act(() => vi.advanceTimersByTime(1000));
+      expect(screen.getByRole("status").textContent).toContain("42.86");
+      act(() => vi.advanceTimersByTime(2000));
+      expect(screen.queryByRole("status")).toBeNull();
+      fireEvent.click(screen.getByRole("button", { name: "Remove Exposure Count" }));
+      fireEvent.click(screen.getByRole("button", { name: "Test" }));
+      expect(screen.getByRole("status").textContent).toContain("Please build a formula first.");
+      act(() => vi.advanceTimersByTime(3000));
+      expect(screen.getByRole("status").textContent).toContain("Please build a formula first.");
+      fireEvent.click(document.querySelector(".mh-derived-panel__reference"));
+      expect(vi.getTimerCount()).toBe(1);
+      unmount();
+      expect(vi.getTimerCount()).toBe(0);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("adds a numeric constant and clears the formula", () => {
