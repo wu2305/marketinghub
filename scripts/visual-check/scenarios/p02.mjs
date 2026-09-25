@@ -804,6 +804,7 @@ export default [
         { click: ".mh-launcher" },
         { wait: ".mh-copilot.is-open" },
         { click: ".mh-copilot__view-more" },
+        { click: ".mh-copilot__view-more" },
       ],
       expect: [
         { sel: ".mh-copilot__recs.is-show-all" },

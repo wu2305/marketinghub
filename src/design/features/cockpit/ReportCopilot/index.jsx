@@ -759,15 +759,8 @@ export function ReportCopilot({
           type="button"
           className="mh-copilot__view-more"
           onClick={(event) => {
-            /* Once expanded, the original handler early-returns without
-               stopPropagation, so the click bubbles to the collapsible head
-               and toggles the section. */
-            if (showAll) {
-              toggleCollapsed("scenarios");
-              return;
-            }
             event.stopPropagation();
-            setShowAll(true);
+            if (!showAll) setShowAll(true);
           }}
         >
           view more
