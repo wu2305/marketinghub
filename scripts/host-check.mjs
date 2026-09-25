@@ -567,6 +567,27 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P10 standalone route: hook, form process and host URLs ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}metric-dictionary`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".mh-metric-page__list button", { timeout: 8000 });
+  if ((await page.locator(".mh-metric-page__list button").count()) !== 7) notes.push("P10 did not render seven Basic metrics");
+  await page.locator(".mh-metric-page__action--primary").click();
+  await page.locator(".mh-derived-panel").waitFor({ timeout: 5000 });
+  await page.locator('input[placeholder="Enter metric name..."]').fill("Host metric");
+  await page.locator(".mh-derived-panel__save").click();
+  if (!(await page.locator(".mh-metric-page h1").innerText()).includes("Host metric")) notes.push("P10 Save did not select new metric");
+  if ((await page.locator(".mh-metric-page__list button").count()) !== 3) notes.push("P10 Save did not grow Derived list");
+  const href = await page.locator('.mh-metric-page__breadcrumb a').first().getAttribute("href");
+  if (!href?.startsWith(BASE)) notes.push(`P10 hrefFor escaped host base: ${href}`);
+  await page.screenshot({ path: path.join(OUT, "metric-dictionary.png") });
+  notes.push(...errors);
+  record("metric-dictionary", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 

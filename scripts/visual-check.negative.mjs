@@ -77,6 +77,12 @@ export default [
     reason: "empty search cannot satisfy filtered DC Media result and Basic card assertions",
   },
   {
+    id: "neg-p10-wrong-category",
+    base: "p10-metric-derived-category",
+    story: { id: "pages--metric-dictionary" },
+    reason: "Basic 7-row story must not satisfy Derived 2-row state",
+  },
+  {
     // Proves the layout check bites: restoring the pre-Batch-D full-width hero
     // on a type page must fail the sidebar/hero/main geometry assertions.
     id: "neg-p07-hero-fullwidth",

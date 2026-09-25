@@ -26,6 +26,7 @@ import {
   BusinessTermView,
   DataModelPage,
   KnowledgeCreatePage,
+  MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -42,10 +43,14 @@ import {
   MODEL_FLOW,
   NAV,
   SELF_SERVICE,
+  LITE_ASSISTANT,
+  buildLiteAssistantAnswer,
   buildHomeAssistantAnswer,
   buildModelDraft,
   buildReportAssistantAnswer,
 } from "../../src/design/content.js";
+import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../src/design/demo/content/metric-dictionary.js";
+import { metricDictionaryHrefFor, useMetricDictionaryDemo } from "../../src/design/demo/metric-dictionary-demo.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "../../src/design/demo/report-demo.js";
 import {
@@ -77,6 +82,7 @@ const ROUTE_MAP = {
   "/assets/pages/knowledge.html": "interpreter",
   "/assets/pages/knowledge-create.html": "knowledge-create",
   "/assets/pages/flexible.html": "self-service",
+  "/assets/pages/metric-dictionary.html": "metric-dictionary",
 };
 
 function mapDemoHref(href) {
@@ -127,6 +133,7 @@ function routeOf(loc) {
   if (rest === "interpreter") return { name: "interpreter", params };
   if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "self-service") return { name: "self-service", params };
+  if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -288,6 +295,22 @@ function DataModelRoute({ params }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Metric Dictionary                                                   */
+/* ------------------------------------------------------------------ */
+
+function MetricDictionaryRoute() {
+  const hrefFor = (id, params) => mapDemoHref(metricDictionaryHrefFor(id, params));
+  const props = useMetricDictionaryDemo({
+    content: METRIC_DICTIONARY,
+    hrefFor,
+    modelFlow: MODEL_FLOW,
+    modelDraftFor: buildModelDraft,
+    assistantAnswerFor: buildLiteAssistantAnswer,
+  });
+  return <MetricDictionaryPage {...props} logo={hostLogo} navigation={hostNav()} content={METRIC_DICTIONARY} assistant={{ copy: METRIC_ASSISTANT, ...props.assistantState }} />;
+}
+
+/* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
 
@@ -394,6 +417,7 @@ function App() {
   if (route.name === "interpreter") return <InterpreterRoute params={route.params} />;
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
+  if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;
