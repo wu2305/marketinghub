@@ -206,6 +206,14 @@ export { DataModelPage } from "./pages/DataModelPage/index.jsx";
 export { KnowledgeCreatePage } from "./pages/KnowledgeCreatePage/index.jsx";
 export { KnowledgeCreateFields } from "./features/knowledge-create/KnowledgeCreateFields/index.jsx";
 export { knowledgeCreateTypes, knowledgeCreateModes } from "./knowledge-create-options.js";
+export {
+  KnowledgeDetail,
+  knowledgeDetailTypes,
+  knowledgeModelActions,
+  knowledgeModelGroups,
+  knowledgeModelTabs,
+} from "./features/knowledge-view/KnowledgeDetail/index.jsx";
+export { KnowledgeViewPage } from "./pages/KnowledgeViewPage/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";

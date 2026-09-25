@@ -125,6 +125,15 @@ describe("FieldLibraryView", () => {
     expect(within(drawer).queryByRole("button", { name: "Disable" })).toBeNull();
   });
 
+  it("keeps a URL-seeded detail open when the same host instance changes knowledge type", () => {
+    const { rerender } = renderView({ type: "Report Context", detail: "city-report-context" });
+    expect(screen.getByRole("dialog", { name: "Invest City Strategy Analysis" })).toBeTruthy();
+    rerender(<Harness {...bundle} records={INTERPRETER.records} type="Metric Dictionary" detail="metric-dictionary-member-conversion" />);
+    expect(screen.getByRole("dialog", { name: "Member conversion" })).toBeTruthy();
+    rerender(<Harness {...bundle} records={INTERPRETER.records} type="Email Reports" detail={null} />);
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
   it("gates Analytical Model actions by owner+status and runs disable → delete-blocked", () => {
     const onNavigate = vi.fn();
     renderView({ type: "Analytical Model", onNavigate });

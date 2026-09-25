@@ -38,7 +38,7 @@ import { ASSISTANT } from "../src/design/content.js";
 const HOST = path.join(ROOT, "examples", "host");
 const DIST = path.join(HOST, "dist");
 const HOST_PATHS = ["src/design", "examples/host", "package.json", "package-lock.json"];
-const PORT = 4618;
+const PORT = Number(process.env.MH_HOST_PORT || 4618);
 const BASE = "/mh-host/";
 
 const outIdx = process.argv.indexOf("--out");
@@ -585,6 +585,128 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "metric-dictionary.png") });
   notes.push(...errors);
   record("metric-dictionary", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- P09: direct detail URL, source actions, and in-host record switch ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-view?id=business-term-gmv`, { waitUntil: "networkidle" });
+  await page.waitForSelector(".mh-kdetail--business", { timeout: 10000 });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if (!(await page.locator(".mh-kdetail__head h1").innerText()).includes("GMV")) notes.push("GMV title missing");
+  const edit = await page.locator(".mh-kdetail__actions a").getAttribute("href");
+  if (!edit?.includes("mode=edit&id=business-term-gmv")) notes.push(`edit href missing source params: ${edit}`);
+  await page.locator(".mh-kdetail__head button").click();
+  await page.locator(".mh-kdetail__versions[role='dialog']").waitFor({ timeout: 5000 });
+  await page.locator(".mh-kdetail__versions .mh-modal__close").click();
+  if (await page.locator(".mh-kdetail__versions[role='dialog']").count()) notes.push("versions did not close");
+  await page.evaluate((next) => {
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `${BASE}knowledge-view?id=channel-data-model`);
+  await page.waitForSelector(".mh-kdetail--model", { timeout: 10000 });
+  await page.locator(".mh-kdetail__model-tabs button:has-text('Basic Info')").click();
+  if (!(await page.locator(".mh-kdetail__model-tabs button.is-active").innerText()).includes("Basic Info")) notes.push("Basic Info tab did not become active");
+  if ((await page.locator(".mh-kdetail__model-table tbody tr").count()) !== 5) notes.push("highlight-only tab lost field rows");
+  await page.locator(".mh-kdetail__model-export").click();
+  if (!(await page.locator(".mh-modal__dialog").innerText()).includes("The model configuration is ready to export.")) notes.push("Export notice missing");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("detail route reloaded host");
+  await page.screenshot({ path: path.join(OUT, "p09-detail.png"), fullPage: true });
+  notes.push(...errors);
+  record("p09-knowledge-view", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- P09: notice dismissal stays local; its body Back link reaches Interpreter ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  for (const [id, trigger] of [["scenario-channel-performance", ".mh-kdetail__scenario-actions button"], ["channel-data-model", ".mh-kdetail__model-export"]]) {
+    await page.goto(`${origin}${BASE}knowledge-view?id=${id}`, { waitUntil: "networkidle" });
+    const boot = await page.evaluate(() => window.__mhHostBoot);
+    await page.locator(trigger).click();
+    await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+    if ((await page.locator(".mh-modal__close").getAttribute("aria-label")) !== "Close dialog") notes.push(`${id}: close control announces navigation`);
+    await page.locator(".mh-modal__close").click();
+    if (await page.locator(".mh-modal__dialog[role='dialog']").count()) notes.push(`${id}: close control did not dismiss notice`);
+    if (new URL(page.url()).pathname !== `${BASE}knowledge-view`) notes.push(`${id}: close control navigated away`);
+    if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push(`${id}: closing notice reloaded host`);
+    await page.locator(trigger).click();
+    await page.locator(".mh-modal__dialog a:has-text('Back to Knowledge Management')").click();
+    await page.locator(".mh-interpreter").waitFor({ timeout: 10000 });
+    if (new URL(page.url()).pathname !== `${BASE}interpreter`) notes.push(`${id}: body Back link did not reach Interpreter`);
+    if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push(`${id}: body Back link reloaded host`);
+  }
+  notes.push(...errors);
+  record("p09-notice-back", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- P09: four source redirects resolve to P07's actual detail drawer ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  const destinations = [
+    ["city-report-context", "Report Context", "Invest City Strategy Analysis"],
+    ["metric-dictionary-member-conversion", "Metric Dictionary", "Member conversion"],
+    ["playbook-opportunity-scan", "Analytical Model", "Opportunity scan playbook"],
+    ["email-report-weekly-performance", "Email Reports", "Weekly Marketing Performance | Executive Summary"],
+  ];
+  for (const [id, type, title] of destinations) {
+    await page.goto(`${origin}${BASE}knowledge-view?id=${id}`, { waitUntil: "networkidle" });
+    await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+    const final = new URL(page.url());
+    if (final.pathname !== `${BASE}interpreter` || final.searchParams.get("type") !== type || final.searchParams.get("detail") !== id) notes.push(`${id}: final route mismatch ${final.pathname}${final.search}`);
+    if ((await page.locator(`.mh-flview[data-fl-type='${type}']`).count()) !== 1) notes.push(`${id}: wrong P07 type view`);
+    if ((await page.locator(".mh-modal__dialog[role='dialog']").count()) !== 1) notes.push(`${id}: P07 detail drawer missing`);
+    if (!(await page.locator(".mh-modal__title").innerText()).includes(title)) notes.push(`${id}: wrong detail title`);
+    if (await page.locator(".mh-kdetail").count()) notes.push(`${id}: transient P09 detail remained mounted`);
+  }
+  await page.goto(`${origin}${BASE}knowledge-view?id=email-report-unknown`, { waitUntil: "networkidle" });
+  await page.locator(".mh-flview[data-fl-type='Email Reports']").waitFor({ timeout: 10000 });
+  const fallback = new URL(page.url());
+  if (fallback.pathname !== `${BASE}interpreter` || fallback.searchParams.get("type") !== "Email Reports" || fallback.searchParams.get("detail") !== "email-report-unknown") notes.push(`email prefix fallback route mismatch ${fallback.pathname}${fallback.search}`);
+  if (await page.locator(".mh-modal__dialog[role='dialog']").count()) notes.push("unknown email prefix invented a detail record");
+  await page.goto(`${origin}${BASE}knowledge-view?id=business-term-gmv`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.evaluate((next) => {
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `${BASE}knowledge-view?id=city-report-context`);
+  await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+  if (new URL(page.url()).searchParams.get("detail") !== "city-report-context") notes.push("in-host redirect lost detail ID");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("in-host detail redirect reloaded the host");
+  await page.evaluate((next) => {
+    window.history.pushState(null, "", next);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `${BASE}interpreter?type=Metric%20Dictionary&detail=metric-dictionary-member-conversion`);
+  await page.locator(".mh-flview[data-fl-type='Metric Dictionary']").waitFor({ timeout: 10000 });
+  await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+  if (!(await page.locator(".mh-modal__title").innerText()).includes("Member conversion")) notes.push("same-instance type switch lost Metric detail drawer");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("same-instance type switch reloaded the host");
+  notes.push(...errors);
+  record("p09-detail-redirects", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- P09: source edit anchors navigate to the actual P08 form route ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  for (const [id, type] of [["business-term-gmv", "Business Term"], ["scenario-channel-performance", "Scenario Reporting"]]) {
+    await page.goto(`${origin}${BASE}knowledge-view?id=${id}`, { waitUntil: "networkidle" });
+    const boot = await page.evaluate(() => window.__mhHostBoot);
+    await page.locator(".mh-kdetail a:has-text('Edit')").last().click();
+    await page.locator(".mh-kcreate").waitFor({ timeout: 10000 });
+    const final = new URL(page.url());
+    if (final.pathname !== `${BASE}knowledge-create` || final.searchParams.get("mode") !== "edit" || final.searchParams.get("id") !== id) notes.push(`${id}: edit route mismatch ${final.pathname}${final.search}`);
+    if (type === "Scenario Reporting" && final.searchParams.get("type") !== type) notes.push(`${id}: scenario type missing from edit URL`);
+    if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push(`${id}: edit navigation reloaded host`);
+  }
+  notes.push(...errors);
+  record("p09-edit-to-p08", notes.length === 0, notes);
   await page.close();
 }
 
