@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          '"Generate Analytical Model" flow dialog reached from the skill menu. `step="history"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step="generated"` shows the drafted model form; `step="manual"` shows the same form empty.',
+          '"Generate Analytical Model" flow dialog reached from the skill menu. `step="history"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step="generated"` shows the drafted model form; `step="manual"` shows the same form empty. Escape closes only this dialog and restores focus to its opener.',
       },
     },
   },
@@ -65,7 +65,10 @@ export const Default = {
           setStep("history");
           args.onBack?.();
         }}
-        onClose={() => args.onClose?.()}
+        onClose={(event) => {
+          setStep(null);
+          args.onClose?.(event);
+        }}
         onSave={args.onSave}
         onSubmit={args.onSubmit}
       />

@@ -2,7 +2,7 @@ import "../../../tokens.css";
 import React from "react";
 import { cx } from "../../../cx.js";
 import { Icon } from "../../../icons.jsx";
-import { useBodyScrollLock, useFocusRestore } from "../../../lib/overlay.js";
+import { useOverlayLayer } from "../../../lib/overlay.js";
 import "./ReportDetailsDrawer.css";
 
 
@@ -59,22 +59,12 @@ export function ReportDetailsDrawer({
     setActiveScenario(null);
     setShowAll(false);
   }, [resetKey]);
-  useBodyScrollLock(open);
-  useFocusRestore(open, layerRef);
-  React.useEffect(() => {
-    if (!open) return undefined;
-    closeRef.current?.focus();
-    const onKey = (event) => {
-      if (event.key === "Escape") onClose?.({ reason: "escape" });
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open, resetKey]);
+  useOverlayLayer({ open, onClose, layerRef, initialFocusRef: closeRef });
   if (!open) return null;
   return (
     <React.Fragment>
-      <div className="mh-details-scrim" onClick={() => onClose?.({ reason: "scrim" })} />
-      <aside ref={layerRef} className={cx("mh-details", fullscreen && "is-fullscreen")} aria-labelledby={titleId}>
+      <div data-mh-overlay-scrim className="mh-details-scrim" onClick={() => onClose?.({ reason: "scrim" })} />
+      <aside data-mh-overlay-surface ref={layerRef} className={cx("mh-details", fullscreen && "is-fullscreen")} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <header className="mh-details__head">
           <div>
             <span>{eyebrow}</span>

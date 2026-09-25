@@ -1,6 +1,6 @@
 import "../../../tokens.css";
 import React from "react";
-import { useBodyScrollLock, useFocusRestore } from "../../../lib/overlay.js";
+import { useOverlayLayer } from "../../../lib/overlay.js";
 import { Icon } from "../../../icons.jsx";
 import { cx } from "../../../cx.js";
 import "./DataModelView.css";
@@ -32,26 +32,12 @@ function DmTagList({ values, className = "mh-dmview__tag" }) {
  */
 function TableDialog({ drawer, strings, onTab, onClose }) {
   const dialogRef = React.useRef(null);
-  const onCloseRef = React.useRef(onClose);
-  onCloseRef.current = onClose;
-  useBodyScrollLock(Boolean(drawer));
-  useFocusRestore(Boolean(drawer), dialogRef);
-  React.useEffect(() => {
-    if (!drawer) return undefined;
-    const onKey = (event) => {
-      if (event.key === "Escape") onCloseRef.current?.({ reason: "escape" });
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [drawer]);
+  useOverlayLayer({ open: Boolean(drawer), onClose, layerRef: dialogRef });
   const titleId = React.useId();
-  React.useEffect(() => {
-    if (drawer) dialogRef.current?.focus();
-  }, [drawer]);
   if (!drawer) return null;
   const { table, isFact, tab, fields, previewRows } = drawer;
   return (
-    <div className="mh-dmview__overlay">
+    <div data-mh-overlay-surface className="mh-dmview__overlay">
       <div className="mh-dmview__scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <section
         className="mh-dmview__dialog"

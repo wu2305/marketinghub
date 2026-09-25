@@ -185,6 +185,7 @@ export function CampaignPage({
     auth: <StatusBadge status={row.authStatus}>{row.authLabel}</StatusBadge>,
     permission: row.permissionStatus ? <StatusBadge status={row.permissionStatus}>{row.permission}</StatusBadge> : row.permission,
   }));
+  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
@@ -312,9 +313,10 @@ export function CampaignPage({
           ) : null}
         </main>
       </div>
-      <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
+      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <AssistantPanel
         open={assistantOpen}
+        returnFocusRef={assistantLauncherRef}
         placement="drawer"
         enterToSubmit={false}
         showPicks={false}

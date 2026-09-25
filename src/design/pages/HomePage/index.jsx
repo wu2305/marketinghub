@@ -1,4 +1,5 @@
 import "../../tokens.css";
+import React from "react";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
@@ -65,6 +66,7 @@ export function HomePage({
   onHistorySelect,
   onFeedback,
 }) {
+  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="home">
       <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" tone="overlay" onNavigate={onNavigate} />
@@ -81,9 +83,10 @@ export function HomePage({
           ))}
         </div>
       </div>
-      <AssistantLauncher hidden={assistantOpen} onOpen={onOpenAssistant} />
+      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <AssistantPanel
         open={assistantOpen}
+        returnFocusRef={assistantLauncherRef}
         placement="drawer"
         tone="home"
         {...assistant}
