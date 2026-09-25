@@ -12,9 +12,31 @@ import { useBusinessTermDemo } from "./business-term-demo.js";
 import { useDataModelDemo } from "./data-model-demo.js";
 import { useFieldLibraryDemo } from "./field-library-demo.js";
 import { useScenarioDemo } from "./scenario-demo.js";
+import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 import { FieldLibraryDrawer } from "../features/interpreter/FieldLibraryView/index.jsx";
 
 const EMPTY_ARRAY = [];
+
+/** Deterministic knowledge answer from knowledge/workspace.js:createAnswer(). */
+export function buildInterpreterAnswer(query) {
+  return {
+    query,
+    variant: "workspace",
+    banner: "AI Response",
+    context: "Context: Knowledge Base",
+    body: "Based on the governed knowledge, I've identified the following insights.",
+    findings: [
+      { label: "Related Assets", detail: "Found 3 knowledge assets connected to your query in the Knowledge Base." },
+      { label: "Metric Definition", detail: "Attributed ROI is defined as net revenue attributed to marketing divided by total marketing cost." },
+      { label: "Data Quality", detail: "2 metrics show incomplete backflow and need review." },
+    ],
+    sources: [
+      "Knowledge Base / Metrics Dictionary",
+      "Data Model / City Strategy",
+      "Governed Definitions",
+    ],
+  };
+}
 
 /** Controlled-prop mirror: local state re-syncs when the input value changes. */
 function useSynced(value) {
@@ -46,7 +68,7 @@ export function paginateRows(rows, { page = 1, pageSize = 10 } = {}) {
  * skip view derivation. Only the active view (and an open related-report
  * overlay) becomes page props. Host callbacks carry the active typeId.
  * @param {object} props type/record seeds, per-view content and host callbacks
- * @returns {{view: object|null, overlay: React.ReactNode}} page view slots
+ * @returns {{view: object|null, overlay: React.ReactNode, assistant: object, skillFlow?: object}} page view slots and assistant flow
  */
 export function useInterpreterDemo(props) {
   const [query, setQuery] = useSynced(props.query ?? "");
@@ -223,9 +245,17 @@ export function useInterpreterDemo(props) {
     : activeView === "field-library" ? fieldLibrary
     : activeView === "scenario-reports" ? scenarioReports
     : null;
+  const workspace = useWorkspaceAssistantDemo({
+    assistant: props.assistant,
+    demo: { ...props.demo, answerFor: props.demo?.answerFor || buildInterpreterAnswer },
+    typeId,
+    onFlowSave: props.onFlowSave,
+    onFlowSubmit: props.onFlowSubmit,
+  });
   return {
     view,
     overlay,
+    ...workspace,
 
   };
 }

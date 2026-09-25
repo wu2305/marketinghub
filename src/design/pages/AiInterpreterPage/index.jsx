@@ -1,9 +1,11 @@
 import "../../tokens.css";
 import React from "react";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
+import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
+import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
 import { DataModelView } from "../../features/interpreter/DataModelView/index.jsx";
@@ -38,6 +40,8 @@ const typeViews = {
  * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view)
  * @param {object} [props.view] props for the active registered type
  * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host
+ * @param {object} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace
+ * @param {object} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
  * @param {(target: object & { typeId: string }) => void} [props.onNavigate]
@@ -53,6 +57,8 @@ export function AiInterpreterPage({
   types = [],
   view = {},
   overlay = null,
+  assistant = {},
+  skillFlow,
   activeType = "overview",
   copy,
   onNavigate,
@@ -63,6 +69,7 @@ export function AiInterpreterPage({
   const known = overview || Boolean(type);
   const searchRef = React.useRef(null);
   const rootRef = React.useRef(null);
+  const assistantLauncherRef = React.useRef(null);
   const rulesHintId = React.useId();
 
   // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages;
@@ -136,7 +143,9 @@ export function AiInterpreterPage({
         </div>
       </div>
       {overlay}
-      <AssistantLauncher label={copy.assistantLabel} onOpen={() => onNavigate?.({ id: "assistant", label: copy.assistantLabel, typeId: activeType })} />
+      <AssistantLauncher ref={assistantLauncherRef} label={copy.assistantLabel} hidden={assistant.open} onOpen={assistant.onOpen} />
+      <AssistantPanel {...assistant} returnFocusRef={assistantLauncherRef} placement="drawer" variant="campaign" />
+      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );
 }

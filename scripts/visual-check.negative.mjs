@@ -49,8 +49,8 @@ export default [
     reason: "activeType=Business Term must not satisfy Principles filter assertions",
   },
   {
-    // The dedicated view has no generic asset rows and no launcher; the
-    // overview's type grid must not satisfy its assertions either.
+    // The overview's type grid must not satisfy Business Term card and
+    // toolbar assertions; the assistant launcher is visible in both views.
     id: "neg-p07-business-term-overview",
     base: "p07-interpreter-business-term",
     story: { args: { activeType: "overview" } },
@@ -119,5 +119,23 @@ export default [
     base: "p03-assistant-escape-focus",
     story: { id: "pages--self-service-assistant", actions: [] },
     reason: "assistant left open must not satisfy Escape closure and launcher-focus assertions",
+  },
+  {
+    id: "neg-p07-assistant-closed",
+    base: "p07-assistant-open",
+    story: { id: "pages--interpreter" },
+    reason: "closed Interpreter page must not satisfy open knowledge drawer assertions",
+  },
+  {
+    id: "neg-p07-assistant-missing-answer",
+    base: "p07-assistant-answer",
+    story: { id: "pages--interpreter-assistant" },
+    reason: "open knowledge assistant without a submitted suggestion must not satisfy answer assertions",
+  },
+  {
+    id: "neg-p07-assistant-escape-left-open",
+    base: "p07-assistant-escape-focus",
+    story: { id: "pages--interpreter-assistant", actions: [] },
+    reason: "knowledge assistant left open must fail Escape closure and launcher focus assertions",
   },
 ];

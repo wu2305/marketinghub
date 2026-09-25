@@ -311,6 +311,36 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- Interpreter: existing routed type view plus knowledge assistant ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}interpreter?type=Business%20Term`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if (!(await page.locator('.mh-interpreter__main[data-active-type="Business Term"]').count())) notes.push("typed Interpreter view missing");
+  await page.locator(".mh-launcher").click();
+  await page.waitForSelector(".mh-assistant--drawer", { timeout: 5000 });
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  await page.waitForSelector(".mh-assistant__answer--workspace", { timeout: 5000 });
+  if (!(await page.locator(".mh-assistant__answer-banner").innerText()).includes("Context: Knowledge Base")) notes.push("knowledge answer context missing");
+  await page.locator(".mh-assistant__skill").click();
+  await page.locator(".mh-skill__category", { hasText: "Analytical Model" }).click();
+  if ((await page.locator(".mh-skill__option").count()) !== 1) notes.push("knowledge data-backed skill count is not one");
+  await page.locator(".mh-skill__action", { hasText: "Add from Chat History" }).click();
+  await page.waitForSelector(".mh-flow__card--history", { timeout: 5000 });
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-flow").count()) notes.push("top model flow survived Escape");
+  if (!(await page.locator(".mh-assistant").count())) notes.push("assistant closed before top flow");
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-assistant").count()) notes.push("assistant survived second Escape");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Interpreter assistant reloaded host");
+  if (!page.url().includes("interpreter?type=Business%20Term")) notes.push("Interpreter type route changed during assistant flow");
+  await page.screenshot({ path: path.join(OUT, "interpreter-assistant.png") });
+  notes.push(...errors);
+  record("interpreter-assistant-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- sentinel: host elements identical with and without the design system ---- */
 {
   const props = ["fontFamily", "boxSizing", "padding", "border", "backgroundColor", "color", "textDecorationLine"];
