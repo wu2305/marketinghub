@@ -9,7 +9,7 @@ const baseProps = {
   hero: INTERPRETER.hero,
   overviewItem: INTERPRETER.overview,
   sidebarTitle: INTERPRETER.sidebarTitle,
-  unknownCopy: INTERPRETER.unknownCopy,
+  copy: INTERPRETER.copy,
   types: INTERPRETER.types,
 };
 
@@ -81,6 +81,58 @@ describe("AI Interpreter type contract", () => {
     expect(screen.getByText("Unknown knowledge type")).toBeTruthy();
     expect(document.querySelectorAll(".mh-asset").length).toBe(0);
     expect(screen.queryByText("Trusted analysis guardrails")).toBeNull();
+  });
+
+  it("uses host copy for every knowledge shell label and callback", () => {
+    const onNavigate = vi.fn();
+    const copy = {
+      unknown: {
+        typeTitle: "Unsupported kind",
+        typeDescription: ({ typeId, count }) => `Choose one of ${count} kinds instead of ${typeId}.`,
+        viewTitle: "Unsupported view",
+      },
+      stats: {
+        fallbackUnit: "widgets",
+        publishedLabel: "Ready items",
+        monthlyLabel: "Fresh items",
+        governedCaption: ({ unit }) => `Governed ${unit}`,
+        addedCaption: ({ unit }) => `Added ${unit}`,
+      },
+      heroAsideLabel: ({ typeTitle }) => typeTitle ? `Statistics for ${typeTitle}` : "Statistics for all kinds",
+      management: {
+        triggerLabel: "Usage policy",
+        title: "Team guidance",
+        rules: ["Ask your owner before editing.", "Keep the record available."],
+      },
+      assistantLabel: "Knowledge helper",
+    };
+    const types = INTERPRETER.types.map((type) => type.id === "Business Term"
+      ? { ...type, stats: { ...type.stats, units: [], total: 1, monthly: 2 } }
+      : type);
+    const hero = { ...INTERPRETER.hero, stats: [...INTERPRETER.hero.stats].reverse() };
+    const { unmount } = renderPage({ activeType: "Business Term", types, hero, copy, onNavigate });
+    expect(screen.getByText("Ready items")).toBeTruthy();
+    expect(screen.getByText("Fresh items")).toBeTruthy();
+    expect(screen.getByText("Governed widget")).toBeTruthy();
+    expect(screen.getByText("Added widgets")).toBeTruthy();
+    expect(screen.queryByText("Published Knowledge")).toBeNull();
+    expect(screen.queryByText("New This Month")).toBeNull();
+    expect(screen.getByRole("group", { name: "Statistics for Business Terms" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Usage policy" })).toBeTruthy();
+    expect(screen.getByText("Team guidance")).toBeTruthy();
+    expect(screen.getByText("Ask your owner before editing.")).toBeTruthy();
+    expect(screen.getByText("Keep the record available.")).toBeTruthy();
+    fireEvent.click(screen.getByText("Knowledge helper").closest("button"));
+    expect(onNavigate).toHaveBeenCalledWith({ id: "assistant", label: "Knowledge helper", typeId: "Business Term" });
+
+    unmount();
+    const unknown = renderPage({ activeType: "other", types, hero, copy });
+    expect(screen.getByText("Unsupported kind")).toBeTruthy();
+    expect(screen.getByText(`Choose one of ${types.length} kinds instead of other.`)).toBeTruthy();
+    expect(screen.getByRole("group", { name: "Statistics for all kinds" })).toBeTruthy();
+    unknown.unmount();
+    renderPage({ activeType: "Business Term", types: types.map((type) => type.id === "Business Term" ? { ...type, view: "unregistered" } : type), hero, copy });
+    expect(screen.getByText("Unsupported view")).toBeTruthy();
   });
 
   it("hides create controls on read-only types and shows them on manageable types", () => {

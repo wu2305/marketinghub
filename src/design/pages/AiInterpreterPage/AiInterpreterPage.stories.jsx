@@ -19,7 +19,7 @@ export const Interpreter = {
     hero: INTERPRETER.hero,
     overviewItem: INTERPRETER.overview,
     sidebarTitle: INTERPRETER.sidebarTitle,
-    unknownCopy: INTERPRETER.unknownCopy,
+    copy: INTERPRETER.copy,
     types: INTERPRETER.types,
     records: INTERPRETER.records,
     principles: {

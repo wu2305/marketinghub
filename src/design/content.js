@@ -351,10 +351,31 @@ export const SELF_SERVICE = {
 // the same identifiers the original demo uses in ?type= URLs and asset.type fields.
 // stats mirror typeMeta[].stats (the agreed counting source, see AGENTS.md 3.3).
 export const INTERPRETER = {
-  unknownCopy: {
-    typeTitle: "Unknown knowledge type",
-    typeDescription: ({ typeId, count }) => `"${typeId}" is not one of the ${count} knowledge types. Pick a type from the navigation.`,
-    viewTitle: "Unknown knowledge view",
+  copy: {
+    unknown: {
+      typeTitle: "Unknown knowledge type",
+      typeDescription: ({ typeId, count }) => `"${typeId}" is not one of the ${count} knowledge types. Pick a type from the navigation.`,
+      viewTitle: "Unknown knowledge view",
+    },
+    stats: {
+      fallbackUnit: "knowledge assets",
+      publishedLabel: "Published Knowledge",
+      monthlyLabel: "New This Month",
+      governedCaption: ({ unit }) => `${unit} governed for AI use`,
+      addedCaption: ({ unit }) => `${unit} added recently`,
+    },
+    heroAsideLabel: ({ typeTitle }) => `${typeTitle || "All types"} knowledge statistics`,
+    management: {
+      triggerLabel: "Management rules",
+      title: "Operation Reminder",
+      rules: [
+        "Only knowledge created by you can be managed.",
+        "Disable knowledge before editing or deleting it.",
+        "Deletion is permanent and cannot be undone.",
+        "Disabled knowledge is unavailable for AI use and can be enabled again.",
+      ],
+    },
+    assistantLabel: "AI Interpreter",
   },
   hero: {
     image: assetUrl("assets/images/knowledge-hero.jpg"),

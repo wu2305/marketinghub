@@ -33,13 +33,13 @@ const typeViews = {
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
- * @param {{ id: string, label: string, icon?: string }} [props.overviewItem]
+ * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
  * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view)
  * @param {object} [props.view] props for the active registered type
  * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
- * @param {{typeTitle: string, typeDescription: Function, viewTitle: string}} props.unknownCopy empty-state copy supplied by the host
+ * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
  * @param {(target: object & { typeId: string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType]
  */
@@ -48,13 +48,13 @@ export function AiInterpreterPage({
   logo,
   navigation = [],
   hero = { stats: [] },
-  overviewItem = { id: "overview", label: "Overview" },
+  overviewItem,
   sidebarTitle,
   types = [],
   view = {},
   overlay = null,
   activeType = "overview",
-  unknownCopy = {},
+  copy,
   onNavigate,
   onSelectType,
 }) {
@@ -71,12 +71,12 @@ export function AiInterpreterPage({
 
   // renderHeroStats: labels stay static; values/captions follow the active type,
   // singularizing the unit when its own value is 1 ("1 model governed…").
-  const unit = type?.stats?.units?.[1] || "knowledge assets";
+  const unit = type?.stats?.units?.[1] || copy.stats.fallbackUnit;
   const captionUnit = (value) => (value === 1 && unit.endsWith("s") ? unit.slice(0, -1) : unit);
   const heroStats = type
     ? [
-        { label: "Published Knowledge", value: type.stats.total.toLocaleString(), caption: `${captionUnit(type.stats.total)} governed for AI use` },
-        { label: "New This Month", value: type.stats.monthly.toLocaleString(), caption: `${captionUnit(type.stats.monthly)} added recently` },
+        { label: copy.stats.publishedLabel, value: type.stats.total.toLocaleString(), caption: copy.stats.governedCaption({ unit: captionUnit(type.stats.total) }) },
+        { label: copy.stats.monthlyLabel, value: type.stats.monthly.toLocaleString(), caption: copy.stats.addedCaption({ unit: captionUnit(type.stats.monthly) }) },
       ]
     : hero.stats || [];
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
@@ -91,7 +91,7 @@ export function AiInterpreterPage({
     <Shell tone="interpreter" className={type ? "mh-page--interpreter-type" : undefined}>
       <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" onNavigate={(event) => onNavigate?.({ ...event, typeId: activeType })} />
       <div className="mh-page__offset" aria-hidden="true" />
-      <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={`${type ? type.title : "All types"} knowledge statistics`}>
+      <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={copy.heroAsideLabel({ typeTitle: type?.title })}>
         {heroStats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" compact />
         ))}
@@ -99,14 +99,11 @@ export function AiInterpreterPage({
             for manageable types (Business Term / Analytical Model / Scenario). */}
         {type?.manageable ? (
           <div className="mh-rules-hint">
-            <button className="mh-rules-hint__trigger" type="button" aria-label="Management rules" aria-describedby={rulesHintId}>!</button>
+            <button className="mh-rules-hint__trigger" type="button" aria-label={copy.management.triggerLabel} aria-describedby={rulesHintId}>!</button>
             <section className="mh-rules-hint__tooltip" id={rulesHintId} role="tooltip">
-              <h3>Operation Reminder</h3>
+              <h3>{copy.management.title}</h3>
               <ol>
-                <li>Only knowledge created by you can be managed.</li>
-                <li>Disable knowledge before editing or deleting it.</li>
-                <li>Deletion is permanent and cannot be undone.</li>
-                <li>Disabled knowledge is unavailable for AI use and can be enabled again.</li>
+                {copy.management.rules.map((rule, index) => <li key={index}>{rule}</li>)}
               </ol>
             </section>
           </div>
@@ -128,18 +125,18 @@ export function AiInterpreterPage({
             <TypeGrid items={types} activeId={activeType} onSelect={(event) => onSelectType?.({ ...event, typeId: activeType })} />
           ) : !known ? (
             <div className="mh-empty mh-empty--unknown" role="status">
-              <strong>{unknownCopy.typeTitle}</strong>
-              <p>{unknownCopy.typeDescription?.({ typeId: activeType, count: types.length })}</p>
+              <strong>{copy.unknown.typeTitle}</strong>
+              <p>{copy.unknown.typeDescription({ typeId: activeType, count: types.length })}</p>
             </div>
           ) : View ? (
             <View searchRef={searchRef} {...view} />
           ) : (
-            <div className="mh-empty mh-empty--unknown" role="status">{unknownCopy.viewTitle}</div>
+            <div className="mh-empty mh-empty--unknown" role="status">{copy.unknown.viewTitle}</div>
           )}
         </div>
       </div>
       {overlay}
-      <AssistantLauncher onOpen={() => onNavigate?.({ id: "assistant", label: "AI Interpreter", typeId: activeType })} />
+      <AssistantLauncher label={copy.assistantLabel} onOpen={() => onNavigate?.({ id: "assistant", label: copy.assistantLabel, typeId: activeType })} />
     </Shell>
   );
 }
