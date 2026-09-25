@@ -6,6 +6,10 @@ import "./Header.css";
 export const headerTones = ["solid", "overlay"];
 export const headerPositions = ["sticky", "fixed"];
 
+function isPlainPrimaryLink(event) {
+  return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.currentTarget.target && !event.currentTarget.hasAttribute("download");
+}
+
 /**
  * Global site header with logo and top navigation.
  * @param {object} props
@@ -33,7 +37,7 @@ export function Header({
           className="mh-header__logo"
           href={logo.href || "/index.html"}
           aria-label="Tapestry Marketing Portal home"
-          onClick={() => onNavigate?.({ id: "home", href: logo.href || "/index.html", label: "Home" })}
+          onClick={(event) => isPlainPrimaryLink(event) && onNavigate?.({ id: "home", href: logo.href || "/index.html", label: "Home" })}
         >
           <img src={logo.src} alt={logo.alt || "Tapestry"} />
         </a>
@@ -44,7 +48,7 @@ export function Header({
               className={cx("mh-header__link", highlightCurrent && item.id === current && "is-current")}
               href={item.href}
               aria-current={item.id === current ? "page" : undefined}
-              onClick={() => onNavigate?.({ id: item.id, href: item.href, label: item.label })}
+              onClick={(event) => isPlainPrimaryLink(event) && onNavigate?.({ id: item.id, href: item.href, label: item.label })}
             >
               {item.label}
             </a>

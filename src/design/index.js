@@ -203,6 +203,9 @@ export {
   MediaTrackingDetailPage,
 } from "./pages/MediaTrackingDetailPage/index.jsx";
 export { DataModelPage } from "./pages/DataModelPage/index.jsx";
+export { KnowledgeCreatePage } from "./pages/KnowledgeCreatePage/index.jsx";
+export { KnowledgeCreateFields } from "./features/knowledge-create/KnowledgeCreateFields/index.jsx";
+export { knowledgeCreateTypes, knowledgeCreateModes } from "./knowledge-create-options.js";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";

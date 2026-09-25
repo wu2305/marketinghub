@@ -11,6 +11,12 @@
  */
 export default [
   {
+    id: "neg-p08-wrong-type",
+    base: "p08-business-term",
+    story: { id: "pages--knowledge-create-analysis" },
+    reason: "Analytical Model must not satisfy Business Term form assertions",
+  },
+  {
     // Pages--campaign renders the campaign workspace, so the Home hero and
     // workspace-card expects can never be satisfied.
     id: "neg-p01-wrong-story",

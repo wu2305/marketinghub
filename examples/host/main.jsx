@@ -15,6 +15,7 @@ import "../../src/design/tokens.css";
 import "./host.css";
 import {
   HomePage,
+  AiInterpreterPage,
   MarketingCockpitPage,
   CityInvestDashboard,
   ReportCopilot,
@@ -23,6 +24,7 @@ import {
   useBusinessTermDemo,
   BusinessTermView,
   DataModelPage,
+  KnowledgeCreatePage,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -52,6 +54,9 @@ import {
 import { ALT_BUSINESS_TERMS } from "../../src/design/demo/__fixtures__/alt-business-terms.js";
 import { useDataModelPageDemo, dataModelPageHrefFor, normalizedDataModelSearch } from "../../src/design/demo/data-model-page-demo.js";
 import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.js";
+import { KNOWLEDGE_CREATE } from "../../src/design/demo/content/knowledge-create.js";
+import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-demo.js";
+import { useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -66,17 +71,26 @@ const ROUTE_MAP = {
   "/index.html": "",
   "/assets/pages/reports.html": "cockpit",
   "/assets/pages/data-model.html": "data-model",
+  "/assets/pages/knowledge.html": "interpreter",
+  "/assets/pages/knowledge-create.html": "knowledge-create",
 };
 
 function mapDemoHref(href) {
   if (!href) return href;
-  const url = new URL(href, `http://host.local${BASE}`);
+  const url = new URL(href, "http://host.local/assets/pages/");
   if (!url.pathname.endsWith(".html") && url.pathname !== "/") return href;
-  const mapped = ROUTE_MAP[url.pathname];
+  const originalPath = url.pathname.startsWith(BASE) ? `/assets/pages/${url.pathname.slice(BASE.length)}` : url.pathname;
+  const mapped = ROUTE_MAP[originalPath];
   if (mapped === undefined) return hostHref(`coverage/${url.pathname.replace(/^\/+/, "")}`);
-  const project = url.searchParams.get("project");
-  if (mapped === "cockpit" && project) return `${hostHref("cockpit")}?project=${project}`;
-  return hostHref(mapped);
+  return `${hostHref(mapped)}${url.search}`;
+}
+
+function navigateHost(href) {
+  if (!href) return;
+  const next = href.startsWith(BASE) ? href : mapDemoHref(href);
+  if (next === window.location.pathname + window.location.search) return;
+  window.history.pushState(null, "", next);
+  window.dispatchEvent(new PopStateEvent("popstate"));
 }
 
 const hostNav = () =>
@@ -106,6 +120,8 @@ function routeOf(loc) {
   if (rest === "") return { name: "home", params };
   if (rest === "cockpit") return { name: "cockpit", params };
   if (rest === "data-model") return { name: "data-model", params };
+  if (rest === "interpreter") return { name: "interpreter", params };
+  if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -131,7 +147,7 @@ function useRoute() {
       event.preventDefault();
       /* Demo-route hrefs become coverage URLs — the address bar must never
          leave /mh-host/ (a reload of an unmapped /assets/pages/ URL 404s). */
-      const next = url.pathname.startsWith(BASE)
+      const next = url.pathname.startsWith(BASE) && !url.pathname.endsWith(".html")
         ? url.pathname + url.search
         : mapDemoHref(url.pathname + url.search);
       if (next === window.location.pathname + window.location.search) return;
@@ -197,6 +213,40 @@ function CockpitRoute({ params }) {
     ...cockpitRoutes,
   });
   return <MarketingCockpitPage {...props} />;
+}
+
+function InterpreterRoute({ params }) {
+  const activeType = params.get("type") || "overview";
+  const principles = { items: INTERPRETER.principles, strings: INTERPRETER.principlesLibrary, selectedCategories: [], page: 1, pageSize: 10, expanded: [] };
+  const demo = useInterpreterDemo({
+    types: INTERPRETER.types, records: INTERPRETER.records, activeType, query: "", principles,
+    businessTermLibrary: INTERPRETER.businessTermLibrary, fieldLibrary: INTERPRETER.fieldLibrary,
+    scenarioReports: INTERPRETER.scenarioReports,
+    onNavigate: ({ href }) => navigateHost(href),
+  });
+  return <AiInterpreterPage
+    logo={hostLogo} navigation={hostNav()} hero={INTERPRETER.hero} overviewItem={INTERPRETER.overview}
+    sidebarTitle={INTERPRETER.sidebarTitle} copy={INTERPRETER.copy} types={INTERPRETER.types}
+    activeType={activeType} {...demo}
+    onNavigate={({ href }) => navigateHost(href)}
+    onSelectType={({ id }) => navigateHost(`${hostHref("interpreter")}?type=${encodeURIComponent(id)}`)}
+  />;
+}
+
+function KnowledgeCreateRoute({ params }) {
+  const props = useKnowledgeCreateDemo({
+    content: KNOWLEDGE_CREATE,
+    type: params.get("type") || "Business Term",
+    mode: params.get("copy") ? "copy" : params.get("mode") || "create",
+    id: params.get("copy") || params.get("id") || undefined,
+    onNavigate: ({ href }) => navigateHost(href),
+    hrefFor: (id, values = {}) => {
+      if (id === "knowledgeCreate") return `${hostHref("knowledge-create")}?${new URLSearchParams(values)}`;
+      if (id === "interpreter") return `${hostHref("interpreter")}${Object.keys(values).length ? `?${new URLSearchParams(values)}` : ""}`;
+      return mapDemoHref(({ home: "/index.html", cockpit: "/assets/pages/reports.html", selfService: "/assets/pages/flexible.html", campaign: "/assets/pages/campaign.html" })[id] || "/assets/pages/knowledge.html");
+    },
+  });
+  return <KnowledgeCreatePage {...props} logo={hostLogo} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -323,6 +373,8 @@ function App() {
   }
   if (route.name === "cockpit") return <CockpitRoute params={route.params} />;
   if (route.name === "data-model") return <DataModelRoute params={route.params} />;
+  if (route.name === "interpreter") return <InterpreterRoute params={route.params} />;
+  if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;
