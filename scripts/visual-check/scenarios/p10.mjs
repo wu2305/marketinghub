@@ -119,12 +119,12 @@ export default [
   },
   {
     id: "p10-metric-qa-disabled",
-    original: { url: "/assets/pages/metric-dictionary.html", actions: [{ click: "#metricQaToggle" }], expect: [{ sel: "#metricQaToggle:not(:checked)", count: 1 }] },
+    original: { url: "/assets/pages/metric-dictionary.html", actions: [{ click: ".metric-toggle" }], expect: [{ sel: "#metricQaToggle:not(:checked)", state: "attached", count: 1 }] },
     story: { id: "pages--metric-dictionary-qa-disabled", expect: [{ sel: ".mh-metric-page__toggle input:not(:checked)", count: 1 }] },
   },
   {
     id: "p10-metric-dimension-disabled",
-    original: { url: "/assets/pages/metric-dictionary.html", actions: [{ click: '.metric-detail-tab[data-tab="dimensions"]' }, { click: "#dimensionsTab .metric-dim-list input:first-child" }], expect: [{ sel: "#dimensionsTab .metric-dim-list input:not(:checked)", count: 1 }] },
+    original: { url: "/assets/pages/metric-dictionary.html", actions: [{ click: '.metric-detail-tab[data-tab="dimensions"]' }, { click: "#dimensionsTab .metric-dim-list .metric-dim-item:first-child .metric-dim-toggle" }], expect: [{ sel: "#dimensionsTab .metric-dim-list input:not(:checked)", state: "attached", count: 1 }] },
     story: { id: "pages--metric-dictionary-dimension-disabled", expect: [{ sel: ".mh-metric-page__dimension-grid input:not(:checked)", count: 1 }] },
   },
 ];
