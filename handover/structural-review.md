@@ -38,7 +38,7 @@
 
     **CSS 归属规则**：每条规则归其选择器最外层 class 的渲染方；选择器含页面作用域 class（`mh-page--*`、`mh-campaign`、`mh-interpreter`、`mh-tracking`、`mh-upload`、`mh-bulk-import`、`mh-task-dialog`、`mh-rules-hint` 等）时归该页面组件（跨组件覆盖放上层）；`mh-page`/`mh-page__offset`/`mh-page__shell` 等通用壳类归 `pages/Shell/Shell.css`；`mh-empty` 基础规则归 KnowledgeLibrary（AiInterpreterPage 的 `--unknown` 复用同元素）；`mh-count`/`mh-health`/`mh-stack`/`mh-efficiency`/`mh-recommendations` 归 CampaignPage；`mh-empty-state` 归 MarketingCockpitPage；`mh-eyebrow` 归 LiveReportView；`mh-live-toolbar/back/heading/panel` 归 LiveReportView，`mh-live-dashboard/kpi*/grid/card/chart/rank*` 归 LiveOverview；`@keyframes` 跟随使用方（mh-toast-in→Toast、mhLauncherAura→AssistantLauncher、mhAssistantModal/DrawerEnter→AssistantPanel、mh-details-in→ReportDetailsDrawer、mh-stream-blink→ReportCopilot）。顺序保证：组件 `index.jsx` 内依赖 import 在前、自身 `.css` 在后，使子组件样式先于父级覆盖排放（与原 atoms→molecules→organisms→pages 层级一致）；另写脚本对拆分前后打包 CSS 逐条比对（同选择器/同 media 的规则序列、等特异性可共匹配规则对的相对顺序），输出 `/tmp/mh-s1-css-order/`。
 
-- [ ] **S2 覆盖层没有统一的层栈**
+- [x] **S2 覆盖层没有统一的层栈**（PR #5 已完成；共享生命周期，保留各真实外壳；验证见 README §1/§5）
   - 现状：`useBodyScrollLock` 和 `useFocusRestore` 已经共享（organisms.jsx:40–82），但 Escape、焦点环、背景 inert 仍由各组件自己实现。
   - 后果：嵌套时一次 Escape 会关掉全部层（handover 登记的已知残留）；ModelFlowDialog 按 Escape 无反应；抽屉类覆盖层没有焦点环。
   - 方向：写一个 `useOverlayLayer({ open, onClose, layerRef, trapFocus })`。它维护全局层栈，只有栈顶响应 Escape；统一处理滚动锁、焦点进入、焦点环和焦点还原。
@@ -576,7 +576,7 @@ R5(a)：
 - [x] **WP1 CSS budget ratchet**（PR #1，36959e7；独立对抗审核与全套验证通过，实数见 README §1/§5）：裸十六进制、token 定义数、同值多名数量上限；组件前缀新增禁令和仅可缩减豁免；负向变异证明；AGENTS §4 临时脚本位置。
 - [x] **WP2 P07 closeout**（PR #4，1d39a5d；对抗审核与最终全套验证见 README §1/§5）：管理动作/状态/确认流程共性；active-view 注册契约和 overlay slot；删除无使用者过渡组件；fl/dm/sr 语义 token；P07 八类状态只维护 §2.2。
 - [x] **WP3.1 A2**（PR #2；对抗审核及全套验证通过，实数见 README §1/§5）：参照物逻辑缺陷退出组件，demo 层按需重现。
-- [ ] **WP3.2 S2**：统一覆盖层栈、Escape 与焦点环。
+- [x] **WP3.2 S2**（PR #5，e76fedd；对抗审核和全套验证见 README §1/§5）：统一覆盖层栈、Escape 与焦点环。
 - [ ] **WP3.3 S3 + R3 + O5**：共用助手外壳、页面预设与变体枚举、答案变体收敛。
 - [x] **WP4 export-surface guard**（PR #3；对抗审核及全套验证通过，实数见 README §1/§5）：冻结公共入口 demo/content/routes/fixtures 导出，允许删除，禁止增加；既有项保留至 M7 R5(b)。
 - [ ] **WP5 P08**：knowledge-create 各类创建/编辑、关联、校验和全部动作；可达状态故事和配对/负向场景。
