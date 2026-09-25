@@ -54,7 +54,7 @@ import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../src/design/demo/conte
 import { metricDictionaryHrefFor, useMetricDictionaryDemo } from "../../src/design/demo/metric-dictionary-demo.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
 import { cityInvestScenarioSource } from "../../src/design/demo/report-demo.js";
-import { useKnowledgeViewDemo, knowledgeViewHrefFor } from "../../src/design/demo/knowledge-view-demo.js";
+import { useKnowledgeViewDemo, knowledgeViewHrefFor, knowledgeViewRedirectFor } from "../../src/design/demo/knowledge-view-demo.js";
 import { KNOWLEDGE_VIEW } from "../../src/design/demo/content/knowledge-view.js";
 import {
   ALT_CITY_INVEST,
@@ -173,6 +173,7 @@ function useRoute() {
     };
     window.addEventListener("popstate", onPop);
     document.addEventListener("click", onClick);
+    onPop();
     return () => {
       window.removeEventListener("popstate", onPop);
       document.removeEventListener("click", onClick);
@@ -237,7 +238,8 @@ function InterpreterRoute({ params }) {
   const principles = { items: INTERPRETER.principles, strings: INTERPRETER.principlesLibrary, selectedCategories: [], page: 1, pageSize: 10, expanded: [] };
   const demo = useInterpreterDemo({
     types: INTERPRETER.types, records: INTERPRETER.records, activeType, query: "", principles,
-    businessTermLibrary: INTERPRETER.businessTermLibrary, fieldLibrary: INTERPRETER.fieldLibrary,
+    businessTermLibrary: INTERPRETER.businessTermLibrary,
+    fieldLibrary: { ...INTERPRETER.fieldLibrary, detail: params.get("detail") || null },
     scenarioReports: INTERPRETER.scenarioReports,
     onNavigate: ({ href }) => navigateHost(href),
   });
@@ -331,11 +333,20 @@ function knowledgeViewHostHrefFor(id, params = {}) {
 }
 
 function KnowledgeViewRoute({ params }) {
+  const recordId = params.get("id") || undefined;
+  const redirect = knowledgeViewRedirectFor(recordId, INTERPRETER.records);
+  const redirectHref = redirect ? knowledgeViewHostHrefFor(redirect.id, redirect.params) : null;
+  React.useEffect(() => {
+    if (!redirectHref) return;
+    window.history.replaceState(null, "", redirectHref);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, [redirectHref]);
   const demo = useKnowledgeViewDemo({
     content: KNOWLEDGE_VIEW,
-    recordId: params.get("id") || undefined,
+    recordId,
     hrefFor: knowledgeViewHostHrefFor,
   });
+  if (redirectHref) return null;
   return <KnowledgeViewPage {...demo} logo={hostLogo} navigation={hostNav().filter((item) => ["home", "cockpit", "interpreter"].includes(item.id))} />;
 }
 
