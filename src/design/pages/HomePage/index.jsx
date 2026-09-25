@@ -90,10 +90,9 @@ export function HomePage({
         placement="drawer"
         tone="home"
         {...assistant}
+        variant="home"
         suggestions={assistant.homeSuggestions || assistant.suggestions}
         scope={scope}
-        showScopes={false}
-        showPicks={false}
         prompt={prompt}
         onClose={onCloseAssistant}
         onPromptChange={onPromptChange}

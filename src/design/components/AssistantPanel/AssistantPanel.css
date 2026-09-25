@@ -180,20 +180,6 @@ border-bottom: 0;
 min-height: 32px;
 }
 
-.mh-assistant__scopes {
-display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.mh-assistant__scopes > span {
-margin-right: 6px;
-  color: var(--mh-muted-ai);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
 .mh-assistant__box {
 display: grid;
   gap: 8px;
@@ -217,21 +203,6 @@ position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.mh-assistant__pick {
-display: inline-flex;
-  height: 30px;
-  align-items: center;
-  padding: 0 8px;
-  border: 1px solid var(--mh-line-ai);
-  border-radius: 6px;
-  background: var(--mh-surface);
-  color: var(--mh-ink-ai);
-  font-family: var(--mh-font);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
 }
 
 .mh-assistant__main {

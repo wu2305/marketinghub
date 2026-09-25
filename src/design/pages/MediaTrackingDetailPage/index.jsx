@@ -156,9 +156,8 @@ export function MediaTrackingDetailPage({
         open={assistantOpen}
         returnFocusRef={assistantLauncherRef}
         placement="drawer"
-        enterToSubmit={false}
-        lite
         {...assistant}
+        variant="lite"
         prompt={prompt}
         onClose={onCloseAssistant}
         onPromptChange={onPromptChange}
