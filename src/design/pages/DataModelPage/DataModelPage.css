@@ -1,0 +1,14 @@
+.mh-data-model-page {
+  background: var(--mh-page-bg);
+}
+
+.mh-data-model-page__main {
+  min-height: calc(100vh - var(--mh-header));
+  padding: 18px 24px 28px;
+}
+
+@media (max-width: 900px) {
+  .mh-data-model-page__main {
+    padding: 16px 14px 24px;
+  }
+}

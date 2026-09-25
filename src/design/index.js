@@ -202,6 +202,7 @@ export {
 export {
   MediaTrackingDetailPage,
 } from "./pages/MediaTrackingDetailPage/index.jsx";
+export { DataModelPage } from "./pages/DataModelPage/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";

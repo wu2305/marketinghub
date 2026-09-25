@@ -22,6 +22,7 @@ import {
   useHomeDemo,
   useBusinessTermDemo,
   BusinessTermView,
+  DataModelPage,
   buildCopilotChatEntry,
   copilotSkillItems,
   resolveCopilotAnswer,
@@ -49,6 +50,8 @@ import {
   ALT_PROJECTS,
 } from "../../src/design/demo/__fixtures__/alt-cockpit.js";
 import { ALT_BUSINESS_TERMS } from "../../src/design/demo/__fixtures__/alt-business-terms.js";
+import { useDataModelPageDemo, dataModelPageHrefFor, normalizedDataModelSearch } from "../../src/design/demo/data-model-page-demo.js";
+import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -62,6 +65,7 @@ const hostHref = (path) => `${BASE}${String(path).replace(/^\/+/, "")}`;
 const ROUTE_MAP = {
   "/index.html": "",
   "/assets/pages/reports.html": "cockpit",
+  "/assets/pages/data-model.html": "data-model",
 };
 
 function mapDemoHref(href) {
@@ -101,6 +105,7 @@ function routeOf(loc) {
   const rest = path.slice(BASE.length).replace(/\/+$/, "");
   if (rest === "") return { name: "home", params };
   if (rest === "cockpit") return { name: "cockpit", params };
+  if (rest === "data-model") return { name: "data-model", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -192,6 +197,26 @@ function CockpitRoute({ params }) {
     ...cockpitRoutes,
   });
   return <MarketingCockpitPage {...props} />;
+}
+
+/* ------------------------------------------------------------------ */
+/* P11 Data Model — standalone browser and source query normalization    */
+/* ------------------------------------------------------------------ */
+
+function dataModelHostHrefFor(id, params = {}) {
+  const raw = dataModelPageHrefFor(id, params);
+  const mapped = mapDemoHref(raw);
+  const query = new URL(raw, "http://host.local").search;
+  return mapped.includes("?") ? mapped : `${mapped}${query}`;
+}
+
+function DataModelRoute({ params }) {
+  const normalizedSearch = normalizedDataModelSearch(params.toString());
+  React.useEffect(() => {
+    if (normalizedSearch) window.history.replaceState(null, "", `${hostHref("data-model")}${normalizedSearch}`);
+  }, [normalizedSearch]);
+  const page = useDataModelPageDemo({ content: DATA_MODEL_PAGE, hrefFor: dataModelHostHrefFor });
+  return <DataModelPage {...page} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -297,6 +322,7 @@ function App() {
     );
   }
   if (route.name === "cockpit") return <CockpitRoute params={route.params} />;
+  if (route.name === "data-model") return <DataModelRoute params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

@@ -277,6 +277,17 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
         else if (step.check) await page.check(step.check);
         else if (step.hover) await page.hover(step.hover);
         else if (step.press) await page.press(step.press[0], step.press[1]);
+        else if (step.drag) {
+          const [selector, dx, dy] = step.drag;
+          const rect = await page.locator(selector).boundingBox();
+          if (!rect) throw new Error(`drag target missing: ${selector}`);
+          const x = rect.x + rect.width * 0.2;
+          const y = rect.y + rect.height * 0.8;
+          await page.mouse.move(x, y);
+          await page.mouse.down();
+          await page.mouse.move(x + dx, y + dy, { steps: 5 });
+          await page.mouse.up();
+        }
         else if (step.upload)
           await page.setInputFiles(step.upload[0], {
             name: step.upload[1].name,
