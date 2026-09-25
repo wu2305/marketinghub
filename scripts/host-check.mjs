@@ -619,6 +619,31 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P09: notice dismissal stays local; its body Back link reaches Interpreter ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  for (const [id, trigger] of [["scenario-channel-performance", ".mh-kdetail__scenario-actions button"], ["channel-data-model", ".mh-kdetail__model-export"]]) {
+    await page.goto(`${origin}${BASE}knowledge-view?id=${id}`, { waitUntil: "networkidle" });
+    const boot = await page.evaluate(() => window.__mhHostBoot);
+    await page.locator(trigger).click();
+    await page.locator(".mh-modal__dialog[role='dialog']").waitFor({ timeout: 10000 });
+    if ((await page.locator(".mh-modal__close").getAttribute("aria-label")) !== "Close dialog") notes.push(`${id}: close control announces navigation`);
+    await page.locator(".mh-modal__close").click();
+    if (await page.locator(".mh-modal__dialog[role='dialog']").count()) notes.push(`${id}: close control did not dismiss notice`);
+    if (new URL(page.url()).pathname !== `${BASE}knowledge-view`) notes.push(`${id}: close control navigated away`);
+    if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push(`${id}: closing notice reloaded host`);
+    await page.locator(trigger).click();
+    await page.locator(".mh-modal__dialog a:has-text('Back to Knowledge Management')").click();
+    await page.locator(".mh-interpreter").waitFor({ timeout: 10000 });
+    if (new URL(page.url()).pathname !== `${BASE}interpreter`) notes.push(`${id}: body Back link did not reach Interpreter`);
+    if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push(`${id}: body Back link reloaded host`);
+  }
+  notes.push(...errors);
+  record("p09-notice-back", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- P09: four source redirects resolve to P07's actual detail drawer ---- */
 {
   const { page, errors } = await newPage();

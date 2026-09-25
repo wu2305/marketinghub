@@ -12,11 +12,13 @@ function Fixture({ content, recordId, hrefFor, onNavigate, onAction, onOpen, onC
 }
 
 describe("P09 knowledge detail flow", () => {
-  it("falls back to GMV for missing and unknown IDs, as the effective source does", () => {
+  it("keeps a fallback GMV edit target consistent with the displayed record for missing and unknown IDs", () => {
     const { rerender } = render(<Fixture />);
     expect(screen.getByRole("heading", { name: /^GMV/ })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Edit" }).getAttribute("href")).toBe("/assets/pages/knowledge-create.html?mode=edit&id=business-term-gmv");
     rerender(<Fixture recordId="unknown-record" />);
     expect(screen.getByRole("heading", { name: /^GMV/ })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Edit" }).getAttribute("href")).toBe("/assets/pages/knowledge-create.html?mode=edit&id=business-term-gmv");
   });
 
   it("uses source Edit URL params and emits the same named navigation payload", () => {
@@ -68,9 +70,35 @@ describe("P09 knowledge detail flow", () => {
     ]) {
       fireEvent.click(screen.getByRole("button", { name: button }));
       expect(within(screen.getByRole("dialog")).getByText(text)).toBeTruthy();
-      fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Back to Knowledge Management" }));
+      fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Close dialog" }));
     }
     expect(onAction.mock.calls.map(([event]) => event.id)).toEqual(["preview", "smart", "export", "edit"]);
+  });
+
+  it.each([
+    ["scenario-channel-performance", "View Versions"],
+    ["channel-data-model", "⇧ Export"],
+  ])("separates %s notice dismissal from its Back navigation", (recordId, trigger) => {
+    const onNavigate = vi.fn();
+    const onCancel = vi.fn();
+    render(<Fixture recordId={recordId} onNavigate={onNavigate} onCancel={onCancel} />);
+    fireEvent.click(screen.getByRole("button", { name: trigger }));
+    const dialog = screen.getByRole("dialog");
+    const back = within(dialog).getByRole("link", { name: "Back to Knowledge Management" });
+    expect(back.getAttribute("href")).toBe("/assets/pages/knowledge.html");
+    fireEvent.click(within(dialog).getByRole("button", { name: "Close dialog" }));
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(onCancel).toHaveBeenCalledWith({ reason: "button", recordId });
+    expect(onNavigate).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: trigger }));
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(onNavigate).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: trigger }));
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("link", { name: "Back to Knowledge Management" }));
+    expect(onNavigate).toHaveBeenCalledWith({ id: "knowledge", params: {}, href: "/assets/pages/knowledge.html" });
   });
 
   it("wires source controls, overlay lifecycle, and named callback payloads", () => {

@@ -3,7 +3,7 @@ export const KNOWLEDGE_VIEW = {
   copy: {
     breadcrumbAria: "Breadcrumb", home: "Home", interpreter: "AI Interpreter", management: "Knowledge Management", details: "Knowledge Details",
     versionButton: "View Versions", versionEyebrow: "VERSION HISTORY", versionCurrent: "Current Version", versionPublished: "Published", closeVersions: "Close version history",
-    actionDone: "Action completed", backManagement: "Back to Knowledge Management", statusPublished: "Published", none: "None", global: "Global",
+    actionDone: "Action completed", closeNotice: "Close dialog", backManagement: "Back to Knowledge Management", statusPublished: "Published", none: "None", global: "Global",
     principles: { leadFallback: "Governed prompt guidance for AI Interpreter.", governedPrompt: "Governed prompt", collapse: (title) => `Collapse ${title}`, versionNumbers: ["v3.2", "v3.1", "v2.0"], versionDescriptions: ["Refined decision thresholds and confidence requirements.", "Clarified the core business principle.", "Initial approved principle."], priorEditor: "Data Governance", priorDate: "Jul 28, 2026" },
     business: { sections: [
       { title: "Basic Definition", caption: "Unified business concept and interpretation" },
