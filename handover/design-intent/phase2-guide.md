@@ -177,9 +177,11 @@ Tests `lib/governance.test.js`:
   follow pattern B6; a draft gives exactly the same result as disabled — assert its 6 rows explicitly);
 - `availabilityOf` for every spelling above.
 
-`demo/knowledge-actions.js` becomes a thin adapter over `lib/governance.js` that returns exactly its old
-shape (`{ action, disabled, title, label }`), so no view changes in WP4 and its existing tests still pass.
-`boundaries.test.js` must pass (lib must not import demo).
+`demo/knowledge-actions.js` is **not** changed in WP4. Its draft rule differs on purpose: it keeps the
+source's dead end (a Draft stored as Enable blocks both edit, "disable first", and disable, "already
+disabled"), which R3 resolves by treating drafts as disabled. Making it delegate would change view
+behaviour before the views migrate. Each WP7 package switches its view to `lib/governance.js`; the last
+one (7d) deletes `demo/knowledge-actions.js`. `boundaries.test.js` must pass (lib must not import demo).
 
 ### WP5 — Extend `Button` and `DataTable`
 
