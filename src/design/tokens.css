@@ -324,6 +324,15 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-copilot-gold-wash: rgba(218, 168, 96, 0.14);
   --mh-copilot-metric-pos: #16a34a;
   --mh-copilot-metric-neg: #dc2626;
+  /* Personal memory card categories and its source blue info banner. */
+  --mh-memory-analysis: #7c3aed;
+  --mh-memory-meeting: #b88a3d;
+  --mh-memory-findings: #db2777;
+  --mh-memory-reference: #2d7972;
+  --mh-memory-banner: #eff6ff;
+  --mh-memory-banner-line: #dbeafe;
+  --mh-memory-banner-icon: #3b82f6;
+  --mh-memory-form-error: #ef4444;
   --mh-copilot-box-line: #d8e0e6;
   --mh-copilot-send-ink: #000000;
   --mh-copilot-upload-line: #d8dde2;
