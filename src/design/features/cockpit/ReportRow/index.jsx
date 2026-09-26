@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./ReportRow.css";
 
 
@@ -14,10 +15,9 @@ import "./ReportRow.css";
  * @param {string} [props.openLabel="Open Dashboard"]
  * @param {string} [props.href] live-report link target
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
- * @param {string} [props.detailsHref] knowledge-context link target
- * @param {(target: { title: string, href?: string }) => void} [props.onDetails]
+ * @param {(target: { title: string }) => void} [props.onDetails] opens report details without navigation
  */
-export function ReportRow({ index, path, title, description, meta = [], detailsLabel = "Knowledge", openLabel = "Open Dashboard", href, detailsHref, onOpen, onDetails }) {
+export function ReportRow({ index, path, title, description, meta = [], detailsLabel = "Knowledge", openLabel = "Open Dashboard", href, onOpen, onDetails }) {
   return (
     <article className="mh-report-row">
       <div className="mh-report-row__index">
@@ -27,7 +27,7 @@ export function ReportRow({ index, path, title, description, meta = [], detailsL
       <div className="mh-report-row__main">
         <span className="mh-report-row__path">{path}</span>
         <h3>
-          <a href={href || "#"} onClick={() => onOpen?.({ title, href })}>
+          <a href={href || "#"} onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}>
             {title}
           </a>
         </h3>
@@ -42,10 +42,10 @@ export function ReportRow({ index, path, title, description, meta = [], detailsL
         ))}
       </dl>
       <div className="mh-report-row__actions">
-        <a className="mh-report-row__details" href={detailsHref || "#"} aria-label={`Open knowledge for ${title}`} onClick={() => onDetails?.({ title, href: detailsHref })}>
+        <button className="mh-report-row__details" type="button" aria-label={`Open knowledge for ${title}`} onClick={() => onDetails?.({ title })}>
           {detailsLabel}
-        </a>
-        <a className="mh-report-row__open" href={href || "#"} onClick={() => onOpen?.({ title, href })}>
+        </button>
+        <a className="mh-report-row__open" href={href || "#"} onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}>
           {openLabel} <span aria-hidden="true">→</span>
         </a>
       </div>

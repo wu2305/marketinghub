@@ -6,9 +6,9 @@
  * No Storybook imports; any host can drive the page the same way.
  */
 import React from "react";
+import { demoHrefFor, demoTargetForHref } from "./navigation.js";
 import { buildModelDraft } from "../content.js";
-import { buildReportModelDraft, resolveReportContext } from "../features/cockpit/lib/report-logic.js";
-import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextHref } from "./report-routes.js";
+import { buildReportModelDraft } from "../features/cockpit/lib/report-logic.js";
 import {
   buildCopilotChatEntry,
   copilotProfile,
@@ -47,6 +47,11 @@ export function useCockpitDemo(props) {
   const { copilot = {}, modelFlow = {}, reportAnswerFor } = props.demo || {};
   const projects = props.projects || {};
   const knowledge = props.knowledge || [];
+  const hrefFor = props.hrefFor || demoHrefFor;
+  const routeSource = (source) => {
+    const target = demoTargetForHref(source.href);
+    return target?.id && target.id !== "coverage" ? { ...source, href: hrefFor(target.id, target.params) } : source;
+  };
 
   const [query, setQuery] = useSynced(props.query);
   const [project, setProject] = useSynced(props.project);
@@ -87,7 +92,8 @@ export function useCockpitDemo(props) {
     /* showAiAnswer: appends only while the answer view is open, else clears
        the thread and enters chat mode. */
     const append = Boolean(wsAnswer) || wsChat.length > 0;
-    const entry = buildCopilotChatEntry(projects, knowledge, copilot, liveKey, liveRawIndex, question);
+    const built = buildCopilotChatEntry(projects, knowledge, copilot, liveKey, liveRawIndex, question);
+    const entry = { ...built, sources: built.sources.map(routeSource) };
     setWsChat((current) => (append ? [...current, entry] : [entry]));
     if (!append) setWsAnswer(null);
     setWsPrompt("");
@@ -96,10 +102,7 @@ export function useCockpitDemo(props) {
 
   return {
     ...props,
-    projectHref: props.projectHref || projectCatalogHref,
-    liveHref: props.liveHref || liveReportHref,
-    contextHref: props.contextHref || ((projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report))),
-    backHref: props.backHref || REPORT_CATALOG_HREF,
+    hrefFor: props.hrefFor || demoHrefFor,
     assistant: {
       ...props.assistant,
       answers,
@@ -172,7 +175,8 @@ export function useCockpitDemo(props) {
       summary: copilot.summary,
       recommendations: (liveReport?.recommendations || []).map((rec) => ({ title: rec.title })),
       periodHint: wsProfile.periodHint,
-      sources: copilotSources(knowledge, liveKey, liveReport),
+      sources: copilotSources(knowledge, liveKey, liveReport).map(routeSource),
+      contextHref: hrefFor("interpreter", {}),
       answer: wsAnswer,
       chat: wsChat,
       prompt: wsPrompt,
@@ -278,7 +282,7 @@ export function useCockpitDemo(props) {
       props.onSubmit?.(event);
     },
     onNavigate: (target) => {
-      if (target.id === "cockpit-all") setProject("all");
+      if (target.id === "cockpit-all" || (target.id === "cockpit" && !target.params?.project && !target.params?.dashboard)) setProject("all");
       props.onNavigate?.(target);
     },
     onQueryChange: (event) => {
@@ -295,7 +299,10 @@ export function useCockpitDemo(props) {
       setView("live");
       props.onOpenReport?.(target);
     },
-    onOpenDetails: props.onOpenDetails,
+    onOpenDetails: (target) => {
+      setDetails({ project: target.project, index: target.index });
+      props.onOpenDetails?.(target);
+    },
     onCloseDetails: (event) => {
       setDetails(null);
       props.onCloseDetails?.(event);

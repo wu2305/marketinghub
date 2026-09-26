@@ -177,6 +177,14 @@ async function newPage() {
   if (!loc.includes("project=city")) notes.push(`after project click: unexpected URL ${loc}`);
   await assertBoot("after project click");
 
+  /* report-core.js:1504–1509 uses a button: Knowledge opens the drawer
+     without navigating to the Interpreter route. */
+  await page.getByRole("button", { name: "Open knowledge for Invest City Strategy Analysis" }).click();
+  await page.locator(".mh-details[role='dialog']").waitFor({ state: "visible", timeout: 5000 });
+  if (!page.url().includes("project=city")) notes.push("Knowledge action changed the route instead of opening report details");
+  await page.getByRole("button", { name: "Close report details" }).click();
+  await page.locator(".mh-details[role='dialog']").waitFor({ state: "detached", timeout: 5000 });
+
   await page.click(".mh-report-row__open >> nth=0");
   await page.waitForSelector(".mh-live", { timeout: 5000 });
   loc = assertLoc("live", "after open click");
@@ -264,6 +272,35 @@ async function newPage() {
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Campaign navigation reloaded host");
   notes.push(...errors);
   record("campaign-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- R6 semantic routes: Home capability params and Interpreter overview ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  const dg = page.getByRole("link", { name: "DG Data Insight" });
+  const dgHref = await dg.getAttribute("href");
+  if (dgHref !== `${BASE}cockpit?project=rednote`) notes.push(`DG capability lost project parameter: ${dgHref}`);
+  await dg.click({ modifiers: ["Meta"] });
+  if (new URL(page.url()).pathname !== BASE) notes.push("modified capability click changed the current tab");
+  await dg.click();
+  await page.waitForSelector(".mh-project-directory", { timeout: 5000 });
+  if (new URL(page.url()).searchParams.get("project") !== "rednote") notes.push("DG capability opened wrong project");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("DG capability reloaded host");
+  await page.goto(`${origin}${BASE}interpreter?type=Business%20Term`, { waitUntil: "networkidle" });
+  const interpreterBoot = await page.evaluate(() => window.__mhHostBoot);
+  const overview = page.locator(".mh-sidebar-item[href]");
+  if ((await overview.getAttribute("href")) !== `${BASE}interpreter`) notes.push("Overview has no semantic host href");
+  await overview.click();
+  await page.waitForSelector(".mh-type-grid", { timeout: 5000 });
+  const url = new URL(page.url());
+  if (url.pathname !== `${BASE}interpreter` || url.searchParams.has("type")) notes.push(`Overview route wrong: ${url.pathname}${url.search}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== interpreterBoot) notes.push("Overview reloaded host");
+  notes.push(...errors);
+  record("semantic-navigation", notes.length === 0, notes);
   await page.close();
 }
 
@@ -822,23 +859,23 @@ async function newPage() {
   await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
   await page.waitForSelector(".host-copilot .mh-copilot", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  /* The generic chat entry renders "Open report context" with an original
-     knowledge.html href that bypasses page-level href builders. */
+  /* Copilot source links carry report/asset identity into the Interpreter
+     while remaining native links under the host base. */
   const copA = page.locator('.host-copilot[data-instance="a"] .mh-copilot');
   await copA.locator("textarea").fill("what drove this?");
   await copA.locator(".mh-copilot__send").click();
   await copA.locator(".mh-copilot__entry").first().waitFor({ timeout: 8000 });
   const link = copA.locator('a:has-text("Open report context")').first();
   const href = await link.getAttribute("href");
-  if (!href || !href.includes("/assets/pages/")) notes.push(`expected a raw demo href, got ${href}`);
+  const target = new URL(href, origin);
+  if (target.pathname !== `${BASE}interpreter` || target.searchParams.get("report") !== "city" || target.searchParams.get("asset") !== "city-report-context") notes.push(`copilot context lost report/asset parameters: ${href}`);
   await link.click();
   await page.waitForSelector(".mh-interpreter__main", { timeout: 5000 });
   const loc = new URL(page.url());
-  if (loc.pathname !== `${BASE}interpreter`) notes.push(`raw knowledge link missed InterpreterRoute: ${loc.pathname}`);
-  if (loc.pathname.startsWith("/assets/pages/")) notes.push(`raw knowledge link hit the original route: ${loc.pathname}`);
-  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("raw knowledge link reloaded the page");
+  if (loc.pathname !== `${BASE}interpreter`) notes.push(`copilot context missed InterpreterRoute: ${loc.pathname}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("copilot context reloaded the page");
   notes.push(...errors);
-  record("raw-knowledge-link", notes.length === 0, notes);
+  record("copilot-context-link", notes.length === 0, notes);
   await page.close();
 }
 

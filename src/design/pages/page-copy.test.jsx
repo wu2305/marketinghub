@@ -8,16 +8,18 @@ import { MarketingCockpitPage } from "./MarketingCockpitPage/index.jsx";
 import { MediaTrackingDetailPage } from "./MediaTrackingDetailPage/index.jsx";
 import { SelfServicePage } from "./SelfServicePage/index.jsx";
 
+const hrefFor = (id) => `#${id}`;
+
 describe("page copy comes from page props", () => {
   it("uses replacement Cockpit search and report metadata labels", () => {
-    render(<MarketingCockpitPage copy={{ ...COCKPIT.copy, searchLabel: "Find a dashboard", meta: { ...COCKPIT.copy.meta, owner: "Steward" } }} groups={COCKPIT.groups} projects={COCKPIT.projects} project="city" />);
+    render(<MarketingCockpitPage copy={{ ...COCKPIT.copy, searchLabel: "Find a dashboard", meta: { ...COCKPIT.copy.meta, owner: "Steward" } }} groups={COCKPIT.groups} projects={COCKPIT.projects} project="city" hrefFor={hrefFor} />);
     expect(screen.getByPlaceholderText("Find a dashboard")).toBeTruthy();
     expect(screen.getAllByText("Steward").length).toBeGreaterThan(0);
     expect(screen.queryByText("Owner")).toBeNull();
   });
 
   it("uses replacement Self-Service tab and filter names", () => {
-    render(<SelfServicePage labels={{ ...SELF_SERVICE.labels, tabAria: "Analysis mode", analysisFilterAria: "Report categories" }} tabs={SELF_SERVICE.tabs} filters={SELF_SERVICE.filters} />);
+    render(<SelfServicePage labels={{ ...SELF_SERVICE.labels, tabAria: "Analysis mode", analysisFilterAria: "Report categories" }} tabs={SELF_SERVICE.tabs} filters={SELF_SERVICE.filters} hrefFor={hrefFor} />);
     expect(screen.getByRole("tablist", { name: "Analysis mode" })).toBeTruthy();
     expect(screen.getByRole("group", { name: "Report categories" })).toBeTruthy();
     expect(screen.queryByRole("group", { name: "Filter reports" })).toBeNull();

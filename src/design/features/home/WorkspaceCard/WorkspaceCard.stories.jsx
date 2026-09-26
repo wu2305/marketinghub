@@ -1,5 +1,6 @@
 import { WorkspaceCard } from "./index.jsx";
 import { HOME } from "../../../content.js";
+import { demoHrefFor } from "../../../demo/navigation.js";
 
 export default {
   title: "Features/Home/Workspace card",
@@ -19,7 +20,12 @@ export default {
   },
   render: (args) => (
     <div style={{ width: 320 }}>
-      <WorkspaceCard {...HOME.cards[0]} {...args} />
+      <WorkspaceCard
+        {...HOME.cards[0]}
+        href={demoHrefFor(HOME.cards[0].target.id, HOME.cards[0].target.params)}
+        links={HOME.cards[0].links.map((link) => ({ ...link, href: demoHrefFor(link.target.id, link.target.params) }))}
+        {...args}
+      />
     </div>
   ),
 };

@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import React from "react";
 import { cx } from "../../../cx.js";
 import { Icon } from "../../../icons.jsx";
@@ -150,7 +151,7 @@ export function ReportDetailsDrawer({
           ) : null}
         </div>
         <footer className="mh-details__footer">
-          <a className="mh-details__live" href={liveHref || "#"} onClick={() => onOpenLive?.({ href: liveHref })}>
+          <a className="mh-details__live" href={liveHref || "#"} onClick={(event) => isPlainPrimaryLink(event) && onOpenLive?.({ href: liveHref })}>
             {liveLabel} <span aria-hidden="true">→</span>
           </a>
         </footer>

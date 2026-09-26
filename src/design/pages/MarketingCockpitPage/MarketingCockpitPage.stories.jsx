@@ -42,6 +42,7 @@ export const MarketingCockpit = {
   name: "Marketing Cockpit",
   args,
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     project: { control: "select", options: ["all", ...Object.keys(args.projects)] },
     view: enumProp(cockpitViews, "catalog", "Catalog or live view; a dashboard index opens the live report"),
     dashboard: { control: { type: "number", min: 0, max: 1 } },

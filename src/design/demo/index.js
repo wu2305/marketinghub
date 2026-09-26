@@ -3,6 +3,7 @@ export * as demoContent from "../content.js";
 export * from "../content.js";
 export * from "./report-fixtures.js";
 export * from "./report-routes.js";
+export * from "./navigation.js";
 export * from "./report-demo.js";
 export * from "./cockpit-demo.js";
 export * from "./home-demo.js";

@@ -36,6 +36,7 @@ export const Interpreter = {
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", "Selected knowledge view; unknown-type is a fallback contract probe."),
     onNavigate: { action: "onNavigate" },
     onSelectType: { action: "onSelectType" },
