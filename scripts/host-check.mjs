@@ -515,6 +515,16 @@ async function newPage() {
       if (inside !== bareStyles[sel]) notes.push(`${slot} ${sel}: sentinel=${bareStyles[sel]} vs slot=${inside}`);
     }
   }
+  const dialogBoxes = await slots.locator(".mh-modal__dialog").evaluateAll((dialogs) => dialogs.map((dialog) => ({
+    boxSizing: getComputedStyle(dialog).boxSizing,
+    cssWidth: parseFloat(getComputedStyle(dialog).width),
+    outerWidth: dialog.getBoundingClientRect().width,
+  })));
+  for (const box of dialogBoxes) {
+    if (box.boxSizing !== "border-box" || Math.abs(box.outerWidth - box.cssWidth) > 1) {
+      notes.push("Modal dialog frame expanded beyond CSS width: " + JSON.stringify(box));
+    }
+  }
   await slots.close();
   record("sentinel", notes.length === 0, notes);
 }

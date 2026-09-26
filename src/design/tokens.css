@@ -59,6 +59,11 @@
   }
 }
 
+/* The slot wrapper remains library-owned even though its contents are not. */
+:where([data-mh-slot][class^="mh-"], [data-mh-slot][class*=" mh-"]) {
+  box-sizing: border-box;
+}
+
 :root {
   --mh-font: "DIN 2014", Arial, sans-serif;
   --mh-display: "BentonModDisplay", Georgia, serif;
