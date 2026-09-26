@@ -159,3 +159,17 @@ display: inline-flex;
 display: grid;
   gap: 10px;
 }
+
+@media (max-width: 880px) {
+  .mh-project-directory__intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-project-directory__intro > img {
+    width: 100%;
+  }
+
+  .mh-project-directory__meta {
+    flex-wrap: wrap;
+  }
+}

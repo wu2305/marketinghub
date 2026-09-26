@@ -23,3 +23,9 @@ background: var(--mh-reports-bg);
 width: 360px;
   margin-bottom: 44px;
 }
+
+@media (max-width: 600px) {
+  .mh-page--cockpit .mh-page__search {
+    width: 100%;
+  }
+}

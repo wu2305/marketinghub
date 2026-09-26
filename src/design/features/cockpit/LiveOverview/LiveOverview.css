@@ -183,3 +183,18 @@ color: var(--mh-reports-ink);
   grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width: 600px) {
+  .mh-live-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-live-grid,
+  .mh-live-card {
+    min-width: 0;
+  }
+
+  .mh-live-chart {
+    overflow-x: auto;
+  }
+}
