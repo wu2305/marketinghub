@@ -23,6 +23,8 @@ export {
 } from "./components/Select/index.jsx";
 export {
   StatusBadge,
+  statusBadgeSizes,
+  statusBadgeTones,
   statusBadgeVariants,
 } from "./components/StatusBadge/index.jsx";
 export {

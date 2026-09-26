@@ -1,4 +1,4 @@
-import { StatusBadge, statusBadgeVariants } from "./index.jsx";
+import { StatusBadge, statusBadgeSizes, statusBadgeTones, statusBadgeVariants } from "./index.jsx";
 import { enumProp, prop } from "../../lib/story-helpers.js";
 
 export default {
@@ -9,23 +9,20 @@ export default {
     docs: {
       description: {
         component:
-          'Status pill. `status` is a free label — tone is derived by substring/token matching: ' +
-          'contains "publish" or equals success/token-valid/enabled → success; contains "review" ' +
-          "or equals syncing/building → review; contains \"pending\" or equals watch/queued → " +
-          'pending; contains "pause" or equals danger/disabled → paused; else draft. Matching is ' +
-          'substring-based, so e.g. "Unpublished" still maps to success.',
+          "Status pill with independent size and tone controls. Auto tone recognizes exact known states; unknown labels remain neutral. Use an explicit tone when a state needs a different emphasis.",
       },
     },
   },
-  args: { status: "Published", variant: "default", outline: false },
+  args: { status: "Published", variant: "default", size: "sm", tone: "auto", outline: false },
   argTypes: {
     status: prop("string", {
       defaultValue: "draft",
-      description:
-        "Free-form label; the tone is derived from it (contains publish → success, review → review, pending → pending, pause → paused, else draft).",
+      description: "Visible label; auto tone recognizes exact known states and keeps unknown labels neutral.",
       control: "text",
     }),
     variant: enumProp(statusBadgeVariants, "default", "General status, fixed-slot knowledge status, or naturally sized detail status."),
+    size: enumProp(statusBadgeSizes, "sm", "Plain status pill density; knowledge/detail variants keep their own shape."),
+    tone: enumProp(statusBadgeTones, "auto", "Explicit semantic tone, or exact known-state mapping in auto mode."),
     outline: prop("boolean", { defaultValue: false, description: "Outline variant." }),
     children: prop("React.ReactNode", { description: "Overrides `status` as the visible label.", control: "text" }),
   },

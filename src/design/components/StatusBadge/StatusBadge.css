@@ -14,7 +14,15 @@ display: inline-flex;
   white-space: nowrap;
 }
 
-.mh-badge--published,
+.mh-badge--lg {
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .mh-badge--success {
 background: #edf6f1;
   color: var(--mh-green);
@@ -25,20 +33,22 @@ background: #f3f5f7;
   color: #66717b;
 }
 
-.mh-badge--review,
-.mh-badge--syncing {
+.mh-badge--warning {
+  background: var(--mh-surface-warning-soft);
+  color: var(--mh-ink-warning-brown);
+}
+
+.mh-badge--review {
 background: #eef3f8;
   color: var(--mh-blue);
 }
 
-.mh-badge--pending,
-.mh-badge--watch {
+.mh-badge--pending {
 background: #fbf5ea;
   color: var(--mh-amber);
 }
 
-.mh-badge--paused,
-.mh-badge--danger {
+.mh-badge--paused {
 background: #faeff1;
   color: #a23b4f;
 }
