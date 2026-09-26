@@ -1,7 +1,7 @@
 {
   "maxRawHexColors": 0,
-  "maxTokenDefinitions": 498,
-  "maxDuplicateValues": 34,
+  "maxTokenDefinitions": 487,
+  "maxDuplicateValues": 39,
   "legacyPrefixExemptions": [
     "--mh-header",
     "--mh-drawer-shadow",
@@ -50,7 +50,6 @@
     "--mh-reports-scrim",
     "--mh-reports-thumb-bg",
     "--mh-reports-media-bg",
-    "--mh-reports-filter",
     "--mh-live-toolbar-bg",
     "--mh-live-inkline",
     "--mh-live-bar",

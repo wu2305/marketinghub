@@ -36,7 +36,7 @@ width: 246px;
   border: 1px solid var(--mh-line);
   border-radius: 5px;
   object-fit: cover;
-  filter: var(--mh-reports-filter);
+  filter: saturate(0.86) contrast(0.96) brightness(1.04);
 }
 
 .mh-project-directory__copy {
