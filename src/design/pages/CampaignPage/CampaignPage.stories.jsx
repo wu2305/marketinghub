@@ -108,6 +108,24 @@ export const CampaignAccountFiltered = {
   },
 };
 
+export const CampaignAccountEmpty = {
+  ...Campaign,
+  name: "No matching account operations",
+  play: async ({ canvasElement }) => {
+    const doc = canvasElement.ownerDocument;
+    await new Promise((resolve) => doc.defaultView.requestAnimationFrame(() => doc.defaultView.requestAnimationFrame(resolve)));
+    const input = doc.querySelector(".mh-campaign__tools input");
+    if (!input) throw new Error("Campaign account search is missing");
+    Object.getOwnPropertyDescriptor(doc.defaultView.HTMLInputElement.prototype, "value").set.call(input, "no matching account");
+    input.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+      if (doc.querySelector(".mh-campaign__table")?.textContent.includes("0 accounts shown") && !doc.querySelector(".mh-campaign__table tbody tr")) return;
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    throw new Error("Campaign account search did not show the empty result");
+  },
+};
+
 async function click(doc, selector, index = 0) {
   for (let attempt = 0; attempt < 50; attempt += 1) {
     const target = doc.querySelectorAll(selector)[index];
@@ -167,6 +185,11 @@ export const CampaignAssistantAnswer = {
   play: play([".mh-assistant__suggestions button"], ".mh-assistant__answer--workspace"),
 };
 
+export const CampaignAssistantFeedback = {
+  ...assistantStory("Campaign assistant helpful feedback"),
+  play: play([".mh-assistant__suggestions button", ".mh-assistant__feedback button[data-kind='helpful']"], ".mh-assistant__feedback button[data-kind='helpful'][aria-pressed='true']"),
+};
+
 export const CampaignAssistantHistory = {
   ...assistantStory("Campaign assistant recent chats"),
   play: play(["button[aria-label='History']"], ".mh-assistant__history-pop"),
@@ -202,14 +225,50 @@ export const CampaignAssistantSelectedSkill = {
 
 const modelSteps = [".mh-assistant__skill", [".mh-skill__category", 1]];
 
+export const CampaignAssistantSkillSearchEmpty = {
+  ...assistantStory("Campaign assistant skill search empty"),
+  play: async (context) => {
+    await play(modelSteps, ".mh-skill__search input")(context);
+    const doc = context.canvasElement.ownerDocument;
+    const input = doc.querySelector(".mh-skill__search input");
+    Object.getOwnPropertyDescriptor(doc.defaultView.HTMLInputElement.prototype, "value").set.call(input, "no matching model");
+    input.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
+    await expectState(doc, ".mh-skill__empty");
+    if (doc.querySelectorAll(".mh-skill__option").length) throw new Error("Campaign skill search still has matching options");
+  },
+};
+
 export const CampaignModelHistory = {
   ...assistantStory("Campaign model from chat history"),
   play: play([...modelSteps, [".mh-skill__action", 0]], ".mh-flow__card--history"),
 };
 
+export const CampaignModelEmptySelection = {
+  ...assistantStory("Campaign model requires a selected message"),
+  play: async (context) => {
+    await CampaignModelHistory.play(context);
+    const doc = context.canvasElement.ownerDocument;
+    doc.querySelectorAll(".mh-flow__msg input:checked").forEach((input) => input.click());
+    await click(doc, ".mh-flow__foot .mh-flow__btn--primary");
+    await expectState(doc, ".mh-flow__error:not([hidden])");
+    if (!doc.querySelector(".mh-flow__card--history")) throw new Error("Campaign model history closed after empty Generate");
+  },
+};
+
 export const CampaignModelGenerated = {
   ...assistantStory("Campaign generated model"),
   play: play([...modelSteps, [".mh-skill__action", 0], ".mh-flow__foot .mh-flow__btn--primary"], ".mh-flow__card--form"),
+};
+
+export const CampaignModelManual = {
+  ...assistantStory("Campaign manual model form"),
+  play: async (context) => {
+    await play([...modelSteps, [".mh-skill__action", 1]], ".mh-flow__card--form")(context);
+    const doc = context.canvasElement.ownerDocument;
+    if (!doc.querySelector(".mh-flow__card--form header strong")?.textContent.includes("Create Analytical Model Manually") || doc.querySelector(".mh-flow__field-error")) {
+      throw new Error("Campaign manual form did not open before validation");
+    }
+  },
 };
 
 export const CampaignModelManualError = {

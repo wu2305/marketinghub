@@ -539,5 +539,30 @@ export default [
       ],
       expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful']", attr: { name: "aria-pressed", value: "false" }, text: "Helpful" }],
     },
-  }
+  },
+  {
+    id: "p06-campaign-account-empty",
+    original: { url: "/assets/pages/campaign.html", actions: [{ fill: ["#accountSearch", "no matching account"] }], expect: [{ sel: "#accountTable tbody tr:not([hidden])", state: "detached", count: 0 }, { sel: "#accountTableResult", text: "0 accounts shown" }] },
+    story: { id: "pages--campaign-account-empty", expect: [{ sel: ".mh-campaign__table tbody tr", state: "detached", count: 0 }, { sel: ".mh-campaign__table", text: "0 accounts shown" }] },
+  },
+  {
+    id: "p06-assistant-skill-empty",
+    original: { url: "/assets/pages/campaign.html", actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category >> nth=1" }, { fill: [".ai-skill-search input", "no matching model"] }], expect: [{ sel: ".ai-skill-empty", text: "No matching skills" }, { sel: ".ai-skill-detail-panel:not([hidden])" }] },
+    story: { id: "pages--campaign-assistant-skill-search-empty", expect: [{ sel: ".mh-skill__empty", text: "No matching skills" }, { sel: ".mh-skill__option", state: "detached", count: 0 }] },
+  },
+  {
+    id: "p06-assistant-model-empty-selection",
+    original: { url: "/assets/pages/campaign.html", actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category >> nth=1" }, { click: "[data-ai-skill-action='history']" }, { eval: "document.querySelectorAll('#aiHistoryGenerateDialog [data-ai-history-msg]:checked').forEach(input => input.click())" }, { click: "[data-ai-generate-model]" }], expect: [{ sel: ".ai-history-error:not([hidden])", text: "Select at least one message" }, { sel: "#aiHistoryGenerateDialog:not([hidden])" }] },
+    story: { id: "pages--campaign-model-empty-selection", expect: [{ sel: ".mh-flow__error:not([hidden])", text: "Select at least one message" }, { sel: ".mh-flow__card--history" }] },
+  },
+  {
+    id: "p06-assistant-model-manual-before-validation",
+    original: { url: "/assets/pages/campaign.html", actions: [{ click: "#aiEntry" }, { click: "#uploadFile" }, { click: ".ai-skill-category >> nth=1" }, { click: "[data-ai-skill-action='manual']" }], expect: [{ sel: "#aiGeneratedModelDialog header strong", text: "Create Analytical Model Manually" }, { sel: "#aiGeneratedModelDialog .field-error", state: "detached", count: 0 }] },
+    story: { id: "pages--campaign-model-manual", expect: [{ sel: ".mh-flow__card--form header strong", text: "Create Analytical Model Manually" }, { sel: ".mh-flow__field-error", state: "detached", count: 0 }] },
+  },
+  {
+    id: "p06-assistant-feedback-selected",
+    original: { url: "/assets/pages/campaign.html", actions: [{ click: "#aiEntry" }, { click: ".ask-suggestion" }, { click: ".answer-feedback-btn[data-feedback='helpful']" }], expect: [{ sel: ".answer-feedback-btn[data-feedback='helpful']", attr: { name: "aria-pressed", value: "true" } }] },
+    story: { id: "pages--campaign-assistant-feedback", expect: [{ sel: ".mh-assistant__feedback button[data-kind='helpful']", attr: { name: "aria-pressed", value: "true" } }] },
+  },
 ];
