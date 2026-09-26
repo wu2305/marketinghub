@@ -6,6 +6,7 @@ import { Icon } from "../../icons.jsx";
 import "./ConfirmDialog.css";
 
 
+/** @type {readonly ["confirm", "info", "warning", "danger"]} */
 export const confirmDialogPurposes = ["confirm", "info", "warning", "danger"];
 
 const CONFIRM_ICON_PATH =

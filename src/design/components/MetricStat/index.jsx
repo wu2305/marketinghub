@@ -2,7 +2,9 @@ import "../../tokens.css";
 import { cx } from "../../cx.js";
 import "./MetricStat.css";
 
+/** @type {readonly ["card", "glass"]} */
 export const metricStatVariants = ["card", "glass"];
+/** @type {readonly ["gold", "green", "amber", "blue", "red"]} */
 export const metricStatAccents = ["gold", "green", "amber", "blue", "red"];
 
 /**

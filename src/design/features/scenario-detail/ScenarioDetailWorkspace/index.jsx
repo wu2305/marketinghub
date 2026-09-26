@@ -2,6 +2,7 @@ import "../../../tokens.css";
 import React from "react";
 import "./ScenarioDetailWorkspace.css";
 
+/** @type {readonly ["content", "related", "ai-check", "usage", "version", "activity"]} */
 export const scenarioDetailTabs = ["content", "related", "ai-check", "usage", "version", "activity"];
 
 function isPlainPrimaryLink(event) {

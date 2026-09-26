@@ -3,6 +3,7 @@ import { cx } from "../../cx.js";
 import "./StatusBadge.css";
 
 
+/** @type {readonly ["default", "knowledge"]} */
 export const statusBadgeVariants = ["default", "knowledge"];
 
 /**

@@ -7,7 +7,9 @@ import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetr
 import { Shell } from "../Shell/index.jsx";
 import "./MetricDictionaryPage.css";
 
+/** @type {readonly ["Basic", "Derived"]} */
 export const metricCategories = ["Basic", "Derived"];
+/** @type {readonly ["definition", "formula", "dimensions"]} */
 export const metricDetailTabs = ["definition", "formula", "dimensions"];
 
 /**

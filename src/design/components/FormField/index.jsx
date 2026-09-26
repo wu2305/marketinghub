@@ -5,6 +5,7 @@ import { TextInput } from "../../components/TextInput/index.jsx";
 import { cx } from "../../cx.js";
 import "./FormField.css";
 
+/** @type {readonly ["text", "textarea", "select"]} */
 export const formFieldControls = ["text", "textarea", "select"];
 
 /**

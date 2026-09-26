@@ -12,6 +12,7 @@ import { MemoryWorkspace } from "../../features/personal-memory/MemoryWorkspace/
 import { Icon } from "../../icons.jsx";
 import "./PersonalMemoryPage.css";
 
+/** @type {readonly ["all", "analysis", "meeting", "findings", "reference"]} */
 export const memoryCategories = ["all", "analysis", "meeting", "findings", "reference"];
 
 /**

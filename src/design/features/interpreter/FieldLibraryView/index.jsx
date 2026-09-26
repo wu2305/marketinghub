@@ -13,6 +13,7 @@ import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
 import "./FieldLibraryView.css";
 
 
+/** @type {readonly ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"]} */
 export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
 
 function ChipTags({ values = [], domain = false }) {

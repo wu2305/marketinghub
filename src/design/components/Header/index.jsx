@@ -3,7 +3,9 @@ import { assetUrl } from "../../asset-url.js";
 import { cx } from "../../cx.js";
 import "./Header.css";
 
+/** @type {readonly ["solid", "overlay"]} */
 export const headerTones = ["solid", "overlay"];
+/** @type {readonly ["sticky", "fixed"]} */
 export const headerPositions = ["sticky", "fixed"];
 
 function isPlainPrimaryLink(event) {

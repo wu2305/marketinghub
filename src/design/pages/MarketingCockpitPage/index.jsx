@@ -20,6 +20,7 @@ import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextH
 import "./MarketingCockpitPage.css";
 
 
+/** @type {readonly ["catalog", "live"]} */
 export const cockpitViews = ["catalog", "live"];
 
 /**

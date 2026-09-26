@@ -2,6 +2,7 @@ import "../../tokens.css";
 import { cx } from "../../cx.js";
 import "./Tabs.css";
 
+/** @type {readonly ["underline", "segmented"]} */
 export const tabsVariants = ["underline", "segmented"];
 
 /**

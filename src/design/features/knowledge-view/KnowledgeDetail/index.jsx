@@ -2,9 +2,13 @@ import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
 import "./KnowledgeDetail.css";
 
+/** @type {readonly ["Principles", "Business Term", "Data Model", "Scenario Reporting"]} */
 export const knowledgeDetailTypes = ["Principles", "Business Term", "Data Model", "Scenario Reporting"];
+/** @type {readonly ["preview", "smart", "export", "edit"]} */
 export const knowledgeModelActions = ["preview", "smart", "export", "edit"];
+/** @type {readonly ["basic", "fields"]} */
 export const knowledgeModelTabs = ["basic", "fields"];
+/** @type {readonly ["entity", "event"]} */
 export const knowledgeModelGroups = ["entity", "event"];
 
 function notifyNavigation(event, onNavigate, target) {
