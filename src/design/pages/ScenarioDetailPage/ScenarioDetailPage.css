@@ -1,0 +1,9 @@
+.mh-scenario-detail-page{min-height:100vh;background:var(--mh-page-bg);color:var(--mh-ink-strong);font-family:var(--mh-font)}
+.mh-scenario-detail-page>.mh-hero{margin-top:-56px;padding-top:56px;box-sizing:content-box}
+.mh-scenario-detail-page .mh-hero__media img{object-position:center 55%}
+.mh-scenario-detail-page__stats{display:grid;grid-template-columns:repeat(3,240px);gap:16px;width:max-content;transform:translateX(-272px)}
+.mh-scenario-detail-page__body{display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;width:min(1440px,calc(100% - 88px));margin:0 auto;padding:34px 0 84px;align-items:start}
+.mh-scenario-detail-page__main{min-width:0}
+@media(max-width:1280px){.mh-scenario-detail-page__body{grid-template-columns:200px minmax(0,1fr);gap:20px}}
+@media(max-width:1100px){.mh-scenario-detail-page>.mh-hero .mh-hero__layout{grid-template-columns:1fr}.mh-scenario-detail-page__body{grid-template-columns:1fr}}
+@media(max-width:560px){.mh-scenario-detail-page>.mh-hero .mh-hero__copy{max-width:none}.mh-scenario-detail-page>.mh-hero .mh-hero__aside{position:absolute;top:140px;left:calc(100% - 5px)}.mh-scenario-detail-page__stats{transform:none}.mh-scenario-detail-page__body{width:calc(100% - 88px);padding:34px 0 50px}}

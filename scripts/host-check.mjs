@@ -881,6 +881,35 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P16: skill identity, all six panels, preview and edit query survive the host ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}scenario-detail`, { waitUntil: "networkidle" });
+  if (await page.locator('.mh-scenario-detail-page[data-scenario-id="city-comparison"]').count() !== 1) notes.push("no-id default did not select City Comparison");
+  if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "City Comparison Analysis") notes.push("default record content mismatch");
+  for (const [tab, label] of [["related", "Related Objects"], ["ai-check", "AI Review"], ["usage", "Usage & Feedback"], ["version", "Version History"], ["activity", "Scenario updated to v1.3"]]) {
+    await page.locator(`.mh-scenario-detail__tabs button:has-text("${tab === "ai-check" ? "AI Check" : tab === "usage" ? "Usage & Feedback" : tab === "version" ? "Version History" : tab === "activity" ? "Activity Log" : "Related Objects"}")`).click();
+    if (await page.locator(`.mh-scenario-detail[data-scenario-tab="${tab}"]`).count() !== 1 || !(await page.locator(".mh-scenario-detail__panel").innerText()).includes(label)) notes.push(`${tab}: panel mismatch`);
+  }
+  await page.locator('.mh-scenario-detail__tabs button:has-text("Knowledge Content")').click();
+  await page.locator('.mh-scenario-detail__preview button').click();
+  if (await page.locator(".mh-scenario-detail__preview-output pre").count() !== 1) notes.push("preview did not open");
+  await page.goto(`${origin}${BASE}scenario-detail?id=scenario-campaign-review`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Campaign Review Reporting") notes.push("known id did not select campaign record");
+  await page.locator(".mh-scenario-detail__edit").click();
+  const editUrl = new URL(page.url());
+  if (!editUrl.pathname.startsWith(`${BASE}coverage/`) || editUrl.searchParams.get("id") !== "scenario-campaign-review") notes.push(`edit lost selected id: ${editUrl.pathname}${editUrl.search}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("edit navigation reloaded host");
+  await page.goto(`${origin}${BASE}scenario-detail?id=does-not-exist`, { waitUntil: "networkidle" });
+  if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Channel Performance Analysis") notes.push("unknown id did not fall back to first skill");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "scenario-detail.png") });
+  record("scenario-detail-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 
