@@ -29,7 +29,7 @@ display: inline-flex;
   padding: 0 15px;
   margin-left: auto;
   border-radius: 9px;
-  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
   box-shadow: var(--mh-bt-create-shadow);
   color: var(--mh-ink-inverse);
   font-size: 12px;
@@ -40,7 +40,7 @@ display: inline-flex;
 }
 
 .mh-btview__create:hover {
-background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
 }
 
 .mh-btview__create:focus-visible {

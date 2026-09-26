@@ -82,15 +82,16 @@
   margin-left: auto;
   padding: 0 16px;
   border-radius: 8px;
-  background: var(--mh-gold-gradient);
-  color: var(--mh-surface);
+  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
+  color: var(--mh-ink-inverse);
   font-size: 12px;
   font-weight: 600;
   text-decoration: none;
 }
 
-.mh-srview__create:hover {
-  filter: brightness(1.04);
+.mh-srview__create:hover,
+.mh-srview__create:focus-visible {
+  background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
 }
 
 /* hidden in the original on type pages (fm-overview-countline is display:none) */

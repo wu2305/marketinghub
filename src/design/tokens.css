@@ -430,10 +430,10 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-empty: #78838d;
   --mh-bt-draft-bg: #f6ede0;
   --mh-bt-draft-ink: #a76412;
-  --mh-bt-create-from: #e3ba6d;
-  --mh-bt-create-to: #cb8f2b;
-  --mh-bt-create-from-hover: #ecc673;
-  --mh-bt-create-to-hover: #d59a33;
+  --mh-gold-action-start: #e3ba6d;
+  --mh-gold-action-end: #cb8f2b;
+  --mh-gold-action-hover-start: #ecc673;
+  --mh-gold-action-hover-end: #d59a33;
   --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
   --mh-bt-drawer-bg: #f6f7f9;
   --mh-bt-drawer-line: #dfe5eb;

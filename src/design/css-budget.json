@@ -1,7 +1,7 @@
 {
-  "maxRawHexColors": 148,
-  "maxTokenDefinitions": 456,
-  "maxDuplicateValues": 42,
+  "maxRawHexColors": 0,
+  "maxTokenDefinitions": 449,
+  "maxDuplicateValues": 9,
   "legacyPrefixExemptions": [
     "--mh-header",
     "--mh-drawer-shadow",
@@ -143,10 +143,6 @@
     "--mh-bt-empty",
     "--mh-bt-draft-bg",
     "--mh-bt-draft-ink",
-    "--mh-bt-create-from",
-    "--mh-bt-create-to",
-    "--mh-bt-create-from-hover",
-    "--mh-bt-create-to-hover",
     "--mh-bt-create-shadow",
     "--mh-bt-drawer-bg",
     "--mh-bt-drawer-line",
