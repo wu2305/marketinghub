@@ -20,7 +20,10 @@ export function filterFeedback(records, { search = "", type = "all", time = "all
 
 /** Private source-backed flow shared by page stories and the independent host. */
 export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, now = Date.UTC(2026, 8, 26, 12), initial = EMPTY_INITIAL, onNavigate, onTypeChange, onTimeChange, onSearchChange, onOpen, onCloseDetail, onAssistantSubmit, onFlowSave, onFlowSubmit } = {}) {
-  const sourceRecords = React.useMemo(() => records || makeFeedbackRecords(now), [records, now]);
+  // Source rows are created at page load and filters run after that render.
+  // One deterministic second of elapsed time keeps the exact 24h/168h rows
+  // on the same side of the boundary that users see after selecting a filter.
+  const sourceRecords = React.useMemo(() => records || makeFeedbackRecords(Number(new Date(now)) - 1000), [records, now]);
   const [search, setSearch] = React.useState(initial.search || "");
   const [type, setType] = React.useState(initial.type || "all");
   const [time, setTime] = React.useState(initial.time || "all");

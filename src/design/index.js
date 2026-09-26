@@ -218,7 +218,7 @@ export { ReviewCenterPage, reviewTabs, reviewTypes, reviewTimes, reviewPanels } 
 export { ReviewQueue } from "./features/review-center/ReviewQueue/index.jsx";
 export { GovernanceNav } from "./components/GovernanceNav/index.jsx";
 export { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes } from "./pages/FeedbackQualityPage/index.jsx";
-export { FeedbackList, feedbackTypes } from "./features/feedback-quality/FeedbackList/index.jsx";
+export { FeedbackList } from "./features/feedback-quality/FeedbackList/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";

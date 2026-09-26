@@ -5,7 +5,7 @@ import { callbackProp, enumProp } from "../../lib/story-helpers.js";
 import { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes } from "./index.jsx";
 
 const NOW = Date.UTC(2026, 8, 26, 12);
-const records = makeFeedbackRecords(NOW);
+const records = makeFeedbackRecords(NOW - 1000);
 const hrefFor = (id, params = {}) => {
   const path = ({ interpreter: "/assets/pages/knowledge.html", "review-center": "/assets/pages/review-center.html", "scenario-library": "/assets/pages/scenario-library.html", "feedback-quality": "/assets/pages/feedback-quality.html" })[id];
   const query = new URLSearchParams(params).toString();

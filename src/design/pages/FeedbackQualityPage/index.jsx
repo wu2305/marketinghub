@@ -20,9 +20,9 @@ export const feedbackFilterTimes = ["all", "today", "week", "month"];
  * @param {object} props.content Hero, sidebar, labels and assistant copy.
  * @param {object} props.logo Header logo.
  * @param {object[]} props.navigation Header links.
- * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange:Function,onTypeChange:Function,onTimeChange:Function}} props.filters
- * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen:Function}} props.list
- * @param {{selected:object|null,onClose:Function}} props.detail
+ * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void}} props.filters
+ * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} props.list
+ * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} props.detail
  * @param {object} props.assistant Assistant state and callbacks.
  * @param {object} [props.skillFlow] Model flow state and callbacks.
  * @param {(id:string,params?:object)=>string} props.hrefFor

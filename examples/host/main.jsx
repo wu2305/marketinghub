@@ -382,7 +382,7 @@ function ReviewCenterRoute() {
 }
 
 const FEEDBACK_NOW = Date.UTC(2026, 8, 26, 12);
-const FEEDBACK_RECORDS = makeFeedbackRecords(FEEDBACK_NOW);
+const FEEDBACK_RECORDS = makeFeedbackRecords(FEEDBACK_NOW - 1000);
 
 function FeedbackQualityRoute() {
   const props = useFeedbackQualityDemo({

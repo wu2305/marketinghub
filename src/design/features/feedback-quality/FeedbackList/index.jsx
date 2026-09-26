@@ -2,14 +2,12 @@ import "../../../tokens.css";
 import { Icon } from "../../../icons.jsx";
 import "./FeedbackList.css";
 
-export const feedbackTypes = ["thumbs-up", "thumbs-down"];
-
 const truncate = (value, limit) => value.length > limit ? `${value.slice(0, limit)}...` : value;
 
 /**
  * Feedback table from feedback-quality.html, including every source-visible cell.
  * @param {object} props
- * @param {Array<{id:string,question:string,answer:string,type:typeof feedbackTypes[number],reason:string,feedbackBy:string,feedbackByInitials:string,time:string}>} props.items
+ * @param {Array<{id:string,question:string,answer:string,type:"thumbs-up"|"thumbs-down",reason:string,feedbackBy:string,feedbackByInitials:string,time:string}>} props.items
  * @param {string[]} props.columns Seven source column headings.
  * @param {{up:string,down:string,reasonNone:string,view:string,emptyTitle:string,emptyDescription:string,itemsAria:string}} props.labels
  * @param {(event:{id:string})=>void} [props.onOpen]
