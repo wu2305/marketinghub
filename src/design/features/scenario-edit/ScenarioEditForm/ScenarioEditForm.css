@@ -11,7 +11,7 @@
 .mh-scenario-edit-form :is(textarea){resize:vertical}
 .mh-scenario-edit-form__field textarea{min-height:80px}
 .mh-scenario-edit-form__field :is(input,textarea,select):focus,.mh-scenario-edit-form__card-body :is(textarea,select):focus,.mh-scenario-edit-form__preview-body textarea:focus{border-color:var(--mh-bubble-to);box-shadow:var(--mh-shadow-focus-warm-soft)}
-.mh-scenario-edit-form [aria-invalid="true"]{border-color:var(--mh-ink-required)!important;box-shadow:var(--mh-shadow-required-focus)}
+.mh-scenario-edit-form [aria-invalid="true"]{border-color:var(--mh-ink-required)!important;box-shadow:0 0 0 3px var(--mh-danger-ring)}
 .mh-scenario-edit-form__field small[role="alert"],.mh-scenario-edit-form__card-body small[role="alert"]{display:block;margin-top:4px;color:var(--mh-ink-required);font-size:11px}
 .mh-scenario-edit-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .mh-scenario-edit-form__section{margin-top:24px;padding-top:20px;border-top:1px solid var(--mh-line-panel-subtle)}
@@ -33,7 +33,9 @@
 .mh-scenario-edit-form__fill textarea{padding-bottom:40px}
 .mh-scenario-edit-form__fill button{position:absolute;right:8px;bottom:8px;padding:4px 10px;border:0;border-radius:999px;background:var(--mh-reports-pill-bg);color:var(--mh-reports-pill-ink);box-shadow:var(--mh-shadow-chip-soft);cursor:pointer;font:inherit;font-size:11px;font-weight:600}
 .mh-scenario-edit-form__fill button:hover{background:var(--mh-surface-accent-hover)}
-.mh-scenario-edit-form__upload{display:grid;gap:5px;padding:14px 16px;border:1px dashed var(--mh-field-line);border-radius:8px;background:var(--mh-surface-info-soft);cursor:pointer}
+.mh-scenario-edit-form__upload{position:relative;display:grid;gap:5px;padding:14px 16px;border:1px dashed var(--mh-field-line);border-radius:8px;background:var(--mh-surface-info-soft);cursor:pointer}
+.mh-scenario-edit-form__upload input{position:absolute;width:1px;height:1px;opacity:0}
+.mh-scenario-edit-form__upload:focus-within,.mh-scenario-edit-form :is(a,button,input,textarea,select):focus-visible{outline:2px solid var(--mh-bubble-to);outline-offset:2px}
 .mh-scenario-edit-form__upload span{font-size:13px;font-weight:700}
 .mh-scenario-edit-form__upload small{color:var(--mh-muted);font-size:12px;line-height:1.4}
 .mh-scenario-edit-form__attachments{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
