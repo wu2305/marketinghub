@@ -49,7 +49,7 @@ export default {
     totals: prop("{ shown: number, total: number }", { description: "Count line data — rendered but hidden, matching the original's display:none rule.", control: false }),
     filters: prop("Array<FilterDef>", { description: "Checkbox disclosure filters computed by the container (Status, Creator).", control: false }),
     searchRef: prop("React.Ref", { description: "Forwarded to the search input so page-level '/' and Cmd/Ctrl+K shortcuts focus it.", control: false }),
-    dialog: prop("object | null", { description: "ConfirmDialog content ({ tone, title, message, labels }) driven by the container; null = closed.", control: false }),
+    dialog: prop("object | null", { description: "ConfirmDialog content ({ purpose, title, message, labels }) driven by the container; null = closed.", control: false }),
     onQueryChange: callbackProp("onQueryChange", "(event: { name, value }) => void", { name: "search", value: "gmv" }, "Search input change; also resets to page 1."),
     onFilterToggle: callbackProp("onFilterToggle", "(event: { id, value, checked }) => void", { id: "status", value: "Disable", checked: true }, "Checkbox toggle inside a filter disclosure (stays open); resets to page 1."),
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, "Previous/Next page."),

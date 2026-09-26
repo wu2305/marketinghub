@@ -246,6 +246,7 @@ export function ScenarioReportsView({
       {dialog ? (
         <ConfirmDialog
           open
+          purpose={dialog.purpose}
           title={dialog.title}
           message={dialog.message}
           cancelLabel={dialog.cancelLabel}

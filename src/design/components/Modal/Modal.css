@@ -15,6 +15,7 @@ position: absolute;
 
 .mh-modal__dialog {
 position: relative;
+  font-family: var(--mh-font);
   width: min(600px, calc(100% - 80px));
   max-height: calc(100% - 80px);
   overflow: auto;
@@ -203,101 +204,4 @@ padding: 16px 24px;
   justify-content: flex-end;
   border-top: 1px solid var(--mh-bt-drawer-line);
   background: var(--mh-surface);
-}
-
-.mh-modal:has(> .mh-modal__dialog.mh-confirm--confirm) .mh-modal__scrim {
-background: var(--mh-bt-confirm-scrim);
-  backdrop-filter: none;
-}
-
-.mh-modal:has(> .mh-modal__dialog.mh-confirm--info) .mh-modal__scrim {
-background: var(--mh-bt-dialog-scrim);
-  backdrop-filter: none;
-}
-
-.mh-confirm.mh-modal__dialog {
-width: auto;
-  max-width: min(440px, 85vw);
-  padding: 0;
-  border-color: var(--mh-bt-dialog-line);
-  border-radius: 12px;
-  color: var(--mh-bt-dialog-ink);
-}
-
-.mh-confirm .mh-modal__header {
-padding: 20px 20px 0;
-}
-
-.mh-confirm .mh-modal__title {
-font-size: 14px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--mh-bt-confirm-title);
-}
-
-.mh-confirm--info.mh-modal__dialog {
-width: 370px;
-}
-
-.mh-confirm--info .mh-modal__header {
-padding: 25px 25px 0;
-}
-
-/* `dialog.fm-dialog` — centred title/message, Close focused on open. The
-   heading must span the full header row or text-align has no room to centre. */
-
-.mh-confirm--info .mh-modal__heading {
-flex: 1;
-}
-
-.mh-confirm--info .mh-modal__title {
-margin: 0;
-  font-size: 16.38px;
-  text-align: center;
-}
-
-.mh-confirm .mh-modal__close {
-display: none;
-}
-
-/* `.knowledge-confirm-dialog` — the warning icon is pinned top-left of the
-   dialog and the message aligns under the title column. */
-
-.mh-confirm--confirm.mh-modal__dialog {
-position: relative;
-  border: 0;
-  border-radius: 18px;
-}
-
-.mh-confirm--confirm .mh-modal__header {
-padding: 20px 20px 0;
-}
-
-.mh-confirm--confirm .mh-modal__eyebrow {
-position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 25px;
-  height: 25px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  border-radius: 50%;
-  background: var(--mh-bt-confirm-icon-bg);
-  color: var(--mh-bt-confirm-icon);
-  font-size: 0;
-  letter-spacing: 0;
-}
-
-.mh-confirm--confirm .mh-modal__eyebrow svg {
-width: 14px;
-  height: 14px;
-}
-
-.mh-confirm--confirm .mh-modal__title {
-margin: 0 0 0 37px;
-  font-size: 14px;
-  line-height: 1.25;
-  color: var(--mh-bt-confirm-title);
 }

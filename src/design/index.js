@@ -178,7 +178,7 @@ export {
 } from "./features/interpreter/ScenarioReportsView/index.jsx";
 export {
   ConfirmDialog,
-  confirmDialogTones,
+  confirmDialogPurposes,
 } from "./components/ConfirmDialog/index.jsx";
 export {
   HomePage,

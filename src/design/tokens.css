@@ -462,14 +462,10 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-dialog-line: #dbe1e8;
   --mh-bt-dialog-ink: #354253;
   --mh-bt-dialog-scrim: rgba(23, 34, 50, 0.4);
-  --mh-bt-confirm-scrim: rgba(48, 56, 68, 0.5);
-  --mh-bt-confirm-icon-bg: #fff3e7;
-  --mh-bt-confirm-icon: #e58a24;
-  --mh-bt-confirm-title: #252f3e;
+  --mh-surface-warning-icon: #fef3c7;
+  --mh-ink-warning-icon: #b45309;
   --mh-bt-confirm-copy: #737e90;
   --mh-bt-confirm-btn-line: #dce2e9;
-  --mh-bt-confirm-btn-ink: #2e3948;
-  --mh-bt-confirm-primary: #cf8a20;
   --mh-bt-pag-ink: #6c7785;
   /* Field-mapping library shared view — Report Context, Metric Dictionary,
      Analytical Model, Email Reports (field-library.js / field-components.css /

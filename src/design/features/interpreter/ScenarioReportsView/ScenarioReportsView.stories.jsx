@@ -90,6 +90,25 @@ export const OwnRecordDisableConfirm = {
   },
 };
 
+/** An owned + disabled scenario exposes Delete and its destructive confirmation. */
+export const OwnRecordDeleteConfirm = {
+  args: {
+    records: [
+      {
+        id: "scenario-own-disabled",
+        title: "Owned Disabled Scenario",
+        description: "Owned scenario ready for deletion.",
+        report: "Invest City Strategy Analysis",
+        creator: "Current User",
+        owner: "Current User",
+        workflow_status: "Draft",
+        ai_interpreter_enabled: false,
+      },
+    ],
+    dialog: { kind: "delete-confirm", record: { id: "scenario-own-disabled" } },
+  },
+};
+
 export const FilteredEmpty = {
   args: { query: "no such scenario" },
 };

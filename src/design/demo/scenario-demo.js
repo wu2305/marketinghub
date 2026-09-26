@@ -203,6 +203,7 @@ export function useScenarioDemo(props = {}) {
     resolveSeed: (seedDialog) => all.find((item) => item.id === seedDialog.record?.id),
     buildDialog: (kind, record) => ({
       kind, record,
+      purpose: kind === "delete-confirm" ? "danger" : "confirm",
       title: strings.confirmTitle,
       message: kind === "delete-confirm" ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
       confirmLabel: kind === "delete-confirm" ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
