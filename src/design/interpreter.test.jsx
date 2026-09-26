@@ -5,6 +5,7 @@ import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
 import { buildInterpreterAnswer, useInterpreterDemo } from "./demo/interpreter-demo.js";
 import { demoHrefFor } from "./demo/navigation.js";
 import { INTERPRETER, MODEL_FLOW, buildModelDraft } from "./content.js";
+import { KnowledgeSidebar } from "./features/interpreter/KnowledgeSidebar/index.jsx";
 
 Element.prototype.scrollTo ??= () => {};
 
@@ -68,6 +69,15 @@ function Harness({ onSelectType, ...rest }) {
 
 
 describe("AI Interpreter type contract", () => {
+
+  it("keeps the Overview anchor native when its selection callback only observes", () => {
+    const onSelect = vi.fn();
+    render(<KnowledgeSidebar overview={{ id: "overview", label: "Overview" }} overviewHref="/mh-host/interpreter" onSelect={onSelect} />);
+    const overview = screen.getByRole("link", { name: "Overview" });
+    expect(overview.getAttribute("href")).toBe("/mh-host/interpreter");
+    expect(fireEvent.click(overview)).toBe(true);
+    expect(onSelect).toHaveBeenCalledWith({ id: "overview", label: "Overview" });
+  });
   it("filters records by stable typeId even when the visible title changes", () => {
     const renamed = INTERPRETER.types.map((type) =>
       type.id === "Scenario Reporting" ? { ...type, title: "Renamed Scenarios" } : type,

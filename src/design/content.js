@@ -31,17 +31,19 @@ export const HOME = {
   cards: [
     {
       title: "Marketing Cockpit",
+      href: "/assets/pages/reports.html",
       target: { id: "cockpit", params: {} },
       description: "Centralized view for tracking all marketing initiatives' performance and evolving business trends.",
       image: assetUrl("assets/images/workspace-marketing-overview.png"),
       links: [
-        { id: "dg", label: "DG Data Insight", target: { id: "cockpit", params: { project: "rednote" } } },
-        { id: "dc", label: "DC Data Insight", target: { id: "cockpit", params: { project: "abo" } } },
-        { id: "d2c", label: "D2C Insight", target: { id: "cockpit", params: { project: "customer" } } },
+        { id: "dg", label: "DG Data Insight", href: "/assets/pages/reports.html?project=rednote", target: { id: "cockpit", params: { project: "rednote" } } },
+        { id: "dc", label: "DC Data Insight", href: "/assets/pages/reports.html?project=abo", target: { id: "cockpit", params: { project: "abo" } } },
+        { id: "d2c", label: "D2C Insight", href: "/assets/pages/reports.html?project=customer", target: { id: "cockpit", params: { project: "customer" } } },
       ],
     },
     {
       title: "Self-Service Center",
+      href: "/assets/pages/flexible.html",
       target: { id: "self-service", params: {} },
       description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
       image: assetUrl("assets/images/workspace-business-explorer.png"),
@@ -49,13 +51,15 @@ export const HOME = {
     },
     {
       title: "AI Interpreter",
+      href: "/assets/pages/knowledge.html",
       target: { id: "interpreter", params: {} },
       description: "Empower business teams to create, manage and evolve trusted knowledge for consistent AI experiences.",
       image: assetUrl("assets/images/workspace-knowledge-center.png"),
-      links: [{ id: "knowledge", label: "Knowledge Management", target: { id: "interpreter", params: {} } }],
+      links: [{ id: "knowledge", label: "Knowledge Management", href: "/assets/pages/knowledge.html", target: { id: "interpreter", params: {} } }],
     },
     {
       title: "RedNote Campaign Tool",
+      href: "/assets/pages/campaign.html",
       target: { id: "campaign", params: {} },
       description: "Plan, launch and manage every campaign from one connected workspace.",
       image: assetUrl("assets/images/workspace-campaign-operations.png"),
@@ -323,6 +327,7 @@ export const SELF_SERVICE = {
       category: "dg",
       description: "Miaozhen OTV/OLV media monitoring self-analysis by Campaign, Media & Platform dimensions.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
       target: { id: "media-tracking-detail", params: {} },
     },
     {
@@ -330,6 +335,7 @@ export const SELF_SERVICE = {
       category: "dc",
       description: "Self-analysis of ad placement and conversion data: TMALL, JD, Tiktok, Wechat.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
       target: { id: "media-tracking-detail", params: {} },
     },
     {
@@ -337,6 +343,7 @@ export const SELF_SERVICE = {
       category: "dg",
       description: "Self-analysis of Rednote Campaign & note placement and conversion data.",
       actionLabel: "Open data view",
+      href: "/assets/pages/media-tracking-detail.html",
       target: { id: "media-tracking-detail", params: {} },
     },
   ],
@@ -347,6 +354,7 @@ export const SELF_SERVICE = {
       module: "store-performance",
       description: "Upload finance pilot city data covering budgets, expenses and KPIs across business lines and reporting periods.",
       actionLabel: "Open upload module",
+      href: "/assets/pages/data-upload.html",
       target: { id: "data-upload", params: {} },
       history: [
         { file: "finance_pilot_city_2026Q3.xlsx", uploader: "Wang Chen", time: "2 days ago", size: "248 KB" },

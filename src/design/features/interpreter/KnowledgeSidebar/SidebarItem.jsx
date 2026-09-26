@@ -32,10 +32,7 @@ export function SidebarItem({ label, icon, active = false, badge, count, href, o
   };
   return href ? (
     <a {...common} href={href} onClick={(event) => {
-      if (isPlainPrimaryLink(event) && onSelect) {
-        event.preventDefault();
-        onSelect({ label });
-      }
+      if (isPlainPrimaryLink(event)) onSelect?.({ label });
     }}>{content}</a>
   ) : (
     <button {...common} type="button" onClick={() => onSelect?.({ label })}>{content}</button>
