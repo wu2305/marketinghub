@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 Data Upload共享演示流程 PR #24：useDataUploadDemo共用故事/宿主，14字段、提交瞬态、Import与文件选择；提交载荷{values}；独立对抗审核见/tmp/mh-p04-flow-adversarial.md。M7其余条目与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 Self-Service状态档案 PR #25：18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程；独立对抗审核见/tmp/mh-p03-state-adversarial.md。M7其余条目与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 405 stories + 67 docs；2026-09-26 a9391f4干净构建 |
-| 测试 | `npm test`：25 文件 225 条通过（a9391f4） |
-| lint | `npm run lint`：0 errors / 0 warnings，a9391f4 |
-| 构建验证 | `npm run build-storybook` 405 stories/67 docs；`npm run build:host` + host-check 27/27（`/tmp/mh-p04-integrate-host`）；最新main上rebase并干净构建，stamp a9391f4 |
+| 故事数 | 408 stories + 67 docs；2026-09-26 215dfdc干净构建 |
+| 测试 | `npm test`：25 文件 225 条通过（215dfdc） |
+| lint | `npm run lint`：0 errors / 0 warnings，215dfdc |
+| 构建验证 | `npm run build-storybook` 408 stories/67 docs；`npm run build:host` + host-check 27/27（`/tmp/mh-p03-integrate-r2-host`）；最新main上rebase并干净构建，stamp 215dfdc |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp a9391f4，工作区干净）：全站492/492机器通过（`/tmp/mh-p04-integrate-visual`），负向39/39按预期失败。P04本页4场景；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
+| 最近视觉对照 | 2026-09-26（stamp 215dfdc，工作区干净）：全站493/493机器通过（`/tmp/mh-p03-integrate-r2-visual`），负向39/39按预期失败。P03本页30场景；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -37,7 +37,7 @@ npm test               # vitest 行为测试
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。WP1 加 CSS 预算棘轮（裸十六进制、token 数、同值别名及新组件前缀）；WP4 冻结现有 47 个公共 demo/content/routes/fixtures 导出身份，新增拒绝、删除允许，待 M7 R5(b) 拆入口；仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 机器集成完成；人工整页收敛继续 | Header PR #21、首页状态/窄屏 PR #22；完整入口与15命名状态见§2.2 P01，原不可达platformGuide/picker/upload残留不复活 |
-| M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；P04已共用demo/宿主流程；P03档案与窄屏回修、P05/P06流程迁入demo及人工视觉收敛继续，见§4当前复核 |
+| M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；P04已共用demo/宿主流程；P03档案与窄屏回修已合并#25、P05/P06流程迁入demo及人工视觉收敛继续，见§4当前复核 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
 | M6 | 治理与Scenario三页全量结构/流程 | 结构覆盖已实现；P12–P17分别集成，人工视觉与共享组件收敛继续 | PR #13–#18 |
@@ -60,7 +60,7 @@ npm test               # vitest 行为测试
 |---|---|---|---|---|
 | P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | PR #22；15个命名页面故事、20个本页配对，四卡390/900/1440可读与链接可达；Header由#21合入；人工整页收敛继续 |
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | PR #23机器集成；26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}；本页57/57机器配对；人工整页收敛继续 |
-| P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | 助手已实现，PR #9；建议即提交、替换答案、历史填充、最大化、技能/模型流、反馈/复制及焦点/Escape；M7补Upload、整页Upload History及DG分类筛选命名故事，现18页面故事、30/30本页配对；390px卡片内容/入口已做可读布局，人工像素收敛待办 |
+| P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | PR #25机器集成；18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程；本页30/30机器配对；人工整页收敛继续 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | PR #24机器集成；useDataUploadDemo共用故事/宿主，14字段、提交瞬态、Import与文件选择；提交载荷{values}；本页4/4机器配对；人工整页收敛继续 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
 | P06 | assets/pages/campaign.html | 五个 section、创建任务/绑定等实际动作、助手 | M3 | 进行中；A2 修正助手关闭后最大化复位与答案横幅样式 |
@@ -361,6 +361,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P07知识管理确认弹窗（business-term-library.js / field-library.js / scenario-reports.js） | 原小型紧凑确认框统一为可换行、随内容增高的普通确认/删除/通知外观 | 同用途共享一个ConfirmDialog；保留权限、引用、确认动作及结果，不为每页保留外观flag | #19 |
 | Header / Home Hero | 小屏导航在自身区域滚动并保留全部链接，Home Hero随内容增高；P08/P11保留已有sticky可读布局；Header层级低于覆盖层 | 提取导航/内容容器用途，避免原固定宽度/孤立z-index造成不可达或遮挡，不删除统计/链接 | #21 |
 | Home工作台卡片（home.css:353–356） | ≤760px改为单列并保留四卡全部内容、能力链接与入口 | 原固定四列在390px横溢；按入口卡用途保障可读可达，不新增卡片变体 | #22 |
+| Self-Service / ActionCard窄屏 | 页面卡片单列，卡片正文与CTA纵排，保留所有说明、链接和History入口 | 原固定列宽令390px正文挤压和动作溢出；按入口卡用途保证完整可读，无新变体 | #25 |
 
 ## 4. 已知缺口
 
@@ -581,3 +582,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | M7 P04 候选：原 `self-service/upload.js:1–89` 的 1500ms Submitted、Template Import 开关与原生文件选择回写迁入私有 `useDataUploadDemo`，DataUploadPage 故事和独立宿主共用；补 Submitted、Import open、File selected 三个不重复的整页状态，Autodocs 绑定页面并注明回调载荷。`/mh-host/data-upload` 可由 Self-Service 上传卡进入、返回原 upload 页签；保留 14 字段、空表单可提交、Escape 关闭、重开保留文件名及无实际上传结果。页面提交回调改具名 `{values}`，仅本页 CSS 覆盖共享按钮 disabled 透明度：原 `upload.css:130–150` 禁用时仍清晰展示金色 Submitted。P04 最终本地定向配对 4/4（`/tmp/mh-p04-closeout-postrebase-pairs`）、宿主 25/25（`/tmp/mh-p04-closeout-postrebase-host`），lint0、23文件221测试、Storybook321故事/65文档候选构建；最新 main clean-head 全套待集成。原页与 React 的 Hero 图像裁切、输入字体、Modal 高度/纵向间距仍有像素差异，人工不标 PASS，留第二轮。 | Codex WP6 |
 | 2026-09-26 | P04 PR #24（https://github.com/wu2305/marketinghub/pull/24）合并9e354ad，冻结a9391f4：lint0/0、25文件225测试、405stories/67docs、host27/27、visual492/492、negative39/39，证据/tmp/mh-p04-integrate-*。useDataUploadDemo共用故事/宿主，14字段、提交瞬态、Import与文件选择；提交载荷{values}。独立审核/tmp/mh-p04-flow-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
 | 2026-09-26 | M7 P03 命名档案候选：新增 `pages--self-service-upload`（完整上传页签）与 `pages--self-service-upload-history`（通过可见历史按钮的故事 play 打开覆盖层），沿用 `useSelfServiceDemo`，无新页面/展示 prop 或重复助手状态；页面 Autodocs 绑定 `SelfServicePage`，tab Controls 从现有 `SELF_SERVICE.tabs` 派生。两条原始侧配对动作不变，React侧改由命名故事承载；本页29/29机器通过（`/tmp/mh-p03-state-archive-pairs`），lint0、Storybook 320 stories/65 docs。两张新增状态在1440px已人工抽看：结构与内容完整，既有 Upload History 弹窗纵向间距有像素差异，人工签收仍 pending；源码/组件映射见 `/tmp/mh-p03-state-completeness.md`。全站门禁由集成者执行。 | Codex P03 |
+| 2026-09-26 | P03 PR #25（https://github.com/wu2305/marketinghub/pull/25）合并e0023e6，冻结215dfdc：lint0/0、25文件225测试、408stories/67docs、host27/27、visual493/493、negative39/39，证据/tmp/mh-p03-integrate-r2-*。18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程。独立审核/tmp/mh-p03-state-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
