@@ -58,7 +58,7 @@ export function DataUploadPage({
 }) {
   return (
     <Shell>
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-upload">

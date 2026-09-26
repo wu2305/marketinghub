@@ -85,7 +85,7 @@ export function MediaTrackingDetailPage({
   const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="tracking">
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} onNavigate={onNavigate} />
       <main className="mh-tracking">
         <div className="mh-tracking__topbar">
           <a className="mh-tracking__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref })}>

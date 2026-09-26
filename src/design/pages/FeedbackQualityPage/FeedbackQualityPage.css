@@ -1,5 +1,5 @@
 .mh-feedback-page{min-height:100vh;background:var(--mh-bg-soft);color:var(--mh-ink);font-family:var(--mh-font)}
-.mh-feedback-page>.mh-hero{margin-top:calc(-2 * var(--mh-header))}
+.mh-feedback-page>.mh-hero{margin-top:calc(-1 * var(--mh-header))}
 .mh-feedback-page__stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;min-width:520px}
 .mh-feedback-page__stats article{display:grid;gap:4px;padding:20px 18px;border:1px solid color-mix(in srgb,var(--mh-surface) 18%,transparent);border-radius:12px;background:color-mix(in srgb,var(--mh-ink) 82%,transparent);color:var(--mh-surface)}
 .mh-feedback-page__stats span{color:color-mix(in srgb,var(--mh-surface) 75%,transparent);font-size:10px;font-weight:700;letter-spacing:.08em}

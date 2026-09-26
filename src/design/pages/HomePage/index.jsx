@@ -69,7 +69,7 @@ export function HomePage({
   const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="home">
-      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" tone="overlay" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} onNavigate={onNavigate} />
       <Hero image={hero.image} title={hero.title} description={hero.description} height={300} variant="home" scrim="home">
         {hero.stats.map((stat) => (
           <MetricStat key={stat.label} {...stat} variant="glass" />

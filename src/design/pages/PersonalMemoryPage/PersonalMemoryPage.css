@@ -1,5 +1,5 @@
 .mh-memory-page { min-height:100vh; background:var(--mh-bg); color:var(--mh-ink); font-family:var(--mh-font); }
-.mh-memory-page > .mh-hero { margin-top:calc(-2 * var(--mh-header)); }
+.mh-memory-page > .mh-hero { margin-top:calc(-1 * var(--mh-header)); }
 .mh-memory-page__body { display:grid; grid-template-columns:240px minmax(0,1fr); gap:28px; width:min(1440px,calc(100% - 88px)); margin:auto; padding:34px 0 84px; }
 .mh-memory-page__banner-icon svg,.mh-memory-page__banner button svg { width:16px; height:16px; }.mh-memory-page__new svg { width:14px; height:14px; }
 .mh-memory-page__main { min-width:0; }

@@ -1,5 +1,6 @@
 .mh-header {
-position: sticky;
+  position: fixed;
+  inset: 0 0 auto;
   top: 0;
   z-index: 40;
   height: var(--mh-header);
@@ -8,23 +9,24 @@ position: sticky;
   backdrop-filter: blur(18px);
 }
 
-.mh-header--fixed {
-position: fixed;
-  inset: 0 0 auto;
+.mh-header--comfortable.mh-header--fixed {
+  z-index: 70;
 }
 
-.mh-header--overlay {
-border-bottom-color: rgba(255, 255, 255, 0.12);
-  background: transparent;
-  backdrop-filter: none;
+.mh-header--sticky {
+  position: sticky;
+  inset: auto;
+  top: 0;
+  z-index: 60;
 }
 
 .mh-header__bar {
-display: flex;
+  display: flex;
   width: min(1460px, calc(100% - 88px));
   height: 56px;
   align-items: center;
   justify-content: space-between;
+  gap: 32px;
   margin: 0 auto;
 }
 
@@ -41,16 +43,16 @@ display: block;
 }
 
 .mh-header__links {
-display: flex;
-  height: 56px;
+  display: flex;
+  height: 48px;
   align-items: center;
   gap: 26px;
 }
 
 .mh-header__link {
-position: relative;
+  position: relative;
   display: grid;
-  height: 56px;
+  height: 48px;
   place-items: center;
   padding: 0;
   border: 0;
@@ -64,8 +66,9 @@ position: relative;
   cursor: pointer;
 }
 
-.mh-header--overlay .mh-header__link {
-color: rgba(255, 255, 255, 0.72);
+.mh-header--comfortable .mh-header__links,
+.mh-header--comfortable .mh-header__link {
+  height: 56px;
 }
 
 .mh-header__link::after {
@@ -80,15 +83,42 @@ position: absolute;
 }
 
 .mh-header__link:hover,
+.mh-header__link:focus-visible,
 .mh-header__link.is-current {
 color: var(--mh-ink);
 }
 
-.mh-header--overlay .mh-header__link:hover,
-.mh-header--overlay .mh-header__link.is-current {
-color: #fff;
+.mh-header__link:focus-visible,
+.mh-header__logo:focus-visible {
+  outline: 2px solid var(--mh-bubble-to);
+  outline-offset: 2px;
 }
 
+.mh-header__link:hover::after,
+.mh-header__link:focus-visible::after,
 .mh-header__link.is-current::after {
 opacity: 1;
+}
+
+@media (max-width: 800px) {
+  .mh-header__bar {
+    width: calc(100% - 32px);
+    gap: 16px;
+  }
+
+  .mh-header__logo {
+    flex: none;
+  }
+
+  .mh-header__links {
+    flex: 1;
+    min-width: 0;
+    gap: 18px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .mh-header__link {
+    flex: none;
+  }
 }

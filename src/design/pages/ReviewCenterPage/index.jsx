@@ -44,7 +44,7 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
   const ai = assistant || {};
   const { open: aiOpen = false, prompt: aiPrompt = "", answers: aiAnswers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = ai;
   return <div className="mh-review-page" data-review-tab={tab} data-review-panel={panel || "none"}>
-    <Header logo={logo} items={navigation} current="interpreter" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
+    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={image} eyebrow={content.hero.eyebrow} title={content.hero.title} description={content.hero.description} height={372} variant="home" scrim="none" asideLabel={labels.summaryAria}>
       <div className="mh-review-page__stats">{content.hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
     </Hero>

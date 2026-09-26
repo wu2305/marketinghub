@@ -61,7 +61,7 @@ export function KnowledgeCreatePage({
   const resultText = result?.action === "save" ? labels.savedText : labels.submittedText;
   const submitDisabled = isReportEdit && String(values.description || "").trim() === String(values.originalDescription || "").trim();
   return <div data-kc-type={type} data-kc-mode={mode} className={`mh-kcreate mh-kcreate--${isTerm ? "term" : isAnalysis ? "analysis" : isScenario ? "scenario" : isReportEdit ? "report-edit" : "generic"}`}>
-    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={({ id: targetId }) => route(targetId)} />
+    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} position="sticky" onNavigate={({ id: targetId }) => route(targetId)} />
     <main className="mh-kcreate__main">
       <div className="mh-kcreate__breadcrumb" aria-label={labels.breadcrumb}>
         {(isTerm || isAnalysis || isScenario) && <><a href={hrefFor("home")} onClick={(event) => followLink(event, "home")}>{labels.home}</a><span>/</span></>}

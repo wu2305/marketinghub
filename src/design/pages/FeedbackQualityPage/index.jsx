@@ -36,7 +36,7 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
   const launcherRef = React.useRef(null);
   const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
   return <div className="mh-feedback-page" data-feedback-type={type} data-feedback-time={time}>
-    <Header logo={logo} items={navigation} current="interpreter" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
+    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={hero.image} eyebrow={hero.eyebrow} title={hero.title} description={hero.description} height={372} variant="home" scrim="none" asideLabel={hero.summaryAria}>
       <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
     </Hero>

@@ -66,7 +66,7 @@ export function SelfServicePage({
   const items = source.filter((item) => category === "all" || item.category === category);
   return (
     <Shell>
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-page__shell mh-page__shell--self">
