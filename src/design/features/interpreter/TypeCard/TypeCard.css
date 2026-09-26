@@ -114,3 +114,8 @@ background: #fffaf3;
 .mh-type-card.is-manageable {
 border-top-color: var(--mh-line-warm-strong);
 }
+
+.mh-type-card:focus-visible {
+  outline: 2px solid var(--mh-focus-strong);
+  outline-offset: 2px;
+}

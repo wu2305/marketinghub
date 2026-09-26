@@ -548,3 +548,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P16 PR #17（https://github.com/wu2305/marketinghub/pull/17）合并07dd34f，候选eeb12ca：lint0/0、24文件223测试、341stories/66docs、host25/25、visual439/439、negative35/35；证据/tmp/mh-p16-integrate-r2-*。独立审核/tmp/mh-p16-adversarial.md确认全部六面板/预览/助手及记录回退，补独立Workspace故事有效路由；rebase后保留P15宿主/配置及唯一私有记录数据，修宿主函数边界；首轮门禁因发现窄屏Hero裁切主动中止，eeb12ca修复后重启全套，390/900/1440信息完整，未以原参照裁切作为组件要求。默认/窄屏人工fail留视觉收敛，P17继续。 | Codex integrator |
 
 | 2026-09-26 | TypeCard 内容布局候选：原 ai-interpreter-overview.css:2044–2092 固定171px与绝对定位被保留到组件后，900px实测7张、390px6张标题与计数相交。改为自然布局，标题/计数可换行、正文和动作参与高度；不新增组件/API/token，不改变八类入口行为。1440/900/390相交数均降为0，证据/tmp/mh-type-card-before.json、after.json、mh-type-card-*.png。卡片高度/后续行Y按可读内容变化，配对保留列位置宽度及内容检查；有意差异将在合并时登记。 | Codex integrator |
+| 2026-09-26 | TypeCard 独立审核 `/tmp/mh-type-card-independent-review.md` 无布局/接口阻断；补显式 token focus-visible，键盘聚焦无需依赖浏览器默认样式。900/390整页1180px横向布局为既存Interpreter页壳约束，未伪称本包解决。 | Codex integrator |
