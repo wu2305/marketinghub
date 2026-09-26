@@ -6,6 +6,7 @@ export default {
   component: Toast,
   tags: ["autodocs"],
   parameters: {
+    layout: "fullscreen",
     docs: {
       description: {
         component:
@@ -18,12 +19,7 @@ export default {
     message: prop("string", { defaultValue: "", description: "Status text announced by the live region." }),
     open: prop("boolean", { defaultValue: false, description: "Visibility — false renders `hidden`.", control: "boolean" }),
   },
-  render: (args) => (
-    <>
-      <p>Toast is pinned to the lower-right viewport regardless of this text.</p>
-      <Toast {...args} />
-    </>
-  ),
+  render: (args) => <div style={{ height: 120 }}><Toast {...args} /></div>,
 };
 
 export const Default = {};

@@ -1,3 +1,7 @@
+.mh-feedback-list, .mh-feedback-list__head, .mh-feedback-list__empty {
+  font-family: var(--mh-font);
+}
+
 .mh-feedback-list__head,.mh-feedback-list__row{display:grid;grid-template-columns:minmax(180px,2.2fr) minmax(200px,2.5fr) minmax(80px,1fr) minmax(100px,1.5fr) minmax(90px,1.2fr) minmax(70px,.8fr) minmax(80px,.9fr);gap:12px;align-items:center;text-align:left}
 .mh-feedback-list__head{padding:10px 20px;border-bottom:1px solid var(--mh-line);color:var(--mh-muted);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
 .mh-feedback-list__row{padding:14px 20px;border-bottom:1px solid var(--mh-line);color:var(--mh-ink);font-size:12px;cursor:pointer}

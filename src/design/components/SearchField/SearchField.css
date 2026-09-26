@@ -1,4 +1,5 @@
 .mh-search {
+  font-family: var(--mh-font);
 position: relative;
   display: block;
   width: 100%;

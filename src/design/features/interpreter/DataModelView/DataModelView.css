@@ -3,6 +3,7 @@
    folded in. Effective values probed from the rendered page. */
 
 .mh-dmview {
+  font-family: var(--mh-font);
   color: var(--mh-ink);
 }
 

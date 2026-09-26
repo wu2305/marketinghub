@@ -14,6 +14,7 @@ display: none;
 }
 
 .mh-copilot {
+  font-family: var(--mh-font);
 position: fixed;
   top: 0;
   right: 0;

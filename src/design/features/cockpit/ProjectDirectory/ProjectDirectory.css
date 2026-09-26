@@ -1,6 +1,7 @@
 /* ---------- Cockpit project directory + report rows ---------- */
 
 .mh-project-directory {
+  font-family: var(--mh-font);
 display: block;
 }
 

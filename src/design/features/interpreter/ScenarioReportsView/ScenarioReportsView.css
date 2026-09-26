@@ -2,6 +2,7 @@
    stylesheet + unified-type-toolbar.css + ai-interpreter-overview.css. */
 
 .mh-srview {
+  font-family: var(--mh-font);
   color: var(--mh-ink);
 }
 

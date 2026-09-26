@@ -1,4 +1,5 @@
 .mh-assistant {
+  font-family: var(--mh-font);
 position: fixed;
   inset: 0;
   z-index: 50;

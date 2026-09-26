@@ -9,6 +9,7 @@ margin: 0;
 }
 
 .mh-panel {
+  font-family: var(--mh-font);
 min-width: 0;
   padding: 18px;
   border: 1px solid var(--mh-line);

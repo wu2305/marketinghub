@@ -1,6 +1,7 @@
 /* Shared library pagination — `#businessPagination`. */
 
 .mh-pagination {
+  font-family: var(--mh-font);
 display: flex;
   min-height: 54px;
   align-items: center;

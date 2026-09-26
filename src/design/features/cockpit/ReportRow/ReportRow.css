@@ -1,4 +1,5 @@
 .mh-report-row {
+  font-family: var(--mh-font);
 display: grid;
   grid-template-columns: 52px minmax(340px, 1fr) 220px 118px;
   gap: 18px;
