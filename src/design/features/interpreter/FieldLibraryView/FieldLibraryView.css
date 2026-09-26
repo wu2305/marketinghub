@@ -27,6 +27,38 @@ order: -1;
   width: 300px;
 }
 
+@media (max-width: 1100px) {
+  .mh-flview__tools {
+    flex-wrap: wrap;
+  }
+
+  .mh-flview__search {
+    flex: 1 1 300px;
+    min-width: min(100%, 240px);
+    width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .mh-flview__search {
+    flex-basis: 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mh-flview .mh-flview__tools > .mh-check-filter {
+    flex: 1 1 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mh-flview .mh-flview__tools .mh-check-filter__options {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+  }
+}
+
 /* `.knowledge-add-button` — gold gradient pill (AM only). */
 
 .mh-flview__create {
