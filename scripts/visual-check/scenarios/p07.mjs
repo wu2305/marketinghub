@@ -1,3 +1,14 @@
+const responsiveStoryCheck = (selectors) => `(() => {
+  const width = document.documentElement.clientWidth;
+  if (document.documentElement.scrollWidth > width + 1) throw new Error('Interpreter extends beyond the viewport');
+  for (const selector of ${JSON.stringify(selectors)}) {
+    const element = document.querySelector(selector);
+    if (!element) throw new Error('Missing responsive element: ' + selector);
+    const box = element.getBoundingClientRect();
+    if (box.width < 1 || box.left < -1 || box.right > width + 1) throw new Error('Offscreen responsive element: ' + selector);
+  }
+})()`;
+
 export default [
   {
     id: "p07-interpreter-overview",
@@ -404,29 +415,30 @@ export default [
     },
   },
   {
-    /* 1024 viewport: the 1180px document min-width keeps three columns; the
-       tool row and cards narrow with the content column. */
+    /* The original keeps a 1180px horizontal canvas at 1024; the React page
+       instead stacks navigation and keeps the toolbar/action in the viewport. */
     id: "p07-business-term-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".bt-overview-tools", story: ".mh-btview__tools", props: ["x", "width"], tol: 8 },
-      { orig: ".bt-term-card", story: ".mh-btview__card", props: ["x", "y", "width"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
       expect: [
         { sel: ".bt-term-card", count: 6 },
         { sel: ".bt-tag-overflow", count: 6 },
+        { sel: "#businessTypeNav button", count: 8 },
+        { sel: ".bt-overview-filter:has(input[data-bt-filter='status']) summary", text: "All statuses" },
+        { sel: ".bt-overview-tools .knowledge-add-button", text: "Add Business Term" },
       ],
     },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Business Term" },
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-btview__tools", ".mh-btview__create", ".mh-btview__card"]) }],
       expect: [
         { sel: ".mh-btview__card", count: 6 },
         { sel: ".mh-btview__tag--overflow", count: 6 },
+        { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
+        { sel: ".mh-btview__tools .mh-check-filter:nth-of-type(2) .mh-check-filter__summary", text: "All statuses" },
+        { sel: ".mh-btview__create", text: "Add Business Term" },
       ],
     },
   },
@@ -752,47 +764,40 @@ export default [
     },
   },
   {
-    /* The original's min-width:1180 document + ≤1240 breakpoint: the fixed
-       rail moves to left:32 and the hero takes margin-left:272/width:876 at
-       a 1024 viewport (the document stays 1180 wide). */
+    /* Original 1180px canvas geometry is intentionally not compared below
+       1100px: React keeps navigation, stats and cards inside the viewport. */
     id: "p07-interpreter-overview-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html",
-      expect: [{ sel: ".v20-type-card", count: 8 }, { sel: "h1", text: "AI Interpreter" }],
+      expect: [{ sel: ".v20-type-card", count: 8 }, { sel: "#businessTypeNav button", count: 8 }, { sel: ".knowledge-hero-stat", count: 2 }, { sel: "h1", text: "AI Interpreter" }],
     },
     story: {
       id: "pages--interpreter",
-      expect: [{ sel: ".mh-type-card", count: 8 }, { sel: ".mh-hero h1", text: "AI Interpreter" }],
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-type-card:first-child", ".mh-type-card:last-child"]) }],
+      expect: [{ sel: ".mh-type-card", count: 8 }, { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 }, { sel: ".mh-hero__aside .mh-metric", count: 2 }, { sel: ".mh-hero h1", text: "AI Interpreter" }],
     },
   },
   {
     id: "p07-interpreter-principles-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       expect: [
         { sel: ".principle-list-item", text: "Interactive Agent for Business Questions" },
+        { sel: "#businessTypeNav button", count: 8 },
+        { sel: ".knowledge-hero-stat", count: 2 },
         { sel: "#businessPagination", text: "10 principles" },
       ],
     },
     story: {
       id: "pages--interpreter",
       args: { activeType: "Principles" },
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-principles__toolbar", ".mh-principle:first-child"]) }],
       expect: [
         { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
+        { sel: ".mh-hero__aside .mh-metric", count: 2 },
         { sel: ".mh-pagination", text: "10 principles" },
       ],
     },
