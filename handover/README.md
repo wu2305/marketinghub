@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P15 PR #16完整性复核完成：Skill Library九条完整记录、治理字段、结构内容、内联表单与预览/助手状态；默认/详情人工fail。外部组件复核及修复包仍见§4 |
+| 最新独立审核 | 2026-09-26 P16 PR #17独立完整性审核完成：六页签、五段结构/九项治理、预览、静态AI/Usage/Version/Activity及助手模型流完整；独立组件故事链接已修。默认/窄屏人工fail，组件复用收敛见§4 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 318 stories + 65 docs；2026-09-26 5b8fbe4干净构建；21个P15页面状态与3个专用组件故事新增 |
-| 测试 | `npm test`：23 文件 221 条通过（5b8fbe4） |
-| lint | `npm run lint`：0 errors / 0 warnings，5b8fbe4 |
-| 构建验证 | `npm run build-storybook` 318 stories/65 docs；`npm run build:host` + host-check 24/24（`/tmp/mh-p15-integrate-r2-host`）；最新origin/main rebase后干净构建，stamp 5b8fbe4 |
+| 故事数 | 341 stories + 66 docs；2026-09-26 eeb12ca干净构建；P16新增22个页面状态与1个专用组件故事 |
+| 测试 | `npm test`：24 文件 223 条通过（eeb12ca） |
+| lint | `npm run lint`：0 errors / 0 warnings，eeb12ca |
+| 构建验证 | `npm run build-storybook` 341 stories/66 docs；`npm run build:host` + host-check 25/25（`/tmp/mh-p16-integrate-r2-host`）；最新origin/main rebase后干净构建，stamp eeb12ca |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 5b8fbe4，工作区干净）：全站410/410机器通过，P15 19/19（`/tmp/mh-p15-integrate-r2-visual`）；负向31/31按预期失败。默认/详情人工fail，其他pending；机器结果不替代组件形态/人工验收，已确认修复清单见§4。 |
+| 最近视觉对照 | 2026-09-26（stamp eeb12ca，工作区干净）：全站439/439机器通过，P16 29/29（`/tmp/mh-p16-integrate-r2-visual`）；负向35/35按预期失败。P16默认/窄屏人工fail，其他pending；机器结果不替代组件形态/人工验收。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -40,7 +40,7 @@ npm test               # vitest 行为测试
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；命名状态档案、P04/P05/P06流程迁入demo及人工像素收敛仍待完成，见§4当前复核 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
-| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12–P15已集成，组件形态与人工收敛待办，P16/P17继续 | PR #13–#16 |
+| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12–P16已集成，组件形态与人工收敛待办，P17继续 | PR #13–#17 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
@@ -70,7 +70,7 @@ npm test               # vitest 行为测试
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P15 | assets/pages/scenario-library.html | Skill列表/筛选/空态、九字段详情与五段结构、预览、内联创建编辑、助手/模型 | M6 | 已实现，PR #16；21个页面+3组件故事，本页19/19及全套机器通过；默认/详情人工fail。按用途抽象，不恢复隐藏Use或虚构原无处理器动作 |
-| P16 | assets/pages/scenario-detail.html | Skill 详情：Hero三统计、六页签、五段结构/九项治理、预览/Related/AI/Usage/Version/Activity、lite助手 | M6 | 预候选已提取；22个页面命名状态+1组件故事、29组本页机器配对和独立宿主预检通过；P15合并后rebase，完整门禁与人工像素待集成 |
+| P16 | assets/pages/scenario-detail.html | 六页签、五结构/九治理、预览/Related/AI/Usage/Version/Activity及助手模型流 | M6 | 已实现，PR #17；22页面+1组件故事，29/29本页及全套机器通过；默认/窄屏人工fail。独立Workspace受控、记录复用P15，Edit保留当前id；P17集成后接通编辑目标 |
 | P17 | assets/pages/scenario-edit.html | Skill 编辑表单、校验、preview、Submit for Review | M6 | 未开始 |
 
 ### 2.3 细分台账与证据记录格式
@@ -348,8 +348,12 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P14新建表单重开（governance/memory.js:69–105,110–145） | 原Cancel→New清表单值但残留必填错误；React新开同时清错误 | AGENTS §3.5状态quirk不进入展示组件；提交仍校验title/description且聚焦首个错误 | #15 |
 | P15状态点击（governance/skills.js:55–60,146–168） | 原状态点击同时冒泡打开详情；React只推进状态 | 独立状态动作不误触整行，保留真实状态转换 | #16 |
 | P15创建/编辑（skills.js:203–229；scenario-library.html:286–293） | 原Create沿用Edit草稿，已存D2C Insights回填丢失；React新建清空并保留当前记录的非标准scope选项 | 修复状态残留和数据回填丢失，不新增全局分类 | #16 |
+| P16 Hero窄屏（skill-detail.css:1080–1105） | 原页单列布局仍固定360px并隐藏溢出，统计与说明裁切；React在≤1100px随内容增高、统计自适应分列 | 保持全部内容可读，390/900/1440边界证据见`/tmp/mh-p16-responsive-clean`；共享Header窄屏问题另包处理 | #17 |
+| P16 Edit Scenario（scenario-detail.html:203；skill-detail.js:1–99） | 原Edit固定链接丢失当前id；React通过hrefFor和onNavigate保留当前记录id | 修复显示记录与编辑目标身份不一致，不增加新业务流程 | #17 |
 
 ## 4. 已知缺口
+
+- P15/P16共享区块候选：预览、五段结构和治理信息具有真实共同用途，M7在保留抽屉/整页顺序布局的前提下评估最小共享；不因细微图标尺寸/颜色差复制组件，也不引入通用字段渲染器。证据`/tmp/mh-scenario-shared-boundary.md`。共享Hero的固定高度与页面断点规则也需集中收敛；P16先修900/390统计与说明裁切，不把原页不可读效果作为组件契约。
 
 2026-09-26 外部组件报告复核（干净代码基线10d8e09重新构建；Chromium/Playwright，Header 1440/390，其余指定同态1440；证据 `/tmp/mh-feedback-recheck*/results.json` 与同目录截图，Browser插件不可用）：
 - **优先补完整形态**：P12风险批准误用P07知识小确认框，原440×301/56px图标/32px 28px内距，React440×122.5/25px图标/0内距且长提示不换行被裁；P14删除原400×177/24px内距/红色Delete，React440×122.5/橙色知识确认；P08 RC描述提交原370×191/25px内距/无警告图标，React320×122.5/知识警告图标。需保留真实内容组合及样式差异，共享Modal覆盖层行为，不全局把ConfirmDialog改成440px。源见review-center.html:401–426/review.css:1091–1148，memory.js:426–440/memory.css:1177–1228，report-context-form.js:81–100。P07同态原/React页面确认框均282.3×122.5，原报告混合不同实例的尺寸不能直接采纳。
@@ -540,3 +544,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | WP6 P16 Skill Detail 预候选：源 `assets/js/governance/skill-detail.js:1–99` 与 `assets/pages/scenario-detail.html` 六个可达页签映射至受控 `ScenarioDetailPage`+专用 `ScenarioDetailWorkspace`；Content含五结构行、九治理字段、预览展开/收起，Related四个原始宽链（两reports/两knowledge），AI Check 8/10、Usage四值、四版本与四活动行保留源静态板块。缺id选City Comparison，未知id回退九条源记录首项Channel Performance；`Edit Scenario` 原锚丢id是身份缺陷，React通过`hrefFor('scenario-edit',{id})`保存当前记录。四条可见治理锚与lite助手/模型流复用既有组件；`useScenarioDetailDemo`供22页面命名状态及独立宿主共用，九条记录复用P15私有`SKILL_RECORDS`。源码矩阵`/tmp/mh-wp6-p16-source-matrix.md`、完整性审查`/tmp/mh-p16-completeness-review.md`无遗漏；本页配对29/29机器通过`/tmp/mh-p16-pairs-preview3`，host23/23`/tmp/mh-p16-host-preview3`，default/390px人工像素仍fail但信息可读，最终全套由集成者在本rebase后冻结执行。 | Codex WP6 |
 | 2026-09-26 | P16 独立完整性复核补修：`ScenarioDetailWorkspace` 组件故事与页面故事使用同一原始路由空间的 `hrefFor`，Edit保留所选记录id、四个Related锚可在Storybook独立故事中导航；组件及页面实现未改，原29组配对无需重跑。独立复核记录`/tmp/mh-p16-adversarial.md`。 | Codex P16 review |
 | 2026-09-26 | P16 Hero 窄屏可读性补修：原 `assets/css/governance/skill-detail.css:1080–1105` 在 ≤1100px 将文案/统计改单列，却保持 360px 高度与 overflow hidden；原390px 截图 `/tmp/mh-p16-pairs-preview3/p16-narrow-original.png` 三项统计被裁/推出视口。候选 React 的 `ScenarioDetailPage.css` 原 @560 同样绝对定位推出统计，现仅在本页 ≤1100 使 Hero 随内容增高、统计按可用宽度自动分列，保留全部三项与标题说明；1440px 桌面组合不变。`/tmp/mh-p16-responsive/{390,900,1440}.png` 与 `bounds.json` 验证这五块均在 Hero/视口内；390px 仍存在共享 Header 横溢，非本包范围。定向 `p16-narrow`/`p16-default` 各1/1机器通过（`/tmp/mh-p16-responsive-{narrow,default}-pair`），lint0、Storybook341故事/66文档候选构建；原窄屏视觉差异为保证可读性而有意保留，最终干净提交门禁由集成者执行。 | Codex WP6 |
+| 2026-09-26 | P16 PR #17（https://github.com/wu2305/marketinghub/pull/17）合并07dd34f，候选eeb12ca：lint0/0、24文件223测试、341stories/66docs、host25/25、visual439/439、negative35/35；证据/tmp/mh-p16-integrate-r2-*。独立审核/tmp/mh-p16-adversarial.md确认全部六面板/预览/助手及记录回退，补独立Workspace故事有效路由；rebase后保留P15宿主/配置及唯一私有记录数据，修宿主函数边界；首轮门禁因发现窄屏Hero裁切主动中止，eeb12ca修复后重启全套，390/900/1440信息完整，未以原参照裁切作为组件要求。默认/窄屏人工fail留视觉收敛，P17继续。 | Codex integrator |

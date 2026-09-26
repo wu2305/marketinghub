@@ -592,7 +592,8 @@ R5(a)：
   - [x] P13 Feedback & Quality（PR #14，5a51090；完整性结论、实数与人工fail见README）。
   - [x] P14 Personal Memory（PR #15，7ebf1e1；完整性结论、实数与人工fail见README）。
   - [x] P15 Skill Library（PR #16，391325d；完整性复核与实数见README）。
-  - [ ] P16–P17按页继续。
+  - [x] P16 Skill Detail（PR #17，07dd34f；完整性审核与实数见README）。
+  - [ ] P17继续。
 
 ### WP2 token 预算冲突决策
 
