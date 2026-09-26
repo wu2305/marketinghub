@@ -11,8 +11,8 @@
  *   nav-loop    — catalog card → report row → live back → directory back,
  *                 all inside React (no reload, URL stays under /mh-host/),
  *                 then browser back (popstate) returns to the directory
- *   coverage    — a link to an unrebuilt original page shows the coverage
- *                 notice instead of navigating to /assets/pages/…
+ *   coverage    — an unrebuilt route shows the coverage notice under the base
+ *   campaign    — the real Campaign route shares Storybook's task/assistant flow
  *   home-flow   — Home assistant via useHomeDemo: history pick fills the
  *                 prompt with ASK disabled, typing re-enables, submit shows
  *                 an answer, close→reopen keeps it, new session clears, and
@@ -217,7 +217,10 @@ async function newPage() {
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-header__link", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  await page.click('.mh-header__link:has-text("RedNote Campaign Tool")');
+  await page.evaluate(() => {
+    window.history.pushState(null, "", "/mh-host/coverage/assets/pages/unrebuilt.html");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
   await page.waitForSelector(".host-coverage", { timeout: 5000 });
   const loc = page.url();
   if (!new URL(loc).pathname.startsWith(BASE)) notes.push(`coverage left base: ${loc}`);
@@ -227,6 +230,42 @@ async function newPage() {
   if (!/not yet rebuilt/i.test(text)) notes.push(`coverage notice text missing: ${text.slice(0, 80)}`);
   notes.push(...errors);
   record("coverage", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- campaign-flow: all sections, retained task draft, assistant answer ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.click('.mh-header__link:has-text("RedNote Campaign Tool")');
+  await page.waitForSelector(".mh-campaign", { timeout: 5000 });
+  for (const [label, heading] of [
+    ["Execution", "RedNote Campaign Tool"],
+    ["Assets", "Creative Asset"],
+    ["Analytics", "Analytics"],
+    ["Accounts", "Account Binding"],
+  ]) {
+    await page.locator(".mh-rail__item", { hasText: label }).click();
+    if (!(await page.locator(".mh-campaign main").innerText()).includes(heading)) notes.push(`${label} section missing ${heading}`);
+  }
+  await page.locator(".mh-rail__item", { hasText: "Execution" }).click();
+  await page.locator(".mh-heading--view .mh-button--primary").click();
+  await page.locator(".mh-task-dialog input[name='object']").fill("12 plans");
+  await page.locator(".mh-task-dialog select[name='platform']").selectOption("Douyin");
+  await page.locator(".mh-task-dialog__footer .mh-button--secondary").click();
+  await page.locator(".mh-heading--view .mh-button--primary").click();
+  if (await page.locator(".mh-task-dialog input[name='object']").inputValue() !== "12 plans") notes.push("task draft object reset after reopen");
+  if (await page.locator(".mh-task-dialog select[name='platform']").inputValue() !== "Douyin") notes.push("task draft platform reset after reopen");
+  await page.locator(".mh-task-dialog__footer .mh-button--primary").click();
+  if (!(await page.locator(".mh-toast").innerText()).includes("Campaign task added")) notes.push("submit toast missing");
+  await page.locator(".mh-launcher").click();
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  if (!(await page.locator(".mh-assistant__answer--workspace").innerText()).includes("AI Response")) notes.push("assistant answer missing");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Campaign navigation reloaded host");
+  notes.push(...errors);
+  record("campaign-flow", notes.length === 0, notes);
   await page.close();
 }
 

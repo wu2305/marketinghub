@@ -13,6 +13,7 @@ import {
 } from "./index.js";
 import { DataModelView } from "./features/interpreter/DataModelView/index.jsx";
 import { useDataModelDemo } from "./demo/data-model-demo.js";
+import { useCampaignDemo } from "./demo/campaign-demo.js";
 import { useOverlayLayer } from "./lib/overlay.js";
 
 // jsdom does not implement scrollIntoView/scrollTo; the copilot chat entry and
@@ -48,22 +49,17 @@ const TASK_DIALOG = {
 };
 
 function TaskHost() {
-  const [open, setOpen] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(null);
+  const props = useCampaignDemo({
+    taskDialog: TASK_DIALOG,
+    onSubmitTask: setSubmitted,
+  });
   return (
     <div>
-      <button type="button" onClick={() => setOpen(true)}>
+      <button type="button" onClick={() => props.onCreateTask({ reason: "button" })}>
         Open task
       </button>
-      <CampaignPage
-        taskDialog={TASK_DIALOG}
-        taskDialogOpen={open}
-        onCloseTask={() => setOpen(false)}
-        onSubmitTask={(event) => {
-          setSubmitted(event);
-          setOpen(false);
-        }}
-      />
+      <CampaignPage {...props} />
       <output data-testid="submitted">{submitted ? JSON.stringify(submitted) : ""}</output>
     </div>
   );

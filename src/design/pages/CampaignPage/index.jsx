@@ -23,6 +23,8 @@ import { TaskList } from "../../features/campaign/TaskList/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./CampaignPage.css";
 
+export const campaignSections = ["overview", "execution", "assets", "analytics", "accounts"];
+export const campaignChannels = ["rednote", "douyin"];
 
 /**
  * RedNote Campaign Tool: rail-navigated sections (overview, execution, assets,
@@ -53,7 +55,7 @@ import "./CampaignPage.css";
  * @param {Array<object>} [props.accounts=[]]
  * @param {object} [props.taskDialog={}] Create Campaign Task dialog copy: eyebrow, title, description, fields {actions, platforms, accounts}, object {label, value}, preview {eyebrow, state, note}, cancelLabel, submitLabel
  * @param {boolean} [props.taskDialogOpen=false]
- * @param {{ action?: string, platform?: string, account?: string, object?: string }} [props.taskDraft] controlled draft values; omit to let the page keep its own draft
+ * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes.
  * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft
  * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
@@ -128,26 +130,9 @@ export function CampaignPage({
   onSubmit,
   onSuggestion,
 }) {
-  /* The original task dialog is a native <dialog> whose form is never reset —
-     cancel/×/backdrop/Escape and even a successful submit all keep the field
-     values. The draft therefore lives on the page (surviving Modal unmounts),
-     uncontrolled by default; `taskDraft` + `onTaskDraftChange` let a host take
-     over. */
-  const firstOption = (options) => {
-    const first = options?.[0];
-    return typeof first === "object" && first !== null ? first.value : first || "";
-  };
-  const taskDefaults = {
-    action: firstOption(taskDialog.fields?.actions),
-    platform: firstOption(taskDialog.fields?.platforms),
-    account: firstOption(taskDialog.fields?.accounts),
-    object: taskDialog.object?.value || "",
-  };
-  const [localTaskDraft, setLocalTaskDraft] = React.useState(taskDefaults);
-  const draft = taskDraft !== undefined ? taskDraft : localTaskDraft;
+  const draft = taskDraft || { action: "", platform: "", account: "", object: "" };
   const updateTaskDraft = (name, value) => {
     const next = { ...draft, [name]: value };
-    if (taskDraft === undefined) setLocalTaskDraft(next);
     onTaskDraftChange?.({ name, value, draft: next });
   };
   const visibleAccounts = accountRows.filter((row) => !query || row.name.toLowerCase().includes(query.toLowerCase()));

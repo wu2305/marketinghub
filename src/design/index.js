@@ -195,6 +195,8 @@ export {
 } from "./pages/AiInterpreterPage/index.jsx";
 export {
   CampaignPage,
+  campaignSections,
+  campaignChannels,
 } from "./pages/CampaignPage/index.jsx";
 export {
   DataUploadPage,
