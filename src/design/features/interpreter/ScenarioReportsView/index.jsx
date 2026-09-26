@@ -3,8 +3,8 @@ import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
+import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
-import { cx } from "../../../cx.js";
 import "./ScenarioReportsView.css";
 
 /**
@@ -132,9 +132,9 @@ export function ScenarioReportsView({
                   </div>
                 </div>
                 <div className="mh-srview__pills">
-                  <span className={cx("mh-srview__state", !record.ai_interpreter_enabled && "is-off")}>
+                  <StatusBadge variant="knowledge" status={record.ai_interpreter_enabled ? "Enabled" : "Disabled"}>
                     {record.ai_interpreter_enabled ? strings.enabled : strings.disabled}
-                  </span>
+                  </StatusBadge>
                 </div>
                 <div className="mh-srview__card-actions">
                   <KnowledgeActions variant="scenario" actions={actionsFor(record)} record={record} onAction={({ action }) => onAction?.(action, record)} />
@@ -174,10 +174,9 @@ export function ScenarioReportsView({
         titleExtra={
           detail ? (
             <>
-              <span className="mh-srview__title-pill" data-status={detailEnabled ? "enabled" : "disabled"}>
-                <i aria-hidden="true" />
+              <StatusBadge variant="detail" status={detailEnabled ? "Enabled" : "Disabled"}>
                 {detailEnabled ? strings.enabled : strings.disabled}
-              </span>
+              </StatusBadge>
               {flowPill(detail.workflow_status, "mh-srview__flow mh-srview__flow--head")}
             </>
           ) : null

@@ -1,5 +1,5 @@
 import { StatusBadge, statusBadgeVariants } from "./index.jsx";
-import { prop } from "../../lib/story-helpers.js";
+import { enumProp, prop } from "../../lib/story-helpers.js";
 
 export default {
   title: "Atoms/Status badge",
@@ -17,7 +17,7 @@ export default {
       },
     },
   },
-  args: { status: "Published", children: "Published", variant: "default", outline: false },
+  args: { status: "Published", variant: "default", outline: false },
   argTypes: {
     status: prop("string", {
       defaultValue: "draft",
@@ -25,7 +25,7 @@ export default {
         "Free-form label; the tone is derived from it (contains publish → success, review → review, pending → pending, pause → paused, else draft).",
       control: "text",
     }),
-    variant: prop("string", { defaultValue: "default", description: "Default badge or P07 knowledge availability capsule.", control: "select", options: statusBadgeVariants }),
+    variant: enumProp(statusBadgeVariants, "default", "General status, fixed-slot knowledge status, or naturally sized detail status."),
     outline: prop("boolean", { defaultValue: false, description: "Outline variant." }),
     children: prop("React.ReactNode", { description: "Overrides `status` as the visible label.", control: "text" }),
   },

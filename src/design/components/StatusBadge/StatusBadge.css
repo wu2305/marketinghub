@@ -75,3 +75,31 @@ border: 1px solid currentColor;
   background: var(--mh-bt-state-off-bg);
   color: var(--mh-bt-state-off-ink);
 }
+
+/* Detail/read-only metadata: same availability meaning, naturally sized. */
+.mh-badge--detail {
+  flex: 0 0 auto;
+  gap: 7px;
+  min-height: 22px;
+  padding: 5px 10px 5px 9px;
+  border-radius: 999px;
+  background: var(--mh-bt-status-on-bg);
+  color: var(--mh-bt-status-on-ink);
+  font-size: 11px;
+  font-weight: 600;
+}
+.mh-badge--detail::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--mh-bt-status-on-dot);
+}
+.mh-badge--detail.mh-badge--paused {
+  background: var(--mh-bt-status-off-bg);
+  color: var(--mh-bt-status-off-ink);
+}
+.mh-badge--detail.mh-badge--paused::before {
+  background: var(--mh-bt-status-off-dot);
+}

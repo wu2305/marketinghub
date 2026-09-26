@@ -226,6 +226,19 @@ describe("P08 demo flow", () => {
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Report Context" } }));
   });
 
+  it("shows Report Context relationships as tags and maps AI Summary independently", () => {
+    const source = KNOWLEDGE_CREATE.records["city-report-context"];
+    const content = { ...KNOWLEDGE_CREATE, records: { ...KNOWLEDGE_CREATE.records,
+      "city-report-context": { ...source, ai_interpretation_enabled: true, ai_summary_enabled: false },
+    } };
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content, type: "Report Context", mode: "edit", id: "city-report-context" })} />; }
+    const { container } = render(<Test />);
+    expect([...container.querySelectorAll(".mh-kcf__rc-meta .mh-badge--detail")].map((badge) => badge.textContent)).toEqual(["Enabled", "Disabled"]);
+    expect([...container.querySelectorAll(".mh-kcf__rc-tags .mh-kcf__rc-tag")].map((tag) => tag.textContent)).toEqual([
+      "City Strategy", "scenario-channel-performance", "scenario-campaign-review",
+    ]);
+  });
+
   it("routes Report Context edit Cancel to its scoped library", () => {
     const navigate = vi.fn();
     const { result } = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Report Context", mode: "edit", id: "city-report-context", onNavigate: navigate }));

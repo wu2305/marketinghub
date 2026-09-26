@@ -3,7 +3,7 @@ import { cx } from "../../cx.js";
 import "./StatusBadge.css";
 
 
-export const statusBadgeVariants = ["default", "knowledge"];
+export const statusBadgeVariants = ["default", "knowledge", "detail"];
 
 /**
  * Status pill. `status` is the label; tone is derived by substring/token
@@ -14,7 +14,7 @@ export const statusBadgeVariants = ["default", "knowledge"];
  * so e.g. "Unpublished" still maps to success.
  * @param {object} props
  * @param {string} [props.status="draft"]
- * @param {"default"|"knowledge"} [props.variant="default"]
+ * @param {typeof statusBadgeVariants[number]} [props.variant="default"] knowledge reserves a card slot; detail grows with its label
  * @param {boolean} [props.outline=false]
  * @param {React.ReactNode} [props.children] overrides `status` as label
  */
@@ -32,5 +32,5 @@ export function StatusBadge({ status = "draft", variant = "default", outline = f
             : key.includes("draft")
               ? "draft"
               : "draft";
-  return <span className={cx("mh-badge", `mh-badge--${tone}`, variant === "knowledge" && "mh-badge--knowledge", outline && "mh-badge--outline")}>{children || status}</span>;
+  return <span className={cx("mh-badge", `mh-badge--${tone}`, variant !== "default" && `mh-badge--${variant}`, outline && "mh-badge--outline")}>{children || status}</span>;
 }
