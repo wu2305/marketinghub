@@ -1,4 +1,4 @@
-export default [
+const scenarios = [
   {
     id: "p01-home",
     original: {
@@ -41,8 +41,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--home",
-      args: { assistantOpen: true },
+      id: "pages--home-assistant-open",
       actions: [
         { click: ".mh-assistant__suggestions button" },
         { click: ".mh-assistant__tools .mh-button" },
@@ -86,8 +85,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--home",
-      args: { assistantOpen: true },
+      id: "pages--home-assistant-open",
       actions: [
         { wait: ".mh-assistant--drawer" },
         {
@@ -124,8 +122,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--home",
-      args: { assistantOpen: true },
+      id: "pages--home-assistant-open",
       actions: [
         { click: "button[aria-label='History']" },
         { wait: ".mh-assistant__history-pop" },
@@ -160,8 +157,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--home",
-      args: { assistantOpen: true },
+      id: "pages--home-assistant-open",
       actions: [
         { click: ".mh-assistant__skill" },
         { wait: ".mh-skill" },
@@ -200,8 +196,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--home",
-      args: { assistantOpen: true },
+      id: "pages--home-assistant-open",
       actions: [
         { click: ".mh-assistant__skill" },
         { wait: ".mh-skill" },
@@ -221,4 +216,45 @@ export default [
       ],
     },
   }
+];
+
+const sourceOpen = [
+  { click: "#aiEntry" },
+  { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
+];
+const sourceModelMenu = [...sourceOpen, { click: "#uploadFile" }, { click: ".ai-skill-category >> nth=1" }];
+const archived = (id, actions, originalExpect, storyId, storyExpect) => ({
+  id: `p01-${id}`,
+  original: { url: "/index.html", actions, expect: originalExpect },
+  story: { id: `pages--home-${storyId}`, expect: storyExpect },
+});
+
+export default [...scenarios,
+  archived("answer-archive", [...sourceOpen, { click: ".ask-suggestion" }, { click: "#sendQuery" }],
+    [{ sel: "#answerFeed .answer-card", text: "Recommended next move." }], "assistant-answer",
+    [{ sel: ".mh-assistant__answer", text: "Recommended next move." }]),
+  archived("history-archive", [...sourceOpen, { click: "#homeHistory" }],
+    [{ sel: "#homeHistoryPopup:not([hidden]) .home-history-item", count: 11 }], "assistant-history",
+    [{ sel: ".mh-assistant__history-pop .mh-assistant__history-item", count: 11 }]),
+  archived("maximized-archive", [...sourceOpen, { click: "#homeMaximize" }],
+    [{ sel: "#assistantPanel.is-ai-expanded", text: "Ask a question" }], "assistant-maximized",
+    [{ sel: ".mh-assistant--expanded", text: "Ask a question" }]),
+  archived("skills-archive", [...sourceOpen, { click: "#uploadFile" }],
+    [{ sel: "#aiSkillMenu:not([hidden])", text: "Analytical Model" }], "assistant-skills",
+    [{ sel: ".mh-skill", text: "Analytical Model" }]),
+  archived("selected-skill-archive", [...sourceModelMenu, { click: ".ai-skill-option:has-text('ROI diagnosis')" }],
+    [{ sel: ".ai-skill-chip:not([hidden])", text: "ROI diagnosis model" }], "assistant-selected-skill",
+    [{ sel: ".mh-assistant__chip", text: "ROI diagnosis model" }]),
+  archived("model-history-archive", [...sourceModelMenu, { click: "[data-ai-skill-action='history']" }],
+    [{ sel: "#aiHistoryGenerateDialog", text: "Generate Analytical Model" }], "model-history",
+    [{ sel: ".mh-flow__card--history", text: "Generate Analytical Model" }]),
+  archived("model-generated-archive", [...sourceModelMenu, { click: "[data-ai-skill-action='history']" }, { click: "[data-ai-generate-model]" }],
+    [{ sel: "#aiGeneratedModelDialog", text: "Analytical Model" }], "model-generated",
+    [{ sel: ".mh-flow__card--form", text: "Analytical Model" }]),
+  archived("model-manual-archive", [...sourceModelMenu, { click: "[data-ai-skill-action='manual']" }],
+    [{ sel: "#aiGeneratedModelDialog", text: "Analytical Model" }], "model-manual",
+    [{ sel: ".mh-flow__card--form", text: "Analytical Model" }]),
+  archived("model-error-archive", [...sourceModelMenu, { click: "[data-ai-skill-action='manual']" }, { click: "[data-ai-submit-model]" }],
+    [{ sel: "#aiGeneratedModelDialog .field-error", text: "required" }], "model-manual-error",
+    [{ sel: ".mh-flow__field-error", text: "required" }]),
 ];

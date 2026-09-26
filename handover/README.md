@@ -59,7 +59,7 @@ npm test               # vitest 行为测试
 
 | ID | 原始入口 | 主要待覆盖范围（以实际生效内容补全） | 里程碑 | 状态 |
 |---|---|---|---|---|
-| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 进行中；A2 修正历史回填后 ASK 可提交及关闭后最大化复位 |
+| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 已有首页及共享宿主流程；M7补10个助手/技能/模型命名状态（共11页面故事），15/15本页配对；Header与人工视觉收敛另包待办 |
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中；A2 修正城市默认计算、全选/空选标签及 Copilot 历史大小写/View more 二次点击 |
 | P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | 助手已实现，PR #9；建议即提交、替换答案、历史填充、最大化、技能/模型流、反馈/复制及焦点/Escape；15页面故事、29/29配对；人工像素收敛待办 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
@@ -570,3 +570,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | Header 候选同步 P17 后，`ScenarioEditPage` 桌面及900px Hero 取消负56px位移，让标题说明和三张统计卡避开固定导航；390px 原本已有自身零位移，保持随内容增高。三档最终边界与截图见 `/tmp/mh-header-responsive/scenario-edit-{390,900,1440}-final.png`、`scenario-edit-final.json`；这是页面布局适配，Header/表单/助手接口不变。 | Codex Header repair |
 | 2026-09-26 | Header 集成门禁发现 comfortable/fixed 的 z70 与 sticky 的 z60 会盖过 AssistantPanel z50，导致 P03/P06 抽屉头部 New session、History、Maximize 无法点击；统一 Header 层级 z40，页面导航仍固定/可滚动，覆盖层恢复置顶。原失败见 `/tmp/mh-header-integrate-visual.log`；重建后五个受影响场景各 1/1 机器通过（`/tmp/mh-header-overlay-p03-assistant-newsession`、`/tmp/mh-header-overlay-p06-assistant-*`），390/1440px 顶部按钮点击命中及 trial 见 `/tmp/mh-header-overlay-hit.json`；这些是定向验证，最终全套与人工视觉由 integrator 复核。 | Codex Header repair |
 | 2026-09-26 | Header PR #21（https://github.com/wu2305/marketinghub/pull/21）合并4015abe，冻结e09e1a9：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-header-integrate-r2-*。源最终生效样式/tmp/mh-header-source-probe.json、响应式/tmp/mh-header-responsive、独立复核/tmp/mh-header-integrator-review.md。首轮完整门禁发现comfortable/fixed z70遮挡z50助手，退回修为共享z40，P03新会话和P06新会话/历史/最大化/还原5项在本轮全套通过；390/1440真实hit证据/tmp/mh-header-overlay-hit.json。Home透明死CSS分支删除，48/56密度及fixed/sticky由真实使用区分。main已含字体包，Home卡片窄屏与状态档案下一包继续；整页人工结果不冒充全过。 | Codex integrator |
+| 2026-09-26 | M7 P01命名档案候选：保留默认首页，新增助手初开/答案/历史/最大化/技能菜单/已选模型及模型历史/生成/手动/必填错误10个真实状态；均复用useHomeDemo，由可见按钮play驱动，不给页面新增截图props。补HomePage Autodocs绑定，scope Controls从既有内容派生。15/15本页配对（/tmp/mh-p01-archive-pairs-r2）、lint0、23文件221测试、328stories/65docs；初次探针中历史条数误写3与错误类名已按原index.html的11条及assistant-skill-menu.js的field-error更正，产品未改。抽看生成表单两侧字段/动作完整，既有Header/助手头部及少量间距差留后续视觉收敛。最终全站门禁与独立审核待集成。 | Codex P01 |

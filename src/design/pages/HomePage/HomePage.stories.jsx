@@ -8,6 +8,7 @@ const HOME_DEMO = { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, 
 
 export default {
   title: "Pages",
+  component: HomePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
 };
@@ -25,7 +26,8 @@ export const Home = {
     assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
   },
   argTypes: {
-    scope: { control: "select", options: ["All", "Campaigns", "Dashboards", "Knowledge"] },
+    scope: { control: "select", options: ASSISTANT.scopes },
+    assistantOpen: { control: "boolean" },
     onNavigate: { action: "onNavigate" },
     onOpen: { action: "onOpen" },
     onOpenAssistant: { action: "onOpenAssistant" },
@@ -49,4 +51,79 @@ export const Home = {
   render: function HomeStory(args) {
     return <HomePage {...useHomeDemo({ ...args, demo: HOME_DEMO })} />;
   },
+};
+
+// Reach these states through the same controls as the original page, keeping
+// transient menu/model state out of the page's public interface.
+const playSteps = (selectors, expected) => async ({ canvasElement }) => {
+  const doc = canvasElement.ownerDocument;
+  await new Promise((resolve) => doc.defaultView.requestAnimationFrame(() => doc.defaultView.requestAnimationFrame(resolve)));
+  for (const selector of selectors) {
+    const control = doc.querySelector(selector);
+    if (!control) throw new Error(`Home story control missing: ${selector}`);
+    control.click();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  if (!doc.querySelector(expected)) throw new Error(`Home story state missing: ${expected}`);
+};
+
+export const HomeAssistantOpen = {
+  ...Home,
+  name: "Home assistant open",
+  args: { ...Home.args, assistantOpen: true },
+};
+
+export const HomeAssistantAnswer = {
+  ...HomeAssistantOpen,
+  name: "Home assistant answer",
+  play: playSteps([".mh-assistant__suggestions button", ".mh-assistant__send .mh-button"], ".mh-assistant__answer"),
+};
+
+export const HomeAssistantHistory = {
+  ...HomeAssistantOpen,
+  name: "Home assistant recent chats",
+  play: playSteps(["button[aria-label='History']"], ".mh-assistant__history-pop"),
+};
+
+export const HomeAssistantMaximized = {
+  ...HomeAssistantOpen,
+  name: "Home assistant maximized",
+  play: playSteps(["button[aria-label='Maximize']"], ".mh-assistant--expanded"),
+};
+
+export const HomeAssistantSkills = {
+  ...HomeAssistantOpen,
+  name: "Home assistant skills",
+  play: playSteps([".mh-assistant__skill"], ".mh-skill"),
+};
+
+const modelMenu = [".mh-assistant__skill", ".mh-skill__category:nth-child(2)"];
+export const HomeAssistantSelectedSkill = {
+  ...HomeAssistantOpen,
+  name: "Home assistant selected model",
+  play: playSteps([...modelMenu, ".mh-skill__option:nth-child(2)"], ".mh-assistant__chip"),
+};
+
+export const HomeModelHistory = {
+  ...HomeAssistantOpen,
+  name: "Home model from chat history",
+  play: playSteps([...modelMenu, ".mh-skill__action:first-child"], ".mh-flow__card--history"),
+};
+
+export const HomeModelGenerated = {
+  ...HomeAssistantOpen,
+  name: "Home generated model",
+  play: playSteps([...modelMenu, ".mh-skill__action:first-child", ".mh-flow__foot .mh-flow__btn--primary"], ".mh-flow__card--form"),
+};
+
+export const HomeModelManual = {
+  ...HomeAssistantOpen,
+  name: "Home manual model",
+  play: playSteps([...modelMenu, ".mh-skill__action:last-child"], ".mh-flow__card--form"),
+};
+
+export const HomeModelManualError = {
+  ...HomeAssistantOpen,
+  name: "Home model required fields",
+  play: playSteps([...modelMenu, ".mh-skill__action:last-child", ".mh-flow__foot .mh-flow__btn--primary"], ".mh-flow__field-error"),
 };
