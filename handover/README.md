@@ -50,6 +50,7 @@ npm test               # vitest 行为测试
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
 | M7 | LiveReportView 独立故事标题与粘性返回条 | 候选完成；待独立审核、全套 gate 与 PR | 独立使用时工具栏贴视口顶部；Cockpit 页壳按 Header 高度提供 72px 偏移，完整页面原布局不变。1440/900/390 浏览器前后证据与 P02 live 配对见 §5 |
+| M7 | Data Model关联报表与表格标题窄屏可读性 | 候选待独立审核/集成 | DataModelView自身CSS：≤680px关联报表单列，表格弹窗标题按内容换行；P11页与组件故事390/900定向浏览器已核，P07页壳待已冻结的响应式包先合后复核 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -586,3 +587,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P03 PR #25（https://github.com/wu2305/marketinghub/pull/25）合并e0023e6，冻结215dfdc：lint0/0、25文件225测试、408stories/67docs、host27/27、visual493/493、negative39/39，证据/tmp/mh-p03-integrate-r2-*。18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程。独立审核/tmp/mh-p03-state-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
 | 2026-09-26 | LiveReportView P1 布局候选：独立故事没有全站 Header，却继承 `top:72px`，浏览器实测默认 4P 标题与粘性条重叠 26px；组件默认改 `top:0`，Cockpit 页壳只提供 Header 所需的 72px 上偏移。独立故事 1440/900/390 初始无重叠；完整 Cockpit 三宽默认/滚动的标题、返回条位置保持，原始页面实测对应位置不变。lint0、25文件224测试、Storybook 363 stories/67 docs，`p02-live-overview` 定向配对1/1机器通过、人工整页仍待审。证据 `/tmp/mh-live-report-isolated-{before,after}.json`、`/tmp/mh-live-report-{before,after}.json`、`/tmp/mh-live-feature-*-{before,after}.png`、`/tmp/mh-live-report-pair/`。独立组件与完整页的偏移差异由是否存在固定 Header 的布局用途决定，未增加组件变体或全局 token。 | Codex LiveReportView |
 | 2026-09-26 | P08 Metric Dictionary 窄屏公式访问修复候选：390px 原 `.mh-kcf__metric-list` 被 `display:none` 隐藏，七个基础指标按钮均不可达，公式只能加入运算符/常数；移除隐藏规则，使现有指标列表在单列布局下保留于公式区后，复用原按钮/回调。390/900/1440 浏览器各以两个指标加运算符生成公式并成功 Submit，三档无整页横溢或pageerror；lint、Storybook 377stories/67docs 通过，证据 `/tmp/mh-p08-p09-access-review/`；独立复核和最终全套门禁待集成。 | Codex P08 access |
+| 2026-09-26 | DataModelView窄屏可读性候选：390px原关联报表固定双240px列+48px间隔使第2卡落到视口外，改≤680px单列；原表格弹窗标题nowrap/ellipsis，改随内容换行并保持关闭按钮独立可点击。P11页与DataModelView独立故事在390/900均真实点击第2卡、图谱节点及关闭按钮；长标题布局探针完整可读，面板无横溢和pageerror，1440px默认两列维持。lint0、Storybook377 stories/67 docs；截图和边界见`/tmp/mh-p10-p11-access-review/repair-*`，原始1440对照见同目录`desktop-*`。当前main P07页壳min-width1180拦截390px实际点击，属于已冻结的P07响应式候选，待先合后复核；本包不扩页壳。人工全页视觉仍待集成门禁。 | Codex Data Model access |

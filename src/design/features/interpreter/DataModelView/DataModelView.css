@@ -670,20 +670,19 @@
 .mh-dmview__dialog-titleline {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
-  max-width: calc(100% - 56px);
+  max-width: 100%;
 }
 
 .mh-dmview__dialog-titleline strong {
   flex: 0 1 auto;
   min-width: 0;
-  overflow: hidden;
+  overflow-wrap: anywhere;
   color: var(--mh-ink-primary-deep);
   font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .mh-dmview__table-type {
@@ -857,5 +856,12 @@
 
   .mh-dmview__domains {
     max-height: 300px;
+  }
+}
+
+@media (max-width: 680px) {
+  .mh-dmview__related {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
   }
 }
