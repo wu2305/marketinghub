@@ -51,3 +51,32 @@ Template — copy, fill every column, keep one row per behaviour:
 |---|---|---|---|---|---|
 | <view-code>-01 | … | … | Intent/Normalize/Fix/Drop-stub/Ask | … | added / changed / removed: <id> |
 ```
+
+### Business Terms — WP7a
+
+Source: `assets/js/knowledge/business-term-library.js`; React before: `features/interpreter/BusinessTermView`, `demo/business-term-demo.js`.
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| BT-01 | search over title, description, synonyms, scope, creator | `business-term-library.js:320-335` | Intent | `LibraryToolbar` search, same fields; resets page (B1) | scenario `p07-business-term-search` selectors updated |
+| BT-02 | Status and Creator multi-select facets, "N selected" summary, disclosure stays open | `:309-318,345-356` | Intent | `LibraryToolbar` multi facets (CheckboxFilter) | `p07-business-term-status-empty`, `-creator-filter` selectors updated |
+| BT-03 | status facet offers Enabled/Disabled only; the filter code also accepts "Draft" but no option offers it | `:320-325,349-350` | Normalize | options Enabled/Disabled; a draft counts as Disabled (R3), so "Disabled" includes drafts | — |
+| BT-04 | draft visibility checked on the raw draft before its stage is derived, so another user's stage-less draft is shown | `:85-89` | Fix (R3) | normalise first, then hide every draft not created by the viewer | test "hides every other user's draft" |
+| BT-05 | a draft stored as Enable: edit blocked "disable first", disable blocked "already disabled" — a dead end | `:108-123` | Fix (R3) | drafts are disabled: edit/delete allowed, disable explains it is already disabled | test "marks blocked actions" |
+| BT-06 | card: title + Draft superscript, description, creator, synonyms, status pill, three icon actions; card opens drawer | `:127-150` | Intent + Normalize | `LibraryItem` (title button, draft marker, 2-line description, creator meta, status, `ItemActions`) | — |
+| BT-07 | synonym chips clamped by measuring layout every frame, "…" marker (D07) | `:282-307` | Normalize | three chips, the rest in a "+N" chip, no layout measuring | six `…` assertions in `p07-interpreter-business-term` → chip assertions; `-narrow` asserts 14 chips |
+| BT-08 | data-model scope tags rendered on cards but hidden by CSS | `:103-105`; `ai-interpreter-overview.css` | Drop-stub | scope shown only in the drawer, where it is visible in the source | — |
+| BT-09 | count line rendered but hidden (D08) | `ai-interpreter-overview.css` `fm-overview-countline` | Normalize (R7) | visible toolbar count "Showing X of Y terms" | `p07-interpreter-business-term` asserts it |
+| BT-10 | Add Business Term opens the create page in a new tab (`target="_blank"`) | `:358` | Normalize | an ordinary link to the same page (`Button href`); the host navigates in place through `onCreate`, and a modifier-click still opens a new tab | selector updated |
+| BT-11 | permission denied: info dialog "You do not have permission to {action} knowledge created by another user." | `:199-205` | Normalize (D05) | info dialog, "Knowledge created by others cannot be operated." | `p07-business-term-permission` story text updated |
+| BT-12 | edit/delete on an enabled term: "Please take the knowledge offline first" → "Go Offline" disables and stops | `:207-217,166` | Intent (A3, B7) | same dialog; after going offline the requested edit/delete continues | new story `OfflineFirst`; tests |
+| BT-13 | disable: "Confirm Operation / Please confirm whether to offline this knowledge." → Confirm Offline | `:237-246,166` | Intent | warning dialog, same copy | `.mh-confirm--confirm` → `--warning` in scenarios and host check |
+| BT-14 | delete: confirm "Deletion cannot be undone", removes the term, closes its drawer | `:223-231` | Intent | same | tests |
+| BT-15 | success feedback called but undefined (D03) | `:155` | Fix | Toast "Disabled successfully" / "Deleted successfully", 3 s | tests |
+| BT-16 | disabling a disabled term: info "This knowledge is already disabled." | `:233-235` | Intent | info dialog | tests |
+| BT-17 | compact pagination, 5/10/20 per page, clamps after delete | `:337-339` | Intent | `Pagination` compact | `p07-business-term-pagination` selectors updated |
+| BT-18 | detail drawer: eyebrow, title, status, term type, description, synonyms, data model, creator, footer actions | `:188-197` | Intent (B13) | `Modal` drawer, `StatusBadge` + `ItemActions` footer | geometry pairs on drawer internals dropped |
+| BT-19 | warm-grey palette (D17), variant `KnowledgeActions business-term` (D04) | `foundations.md` §2.1 | Normalize | foundation tokens; `ItemActions` | view CSS 364 → 82 lines |
+| BT-20 | React prop `strings.tooltips.permission(action)` and `dialogs.permissionDenied(action)` functions | content.js | Normalize (D05) | one string per reason (`tooltips.permission`, `"disable-first"`, `"already-disabled"`) | — |
+| BT-21 | React `SynonymClamp` component, `ResizeObserver` shim in tests | view `:20-66` | Drop (D07) | removed | — |
+| BT-22 | geometry pairs (`layout:`) comparing BT internals with the original | `p07.mjs` | Drop | not a design-intent check; shell pairs kept | 16 pairs removed (list, drawer and dialog internals) |

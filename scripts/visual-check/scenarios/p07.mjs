@@ -49,14 +49,6 @@ export default [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".bt-overview-tools", story: ".mh-btview__tools", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".bt-overview-search", story: ".mh-btview__search", props: ["x", "width"], tol: 8 },
-      { orig: ".bt-overview-filter:has(input[data-bt-filter='status'])", story: ".mh-btview .mh-check-filter:nth-of-type(2)", props: ["x", "width"], tol: 8 },
-      { orig: ".bt-overview-filter:has(input[data-bt-filter='creator'])", story: ".mh-btview .mh-check-filter:nth-of-type(3)", props: ["x", "width"], tol: 8 },
-      { orig: ".bt-overview-tools .knowledge-add-button", story: ".mh-btview__create", props: ["x", "y"], tol: 10 },
-      { orig: ".bt-term-card", story: ".mh-btview__card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".bt-term-card .bt-term-card-pills", story: ".mh-btview__card .mh-btview__pills", props: ["x", "y"], tol: 8 },
-      { orig: ".fm-pagination", story: ".mh-btview .mh-pagination", props: ["x", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
@@ -95,22 +87,21 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       expect: [
-        { sel: ".mh-btview__card", count: 6, text: "GMV (Gross Merchandise Value)" },
-        { sel: ".mh-btview__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
-        { sel: ".mh-btview .mh-check-filter:nth-of-type(2) .mh-check-filter__summary", text: "All statuses" },
-        { sel: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__summary", text: "All creators" },
-        { sel: ".mh-btview__create", text: "Add Business Term" },
-        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge", text: "Enabled" },
-        { sel: ".mh-btview__card:has-text('Campaign') .mh-badge--knowledge", text: "Enabled" },
+        { sel: ".mh-btview .mh-library-item", count: 6, text: "GMV (Gross Merchandise Value)" },
+        { sel: ".mh-btview .mh-library-toolbar__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
+        { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(2) .mh-check-filter .mh-check-filter__summary", text: "All statuses" },
+        { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(3) .mh-check-filter .mh-check-filter__summary", text: "All creators" },
+        { sel: ".mh-btview .mh-library-toolbar a.mh-button", text: "Add Business Term" },
+        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-library-item__head > .mh-badge", text: "Enabled" },
+        { sel: ".mh-btview .mh-library-item:has-text('Campaign') .mh-library-item__head > .mh-badge", text: "Enabled" },
         { sel: ".mh-btview .mh-pagination", text: "6 records" },
         { sel: ".mh-launcher", text: "AI Interpreter" },
         { sel: ".mh-asset", state: "detached" },
-        { sel: ".mh-btview__card[data-id='business-term-gmv'] .mh-btview__tag--overflow", count: 1 },
-        { sel: ".mh-btview__card[data-id='business-term-paid-customer'] .mh-btview__tag--overflow", count: 1 },
-        { sel: ".mh-btview__card[data-id='business-term-active-member'] .mh-btview__tag--overflow", count: 0, state: "detached" },
-        { sel: ".mh-btview__card[data-id='global-synonym-revenue'] .mh-btview__tag--overflow", count: 1 },
-        { sel: ".mh-btview__card[data-id='global-synonym-customer'] .mh-btview__tag--overflow", count: 1 },
-        { sel: ".mh-btview__card[data-id='global-synonym-campaign'] .mh-btview__tag--overflow", count: 1 },
+        /* R7: the count is visible (the source hid it); D07: synonyms show as
+           chips, three at most, without the measured "…" clamp. */
+        { sel: ".mh-btview .mh-library-toolbar__count", text: "Showing 6 of 6 terms" },
+        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-btview__synonyms li", count: 3, text: "Gross Sales" },
+        { sel: ".mh-btview .mh-btview__more", count: 0, state: "detached" },
       ],
     },
   },
@@ -141,16 +132,16 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       actions: [
-        { click: ".mh-btview .mh-check-filter:nth-of-type(2) .mh-check-filter__summary" },
+        { click: ".mh-btview .mh-library-toolbar__facet:nth-of-type(2) .mh-check-filter .mh-check-filter__summary" },
         { wait: ".mh-btview .mh-check-filter__details[open]" },
         { click: ".mh-btview .mh-check-filter__option:has-text('Disabled')" },
         { waitMs: 300 },
       ],
       expect: [
         { sel: ".mh-btview .mh-check-filter__details[open]" },
-        { sel: ".mh-btview .mh-check-filter:nth-of-type(2) .mh-check-filter__summary", text: "1 selected" },
-        { sel: ".mh-btview__empty", text: "No matching records" },
-        { sel: ".mh-btview__card", count: 0, state: "detached" },
+        { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(2) .mh-check-filter .mh-check-filter__summary", text: "1 selected" },
+        { sel: ".mh-btview .mh-library-empty", text: "No matching records" },
+        { sel: ".mh-btview .mh-library-item", count: 0, state: "detached" },
         { sel: ".mh-btview .mh-pagination", text: "0 records" },
       ],
     },
@@ -179,16 +170,16 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       actions: [
-        { click: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__summary" },
-        { click: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__option:has-text('Current User')" },
-        { click: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__option:has-text('Emily Wang')" },
+        { click: ".mh-btview .mh-library-toolbar__facet:nth-of-type(3) .mh-check-filter .mh-check-filter__summary" },
+        { click: ".mh-btview .mh-library-toolbar__facet:nth-of-type(3) .mh-check-filter .mh-check-filter__option:has-text('Current User')" },
+        { click: ".mh-btview .mh-library-toolbar__facet:nth-of-type(3) .mh-check-filter .mh-check-filter__option:has-text('Emily Wang')" },
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__summary", text: "2 selected" },
-        { sel: ".mh-btview__card", count: 3 },
-        { sel: ".mh-btview__card:has-text('Paid Customer')" },
-        { sel: ".mh-btview__card:has-text('Active Member')", state: "detached" },
+        { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(3) .mh-check-filter .mh-check-filter__summary", text: "2 selected" },
+        { sel: ".mh-btview .mh-library-item", count: 3 },
+        { sel: ".mh-btview .mh-library-item:has-text('Paid Customer')" },
+        { sel: ".mh-btview .mh-library-item:has-text('Active Member')", state: "detached" },
       ],
     },
   },
@@ -207,10 +198,10 @@ export default [
     },
     story: {
       id: "pages--interpreter-business-term",
-      actions: [{ fill: [".mh-btview__search input[type='search']", "turnover"] }, { waitMs: 300 }],
+      actions: [{ fill: [".mh-btview .mh-library-toolbar__search input[type='search']", "turnover"] }, { waitMs: 300 }],
       expect: [
-        { sel: ".mh-btview__card", count: 1 },
-        { sel: ".mh-btview__card:has-text('Revenue')" },
+        { sel: ".mh-btview .mh-library-item", count: 1 },
+        { sel: ".mh-btview .mh-library-item:has-text('Revenue')" },
         { sel: ".mh-btview .mh-pagination", text: "1 records" },
       ],
     },
@@ -243,8 +234,8 @@ export default [
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-btview__card", count: 1 },
-        { sel: ".mh-btview__card:has-text('Campaign')" },
+        { sel: ".mh-btview .mh-library-item", count: 1 },
+        { sel: ".mh-btview .mh-library-item:has-text('Campaign')" },
         { sel: ".mh-btview .mh-pagination", text: "2 / 2" },
         { sel: ".mh-pagination__next", attr: { name: "disabled", value: "" } },
       ],
@@ -254,14 +245,6 @@ export default [
     /* Clicking a card opens the right-side detail drawer with the type
        eyebrow, title + status pill and the footer actions. */
     id: "p07-business-term-detail",
-    layout: [
-      { orig: ".fm-overlay .fm-drawer", story: ".mh-modal--drawer .mh-modal__dialog", props: ["y", "height"], tol: 8 },
-      { orig: ".fm-drawer-head", story: ".mh-modal--drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
-      { orig: ".fm-drawer-head small", story: ".mh-modal--drawer .mh-modal__eyebrow", props: ["x", "y"], tol: 8 },
-      { orig: ".fm-drawer-titleline h2", story: ".mh-modal--drawer .mh-modal__title", props: ["x", "y", "height"], tol: 8 },
-      { orig: ".fm-title-status", story: ".mh-btview__drawer-status", props: ["y", "height"], tol: 8 },
-      { orig: ".fm-drawer-body .bt-scope-tag", story: ".mh-btview__detail .mh-btview__scope", props: ["x", "y"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
       actions: [{ click: ".bt-term-card[data-bt-id='business-term-gmv']" }, { wait: ".fm-drawer" }],
@@ -274,12 +257,12 @@ export default [
     },
     story: {
       id: "pages--interpreter-business-term",
-      actions: [{ click: ".mh-btview__card:has-text('GMV')" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      actions: [{ click: ".mh-btview .mh-library-item:has-text('GMV') .mh-library-item__title button" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Business Term" },
         { sel: ".mh-modal--drawer .mh-modal__title", text: "GMV (Gross Merchandise Value)" },
-        { sel: ".mh-modal--drawer .mh-btview__drawer-status", text: "Enabled" },
-        { sel: ".mh-modal--drawer .mh-modal__foot .mh-knowledge-actions--business-term .mh-knowledge-actions__button", count: 3 },
+        { sel: ".mh-modal--drawer .mh-modal__titleline .mh-badge", text: "Enabled" },
+        { sel: ".mh-modal--drawer .mh-modal__foot .mh-item-actions__button", count: 3 },
       ],
     },
   },
@@ -305,14 +288,14 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       actions: [
-        { click: ".mh-btview__card:has-text('GMV') [aria-label^='Disable']" },
-        { wait: ".mh-confirm--confirm" },
-        { click: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
+        { click: ".mh-btview [aria-label='Disable GMV (Gross Merchandise Value)']" },
+        { wait: ".mh-confirm--warning" },
+        { click: ".mh-confirm--warning button:has-text('Confirm Offline')" },
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge", text: "Disabled" },
-        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge.mh-badge--neutral" },
+        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-library-item__head > .mh-badge", text: "Disabled" },
+        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-library-item__head > .mh-badge.mh-badge--neutral" },
       ],
     },
   },
@@ -337,14 +320,14 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       actions: [
-        { click: ".mh-btview__card:has-text('GMV') [aria-label^='Disable']" },
-        { wait: ".mh-confirm--confirm" },
-        { eval: "(() => { const d = document.querySelector('.mh-confirm--confirm'); const r = d.getBoundingClientRect(); if (r.left < 0 || r.right > innerWidth || r.top < 0 || r.bottom > innerHeight || d.scrollHeight > d.clientHeight + 1) throw new Error('confirm surface clipped'); for (const sel of ['.mh-modal__title', '.mh-confirm__message', '.mh-confirm__foot button:first-child', '.mh-confirm__foot button:last-child']) { const el = d.querySelector(sel); const b = el.getBoundingClientRect(); if (b.left < r.left || b.right > r.right || b.top < r.top || b.bottom > r.bottom) throw new Error(sel + ' clipped'); } })()" },
+        { click: ".mh-btview [aria-label='Disable GMV (Gross Merchandise Value)']" },
+        { wait: ".mh-confirm--warning" },
+        { eval: "(() => { const d = document.querySelector('.mh-confirm--warning'); const r = d.getBoundingClientRect(); if (r.left < 0 || r.right > innerWidth || r.top < 0 || r.bottom > innerHeight || d.scrollHeight > d.clientHeight + 1) throw new Error('confirm surface clipped'); for (const sel of ['.mh-modal__title', '.mh-confirm__message', '.mh-confirm__foot button:first-child', '.mh-confirm__foot button:last-child']) { const el = d.querySelector(sel); const b = el.getBoundingClientRect(); if (b.left < r.left || b.right > r.right || b.top < r.top || b.bottom > r.bottom) throw new Error(sel + ' clipped'); } })()" },
       ],
       expect: [
-        { sel: ".mh-confirm--confirm .mh-modal__title", text: "Confirm Operation" },
-        { sel: ".mh-confirm--confirm", text: "Please confirm whether to offline this knowledge." },
-        { sel: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
+        { sel: ".mh-confirm--warning .mh-modal__title", text: "Confirm Operation" },
+        { sel: ".mh-confirm--warning", text: "Please confirm whether to offline this knowledge." },
+        { sel: ".mh-confirm--warning button:has-text('Confirm Offline')" },
       ],
     },
   },
@@ -352,10 +335,6 @@ export default [
     /* Another user's record: actions stay clickable but show the
        permission-denied info dialog. */
     id: "p07-business-term-permission",
-    layout: [
-      { orig: "dialog.fm-dialog", story: ".mh-confirm--info", props: ["width", "height"], tol: 8 },
-      { orig: "dialog.fm-dialog h3", story: ".mh-confirm--info .mh-modal__title", props: ["x", "y"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
       actions: [
@@ -374,12 +353,12 @@ export default [
     story: {
       id: "pages--interpreter-business-term",
       actions: [
-        { eval: "document.querySelector(\".mh-btview__card[data-id='business-term-paid-customer'] [aria-label^='Edit']\").click()" },
+        { eval: "document.querySelector(\".mh-btview [aria-label='Edit Paid Customer']\").click()" },
         { wait: ".mh-confirm--info" },
       ],
       expect: [
         { sel: ".mh-confirm--info .mh-modal__title", text: "Permission denied" },
-        { sel: ".mh-confirm--info", text: "You do not have permission to edit knowledge created by another user." },
+        { sel: ".mh-confirm--info", text: "Knowledge created by others cannot be operated." },
       ],
     },
   },
@@ -422,13 +401,13 @@ export default [
     },
     story: {
       id: "pages--interpreter-business-term",
-      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-btview__tools", ".mh-btview__create", ".mh-btview__card"]) }],
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-btview .mh-library-toolbar", ".mh-btview .mh-library-toolbar a.mh-button", ".mh-btview .mh-library-item"]) }],
       expect: [
-        { sel: ".mh-btview__card", count: 6 },
-        { sel: ".mh-btview__tag--overflow", count: 6 },
+        { sel: ".mh-btview .mh-library-item", count: 6 },
+        { sel: ".mh-btview .mh-btview__synonyms li", count: 14 },
         { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
-        { sel: ".mh-btview__tools .mh-check-filter:nth-of-type(2) .mh-check-filter__summary", text: "All statuses" },
-        { sel: ".mh-btview__create", text: "Add Business Term" },
+        { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(2) .mh-check-filter .mh-check-filter__summary", text: "All statuses" },
+        { sel: ".mh-btview .mh-library-toolbar a.mh-button", text: "Add Business Term" },
       ],
     },
   },

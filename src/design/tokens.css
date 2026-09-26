@@ -490,8 +490,6 @@
   --mh-shadow-search-warm: var(--mh-shadow-raised);
   --mh-bt-countline: var(--mh-text-muted);
   --mh-bt-empty: var(--mh-text-muted);
-  --mh-bt-draft-bg: var(--mh-accent-wash);
-  --mh-bt-draft-ink: var(--mh-accent-ink);
   --mh-gold-action-start: var(--mh-accent-soft);
   --mh-gold-action-end: var(--mh-accent);
   --mh-gold-action-hover-start: var(--mh-accent);

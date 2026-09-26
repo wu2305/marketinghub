@@ -183,7 +183,7 @@ describe("AI Interpreter type contract", () => {
       }
       // business-term-library.js swaps in #businessTermOverview's term cards.
       if (type.view === "business-term") {
-        const cards = document.querySelectorAll(".mh-btview__card");
+        const cards = document.querySelectorAll(".mh-btview .mh-library-item");
         expect(cards.length).toBe(INTERPRETER.businessTermLibrary.records.length);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
@@ -298,7 +298,7 @@ describe("AI Interpreter type contract", () => {
 
   it("renders the dedicated Business Term view", () => {
     render(<Harness activeType="Business Term" />);
-    expect(document.querySelectorAll(".mh-btview__card").length).toBe(
+    expect(document.querySelectorAll(".mh-btview .mh-library-item").length).toBe(
       INTERPRETER.businessTermLibrary.records.length,
     );
     expect(document.querySelector(".mh-asset")).toBeNull();
