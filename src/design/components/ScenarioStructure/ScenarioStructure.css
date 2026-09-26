@@ -1,4 +1,4 @@
-.mh-scenario-structure{display:grid;gap:12px}
+.mh-scenario-structure{display:grid;gap:12px;font-family:var(--mh-font)}
 .mh-scenario-structure__item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1px solid var(--mh-line-panel-subtle);border-radius:8px;background:var(--mh-surface)}
 .mh-scenario-structure__item:hover{border-color:var(--mh-bubble-to);box-shadow:var(--mh-shadow-chip-soft)}
 .mh-scenario-structure__icon{display:grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:8px;background:var(--mh-surface-info-strong);color:var(--mh-ink-info-strong)}

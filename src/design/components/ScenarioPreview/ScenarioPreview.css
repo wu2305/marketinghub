@@ -1,3 +1,4 @@
+.mh-scenario-preview{font-family:var(--mh-font)}
 .mh-scenario-preview__head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .mh-scenario-preview .mh-scenario-preview__head h3{margin:0;color:var(--mh-ink-strong);font-size:14px}
 .mh-scenario-preview__head button{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid var(--mh-line-panel-subtle);border-radius:6px;background:var(--mh-surface);color:var(--mh-ink-control-deep);font:700 12px var(--mh-font);cursor:pointer}
