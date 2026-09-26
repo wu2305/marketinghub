@@ -1489,5 +1489,49 @@ export default [
         { sel: ".mh-copilot__period-hint", text: "Type your question directly or start with a preset analysis below." },
       ],
     },
+  },
+  {
+    id: "p02-copilot-skill-empty",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" }, { wait: "#aiWorkspace.open" }, { click: "#aiCmdUpload" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { fill: [".ai-skill-detail-panel input[type='search']", "no matching model"] },
+      ],
+      expect: [{ sel: ".ai-skill-empty", text: "No matching skills" }],
+    },
+    story: { id: "pages--marketing-cockpit-copilot-skills-empty", expect: [{ sel: ".mh-skill__empty", text: "No matching skills" }] },
+  },
+  {
+    id: "p02-copilot-flow-empty",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" }, { wait: "#aiWorkspace.open" }, { click: "#aiCmdUpload" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { click: "[data-report-skill-action='history']" },
+        { wait: "#aiReportHistoryGenerateDialog" },
+        { eval: "(() => { document.querySelectorAll('#aiReportHistoryGenerateDialog [data-report-history-msg]:checked').forEach(input => input.click()); })()" },
+        { click: "[data-report-generate-model]" },
+      ],
+      expect: [{ sel: "[data-report-generate-error]:not([hidden])", text: "Select at least one message to continue." }],
+    },
+    story: { id: "pages--marketing-cockpit-copilot-model-empty", expect: [{ sel: ".mh-flow__error:not([hidden])", text: "Select at least one message to continue." }] },
+  },
+  {
+    id: "p02-copilot-flow-manual-required",
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [
+        { click: "#aiEntry" }, { wait: "#aiWorkspace.open" }, { click: "#aiCmdUpload" },
+        { click: "[data-report-skill-category='Analytical Model']" },
+        { click: "[data-report-skill-action='manual']" },
+        { wait: "#aiReportGeneratedModelDialog" },
+        { click: "#aiReportGeneratedModelDialog [data-report-submit-model]" },
+      ],
+      expect: [{ sel: "#aiReportGeneratedModelDialog .field-error", count: 3, text: "Name is required." }],
+    },
+    story: { id: "pages--marketing-cockpit-copilot-model-required", expect: [{ sel: ".mh-flow__field-error", count: 3, text: "Name is required." }] },
   }
 ];

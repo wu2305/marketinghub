@@ -109,7 +109,8 @@ function steps(actions, expected) {
       const element = await waitFor(doc, selector);
       if (kind === "click") element.click();
       if (kind === "fill") {
-        const setter = Object.getOwnPropertyDescriptor(doc.defaultView.HTMLTextAreaElement.prototype, "value").set;
+        const prototype = element.tagName === "TEXTAREA" ? doc.defaultView.HTMLTextAreaElement.prototype : doc.defaultView.HTMLInputElement.prototype;
+        const setter = Object.getOwnPropertyDescriptor(prototype, "value").set;
         setter.call(element, value);
         element.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
       }
@@ -189,6 +190,11 @@ export const MarketingCockpitCopilotSkills = {
   name: "Report Copilot skill menu",
   play: steps([click(".mh-copilot__command-actions .mh-assistant__skill"), click(".mh-skill__category:nth-child(2)")], ".mh-skill__detail"),
 };
+export const MarketingCockpitCopilotSkillsEmpty = {
+  ...MarketingCockpitCopilotOpen,
+  name: "Report Copilot no matching models",
+  play: steps([click(".mh-copilot__command-actions .mh-assistant__skill"), click(".mh-skill__category:nth-child(2)"), fill(".mh-skill__search input", "no matching model")], ".mh-skill__empty"),
+};
 export const MarketingCockpitCopilotSkillPicked = {
   ...MarketingCockpitCopilotOpen,
   name: "Report Copilot model selected in composer",
@@ -208,6 +214,18 @@ export const MarketingCockpitCopilotModelHistory = {
   name: "Report Copilot model from history",
   play: steps(modelActions, ".mh-flow__card--history"),
 };
+export const MarketingCockpitCopilotModelEmpty = {
+  ...MarketingCockpitCopilotOpen,
+  name: "Report Copilot requires a selected message",
+  play: async (context) => {
+    await steps(modelActions, ".mh-flow__card--history")(context);
+    const doc = context.canvasElement.ownerDocument;
+    doc.querySelectorAll(".mh-flow__msg input:checked").forEach((input) => input.click());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    (await waitFor(doc, ".mh-flow__foot .mh-flow__btn--primary")).click();
+    await waitFor(doc, ".mh-flow__error:not([hidden])");
+  },
+};
 export const MarketingCockpitCopilotModelGenerated = {
   ...MarketingCockpitCopilotOpen,
   name: "Report Copilot generated model",
@@ -217,6 +235,11 @@ export const MarketingCockpitCopilotModelManual = {
   ...MarketingCockpitCopilotOpen,
   name: "Report Copilot manual model form",
   play: steps([click(".mh-copilot__command-actions .mh-assistant__skill"), click(".mh-skill__category:nth-child(2)"), click(".mh-skill__action:nth-child(2)")], ".mh-flow__card--form"),
+};
+export const MarketingCockpitCopilotModelRequired = {
+  ...MarketingCockpitCopilotModelManual,
+  name: "Report Copilot manual model required fields",
+  play: steps([click(".mh-copilot__command-actions .mh-assistant__skill"), click(".mh-skill__category:nth-child(2)"), click(".mh-skill__action:nth-child(2)"), click(".mh-flow__foot .mh-flow__btn--primary")], ".mh-flow__field-error"),
 };
 export const MarketingCockpitCopilotFeedback = {
   ...MarketingCockpitCopilotOpen,
