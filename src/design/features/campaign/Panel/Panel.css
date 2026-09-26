@@ -46,3 +46,9 @@ color: var(--mh-faint);
   font-family: var(--mh-font);
   font-size: 9px;
 }
+
+@media (max-width: 600px) {
+  .mh-panel__head {
+    flex-wrap: wrap;
+  }
+}
