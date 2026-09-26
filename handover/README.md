@@ -62,7 +62,7 @@ npm test               # vitest 行为测试
 | ID | 原始入口 | 主要待覆盖范围（以实际生效内容补全） | 里程碑 | 状态 |
 |---|---|---|---|---|
 | P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | PR #22；15个命名页面故事、20个本页配对，四卡390/900/1440可读与链接可达；Header由#21合入；人工整页收敛继续 |
-| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | PR #23机器集成；26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}；本页57/57机器配对；人工整页收敛继续 |
+| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | PR #23机器集成；26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}；本页57/57机器配对；390–880px目录/项目及390px live布局修复候选待审核；人工整页收敛继续 |
 | P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | PR #25机器集成；18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程；本页30/30机器配对；人工整页收敛继续 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | PR #24机器集成；useDataUploadDemo共用故事/宿主，14字段、提交瞬态、Import与文件选择；提交载荷{values}；本页4/4机器配对；人工整页收敛继续 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
@@ -594,3 +594,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | TypeCard 独立审核 `/tmp/mh-type-card-independent-review.md` 无布局/接口阻断；补显式 token focus-visible，键盘聚焦无需依赖浏览器默认样式。900/390整页1180px横向布局为既存Interpreter页壳约束，未伪称本包解决。 | Codex integrator |
 | 2026-09-26 | P06 Campaign 窄屏可达性修复候选：原390px固定236px rail+五列指标+最小340px双面板令整页509–652px宽，概览表格仅20px可视、创建任务/绑定操作处于视口外；React在≤900px让现有rail与主区上下布局，rail五入口自动排格，指标与双面板重排，≤600px执行摘要单列、panel/filter可换行，保留五区、所有字段和动作及表格局部横滚。390/600/601/900/901/1440px五区共30态文档无横向溢出、无pageerror；390px Filter 1条→Reset 3条、任务四字段弹窗/提交toast、绑定toast、表末列局部滚动实测可用。证据`/tmp/mh-campaign-responsive/`；lint、Storybook构建402stories/67docs通过。原窄屏与React用途差异待集成者登记§3，人工整页视觉仍需独立复核。 | Codex P15 |
 | 2026-09-26 | P06窄屏候选独立审核修正：首稿仅≤900px堆叠双面板，901px Overview 左面板client215/ProgressList scroll304，虽整页未溢出却与右面板重叠；仅将既有双面板上下布局延续到≤1100px，rail切换点仍900px，不改图表/列表数据或组件接口。390/900/901/1000/1100/1101/1440px的Overview、Execution、Analytics全部面板及内层body `scrollWidth==clientWidth`，901px左面板567/567、1101px恢复双列407/407与346/346；390/900/901/1100/1101/1440px筛选1→重置3、任务四字段提交toast、绑定toast均通过且无pageerror。当前构建截图/几何/动作见`/tmp/mh-campaign-responsive/*-r2.png`、`r2-boundaries.json`、`r2-actions.json`；lint、Storybook402stories/67docs通过，待独立复审及全套门禁。 | Codex P15 |
+| 2026-09-26 | P02 Cockpit 窄屏可达性修复候选：原390px三列目录卡CTA被裁切、项目报告行伸出视口、Live KPI推宽页面；React将目录六卡在≤600px改一列、601–880px改两列，项目介绍和两条报告行在≤880px改上下布局，Knowledge/Open Dashboard双操作完整可见；Live四KPI在≤600px单列，六条图表数据在卡片内横滚。390/600/601/760/880/881/900/1440px文档均无横向溢出，目录→项目→Dashboard真实链接路径可用，图表末项滚动可见；截图与边界数据`/tmp/mh-cockpit-responsive/`，构建402stories/67docs、lint通过。此用途差异待集成者登记§3；整页人工视觉仍待独立复核。 | Codex P15 |
