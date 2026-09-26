@@ -367,12 +367,42 @@ async function newPage() {
   await page.getByRole("button", { name: "Ask" }).click();
   if (!(await page.locator(".mh-assistant__answer--simple").count())) notes.push("lite answer missing after Ask");
   await page.keyboard.press("Escape");
-  await page.locator('.mh-review-page__sidebar a[href$="/interpreter"]').click();
+  await page.locator('.mh-governance-nav a[href$="/interpreter"]').click();
   if (!page.url().includes("/mh-host/interpreter")) notes.push("governance sidebar anchor missed Interpreter route");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Review Center navigation reloaded host");
   notes.push(...errors);
   await page.screenshot({ path: path.join(OUT, "review-center.png") });
   record("review-center-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- Feedback & Quality: source filters/detail plus restored assistant ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}feedback-quality`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator(".mh-feedback-list__row").count()) !== 15) notes.push("Feedback list should show fifteen source records");
+  await page.getByLabel("Feedback Type").selectOption("thumbs-down");
+  if ((await page.locator(".mh-feedback-list__row").count()) !== 5) notes.push("Thumbs Down filter missed five records");
+  await page.getByRole("tab", { name: /All Feedback/ }).click();
+  if ((await page.locator(".mh-feedback-list__row").count()) !== 15) notes.push("All Feedback did not reset Type");
+  await page.locator(".mh-feedback-list__row").nth(2).getByRole("button", { name: "View" }).click();
+  if (!(await page.locator(".mh-feedback-page__detail-reason").count())) notes.push("negative detail did not show full reason");
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-feedback-page__detail-reason").count()) notes.push("feedback detail survived Escape");
+  await page.getByRole("button", { name: "Open AI assistant" }).click();
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  if (await page.locator(".mh-assistant__answer").count()) notes.push("P13 suggestion submitted before Ask");
+  await page.locator(".mh-assistant__box textarea").press("Enter");
+  if (!(await page.locator(".mh-assistant__answer").count())) notes.push("P13 Enter did not submit grounded answer");
+  await page.keyboard.press("Escape");
+  await page.locator('.mh-governance-nav a[href$="/review-center"]').click();
+  if (!page.url().includes("/mh-host/review-center")) notes.push("Feedback sidebar missed Review Center route");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Feedback navigation reloaded host");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "feedback-quality.png") });
+  record("feedback-quality-flow", notes.length === 0, notes);
   await page.close();
 }
 

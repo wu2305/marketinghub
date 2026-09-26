@@ -6,6 +6,7 @@ import { Modal } from "../../components/Modal/index.jsx";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { FeedbackList } from "../../features/feedback-quality/FeedbackList/index.jsx";
 import { Icon } from "../../icons.jsx";
 import "./FeedbackQualityPage.css";
@@ -33,11 +34,6 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
   const { items = [], counts = {}, onOpen } = list;
   const { selected, onClose } = detail;
   const launcherRef = React.useRef(null);
-  const route = (item) => hrefFor?.(item.id, {}) || item.href;
-  const follow = (event, item) => {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    onNavigate?.({ id: item.id, params: {}, href: route(item), label: item.label });
-  };
   const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
   return <div className="mh-feedback-page" data-feedback-type={type} data-feedback-time={time}>
     <Header logo={logo} items={navigation} current="interpreter" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
@@ -45,11 +41,11 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
       <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
     </Hero>
     <div className="mh-feedback-page__body">
-      <aside className="mh-feedback-page__sidebar" aria-label={labels.navigationAria}><nav aria-label={labels.categoriesAria}>{sidebar.map((item) => <a key={item.id} href={route(item)} aria-current={item.id === "feedback-quality" ? "page" : undefined} onClick={(event) => follow(event, item)}><Icon name={item.icon} />{item.label}</a>)}</nav></aside>
+      <GovernanceNav items={sidebar} current="feedback-quality" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />
       <main className="mh-feedback-page__main">
         <div className="mh-feedback-page__tabs" role="tablist" aria-label={labels.tabsAria}><button type="button" role="tab" aria-selected={type === "all"} onClick={() => onTypeChange?.({ value: "all" })}>{labels.tab} <span>{counts.total ?? 0}</span></button></div>
         <section className="mh-feedback-page__library" aria-label={labels.itemsAria}>
-          <div className="mh-feedback-page__toolbar"><label className="mh-feedback-page__search"><span className="mh-feedback-page__sr">{labels.searchAria}</span><Icon name="search" /><input type="search" value={search} placeholder={labels.search} onChange={(event) => onSearchChange?.({ value: event.target.value })} /></label><div className="mh-feedback-page__filters"><strong>{items.length} {items.length === 1 ? labels.resultSingular : labels.resultPlural}</strong><label>{labels.type}<select value={type} onChange={(event) => onTypeChange?.({ value: event.target.value })}>{labels.typeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label><label>{labels.time}<select value={time} onChange={(event) => onTimeChange?.({ value: event.target.value })}>{labels.timeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label></div></div>
+          <div className="mh-feedback-page__toolbar"><label className="mh-feedback-page__search"><span className="mh-feedback-page__sr">{labels.searchAria}</span><Icon name="search" /><input type="search" value={search} placeholder={labels.search} onChange={(event) => onSearchChange?.({ value: event.target.value })} /></label><div className="mh-feedback-page__filters"><label>{labels.type}<select value={type} onChange={(event) => onTypeChange?.({ value: event.target.value })}>{labels.typeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label><label>{labels.time}<select value={time} onChange={(event) => onTimeChange?.({ value: event.target.value })}>{labels.timeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label></div></div>
           <FeedbackList items={items} columns={labels.columns} labels={labels} onOpen={onOpen} />
         </section>
       </main>

@@ -202,7 +202,7 @@ export const FEEDBACK_QUALITY = {
   labels: {
     navigationAria: "Knowledge navigation", categoriesAria: "Knowledge categories",
     tabsAria: "Feedback tabs", tab: "All Feedback", itemsAria: "Feedback records",
-    searchAria: "Search feedback", search: "Search feedback...", resultSingular: "record", resultPlural: "records",
+    searchAria: "Search feedback", search: "Search feedback...",
     type: "Feedback Type", time: "Time",
     typeOptions: [{ value: "all", label: "All types" }, { value: "thumbs-up", label: "Thumbs Up" }, { value: "thumbs-down", label: "Thumbs Down" }],
     timeOptions: [{ value: "all", label: "All time" }, { value: "today", label: "Today" }, { value: "week", label: "This week" }, { value: "month", label: "This month" }],
@@ -213,7 +213,7 @@ export const FEEDBACK_QUALITY = {
     answer: "Answer Content", downReason: "Thumbs Down Reason", feedbackBy: "Feedback By", operationTime: "Operation Time",
   },
   assistant: {
-    launcherLabel: "Open AI assistant", title: "Ask AI Interpreter", headline: "Ask a question",
+    launcherLabel: "AI Interpreter", title: "Ask AI Interpreter", headline: "Ask a question",
     description: "Your AI partner for every marketing task", historyTitle: "Recent Chats",
     suggestions: [
       { label: "Definition of Attributed ROI", prompt: "What is the governed definition of 'Attributed ROI' and which reports use it?" },
@@ -221,8 +221,9 @@ export const FEEDBACK_QUALITY = {
       { label: "Metrics with data quality issues", prompt: "Which metrics have incomplete backflow and need data quality review?" },
     ],
     history: [
-      { id: "roi", label: "What is the governed definition of Attributed ROI?", prompt: "What is the governed definition of Attributed ROI?" },
-      { id: "city", label: "Show me knowledge assets related to city investment strategy.", prompt: "Show me knowledge assets related to city investment strategy." },
+      { id: "campaign-roi", title: "Campaign ROI decline", label: "Why did campaign ROI decline last week?", prompt: "Why did campaign ROI decline last week?" },
+      { id: "conversion", title: "Conversion drop", label: "Analyze conversion drop by customer segment.", prompt: "Analyze conversion drop by customer segment." },
+      { id: "quality", title: "Data quality issues", label: "Summarize metrics with data quality issues.", prompt: "Summarize metrics with data quality issues." },
     ],
     skillMenu: ASSISTANT_SKILL_MENU,
   },

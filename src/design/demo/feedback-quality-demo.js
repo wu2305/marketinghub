@@ -30,6 +30,8 @@ export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, no
   const items = filterFeedback(sourceRecords, { search, type, time }, now);
   const up = sourceRecords.filter((item) => item.type === "thumbs-up").length;
   const workspace = useWorkspaceAssistantDemo({
+    variant: "home",
+    initial,
     assistant: { ...content.assistant, open: Boolean(initial.assistantOpen), prompt: initial.assistantPrompt || "", answers: initial.assistantAnswers || EMPTY_ANSWERS, onSubmit: onAssistantSubmit },
     demo: { answerFor: content.answerFor, modelFlow: content.modelFlow, modelDraftFor: content.modelDraftFor },
     onFlowSave,

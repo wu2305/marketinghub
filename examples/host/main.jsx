@@ -28,6 +28,7 @@ import {
   DataModelPage,
   KnowledgeCreatePage,
   ReviewCenterPage,
+  FeedbackQualityPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -71,6 +72,8 @@ import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-d
 import { buildInterpreterAnswer, useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
 import { REVIEW_CENTER, REVIEW_SHELL } from "../../src/design/demo/content/review-center.js";
 import { useReviewCenterDemo } from "../../src/design/demo/review-center-demo.js";
+import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../src/design/demo/content/feedback-quality.js";
+import { useFeedbackQualityDemo } from "../../src/design/demo/feedback-quality-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -91,6 +94,7 @@ const ROUTE_MAP = {
   "/assets/pages/metric-dictionary.html": "metric-dictionary",
   "/assets/pages/knowledge-view.html": "knowledge-view",
   "/assets/pages/review-center.html": "review-center",
+  "/assets/pages/feedback-quality.html": "feedback-quality",
 };
 
 function mapDemoHref(href) {
@@ -144,6 +148,7 @@ function routeOf(loc) {
   if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
   if (rest === "knowledge-view") return { name: "knowledge-view", params };
   if (rest === "review-center") return { name: "review-center", params };
+  if (rest === "feedback-quality") return { name: "feedback-quality", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -367,13 +372,31 @@ function ReviewCenterRoute() {
     logo: hostLogo,
     navigation: hostNav(),
     hrefFor: (id, params = {}) => {
-      const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": mapDemoHref("feedback-quality.html") })[id];
+      const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality") })[id];
       const query = new URLSearchParams(params).toString();
       return path && query ? `${path}?${query}` : path;
     },
     onNavigate: ({ href }) => navigateHost(href),
   });
   return <ReviewCenterPage {...props} />;
+}
+
+const FEEDBACK_NOW = Date.UTC(2026, 8, 26, 12);
+const FEEDBACK_RECORDS = makeFeedbackRecords(FEEDBACK_NOW);
+
+function FeedbackQualityRoute() {
+  const props = useFeedbackQualityDemo({
+    content: FEEDBACK_QUALITY,
+    records: FEEDBACK_RECORDS,
+    now: FEEDBACK_NOW,
+    onNavigate: ({ href }) => navigateHost(href),
+  });
+  const hrefFor = (id, params = {}) => {
+    const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality") })[id];
+    const query = new URLSearchParams(params).toString();
+    return path && query ? `${path}?${query}` : path;
+  };
+  return <FeedbackQualityPage {...props} logo={hostLogo} navigation={hostNav()} hrefFor={hrefFor} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -486,6 +509,7 @@ function App() {
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "review-center") return <ReviewCenterRoute />;
+  if (route.name === "feedback-quality") return <FeedbackQualityRoute />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

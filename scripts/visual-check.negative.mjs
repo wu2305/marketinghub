@@ -162,4 +162,22 @@ export default [
     story: { id: "pages--interpreter-assistant", actions: [] },
     reason: "knowledge assistant left open must fail Escape closure and launcher focus assertions",
   },
+  {
+    id: "neg-p13-wrong-type",
+    base: "p13-down",
+    story: { id: "pages--feedback-quality-up" },
+    reason: "Thumbs Up's ten records cannot satisfy the five-record Thumbs Down state",
+  },
+  {
+    id: "neg-p13-wrong-detail",
+    base: "p13-negative-detail",
+    story: { id: "pages--feedback-quality-positive-detail" },
+    reason: "positive feedback has no reason section and cannot satisfy negative detail",
+  },
+  {
+    id: "neg-p13-assistant-closed",
+    base: "p13-assistant-guard-correction",
+    story: { id: "pages--feedback-quality" },
+    reason: "closed React default cannot satisfy the restored assistant-open assertion",
+  },
 ];
