@@ -16,7 +16,7 @@ color: var(--mh-reports-ink);
 }
 
 .mh-page--cockpit {
-background: var(--mh-reports-bg);
+background: var(--mh-surface-neutral-cool);
   --mh-live-toolbar-top: calc(var(--mh-header) + 16px);
 }
 

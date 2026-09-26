@@ -11,7 +11,7 @@ position: relative;
 height: 180px;
   overflow: hidden;
   border-radius: 10px 10px 0 0;
-  background: #14171a;
+  background: var(--mh-surface-dark-strong);
 }
 
 .mh-workspace-card__image img {
@@ -30,13 +30,13 @@ display: flex;
   border: 1px solid transparent;
   border-radius: 10px;
   background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%) border-box;
+    linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
+    linear-gradient(180deg, var(--mh-surface-warning) 0%, var(--mh-gold-light) 100%) border-box;
 }
 
 .mh-workspace-card h3 {
 margin: 4px 0 8px;
-  color: #1c2328;
+  color: var(--mh-ink-field);
   font-family: var(--mh-display);
   font-size: 26px;
   font-style: italic;
@@ -46,7 +46,7 @@ margin: 4px 0 8px;
 
 .mh-workspace-card p {
 margin: 10px 0 0;
-  color: #5d6872;
+  color: var(--mh-ink-secondary-muted);
   font-family: var(--mh-font);
   font-size: 11px;
   line-height: 1.45;
@@ -65,8 +65,8 @@ position: relative;
   padding: 4px 10px;
   border: 0;
   border-radius: 999px;
-  background: #fff8df;
-  color: #986525;
+  background: var(--mh-surface-gold-pale);
+  color: var(--mh-gold-text);
   font-family: var(--mh-font);
   font-size: 12px;
   font-weight: 700;

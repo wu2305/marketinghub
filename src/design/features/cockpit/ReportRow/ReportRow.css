@@ -9,7 +9,7 @@ display: grid;
   border: 1px solid transparent;
   border-radius: 10px;
   background:
-    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
     var(--mh-reports-card-edge) border-box;
   box-shadow: var(--mh-reports-row-shadow);
   transition:
@@ -143,7 +143,7 @@ border: 1px solid var(--mh-line-strong);
 
 .mh-report-row__details:hover,
 .mh-report-row__details:focus-visible {
-border-color: var(--mh-reports-hover-line);
+border-color: var(--mh-gold-medium);
   background: var(--mh-reports-badge-bg);
   color: var(--mh-ink-strong);
 }

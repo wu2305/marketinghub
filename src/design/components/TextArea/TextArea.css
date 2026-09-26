@@ -12,7 +12,7 @@ outline: 2px solid rgba(63, 115, 166, 0.55);
 width: 100%;
   border: 1px solid var(--mh-line-strong);
   border-radius: var(--mh-radius-control);
-  background: #fff;
+  background: var(--mh-surface);
   color: var(--mh-ink);
   font-size: 13px;
 }
@@ -25,14 +25,14 @@ min-height: 96px;
 }
 
 .mh-textarea:focus {
-border-color: #daa860;
+border-color: var(--mh-gold-medium);
   box-shadow: var(--mh-shadow-focus-warm-soft);
   outline: 0;
 }
 
 .mh-textarea:disabled {
 cursor: not-allowed;
-  background: #f3f5f7;
+  background: var(--mh-surface-neutral-cool);
   color: var(--mh-faint);
 }
 

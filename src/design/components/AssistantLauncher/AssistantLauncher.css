@@ -19,7 +19,7 @@ position: fixed;
   border: 1px solid var(--mh-launcher-line);
   border-radius: 999px;
   appearance: none;
-  background: var(--mh-launcher-bg);
+  background: var(--mh-surface-dark);
   color: var(--mh-surface);
   box-shadow: var(--mh-launcher-shadow);
   font-family: var(--mh-font);
@@ -49,7 +49,7 @@ position: absolute;
 
 .mh-launcher:hover,
 .mh-launcher:focus-visible {
-border-color: var(--mh-bubble-to);
+border-color: var(--mh-gold-medium);
   outline: 0;
   background: var(--mh-launcher-bg-hover);
   box-shadow: var(--mh-launcher-shadow-hover);
@@ -92,7 +92,7 @@ display: grid;
   height: 28px;
   place-items: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
+  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   color: var(--mh-ink-action-strong);
   font-size: 10px;
   font-weight: 700;

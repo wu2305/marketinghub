@@ -5,7 +5,7 @@
   min-height: 22px;
   padding: 3px 8px;
   border-radius: 3px;
-  background: #f2f5f7;
+  background: var(--mh-surface-neutral-soft);
   color: var(--mh-copy);
   font-family: var(--mh-font);
   font-size: 10px;
@@ -15,7 +15,7 @@
 }
 
 .mh-badge--success {
-  background: #edf6f1;
+  background: var(--mh-surface-success-soft);
   color: var(--mh-green);
 }
 
@@ -25,13 +25,13 @@
 }
 
 .mh-badge--info {
-  background: #eef3f8;
+  background: var(--mh-surface-info);
   color: var(--mh-blue);
 }
 
 .mh-badge--danger {
-  background: #faeff1;
-  color: #a23b4f;
+  background: var(--mh-surface-danger-hover);
+  color: var(--mh-danger-muted);
 }
 
 /* P07 field-mapping and Business Term availability capsule, 76×20 with dot. */
@@ -90,7 +90,7 @@
   background: var(--mh-bt-status-on-dot);
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral {
-  background: var(--mh-bt-status-off-bg);
+  background: var(--mh-surface-control-muted);
   color: var(--mh-bt-status-off-ink);
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral::before {
@@ -117,5 +117,5 @@
 
 .mh-badge--outline {
   border: 1px solid currentColor;
-  background: #fff;
+  background: var(--mh-surface);
 }

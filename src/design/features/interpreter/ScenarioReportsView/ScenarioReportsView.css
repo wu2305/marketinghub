@@ -83,7 +83,7 @@
   margin-left: auto;
   padding: 0 16px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
   box-shadow: var(--mh-bt-create-shadow);
   color: var(--mh-surface);
   font-size: 12px;
@@ -92,7 +92,7 @@
 }
 
 .mh-srview__create:hover {
-  background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+  background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
 }
 
 .mh-srview__create:focus-visible {

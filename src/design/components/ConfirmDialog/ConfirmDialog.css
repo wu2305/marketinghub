@@ -86,7 +86,7 @@
 
 /* Risk: visible warning symbol and an amber approval action. */
 .mh-modal:has(> .mh-modal__dialog.mh-confirm--warning) .mh-modal__scrim {
-  background: color-mix(in srgb, var(--mh-copilot-send-ink) 50%, transparent);
+  background: color-mix(in srgb, var(--mh-ink-black) 50%, transparent);
 }
 
 .mh-confirm--warning.mh-modal__dialog {
@@ -143,14 +143,14 @@
 
 .mh-confirm--warning .mh-confirm__btn--primary {
   border: 0;
-  background: linear-gradient(135deg, var(--mh-bubble-from), var(--mh-bubble-to));
+  background: linear-gradient(135deg, var(--mh-gold-light), var(--mh-gold-medium));
   color: var(--mh-ink-strong);
   font-weight: 700;
 }
 
 /* Destructive action: no decorative icon, red primary, neutral cancellation. */
 .mh-modal:has(> .mh-modal__dialog.mh-confirm--danger) .mh-modal__scrim {
-  background: color-mix(in srgb, var(--mh-copilot-send-ink) 35%, transparent);
+  background: color-mix(in srgb, var(--mh-ink-black) 35%, transparent);
 }
 
 .mh-confirm--danger.mh-modal__dialog {

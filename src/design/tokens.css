@@ -60,6 +60,14 @@ a:where([class*="mh-"], [class*="mh-"] *) {
 }
 
 :root {
+  /* Shared foreground, action, and status colors extracted from component CSS. */
+  --mh-ink-inverse: #ffffff;
+  --mh-surface-dark-strong: #14171a;
+  --mh-surface-action-slate: #39444e;
+  --mh-surface-action-blue: #344f60;
+  --mh-surface-dark-cool: #1c2328;
+  --mh-indicator-selection-warm: #b08d57;
+  --mh-danger-muted: #a23b4f;
   --mh-font: "DIN 2014", Arial, sans-serif;
   --mh-display: "BentonModDisplay", Georgia, serif;
   --mh-radius-control: 4px;
@@ -165,19 +173,16 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-disabled-line: #d0d4d8;
   --mh-disabled-ink: #8a949e;
   --mh-index-line: #d8c76f;
-  --mh-index-bg: #fff9df;
   --mh-index-ink: #6c5800;
-  --mh-bubble-from: #f2d185;
-  --mh-bubble-to: #daa860;
+  --mh-gold-light: #f2d185;
+  --mh-gold-medium: #daa860;
   --mh-info: #2f6ea6;
   --mh-popover-shadow: 0 16px 40px rgba(24, 33, 42, 0.18);
   --mh-scrim: rgba(31, 41, 55, 0.3);
   --mh-modal-shadow: 0 28px 80px rgba(31, 41, 55, 0.2);
-  --mh-toast-bg: #20262c;
   --mh-toast-shadow: 0 14px 40px rgba(31, 41, 55, 0.22);
-  --mh-warn-bg: #fff9df;
+  --mh-surface-warning-pale: #fff9df;
   --mh-warn-line: #e5d58b;
-  --mh-warn-accent: #e6bc73;
   --mh-warn-note: #776f4b;
   --mh-focus-blue: #8da7c0;
   --mh-focus-ring: rgba(63, 115, 166, 0.1);
@@ -201,7 +206,8 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: #303840;
-  --mh-launcher-bg: #20262c;
+  --mh-surface-dark: #20262c;
+  --mh-ink-dark-control: #20262c;
   --mh-launcher-bg-hover: #171c21;
   --mh-launcher-aura: rgba(218, 168, 96, 0.2);
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
@@ -210,7 +216,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-ink-action-strong: #111111;
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: #171b1f;
-  --mh-ink-ai-strong: #141414;
   --mh-copy-ai: #4f5963;
   --mh-muted-ai: #717b85;
   --mh-line-strong-ai: #bcc5ce;
@@ -256,7 +261,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
-  --mh-reports-bg: #f3f5f7;
+  --mh-surface-neutral-cool: #f3f5f7;
 
   --mh-reports-ink: #17191c;
   --mh-reports-copy: #46505b;
@@ -275,9 +280,8 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-reports-badge-ink: #7a5c3a;
   --mh-reports-pill-bg: #fff8db;
 
-  --mh-reports-pill-hover-bg: #faeed4;
+  --mh-surface-gold-hover-soft: #faeed4;
   --mh-reports-pill-hover-ink: #6f4900;
-  --mh-reports-hover-line: #daa860;
   --mh-reports-title-hover: #916732;
   --mh-reports-scrim: rgba(28, 36, 44, 0.28);
   --mh-reports-thumb-bg: #e9edf1;
@@ -288,10 +292,9 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-live-toolbar-bg: rgba(244, 246, 248, 0.96);
   --mh-line-neutral-soft: #dfe3e8;
   --mh-live-inkline: #2a2925;
-  --mh-live-chart-bg: #f7f7f7;
+  --mh-surface-chart-neutral: #f7f7f7;
 
   --mh-line-control-strong: #cbd2d9;
-  --mh-live-back-hover-bg: #f7f7f7;
   --mh-live-bar: #d8d4c9;
   --mh-live-bar-alt: #79a991;
   --mh-ink-faint-warm: #74726c;
@@ -304,15 +307,14 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-sc-note: #8a9099;
   --mh-line-neutral-faint: #eceef1;
   --mh-sc-line-strong: #d9dde3;
-  --mh-sc-field-bg: #f7f8fa;
   --mh-sc-static-bg: #eef0f3;
   --mh-sc-static-line: #e0e3e8;
   --mh-ink-muted-neutral: #6b7280;
   --mh-sc-row-hover: #f3f5f8;
   --mh-sc-head-line: #eeeeee;
   --mh-ink-info-accent: #185fa5;
-  --mh-sc-pos: #00a06b;
-  --mh-sc-neg: #e34d59;
+  --mh-indicator-positive-chart: #00a06b;
+  --mh-indicator-negative-chart: #e34d59;
   --mh-sc-gridline: #eef0f3;
   --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -320,18 +322,17 @@ a:where([class*="mh-"], [class*="mh-"] *) {
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
-  --mh-copilot-ink: #141414;
+  --mh-ink-black-soft: #141414;
+  --mh-surface-control-black-soft: #141414;
   --mh-ink-secondary-dark: #3f4854;
 
-  --mh-copilot-hover-bg: #f4f6f8;
   --mh-copilot-tool-bg: #f2f4f7;
   --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
   --mh-copilot-gold-wash: rgba(218, 168, 96, 0.14);
   --mh-copilot-metric-pos: #16a34a;
   --mh-copilot-metric-neg: #dc2626;
   --mh-copilot-box-line: #d8e0e6;
-  --mh-copilot-send-ink: #000000;
-  --mh-copilot-upload-hover-bg: #f0f2f4;
+  --mh-ink-black: #000000;
   --mh-line-secondary-cool: #d8dee6;
   --mh-copilot-card-faint: #667487;
   --mh-copilot-card-ink: #101820;
@@ -359,15 +360,12 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-hr-axis: #aab0b8;
   --mh-hr-th-line: #e4e2da;
   --mh-hr-td-line: #f0efe9;
-  --mh-hr-dot-pos: #00a06b;
   --mh-hr-dot-warn: #e6a23c;
-  --mh-hr-dot-neg: #e34d59;
   --mh-ink-positive-dark: #0a7a54;
   --mh-ink-negative-bright: #d43d4a;
-  --mh-hr-insight-line: #c9a44a;
+  --mh-line-highlight-chart: #c9a44a;
   --mh-surface-highlight-warm: #fdfbf6;
   --mh-hr-insight-ink: #444441;
-  --mh-hr-cursor: #c9a44a;
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
 
@@ -379,11 +377,9 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-ra-icon-retail: #8a6d1f;
   --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
 
-  --mh-ra-insight-line: #c9a44a;
   --mh-ra-insight-bg: #fbf9f4;
   --mh-ra-insight-ink: #3f3f3c;
   --mh-ra-option-icon-bg: rgba(24, 95, 165, 0.1);
-  --mh-ra-option-hover-line: #c9a44a;
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
@@ -410,8 +406,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-principle-search-ink: #292724;
   --mh-principle-search-placeholder: #77716b;
 
-  --mh-pagination-active: #141414;
-  --mh-pagination-hover-line: #e6bc73;
   --mh-pagination-hover-bg: #fff9f2;
   --mh-pagination-select-line: #d9dee3;
   --mh-pagination-select-ink: #404850;
@@ -428,18 +422,18 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-action: #c8892b;
   --mh-bt-action-disabled: #858b91;
   --mh-bt-action-hover-bg: #fff6e8;
-  --mh-bt-search-line: #d9bd91;
-  --mh-bt-search-focus: #b98234;
-  --mh-bt-search-icon: #6f665d;
+  --mh-line-control-warm: #d9bd91;
+  --mh-line-control-focus-warm: #b98234;
+  --mh-ink-icon-warm-muted: #6f665d;
   --mh-shadow-search-warm: 0 8px 24px rgba(116, 78, 31, 0.08);
   --mh-bt-countline: #6f6961;
   --mh-bt-empty: #78838d;
   --mh-bt-draft-bg: #f6ede0;
   --mh-bt-draft-ink: #a76412;
-  --mh-bt-create-from: #e3ba6d;
-  --mh-bt-create-to: #cb8f2b;
-  --mh-bt-create-from-hover: #ecc673;
-  --mh-bt-create-to-hover: #d59a33;
+  --mh-gold-action-start: #e3ba6d;
+  --mh-gold-action-end: #cb8f2b;
+  --mh-gold-action-hover-start: #ecc673;
+  --mh-gold-action-hover-end: #d59a33;
   --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
   --mh-bt-drawer-bg: #f6f7f9;
   --mh-bt-drawer-line: #dfe5eb;
@@ -450,7 +444,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-status-on-bg: #fff4df;
   --mh-bt-status-on-ink: #8c5622;
   --mh-bt-status-on-dot: #c17d22;
-  --mh-bt-status-off-bg: #f0f2f4;
+  --mh-surface-control-muted: #f0f2f4;
   --mh-bt-status-off-ink: #8b8f94;
   --mh-bt-status-off-dot: #929292;
   --mh-bt-section-title: #20262d;

@@ -7,9 +7,9 @@ position: relative;
   font-family: var(--mh-font);
   padding: 18px 8px 20px 24px;
   overflow: hidden;
-  border: 1px solid #ebe6de;
+  border: 1px solid var(--mh-line-card-warm);
   border-radius: 12px;
-  background: linear-gradient(135deg, #ffffff 0%, #fffefa 100%);
+  background: linear-gradient(135deg, var(--mh-surface) 0%, var(--mh-surface-highlight-warm) 100%);
   box-shadow: 0 8px 22px rgba(57, 43, 25, 0.045);
   text-align: left;
   cursor: pointer;
@@ -54,7 +54,7 @@ position: relative;
 .mh-type-card strong {
   min-width: 0;
   overflow-wrap: anywhere;
-  color: #17202d;
+  color: var(--mh-ink-row-title);
   font-size: 18px;
   font-weight: 700;
 }
@@ -69,8 +69,8 @@ position: relative;
   align-items: center;
   padding: 0 13px;
   border-radius: 999px;
-  background: #fbf2e4;
-  color: #b5640b;
+  background: var(--mh-surface-warning);
+  color: var(--mh-ink-warning);
   font-size: 12px;
   font-weight: 700;
 }
@@ -80,7 +80,7 @@ position: relative;
   margin-bottom: 12px;
   width: 70%;
   overflow-wrap: anywhere;
-  color: #69707b;
+  color: var(--mh-muted);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -89,7 +89,7 @@ position: relative;
   margin-top: auto;
   width: min(178px, 100%);
   padding-top: 11px;
-  color: #a95d08;
+  color: var(--mh-ink-warning);
   font-size: 12px;
   font-weight: 700;
 }
@@ -100,16 +100,16 @@ position: absolute;
   left: 0;
   width: 66%;
   height: 1px;
-  background: #ece8e1;
+  background: var(--mh-line-warm-soft);
   content: "";
 }
 
 .mh-type-card.is-active {
-background: #fffaf3;
+background: var(--mh-surface-gold-wash);
 }
 
 /* The original's `.v20-type-card.is-manageable` only gets a warmer top border
-   (#e6e1d8) at rest — same count pill and other sides as every card. */
+   a warmer top border at rest — same count pill and other sides as every card. */
 
 .mh-type-card.is-manageable {
 border-top-color: var(--mh-line-warm-strong);

@@ -27,7 +27,7 @@
 .mh-skill-detail__usage{padding:14px 16px;border:0;border-radius:8px;background:var(--mh-surface-gold-pale);color:var(--mh-gold-text);font-weight:600;text-decoration:none}
 .mh-skill-detail__usage:hover{background:var(--mh-surface-gold-hover)}
 .mh-skill-detail__actions button{border-color:var(--mh-copilot-box-line);color:var(--mh-ink-control-deep)}
-.mh-skill-detail__actions button:hover{border-color:var(--mh-bubble-to);background:var(--mh-surface-hover-neutral)}
+.mh-skill-detail__actions button:hover{border-color:var(--mh-gold-medium);background:var(--mh-surface-hover-neutral)}
 .mh-skill-detail__actions .mh-skill-detail__danger{border-color:var(--mh-danger-bright);color:var(--mh-copilot-metric-neg)}
 .mh-skill-detail__actions .mh-skill-detail__danger:hover{border-color:var(--mh-copilot-metric-neg);background:var(--mh-surface-danger-hover)}
 @media(max-width:680px){.mh-skill-detail{width:100vw!important}}

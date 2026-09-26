@@ -1,7 +1,7 @@
 .mh-skill-library{min-width:0;font-family:var(--mh-font);color:var(--mh-ink)}
 .mh-skill-library__tabs{display:flex;margin:0 0 16px;border-bottom:1px solid var(--mh-line-tab)}
-.mh-skill-library__tabs button{display:inline-flex;align-items:center;gap:10px;padding:14px 4px 12px;border:0;border-bottom:2px solid var(--mh-bubble-to);background:transparent;color:var(--mh-ink);font-weight:700;font-size:14px;cursor:pointer}
-.mh-skill-library__tabs span{display:grid;min-width:22px;height:20px;padding:0 6px;place-items:center;border-radius:999px;background:linear-gradient(135deg,var(--mh-bubble-from),var(--mh-bubble-to));font-size:11px}
+.mh-skill-library__tabs button{display:inline-flex;align-items:center;gap:10px;padding:14px 4px 12px;border:0;border-bottom:2px solid var(--mh-gold-medium);background:transparent;color:var(--mh-ink);font-weight:700;font-size:14px;cursor:pointer}
+.mh-skill-library__tabs span{display:grid;min-width:22px;height:20px;padding:0 6px;place-items:center;border-radius:999px;background:linear-gradient(135deg,var(--mh-gold-light),var(--mh-gold-medium));font-size:11px}
 .mh-skill-library__toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:63px;padding:11px 20px;border:1px solid var(--mh-copilot-box-line);background:var(--mh-surface)}
 .mh-skill-library__controls{display:flex;align-items:center;gap:16px;min-width:0}
 .mh-skill-library__search{display:flex;align-items:center;gap:8px;width:280px;min-width:160px;height:39px;padding:0 12px;border:1px solid var(--mh-copilot-box-line);border-radius:5px;background:var(--mh-bg-faint)}
@@ -10,7 +10,7 @@
 .mh-skill-library__search input::placeholder{color:var(--mh-faint)}
 .mh-skill-library__filter{display:flex;align-items:center;gap:10px;color:var(--mh-ink-filter-label);font-size:11px;font-weight:700;text-transform:uppercase}
 .mh-skill-library__filter select{height:34px;min-width:139px;padding:0 12px;border:1px solid var(--mh-copilot-box-line);border-radius:5px;background:var(--mh-surface);color:var(--mh-ink-control-deep);font-size:12px;font-weight:400;text-transform:none;cursor:pointer}
-.mh-skill-library__create{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:176px;height:40px;padding:0 12px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--mh-bubble-from),var(--mh-bubble-to));color:var(--mh-ink);font-size:12px;font-weight:700;cursor:pointer}
+.mh-skill-library__create{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-width:176px;height:40px;padding:0 12px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--mh-gold-light),var(--mh-gold-medium));color:var(--mh-ink);font-size:12px;font-weight:700;cursor:pointer}
 .mh-skill-library__create svg{width:14px;height:14px}
 .mh-skill-library__head,.mh-skill-library__row{display:grid;grid-template-columns:minmax(200px,1.8fr) 140px 100px 80px 80px 90px 44px;align-items:center;gap:12px}
 .mh-skill-library__head{min-height:44px;padding:0 20px;border-bottom:1px solid var(--mh-line-panel-subtle);background:var(--mh-bg-faint);color:var(--mh-muted-strong);font-size:10px;font-weight:700;text-transform:uppercase}

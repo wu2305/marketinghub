@@ -14,9 +14,9 @@ padding: 8px 14px;
 }
 
 .mh-suggestion:hover {
-border-color: #daa860;
-  background: #faeed4;
-  color: #1a1d20;
+border-color: var(--mh-gold-medium);
+  background: var(--mh-surface-gold-hover-soft);
+  color: var(--mh-ink-strong);
 }
 
 .mh-assistant--drawer .mh-assistant__suggestions .mh-suggestion {
