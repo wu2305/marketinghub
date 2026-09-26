@@ -433,6 +433,8 @@ function ScenarioLibraryRoute() {
   };
   const page = useSkillLibraryDemo({ content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, hrefFor, onNavigate: ({ href }) => navigateHost(href) });
   return <ScenarioLibraryPage {...page} logo={hostLogo} navigation={hostNav()} />;
+}
+
 function ScenarioDetailRoute({ params }) {
   const hrefFor = (id, query = {}) => {
     const path = ({ home: hostHref(""), cockpit: hostHref("cockpit"), interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality"), "scenario-edit": hostHref("coverage/scenario-edit") })[id];
