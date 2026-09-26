@@ -284,7 +284,8 @@ async function newPage() {
   const dg = page.getByRole("link", { name: "DG Data Insight" });
   const dgHref = await dg.getAttribute("href");
   if (dgHref !== `${BASE}cockpit?project=rednote`) notes.push(`DG capability lost project parameter: ${dgHref}`);
-  await dg.click({ modifiers: ["Meta"] });
+  // The new-tab modifier is Cmd on macOS but Ctrl on Linux/Windows (CI).
+  await dg.click({ modifiers: ["ControlOrMeta"] });
   if (new URL(page.url()).pathname !== BASE) notes.push("modified capability click changed the current tab");
   await dg.click();
   await page.waitForSelector(".mh-project-directory", { timeout: 5000 });
