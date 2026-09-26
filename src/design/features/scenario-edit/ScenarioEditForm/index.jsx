@@ -24,11 +24,11 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {Record<string,boolean>} [props.errors] Validation state for name/purpose/scope/owner/report.
  * @param {string|null} [props.preview] Null hides preview; string is the generated or empty-question output.
  * @param {(event:{field:string,value:string})=>void} [props.onChange]
- * @param {()=>void} [props.onRunPreview] The demo container derives the preview from current values.
+ * @param {(event:{question:string})=>void} [props.onRunPreview] The demo container derives output using the current question.
  * @param {(event:{field:"logic"|"output"})=>void} [props.onAutoFill] Source buttons have no resulting behavior.
  * @param {(event:{files:string[]})=>void} [props.onSelectFiles] Native picker selection; static pills do not change.
  * @param {(event:{values:object})=>void} [props.onSaveDraft] Source button has no resulting behavior.
- * @param {()=>void} [props.onSubmit] The demo container validates and emits the final named payload.
+ * @param {(event:{values:object})=>void} [props.onSubmit] The demo container validates the submitted values and emits the final named payload.
  * @param {(id:string,params?:object)=>string} [props.hrefFor]
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
  */
@@ -53,7 +53,7 @@ export function ScenarioEditForm({ content, values, errors = {}, preview = null,
   const cancelHref = hrefFor?.("scenario-library", {}) || "scenario-library.html";
   // Preserve only a loaded record's unsupported scope as an additional option.
   const scopeOptions = values.scope && !scopes.some((option) => option.value === values.scope) ? [...scopes, { value: values.scope, label: values.scope }] : scopes;
-  return <form className="mh-scenario-edit-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.(); }}>
+  return <form className="mh-scenario-edit-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values: { ...values } }); }}>
     <header className="mh-scenario-edit-form__header"><h2>{labels.formTitle}</h2><span><FormIcon name="clock" weight={2} />{labels.saved}</span></header>
     <div className="mh-scenario-edit-form__body">
       <div className="mh-scenario-edit-form__row">{field("name", labels.name, input("name", labels.namePlaceholder))}</div>
@@ -68,7 +68,7 @@ export function ScenarioEditForm({ content, values, errors = {}, preview = null,
         <div className="mh-scenario-edit-form__card"><span className="mh-scenario-edit-form__icon mh-scenario-edit-form__icon--output"><FormIcon name="output" /></span><div className="mh-scenario-edit-form__card-body"><strong>{labels.output}</strong><div className="mh-scenario-edit-form__fill"><textarea id={ids.output} rows={2} value={values.output || ""} placeholder={labels.outputPlaceholder} aria-label={labels.output} onChange={update("output")} /><button type="button" onClick={() => onAutoFill?.({ field: "output" })}>{labels.autoFill}</button></div></div></div>
         <div className="mh-scenario-edit-form__card"><span className="mh-scenario-edit-form__icon mh-scenario-edit-form__icon--boundary"><FormIcon name="boundary" /></span><div className="mh-scenario-edit-form__card-body"><strong>{labels.materials}</strong><label htmlFor={ids.files} className="mh-scenario-edit-form__upload"><input id={ids.files} type="file" multiple accept={attachmentAccept} onChange={(event) => onSelectFiles?.({ files: Array.from(event.target.files || [], (file) => file.name) })} /><span>{labels.upload}</span><small>{labels.uploadHint}</small></label><div className="mh-scenario-edit-form__attachments">{attachments.map((name) => <span key={name}>{name}</span>)}</div></div></div>
       </div></section>
-      <section className="mh-scenario-edit-form__section mh-scenario-edit-form__preview"><div className="mh-scenario-edit-form__preview-head"><h3>{labels.preview}</h3><button type="button" onClick={() => onRunPreview?.()}><FormIcon name="play" />{labels.runPreview}</button></div>{preview !== null && <div className="mh-scenario-edit-form__preview-body"><label htmlFor={ids.question}>{labels.question}</label><textarea id={ids.question} rows={2} value={values.question || ""} placeholder={labels.questionPlaceholder} onChange={update("question")} /><pre>{preview}</pre></div>}</section>
+      <section className="mh-scenario-edit-form__section mh-scenario-edit-form__preview"><div className="mh-scenario-edit-form__preview-head"><h3>{labels.preview}</h3><button type="button" onClick={() => onRunPreview?.({ question: values.question || "" })}><FormIcon name="play" />{labels.runPreview}</button></div>{preview !== null && <div className="mh-scenario-edit-form__preview-body"><label htmlFor={ids.question}>{labels.question}</label><textarea id={ids.question} rows={2} value={values.question || ""} placeholder={labels.questionPlaceholder} onChange={update("question")} /><pre>{preview}</pre></div>}</section>
       <footer className="mh-scenario-edit-form__footer"><span className="mh-scenario-edit-form__saved"><FormIcon name="clock" weight={2} />{labels.saved}</span><div className="mh-scenario-edit-form__actions"><a href={cancelHref} onClick={(event) => plainPrimary(event) && onNavigate?.({ id: "scenario-library", params: {}, href: cancelHref, label: labels.cancel })}><FormIcon name="back" weight={2} />{labels.cancel}</a><button type="button" onClick={() => onSaveDraft?.({ values: { ...values } })}><FormIcon name="save" weight={2} />{labels.saveDraft}</button><button type="submit">{labels.submit}<FormIcon name="next" weight={2} /></button></div></footer>
     </div>
   </form>;

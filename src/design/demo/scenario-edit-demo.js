@@ -39,12 +39,12 @@ export function useScenarioEditDemo(props) {
   React.useEffect(() => { setValues({ ...seed, ...initial.values }); setErrors(initial.errors || {}); setPreview(initial.preview || null); }, [seed, initial]);
 
   const onChange = ({ field, value }) => { setValues((current) => ({ ...current, [field]: value })); props.onChange?.({ field, value }); };
-  const onSubmit = () => {
-    const nextErrors = Object.fromEntries(REQUIRED.map((field) => [field, !String(values[field] || "").trim()]));
+  const onSubmit = ({ values: submittedValues }) => {
+    const nextErrors = Object.fromEntries(REQUIRED.map((field) => [field, !String(submittedValues[field] || "").trim()]));
     setErrors(nextErrors);
     const firstInvalid = REQUIRED.find((field) => nextErrors[field]);
     if (firstInvalid) { props.onValidation?.({ firstInvalid, errors: nextErrors }); return; }
-    const payload = { id: record?.id || null, values: { ...values } };
+    const payload = { id: record?.id || null, values: { ...submittedValues } };
     props.onSubmit?.(payload);
     window.alert(props.content.labels.submitted);
     const href = props.hrefFor?.("scenario-library", {}) || "scenario-library.html";
@@ -63,7 +63,7 @@ export function useScenarioEditDemo(props) {
   return {
     content: props.content, logo: props.logo, navigation: props.navigation, hrefFor: props.hrefFor, onNavigate: props.onNavigate,
     form: { values, errors, preview, onChange, onSubmit,
-      onRunPreview: () => { const output = scenarioEditPreviewFor(values, props.content.labels); setPreview(output); props.onRunPreview?.({ question: values.question.trim(), output }); },
+      onRunPreview: ({ question }) => { const output = scenarioEditPreviewFor({ ...values, question }, props.content.labels); setPreview(output); props.onRunPreview?.({ question: question.trim(), output }); },
       onAutoFill: ({ field }) => props.onAutoFill?.({ field }),
       onSaveDraft: () => props.onSaveDraft?.({ values: { ...values } }),
       onSelectFiles: ({ files }) => props.onSelectFiles?.({ files }),
