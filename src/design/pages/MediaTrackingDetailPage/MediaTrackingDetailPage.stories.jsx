@@ -82,8 +82,8 @@ export const MediaTrackingDetail = {
                   setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
                 onBack: () => setFlow((current) => ({ ...current, step: "history" })),
                 onClose: () => setFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+                onSave: (event) => args.onFlowSave?.(event),
+                onSubmit: (event) => args.onFlowSubmit?.(event),
               }
             : undefined
         }
@@ -93,13 +93,13 @@ export const MediaTrackingDetail = {
           args.onPeriodChange?.(event);
         }}
         onFilterChange={args.onFilterChange}
-        onOpenAssistant={() => {
+        onOpenAssistant={(event) => {
           setOpen(true);
-          args.onOpenAssistant?.();
+          args.onOpenAssistant?.(event);
         }}
-        onCloseAssistant={() => {
+        onCloseAssistant={(event) => {
           setOpen(false);
-          args.onCloseAssistant?.();
+          args.onCloseAssistant?.(event);
         }}
         onPromptChange={(event) => {
           setPrompt(event.value);

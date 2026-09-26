@@ -19,12 +19,12 @@ export const skillLibraryModes = ["list", "create", "edit"];
  * @param {object} props
  * @param {object} props.content Hero, navigation, table, detail and form copy.
  * @param {object} props.logo Header logo.
- * @param {object[]} props.navigation Primary navigation links.
+ * @param {object[]} [props.navigation=[]] Primary navigation links.
  * @param {string} props.image Hero image URL.
- * @param {object} props.library Controlled list/filter state and callbacks.
- * @param {object} props.detail Selected record and preview state.
- * @param {object} props.form Controlled inline create/edit state.
- * @param {object} props.assistant Controlled lite assistant.
+ * @param {object} [props.library={}] Controlled list/filter state and callbacks.
+ * @param {object} [props.detail={}] Selected record and preview state.
+ * @param {object} [props.form={}] Controlled inline create/edit state.
+ * @param {object} [props.assistant={}] Controlled lite assistant.
  * @param {object|null} props.skillFlow Optional model flow overlay.
  * @param {(id:string,params?:object)=>string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]

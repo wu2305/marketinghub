@@ -111,32 +111,41 @@ export const Campaign = {
           args.onQueryChange?.(event);
         }}
         onFilter={args.onFilter}
-        onReset={() => {
+        onReset={(event) => {
           setQuery("");
-          args.onReset?.();
+          args.onReset?.(event);
         }}
         taskDialogOpen={taskOpen}
         toast={toast}
-        onCreateTask={() => {
+        onCreateTask={(event) => {
           setTaskOpen(true);
-          args.onCreateTask?.();
+          args.onCreateTask?.(event);
         }}
-        onBindAccount={() => {
+        onBindAccount={(event) => {
           showToast(CAMPAIGN.toasts.bindAccount);
-          args.onBindAccount?.();
+          args.onBindAccount?.(event);
         }}
-        onCloseTask={() => {
+        onCloseTask={(event) => {
           setTaskOpen(false);
-          args.onCloseTask?.();
+          args.onCloseTask?.(event);
         }}
         onSubmitTask={(event) => {
           setTaskOpen(false);
           showToast(CAMPAIGN.toasts.taskSubmitted);
           args.onSubmitTask?.(event);
         }}
-        onOpenAssistant={() => setOpen(true)}
-        onCloseAssistant={() => setOpen(false)}
-        onPromptChange={(event) => setPrompt(event.value)}
+        onOpenAssistant={(event) => {
+          setOpen(true);
+          args.onOpenAssistant?.(event);
+        }}
+        onCloseAssistant={(event) => {
+          setOpen(false);
+          args.onCloseAssistant?.(event);
+        }}
+        onPromptChange={(event) => {
+          setPrompt(event.value);
+          args.onPromptChange?.(event);
+        }}
         /* workspace.js: submit replaces the feed with one answer entry; a
            suggestion click submits immediately and clears the composer. */
         onSuggestion={(event) => {
@@ -208,8 +217,8 @@ export const Campaign = {
                   setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
                 onBack: () => setFlow((current) => ({ ...current, step: "history" })),
                 onClose: () => setFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+                onSave: (event) => args.onFlowSave?.(event),
+                onSubmit: (event) => args.onFlowSubmit?.(event),
               }
             : undefined
         }

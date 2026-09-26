@@ -22,13 +22,13 @@ export const reviewPanels = ["none", "detail", "reject", "risk"];
  * @param {object} props
  * @param {object} props.content Source-backed labels, hero, sidebar and suggestions; hero stats carry a `key` matching queue counts.
  * @param {object} props.logo Header logo.
- * @param {object[]} props.navigation Primary navigation.
+ * @param {object[]} [props.navigation=[]] Primary navigation.
  * @param {string} props.image Hero image URL.
- * @param {object} props.filters Controlled tab/search/type/time and change callbacks.
- * @param {object} props.queue Filtered records, counts, open-detail and action callbacks.
- * @param {object} props.decision Selected item, panel, reason, suggestions and decision callbacks.
+ * @param {object} [props.filters={}] Controlled tab/search/type/time and change callbacks.
+ * @param {object} [props.queue={}] Filtered records, counts, open-detail and action callbacks.
+ * @param {object} [props.decision={}] Selected item, panel, reason, suggestions and decision callbacks.
  * @param {(event:{id:string,reason:string})=>void} [props.decision.onConfirmReject] Reject request with named fields.
- * @param {object} props.assistant Lite assistant copy, state and callbacks.
+ * @param {object} [props.assistant={}] Lite assistant copy, state and callbacks.
  * @param {object|null} props.skillFlow Optional ModelFlowDialog state.
  * @param {(id:string,params?:object)=>string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} props.onNavigate

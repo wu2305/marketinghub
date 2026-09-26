@@ -19,11 +19,11 @@ export const memoryCategories = ["all", "analysis", "meeting", "findings", "refe
  * @param {object} props
  * @param {object} props.content Hero/sidebar/category options and all visible labels.
  * @param {object} props.logo Header logo.
- * @param {object[]} props.navigation Header navigation.
- * @param {{items:object[],counts:object,category:typeof memoryCategories[number],bannerOpen:boolean,selected:object|null,menuId:string|null,editing:boolean,draft:object}} props.memory Workspace state and named action callbacks; see MemoryWorkspace.
- * @param {{open:boolean,draft:{title:string,category:string,description:string},errors:{title?:boolean,description?:boolean},onOpen?:Function,onClose?:(event:{reason:string})=>void,onChange?:(event:{field:string,value:string})=>void,onAutoFill?:Function,onSave?:Function}} props.create Create drawer state/actions.
- * @param {{target:object|null,onCancel?:(event:{reason:string})=>void,onConfirm?:(event:{confirmed:true})=>void}} props.deletion Delete confirmation state/actions.
- * @param {object} props.assistant Lite assistant props and named callbacks.
+ * @param {object[]} [props.navigation=[]] Header navigation.
+ * @param {{items:object[],counts:object,category:typeof memoryCategories[number],bannerOpen:boolean,selected:object|null,menuId:string|null,editing:boolean,draft:object}} [props.memory={}] Workspace state and named action callbacks; see MemoryWorkspace.
+ * @param {{open:boolean,draft:{title:string,category:string,description:string},errors:{title?:boolean,description?:boolean},onOpen?:Function,onClose?:(event:{reason:string})=>void,onChange?:(event:{field:string,value:string})=>void,onAutoFill?:Function,onSave?:Function}} [props.create={}] Create drawer state/actions.
+ * @param {{target:object|null,onCancel?:(event:{reason:string})=>void,onConfirm?:(event:{confirmed:true})=>void}} [props.deletion={}] Delete confirmation state/actions.
+ * @param {object} [props.assistant={}] Lite assistant props and named callbacks.
  * @param {object} [props.skillFlow] Model-flow props.
  * @param {(id:string,params?:object)=>string} [props.hrefFor]
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
