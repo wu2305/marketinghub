@@ -20,6 +20,7 @@ import {
   CityInvestDashboard,
   ReportCopilot,
   SelfServicePage,
+  DataUploadPage,
   KnowledgeViewPage,
   useCockpitDemo,
   useHomeDemo,
@@ -36,6 +37,7 @@ import {
   MetricDictionaryPage,
 } from "../../src/design/index.js";
 import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
+import { useDataUploadDemo } from "../../src/design/demo/data-upload-demo.js";
 import {
   ASSISTANT,
   ASSISTANT_SKILL_MENU,
@@ -47,6 +49,7 @@ import {
   MODEL_FLOW,
   NAV,
   SELF_SERVICE,
+  DATA_UPLOAD,
   LITE_ASSISTANT,
   buildLiteAssistantAnswer,
   buildHomeAssistantAnswer,
@@ -101,6 +104,7 @@ const ROUTE_MAP = {
   "/assets/pages/knowledge.html": "interpreter",
   "/assets/pages/knowledge-create.html": "knowledge-create",
   "/assets/pages/flexible.html": "self-service",
+  "/assets/pages/data-upload.html": "data-upload",
   "/assets/pages/metric-dictionary.html": "metric-dictionary",
   "/assets/pages/knowledge-view.html": "knowledge-view",
   "/assets/pages/review-center.html": "review-center",
@@ -159,6 +163,7 @@ function routeOf(loc) {
   if (rest === "interpreter") return { name: "interpreter", params };
   if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "self-service") return { name: "self-service", params };
+  if (rest === "data-upload") return { name: "data-upload", params };
   if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
   if (rest === "knowledge-view") return { name: "knowledge-view", params };
   if (rest === "review-center") return { name: "review-center", params };
@@ -309,6 +314,20 @@ function SelfServiceRoute({ params }) {
     demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
   });
   return <SelfServicePage {...props} />;
+}
+
+function DataUploadRoute() {
+  const page = useDataUploadDemo({
+    logo: hostLogo,
+    navigation: hostNav(),
+    hero: SELF_SERVICE.hero,
+    toolbar: { ...DATA_UPLOAD.toolbar, backHref: hostHref("self-service?tab=upload") },
+    fields: DATA_UPLOAD.fields,
+    bulkImport: DATA_UPLOAD.bulkImport,
+    submitLabel: "Submit",
+    submittingLabel: "Submitted",
+  });
+  return <DataUploadPage {...page} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -531,6 +550,7 @@ function App() {
   if (route.name === "interpreter") return <InterpreterRoute params={route.params} />;
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
+  if (route.name === "data-upload") return <DataUploadRoute />;
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "review-center") return <ReviewCenterRoute />;

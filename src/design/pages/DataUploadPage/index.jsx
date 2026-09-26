@@ -30,11 +30,11 @@ import "./DataUploadPage.css";
  * @param {boolean} [props.bulkImportOpen=false]
  * @param {string} [props.selectedFile] file name shown in the dropzone hint
  * @param {(target: object) => void} [props.onNavigate]
- * @param {() => void} [props.onOpenImport]
+ * @param {(event: { label: string }) => void} [props.onOpenImport]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]
  * @param {(file: { name: string }) => void} [props.onSelectFile]
  * @param {(target: { href: string }) => void} [props.onDownloadTemplate]
- * @param {(values: Object<string, string>) => void} [props.onSubmitForm]
+ * @param {(event: { values: Object<string, string> }) => void} [props.onSubmitForm]
  */
 export function DataUploadPage({
   current = "self-service",
@@ -78,7 +78,7 @@ export function DataUploadPage({
             const data = new FormData(event.currentTarget);
             const values = {};
             for (const [name, value] of data.entries()) values[name] = String(value).trim();
-            onSubmitForm?.(values);
+            onSubmitForm?.({ values });
           }}
         >
           <div className="mh-upload__card">

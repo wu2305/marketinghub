@@ -11,8 +11,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--data-upload",
-      actions: [{ click: ".mh-upload__form .mh-button--gold" }],
+      id: "pages--data-upload-submitted",
       expect: [
         { sel: ".mh-upload__form .mh-button--gold", text: "Submitted" },
         { sel: ".mh-upload__card" },
@@ -36,11 +35,8 @@ export default [
       ],
     },
     story: {
-      id: "pages--data-upload",
-      actions: [
-        { click: ".mh-upload__toolbar .mh-button--secondary" },
-        { wait: ".mh-modal .mh-dropzone" },
-      ],
+      id: "pages--data-upload-import-open",
+      actions: [{ wait: ".mh-modal .mh-dropzone" }],
       expect: [
         { sel: ".mh-modal", text: "Template Import" },
         { sel: ".mh-dropzone__title", text: "Click or drag a file to upload here" },
@@ -64,8 +60,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--data-upload",
-      args: { bulkImportOpen: true },
+      id: "pages--data-upload-import-open",
       actions: [
         { wait: ".mh-modal .mh-dropzone" },
         { press: ["body", "Escape"] },
@@ -93,18 +88,8 @@ export default [
       expect: [{ sel: ".bulk-import-dropzone-hint", text: "Selected: city-sales.xlsx" }],
     },
     story: {
-      id: "pages--data-upload",
-      args: { bulkImportOpen: true },
-      actions: [
-        { wait: ".mh-modal .mh-dropzone" },
-        { click: ".mh-dropzone" },
-        {
-          upload: [
-            ".mh-dropzone__input",
-            { name: "city-sales.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", content: "demo" },
-          ],
-        },
-      ],
+      id: "pages--data-upload-import-file-selected",
+      actions: [{ wait: ".mh-modal .mh-dropzone" }],
       expect: [{ sel: ".mh-dropzone__hint", text: "Selected: city-sales.xlsx" }],
     },
   }

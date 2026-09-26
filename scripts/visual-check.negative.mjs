@@ -13,6 +13,12 @@ export default [
   { id: "neg-p17-wrong-record", base: "p17-known", story: { id: "pages--scenario-edit" }, reason: "HTML City Comparison defaults cannot satisfy known Campaign Review fields and corrected scope" },
   { id: "neg-p17-missing-preview", base: "p17-preview", story: { id: "pages--scenario-edit" }, reason: "Unrun form cannot satisfy the generated preview" },
   { id: "neg-p17-missing-validation", base: "p17-required", story: { id: "pages--scenario-edit-known" }, reason: "Valid seeded form cannot satisfy five required-field errors" },
+  {
+    id: "neg-p04-import-closed",
+    base: "p04-data-upload-import",
+    story: { id: "pages--data-upload", actions: [] },
+    reason: "Closed default upload page cannot satisfy the Template Import dialog assertions",
+  },
   { id: "neg-p14-wrong-category", base: "p14-analysis", story: { id: "pages--personal-memory" }, reason: "All eighteen memories cannot satisfy six Analysis cards" },
   { id: "neg-p14-missing-detail", base: "p14-detail", story: { id: "pages--personal-memory" }, reason: "Empty detail cannot satisfy selected memory description" },
   { id: "neg-p14-missing-create-errors", base: "p14-create-errors", story: { id: "pages--personal-memory-create" }, reason: "Untouched create form cannot satisfy required-field errors" },

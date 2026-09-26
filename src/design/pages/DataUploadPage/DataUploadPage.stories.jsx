@@ -1,10 +1,18 @@
-import React from "react";
 import { DATA_UPLOAD, SELF_SERVICE } from "../../content.js";
-import { pageShell, useSynced } from "../../lib/story-helpers.js";
+import { useDataUploadDemo } from "../../demo/data-upload-demo.js";
+import { callbackProp, pageShell, prop } from "../../lib/story-helpers.js";
 import { DataUploadPage } from "./index.jsx";
+
+const assertState = (selector, value) => async ({ canvasElement }) => {
+  const node = canvasElement.ownerDocument.querySelector(selector);
+  if (!node || (value && !node.textContent.includes(value))) {
+    throw new Error(`Data Upload state missing: ${selector}${value ? ` containing ${value}` : ""}`);
+  }
+};
 
 export default {
   title: "Pages",
+  component: DataUploadPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
 };
@@ -24,48 +32,39 @@ export const DataUpload = {
     selectedFile: undefined,
   },
   argTypes: {
-    submitting: { control: "boolean" },
-    bulkImportOpen: { control: "boolean" },
-    onNavigate: { action: "onNavigate" },
-    onOpenImport: { action: "onOpenImport" },
-    onCloseImport: { action: "onCloseImport" },
-    onSelectFile: { action: "onSelectFile" },
-    onDownloadTemplate: { action: "onDownloadTemplate" },
-    onSubmitForm: { action: "onSubmitForm" },
+    submitting: prop("boolean", { control: "boolean", defaultValue: false, description: "Source 1500ms submit feedback; the demo hook restores false." }),
+    bulkImportOpen: prop("boolean", { control: "boolean", defaultValue: false, description: "Template Import dialog visibility." }),
+    selectedFile: prop("string | undefined", { control: "text", description: "Selected file name displayed in the dropzone." }),
+    onNavigate: callbackProp("onNavigate", "({ href: string }) => void", { href: "/assets/pages/flexible.html?tab=upload" }),
+    onOpenImport: callbackProp("onOpenImport", "({ label: string }) => void", { label: "Template Import" }),
+    onCloseImport: callbackProp("onCloseImport", "({ reason: string }) => void", { reason: "escape" }),
+    onSelectFile: callbackProp("onSelectFile", "({ name: string }) => void", { name: "city-sales.xlsx" }),
+    onDownloadTemplate: callbackProp("onDownloadTemplate", "({ href: string }) => void", { href: "#" }),
+    onSubmitForm: callbackProp("onSubmitForm", "({ values: Record<string, string> }) => void", { values: { year: "2026" } }),
   },
   render: function DataUploadStory(args) {
-    const [importOpen, setImportOpen] = useSynced(args.bulkImportOpen);
-    const [submitting, setSubmitting] = useSynced(args.submitting);
-    const [selectedFile, setSelectedFile] = useSynced(args.selectedFile);
-    const submitTimer = React.useRef(null);
-    React.useEffect(() => () => clearTimeout(submitTimer.current), []);
-    return (
-      <DataUploadPage
-        {...args}
-        bulkImportOpen={importOpen}
-        submitting={submitting}
-        selectedFile={selectedFile}
-        onNavigate={args.onNavigate}
-        onOpenImport={() => {
-          setImportOpen(true);
-          args.onOpenImport?.();
-        }}
-        onCloseImport={() => {
-          setImportOpen(false);
-          args.onCloseImport?.();
-        }}
-        onSelectFile={(file) => {
-          setSelectedFile(file.name);
-          args.onSelectFile?.(file);
-        }}
-        onDownloadTemplate={args.onDownloadTemplate}
-        onSubmitForm={(values) => {
-          clearTimeout(submitTimer.current);
-          setSubmitting(true);
-          submitTimer.current = setTimeout(() => setSubmitting(false), 1500);
-          args.onSubmitForm?.(values);
-        }}
-      />
-    );
+    const page = useDataUploadDemo(args);
+    return <DataUploadPage {...page} />;
   },
+};
+
+export const DataUploadSubmitted = {
+  ...DataUpload,
+  name: "Data Upload · Submitted",
+  args: { ...DataUpload.args, submitting: true },
+  play: assertState(".mh-upload__form .mh-button--gold:disabled", "Submitted"),
+};
+
+export const DataUploadImportOpen = {
+  ...DataUpload,
+  name: "Data Upload · Template Import open",
+  args: { ...DataUpload.args, bulkImportOpen: true },
+  play: assertState(".mh-modal .mh-dropzone", "Click or drag a file"),
+};
+
+export const DataUploadImportFileSelected = {
+  ...DataUpload,
+  name: "Data Upload · Template file selected",
+  args: { ...DataUpload.args, bulkImportOpen: true, selectedFile: "city-sales.xlsx" },
+  play: assertState(".mh-modal .mh-dropzone__hint", "Selected: city-sales.xlsx"),
 };
