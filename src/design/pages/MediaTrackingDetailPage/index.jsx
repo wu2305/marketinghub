@@ -11,6 +11,8 @@ import { Icon } from "../../icons.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./MediaTrackingDetailPage.css";
 
+export const mediaTrackingPeriods = ["daily", "weekly", "monthly", "spot"];
+
 
 /**
  * Media Tracking Detail report page (media-tracking-detail.html): back link,
@@ -19,13 +21,13 @@ import "./MediaTrackingDetailPage.css";
  * table. The assistant is the lite drawer variant (scope row, skill "+"
  * trigger, simple answer cards, "Recent Chats" popover).
  * @param {object} props
- * @param {string} [props.current] nav id for aria-current; the original media-tracking page marks no item
+ * @param {string} [props.current] nav id for aria-current; the source marks Self-Service Center active
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {{ backHref?: string, backLabel?: string }} [props.toolbar={}]
  * @param {{ eyebrow?: string, title?: string }} [props.head={}]
  * @param {Array<{ id: string, label: string }>} [props.periods=[]]
- * @param {string} [props.period="monthly"]
+ * @param {typeof mediaTrackingPeriods[number]} [props.period="monthly"]
  * @param {Array<{ name: string, label: string, required?: boolean, options?: Array<string|object>, placeholder?: string, defaultValue?: string }>} [props.filters=[]]
  * @param {Array<{ term: string, text: string }>} [props.notes=[]]
  * @param {{ title?: string, count?: string, columns?: Array<{ key: string, header: string }>, rows?: Array<object> }} [props.table={}]

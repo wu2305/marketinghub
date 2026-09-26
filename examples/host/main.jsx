@@ -34,6 +34,7 @@ import {
   ScenarioLibraryPage,
   ScenarioDetailPage,
   ScenarioEditPage,
+  MediaTrackingDetailPage,
   MetricDictionaryPage,
 } from "../../src/design/index.js";
 import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
@@ -51,6 +52,7 @@ import {
   SELF_SERVICE,
   DATA_UPLOAD,
   LITE_ASSISTANT,
+  MEDIA_TRACKING,
   buildLiteAssistantAnswer,
   buildHomeAssistantAnswer,
   buildModelDraft,
@@ -87,6 +89,7 @@ import { SKILL_RECORDS } from "../../src/design/demo/content/skill-records.js";
 import { useScenarioDetailDemo } from "../../src/design/demo/scenario-detail-demo.js";
 import { SCENARIO_EDIT, SCENARIO_EDIT_SHELL } from "../../src/design/demo/content/scenario-edit.js";
 import { useScenarioEditDemo } from "../../src/design/demo/scenario-edit-demo.js";
+import { useMediaTrackingDemo } from "../../src/design/demo/media-tracking-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -113,6 +116,7 @@ const ROUTE_MAP = {
   "/assets/pages/scenario-library.html": "scenario-library",
   "/assets/pages/scenario-detail.html": "scenario-detail",
   "/assets/pages/scenario-edit.html": "scenario-edit",
+  "/assets/pages/media-tracking-detail.html": "media-tracking-detail",
 };
 
 function mapDemoHref(href) {
@@ -172,6 +176,7 @@ function routeOf(loc) {
   if (rest === "scenario-library") return { name: "scenario-library", params };
   if (rest === "scenario-detail") return { name: "scenario-detail", params };
   if (rest === "scenario-edit") return { name: "scenario-edit", params };
+  if (rest === "media-tracking-detail") return { name: "media-tracking-detail", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -328,6 +333,20 @@ function DataUploadRoute() {
     submittingLabel: "Submitted",
   });
   return <DataUploadPage {...page} />;
+}
+
+function MediaTrackingRoute() {
+  const props = useMediaTrackingDemo({
+    ...MEDIA_TRACKING,
+    toolbar: { ...MEDIA_TRACKING.toolbar, backHref: hostHref("self-service") },
+    logo: hostLogo,
+    navigation: hostNav(),
+    current: "self-service",
+    assistant: LITE_ASSISTANT,
+    period: "monthly",
+    onNavigate: ({ href }) => navigateHost(href),
+  });
+  return <MediaTrackingDetailPage {...props} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -551,6 +570,7 @@ function App() {
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
   if (route.name === "data-upload") return <DataUploadRoute />;
+  if (route.name === "media-tracking-detail") return <MediaTrackingRoute />;
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "review-center") return <ReviewCenterRoute />;
