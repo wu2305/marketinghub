@@ -48,6 +48,7 @@ npm test               # vitest 行为测试
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
+| M7 | MetricStat 用途与治理页统计可读性 | 候选完成；待独立审核与最新 main 全套门禁 | Campaign 卡片标签保留文案大小写，Review/Feedback 复用 glass 统计；P12/P13 在390/900保留三项完整统计并让Hero随内容增高，证据见§5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -577,3 +578,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P02 独立复核补齐三种稳定可见缺口：`report-core.js:2385–2397`模型搜索无结果、`:2629–2642,2999–3007`历史消息全不选时Generate错误、`:2753–2776`手动模型三个必填错误。复用既有故事play和控件，新增三个命名页面态与源/React配对，不加组件或截图专用props；页面故事23→26，全站故事340→343。三条新场景及相邻模型流定向配对见`/tmp/mh-p02-errors-flow`与`/tmp/mh-p02-errors-search`；人工三条pending，最终门禁仍待集成。 | Codex WP6 |
 | 2026-09-26 | P02 PR #23（https://github.com/wu2305/marketinghub/pull/23）合并e7db1e6，冻结dded96e：lint0/0、25文件225测试、402stories/67docs、host26/26、visual492/492、negative38/38，证据/tmp/mh-p02-integrate-*。26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}。独立审核/tmp/mh-p02-flow-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
 | 2026-09-26 | MetricStat用途修复候选：`glass`只为图片Hero统计将标签排大写，`card`保留原始文案大小写，Campaign的“Automated actions”等不再被强制全大写；Review Center与Feedback & Quality的重复统计article改为现有MetricStat glass，保留各自key计数、标签和辅助文案，accent仍由调用方显式提供且只作用于card。无新variant/token/按位置取色。lint0、23文件221测试、294stories/62docs；定向配对Campaign5/5、P12默认/390px各1/1、P13默认/390px各1/1，路径`/tmp/mh-metric-repair-{campaign,review,feedback,review-narrow,feedback-narrow}`。人工检查默认/窄屏文字与统计可读；全页像素仍待整体第二轮。Storybook Controls验证card/glass×五accent十组：卡片原大小写、glass大写、值/辅助文案完整、显式accent颜色正常；最终全套/负向与hash绑定由集成者执行。 | Codex WP6 |
+| 2026-09-26 | MetricStat包响应式收口：独立治理页审查`/tmp/mh-governance-access-review.md`确认P12/P13原390px把三项Hero统计整组隐藏、900px每卡约67px导致信息难读；原review.css:583–625及feedback.css:540–580不隐藏统计。只在两页Hero布局CSS改≤1024上下排、≤620三卡单列并随内容增高，保留桌面与共享Hero/MetricStat接口。最新main rebase后390/900/1440两页三项标签/值/说明均在Hero和视口内、无横溢/pageerror，P12 Reject、P13负评详情三档各可操作（`/tmp/mh-metric-governance-{bounds,actions}.json`及6张截图）；P12/P13默认和390配对各1/1机器通过（`/tmp/mh-metric-governance-p12-{default,narrow}`、`p13-{default,narrow}`），人工仍pending；lint0、Storybook377stories/67docs。最终全套与人工绑定由集成者在冻结提交执行。 | Codex WP6 |
