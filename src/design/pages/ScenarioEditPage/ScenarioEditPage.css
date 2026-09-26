@@ -1,5 +1,5 @@
 .mh-scenario-edit-page{min-height:100vh;background:var(--mh-page-bg);color:var(--mh-ink-strong);font-family:var(--mh-font)}
-.mh-scenario-edit-page > .mh-hero{margin-top:calc(-1 * var(--mh-header))}
+.mh-scenario-edit-page > .mh-hero{margin-top:0}
 .mh-scenario-edit-page > .mh-hero .mh-hero__layout{width:min(1440px,calc(100% - 88px));grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:40px}
 .mh-scenario-edit-page > .mh-hero .mh-hero__aside{display:block}
 .mh-scenario-edit-page__stats{display:grid;grid-template-columns:1fr;grid-auto-rows:100px;gap:1px}
