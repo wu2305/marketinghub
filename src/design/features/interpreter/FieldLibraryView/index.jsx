@@ -549,7 +549,7 @@ export function FieldLibraryDrawer({
       <Modal
         open={Boolean(detail)}
         variant="drawer"
-        className={type === "Report Context" ? "mh-flview__drawer--rc" : undefined}
+        className={cx("mh-flview__drawer", type === "Report Context" && "mh-flview__drawer--rc")}
         eyebrow={detail?.type}
         title={detail?.detailTitle}
         closeLabel={detailCloseLabel}

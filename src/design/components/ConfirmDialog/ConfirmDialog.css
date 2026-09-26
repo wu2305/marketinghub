@@ -15,6 +15,7 @@
   border-color: var(--mh-bt-dialog-line);
   border-radius: 12px;
   color: var(--mh-bt-dialog-ink);
+  font-family: var(--mh-font);
 }
 
 .mh-confirm .mh-modal__header {

@@ -630,6 +630,12 @@ padding: 16px 20px;
 /* ── Drawer body — the RC variant re-pads to 22/24/30; the shared
    scenario-report-detail sections serve MD/AM/ER. ─────────────────────── */
 
+/* Drawer and edit dialog content render inside Modal slots, outside the view root. */
+.mh-flview__drawer,
+.mh-flview__edit {
+  font-family: var(--mh-font);
+}
+
 .mh-flview__drawer--rc .mh-modal__body {
 padding: 22px 24px 30px;
 }

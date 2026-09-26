@@ -5,6 +5,7 @@ width: min(800px, calc(100% - 64px));
   flex-direction: column;
   padding: 0;
   overflow: hidden;
+  font-family: var(--mh-font);
 }
 
 .mh-upload-history__body {

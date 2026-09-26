@@ -15,7 +15,6 @@ position: absolute;
 
 .mh-modal__dialog {
 position: relative;
-  font-family: var(--mh-font);
   width: min(600px, calc(100% - 80px));
   max-height: calc(100% - 80px);
   overflow: auto;
@@ -38,6 +37,14 @@ display: flex;
 .mh-modal__heading {
 display: grid;
   gap: 4px;
+}
+
+/* Only Modal's own chrome sets the design font: the dialog, titleline, body
+   and footer are content slots that keep the caller's typography. */
+.mh-modal__eyebrow,
+.mh-modal__title,
+.mh-modal__close {
+  font-family: var(--mh-font);
 }
 
 .mh-modal__eyebrow {
