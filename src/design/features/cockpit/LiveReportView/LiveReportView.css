@@ -10,7 +10,7 @@
 
 .mh-live-toolbar {
 position: sticky;
-  top: 72px;
+  top: var(--mh-live-toolbar-top, 0px);
   z-index: 45;
   display: flex;
   align-items: center;

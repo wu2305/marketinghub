@@ -49,6 +49,7 @@ npm test               # vitest 行为测试
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
+| M7 | LiveReportView 独立故事标题与粘性返回条 | 候选完成；待独立审核、全套 gate 与 PR | 独立使用时工具栏贴视口顶部；Cockpit 页壳按 Header 高度提供 72px 偏移，完整页面原布局不变。1440/900/390 浏览器前后证据与 P02 live 配对见 §5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -583,3 +584,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P04 PR #24（https://github.com/wu2305/marketinghub/pull/24）合并9e354ad，冻结a9391f4：lint0/0、25文件225测试、405stories/67docs、host27/27、visual492/492、negative39/39，证据/tmp/mh-p04-integrate-*。useDataUploadDemo共用故事/宿主，14字段、提交瞬态、Import与文件选择；提交载荷{values}。独立审核/tmp/mh-p04-flow-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
 | 2026-09-26 | M7 P03 命名档案候选：新增 `pages--self-service-upload`（完整上传页签）与 `pages--self-service-upload-history`（通过可见历史按钮的故事 play 打开覆盖层），沿用 `useSelfServiceDemo`，无新页面/展示 prop 或重复助手状态；页面 Autodocs 绑定 `SelfServicePage`，tab Controls 从现有 `SELF_SERVICE.tabs` 派生。两条原始侧配对动作不变，React侧改由命名故事承载；本页29/29机器通过（`/tmp/mh-p03-state-archive-pairs`），lint0、Storybook 320 stories/65 docs。两张新增状态在1440px已人工抽看：结构与内容完整，既有 Upload History 弹窗纵向间距有像素差异，人工签收仍 pending；源码/组件映射见 `/tmp/mh-p03-state-completeness.md`。全站门禁由集成者执行。 | Codex P03 |
 | 2026-09-26 | P03 PR #25（https://github.com/wu2305/marketinghub/pull/25）合并e0023e6，冻结215dfdc：lint0/0、25文件225测试、408stories/67docs、host27/27、visual493/493、negative39/39，证据/tmp/mh-p03-integrate-r2-*。18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程。独立审核/tmp/mh-p03-state-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
+| 2026-09-26 | LiveReportView P1 布局候选：独立故事没有全站 Header，却继承 `top:72px`，浏览器实测默认 4P 标题与粘性条重叠 26px；组件默认改 `top:0`，Cockpit 页壳只提供 Header 所需的 72px 上偏移。独立故事 1440/900/390 初始无重叠；完整 Cockpit 三宽默认/滚动的标题、返回条位置保持，原始页面实测对应位置不变。lint0、25文件224测试、Storybook 363 stories/67 docs，`p02-live-overview` 定向配对1/1机器通过、人工整页仍待审。证据 `/tmp/mh-live-report-isolated-{before,after}.json`、`/tmp/mh-live-report-{before,after}.json`、`/tmp/mh-live-feature-*-{before,after}.png`、`/tmp/mh-live-report-pair/`。独立组件与完整页的偏移差异由是否存在固定 Header 的布局用途决定，未增加组件变体或全局 token。 | Codex LiveReportView |
