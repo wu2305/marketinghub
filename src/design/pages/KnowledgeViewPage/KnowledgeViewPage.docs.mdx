@@ -1,0 +1,11 @@
+import { Meta, Title, Description, Canvas, ArgTypes } from "@storybook/blocks";
+import * as PageStories from "./KnowledgeViewPage.stories.jsx";
+
+<Meta of={PageStories} name="KnowledgeViewPage" />
+
+<Title>KnowledgeViewPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.KnowledgeViewBusinessTerm} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--knowledge-view-business-term" target="_top">Open this story’s Controls and Actions</a>
+
+<ArgTypes of={PageStories.KnowledgeViewBusinessTerm} />
