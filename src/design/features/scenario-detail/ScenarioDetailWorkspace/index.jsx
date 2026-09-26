@@ -1,5 +1,6 @@
 import "../../../tokens.css";
 import React from "react";
+import { Icon } from "../../../icons.jsx";
 import { ScenarioGovernance } from "../../../components/ScenarioGovernance/index.jsx";
 import { ScenarioStructure } from "../../../components/ScenarioStructure/index.jsx";
 import { ScenarioPreview } from "../../../components/ScenarioPreview/index.jsx";
@@ -13,7 +14,6 @@ function isPlainPrimaryLink(event) {
 
 const glyphs = {
   edit: <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />,
-  clock: <><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></>,
   table: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></>,
   layers: <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />,
   chart: <path d="M18 20V10M12 20V4M6 20v-6" />,
@@ -50,7 +50,7 @@ function RelatedPanel({ labels, hrefFor, onNavigate }) {
 }
 
 function AiCheckPanel({ check }) {
-  return <section className="mh-scenario-detail__ai-check" data-scenario-panel="ai-check"><div className="mh-scenario-detail__ai-head"><DetailGlyph name="layers" /><h3>{check.title}</h3><span><DetailGlyph name="clock" />{check.status}</span></div><div className="mh-scenario-detail__ai-card"><div className="mh-scenario-detail__ai-score"><span>{check.completeness}</span><strong>{check.score}</strong></div><div className="mh-scenario-detail__ai-progress"><span style={{ width: `${check.percent}%` }} /></div><div className="mh-scenario-detail__ai-fields">{check.fields.map((field) => <div className={`mh-scenario-detail__ai-field mh-scenario-detail__ai-field--${field.state}`} key={field.label}><DetailGlyph name={field.state === "filled" ? "check" : "missing"} />{field.label}</div>)}</div></div></section>;
+  return <section className="mh-scenario-detail__ai-check" data-scenario-panel="ai-check"><div className="mh-scenario-detail__ai-head"><DetailGlyph name="layers" /><h3>{check.title}</h3><span><Icon name="clock" />{check.status}</span></div><div className="mh-scenario-detail__ai-card"><div className="mh-scenario-detail__ai-score"><span>{check.completeness}</span><strong>{check.score}</strong></div><div className="mh-scenario-detail__ai-progress"><span style={{ width: `${check.percent}%` }} /></div><div className="mh-scenario-detail__ai-fields">{check.fields.map((field) => <div className={`mh-scenario-detail__ai-field mh-scenario-detail__ai-field--${field.state}`} key={field.label}><DetailGlyph name={field.state === "filled" ? "check" : "missing"} />{field.label}</div>)}</div></div></section>;
 }
 
 function UsagePanel({ usage }) {
