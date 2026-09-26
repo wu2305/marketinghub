@@ -40,7 +40,7 @@ display: flex;
   border: 1px solid #d9bd91;
   border-radius: 14px;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(116, 78, 31, 0.08);
+  box-shadow: var(--mh-shadow-search-warm);
 }
 
 .mh-search--plain .mh-search__icon {
@@ -68,7 +68,7 @@ display: flex;
   border: 1px solid var(--mh-bt-search-line);
   border-radius: 14px;
   background: var(--mh-surface);
-  box-shadow: var(--mh-bt-search-shadow);
+  box-shadow: var(--mh-shadow-search-warm);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 

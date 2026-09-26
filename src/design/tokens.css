@@ -62,6 +62,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
 :root {
   --mh-font: "DIN 2014", Arial, sans-serif;
   --mh-display: "BentonModDisplay", Georgia, serif;
+  --mh-radius-control: 4px;
   --mh-bg: #f4f6f8;
   --mh-bg-soft: #f7f9fa;
   --mh-surface: #ffffff;
@@ -104,7 +105,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-ink-copy-dark: #3e464e;
   --mh-ink-copy-slate: #6b7682;
   --mh-ink-icon-muted: #77828d;
-  --mh-surface-control-soft: #f1f3f4;
   --mh-ink-control-muted: #a2a9b0;
   --mh-ink-table-caption: #596570;
   --mh-ink-neutral-mid: #8c8c8c;
@@ -431,7 +431,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-search-line: #d9bd91;
   --mh-bt-search-focus: #b98234;
   --mh-bt-search-icon: #6f665d;
-  --mh-bt-search-shadow: 0 8px 24px rgba(116, 78, 31, 0.08);
+  --mh-shadow-search-warm: 0 8px 24px rgba(116, 78, 31, 0.08);
   --mh-bt-countline: #6f6961;
   --mh-bt-empty: #78838d;
   --mh-bt-draft-bg: #f6ede0;
