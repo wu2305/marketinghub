@@ -2,6 +2,7 @@ import "../../tokens.css";
 import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
+import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
@@ -46,7 +47,7 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
   return <div className="mh-review-page" data-review-tab={tab} data-review-panel={panel || "none"}>
     <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={image} eyebrow={content.hero.eyebrow} title={content.hero.title} description={content.hero.description} height={372} variant="home" scrim="none" asideLabel={labels.summaryAria}>
-      <div className="mh-review-page__stats">{content.hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
+      <div className="mh-review-page__stats">{content.hero.stats.map((stat) => <MetricStat key={stat.key} label={stat.label} value={counts[stat.key] ?? 0} caption={stat.caption} variant="glass" />)}</div>
     </Hero>
     <div className="mh-review-page__body">
       <GovernanceNav items={content.sidebar} current="review-center" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />

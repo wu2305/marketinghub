@@ -23,7 +23,7 @@ export default {
     label: prop("string", { description: "Small label above the value." }),
     value: prop("React.ReactNode", { description: "The metric figure.", control: "text" }),
     caption: prop("string", { description: "Supporting line under the value." }),
-    variant: enumProp(metricStatVariants, "card", '"glass" sits on hero imagery.', "inline-radio"),
+    variant: enumProp(metricStatVariants, "card", '"glass" sits on hero imagery and displays uppercase labels; "card" preserves the supplied case.', "inline-radio"),
     accent: enumProp(metricStatAccents, "gold", "Accent color — only applies to the card variant."),
     compact: prop("boolean", { defaultValue: false, description: "Reduced padding variant." }),
   },
