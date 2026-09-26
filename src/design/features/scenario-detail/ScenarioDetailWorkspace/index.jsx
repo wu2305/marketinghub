@@ -70,7 +70,7 @@ function UsagePanel({ usage }) {
 }
 
 function VersionPanel({ version }) {
-  return <section className="mh-scenario-detail__version" data-scenario-panel="version"><h3>{version.title}</h3><div>{version.items.map((item, index) => <div className={`mh-scenario-detail__version-row ${index === 0 ? "is-current" : ""}`} key={item.version}><span className="mh-scenario-detail__version-number">{item.version}</span><div><strong>{item.title}</strong><small>{item.meta}</small></div><span className="mh-scenario-detail__version-badge">{item.status}</span></div>)}</div></section>;
+  return <section className="mh-scenario-detail__version" data-scenario-panel="version"><h3>{version.title}</h3><div>{version.items.map((item) => <div className={`mh-scenario-detail__version-row ${item.current ? "is-current" : ""}`} key={item.version}><span className="mh-scenario-detail__version-number">{item.version}</span><div><strong>{item.title}</strong><small>{item.meta}</small></div><span className="mh-scenario-detail__version-badge">{item.status}</span></div>)}</div></section>;
 }
 
 function ActivityPanel({ items }) {

@@ -95,7 +95,7 @@ export const SCENARIO_DETAIL = {
     version: {
       title: "Version History",
       items: [
-        { version: "v1.3", title: "Added anomaly detection step", meta: "Updated 2026-07-11 by Marketing Analytics", status: "Published" },
+        { version: "v1.3", title: "Added anomaly detection step", meta: "Updated 2026-07-11 by Marketing Analytics", status: "Published", current: true },
         { version: "v1.2", title: "Expanded city coverage to 15 cities", meta: "Updated 2026-06-28 by Marketing Analytics", status: "Published" },
         { version: "v1.1", title: "Added boundary conditions", meta: "Updated 2026-06-15 by Marketing Analytics", status: "Published" },
         { version: "v1.0", title: "Initial scenario creation", meta: "Created 2026-06-01 by Marketing Analytics", status: "Published" },
