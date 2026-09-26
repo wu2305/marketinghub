@@ -312,15 +312,10 @@ export default [
     },
   },
   {
-    /* The confirm dialog itself (mid-flow state) — warning icon, "Confirm
-       Operation" title, Cancel + Confirm Offline. */
+    /* The confirm dialog itself (mid-flow state). Its shared purpose-based
+       surface intentionally differs from the source's compact icon layout;
+       check the complete message and visible actions, not source geometry. */
     id: "p07-business-term-dialog",
-    layout: [
-      { orig: ".knowledge-confirm-dialog", story: ".mh-confirm--confirm", props: ["width", "height"], tol: 8 },
-      { orig: ".knowledge-confirm-icon", story: ".mh-confirm--confirm .mh-modal__eyebrow", props: ["width", "height"], tol: 8 },
-      { orig: ".knowledge-confirm-dialog h3", story: ".mh-confirm--confirm .mh-modal__title", props: ["x", "y"], tol: 8 },
-      { orig: ".knowledge-confirm-dialog footer", story: ".mh-confirm--confirm .mh-confirm__foot", props: ["height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
       actions: [
@@ -340,6 +335,7 @@ export default [
       actions: [
         { click: ".mh-btview__card:has-text('GMV') [aria-label^='Disable']" },
         { wait: ".mh-confirm--confirm" },
+        { eval: "(() => { const d = document.querySelector('.mh-confirm--confirm'); const r = d.getBoundingClientRect(); if (r.left < 0 || r.right > innerWidth || r.top < 0 || r.bottom > innerHeight || d.scrollHeight > d.clientHeight + 1) throw new Error('confirm surface clipped'); for (const sel of ['.mh-modal__title', '.mh-confirm__message', '.mh-confirm__foot button:first-child', '.mh-confirm__foot button:last-child']) { const el = d.querySelector(sel); const b = el.getBoundingClientRect(); if (b.left < r.left || b.right > r.right || b.top < r.top || b.bottom > r.bottom) throw new Error(sel + ' clipped'); } })()" },
       ],
       expect: [
         { sel: ".mh-confirm--confirm .mh-modal__title", text: "Confirm Operation" },

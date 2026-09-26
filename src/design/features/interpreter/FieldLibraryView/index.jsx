@@ -578,7 +578,7 @@ export function FieldLibraryDrawer({
       </Modal>
       <ConfirmDialog
         open={Boolean(dialog)}
-        tone={dialog?.tone}
+        purpose={dialog?.purpose}
         title={dialog?.title}
         message={dialog?.message}
         confirmLabel={dialog?.confirmLabel}

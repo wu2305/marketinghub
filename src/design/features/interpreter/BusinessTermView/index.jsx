@@ -84,7 +84,7 @@ function SynonymClamp({ tags = [], moreLabel = "More synonyms" }) {
  * @param {string} [props.createHref] "Add Business Term" link target (M5 create page)
  * @param {React.Ref} [props.searchRef] forwarded to the search input ("/" and Cmd/Ctrl+K shortcuts)
  * @param {object|null} [props.detail] record shown in the detail drawer (null = closed)
- * @param {object|null} [props.dialog] ConfirmDialog props content ({ tone, title, message, confirmLabel, cancelLabel, closeLabel }); null = closed
+ * @param {object|null} [props.dialog] ConfirmDialog props content ({ purpose, title, message, confirmLabel, cancelLabel, closeLabel }); null = closed
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(event: { id: string, value: string, checked: boolean }) => void} [props.onFilterToggle]
  * @param {(event: { page: number }) => void} [props.onPage]
@@ -281,7 +281,7 @@ export function BusinessTermView({
       </Modal>
       <ConfirmDialog
         open={Boolean(dialog)}
-        tone={dialog?.tone}
+        purpose={dialog?.purpose}
         title={dialog?.title}
         message={dialog?.message}
         confirmLabel={dialog?.confirmLabel}

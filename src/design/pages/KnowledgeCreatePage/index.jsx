@@ -82,9 +82,9 @@ export function KnowledgeCreatePage({
           </>}
       </section>
     </main>
-    <ConfirmDialog open={Boolean(result)} tone="info" title={resultTitle} message={resultText} closeLabel={labels.back} onCancel={onResultClose} />
-    <ConfirmDialog open={dialog === "confirm"} title={labels.confirmTitle} message={labels.confirmText} cancelLabel={labels.cancel} confirmLabel={labels.submit} onCancel={onDialogClose} onConfirm={() => { onDialogClose?.(); onSubmit?.(); }} />
-    <ConfirmDialog open={["test", "smart", "preview"].includes(dialog)} tone="info" title={dialog === "test" ? values.metricFormula ? labels.testSuccessTitle : labels.testEmptyTitle : dialog === "smart" ? labels.smartTitle : labels.previewTitle} message={dialog === "test" ? values.metricFormula ? labels.testSuccess : labels.testEmpty : dialog === "smart" ? labels.smartText : labels.previewText} closeLabel={labels.back} onCancel={onDialogClose} />
+    <ConfirmDialog open={Boolean(result)} purpose="info" title={resultTitle} message={resultText} closeLabel={labels.back} onCancel={onResultClose} />
+    <ConfirmDialog open={dialog === "confirm"} purpose="confirm" title={labels.confirmTitle} message={labels.confirmText} cancelLabel={labels.cancel} confirmLabel={labels.submit} onCancel={onDialogClose} onConfirm={() => { onDialogClose?.(); onSubmit?.(); }} />
+    <ConfirmDialog open={["test", "smart", "preview"].includes(dialog)} purpose="info" title={dialog === "test" ? values.metricFormula ? labels.testSuccessTitle : labels.testEmptyTitle : dialog === "smart" ? labels.smartTitle : labels.previewTitle} message={dialog === "test" ? values.metricFormula ? labels.testSuccess : labels.testEmpty : dialog === "smart" ? labels.smartText : labels.previewText} closeLabel={labels.back} onCancel={onDialogClose} />
     <Modal open={dialog === "history"} title={labels.historyTitle} className="mh-kcreate__history" closeLabel={labels.close} onClose={onDialogClose}><p><b>{labels.currentVersion}</b> · {content.reportHistory.author} · {values.updatedAt}</p><p>{values.originalDescription}</p><p><b>{labels.previousVersion}</b> · {content.reportHistory.priorAuthor} · {content.reportHistory.priorDate}</p><p>{content.reportHistory.priorDescription}</p></Modal>
   </div>;
 }

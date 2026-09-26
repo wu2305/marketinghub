@@ -75,7 +75,7 @@ export function useBusinessTermDemo(props) {
   const [detailId, setDetailId] = useSynced(props.detail ?? null);
   const management = useKnowledgeDialog({
     buildDialog: (kind) => ({
-      tone: "confirm",
+      purpose: kind === "delete-confirm" ? "danger" : "confirm",
       title: dialogCopy.confirmTitle || "Confirm Operation",
       message: kind === "delete-confirm" ? dialogCopy.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogCopy.offlineMessage || "Please confirm whether to offline this knowledge.",
       confirmLabel: kind === "delete-confirm" ? dialogCopy.deleteConfirm || "Confirm Delete" : dialogCopy.offlineConfirm || "Confirm Offline",
@@ -112,7 +112,7 @@ export function useBusinessTermDemo(props) {
   const currentPage = Math.min(Math.max(1, page), totalPages);
   const detail = detailId ? list.find((record) => record.id === detailId) || null : null;
 
-  const infoDialog = (title, message) => setInfo({ tone: "info", title, message, closeLabel: dialogCopy.closeLabel || "Close" });
+  const infoDialog = (title, message) => setInfo({ purpose: "info", title, message, closeLabel: dialogCopy.closeLabel || "Close" });
   const act = ({ action, id }) => {
     const record = list.find((item) => item.id === id);
     if (!record) return;

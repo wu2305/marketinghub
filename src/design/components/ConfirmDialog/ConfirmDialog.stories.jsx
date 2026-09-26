@@ -1,4 +1,4 @@
-import { ConfirmDialog, confirmDialogTones } from "./index.jsx";
+import { ConfirmDialog, confirmDialogPurposes } from "./index.jsx";
 import { callbackProp, enumProp, prop } from "../../lib/story-helpers.js";
 
 export default {
@@ -9,13 +9,13 @@ export default {
     docs: {
       description: {
         component:
-          "Small confirm/info dialog shared by the knowledge libraries (business-term-library.js / field-library.js / scenario-reports.js all build the same `.fm-dialog`). “confirm” shows a warning icon + Cancel + a primary confirm button; “info” shows title + message + a single Close button. Built on Modal for overlay/focus/Escape lifecycle.",
+          "Purpose-based confirmation and notice dialog. Confirm is neutral, info has one dismissal action, warning emphasizes risk, and danger emphasizes deletion. Modal supplies overlay/focus/Escape behavior.",
       },
     },
   },
   args: {
     open: true,
-    tone: "confirm",
+    purpose: "confirm",
     title: "Confirm Operation",
     message: "Please confirm whether to offline this knowledge.",
     confirmLabel: "Confirm Offline",
@@ -24,12 +24,12 @@ export default {
   },
   argTypes: {
     open: prop("boolean", { defaultValue: false, description: "Whether the dialog is visible." }),
-    tone: enumProp(confirmDialogTones, "confirm", "confirm = warning icon + Cancel/confirm buttons; info = title + message + single close button."),
+    purpose: enumProp(confirmDialogPurposes, "confirm", "Action purpose: neutral confirm, informational notice, risk warning, or destructive action."),
     title: prop("string", { description: "Dialog title." }),
     message: prop("string", { description: "Body copy." }),
-    confirmLabel: prop("string", { defaultValue: "Confirm", description: "Primary action label (confirm tone)." }),
-    cancelLabel: prop("string", { defaultValue: "Cancel", description: "Cancel button label (confirm tone)." }),
-    closeLabel: prop("string", { defaultValue: "Close", description: "Single dismiss button label (info tone)." }),
+    confirmLabel: prop("string", { defaultValue: "Confirm", description: "Primary action label for confirmations." }),
+    cancelLabel: prop("string", { defaultValue: "Cancel", description: "Secondary action label for confirmations." }),
+    closeLabel: prop("string", { defaultValue: "Close", description: "Single dismiss button label for notices." }),
     onConfirm: callbackProp("onConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, "Fired by the primary confirm button."),
     onCancel: callbackProp("onCancel", "(event: { reason: string }) => void", { reason: "cancel" }, "Fired on any dismissal — Cancel, Close, scrim or Escape."),
   },
@@ -42,7 +42,7 @@ export const Confirm = {};
 
 export const Info = {
   args: {
-    tone: "info",
+    purpose: "info",
     title: "Permission denied",
     message: "You do not have permission to edit knowledge created by another user.",
   },

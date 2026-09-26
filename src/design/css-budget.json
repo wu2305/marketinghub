@@ -193,14 +193,8 @@
     "--mh-bt-dialog-line",
     "--mh-bt-dialog-ink",
     "--mh-bt-dialog-scrim",
-    "--mh-bt-confirm-scrim",
-    "--mh-bt-confirm-icon-bg",
-    "--mh-bt-confirm-icon",
-    "--mh-bt-confirm-title",
     "--mh-bt-confirm-copy",
     "--mh-bt-confirm-btn-line",
-    "--mh-bt-confirm-btn-ink",
-    "--mh-bt-confirm-primary",
     "--mh-bt-pag-ink"
   ]
 }

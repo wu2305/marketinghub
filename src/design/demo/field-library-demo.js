@@ -294,14 +294,14 @@ export function useFieldLibraryDemo(props) {
     blockReferenced: true,
     buildDialog: (kind, record) => {
       if (kind === "delete-blocked") return {
-        tone: "info",
+        purpose: "info",
         title: dialogs.deleteBlockedTitle || "Deletion blocked",
         message: dialogs.deleteBlocked?.(record.references || []) ||
           `This analysis is referenced by: ${(record.references || []).join(", ")}. Remove these references before deleting.`,
         closeLabel: dialogs.closeLabel || "Close",
       };
       return {
-        tone: "confirm",
+        purpose: kind === "delete-confirm" ? "danger" : "confirm",
         title: dialogs.confirmTitle || "Confirm Operation",
         message: kind === "delete-confirm" ? dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
         confirmLabel: kind === "delete-confirm" ? dialogs.deleteConfirm || "Confirm Delete" : dialogs.offlineConfirm || "Confirm Offline",

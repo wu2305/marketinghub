@@ -129,6 +129,7 @@ describe("useScenarioDemo + ScenarioReportsView", () => {
     render(<Harness records={[own]} />);
     fireEvent.click(screen.getByRole("button", { name: "Delete My Disabled Scenario" }));
     expect(screen.getByText("Confirm Operation")).toBeTruthy();
+    expect(screen.getByRole("dialog").classList.contains("mh-confirm--danger")).toBe(true);
     fireEvent.click(screen.getByRole("button", { name: "Confirm Delete" }));
     expect(cardTitles()).toEqual([]);
   });
