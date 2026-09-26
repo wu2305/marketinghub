@@ -7,6 +7,45 @@ export const knowledgeActionIconPaths = {
   disable: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18 M6 6l12 12",
 };
 
+/**
+ * @type {readonly [
+ *   "search",
+ *   "plus",
+ *   "home",
+ *   "history",
+ *   "expand",
+ *   "spark",
+ *   "layers",
+ *   "thumb-up",
+ *   "thumb-down",
+ *   "file",
+ *   "eye",
+ *   "download",
+ *   "upload",
+ *   "file-upload",
+ *   "chevron-down",
+ *   "arrow-left",
+ *   "copy",
+ *   "chat",
+ *   "pen",
+ *   "pin",
+ *   "spokes",
+ *   "cart",
+ *   "tag",
+ *   "chart",
+ *   "store",
+ *   "trend",
+ *   "bulb",
+ *   "book-open",
+ *   "check-circle",
+ *   "grid-four",
+ *   "star-outline",
+ *   "more-vertical",
+ *   "share",
+ *   "info",
+ *   "close"
+ * ]}
+ */
 export const iconNames = [
   "search",
   "plus",

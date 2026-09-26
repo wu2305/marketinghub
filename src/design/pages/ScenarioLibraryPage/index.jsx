@@ -12,6 +12,7 @@ import { SkillDetail } from "../../features/scenario-library/SkillDetail/index.j
 import { SkillInlineForm } from "../../features/scenario-library/SkillInlineForm/index.jsx";
 import "./ScenarioLibraryPage.css";
 
+/** @type {readonly ["list", "create", "edit"]} */
 export const skillLibraryModes = ["list", "create", "edit"];
 
 /**

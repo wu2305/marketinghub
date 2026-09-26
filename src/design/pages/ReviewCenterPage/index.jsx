@@ -12,9 +12,23 @@ import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { ReviewQueue } from "../../features/review-center/ReviewQueue/index.jsx";
 import "./ReviewCenterPage.css";
 
+/** @type {readonly ["pending", "approved"]} */
 export const reviewTabs = ["pending", "approved"];
+/**
+ * @type {readonly [
+ *   "all",
+ *   "Principles",
+ *   "Report Context",
+ *   "Data Model",
+ *   "Metric Dictionary",
+ *   "Business Term",
+ *   "Analytical Model"
+ * ]}
+ */
 export const reviewTypes = ["all", "Principles", "Report Context", "Data Model", "Metric Dictionary", "Business Term", "Analytical Model"];
+/** @type {readonly ["all", "today", "week", "month"]} */
 export const reviewTimes = ["all", "today", "week", "month"];
+/** @type {readonly ["none", "detail", "reject", "risk"]} */
 export const reviewPanels = ["none", "detail", "reject", "risk"];
 
 /**

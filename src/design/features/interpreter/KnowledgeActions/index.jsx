@@ -2,6 +2,8 @@ import { Icon, knowledgeActionIconPaths } from "../../../icons.jsx";
 import { cx } from "../../../cx.js";
 import "./KnowledgeActions.css";
 
+/** @type {readonly ["business-term", "field-library", "scenario"]} */
+export const knowledgeActionVariants = ["business-term", "field-library", "scenario"];
 /**
  * P07 knowledge management icon row. Source-specific disabled semantics are
  * retained: Business Term uses aria-disabled so its permission/info notice
@@ -9,10 +11,9 @@ import "./KnowledgeActions.css";
  * @param {object} props
  * @param {Array<{action: string, disabled: boolean, title: string, label: string}>} props.actions
  * @param {object} props.record
- * @param {"business-term"|"field-library"|"scenario"} props.variant
+ * @param {typeof knowledgeActionVariants[number]} props.variant
  * @param {(event: {action: string, id: string, record: object}) => void} props.onAction
  */
-export const knowledgeActionVariants = ["business-term", "field-library", "scenario"];
 export function KnowledgeActions({ actions = [], record, variant = "field-library", onAction }) {
   return (
     <div className={cx("mh-knowledge-actions", `mh-knowledge-actions--${variant}`)}>

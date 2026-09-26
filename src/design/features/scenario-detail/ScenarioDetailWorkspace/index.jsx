@@ -6,6 +6,7 @@ import { ScenarioStructure } from "../../../components/ScenarioStructure/index.j
 import { ScenarioPreview } from "../../../components/ScenarioPreview/index.jsx";
 import "./ScenarioDetailWorkspace.css";
 
+/** @type {readonly ["content", "related", "ai-check", "usage", "version", "activity"]} */
 export const scenarioDetailTabs = ["content", "related", "ai-check", "usage", "version", "activity"];
 
 function isPlainPrimaryLink(event) {

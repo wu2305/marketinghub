@@ -15,7 +15,7 @@ import "./Select.css";
  * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
- * @param {typeof SIZES[number]} [props.size="md"]
+ * @param {"sm"|"md"|"lg"} [props.size="md"]
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
  */

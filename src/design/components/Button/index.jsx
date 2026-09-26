@@ -4,8 +4,11 @@ import { Icon } from "../../icons.jsx";
 import "./Button.css";
 
 
+/** @type {readonly ["primary", "gold", "secondary", "quiet", "danger"]} */
 const BUTTON_VARIANTS = ["primary", "gold", "secondary", "quiet", "danger"];
+/** @type {readonly ["sm", "md", "lg"]} */
 const SIZES = ["sm", "md", "lg"];
+/** @type {readonly ["button", "submit"]} */
 const BUTTON_TYPES = ["button", "submit"];
 
 /**
@@ -15,7 +18,7 @@ const BUTTON_TYPES = ["button", "submit"];
  * @param {typeof SIZES[number]} [props.size="md"]
  * @param {boolean} [props.disabled=false]
  * @param {typeof BUTTON_TYPES[number]} [props.type="button"]
- * @param {string} [props.icon] icon name from icons.jsx
+ * @param {typeof import("../../icons.jsx").iconNames[number]} [props.icon] icon name from icons.jsx
  * @param {React.ReactNode} props.children
  * @param {string} [props.label] aria-label override when the visible text isn't the right accessible name
  * @param {(event: { label: string }) => void} [props.onClick] `label` is the label prop, or the trimmed visible text

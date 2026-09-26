@@ -2,6 +2,7 @@ import "../../tokens.css";
 import "./Pagination.css";
 
 
+/** @type {readonly ["numbered", "compact"]} */
 export const paginationVariants = ["numbered", "compact"];
 
 /**

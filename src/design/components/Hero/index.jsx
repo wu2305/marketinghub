@@ -3,7 +3,9 @@ import React from "react";
 import { cx } from "../../cx.js";
 import "./Hero.css";
 
+/** @type {readonly ["banner", "home", "knowledge"]} */
 export const heroVariants = ["banner", "home", "knowledge"];
+/** @type {readonly ["banner", "home", "knowledge", "none"]} */
 export const heroScrims = ["banner", "home", "knowledge", "none"];
 
 /**

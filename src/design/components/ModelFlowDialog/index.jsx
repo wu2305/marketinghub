@@ -5,6 +5,7 @@ import { useOverlayLayer } from "../../lib/overlay.js";
 import "./ModelFlowDialog.css";
 
 
+/** @type {readonly ["history", "generated", "manual"]} */
 export const modelFlowSteps = ["history", "generated", "manual"];
 
 const MODEL_FLOW_LABELS = {

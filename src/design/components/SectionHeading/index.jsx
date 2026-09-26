@@ -2,7 +2,9 @@ import "../../tokens.css";
 import { cx } from "../../cx.js";
 import "./SectionHeading.css";
 
+/** @type {readonly ["h1", "h2", "h3"]} */
 export const headingLevels = ["h1", "h2", "h3"];
+/** @type {readonly ["home", "view"]} */
 export const sectionHeadingVariants = ["home", "view"];
 
 /**

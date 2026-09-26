@@ -3,6 +3,7 @@ import React from "react";
 import { Icon } from "../../../icons.jsx";
 import "./SkillLibrary.css";
 
+/** @type {readonly ["all", "Draft", "Under Review", "In Development", "Published"]} */
 export const skillStatuses = ["all", "Draft", "Under Review", "In Development", "Published"];
 
 /**

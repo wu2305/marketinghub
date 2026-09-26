@@ -12,7 +12,9 @@ import { FeedbackList } from "../../features/feedback-quality/FeedbackList/index
 import { Icon } from "../../icons.jsx";
 import "./FeedbackQualityPage.css";
 
+/** @type {readonly ["all", "thumbs-up", "thumbs-down"]} */
 export const feedbackFilterTypes = ["all", "thumbs-up", "thumbs-down"];
+/** @type {readonly ["all", "today", "week", "month"]} */
 export const feedbackFilterTimes = ["all", "today", "week", "month"];
 
 /**

@@ -4,6 +4,7 @@ import { cx } from "../../cx.js";
 import { useOverlayLayer } from "../../lib/overlay.js";
 import "./Modal.css";
 
+/** @type {readonly ["modal", "sheet", "drawer"]} */
 export const modalVariants = ["modal", "sheet", "drawer"];
 
 

@@ -3,8 +3,11 @@ import { cx } from "../../cx.js";
 import "./StatusBadge.css";
 
 
+/** @type {readonly ["default", "knowledge", "detail"]} */
 export const statusBadgeVariants = ["default", "knowledge", "detail"];
+/** @type {readonly ["sm", "lg"]} */
 export const statusBadgeSizes = ["sm", "lg"];
+/** @type {readonly ["auto", "neutral", "success", "info", "warning", "danger"]} */
 export const statusBadgeTones = ["auto", "neutral", "success", "info", "warning", "danger"];
 
 const toneForStatus = {
