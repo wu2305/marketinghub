@@ -35,13 +35,15 @@ rows it depends on are merged, except where the "parallel with" column allows it
 | 5 | Extend `Button` (href) and `DataTable` (open, empty, narrow) | 3b–3d | 3a | |
 | 6 | Pattern components | — | 3d, 4, 5 | |
 | 7a | Migrate Business Terms — **pilot, cards layout** | — | 6 | **yes** |
-| 7b | Migrate Analytical Models, Metric Dictionary, Email Reports — **pilot, table layout** | — | 7a reviewed | **yes** |
-| 7c–7k | Migrate the remaining views (table below), in order | — | 7b reviewed | |
+| 7f | Migrate Review Center — **pilot, table layout** | 7b–7e, 7g, 7i | 7a reviewed | **yes** |
+| 7b–7k (other) | Migrate the remaining views (table below); 7b–7e in order (shared interpreter files); 7g, 7i may run beside them | as stated | 7a reviewed; 7h after 7f reviewed | |
 | 8 | Close out: delete unused tokens, tighten budgets, update AGENTS §2.4 | — | 7k | |
 
 **Review stop** means: after that PR is opened, stop. A reviewer (the user or a stronger model) checks it
 with §7, including the pilot-only items. The next package starts only after the reviewer says so. The
-pilots exist to prove the pattern API on one card view and one table view before it is copied.
+pilots (7a cards, 7f table) prove the pattern API on one card view and one table view before it is
+copied. Correction 2026-09-27: 7b is a card view (the original's field-library table is dead code), so the
+table pilot is 7f.
 
 "Merged" means merged to `main` by the user. You never merge.
 
@@ -233,11 +235,11 @@ table specifies.
 | sub | view(s) | files replaced | seeds |
 |---|---|---|---|
 | 7a | Business Terms (**pilot: cards**) | `features/interpreter/BusinessTermView` | D03 D04 D05 D06 D07 D17 |
-| 7b | Analytical Models, Metric Dictionary, Email Reports (**pilot: table**) | table half of `features/interpreter/FieldLibraryView` | D03 D04 D05 D06 D08 |
-| 7c | Report Context; delete `FieldLibraryView` when empty | card half of `FieldLibraryView` | D06 D08 |
+| 7b | Analytical Models, Metric Dictionary, Email Reports | card views of `features/interpreter/FieldLibraryView` except Report Context | D03 D04 D05 D06 D08 |
+| 7c | Report Context; delete `FieldLibraryView` when empty | Report Context cards of `FieldLibraryView` | D06 D08 |
 | 7d | Scenario Reports; delete `KnowledgeActions` (last consumer) | `features/interpreter/ScenarioReportsView` | D03 D04 D05 D06 D16 |
 | 7e | Principles + Data Model domain cards (browser untouched) | `features/interpreter/PrinciplesView`, domain cards in `DataModelView` | D17 |
-| 7f | Review Center | `features/review-center/ReviewQueue`, list parts of `pages/ReviewCenterPage` | D01 D02, B14, A5 |
+| 7f | Review Center (**pilot: table**) | `features/review-center/ReviewQueue`, list parts of `pages/ReviewCenterPage` | D01 D02, B14, A5 |
 | 7g | Feedback & Quality | `features/feedback-quality/FeedbackList`, list parts of `pages/FeedbackQualityPage` | — |
 | 7h | Skill Library list + Skill Detail drawer | `features/scenario-library/{SkillLibrary,SkillDetail}` | D09 D10 |
 | 7i | Personal Memory list column, delete confirm, toast; create form auto-fill | list column of `features/personal-memory/MemoryWorkspace` | D12 |
@@ -445,7 +447,7 @@ For the person or stronger model reviewing each PR.
 - [ ] Screenshots: recognisably the original, uses the foundation, nothing broken at 390 px; record the
       verdict with `node scripts/visual-check.mjs --review <out> <scenarioId> pass|fail "note"`
 - [ ] Concept counts went down, or the PR explains why not
-- [ ] **Pilots (7a, 7b) only**: the pattern components serve this view without view-specific props or
+- [ ] **Pilots (7a cards, 7f table) only**: the pattern components serve this view without view-specific props or
       workarounds, and nothing in the remaining packages (7c–7k and pattern §5) would need a new prop. If
       that fails, the pattern components are fixed in a separate PR before the next package starts.
 
