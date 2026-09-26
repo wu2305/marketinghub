@@ -80,10 +80,10 @@ position: relative;
   height: 250px;
   gap: 18px;
   padding: 12px 18px 26px 38px;
-  border-left: 1px solid var(--mh-live-line);
-  border-bottom: 1px solid var(--mh-live-line);
+  border-left: 1px solid var(--mh-line-neutral-soft);
+  border-bottom: 1px solid var(--mh-line-neutral-soft);
   background: var(--mh-live-chart-bg);
-  color: var(--mh-live-back-hover);
+  color: var(--mh-ink-ai-strong);
 }
 
 .mh-live-chart::before,
@@ -130,7 +130,7 @@ background: var(--mh-live-bar-alt);
 .mh-live-chart__group span {
 position: absolute;
   bottom: -19px;
-  color: var(--mh-live-faint);
+  color: var(--mh-ink-faint-warm);
   font-size: 9px;
 }
 
@@ -147,7 +147,7 @@ display: grid;
 }
 
 .mh-live-rank > span:first-child {
-color: var(--mh-live-faint);
+color: var(--mh-ink-faint-warm);
   font-size: 10px;
 }
 

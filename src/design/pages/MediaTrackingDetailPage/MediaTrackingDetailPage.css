@@ -49,7 +49,7 @@ margin-bottom: 20px;
 .mh-tracking__eyebrow {
 display: inline-block;
   margin-bottom: 8px;
-  color: var(--mh-eyebrow);
+  color: var(--mh-ink-accent-warm);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;

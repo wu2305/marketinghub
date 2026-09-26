@@ -394,7 +394,7 @@
 
 .mh-srview__section p {
   margin: 0;
-  color: var(--mh-bt-section-copy);
+  color: var(--mh-ink-secondary-muted);
   font-size: 13px;
   line-height: 1.7;
   overflow-wrap: anywhere;

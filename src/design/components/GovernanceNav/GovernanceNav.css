@@ -1,6 +1,6 @@
 .mh-governance-nav{position:sticky;top:80px;align-self:start;border-right:1px solid var(--mh-line-graph-panel);background:var(--mh-surface)}
 .mh-governance-nav nav{display:grid;gap:2px}
-.mh-governance-nav a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;color:var(--mh-ai-chip-copy);text-decoration:none;font-size:13px;font-weight:600;transition:background 160ms ease,color 160ms ease}
+.mh-governance-nav a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;color:var(--mh-ink-secondary-muted);text-decoration:none;font-size:13px;font-weight:600;transition:background 160ms ease,color 160ms ease}
 .mh-governance-nav a svg{width:18px;height:18px;flex:none}
 .mh-governance-nav a:hover{background:var(--mh-line-faintest);color:var(--mh-ink-field)}
 .mh-governance-nav a[aria-current=page]{background:var(--mh-index-bg);color:var(--mh-gold-text)}

@@ -30,6 +30,7 @@ import {
   ReviewCenterPage,
   FeedbackQualityPage,
   PersonalMemoryPage,
+  ScenarioLibraryPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -77,6 +78,8 @@ import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../src/design/demo/con
 import { useFeedbackQualityDemo } from "../../src/design/demo/feedback-quality-demo.js";
 import { PERSONAL_MEMORY, PERSONAL_MEMORY_SHELL } from "../../src/design/demo/content/personal-memory.js";
 import { usePersonalMemoryDemo } from "../../src/design/demo/personal-memory-demo.js";
+import { SKILL_LIBRARY, SKILL_LIBRARY_SHELL } from "../../src/design/demo/content/skill-library.js";
+import { useSkillLibraryDemo } from "../../src/design/demo/skill-library-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -99,6 +102,7 @@ const ROUTE_MAP = {
   "/assets/pages/review-center.html": "review-center",
   "/assets/pages/feedback-quality.html": "feedback-quality",
   "/assets/pages/personal-memory.html": "personal-memory",
+  "/assets/pages/scenario-library.html": "scenario-library",
 };
 
 function mapDemoHref(href) {
@@ -154,6 +158,7 @@ function routeOf(loc) {
   if (rest === "review-center") return { name: "review-center", params };
   if (rest === "feedback-quality") return { name: "feedback-quality", params };
   if (rest === "personal-memory") return { name: "personal-memory", params };
+  if (rest === "scenario-library") return { name: "scenario-library", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -414,6 +419,16 @@ function PersonalMemoryRoute() {
   return <PersonalMemoryPage {...props} logo={hostLogo} navigation={hostNav()} hrefFor={hrefFor} />;
 }
 
+function ScenarioLibraryRoute() {
+  const hrefFor = (id, params = {}) => {
+    const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": hostHref("scenario-library"), "feedback-quality": hostHref("feedback-quality") })[id];
+    const query = new URLSearchParams(params).toString();
+    return path && query ? `${path}?${query}` : path;
+  };
+  const page = useSkillLibraryDemo({ content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, hrefFor, onNavigate: ({ href }) => navigateHost(href) });
+  return <ScenarioLibraryPage {...page} logo={hostLogo} navigation={hostNav()} />;
+}
+
 /* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
@@ -526,6 +541,7 @@ function App() {
   if (route.name === "review-center") return <ReviewCenterRoute />;
   if (route.name === "feedback-quality") return <FeedbackQualityRoute />;
   if (route.name === "personal-memory") return <PersonalMemoryRoute />;
+  if (route.name === "scenario-library") return <ScenarioLibraryRoute />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

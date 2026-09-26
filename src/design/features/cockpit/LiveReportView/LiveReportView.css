@@ -15,7 +15,7 @@ position: sticky;
   min-height: 62px;
   margin: -10px -12px 20px;
   padding: 10px 12px;
-  border-bottom: 1px solid var(--mh-live-line);
+  border-bottom: 1px solid var(--mh-line-neutral-soft);
   background: var(--mh-live-toolbar-bg);
   box-shadow: var(--mh-live-shadow);
   backdrop-filter: blur(20px);
@@ -38,9 +38,9 @@ display: inline-flex;
 }
 
 .mh-live-back:hover {
-border-color: var(--mh-live-back-hover-line);
+border-color: var(--mh-line-control-strong);
   background: var(--mh-live-back-hover-bg);
-  color: var(--mh-live-back-hover);
+  color: var(--mh-ink-ai-strong);
 }
 
 .mh-live-back:focus-visible {
