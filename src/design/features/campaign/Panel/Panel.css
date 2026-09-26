@@ -14,7 +14,7 @@ min-width: 0;
   padding: 18px;
   border: 1px solid var(--mh-line);
   border-radius: 6px;
-  background: #fff;
+  background: var(--mh-surface);
 }
 
 .mh-panel__head {
@@ -45,4 +45,10 @@ margin: 0;
 color: var(--mh-faint);
   font-family: var(--mh-font);
   font-size: 9px;
+}
+
+@media (max-width: 600px) {
+  .mh-panel__head {
+    flex-wrap: wrap;
+  }
 }

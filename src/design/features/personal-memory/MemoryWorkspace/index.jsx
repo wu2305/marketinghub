@@ -5,7 +5,13 @@ import "./MemoryWorkspace.css";
 
 /**
  * Source memory cards and inline detail, controlled by the page.
- * @param {{items:object[],selected:object|null,editing:boolean,draft:{title?:string,description?:string},menuId:string|null,labels:object}} props
+ * @param {object} props
+ * @param {object[]} props.items
+ * @param {object|null} props.selected
+ * @param {boolean} props.editing
+ * @param {{title?:string,description?:string}} props.draft
+ * @param {string|null} props.menuId
+ * @param {object} props.labels
  * @param {(event:{id:string})=>void} [props.onSelect]
  * @param {(event:{id:string})=>void} [props.onToggleMenu]
  * @param {(event:{reason:string})=>void} [props.onCloseMenu]

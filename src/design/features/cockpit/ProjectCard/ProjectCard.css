@@ -7,7 +7,7 @@ display: flex;
   border: 1px solid transparent;
   border-radius: 10px;
   background:
-    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
     var(--mh-reports-card-edge) border-box;
   box-shadow: var(--mh-reports-card-shadow);
   transition:

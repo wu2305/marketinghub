@@ -17,6 +17,7 @@ describe("useDataModelDemo + DataModelView", () => {
     const names = domainCards().map((el) => el.querySelector("strong").textContent);
     expect(names).toEqual(["D2C Insight", "DC Media Performance", "DG Media Tracking"]);
     expect(screen.queryByText("Customer Growth")).toBeNull();
+    expect(document.querySelector(".mh-dmview__basic-name .mh-badge--knowledge")?.textContent).toBeTruthy();
   });
 
   it("searches names, descriptions and synonyms", () => {

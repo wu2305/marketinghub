@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./WorkspaceCard.css";
 
 
@@ -25,7 +26,7 @@ export function WorkspaceCard({ title, href, description, image, links = [], onO
         {links.length ? (
           <div className="mh-workspace-card__links">
             {links.map((link) => (
-              <a key={link.label} href={link.href} onClick={() => onNavigate?.({ id: link.id, href: link.href, label: link.label })}>
+              <a key={link.label} href={link.href} onClick={(event) => isPlainPrimaryLink(event) && onNavigate?.({ id: link.id, href: link.href, label: link.label })}>
                 {link.label}
               </a>
             ))}
@@ -36,7 +37,7 @@ export function WorkspaceCard({ title, href, description, image, links = [], onO
         className="mh-workspace-card__open"
         href={href || "#"}
         aria-label={`Open ${title}`}
-        onClick={() => onOpen?.({ title, href })}
+        onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}
       />
     </article>
   );

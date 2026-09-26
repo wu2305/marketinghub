@@ -1,11 +1,12 @@
 import React from "react";
 import { INTERPRETER, MODEL_FLOW, buildModelDraft } from "../../content.js";
 import { buildInterpreterAnswer, useInterpreterDemo } from "../../demo/interpreter-demo.js";
-import { pageShell, useSynced } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, useSynced } from "../../lib/story-helpers.js";
 import { AiInterpreterPage } from "./index.jsx";
 
 export default {
   title: "Pages",
+  component: AiInterpreterPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
 };
@@ -35,10 +36,8 @@ export const Interpreter = {
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
   },
   argTypes: {
-    activeType: {
-      control: "select",
-      options: ["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)],
-    },
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
+    activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", "Selected knowledge view; unknown-type is a fallback contract probe."),
     onNavigate: { action: "onNavigate" },
     onSelectType: { action: "onSelectType" },
     onQueryChange: { action: "onQueryChange" },
@@ -135,10 +134,39 @@ const playClicks = (...selectors) => async ({ canvasElement }) => {
   const doc = canvasElement.ownerDocument;
   for (const selector of selectors) {
     const control = doc.querySelector(selector);
-    if (!control) throw new Error(`Interpreter assistant story control missing: ${selector}`);
+    if (!control) throw new Error(`Interpreter story control missing: ${selector}`);
     control.click();
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
+};
+
+const typeStory = (activeType, name) => ({
+  ...Interpreter,
+  name,
+  args: { ...Interpreter.args, activeType },
+});
+
+export const InterpreterPrinciples = typeStory("Principles", "Principles library");
+export const InterpreterReportContext = typeStory("Report Context", "Report Context library");
+export const InterpreterDataModel = typeStory("Data Model", "Data Model browser");
+export const InterpreterMetricDictionary = typeStory("Metric Dictionary", "Metric Dictionary library");
+export const InterpreterBusinessTerm = typeStory("Business Term", "Business Term library");
+export const InterpreterAnalyticalModel = typeStory("Analytical Model", "Analytical Model library");
+export const InterpreterScenarioReporting = typeStory("Scenario Reporting", "Scenario Reporting library");
+export const InterpreterEmailReports = typeStory("Email Reports", "Email Reports library");
+
+export const InterpreterDataModelReportContextPeek = {
+  ...InterpreterDataModel,
+  name: "Data Model related Report Context",
+  play: async (context) => {
+    await playClicks(".mh-dmview__report[aria-label='Open 4P Report Report Context']")(context);
+    const doc = context.canvasElement.ownerDocument;
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+      if (doc.querySelector(".mh-modal--drawer .mh-modal__dialog")) return;
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+    throw new Error("Related Report Context drawer did not open");
+  },
 };
 
 export const InterpreterAssistantHistory = {

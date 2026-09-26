@@ -1,5 +1,5 @@
-import { StatusBadge, statusBadgeVariants } from "./index.jsx";
-import { prop } from "../../lib/story-helpers.js";
+import { StatusBadge, statusBadgeSizes, statusBadgeTones, statusBadgeVariants } from "./index.jsx";
+import { enumProp, prop } from "../../lib/story-helpers.js";
 
 export default {
   title: "Atoms/Status badge",
@@ -9,23 +9,20 @@ export default {
     docs: {
       description: {
         component:
-          'Status pill. `status` is a free label — tone is derived by substring/token matching: ' +
-          'contains "publish" or equals success/token-valid/enabled → success; contains "review" ' +
-          "or equals syncing/building → review; contains \"pending\" or equals watch/queued → " +
-          'pending; contains "pause" or equals danger/disabled → paused; else draft. Matching is ' +
-          'substring-based, so e.g. "Unpublished" still maps to success.',
+          "Status pill with independent size and semantic tone controls. Auto tone recognizes exact known states and preserves knowledge/detail availability colors; unknown labels remain neutral. Explicit tone overrides the availability palette.",
       },
     },
   },
-  args: { status: "Published", children: "Published", variant: "default", outline: false },
+  args: { status: "Published", variant: "default", size: "sm", tone: "auto", outline: false },
   argTypes: {
     status: prop("string", {
       defaultValue: "draft",
-      description:
-        "Free-form label; the tone is derived from it (contains publish → success, review → review, pending → pending, pause → paused, else draft).",
+      description: "Visible label; auto tone recognizes exact known states and keeps unknown labels neutral.",
       control: "text",
     }),
-    variant: prop("string", { defaultValue: "default", description: "Default badge or P07 knowledge availability capsule.", control: "select", options: statusBadgeVariants }),
+    variant: enumProp(statusBadgeVariants, "default", "General status, fixed-slot knowledge status, or naturally sized detail status."),
+    size: enumProp(statusBadgeSizes, "sm", "lg makes every variant 32px high; sm keeps each variant's compact shape."),
+    tone: enumProp(statusBadgeTones, "auto", "Explicit semantic tone across all variants, or exact known-state mapping with knowledge/detail availability colors in auto mode."),
     outline: prop("boolean", { defaultValue: false, description: "Outline variant." }),
     children: prop("React.ReactNode", { description: "Overrides `status` as the visible label.", control: "text" }),
   },

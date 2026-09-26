@@ -1,4 +1,5 @@
 import { ActionCard } from "./index.jsx";
+import { demoHrefFor } from "../../../demo/navigation.js";
 
 export default {
   title: "Features/Self-Service/Action card",
@@ -15,7 +16,7 @@ export default {
     title: "MZ Tracking Detail",
     description: "Miaozhen OTV/OLV media monitoring self-analysis.",
     actionLabel: "Open data view",
-    href: "/assets/pages/media-tracking-detail.html",
+    href: demoHrefFor("media-tracking-detail"),
     history: undefined,
   },
   argTypes: {

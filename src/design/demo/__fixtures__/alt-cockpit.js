@@ -6,7 +6,7 @@
  * fixtures — nothing here may copy demo text, city names or labels.
  */
 
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 export const ALT_GROUPS = [
   { id: "all", label: "All reports" },
   { id: "alpha", label: "Alt Alpha Group", description: "First alt group." },
@@ -25,7 +25,7 @@ export const ALT_PROJECTS = {
     status: "Ready",
     freshness: "Alt freshness note",
     sourceStrip: ["Data updated: 2030-01-01"],
-    image: assetUrl("assets/images/project-city-tabby.png"),
+    image: demoImage("assets/images/project-city-tabby.png"),
     owner: "Alt Owner",
     accent: "#446688",
     reports: [
@@ -97,7 +97,7 @@ export const ALT_PROJECTS = {
     status: "Ready",
     freshness: "Alt beta freshness",
     sourceStrip: ["Data updated: 2030-02-02"],
-    image: assetUrl("assets/images/project-city-tabby.png"),
+    image: demoImage("assets/images/project-city-tabby.png"),
     owner: "Alt Owner",
     accent: "#886644",
     reports: [

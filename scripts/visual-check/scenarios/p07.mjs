@@ -1,3 +1,14 @@
+const responsiveStoryCheck = (selectors) => `(() => {
+  const width = document.documentElement.clientWidth;
+  if (document.documentElement.scrollWidth > width + 1) throw new Error('Interpreter extends beyond the viewport');
+  for (const selector of ${JSON.stringify(selectors)}) {
+    const element = document.querySelector(selector);
+    if (!element) throw new Error('Missing responsive element: ' + selector);
+    const box = element.getBoundingClientRect();
+    if (box.width < 1 || box.left < -1 || box.right > width + 1) throw new Error('Offscreen responsive element: ' + selector);
+  }
+})()`;
+
 export default [
   {
     id: "p07-interpreter-overview",
@@ -5,8 +16,9 @@ export default [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".v20-type-card", story: ".mh-type-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".v20-type-card:last-of-type", story: ".mh-type-card:last-of-type", props: ["x", "y", "width", "height"], tol: 8 },
+      // Card height follows content so headings/counts never overlap at narrow widths.
+      { orig: ".v20-type-card", story: ".mh-type-card", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".v20-type-card:last-of-type", story: ".mh-type-card:last-of-type", props: ["x", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html",
@@ -81,8 +93,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       expect: [
         { sel: ".mh-btview__card", count: 6, text: "GMV (Gross Merchandise Value)" },
         { sel: ".mh-btview__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
@@ -128,8 +139,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { click: ".mh-btview .mh-check-filter:nth-of-type(2) .mh-check-filter__summary" },
         { wait: ".mh-btview .mh-check-filter__details[open]" },
@@ -167,8 +177,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { click: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__summary" },
         { click: ".mh-btview .mh-check-filter:nth-of-type(3) .mh-check-filter__option:has-text('Current User')" },
@@ -197,8 +206,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [{ fill: [".mh-btview__search input[type='search']", "turnover"] }, { waitMs: 300 }],
       expect: [
         { sel: ".mh-btview__card", count: 1 },
@@ -227,8 +235,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { select: [".mh-btview .mh-pagination__size select", "5"] },
         { waitMs: 200 },
@@ -266,8 +273,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [{ click: ".mh-btview__card:has-text('GMV')" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Business Term" },
@@ -297,8 +303,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { click: ".mh-btview__card:has-text('GMV') [aria-label^='Disable']" },
         { wait: ".mh-confirm--confirm" },
@@ -307,7 +312,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge", text: "Disabled" },
-        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge.mh-badge--paused" },
+        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge.mh-badge--neutral" },
       ],
     },
   },
@@ -330,8 +335,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { click: ".mh-btview__card:has-text('GMV') [aria-label^='Disable']" },
         { wait: ".mh-confirm--confirm" },
@@ -368,8 +372,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [
         { eval: "document.querySelector(\".mh-btview__card[data-id='business-term-paid-customer'] [aria-label^='Edit']\").click()" },
         { wait: ".mh-confirm--info" },
@@ -394,8 +397,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
       actions: [{ eval: "window.scrollTo(0, document.body.scrollHeight)" }, { waitMs: 300 }],
       expect: [
         { sel: ".mh-btview .mh-pagination", text: "6 records" },
@@ -404,29 +406,29 @@ export default [
     },
   },
   {
-    /* 1024 viewport: the 1180px document min-width keeps three columns; the
-       tool row and cards narrow with the content column. */
+    /* The original keeps a 1180px horizontal canvas at 1024; the React page
+       instead stacks navigation and keeps the toolbar/action in the viewport. */
     id: "p07-business-term-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".bt-overview-tools", story: ".mh-btview__tools", props: ["x", "width"], tol: 8 },
-      { orig: ".bt-term-card", story: ".mh-btview__card", props: ["x", "y", "width"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Business%20Term",
       expect: [
         { sel: ".bt-term-card", count: 6 },
         { sel: ".bt-tag-overflow", count: 6 },
+        { sel: "#businessTypeNav button", count: 8 },
+        { sel: ".bt-overview-filter:has(input[data-bt-filter='status']) summary", text: "All statuses" },
+        { sel: ".bt-overview-tools .knowledge-add-button", text: "Add Business Term" },
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Business Term" },
+      id: "pages--interpreter-business-term",
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-btview__tools", ".mh-btview__create", ".mh-btview__card"]) }],
       expect: [
         { sel: ".mh-btview__card", count: 6 },
         { sel: ".mh-btview__tag--overflow", count: 6 },
+        { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
+        { sel: ".mh-btview__tools .mh-check-filter:nth-of-type(2) .mh-check-filter__summary", text: "All statuses" },
+        { sel: ".mh-btview__create", text: "Add Business Term" },
       ],
     },
   },
@@ -458,11 +460,10 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Scenario Reporting" },
+      id: "pages--interpreter-scenario-reporting",
       expect: [
         { sel: ".mh-srview__card", count: 3, text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__state.is-off", count: 2, text: "Disabled" },
+        { sel: ".mh-srview__pills .mh-badge--knowledge.mh-badge--neutral", count: 2, text: "Disabled" },
         { sel: ".mh-srview__card .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 9 },
         { sel: ".mh-srview__countline", state: "hidden" },
         { sel: ".mh-srview__pagination", text: "3 records" },
@@ -493,13 +494,12 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Scenario Reporting" },
+      id: "pages--interpreter-scenario-reporting",
       actions: [{ click: ".mh-srview__card[data-id='scenario-channel-performance'] h3" }, { wait: ".mh-srview__drawer" }],
       expect: [
         { sel: ".mh-srview__drawer .mh-modal__eyebrow", text: "SCENARIO REPORTING" },
         { sel: ".mh-srview__drawer .mh-modal__title", text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__drawer .mh-srview__title-pill", text: "Disabled" },
+        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--detail", text: "Disabled" },
         { sel: ".mh-srview__drawer .mh-srview__flow--head", text: "Building" },
         { sel: ".mh-srview__drawer .mh-srview__detail-link", text: "Invest City Strategy Analysis" },
         { sel: ".mh-srview__drawer .mh-srview__note", text: "AI Interpreter is enabled automatically" },
@@ -529,8 +529,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       expect: [
         { sel: ".mh-interpreter__main[data-active-type='Principles']" },
         { sel: ".mh-check-filter" },
@@ -559,8 +558,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [
         { click: ".mh-check-filter__summary" },
         { wait: ".mh-check-filter__details[open]" },
@@ -596,8 +594,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [
         { click: ".mh-check-filter__summary" },
         { wait: ".mh-check-filter__details[open]" },
@@ -631,8 +628,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [{ fill: [".mh-principles input[type='search']", "requested scope"] }, { waitMs: 300 }],
       expect: [
         { sel: ".mh-principle", text: "Match the Requested Scope" },
@@ -654,8 +650,7 @@ export default [
       expect: [{ sel: ".principles-empty", text: "No matching principles" }],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [{ fill: [".mh-principles input[type='search']", "zzzz-nothing"] }, { waitMs: 300 }],
       expect: [{ sel: ".mh-principles__empty", text: "No matching principles" }],
     },
@@ -682,8 +677,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [
         { wait: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
         { click: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
@@ -712,8 +706,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [
         { wait: ".mh-principles input[type='search']" },
         { waitMs: 400 },
@@ -742,8 +735,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
       actions: [{ eval: "window.scrollTo(0, document.body.scrollHeight)" }, { waitMs: 300 }],
       expect: [
         { sel: ".mh-principle:has-text('Respect Session Guidance')", text: "Respect Session Guidance" },
@@ -752,47 +744,39 @@ export default [
     },
   },
   {
-    /* The original's min-width:1180 document + ≤1240 breakpoint: the fixed
-       rail moves to left:32 and the hero takes margin-left:272/width:876 at
-       a 1024 viewport (the document stays 1180 wide). */
+    /* Original 1180px canvas geometry is intentionally not compared below
+       1100px: React keeps navigation, stats and cards inside the viewport. */
     id: "p07-interpreter-overview-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html",
-      expect: [{ sel: ".v20-type-card", count: 8 }, { sel: "h1", text: "AI Interpreter" }],
+      expect: [{ sel: ".v20-type-card", count: 8 }, { sel: "#businessTypeNav button", count: 8 }, { sel: ".knowledge-hero-stat", count: 2 }, { sel: "h1", text: "AI Interpreter" }],
     },
     story: {
       id: "pages--interpreter",
-      expect: [{ sel: ".mh-type-card", count: 8 }, { sel: ".mh-hero h1", text: "AI Interpreter" }],
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-type-card:first-child", ".mh-type-card:last-child"]) }],
+      expect: [{ sel: ".mh-type-card", count: 8 }, { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 }, { sel: ".mh-hero__aside .mh-metric", count: 2 }, { sel: ".mh-hero h1", text: "AI Interpreter" }],
     },
   },
   {
     id: "p07-interpreter-principles-narrow",
     viewport: { width: 1024, height: 1400 },
-    layout: [
-      { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".knowledge-hero-stat", story: ".mh-hero__aside .mh-metric", props: ["x", "y", "width", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Principles",
       expect: [
         { sel: ".principle-list-item", text: "Interactive Agent for Business Questions" },
+        { sel: "#businessTypeNav button", count: 8 },
+        { sel: ".knowledge-hero-stat", count: 2 },
         { sel: "#businessPagination", text: "10 principles" },
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Principles" },
+      id: "pages--interpreter-principles",
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-principles__toolbar", ".mh-principle:first-child"]) }],
       expect: [
         { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
+        { sel: ".mh-hero__aside .mh-metric", count: 2 },
         { sel: ".mh-pagination", text: "10 principles" },
       ],
     },
@@ -822,8 +806,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Report Context" },
+      id: "pages--interpreter-report-context",
       expect: [
         { sel: ".mh-flview__report-card", count: 6, text: "Invest City Strategy Analysis" },
         { sel: ".mh-flview__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
@@ -855,8 +838,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Report Context" },
+      id: "pages--interpreter-report-context",
       actions: [
         { click: ".mh-flview .mh-check-filter__summary" },
         { wait: ".mh-flview .mh-check-filter__details[open]" },
@@ -899,13 +881,12 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Report Context" },
+      id: "pages--interpreter-report-context",
       actions: [{ click: ".mh-flview__report-card[data-id='city-report-context']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Report Context" },
         { sel: ".mh-modal--drawer .mh-modal__title", text: "Invest City Strategy Analysis" },
-        { sel: ".mh-modal--drawer .mh-badge--knowledge", text: "Enabled" },
+        { sel: ".mh-modal--drawer .mh-badge--detail", text: "Enabled" },
         { sel: ".mh-modal--drawer .mh-flview__domain", text: "D2C Insights" },
         { sel: ".mh-modal--drawer .mh-flview__scenario-link", count: 2, text: "Channel Performance Analysis" },
         { sel: ".mh-flview__open-dashboard", text: "Open Dashboard" },
@@ -937,8 +918,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Report Context" },
+      id: "pages--interpreter-report-context",
       actions: [
         { click: ".mh-flview__report-card[data-id='city-report-context']" },
         { wait: ".mh-modal--drawer .mh-modal__dialog" },
@@ -978,8 +958,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Metric Dictionary" },
+      id: "pages--interpreter-metric-dictionary",
       actions: [{ click: ".mh-flview__metric-card[data-id='metric-dictionary-member-conversion']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-flview__metric-card", count: 3, text: "Member conversion" },
@@ -1015,8 +994,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Analytical Model" },
+      id: "pages--interpreter-analytical-model",
       expect: [
         { sel: ".mh-flview__analysis-card", count: 1, text: "Opportunity scan playbook" },
         { sel: ".mh-flview__create", text: "Add Analytical Model" },
@@ -1048,8 +1026,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Analytical Model" },
+      id: "pages--interpreter-analytical-model",
       actions: [
         { click: ".mh-flview__analysis-card [aria-label='Disable']" },
         { wait: ".mh-confirm--confirm" },
@@ -1086,8 +1063,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Analytical Model" },
+      id: "pages--interpreter-analytical-model",
       actions: [
         { click: ".mh-flview__analysis-card [aria-label='Disable']" },
         { wait: ".mh-confirm--confirm" },
@@ -1126,8 +1102,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Email Reports" },
+      id: "pages--interpreter-email-reports",
       actions: [{ click: ".mh-flview__email-card[data-id='email-report-campaign-alert']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-flview__email-card", count: 3, text: "Weekly Marketing Performance" },
@@ -1160,8 +1135,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Report Context" },
+      id: "pages--interpreter-report-context",
       actions: [
         { select: [".mh-flview .mh-pagination__size select", "5"] },
         { waitMs: 200 },
@@ -1190,7 +1164,7 @@ export default [
       { orig: ".dm-domain-card", story: ".mh-dmview__domain", props: ["x", "y", "width"], tol: 8 },
       { orig: ".dm-domain-tabs", story: ".mh-dmview__tabs", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-basic-card", story: ".mh-dmview__basic", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic-status", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic .mh-badge--knowledge", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-related-report", story: ".mh-dmview__report", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
@@ -1208,15 +1182,14 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model",
       expect: [
         { sel: ".mh-dmview__domain", count: 3 },
         { sel: ".mh-dmview__domain:has-text(\"Customer Growth\")", count: 0, state: "detached" },
         { sel: ".mh-dmview__domain.is-active", text: "D2C Insight" },
         { sel: ".mh-dmview__tab.is-active", text: "Basic information" },
         { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
-        { sel: ".mh-dmview__basic-status", text: "Enabled" },
+        { sel: ".mh-dmview__basic .mh-badge--knowledge", text: "Enabled" },
         { sel: ".mh-dmview__synonym", count: 5 },
         { sel: ".mh-dmview__report", count: 3 },
         { sel: ".mh-dmview__report:has-text(\"4P Report\")" },
@@ -1245,8 +1218,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model",
       actions: [{ click: ".mh-dmview__tab:last-child" }, { waitMs: 400 }],
       expect: [
         { sel: ".mh-dmview__node", count: 6 },
@@ -1284,8 +1256,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model",
       actions: [
         { click: ".mh-dmview__tab:last-child" },
         { waitMs: 400 },
@@ -1321,8 +1292,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model",
       actions: [
         { click: ".mh-dmview__tab:last-child" },
         { waitMs: 400 },
@@ -1352,8 +1322,7 @@ export default [
       expect: [{ sel: ".dm-domain-card", count: 1, text: "DC Media Performance" }],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model",
       actions: [
         { fill: [".mh-dmview__search input[type='search']", "audience"] },
         { waitMs: 300 },
@@ -1380,10 +1349,8 @@ export default [
       ],
     },
     story: {
-      id: "pages--interpreter",
-      args: { activeType: "Data Model" },
+      id: "pages--interpreter-data-model-report-context-peek",
       actions: [
-        { click: ".mh-dmview__report[aria-label='Open 4P Report Report Context']" },
         { wait: ".mh-modal--drawer .mh-modal__dialog" },
       ],
       expect: [

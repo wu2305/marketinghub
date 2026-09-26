@@ -1,4 +1,4 @@
-import { assetUrl } from "./asset-url.js";
+import { demoImage } from "./demo/images.js";
 import { DETAILS_ASSET_SECTIONS, REPORT_GROUPS, REPORT_PROJECTS } from "./demo/report-fixtures.js";
 
 export const NAV = [
@@ -9,11 +9,11 @@ export const NAV = [
   { id: "campaign", label: "RedNote Campaign Tool", href: "/assets/pages/campaign.html" },
 ];
 
-export const LOGO = { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry", href: "/index.html" };
+export const LOGO = { src: demoImage("assets/images/tapestry-logo.png"), alt: "Tapestry", href: "/index.html" };
 
 export const HOME = {
   hero: {
-    image: assetUrl("assets/images/hero-bg-coach.jpg"),
+    image: demoImage("assets/images/hero-bg-coach.jpg"),
     title: "Marketing Portal",
     description: "Your daily workspace for campaign planning, activation, optimization and knowledge — all in one place.",
     stats: [
@@ -32,33 +32,37 @@ export const HOME = {
     {
       title: "Marketing Cockpit",
       href: "/assets/pages/reports.html",
+      target: { id: "cockpit", params: {} },
       description: "Centralized view for tracking all marketing initiatives' performance and evolving business trends.",
-      image: assetUrl("assets/images/workspace-marketing-overview.png"),
+      image: demoImage("assets/images/workspace-marketing-overview.png"),
       links: [
-        { id: "dg", label: "DG Data Insight", href: "/assets/pages/reports.html?project=rednote" },
-        { id: "dc", label: "DC Data Insight", href: "/assets/pages/reports.html?project=abo" },
-        { id: "d2c", label: "D2C Insight", href: "/assets/pages/reports.html?project=customer" },
+        { id: "dg", label: "DG Data Insight", href: "/assets/pages/reports.html?project=rednote", target: { id: "cockpit", params: { project: "rednote" } } },
+        { id: "dc", label: "DC Data Insight", href: "/assets/pages/reports.html?project=abo", target: { id: "cockpit", params: { project: "abo" } } },
+        { id: "d2c", label: "D2C Insight", href: "/assets/pages/reports.html?project=customer", target: { id: "cockpit", params: { project: "customer" } } },
       ],
     },
     {
       title: "Self-Service Center",
       href: "/assets/pages/flexible.html",
+      target: { id: "self-service", params: {} },
       description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
-      image: assetUrl("assets/images/workspace-business-explorer.png"),
+      image: demoImage("assets/images/workspace-business-explorer.png"),
       links: [],
     },
     {
       title: "AI Interpreter",
       href: "/assets/pages/knowledge.html",
+      target: { id: "interpreter", params: {} },
       description: "Empower business teams to create, manage and evolve trusted knowledge for consistent AI experiences.",
-      image: assetUrl("assets/images/workspace-knowledge-center.png"),
-      links: [{ id: "knowledge", label: "Knowledge Management", href: "/assets/pages/knowledge.html" }],
+      image: demoImage("assets/images/workspace-knowledge-center.png"),
+      links: [{ id: "knowledge", label: "Knowledge Management", href: "/assets/pages/knowledge.html", target: { id: "interpreter", params: {} } }],
     },
     {
       title: "RedNote Campaign Tool",
       href: "/assets/pages/campaign.html",
+      target: { id: "campaign", params: {} },
       description: "Plan, launch and manage every campaign from one connected workspace.",
-      image: assetUrl("assets/images/workspace-campaign-operations.png"),
+      image: demoImage("assets/images/workspace-campaign-operations.png"),
       links: [],
     },
   ],
@@ -252,8 +256,20 @@ export function buildCampaignAnswer(query) {
 }
 
 export const COCKPIT = {
+  copy: {
+    liveReportLabel: "LIVE REPORT",
+    searchLabel: "Search dashboards",
+    imageAltSuffix: "report preview",
+    dashboardUnit: "dashboard",
+    assetUnit: "asset",
+    updatedFallback: "Update schedule available in project",
+    catalogBackLabel: "All report projects",
+    emptyTitle: "No matching reports.",
+    emptyDescription: "Try another report or project name.",
+    meta: { owner: "Owner", cadence: "Cadence", updated: "Updated", knowledge: "Knowledge" },
+  },
   hero: {
-    image: assetUrl("assets/images/project-city-tabby.png"),
+    image: demoImage("assets/images/project-city-tabby.png"),
     eyebrow: "Performance tracking",
     title: "Marketing Cockpit",
     description: "Stay connected to the business trends, performance and metrics that matter most.",
@@ -283,6 +299,7 @@ export const COCKPIT = {
 };
 
 export const SELF_SERVICE = {
+  labels: { tabAria: "Data view mode", analysisFilterAria: "Filter reports", uploadFilterAria: "Filter uploads" },
   assistant: {
     title: "Ask AI Interpreter",
     headline: "Ask a question",
@@ -300,7 +317,7 @@ export const SELF_SERVICE = {
     ],
   },
   hero: {
-    image: assetUrl("assets/images/business-explorer-hero.jpg"),
+    image: demoImage("assets/images/business-explorer-hero.jpg"),
     eyebrow: "Flexible analysis",
     title: "Self-Service Center",
     description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
@@ -324,6 +341,7 @@ export const SELF_SERVICE = {
       description: "Miaozhen OTV/OLV media monitoring self-analysis by Campaign, Media & Platform dimensions.",
       actionLabel: "Open data view",
       href: "/assets/pages/media-tracking-detail.html",
+      target: { id: "media-tracking-detail", params: {} },
     },
     {
       title: "ABO Tracking Detail",
@@ -331,6 +349,7 @@ export const SELF_SERVICE = {
       description: "Self-analysis of ad placement and conversion data: TMALL, JD, Tiktok, Wechat.",
       actionLabel: "Open data view",
       href: "/assets/pages/media-tracking-detail.html",
+      target: { id: "media-tracking-detail", params: {} },
     },
     {
       title: "Rednote Tracking Detail",
@@ -338,6 +357,7 @@ export const SELF_SERVICE = {
       description: "Self-analysis of Rednote Campaign & note placement and conversion data.",
       actionLabel: "Open data view",
       href: "/assets/pages/media-tracking-detail.html",
+      target: { id: "media-tracking-detail", params: {} },
     },
   ],
   uploads: [
@@ -348,6 +368,7 @@ export const SELF_SERVICE = {
       description: "Upload finance pilot city data covering budgets, expenses and KPIs across business lines and reporting periods.",
       actionLabel: "Open upload module",
       href: "/assets/pages/data-upload.html",
+      target: { id: "data-upload", params: {} },
       history: [
         { file: "finance_pilot_city_2026Q3.xlsx", uploader: "Wang Chen", time: "2 days ago", size: "248 KB" },
         { file: "finance_pilot_city_metrics_sept_v2.xlsx", uploader: "Liu Yang", time: "5 days ago", size: "186 KB" },
@@ -426,7 +447,7 @@ export const INTERPRETER = {
     assistantLabel: "AI Interpreter",
   },
   hero: {
-    image: assetUrl("assets/images/knowledge-hero.jpg"),
+    image: demoImage("assets/images/knowledge-hero.jpg"),
     eyebrow: "Knowledge management",
     title: "AI Interpreter",
     description: "Explore and govern the trusted knowledge that powers AI interpretation.",
@@ -1331,6 +1352,14 @@ export const COCKPIT_SKILL_MENU = {
 };
 
 export const CAMPAIGN = {
+  labels: {
+    channelViewAria: "Channel view",
+    objectiveChartAria: "Marketing objective distribution chart",
+    accountSearch: "Search sub-account",
+    filterLabel: "Filter",
+    resetLabel: "Reset",
+    accountCaption: (count) => `${count} ${count === 1 ? "account" : "accounts"} shown`,
+  },
   rail: {
     eyebrow: "Campaign execution",
     title: "Trading Desk",
@@ -1525,26 +1554,28 @@ export const CAMPAIGN = {
 };
 
 export const DATA_UPLOAD = {
+  submitLabel: "Submit",
+  submittingLabel: "Submitted",
   toolbar: {
     backHref: "/assets/pages/flexible.html?tab=upload",
     backLabel: "Back",
     importLabel: "Template Import",
   },
   fields: [
-    { name: "year", label: "Year" },
-    { name: "year-period", label: "Year Period" },
-    { name: "quarter", label: "Quarter" },
-    { name: "year-week", label: "Year Week" },
-    { name: "channel", label: "Channel" },
-    { name: "channel-group", label: "Channel Group" },
-    { name: "location", label: "Location" },
-    { name: "door", label: "Door" },
-    { name: "sales", label: "Sales" },
-    { name: "sales-ly", label: "Sales LY" },
-    { name: "traffic", label: "Traffic" },
-    { name: "traffic-ly", label: "Traffic LY" },
-    { name: "trans", label: "Trans" },
-    { name: "trans-ly", label: "Trans LY" },
+    { name: "year", label: "Year", placeholder: "Enter" },
+    { name: "year-period", label: "Year Period", placeholder: "Enter" },
+    { name: "quarter", label: "Quarter", placeholder: "Enter" },
+    { name: "year-week", label: "Year Week", placeholder: "Enter" },
+    { name: "channel", label: "Channel", placeholder: "Enter" },
+    { name: "channel-group", label: "Channel Group", placeholder: "Enter" },
+    { name: "location", label: "Location", placeholder: "Enter" },
+    { name: "door", label: "Door", placeholder: "Enter" },
+    { name: "sales", label: "Sales", placeholder: "Enter" },
+    { name: "sales-ly", label: "Sales LY", placeholder: "Enter" },
+    { name: "traffic", label: "Traffic", placeholder: "Enter" },
+    { name: "traffic-ly", label: "Traffic LY", placeholder: "Enter" },
+    { name: "trans", label: "Trans", placeholder: "Enter" },
+    { name: "trans-ly", label: "Trans LY", placeholder: "Enter" },
   ],
   bulkImport: {
     title: "Template Import",
@@ -1642,6 +1673,7 @@ const TRACKING_ROWS = [
 ];
 
 export const MEDIA_TRACKING = {
+  labels: { periodAria: "Period", filtersAria: "Filters", tableAria: "Data table" },
   toolbar: { backHref: "/assets/pages/flexible.html", backLabel: "Back" },
   head: { eyebrow: "MEDIA TRACKING DETAIL", title: "Media Tracking Detail" },
   periods: [

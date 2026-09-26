@@ -14,14 +14,14 @@ import "./Panel.css";
 export function Panel({ eyebrow, title, meta, actions, children }) {
   return (
     <section className="mh-panel">
-      <header className="mh-panel__head">
+      <header className="mh-panel__head" data-mh-slot>
         <div>
           {eyebrow ? <p className="mh-panel__kicker">{eyebrow}</p> : null}
           <h3>{title}</h3>
         </div>
         {actions || (meta ? <small>{meta}</small> : null)}
       </header>
-      <div className="mh-panel__body">{children}</div>
+      <div className="mh-panel__body" data-mh-slot>{children}</div>
     </section>
   );
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CITY_INVEST } from "./report-fixtures.js";
 import { generateCityInvestScenario } from "./report-demo.js";
-import { selectionLabel, totalLabel } from "../report-logic.js";
+import { selectionLabel, totalLabel } from "../features/cockpit/lib/report-logic.js";
 
 describe("city-invest filter behavior", () => {
   it("uses the supplied baseline for the complete default filter set", () => {

@@ -8,7 +8,7 @@ display: flex;
 
 .mh-heading__kicker {
 margin: 0;
-  color: #65717c;
+  color: var(--mh-ink-table-muted);
   font-family: var(--mh-font);
   font-size: 10px;
   font-weight: 700;
@@ -20,7 +20,7 @@ margin: 0;
 .mh-heading h2,
 .mh-heading h1 {
 margin: 8px 0 0;
-  color: #1c2227;
+  color: var(--mh-ink-row-primary);
   font-family: var(--mh-display);
   font-size: 30px;
   font-style: italic;
@@ -31,7 +31,7 @@ margin: 8px 0 0;
 .mh-heading__text {
 max-width: 420px;
   margin: 0 0 2px;
-  color: #67727c;
+  color: var(--mh-muted);
   font-family: var(--mh-font);
   font-size: 12px;
   line-height: 1.4;

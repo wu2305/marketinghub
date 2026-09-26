@@ -2,6 +2,7 @@ import "../../../tokens.css";
 import React from "react";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import { Icon } from "../../../icons.jsx";
+import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { cx } from "../../../cx.js";
 import "./DataModelView.css";
 
@@ -139,7 +140,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * status pill, synonyms, related-report links that open the Report Context
  * drawer), and the pannable/zoomable relationship graph whose nodes open the
  * centered table detail dialog.
- * @param {object} props — prepared by `useDataModelDemo`
+ * @param {Record<string, any>} props — prepared by `useDataModelDemo`
  */
 export function DataModelView({
   strings,
@@ -267,10 +268,9 @@ export function DataModelView({
                   <section className="mh-dmview__basic-section">
                     <div className="mh-dmview__basic-name">
                       <strong>{domain.name}</strong>
-                      <span className={cx("mh-dmview__basic-status", !isEnabled && "is-disabled")}>
-                        <i aria-hidden="true" />
+                      <StatusBadge variant="knowledge" status={isEnabled ? "Enabled" : "Disabled"}>
                         {isEnabled ? strings.enabled : strings.disabled}
-                      </span>
+                      </StatusBadge>
                     </div>
                     <p className="mh-dmview__basic-summary">{domain.description}</p>
                   </section>

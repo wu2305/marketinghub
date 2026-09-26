@@ -13,7 +13,7 @@ width: 100%;
 .mh-table td {
 height: 50px;
   padding: 0 12px;
-  border-bottom: 1px solid #e3e7ea;
+  border-bottom: 1px solid var(--mh-line-panel-subtle);
   color: var(--mh-copy);
   font-size: 11px;
   text-align: left;
@@ -22,19 +22,19 @@ height: 50px;
 
 .mh-table th {
 height: 38px;
-  background: #f3f6f8;
-  color: #66717b;
+  background: var(--mh-bg);
+  color: var(--mh-ink-secondary-slate);
   font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .mh-table tbody tr:nth-child(even) {
-background: #fbfcfd;
+background: var(--mh-surface-panel-muted);
 }
 
 .mh-table tbody tr:hover {
-background: #fff9e7;
+background: var(--mh-hover-warm);
 }
 
 .mh-table__note {

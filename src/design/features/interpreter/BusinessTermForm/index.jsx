@@ -4,13 +4,14 @@ import { Button } from "../../../components/Button/index.jsx";
 import "../../../tokens.css";
 import "./BusinessTermForm.css";
 
+/** @type {readonly ["Business Term", "Global Synonym"]} */
 export const businessTermKinds = ["Business Term", "Global Synonym"];
 
 /**
  * Controlled Business Term form. `onChange` receives `{name,value}`; actions receive `{values}`.
  * @param {object} props
  * @param {string} props.title Term name.
- * @param {string} props.kind One of businessTermKinds.
+ * @param {typeof businessTermKinds[number]} props.kind One of businessTermKinds.
  * @param {string} props.description Meaning and boundary.
  * @param {string} props.synonyms Comma-separated aliases.
  * @param {string[]} props.scope Linked Data Models.

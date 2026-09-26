@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./LiveReportView.css";
 
 
@@ -26,7 +27,7 @@ export function LiveReportView({ kicker, title, backHref, backLabel = "Report li
           className="mh-live-back"
           href={backHref}
           onClick={(event) => {
-            if (event.defaultPrevented) return;
+            if (!isPlainPrimaryLink(event)) return;
             onBack?.({ href: backHref });
           }}
         >
@@ -39,7 +40,7 @@ export function LiveReportView({ kicker, title, backHref, backLabel = "Report li
           <h1>{title}</h1>
         </div>
       </header>
-      <div className="mh-live-panel">{children}</div>
+      <div className="mh-live-panel" data-mh-slot>{children}</div>
     </section>
   );
 }

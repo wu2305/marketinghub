@@ -3,7 +3,7 @@
  * src/design and asserts the layering rules from handover/structural-review.md:
  *
  * - components/  may not import features/, pages/, demo/, content.js,
- *   report-logic.js or report-routes.js (they are the reusable leaf layer).
+ *   demo/content or original-route helpers (they are not library leaf modules).
  * - features/<page>/ may not import a different features/<page>/ subtree,
  *   nor demo/ or content.js (per-page modules stay page-scoped; shared code
  *   belongs in components/ or lib/).
@@ -34,7 +34,7 @@ const IMPORT_RE = /(?:import|export)\s[^"']*?from\s+["']([^"']+)["']|import\s*\(
 /** Explicitly allowed violations — each entry must say why and be registered
    in handover §4. Keep empty by default: fix the layering, don't whitelist. */
 const WHITELIST = [
-  // { file: "features/cockpit/CityInvestDashboard/index.jsx", specifier: "../../report-logic.js", reason: "..." },
+  // { file: "features/interpreter/Example/index.jsx", specifier: "../../demo/example.js", reason: "..." },
 ];
 
 function* walk(dir) {
@@ -268,61 +268,15 @@ function protectedPublicExports() {
   return identities.sort();
 }
 
-// Temporary compatibility surface. M7 R5(b) will move these to `./demo`.
-// This ratchet permits removals but makes every new public demo identity fail.
-const ALLOWED_DEMO_EXPORTS = [
-  "DATA_MODEL_DOMAINS <- demo/data-model-domains.js#DATA_MODEL_DOMAINS",
-  "KNOWLEDGE_HREF <- report-routes.js#KNOWLEDGE_HREF",
-  "REPORT_CATALOG_HREF <- report-routes.js#REPORT_CATALOG_HREF",
-  "buildCopilotChatEntry <- demo/report-demo.js#buildCopilotChatEntry",
-  "cityInvestScenarioSource <- demo/report-demo.js#cityInvestScenarioSource",
-  "copilotProfile <- demo/report-demo.js#copilotProfile",
-  "copilotSkillItems <- demo/report-demo.js#copilotSkillItems",
-  "copilotSourceHref <- report-routes.js#copilotSourceHref",
-  "copilotSources <- demo/report-demo.js#copilotSources",
-  "dataModelFieldFormat <- demo/data-model-demo.js#dataModelFieldFormat",
-  "demoContent <- content.js#*",
-  "demoContent.ASSISTANT <- content.js#ASSISTANT",
-  "demoContent.ASSISTANT_SKILL_MENU <- content.js#ASSISTANT_SKILL_MENU",
-  "demoContent.CAMPAIGN <- content.js#CAMPAIGN",
-  "demoContent.COCKPIT <- content.js#COCKPIT",
-  "demoContent.COCKPIT_SKILL_MENU <- content.js#COCKPIT_SKILL_MENU",
-  "demoContent.DATA_UPLOAD <- content.js#DATA_UPLOAD",
-  "demoContent.HOME <- content.js#HOME",
-  "demoContent.INTERPRETER <- content.js#INTERPRETER",
-  "demoContent.LITE_ASSISTANT <- content.js#LITE_ASSISTANT",
-  "demoContent.LOGO <- content.js#LOGO",
-  "demoContent.MEDIA_TRACKING <- content.js#MEDIA_TRACKING",
-  "demoContent.MODEL_FLOW <- content.js#MODEL_FLOW",
-  "demoContent.NAV <- content.js#NAV",
-  "demoContent.SELF_SERVICE <- content.js#SELF_SERVICE",
-  "demoContent.buildAssistantAnswer <- content.js#buildAssistantAnswer",
-  "demoContent.buildCampaignAnswer <- content.js#buildCampaignAnswer",
-  "demoContent.buildHomeAssistantAnswer <- content.js#buildHomeAssistantAnswer",
-  "demoContent.buildLiteAssistantAnswer <- content.js#buildLiteAssistantAnswer",
-  "demoContent.buildModelDescription <- content.js#buildModelDescription",
-  "demoContent.buildModelDraft <- content.js#buildModelDraft",
-  "demoContent.buildModelLogic <- content.js#buildModelLogic",
-  "demoContent.buildReportAssistantAnswer <- content.js#buildReportAssistantAnswer",
-  "generateCityInvestScenario <- demo/report-demo.js#generateCityInvestScenario",
-  "liveReportHref <- report-routes.js#liveReportHref",
-  "normalizeFieldRecord <- demo/field-library-demo.js#normalizeFieldRecord",
-  "normalizeScenarioRecord <- demo/scenario-demo.js#normalizeScenarioRecord",
-  "projectCatalogHref <- report-routes.js#projectCatalogHref",
-  "reportContextHref <- report-routes.js#reportContextHref",
-  "resolveCopilotAnswer <- demo/report-demo.js#resolveCopilotAnswer",
-  "useBusinessTermDemo <- demo/business-term-demo.js#useBusinessTermDemo",
-  "useCockpitDemo <- demo/cockpit-demo.js#useCockpitDemo",
-  "useDataModelDemo <- demo/data-model-demo.js#useDataModelDemo",
-  "useFieldLibraryDemo <- demo/field-library-demo.js#useFieldLibraryDemo",
-  "useHomeDemo <- demo/home-demo.js#useHomeDemo",
-  "useInterpreterDemo <- demo/interpreter-demo.js#useInterpreterDemo",
-  "useScenarioDemo <- demo/scenario-demo.js#useScenarioDemo",
-];
+describe("src/design package export boundary (R5b)", () => {
+  it("keeps fixtures, routes and demo hooks out of the component entry", () => {
+    expect(protectedPublicExports()).toEqual([]);
+  });
 
-describe("src/design public demo export surface (WP4)", () => {
-  it("does not add demo, content, route, or fixture symbols to index.js", () => {
-    const allowed = new Set(ALLOWED_DEMO_EXPORTS);
-    expect(protectedPublicExports().filter((entry) => !allowed.has(entry))).toEqual([]);
+  it("exposes the reusable demo flows through the separate demo entry", () => {
+    const demo = publicExports(path.join(ROOT, "demo/index.js"));
+    for (const name of ["demoContent", "useCockpitDemo", "useHomeDemo", "useInterpreterDemo", "cityInvestScenarioSource", "projectCatalogHref"]) {
+      expect(demo.has(name)).toBe(true);
+    }
   });
 });

@@ -10,7 +10,7 @@
 
 .mh-live-toolbar {
 position: sticky;
-  top: 72px;
+  top: var(--mh-live-toolbar-top, 0px);
   z-index: 45;
   display: flex;
   align-items: center;
@@ -43,8 +43,8 @@ display: inline-flex;
 
 .mh-live-back:hover {
 border-color: var(--mh-line-control-strong);
-  background: var(--mh-live-back-hover-bg);
-  color: var(--mh-ink-ai-strong);
+  background: var(--mh-surface-chart-neutral);
+  color: var(--mh-ink-black-soft);
 }
 
 .mh-live-back:focus-visible {

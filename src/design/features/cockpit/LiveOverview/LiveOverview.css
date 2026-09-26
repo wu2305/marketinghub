@@ -83,8 +83,8 @@ position: relative;
   padding: 12px 18px 26px 38px;
   border-left: 1px solid var(--mh-line-neutral-soft);
   border-bottom: 1px solid var(--mh-line-neutral-soft);
-  background: var(--mh-live-chart-bg);
-  color: var(--mh-ink-ai-strong);
+  background: var(--mh-surface-chart-neutral);
+  color: var(--mh-ink-black-soft);
 }
 
 .mh-live-chart::before,
@@ -181,5 +181,20 @@ color: var(--mh-reports-ink);
 
   .mh-live-kpis {
   grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .mh-live-kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-live-grid,
+  .mh-live-card {
+    min-width: 0;
+  }
+
+  .mh-live-chart {
+    overflow-x: auto;
   }
 }

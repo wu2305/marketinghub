@@ -1,5 +1,5 @@
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 import { REVIEW_CENTER } from "./review-center.js";
 
 /** Source-visible copy. The content and record are supplied separately to the page. */
@@ -7,7 +7,7 @@ export const SCENARIO_DETAIL = {
   logo: LOGO,
   navigation: NAV,
   hero: {
-    image: assetUrl("assets/images/project-ottolv-tabby.png"),
+    image: demoImage("assets/images/project-ottolv-tabby.png"),
     eyebrow: "KNOWLEDGE MANAGEMENT",
     title: "Scenario Detail",
     description: "View scenario structure, governance info, and preview example outputs.",
@@ -33,24 +33,24 @@ export const SCENARIO_DETAIL = {
     ],
     edit: "Edit Scenario",
     structure: [
-      { key: "triggerWhen", label: "Trigger When", icon: "clock", tone: "when" },
-      { key: "input", label: "Input", icon: "table", tone: "input" },
-      { key: "logic", label: "Analysis Logic", icon: "bulb", tone: "logic" },
-      { key: "output", label: "Output", icon: "arrow-left", tone: "output" },
-      { key: "boundary", label: "Boundary", icon: "warning", tone: "boundary" },
+      { key: "triggerWhen", label: "Trigger When" },
+      { key: "input", label: "Input" },
+      { key: "logic", label: "Analysis Logic" },
+      { key: "output", label: "Output" },
+      { key: "boundary", label: "Boundary" },
     ],
     governance: "Governance Info",
     userFallback: "Marketing Strategy Team",
     governanceFields: [
-      { key: "knowledgeId", label: "Knowledge ID", icon: "file" },
-      { key: "owner", label: "Owner", icon: "user" },
-      { key: "source", label: "Source", icon: "layers" },
-      { key: "version", label: "Version", icon: "clock" },
-      { key: "reviewStatus", label: "Review Status", icon: "check-circle" },
-      { key: "usageCount", label: "Usage Count", icon: "chart" },
-      { key: "accuracy", label: "Accuracy Score", icon: "file-text" },
-      { key: "updated", label: "Last Updated", icon: "clock" },
-      { key: "user", label: "User", icon: "user" },
+      { key: "knowledgeId", label: "Knowledge ID" },
+      { key: "owner", label: "Owner" },
+      { key: "source", label: "Source" },
+      { key: "version", label: "Version" },
+      { key: "reviewStatus", label: "Review Status" },
+      { key: "usageCount", label: "Usage Count" },
+      { key: "accuracyScore", label: "Accuracy Score" },
+      { key: "updated", label: "Last Updated" },
+      { key: "user", label: "User" },
     ],
     preview: "Preview Example Output",
     showPreview: "Show Preview",

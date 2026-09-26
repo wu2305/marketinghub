@@ -214,7 +214,7 @@
   align-items: center;
   padding: 0 6px;
   border-radius: 999px;
-  background: var(--mh-surface-control-soft);
+  background: var(--mh-surface-neutral-soft);
   color: var(--mh-ink-control-muted);
   font-size: 11px;
 }
@@ -258,37 +258,6 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
-}
-
-.mh-dmview__basic-status {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  width: 76px;
-  height: 20px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.mh-dmview__basic-status i {
-  width: 6px;
-  height: 6px;
-  flex: 0 0 6px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.mh-dmview__basic-status.is-disabled {
-  background: var(--mh-bt-state-off-bg);
-  color: var(--mh-bt-state-off-ink);
 }
 
 .mh-dmview__basic-summary {
@@ -366,7 +335,7 @@
   place-items: center;
   border-radius: 10px;
   background: var(--mh-surface-neutral-soft);
-  color: var(--mh-bubble-to);
+  color: var(--mh-gold-medium);
 }
 
 .mh-dmview__report-icon svg {
@@ -670,20 +639,19 @@
 .mh-dmview__dialog-titleline {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
-  max-width: calc(100% - 56px);
+  max-width: 100%;
 }
 
 .mh-dmview__dialog-titleline strong {
   flex: 0 1 auto;
   min-width: 0;
-  overflow: hidden;
+  overflow-wrap: anywhere;
   color: var(--mh-ink-primary-deep);
   font-size: 20px;
   font-weight: 800;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .mh-dmview__table-type {
@@ -734,7 +702,7 @@
 .mh-dmview__icon-btn:hover,
 .mh-dmview__icon-btn:focus-visible {
   background: var(--mh-bg);
-  color: var(--mh-toast-bg);
+  color: var(--mh-ink-dark-control);
 }
 
 .mh-dmview__icon-btn svg {
@@ -857,5 +825,12 @@
 
   .mh-dmview__domains {
     max-height: 300px;
+  }
+}
+
+@media (max-width: 680px) {
+  .mh-dmview__related {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
   }
 }

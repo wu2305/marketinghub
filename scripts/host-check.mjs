@@ -11,15 +11,14 @@
  *   nav-loop    — catalog card → report row → live back → directory back,
  *                 all inside React (no reload, URL stays under /mh-host/),
  *                 then browser back (popstate) returns to the directory
- *   coverage    — a link to an unrebuilt original page shows the coverage
- *                 notice instead of navigating to /assets/pages/…
+ *   coverage    — an unrebuilt route shows the coverage notice under the base
+ *   campaign    — the real Campaign route shares Storybook's task/assistant flow
  *   home-flow   — Home assistant via useHomeDemo: history pick fills the
  *                 prompt with ASK disabled, typing re-enables, submit shows
  *                 an answer, close→reopen keeps it, new session clears, and
  *                 the skill menu opens the model-flow dialog
- *   sentinel    — host-owned elements get identical computed styles on the
- *                 bare sentinel page and the compose page (scoped resets do
- *                 not leak)
+ *   sentinel    — host-owned elements retain computed styles outside the
+ *                 library and inside compose, Hero children and Modal children
  *   dual        — two CityInvestDashboard / ReportCopilot instances stay
  *                 independent (filter A ≠ B, both streams complete, ask in A
  *                 leaves B untouched, ALT labels only in B)
@@ -33,7 +32,6 @@ import path from "node:path";
 import { chromium } from "playwright";
 import sirv from "sirv";
 import { ROOT, sourceFingerprint } from "./fingerprint.mjs";
-import { ASSISTANT } from "../src/design/content.js";
 
 const HOST = path.join(ROOT, "examples", "host");
 const DIST = path.join(HOST, "dist");
@@ -179,6 +177,14 @@ async function newPage() {
   if (!loc.includes("project=city")) notes.push(`after project click: unexpected URL ${loc}`);
   await assertBoot("after project click");
 
+  /* report-core.js:1504–1509 uses a button: Knowledge opens the drawer
+     without navigating to the Interpreter route. */
+  await page.getByRole("button", { name: "Open knowledge for Invest City Strategy Analysis" }).click();
+  await page.locator(".mh-details[role='dialog']").waitFor({ state: "visible", timeout: 5000 });
+  if (!page.url().includes("project=city")) notes.push("Knowledge action changed the route instead of opening report details");
+  await page.getByRole("button", { name: "Close report details" }).click();
+  await page.locator(".mh-details[role='dialog']").waitFor({ state: "detached", timeout: 5000 });
+
   await page.click(".mh-report-row__open >> nth=0");
   await page.waitForSelector(".mh-live", { timeout: 5000 });
   loc = assertLoc("live", "after open click");
@@ -217,7 +223,10 @@ async function newPage() {
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-header__link", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  await page.click('.mh-header__link:has-text("RedNote Campaign Tool")');
+  await page.evaluate(() => {
+    window.history.pushState(null, "", "/mh-host/coverage/assets/pages/unrebuilt.html");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
   await page.waitForSelector(".host-coverage", { timeout: 5000 });
   const loc = page.url();
   if (!new URL(loc).pathname.startsWith(BASE)) notes.push(`coverage left base: ${loc}`);
@@ -230,13 +239,79 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- campaign-flow: all sections, retained task draft, assistant answer ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.click('.mh-header__link:has-text("RedNote Campaign Tool")');
+  await page.waitForSelector(".mh-campaign", { timeout: 5000 });
+  for (const [label, heading] of [
+    ["Execution", "RedNote Campaign Tool"],
+    ["Assets", "Creative Asset"],
+    ["Analytics", "Analytics"],
+    ["Accounts", "Account Binding"],
+  ]) {
+    await page.locator(".mh-rail__item", { hasText: label }).click();
+    if (!(await page.locator(".mh-campaign main").innerText()).includes(heading)) notes.push(`${label} section missing ${heading}`);
+  }
+  await page.locator(".mh-rail__item", { hasText: "Execution" }).click();
+  await page.locator(".mh-heading--view .mh-button--primary").click();
+  await page.locator(".mh-task-dialog input[name='object']").fill("12 plans");
+  await page.locator(".mh-task-dialog select[name='platform']").selectOption("Douyin");
+  await page.locator(".mh-task-dialog__footer .mh-button--secondary").click();
+  await page.locator(".mh-heading--view .mh-button--primary").click();
+  if (await page.locator(".mh-task-dialog input[name='object']").inputValue() !== "12 plans") notes.push("task draft object reset after reopen");
+  if (await page.locator(".mh-task-dialog select[name='platform']").inputValue() !== "Douyin") notes.push("task draft platform reset after reopen");
+  await page.locator(".mh-task-dialog__footer .mh-button--primary").click();
+  if (!(await page.locator(".mh-toast").innerText()).includes("Campaign task added")) notes.push("submit toast missing");
+  await page.locator(".mh-launcher").click();
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  if (!(await page.locator(".mh-assistant__answer--workspace").innerText()).includes("AI Response")) notes.push("assistant answer missing");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Campaign navigation reloaded host");
+  notes.push(...errors);
+  record("campaign-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- R6 semantic routes: Home capability params and Interpreter overview ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  const dg = page.getByRole("link", { name: "DG Data Insight" });
+  const dgHref = await dg.getAttribute("href");
+  if (dgHref !== `${BASE}cockpit?project=rednote`) notes.push(`DG capability lost project parameter: ${dgHref}`);
+  // The new-tab modifier is Cmd on macOS but Ctrl on Linux/Windows (CI).
+  await dg.click({ modifiers: ["ControlOrMeta"] });
+  if (new URL(page.url()).pathname !== BASE) notes.push("modified capability click changed the current tab");
+  await dg.click();
+  await page.waitForSelector(".mh-project-directory", { timeout: 5000 });
+  if (new URL(page.url()).searchParams.get("project") !== "rednote") notes.push("DG capability opened wrong project");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("DG capability reloaded host");
+  await page.goto(`${origin}${BASE}interpreter?type=Business%20Term`, { waitUntil: "networkidle" });
+  const interpreterBoot = await page.evaluate(() => window.__mhHostBoot);
+  const overview = page.locator(".mh-sidebar-item[href]");
+  if ((await overview.getAttribute("href")) !== `${BASE}interpreter`) notes.push("Overview has no semantic host href");
+  await overview.click();
+  await page.waitForSelector(".mh-type-grid", { timeout: 5000 });
+  const url = new URL(page.url());
+  if (url.pathname !== `${BASE}interpreter` || url.searchParams.has("type")) notes.push(`Overview route wrong: ${url.pathname}${url.search}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== interpreterBoot) notes.push("Overview reloaded host");
+  notes.push(...errors);
+  record("semantic-navigation", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- home-flow: assistant history fill → enabled ASK → submit → session ---- */
 {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-launcher", { timeout: 10000 });
-  const expectedPrompt = ASSISTANT.history[0].prompt;
+  const expectedPrompt = "What's the ROI trend across my active campaigns this quarter?";
   const panel = page.locator(".mh-assistant");
   const box = panel.locator("textarea");
   const ask = panel.locator(".mh-assistant__send button");
@@ -428,9 +503,9 @@ async function newPage() {
   if ((await page.locator(".mh-skill-library__row").count()) !== 2) notes.push("Skill owner search missed two Emily Wang rows");
   await page.locator(".mh-skill-library__search input").fill("");
   await page.locator('[data-skill-id="scenario-channel-performance"]').click();
-  if (!(await page.locator(".mh-skill-detail__structure-item").count() === 5)) notes.push("Skill detail missed five structure blocks");
+  if (!(await page.locator(".mh-skill-detail .mh-scenario-structure__item").count() === 5)) notes.push("Skill detail missed five structure blocks");
   await page.getByRole("button", { name: "Show Preview" }).click();
-  if (!(await page.locator(".mh-skill-detail__preview-body").count())) notes.push("Skill preview did not open");
+  if (!(await page.locator(".mh-skill-detail .mh-scenario-preview__body").count())) notes.push("Skill preview did not open");
   await page.keyboard.press("Escape");
   if (await page.locator(".mh-skill-detail").count()) notes.push("Skill detail survived Escape");
   await page.locator(".mh-skill-library__filter select").selectOption("Under Review");
@@ -561,18 +636,43 @@ async function newPage() {
   await bare.goto(`${origin}${BASE}sentinel`, { waitUntil: "networkidle" });
   await bare.waitForSelector(".host-btn", { timeout: 10000 });
   const bareStyles = {};
-  for (const sel of [".host-btn", ".host-link", ".host-input"]) bareStyles[sel] = await bare.evaluate(snapshot(sel));
+  const selectors = [".host-btn", ".host-link", ".host-input", "[data-testid=host-native-button]", "[data-testid=host-native-link]", "[data-testid=host-native-input]"];
+  for (const sel of selectors) bareStyles[sel] = await bare.evaluate(snapshot(sel));
   await bare.screenshot({ path: path.join(OUT, "sentinel.png") });
   await bare.close();
 
   const { page: compose } = await newPage();
   await compose.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
   await compose.waitForSelector(".host-btn", { timeout: 10000 });
-  for (const sel of [".host-btn", ".host-link", ".host-input"]) {
+  for (const sel of selectors) {
     const onCompose = await compose.evaluate(snapshot(sel));
     if (onCompose !== bareStyles[sel]) notes.push(`${sel}: sentinel=${bareStyles[sel]} vs compose=${onCompose}`);
   }
   await compose.close();
+
+  const { page: slots } = await newPage();
+  await slots.goto(`${origin}${BASE}slot-sentinel`, { waitUntil: "networkidle" });
+  await slots.waitForSelector(".host-slot-modal .host-input", { timeout: 10000 });
+  for (const slot of [
+    ".host-slot-hero", ".host-slot-modal", ".host-slot-nested",
+    ".host-slot-drawer .mh-modal__titleline", ".host-slot-drawer .mh-modal__body", ".host-slot-drawer .mh-modal__foot",
+  ]) {
+    for (const sel of selectors) {
+      const inside = await slots.evaluate(snapshot(`${slot} ${sel}`));
+      if (inside !== bareStyles[sel]) notes.push(`${slot} ${sel}: sentinel=${bareStyles[sel]} vs slot=${inside}`);
+    }
+  }
+  const dialogBoxes = await slots.locator(".mh-modal__dialog").evaluateAll((dialogs) => dialogs.map((dialog) => ({
+    boxSizing: getComputedStyle(dialog).boxSizing,
+    cssWidth: parseFloat(getComputedStyle(dialog).width),
+    outerWidth: dialog.getBoundingClientRect().width,
+  })));
+  for (const box of dialogBoxes) {
+    if (box.boxSizing !== "border-box" || Math.abs(box.outerWidth - box.cssWidth) > 1) {
+      notes.push("Modal dialog frame expanded beyond CSS width: " + JSON.stringify(box));
+    }
+  }
+  await slots.close();
   record("sentinel", notes.length === 0, notes);
 }
 
@@ -760,23 +860,23 @@ async function newPage() {
   await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
   await page.waitForSelector(".host-copilot .mh-copilot", { timeout: 10000 });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  /* The generic chat entry renders "Open report context" with an original
-     knowledge.html href that bypasses page-level href builders. */
+  /* Copilot source links carry report/asset identity into the Interpreter
+     while remaining native links under the host base. */
   const copA = page.locator('.host-copilot[data-instance="a"] .mh-copilot');
   await copA.locator("textarea").fill("what drove this?");
   await copA.locator(".mh-copilot__send").click();
   await copA.locator(".mh-copilot__entry").first().waitFor({ timeout: 8000 });
   const link = copA.locator('a:has-text("Open report context")').first();
   const href = await link.getAttribute("href");
-  if (!href || !href.includes("/assets/pages/")) notes.push(`expected a raw demo href, got ${href}`);
+  const target = new URL(href, origin);
+  if (target.pathname !== `${BASE}interpreter` || target.searchParams.get("report") !== "city" || target.searchParams.get("asset") !== "city-report-context") notes.push(`copilot context lost report/asset parameters: ${href}`);
   await link.click();
   await page.waitForSelector(".mh-interpreter__main", { timeout: 5000 });
   const loc = new URL(page.url());
-  if (loc.pathname !== `${BASE}interpreter`) notes.push(`raw knowledge link missed InterpreterRoute: ${loc.pathname}`);
-  if (loc.pathname.startsWith("/assets/pages/")) notes.push(`raw knowledge link hit the original route: ${loc.pathname}`);
-  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("raw knowledge link reloaded the page");
+  if (loc.pathname !== `${BASE}interpreter`) notes.push(`copilot context missed InterpreterRoute: ${loc.pathname}`);
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("copilot context reloaded the page");
   notes.push(...errors);
-  record("raw-knowledge-link", notes.length === 0, notes);
+  record("copilot-context-link", notes.length === 0, notes);
   await page.close();
 }
 
@@ -967,7 +1067,7 @@ async function newPage() {
   }
   await page.locator('.mh-scenario-detail__tabs button:has-text("Knowledge Content")').click();
   await page.locator('.mh-scenario-detail__preview button').click();
-  if (await page.locator(".mh-scenario-detail__preview-output pre").count() !== 1) notes.push("preview did not open");
+  if (await page.locator(".mh-scenario-detail__preview .mh-scenario-preview__output pre").count() !== 1) notes.push("preview did not open");
   await page.goto(`${origin}${BASE}scenario-detail?id=scenario-campaign-review`, { waitUntil: "networkidle" });
   const boot = await page.evaluate(() => window.__mhHostBoot);
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Campaign Review Reporting") notes.push("known id did not select campaign record");
@@ -981,6 +1081,40 @@ async function newPage() {
   notes.push(...errors);
   await page.screenshot({ path: path.join(OUT, "scenario-detail.png") });
   record("scenario-detail-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- P05: the private Media Tracking hook drives the host as well as stories ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}media-tracking-detail`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.locator(".mh-tracking__head h1").waitFor();
+  if (!(await page.locator(".mh-header__link[aria-current='page']").innerText()).includes("Self-Service Center")) notes.push("source active navigation missing");
+  await page.locator(".mh-tracking .mh-tabs__tab:first-child").click();
+  if (!(await page.locator(".mh-tracking .mh-tabs__tab.is-active").innerText()).includes("Daily")) notes.push("period callback did not select Daily");
+  await page.locator(".mh-launcher").click();
+  await page.locator(".mh-assistant__box textarea").fill("Summarize the latest media tracking performance.");
+  await page.locator(".mh-assistant__send .mh-button").click();
+  if (!(await page.locator(".mh-assistant__answer--simple").innerText()).includes("I will use the AI Interpreter knowledge context")) notes.push("lite answer missing");
+  await page.locator(".mh-assistant__skill").click();
+  await page.locator(".mh-skill__category").nth(1).click();
+  await page.locator(".mh-skill__action").first().click();
+  await page.locator(".mh-flow__card--history").waitFor();
+  await page.locator(".mh-flow__foot .mh-flow__btn--primary").click();
+  await page.locator(".mh-flow__card--form").waitFor();
+  await page.locator(".mh-flow__back").click();
+  await page.locator(".mh-flow__card--history").waitFor();
+  await page.locator(".mh-flow__foot .mh-flow__btn--secondary").click();
+  await page.locator(".mh-assistant__close").click();
+  await page.locator(".mh-assistant").waitFor({ state: "hidden" });
+  await page.locator(".mh-tracking__back").click();
+  await page.locator(".mh-page__shell--self").waitFor();
+  if (new URL(page.url()).pathname !== `${BASE}self-service`) notes.push("Media Tracking back link did not stay in host");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Media Tracking flow reloaded the host");
+  notes.push(...errors);
+  record("p05-media-tracking-flow", notes.length === 0, notes);
   await page.close();
 }
 

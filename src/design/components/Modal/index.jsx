@@ -4,6 +4,7 @@ import { cx } from "../../cx.js";
 import { useOverlayLayer } from "../../lib/overlay.js";
 import "./Modal.css";
 
+/** @type {readonly ["modal", "sheet", "drawer"]} */
 export const modalVariants = ["modal", "sheet", "drawer"];
 
 
@@ -37,6 +38,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
       <div className="mh-modal__scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <div
         className={cx("mh-modal__dialog", className)}
+        data-mh-slot
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId || generatedTitleId}
@@ -47,7 +49,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
           <div className="mh-modal__heading">
             {eyebrow ? <span className="mh-modal__eyebrow">{eyebrow}</span> : null}
             {titleExtra ? (
-              <div className="mh-modal__titleline">
+              <div className="mh-modal__titleline" data-mh-slot>
                 <h2 className="mh-modal__title" id={titleId || generatedTitleId}>
                   {title}
                 </h2>
@@ -63,8 +65,8 @@ export function Modal({ open = false, eyebrow, title, children, className, close
             ×
           </button>
         </header>
-        {isDrawer ? <div className="mh-modal__body">{children}</div> : children}
-        {isDrawer && footer ? <footer className="mh-modal__foot">{footer}</footer> : null}
+        {isDrawer ? <div className="mh-modal__body" data-mh-slot>{children}</div> : children}
+        {isDrawer && footer ? <footer className="mh-modal__foot" data-mh-slot>{footer}</footer> : null}
       </div>
     </div>
   );

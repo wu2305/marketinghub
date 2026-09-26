@@ -3,6 +3,7 @@ import { Modal } from "../../../components/Modal/index.jsx";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import "./DerivedMetricPanel.css";
 
+/** @type {readonly ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"]} */
 export const formulaOperators = ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"];
 const symbol = { "*": "×", "/": "÷", const: "123", clear: "▤", backspace: "⌫" };
 

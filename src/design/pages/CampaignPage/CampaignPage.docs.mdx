@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./CampaignPage.stories.jsx";
+
+<Meta of={PageStories} name="CampaignPage" />
+
+<Title>CampaignPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.Campaign} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--campaign" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="CampaignPage" source={componentSource} />

@@ -1,6 +1,6 @@
 .mh-empty--unknown {
 border-style: dashed;
-  background: #fbfbfc;
+  background: var(--mh-row-hover);
 }
 
 .mh-interpreter {
@@ -23,7 +23,7 @@ min-width: 0;
 /* Type pages flush the library toolbar to the hero edge
    (.knowledge-main.business-type-page → padding 0 44px 42px). The original's
    later ai-interpreter-overview.css `!important` overrides resolve the canvas
-   to #f6f7f8 on every interpreter state. */
+   to var(--mh-page-bg) on every interpreter state. */
 
 .mh-interpreter__main--type {
 /* column 1 is reserved for the (now fixed) sidebar rail, same as the
@@ -319,4 +319,91 @@ font-family: var(--mh-font);
 margin-bottom: 6px;
   color: var(--mh-gold-deep);
   letter-spacing: 0.08em;
+}
+
+/* Below the original 1180px canvas, keep navigation and the active view in
+   the viewport. The type-page rail returns to the grid flow. */
+@media (max-width: 1100px) {
+  .mh-page--interpreter {
+    min-width: 0;
+  }
+
+  .mh-page--interpreter .mh-interpreter {
+    width: calc(100% - 64px);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-page--interpreter-type .mh-interpreter {
+    min-height: 0;
+  }
+
+  .mh-page--interpreter-type .mh-sidebar {
+    position: static;
+    z-index: auto;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    padding: 16px 20px 20px;
+    overflow: visible;
+    border-right: 0;
+  }
+
+  .mh-page--interpreter-type .mh-sidebar__group {
+    margin-right: 0;
+  }
+
+  .mh-page--interpreter-type .mh-hero {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .mh-interpreter__main--type {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 860px) {
+  .mh-page--interpreter .mh-interpreter {
+    width: calc(100% - 32px);
+  }
+
+  .mh-page--interpreter .mh-interpreter__main {
+    padding: 20px 0 42px;
+  }
+
+  .mh-page--interpreter .mh-hero {
+    box-sizing: border-box;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 28px 0 36px;
+  }
+
+  .mh-page--interpreter .mh-hero__layout {
+    width: calc(100% - 32px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 22px;
+  }
+
+  .mh-page--interpreter .mh-hero__copy {
+    min-width: 0;
+    max-width: none;
+  }
+
+  .mh-page--interpreter .mh-hero__copy h1,
+  .mh-page--interpreter-type .mh-hero .mh-hero__copy h1 {
+    font-size: clamp(32px, 9vw, 44px);
+  }
+
+  .mh-page--interpreter .mh-hero__aside {
+    width: 100%;
+    flex: 0 1 auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .mh-page--interpreter .mh-hero__aside .mh-metric {
+    min-height: 0;
+    padding: 12px;
+  }
 }

@@ -33,6 +33,7 @@ describe("useScenarioDemo + ScenarioReportsView", () => {
       "Campaign Review Reporting",
       "Channel Exception Watch",
     ]);
+    expect(cards()[0].querySelector(".mh-badge--knowledge")?.textContent).toBe("Disabled");
     /* every seed is owned by another user — all three icons are disabled with
        the permission tooltip, matching the original's real `disabled` attr. */
     const actions = screen.getAllByRole("button", { name: /^Edit / });

@@ -9,7 +9,7 @@ display: inline-flex;
   justify-content: center;
   gap: 8px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-control);
   cursor: pointer;
   font-weight: 700;
   line-height: 1;
@@ -47,21 +47,21 @@ height: 40px;
 }
 
 .mh-button--primary {
-border-color: #20262c;
-  background: #20262c;
-  color: #fff;
+border-color: var(--mh-surface-dark);
+  background: var(--mh-surface-dark);
+  color: var(--mh-ink-inverse);
 }
 
 .mh-button--primary:hover,
 .mh-button--primary:focus-visible {
-border-color: #39444e;
-  background: #39444e;
+border-color: var(--mh-surface-action-slate);
+  background: var(--mh-surface-action-slate);
 }
 
 .mh-button--gold {
-border-color: #d9a85e;
-  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
-  color: #1a1d20;
+border-color: var(--mh-line-gold-active);
+  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
+  color: var(--mh-ink-strong);
   box-shadow: 0 6px 16px rgba(166, 111, 39, 0.16);
 }
 
@@ -72,13 +72,13 @@ filter: brightness(0.96);
 
 .mh-button--secondary {
 border-color: var(--mh-line-strong);
-  background: #fff;
+  background: var(--mh-surface);
   color: var(--mh-copy);
 }
 
 .mh-button--secondary:hover,
 .mh-button--secondary:focus-visible {
-border-color: #9da8b2;
+border-color: var(--mh-line-control-hover);
   background: var(--mh-bg-soft);
 }
 
@@ -90,14 +90,14 @@ border-color: transparent;
 
 .mh-button--quiet:hover,
 .mh-button--quiet:focus-visible {
-background: #f3f6f8;
+background: var(--mh-bg);
   color: var(--mh-ink);
 }
 
 .mh-button--danger {
-border-color: #a23b4f;
-  background: #fff;
-  color: #a23b4f;
+border-color: var(--mh-danger-muted);
+  background: var(--mh-surface);
+  color: var(--mh-danger-muted);
 }
 
 .mh-button:disabled {

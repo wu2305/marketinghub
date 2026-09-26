@@ -3,7 +3,9 @@ import React from "react";
 import { cx } from "../../cx.js";
 import "./Hero.css";
 
+/** @type {readonly ["banner", "home", "knowledge"]} */
 export const heroVariants = ["banner", "home", "knowledge"];
+/** @type {readonly ["banner", "home", "knowledge", "none"]} */
 export const heroScrims = ["banner", "home", "knowledge", "none"];
 
 /**
@@ -46,7 +48,7 @@ export function Hero({
           <h1 id={headingId}>{title}</h1>
           {description ? <p>{description}</p> : null}
         </div>
-        {children ? <div className="mh-hero__aside" role={asideLabel ? "group" : undefined} aria-label={asideLabel}>{children}</div> : null}
+        {children ? <div className="mh-hero__aside" data-mh-slot role={asideLabel ? "group" : undefined} aria-label={asideLabel}>{children}</div> : null}
       </div>
     </section>
   );

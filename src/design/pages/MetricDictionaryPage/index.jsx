@@ -2,26 +2,29 @@ import React from "react";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";
 import { Shell } from "../Shell/index.jsx";
 import "./MetricDictionaryPage.css";
 
+/** @type {readonly ["Basic", "Derived"]} */
 export const metricCategories = ["Basic", "Derived"];
+/** @type {readonly ["definition", "formula", "dimensions"]} */
 export const metricDetailTabs = ["definition", "formula", "dimensions"];
 
 /**
  * Standalone Metric Dictionary page. All copy, records and state arrive from props.
  * @param {object} props
  * @param {object} props.logo
- * @param {Array<{id:string,label:string,href:string}>} props.navigation
+ * @param {Array<{id:string,label:string,href:string}>} [props.navigation=[]]
  * @param {object} props.content header/sidebar/detail/derivedPanel copy
- * @param {Array<object>} props.metrics
- * @param {typeof metricCategories[number]} props.category
+ * @param {Array<object>} [props.metrics=[]]
+ * @param {typeof metricCategories[number]} [props.category="Basic"]
  * @param {string} props.metricId
- * @param {typeof metricDetailTabs[number]} props.tab
- * @param {object} props.derivedEditor open, draft, tokens, constantOpen, notice and editor callbacks
- * @param {object} props.assistant copy, open, prompt, answers, selectedSkill, skillFlow and callbacks
+ * @param {typeof metricDetailTabs[number]} [props.tab="definition"]
+ * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks
+ * @param {object} [props.assistant={}] copy, open, prompt, answers, selectedSkill, skillFlow and callbacks
  * @param {(id:string,params?:object)=>string} props.hrefFor
  * @param {(target:{id:string,params:object,href:string})=>void} props.onNavigate
  * @param {(event:{category:string})=>void} props.onCategoryChange
@@ -77,7 +80,7 @@ export function MetricDictionaryPage({
             <p>{metric?.desc}</p>
           </div>
           <div className="mh-metric-page__actions">
-            <span className={`mh-metric-page__status mh-metric-page__status--${metric?.status?.toLowerCase()}`}>{metric?.status}</span>
+            {metric?.status ? <StatusBadge status={metric.status} size="lg" tone={metric.status === "Draft" ? "warning" : "auto"} /> : null}
             <button type="button" className="mh-metric-page__action">✎ {header.edit}</button>
             <button type="button" className="mh-metric-page__action mh-metric-page__action--primary" onClick={onOpen}>＋ {header.add}</button>
           </div>

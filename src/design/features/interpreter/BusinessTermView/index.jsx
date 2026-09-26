@@ -82,7 +82,7 @@ function SynonymClamp({ tags = [], moreLabel = "More synonyms" }) {
  * @param {Array<number>} [props.pageSizes=[5, 10, 20]]
  * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, selectedLabel, createLabel, creatorLabel, synonymsLabel, moreSynonymsLabel, statusLabels { Enable, Disable }, emptyMessage, countLabel ("Showing {shown} of {total} terms"), units, rowsPerPageLabel, previousLabel, nextLabel, detailEyebrow, detailCloseLabel, sections { termType, description, synonyms, dataModel, creator }
  * @param {string} [props.createHref] "Add Business Term" link target (M5 create page)
- * @param {React.Ref} [props.searchRef] forwarded to the search input ("/" and Cmd/Ctrl+K shortcuts)
+ * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" and Cmd/Ctrl+K shortcuts)
  * @param {object|null} [props.detail] record shown in the detail drawer (null = closed)
  * @param {object|null} [props.dialog] ConfirmDialog props content ({ purpose, title, message, confirmLabel, cancelLabel, closeLabel }); null = closed
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]

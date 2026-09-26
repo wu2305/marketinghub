@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./ScenarioLibraryPage.stories.jsx";
+
+<Meta of={PageStories} name="ScenarioLibraryPage" />
+
+<Title>ScenarioLibraryPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.ScenarioLibrary} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--scenario-library" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="ScenarioLibraryPage" source={componentSource} />

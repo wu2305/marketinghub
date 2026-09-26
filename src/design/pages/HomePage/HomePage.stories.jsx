@@ -18,7 +18,7 @@ export const Home = {
   args: {
     assistantOpen: false,
     prompt: "",
-    scope: "All",
+    scope: ASSISTANT.scopes[0],
     ...pageShell,
     hero: HOME.hero,
     heading: HOME.heading,
@@ -26,6 +26,7 @@ export const Home = {
     assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     scope: { control: "select", options: ASSISTANT.scopes },
     assistantOpen: { control: "boolean" },
     onNavigate: { action: "onNavigate" },

@@ -18,7 +18,9 @@ export function filterFeedback(records, { search = "", type = "all", time = "all
   });
 }
 
-/** Private source-backed flow shared by page stories and the independent host. */
+/** Private source-backed flow shared by page stories and the independent host.
+ * @param {Record<string, any>} options
+ */
 export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, now = Date.UTC(2026, 8, 26, 12), initial = EMPTY_INITIAL, onNavigate, onTypeChange, onTimeChange, onSearchChange, onOpen, onCloseDetail, onAssistantSubmit, onFlowSave, onFlowSubmit } = {}) {
   // Source rows are created at page load and filters run after that render.
   // One deterministic second of elapsed time keeps the exact 24h/168h rows

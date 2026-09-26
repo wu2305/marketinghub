@@ -27,6 +27,38 @@ order: -1;
   width: 300px;
 }
 
+@media (max-width: 1100px) {
+  .mh-flview__tools {
+    flex-wrap: wrap;
+  }
+
+  .mh-flview__search {
+    flex: 1 1 300px;
+    min-width: min(100%, 240px);
+    width: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .mh-flview__search {
+    flex-basis: 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mh-flview .mh-flview__tools > .mh-check-filter {
+    flex: 1 1 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .mh-flview .mh-flview__tools .mh-check-filter__options {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+  }
+}
+
 /* `.knowledge-add-button` — gold gradient pill (AM only). */
 
 .mh-flview__create {
@@ -36,9 +68,9 @@ display: inline-flex;
   height: 36px;
   padding: 0 15px;
   border-radius: 9px;
-  background: linear-gradient(135deg, var(--mh-bt-create-from), var(--mh-bt-create-to));
+  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
   box-shadow: var(--mh-bt-create-shadow);
-  color: var(--mh-surface);
+  color: var(--mh-ink-inverse);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -47,7 +79,7 @@ display: inline-flex;
 }
 
 .mh-flview__create:hover {
-background: linear-gradient(135deg, var(--mh-bt-create-from-hover), var(--mh-bt-create-to-hover));
+background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
 }
 
 .mh-flview__create:focus-visible {
@@ -597,6 +629,12 @@ padding: 16px 20px;
 
 /* ── Drawer body — the RC variant re-pads to 22/24/30; the shared
    scenario-report-detail sections serve MD/AM/ER. ─────────────────────── */
+
+/* Drawer and edit dialog content render inside Modal slots, outside the view root. */
+.mh-flview__drawer,
+.mh-flview__edit {
+  font-family: var(--mh-font);
+}
 
 .mh-flview__drawer--rc .mh-modal__body {
 padding: 22px 24px 30px;

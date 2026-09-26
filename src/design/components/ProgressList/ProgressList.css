@@ -22,7 +22,7 @@ color: var(--mh-ink);
 height: 6px;
   overflow: hidden;
   border-radius: 3px;
-  background: #e7ebee;
+  background: var(--mh-line-panel-subtle);
 }
 
 .mh-progress__bar {

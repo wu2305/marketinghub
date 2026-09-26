@@ -14,7 +14,7 @@ position: relative;
   padding: 0 13px;
   border: 1px solid var(--mh-check-filter-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--mh-surface);
   color: var(--mh-check-filter-ink);
 }
 
@@ -83,7 +83,7 @@ position: absolute;
   padding: 8px;
   border: 1px solid var(--mh-check-filter-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--mh-surface);
   box-shadow: var(--mh-check-filter-shadow);
 }
 

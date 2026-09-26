@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { assetUrl } from "../asset-url.js";
+import { demoImage } from "./images.js";
 import { KNOWLEDGE_CREATE } from "./content/knowledge-create.js";
 import { knowledgeCreateTypes } from "../knowledge-create-options.js";
 
@@ -47,6 +47,7 @@ const initialValues = {
  * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`. `stage` is
  * present only when the original UI names a draft or dedicated workflow state;
  * generic submit and Report Context description review have no invented stage.
+ * @param {Record<string, any>} options
  */
 export function useKnowledgeCreateDemo({
   content = KNOWLEDGE_CREATE, type: initialType = "Business Term", mode = "create", id,
@@ -57,7 +58,11 @@ export function useKnowledgeCreateDemo({
   const unavailable = mode === "edit" && type === "Analytical Model" &&
     (!record.type || record.created_by !== content.identity.currentUser);
   const reportEditAvailable = type === "Report Context" && mode === "edit" && record.type === "Report Context";
-  const [values, setValues] = useState(() => ({ ...initialValues, ...record, ...initial }));
+  const [values, setValues] = useState(() => ({
+    ...initialValues, ...record, ...initial,
+    aiInterpretationEnabled: initial.aiInterpretationEnabled ?? initial.ai_interpretation_enabled ?? initial.status ?? record.aiInterpretationEnabled ?? record.ai_interpretation_enabled ?? record.status ?? initialValues.status,
+    aiSummaryEnabled: initial.aiSummaryEnabled ?? initial.ai_summary_enabled ?? record.aiSummaryEnabled ?? record.ai_summary_enabled ?? false,
+  }));
   const [invalid, setInvalid] = useState(state.invalid || []);
   const [result, setResult] = useState(state.result || null);
   const [dialog, setDialog] = useState(state.dialog || null);
@@ -93,14 +98,14 @@ export function useKnowledgeCreateDemo({
     return true;
   };
   return {
-    content, logo: { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry", href: hrefFor("home") },
+    content, logo: { src: demoImage("assets/images/tapestry-logo.png"), alt: "Tapestry", href: hrefFor("home") },
     navigation: content.navigation.map((item) => ({ ...item, href: hrefFor(item.id) })),
     type, mode, id, values, invalid, result, dialog, menu, unavailable, reportEditAvailable, hrefFor,
     onNavigate: navigate, onTypeChange: selectType, onChange: update,
     onSave: () => persist("save"), onSubmit: () => persist("submit"),
     onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || reportEditAvailable ? { type } : {} }),
-    onResultClose: ({ reason } = {}) => { setResult(null); if (reason === "close") navigate({ id: "interpreter" }); },
-    onDialog: ({ kind }) => setDialog(kind), onDialogClose: ({ reason } = {}) => { setDialog(null); if (reason === "close" && ["test", "smart", "preview"].includes(dialog)) navigate({ id: "interpreter" }); },
+    onResultClose: ({ reason } = { reason: undefined }) => { setResult(null); if (reason === "close") navigate({ id: "interpreter" }); },
+    onDialog: ({ kind }) => setDialog(kind), onDialogClose: ({ reason } = { reason: undefined }) => { setDialog(null); if (reason === "close" && ["test", "smart", "preview"].includes(dialog)) navigate({ id: "interpreter" }); },
     onMenu: ({ name }) => setMenu((prior) => prior === name ? null : name),
   };
 }

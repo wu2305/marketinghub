@@ -5,6 +5,7 @@ width: min(800px, calc(100% - 64px));
   flex-direction: column;
   padding: 0;
   overflow: hidden;
+  font-family: var(--mh-font);
 }
 
 .mh-upload-history__body {
@@ -106,7 +107,7 @@ width: 12px;
 .mh-upload-history__btn:hover,
 .mh-upload-history__btn:focus-visible {
 background: var(--mh-hover-warm);
-  border-color: var(--mh-bubble-to);
+  border-color: var(--mh-gold-medium);
   color: var(--mh-ink);
   outline: 0;
 }

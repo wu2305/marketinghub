@@ -83,7 +83,8 @@
   margin-left: auto;
   padding: 0 16px;
   border-radius: 8px;
-  background: var(--mh-gold-gradient);
+  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
+  box-shadow: var(--mh-bt-create-shadow);
   color: var(--mh-surface);
   font-size: 12px;
   font-weight: 600;
@@ -91,7 +92,12 @@
 }
 
 .mh-srview__create:hover {
-  filter: brightness(1.04);
+  background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
+}
+
+.mh-srview__create:focus-visible {
+  outline: 2px solid var(--mh-principle-focus-ring);
+  outline-offset: 2px;
 }
 
 /* hidden in the original on type pages (fm-overview-countline is display:none) */
@@ -240,24 +246,6 @@
   max-width: 132px;
 }
 
-.mh-srview__state {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 76px;
-  min-height: 20px;
-  border-radius: 5px;
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.mh-srview__state.is-off {
-  background: var(--mh-bt-state-off-bg);
-  color: var(--mh-bt-state-off-ink);
-}
-
 .mh-srview__card-actions {
   position: absolute;
   right: 16px;
@@ -322,38 +310,6 @@
   padding: 0;
   font-size: 19px;
   line-height: 1;
-}
-
-.mh-srview__title-pill {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 7px;
-  min-height: 22px;
-  padding: 5px 10px 5px 9px;
-  border-radius: 999px;
-  background: var(--mh-surface-status-neutral);
-  color: var(--mh-bt-status-off-ink);
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.mh-srview__title-pill i {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 7px;
-  border-radius: 50%;
-  background: var(--mh-bt-status-off-dot);
-}
-
-.mh-srview__title-pill[data-status="enabled"] {
-  background: var(--mh-bt-status-on-bg);
-  color: var(--mh-bt-status-on-ink);
-}
-
-.mh-srview__title-pill[data-status="enabled"] i {
-  background: var(--mh-bt-status-on-dot);
 }
 
 .mh-srview__flow--head {
@@ -495,7 +451,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 860px) {
   .mh-srview__tools {
     flex-wrap: wrap;
   }
@@ -506,11 +462,13 @@
     order: -2;
   }
 
-  .mh-srview__list {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .mh-srview__create {
     margin-left: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .mh-srview__list {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

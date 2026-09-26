@@ -23,6 +23,8 @@ import { TaskList } from "../../features/campaign/TaskList/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./CampaignPage.css";
 
+export const campaignSections = ["overview", "execution", "assets", "analytics", "accounts"];
+export const campaignChannels = ["rednote", "douyin"];
 
 /**
  * RedNote Campaign Tool: rail-navigated sections (overview, execution, assets,
@@ -40,7 +42,8 @@ import "./CampaignPage.css";
  * @param {Array<object>} [props.objectives=[]] ProgressList items
  * @param {Array<object>} [props.accountColumns=[]] DataTable columns
  * @param {Array<object>} [props.accountRows=[]] DataTable rows
- * @param {Object<string, { eyebrow?: string, title?: string, description?: string }>} [props.headings={}] per-section headings
+ * @param {{ channelViewAria: string, objectiveChartAria: string, accountSearch: string, filterLabel: string, resetLabel: string, accountCaption: (count: number) => string }} props.labels Page control copy and accessible names.
+ * @param {Object<string, { eyebrow?: string, title?: string, description?: string, action?: string, badge?: string, status?: string }>} [props.headings={}] per-section headings and section action/status copy
  * @param {Object<string, object>} [props.panels={}] per-section panel copy
  * @param {Array<object>} [props.executionSummary=[]] SummaryStrip items
  * @param {Array<object>} [props.taskQueue=[]] TaskList items
@@ -51,9 +54,9 @@ import "./CampaignPage.css";
  * @param {Array<object>} [props.recommendations=[]] recommendation card contents
  * @param {Array<object>} [props.bindingColumns=[]]
  * @param {Array<object>} [props.accounts=[]]
- * @param {object} [props.taskDialog={}] Create Campaign Task dialog copy: eyebrow, title, description, fields {actions, platforms, accounts}, object {label, value}, preview {eyebrow, state, note}, cancelLabel, submitLabel
+ * @param {{ eyebrow?: string, title?: string, description?: string, fields?: { actionLabel?: string, actions?: Array<string|object>, platformLabel?: string, platforms?: Array<string|object>, accountLabel?: string, accounts?: Array<string|object> }, object?: { label?: string, value?: string }, preview?: { eyebrow?: string, state?: string, note?: string }, cancelLabel?: string, submitLabel?: string }} [props.taskDialog={}] Create Campaign Task dialog fields and action copy.
  * @param {boolean} [props.taskDialogOpen=false]
- * @param {{ action?: string, platform?: string, account?: string, object?: string }} [props.taskDraft] controlled draft values; omit to let the page keep its own draft
+ * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes.
  * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft
  * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
@@ -64,18 +67,18 @@ import "./CampaignPage.css";
  * @param {(event: { id: string, label: string }) => void} [props.onSectionChange]
  * @param {(event: { id: string, label: string }) => void} [props.onChannelChange]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
- * @param {() => void} [props.onFilter]
- * @param {() => void} [props.onReset]
+ * @param {(target: { query: string }) => void} [props.onFilter]
+ * @param {(event: { reason: "button" }) => void} [props.onReset]
  * @param {(event: { reason: "button" }) => void} [props.onCreateTask]
  * @param {(event: { reason: "button" }) => void} [props.onBindAccount]
  * @param {(event: { reason: "scrim"|"escape"|"button"|"cancel" }) => void} [props.onCloseTask]
  * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask]
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
- * @param {() => void} [props.onOpenAssistant]
- * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
+ * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: object) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  */
 export function CampaignPage({
@@ -90,6 +93,7 @@ export function CampaignPage({
   objectives = [],
   accountColumns = [],
   accountRows = [],
+  labels,
   headings = {},
   panels = {},
   executionSummary = [],
@@ -128,26 +132,9 @@ export function CampaignPage({
   onSubmit,
   onSuggestion,
 }) {
-  /* The original task dialog is a native <dialog> whose form is never reset —
-     cancel/×/backdrop/Escape and even a successful submit all keep the field
-     values. The draft therefore lives on the page (surviving Modal unmounts),
-     uncontrolled by default; `taskDraft` + `onTaskDraftChange` let a host take
-     over. */
-  const firstOption = (options) => {
-    const first = options?.[0];
-    return typeof first === "object" && first !== null ? first.value : first || "";
-  };
-  const taskDefaults = {
-    action: firstOption(taskDialog.fields?.actions),
-    platform: firstOption(taskDialog.fields?.platforms),
-    account: firstOption(taskDialog.fields?.accounts),
-    object: taskDialog.object?.value || "",
-  };
-  const [localTaskDraft, setLocalTaskDraft] = React.useState(taskDefaults);
-  const draft = taskDraft !== undefined ? taskDraft : localTaskDraft;
+  const draft = taskDraft || { action: "", platform: "", account: "", object: "" };
   const updateTaskDraft = (name, value) => {
     const next = { ...draft, [name]: value };
-    if (taskDraft === undefined) setLocalTaskDraft(next);
     onTaskDraftChange?.({ name, value, draft: next });
   };
   const visibleAccounts = accountRows.filter((row) => !query || row.name.toLowerCase().includes(query.toLowerCase()));
@@ -195,7 +182,7 @@ export function CampaignPage({
           {section === "overview" ? (
             <>
               <SectionHeading variant="view" eyebrow={overviewHeading.eyebrow} title={overviewHeading.title} description={overviewHeading.description}>
-                <Tabs label="Channel view" variant="segmented" items={channels} value={channel} onChange={onChannelChange} />
+                <Tabs label={labels.channelViewAria} variant="segmented" items={channels} value={channel} onChange={onChannelChange} />
               </SectionHeading>
               <div className="mh-campaign__metrics">
                 {metrics.map((metric) => (
@@ -207,7 +194,7 @@ export function CampaignPage({
                   <ProgressList items={distribution} />
                 </Panel>
                 <Panel eyebrow={objectivePanel.eyebrow} title={objectivePanel.title} meta={objectivePanel.meta}>
-                  <ColumnChart label="Marketing objective distribution chart" items={objectives} />
+                  <ColumnChart label={labels.objectiveChartAria} items={objectives} />
                 </Panel>
               </div>
               <div className="mh-campaign__table">
@@ -222,17 +209,17 @@ export function CampaignPage({
                         onFilter?.({ query });
                       }}
                     >
-                      <SearchField label="Search sub-account" value={query} placeholder="Search sub-account" size="sm" icon="none" onChange={onQueryChange} />
+                      <SearchField label={labels.accountSearch} value={query} placeholder={labels.accountSearch} size="sm" icon="none" onChange={onQueryChange} />
                       <Button variant="primary" size="sm" type="submit">
-                        Filter
+                        {labels.filterLabel}
                       </Button>
                       <Button variant="secondary" size="sm" onClick={() => onReset?.({ reason: "button" })}>
-                        Reset
+                        {labels.resetLabel}
                       </Button>
                     </form>
                   }
                 >
-                  <DataTable columns={accountColumns} rows={visibleAccounts} caption={`${visibleAccounts.length} ${visibleAccounts.length === 1 ? "account" : "accounts"} shown`} />
+                  <DataTable columns={accountColumns} rows={visibleAccounts} caption={labels.accountCaption(visibleAccounts.length)} />
                 </Panel>
               </div>
             </>
@@ -348,10 +335,10 @@ export function CampaignPage({
         >
           <p className="mh-task-dialog__intro">{taskDialog.description}</p>
           <div className="mh-task-dialog__grid">
-            <FormField label={taskDialog.fields?.actionLabel || "Action"} name="action" control="select" options={taskDialog.fields?.actions || []} value={draft.action} onChange={(event) => updateTaskDraft("action", event.value)} />
-            <FormField label={taskDialog.fields?.platformLabel || "Platform"} name="platform" control="select" options={taskDialog.fields?.platforms || []} value={draft.platform} onChange={(event) => updateTaskDraft("platform", event.value)} />
-            <FormField label={taskDialog.fields?.accountLabel || "Account"} name="account" control="select" options={taskDialog.fields?.accounts || []} value={draft.account} onChange={(event) => updateTaskDraft("account", event.value)} />
-            <FormField label={taskDialog.object?.label || "Object"} name="object" value={draft.object} onChange={(event) => updateTaskDraft("object", event.value)} />
+            <FormField label={taskDialog.fields?.actionLabel} name="action" control="select" options={taskDialog.fields?.actions || []} value={draft.action} onChange={(event) => updateTaskDraft("action", event.value)} />
+            <FormField label={taskDialog.fields?.platformLabel} name="platform" control="select" options={taskDialog.fields?.platforms || []} value={draft.platform} onChange={(event) => updateTaskDraft("platform", event.value)} />
+            <FormField label={taskDialog.fields?.accountLabel} name="account" control="select" options={taskDialog.fields?.accounts || []} value={draft.account} onChange={(event) => updateTaskDraft("account", event.value)} />
+            <FormField label={taskDialog.object?.label} name="object" value={draft.object} onChange={(event) => updateTaskDraft("object", event.value)} />
           </div>
           <div className="mh-task-dialog__preview">
             <span>{taskDialog.preview?.eyebrow}</span>
@@ -360,10 +347,10 @@ export function CampaignPage({
           </div>
           <footer className="mh-task-dialog__footer">
             <Button variant="secondary" onClick={() => onCloseTask?.({ reason: "cancel" })}>
-              {taskDialog.cancelLabel || "Cancel"}
+              {taskDialog.cancelLabel}
             </Button>
             <Button variant="primary" type="submit">
-              {taskDialog.submitLabel || "Add to Review Queue"}
+              {taskDialog.submitLabel}
             </Button>
           </footer>
         </form>

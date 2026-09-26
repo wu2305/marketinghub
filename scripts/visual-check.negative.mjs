@@ -109,11 +109,11 @@ export default [
     reason: "activeType=overview must not satisfy Business Term card/toolbar assertions",
   },
   {
-    // Base clicks the Daily tab; with the default tab (Monthly) still active
-    // the "Daily" active-tab assertion must fail.
+    // The named Daily story starts on Daily; swapping in the default Monthly
+    // story must fail its active-tab assertion.
     id: "neg-p05-default-tab",
     base: "p05-media-tracking-tab",
-    story: { actions: [] },
+    story: { id: "pages--media-tracking-detail", actions: [] },
     reason: "default Monthly tab must not satisfy Daily active-tab assertion",
   },
   {

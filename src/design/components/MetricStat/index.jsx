@@ -2,7 +2,9 @@ import "../../tokens.css";
 import { cx } from "../../cx.js";
 import "./MetricStat.css";
 
+/** @type {readonly ["card", "glass"]} */
 export const metricStatVariants = ["card", "glass"];
+/** @type {readonly ["gold", "green", "amber", "blue", "red"]} */
 export const metricStatAccents = ["gold", "green", "amber", "blue", "red"];
 
 /**
@@ -11,7 +13,7 @@ export const metricStatAccents = ["gold", "green", "amber", "blue", "red"];
  * @param {string} props.label
  * @param {React.ReactNode} props.value
  * @param {string} [props.caption]
- * @param {typeof metricStatVariants[number]} [props.variant="card"] glass sits on hero imagery
+ * @param {typeof metricStatVariants[number]} [props.variant="card"] glass sits on hero imagery and displays uppercase labels; card preserves supplied label case
  * @param {typeof metricStatAccents[number]} [props.accent="gold"] only applies to card variant
  * @param {boolean} [props.compact=false]
  */

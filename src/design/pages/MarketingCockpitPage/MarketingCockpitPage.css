@@ -16,10 +16,17 @@ color: var(--mh-reports-ink);
 }
 
 .mh-page--cockpit {
-background: var(--mh-reports-bg);
+background: var(--mh-surface-neutral-cool);
+  --mh-live-toolbar-top: calc(var(--mh-header) + 16px);
 }
 
 .mh-page__search {
 width: 360px;
   margin-bottom: 44px;
+}
+
+@media (max-width: 600px) {
+  .mh-page--cockpit .mh-page__search {
+    width: 100%;
+  }
 }

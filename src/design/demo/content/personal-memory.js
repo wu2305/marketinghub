@@ -1,10 +1,10 @@
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 import { PERSONAL_MEMORY_RECORDS } from "./personal-memory-records.js";
 
 /** Visible P14 copy and deterministic source records for stories and host. */
 export const PERSONAL_MEMORY = {
-  hero: { image: assetUrl("assets/images/knowledge-hero.jpg"), eyebrow: "KNOWLEDGE MANAGEMENT", title: "Personal Memory", description: "Manage your personal memories with AI assistance and easy retrieval." },
+  hero: { image: demoImage("assets/images/knowledge-hero.jpg"), eyebrow: "KNOWLEDGE MANAGEMENT", title: "Personal Memory", description: "Manage your personal memories with AI assistance and easy retrieval." },
   sidebar: [
     { id: "interpreter", icon: "book-open", label: "Knowledge Management", href: "knowledge.html" },
     { id: "review-center", icon: "check-circle", label: "Review Center", href: "review-center.html" },

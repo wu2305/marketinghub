@@ -17,6 +17,7 @@ export const SelfService = {
     category: "all",
     ...pageShell,
     hero: SELF_SERVICE.hero,
+    labels: SELF_SERVICE.labels,
     tabs: SELF_SERVICE.tabs,
     filters: SELF_SERVICE.filters,
     reports: SELF_SERVICE.reports,
@@ -25,6 +26,7 @@ export const SelfService = {
     assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", "Active Self-Service section.", "inline-radio"),
     category: { control: "inline-radio", options: ["all", "dg", "dc"] },
     onNavigate: { action: "onNavigate" },

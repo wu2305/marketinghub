@@ -14,6 +14,7 @@ import { useFieldLibraryDemo } from "./field-library-demo.js";
 import { useScenarioDemo } from "./scenario-demo.js";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 import { FieldLibraryDrawer } from "../features/interpreter/FieldLibraryView/index.jsx";
+import { demoHrefFor, demoTargetForHref } from "./navigation.js";
 
 const EMPTY_ARRAY = [];
 
@@ -71,6 +72,9 @@ export function paginateRows(rows, { page = 1, pageSize = 10 } = {}) {
  * @returns {{view: object|null, overlay: React.ReactNode, assistant: object, skillFlow?: object}} page view slots and assistant flow
  */
 export function useInterpreterDemo(props) {
+  const hrefFor = props.hrefFor || demoHrefFor;
+  const targetForHref = props.targetForHref;
+  const scenarioInputRecords = props.scenarioReports?.records;
   const [query, setQuery] = useSynced(props.query ?? "");
   const type = (props.types || []).find((item) => item.id === props.activeType);
   const activeView = type?.view;
@@ -80,9 +84,11 @@ export function useInterpreterDemo(props) {
       ? { ...event, typeId }
       : { typeId, value: event },
   );
-  const navigate = (event) => props.onNavigate?.(
-    event && typeof event === "object" ? { ...event, typeId } : { href: event, typeId },
-  );
+  const navigate = (event) => {
+    const payload = event && typeof event === "object" ? event : { href: event };
+    const target = props.targetForHref?.(payload.href) || demoTargetForHref(payload.href);
+    props.onNavigate?.({ ...payload, ...(target || {}), params: target?.params || {}, typeId });
+  };
   const [selectedCategories, setSelectedCategories] = useSynced(props.principles?.selectedCategories ?? EMPTY_ARRAY);
   const [principlePage, setPrinciplePage] = useSynced(props.principles?.page ?? 1);
   const [principlePageSize, setPrinciplePageSize] = useSynced(props.principles?.pageSize ?? 10);
@@ -104,6 +110,8 @@ export function useInterpreterDemo(props) {
 
   const businessTerms = useBusinessTermDemo({
     ...props.businessTermLibrary,
+    createHref: hrefFor("knowledge-create", { type: "Business Term" }),
+    editHref: (id) => hrefFor("knowledge-create", { type: "Business Term", mode: "edit", id }),
     active: activeView === "business-term",
     onNavigate: navigate,
     onQueryChange: typed(props.onQueryChange),
@@ -122,6 +130,10 @@ export function useInterpreterDemo(props) {
      field-mapping types; type.id is the fm type label ("Report Context"…). */
   const fieldLibrary = useFieldLibraryDemo({
     ...(props.fieldLibrary || {}),
+    createHref: hrefFor("knowledge-create", { type: "Analytical Model" }),
+    editHref: (id) => hrefFor("knowledge-create", { type: "Analytical Model", mode: "edit", id }),
+    dashboardHref: hrefFor("cockpit", {}),
+    scenarioHref: (id) => hrefFor("interpreter", { type: "Scenario Reporting", detail: id }),
     active: activeView === "field-library",
     type: type?.view === "field-library" ? type.id : undefined,
     records: props.records,
@@ -145,12 +157,21 @@ export function useInterpreterDemo(props) {
     onDescriptionCancel: typed(props.onDescriptionCancel),
   });
 
+  const routedScenarioRecords = React.useMemo(() => {
+    if (activeView !== "scenario-reports") return scenarioInputRecords;
+    return scenarioInputRecords?.map((record) => {
+      const target = targetForHref?.(record.reportHref) || demoTargetForHref(record.reportHref);
+      return { ...record, reportHref: target?.id && target.id !== "coverage" ? hrefFor(target.id, target.params) : record.reportHref };
+    });
+  }, [activeView, scenarioInputRecords, targetForHref, hrefFor]);
+
   /* scenario-reports.js #scenarioReportOverview — the dedicated Scenario
      Reporting card grid + shared knowledge-detail drawer. */
   const scenarioReports = useScenarioDemo({
     ...(props.scenarioReports || {}),
+    createHref: hrefFor("knowledge-create", { type: "Scenario Reporting" }),
     active: activeView === "scenario-reports",
-    records: props.scenarioReports?.records,
+    records: routedScenarioRecords,
     onNavigate: navigate,
     onQueryChange: typed(props.onQueryChange),
     onFilterChange: typed(props.onFilterChange),
@@ -255,6 +276,7 @@ export function useInterpreterDemo(props) {
   return {
     view,
     overlay,
+    hrefFor,
     ...workspace,
 
   };

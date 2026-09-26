@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./HomePage.stories.jsx";
+
+<Meta of={PageStories} name="HomePage" />
+
+<Title>HomePage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.Home} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--home" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="HomePage" source={componentSource} />

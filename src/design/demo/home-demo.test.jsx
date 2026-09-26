@@ -24,6 +24,7 @@ function Harness(props) {
 const DEMO = { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft };
 
 const baseProps = {
+  scope: ASSISTANT.scopes[0],
   logo: LOGO,
   navigation: NAV,
   hero: HOME.hero,

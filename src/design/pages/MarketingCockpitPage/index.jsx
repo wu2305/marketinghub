@@ -15,11 +15,11 @@ import { ReportCopilot } from "../../features/cockpit/ReportCopilot/index.jsx";
 import { ReportDetailsDrawer } from "../../features/cockpit/ReportDetailsDrawer/index.jsx";
 import { ReportRow } from "../../features/cockpit/ReportRow/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
-import { pluralize, projectSearchText, reportSearchText, resolveReportAssets, resolveReportContext } from "../../report-logic.js";
-import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextHref } from "../../report-routes.js";
+import { pluralize, projectSearchText, reportSearchText, resolveReportAssets } from "../../features/cockpit/lib/report-logic.js";
 import "./MarketingCockpitPage.css";
 
 
+/** @type {readonly ["catalog", "live"]} */
 export const cockpitViews = ["catalog", "live"];
 
 /**
@@ -31,6 +31,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
+ * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details.
  * @param {string} [props.query=""] catalog search text
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
  * @param {Object<string, object>} [props.projects={}] project records keyed by id
@@ -41,35 +42,33 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
  * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
- * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
- * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
- * @param {(id: string, report: object) => string} [props.contextHref] defaults to the resolved report context's knowledge link
- * @param {string} [props.backHref=REPORT_CATALOG_HREF]
- * @param {(target: object) => void} [props.onNavigate]
+ * @param {(id: string, params?: object) => string} props.hrefFor semantic route resolver supplied by story or host
+ * @param {(target: { id: string, params: object, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
- * @param {(target: { project: string, index: number }) => void} [props.onOpenDetails]
+ * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
  * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
  * @param {boolean} [props.workspaceOpen=false]
- * @param {(target: object) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
+ * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
  * @param {object} [props.assistant={}] AssistantPanel props
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
- * @param {(target: object) => void} [props.onOpenAssistant]
- * @param {(target: object) => void} [props.onCloseAssistant]
+ * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { value: string }) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
  */
 export function MarketingCockpitPage({
   current = "cockpit",
   logo,
   navigation = [],
   hero = {},
+  copy,
   query = "",
   groups = [],
   projects = {},
@@ -80,10 +79,7 @@ export function MarketingCockpitPage({
   detailsSections = [],
   knowledge = [],
   cityInvest,
-  projectHref = projectCatalogHref,
-  liveHref = liveReportHref,
-  contextHref = (projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report)),
-  backHref = REPORT_CATALOG_HREF,
+  hrefFor,
   onNavigate,
   onQueryChange,
   onOpenProject,
@@ -127,20 +123,24 @@ export function MarketingCockpitPage({
     if (detailReport) detailsTarget = { project: detailProject, report: detailReport };
   }
   const assistantLauncherRef = React.useRef(null);
+  const projectTarget = (id) => ({ id: "cockpit", params: id === "all" ? {} : { project: id } });
+  const liveTarget = (id, index) => ({ id: "cockpit", params: { project: id, dashboard: index, view: "live" } });
+  const emitNavigation = (target, label) => onNavigate?.({ ...target, href: hrefFor(target.id, target.params), label });
+  const navItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return (
     <Shell tone="cockpit">
-      <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
+      <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={navItems} current={current} density="comfortable" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
         {isLive ? (
           <LiveReportView
-            kicker={`${liveProject.title.toUpperCase()} / LIVE REPORT`}
+            kicker={`${liveProject.title.toUpperCase()} / ${copy.liveReportLabel}`}
             title={liveReport.title}
-            backHref={projectHref(liveKey)}
+            backHref={hrefFor("cockpit", projectTarget(liveKey).params)}
             onBack={(target) => {
               onBack?.({ project: liveKey, href: target.href });
-              onNavigate?.({ id: "cockpit-project", href: target.href, label: liveProject.title });
+              emitNavigation(projectTarget(liveKey), liveProject.title);
             }}
           >
             {liveProject.reports[rawIndex]?.embed === "city-invest" && cityInvest ? (
@@ -152,21 +152,21 @@ export function MarketingCockpitPage({
         ) : (
           <React.Fragment>
         <header className="mh-page__search">
-          <SearchField label="Search dashboards" value={query} placeholder="Search dashboards" size="lg" icon="end" onChange={onQueryChange} />
+          <SearchField label={copy.searchLabel} value={query} placeholder={copy.searchLabel} size="lg" icon="end" onChange={onQueryChange} />
         </header>
         {active ? (
           <React.Fragment>
             <ProjectDirectory
-              backHref={backHref}
+              backHref={hrefFor("cockpit", {})}
               image={active.image}
-              imageAlt={`${active.title} report preview`}
+              imageAlt={`${active.title} ${copy.imageAltSuffix}`}
               kicker={active.kicker}
               title={active.title}
               description={active.description}
-              countText={pluralize(active.reports.length, "dashboard")}
-              updated={active.sourceStrip[0] || "Update schedule available in project"}
-              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, "dashboard")}
-              onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: "All report projects" })}
+              countText={pluralize(active.reports.length, copy.dashboardUnit)}
+              updated={active.sourceStrip[0] || copy.updatedFallback}
+              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, copy.dashboardUnit)}
+              onBack={() => emitNavigation(projectTarget("all"), copy.catalogBackLabel)}
             >
               {active.reports
                 .map((report, index) => ({ report, index }))
@@ -179,22 +179,24 @@ export function MarketingCockpitPage({
                     title={item.report.title}
                     description={item.report.description}
                     meta={[
-                      { label: "Owner", value: item.report.owner },
-                      { label: "Cadence", value: item.report.cadence },
-                      { label: "Updated", value: item.report.updated },
-                      { label: "Knowledge", value: pluralize(resolveReportAssets(knowledge, project, item.report).length, "asset") },
+                      { label: copy.meta.owner, value: item.report.owner },
+                      { label: copy.meta.cadence, value: item.report.cadence },
+                      { label: copy.meta.updated, value: item.report.updated },
+                      { label: copy.meta.knowledge, value: pluralize(resolveReportAssets(knowledge, project, item.report).length, copy.assetUnit) },
                     ]}
-                    href={liveHref(project, item.index)}
-                    detailsHref={contextHref(project, item.report)}
-                    onOpen={() => onOpenReport?.({ project, index: item.index, href: liveHref(project, item.index) })}
-                    onDetails={() => onOpenDetails?.({ project, index: item.index, href: contextHref(project, item.report) })}
+                    href={hrefFor("cockpit", liveTarget(project, item.index).params)}
+                    onOpen={() => {
+                      onOpenReport?.({ project, index: item.index, href: hrefFor("cockpit", liveTarget(project, item.index).params) });
+                      emitNavigation(liveTarget(project, item.index), item.report.title);
+                    }}
+                    onDetails={() => onOpenDetails?.({ project, index: item.index })}
                   />
                 ))}
             </ProjectDirectory>
             {active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length === 0 ? (
               <div className="mh-empty-state">
-                <strong>No matching reports.</strong>
-                <span>Try another report or project name.</span>
+                <strong>{copy.emptyTitle}</strong>
+                <span>{copy.emptyDescription}</span>
               </div>
             ) : null}
           </React.Fragment>
@@ -215,19 +217,22 @@ export function MarketingCockpitPage({
                       kicker: projects[key].kicker,
                       description: projects[key].description,
                       image: projects[key].image,
-                      updated: projects[key].sourceStrip[0] || "Update schedule available in project",
-                      href: projectHref(key),
+                      updated: projects[key].sourceStrip[0] || copy.updatedFallback,
+                      href: hrefFor("cockpit", projectTarget(key).params),
                     })),
                 }))
                 .filter((group) => group.projects.length)}
-              onOpen={(target) => onOpenProject?.({ id: target.id, href: projectHref(target.id) })}
+              onOpen={(target) => {
+                onOpenProject?.({ id: target.id, href: hrefFor("cockpit", projectTarget(target.id).params) });
+                emitNavigation(projectTarget(target.id), target.title);
+              }}
             />
             {groups
               .filter((group) => group.id !== "all")
               .every((group) => !Object.keys(projects).some((key) => projects[key].group === group.id && (!search || projectSearchText(knowledge, key, projects[key]).includes(search)))) ? (
               <div className="mh-empty-state">
-                <strong>No matching reports.</strong>
-                <span>Try another report or project name.</span>
+                <strong>{copy.emptyTitle}</strong>
+                <span>{copy.emptyDescription}</span>
               </div>
             ) : null}
           </React.Fragment>
@@ -239,25 +244,28 @@ export function MarketingCockpitPage({
         open={Boolean(detailsTarget)}
         projectLabel={detailsTarget ? detailsTarget.project.title : undefined}
         image={detailsTarget ? detailsTarget.project.image : undefined}
-        imageAlt={detailsTarget ? `${detailsTarget.project.title} report preview` : undefined}
+        imageAlt={detailsTarget ? `${detailsTarget.project.title} ${copy.imageAltSuffix}` : undefined}
         hierarchy={detailsTarget ? `${detailsTarget.project.category} / ${detailsTarget.project.title} / ${detailsTarget.report.type}` : undefined}
         title={detailsTarget ? detailsTarget.report.title : ""}
         explanation={detailsTarget ? detailsTarget.report.description : undefined}
         meta={
           detailsTarget
             ? [
-                { label: "Owner", value: detailsTarget.report.owner },
-                { label: "Cadence", value: detailsTarget.report.cadence },
-                { label: "Updated", value: detailsTarget.report.updated },
+                { label: copy.meta.owner, value: detailsTarget.report.owner },
+                { label: copy.meta.cadence, value: detailsTarget.report.cadence },
+                { label: copy.meta.updated, value: detailsTarget.report.updated },
               ]
             : []
         }
         sections={detailsSections}
         scenarios={detailsTarget ? (detailsTarget.report.recommendations || []).map((item) => ({ title: item.title, meta: item.meta })) : []}
-        liveHref={details ? liveHref(details.project, details.index) : undefined}
+        liveHref={details ? hrefFor("cockpit", liveTarget(details.project, details.index).params) : undefined}
         resetKey={details ? `${details.project}:${details.index}` : undefined}
         onClose={onCloseDetails}
-        onOpenLive={onOpenLive}
+        onOpenLive={(target) => {
+          onOpenLive?.(target);
+          if (details) emitNavigation(liveTarget(details.project, details.index), detailsTarget?.report.title);
+        }}
       />
       {/* body:has(#aiWorkspace.open) hides the launcher in the original too */}
       <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />

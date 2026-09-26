@@ -10,8 +10,11 @@ import { AssistantShell } from "../../lib/AssistantShell.jsx";
 import "./AssistantPanel.css";
 
 
+/** @type {readonly ["modal", "drawer"]} */
 export const assistantPlacements = ["modal", "drawer"];
+/** @type {readonly ["home", "cockpit", "campaign", "lite"]} */
 export const assistantVariants = ["home", "cockpit", "campaign", "lite"];
+/** @type {readonly ["default", "compact", "workspace", "simple"]} */
 export const assistantAnswerVariants = ["default", "compact", "workspace", "simple"];
 
 const variantSettings = {

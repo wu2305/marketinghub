@@ -1,8 +1,9 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-// Public API only — components/hook are imported via the design-system entry.
-import { MarketingCockpitPage, cityInvestScenarioSource, useCockpitDemo } from "../index.js";
+import { MarketingCockpitPage } from "../index.js";
+import { cityInvestScenarioSource, useCockpitDemo } from "./index.js";
+import { COCKPIT } from "../content.js";
 import { ALT_CITY_INVEST, ALT_COPILOT, ALT_GROUPS, ALT_KNOWLEDGE, ALT_MODEL_FLOW, ALT_PROJECTS, altReportAnswer } from "./__fixtures__/alt-cockpit.js";
 
 // jsdom does not implement scrollIntoView; the copilot chat entry calls it on mount.
@@ -17,6 +18,7 @@ function baseProps(overrides = {}) {
     logo: { src: "/assets/images/tapestry-logo.png", alt: "Alt logo", href: "/alt" },
     navigation: [],
     hero: { title: "Alt Cockpit" },
+    copy: COCKPIT.copy,
     query: "",
     project: "all",
     view: "catalog",

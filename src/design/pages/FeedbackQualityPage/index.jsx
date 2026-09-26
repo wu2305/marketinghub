@@ -2,6 +2,7 @@ import "../../tokens.css";
 import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
+import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
@@ -11,7 +12,9 @@ import { FeedbackList } from "../../features/feedback-quality/FeedbackList/index
 import { Icon } from "../../icons.jsx";
 import "./FeedbackQualityPage.css";
 
+/** @type {readonly ["all", "thumbs-up", "thumbs-down"]} */
 export const feedbackFilterTypes = ["all", "thumbs-up", "thumbs-down"];
+/** @type {readonly ["all", "today", "week", "month"]} */
 export const feedbackFilterTimes = ["all", "today", "week", "month"];
 
 /**
@@ -19,11 +22,11 @@ export const feedbackFilterTimes = ["all", "today", "week", "month"];
  * @param {object} props
  * @param {object} props.content Hero, sidebar, labels and assistant copy.
  * @param {object} props.logo Header logo.
- * @param {object[]} props.navigation Header links.
- * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void}} props.filters
- * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} props.list
- * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} props.detail
- * @param {object} props.assistant Assistant state and callbacks.
+ * @param {object[]} [props.navigation=[]] Header links.
+ * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void}} [props.filters={}] Controlled filters.
+ * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} [props.list={}] Feedback rows and counts.
+ * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} [props.detail={}] Selected feedback.
+ * @param {object} [props.assistant={}] Assistant state and callbacks.
  * @param {object} [props.skillFlow] Model flow state and callbacks.
  * @param {(id:string,params?:object)=>string} props.hrefFor
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
@@ -38,7 +41,7 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
   return <div className="mh-feedback-page" data-feedback-type={type} data-feedback-time={time}>
     <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={hero.image} eyebrow={hero.eyebrow} title={hero.title} description={hero.description} height={372} variant="home" scrim="none" asideLabel={hero.summaryAria}>
-      <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
+      <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <MetricStat key={stat.key} label={stat.label} value={counts[stat.key] ?? 0} caption={stat.caption} variant="glass" />)}</div>
     </Hero>
     <div className="mh-feedback-page__body">
       <GovernanceNav items={sidebar} current="feedback-quality" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />

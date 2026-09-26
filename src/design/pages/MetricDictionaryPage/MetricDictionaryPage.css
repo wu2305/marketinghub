@@ -8,9 +8,7 @@
 .mh-metric-page__header h1 { margin: 0 0 6px; font-size: 28px; }
 .mh-metric-page__header p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--mh-ink-secondary-muted); }
 .mh-metric-page__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-.mh-metric-page__status, .mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
-.mh-metric-page__status { height: 32px; padding: 0 12px; font-size: 12px; background: var(--mh-ai-chip-pos-bg); color: var(--mh-ai-chip-pos); }
-.mh-metric-page__status--draft { background: var(--mh-surface-warning-soft); color: var(--mh-ink-warning-brown); }
+.mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { display: inline-flex; align-items: center; justify-content: center; height: 36px; padding: 0 14px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { border: 1px solid var(--mh-copilot-box-line); background: var(--mh-surface); color: var(--mh-ink-copy-dark); cursor: pointer; }
 .mh-metric-page__action--primary { border-color: var(--mh-ink-strong); background: var(--mh-ink-strong); color: var(--mh-surface); }
 .mh-metric-page__banner { display: flex; align-items: center; gap: 14px; padding: 16px 20px; margin-bottom: 20px; border: 1px solid var(--mh-line); border-radius: 8px; }

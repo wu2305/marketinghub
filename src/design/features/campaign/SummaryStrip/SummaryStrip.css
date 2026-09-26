@@ -3,7 +3,7 @@ display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   border: 1px solid var(--mh-line);
   border-radius: 5px;
-  background: #fff;
+  background: var(--mh-surface);
 }
 
 .mh-summary__item {
@@ -33,4 +33,19 @@ grid-row: 1 / 3;
   align-self: center;
   color: var(--mh-ink);
   font-size: 25px;
+}
+
+@media (max-width: 600px) {
+  .mh-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-summary__item {
+    border-right: 0;
+    border-bottom: 1px solid var(--mh-line);
+  }
+
+  .mh-summary__item:last-child {
+    border-bottom: 0;
+  }
 }

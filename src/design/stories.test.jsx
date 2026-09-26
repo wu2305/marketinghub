@@ -194,10 +194,7 @@ describe("controlled stories write back", () => {
       title,
       href: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
     });
-    fireEvent.click(screen.getByRole("link", { name: `Open knowledge for ${title}` }));
-    expect(onDetails).toHaveBeenLastCalledWith({
-      title,
-      href: "/assets/pages/knowledge.html?type=Report%20Context",
-    });
+    fireEvent.click(screen.getByRole("button", { name: `Open knowledge for ${title}` }));
+    expect(onDetails).toHaveBeenLastCalledWith({ title });
   });
 });

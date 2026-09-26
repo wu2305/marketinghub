@@ -1,4 +1,5 @@
 import React from "react";
+import { demoHrefFor } from "./navigation.js";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 /** Deterministic replacement for flexible.html's createAnswer(). */
@@ -43,6 +44,7 @@ export function useSelfServiceDemo(props) {
   });
   return {
     ...props,
+    hrefFor: props.hrefFor || demoHrefFor,
     ...workspace,
     tab,
     category: categories[tab] || "all",

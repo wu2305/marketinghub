@@ -5,7 +5,9 @@ import { Icon } from "../../icons.jsx";
 import "./SearchField.css";
 
 
+/** @type {readonly ["start", "end", "none"]} */
 export const searchIconPositions = ["start", "end", "none"];
+/** @type {readonly ["field", "plain"]} */
 export const searchVariants = ["field", "plain"];
 
 /**

@@ -11,7 +11,9 @@ export function resolveScenarioDetail(records, id) {
   return records.find((record) => record.id === requested) || records[0];
 }
 
-/** Private deterministic workflow used by Storybook and the independent host. */
+/** Private deterministic workflow used by Storybook and the independent host.
+ * @param {Record<string, any>} options
+ */
 export function useScenarioDetailDemo({ content, records, shell, initial = EMPTY_INITIAL, hrefFor, onNavigate, onTabChange, onTogglePreview, onAssistantSubmit, onFlowSave, onFlowSubmit } = {}) {
   const [tab, setTab] = React.useState(initial.tab || "content");
   const [previewOpen, setPreviewOpen] = React.useState(Boolean(initial.previewOpen));

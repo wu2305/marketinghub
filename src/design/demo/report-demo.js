@@ -3,8 +3,8 @@
  * parameters (fixtures live in demo/report-fixtures.js, but any host-supplied
  * data with the same shape works). No React, no Storybook.
  */
-import { isPilotCitySalesQuestion, resolveReportAssets } from "../report-logic.js";
-import { copilotSourceHref } from "../report-routes.js";
+import { isPilotCitySalesQuestion, resolveReportAssets } from "../features/cockpit/lib/report-logic.js";
+import { copilotSourceHref } from "./report-routes.js";
 
 /* ---------------------------------------------------------------------------
  * Six-city scenario generator — the original seeded RNG and scGenScenario in

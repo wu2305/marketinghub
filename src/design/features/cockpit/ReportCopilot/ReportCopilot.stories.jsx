@@ -3,8 +3,9 @@ import { ReportCopilot } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
 import { COPILOT, KNOWLEDGE_ASSETS } from "../../../demo/report-fixtures.js";
 import { buildCopilotChatEntry, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "../../../demo/report-demo.js";
-import { buildReportModelDraft } from "../../../report-logic.js";
+import { buildReportModelDraft } from "../lib/report-logic.js";
 import { useSynced } from "../../../lib/story-helpers.js";
+import { demoHrefFor } from "../../../demo/navigation.js";
 
 export default {
   title: "Features/Cockpit/Report Copilot workspace",
@@ -21,10 +22,11 @@ export default {
 };
 
 export const Default = {
-  args: { open: true, stream: true, project: "city", index: 0 },
+  args: { open: true, stream: true, project: "city", index: 0, contextHref: demoHrefFor("interpreter") },
   argTypes: {
     project: { control: "select", options: Object.keys(COCKPIT.projects) },
     index: { control: { type: "number", min: 0, max: 1 } },
+    contextHref: { control: "text", description: "Fallback knowledge destination for chat entries without a linked source." },
     onClose: { action: "onClose" },
     onBack: { action: "onBack" },
     onNewSession: { action: "onNewSession" },
@@ -67,6 +69,7 @@ export const Default = {
           recommendations={report.recommendations.map((rec) => ({ title: rec.title }))}
           periodHint={profile.periodHint}
           sources={copilotSources(KNOWLEDGE_ASSETS, projectKey, report)}
+          contextHref={args.contextHref}
           answer={answer}
           chat={chat}
           prompt={prompt}

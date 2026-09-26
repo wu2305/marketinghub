@@ -9,7 +9,7 @@
 .mh-kdetail__outline { border: 1px solid var(--mh-field-line); background: var(--mh-surface); color: var(--mh-ink-primary-deep); }
 .mh-kdetail__outline:hover { border-color: var(--mh-gold-deep); background: var(--mh-surface-gold-wash); }
 .mh-kdetail__primary { border: 1px solid var(--mh-gold-deep); background: var(--mh-gold); color: var(--mh-ink-primary-deep); }
-.mh-kdetail__primary:hover { background: var(--mh-bubble-from); }
+.mh-kdetail__primary:hover { background: var(--mh-gold-light); }
 .mh-kdetail :is(button, a, input, select):focus-visible { outline: 3px solid var(--mh-gold); outline-offset: 2px; }
 .mh-kdetail__sections { display: grid; gap: 16px; }
 .mh-kdetail__section { overflow: hidden; border: 1px solid var(--mh-line); border-radius: 12px; background: var(--mh-surface); box-shadow: var(--mh-composer-shadow); }

@@ -1,7 +1,7 @@
 import { ProjectDirectory } from "./index.jsx";
 import { ReportRow } from "../ReportRow/index.jsx";
 import { COCKPIT } from "../../../content.js";
-import { pluralize } from "../../../report-logic.js";
+import { pluralize } from "../lib/report-logic.js";
 
 const project = COCKPIT.projects.city;
 
@@ -45,7 +45,6 @@ export default {
             { label: "Updated", value: report.updated },
           ]}
           href={`/assets/pages/reports.html?project=city&dashboard=${index}&view=live`}
-          detailsHref="/assets/pages/knowledge.html?type=Report%20Context"
           onOpen={args.onOpen}
           onDetails={args.onDetails}
         />

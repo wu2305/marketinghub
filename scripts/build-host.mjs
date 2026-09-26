@@ -2,22 +2,18 @@
 /**
  * Stamped standalone-host build.
  *
- * 1. Copies the original demo's binary assets (`assets/images`,
- *    `assets/fonts`) into `examples/host/public/assets/` so `assetUrl()`
- *    resolves under `/mh-host/` — the copies are generated, never committed.
- * 2. Runs `vite build` on `examples/host` (base `/mh-host/`).
- * 3. Writes `dist/mh-host-stamp.json` — `scripts/host-check.mjs` requires the
+ * 1. Runs `vite build` on `examples/host` (base `/mh-host/`).
+ * 2. Writes `dist/mh-host-stamp.json` — `scripts/host-check.mjs` requires the
  *    stamp to match the current source fingerprint before it will run.
  *
  * Usage: npm run build:host
  */
 import { spawnSync } from "node:child_process";
-import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
 
 const HOST = path.join(ROOT, "examples", "host");
-const PUBLIC = path.join(HOST, "public");
 const DIST = path.join(HOST, "dist");
 const HOST_PATHS = ["src/design", "examples/host", "package.json", "package-lock.json"];
 const command = "vite build --config examples/host/vite.config.js";
@@ -28,12 +24,6 @@ const viteBin = path.join(ROOT, "node_modules", "vite", "bin", "vite.js");
 if (!existsSync(viteBin)) {
   console.error("vite not installed — run npm install first");
   process.exit(1);
-}
-
-rmSync(path.join(PUBLIC, "assets"), { recursive: true, force: true });
-mkdirSync(path.join(PUBLIC, "assets"), { recursive: true });
-for (const dir of ["images", "fonts"]) {
-  cpSync(path.join(ROOT, "assets", dir), path.join(PUBLIC, "assets", dir), { recursive: true });
 }
 
 const result = spawnSync(process.execPath, [viteBin, "build", "--config", path.join("examples", "host", "vite.config.js")], {
