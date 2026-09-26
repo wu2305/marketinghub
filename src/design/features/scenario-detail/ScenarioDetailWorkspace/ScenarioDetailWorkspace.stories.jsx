@@ -4,6 +4,13 @@ import { SCENARIO_DETAIL } from "../../../demo/content/scenario-detail.js";
 import { enumProp, callbackProp } from "../../../lib/story-helpers.js";
 import { ScenarioDetailWorkspace, scenarioDetailTabs } from "./index.jsx";
 
+const routes = { cockpit: "/assets/pages/reports.html", interpreter: "/assets/pages/knowledge.html", "scenario-edit": "/assets/pages/scenario-edit.html" };
+const hrefFor = (id, params = {}) => {
+  const path = routes[id];
+  const query = new URLSearchParams(params).toString();
+  return path && query ? `${path}?${query}` : path;
+};
+
 export default { title: "Features/Scenario Detail/ScenarioDetailWorkspace", component: ScenarioDetailWorkspace, tags: ["autodocs"], parameters: { docs: { description: { component: "The six actual Skill Detail panels as a controlled, content-driven feature. It owns no URL, record selection or assistant state." } } } };
 
 export const Default = {
@@ -22,6 +29,6 @@ export const Default = {
     const [previewOpen, setPreviewOpen] = React.useState(args.previewOpen);
     React.useEffect(() => setTab(args.tab), [args.tab]);
     React.useEffect(() => setPreviewOpen(args.previewOpen), [args.previewOpen]);
-    return <ScenarioDetailWorkspace {...args} tab={tab} previewOpen={previewOpen} onTabChange={(event) => { setTab(event.value); args.onTabChange?.(event); }} onTogglePreview={(event) => { setPreviewOpen(event.open); args.onTogglePreview?.(event); }} />;
+    return <ScenarioDetailWorkspace {...args} tab={tab} previewOpen={previewOpen} hrefFor={hrefFor} onTabChange={(event) => { setTab(event.value); args.onTabChange?.(event); }} onTogglePreview={(event) => { setPreviewOpen(event.open); args.onTogglePreview?.(event); }} />;
   },
 };
