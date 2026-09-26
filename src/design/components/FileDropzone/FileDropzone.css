@@ -13,7 +13,7 @@ display: flex;
 
 .mh-dropzone:hover,
 .mh-dropzone:focus-visible {
-border-color: var(--mh-bubble-to);
+border-color: var(--mh-gold-medium);
   background: var(--mh-hover-warm);
   outline: 0;
 }

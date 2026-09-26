@@ -53,7 +53,7 @@ width: 14px;
 
 .mh-upload__toolbar .mh-button:hover,
 .mh-upload__toolbar .mh-button:focus-visible {
-border-color: var(--mh-bubble-to);
+border-color: var(--mh-gold-medium);
   background: var(--mh-hover-warm);
 }
 
@@ -97,7 +97,7 @@ height: 40px;
 
 .mh-upload__grid .mh-input:focus,
 .mh-upload__grid .mh-input:focus-visible {
-border-color: var(--mh-bubble-to);
+border-color: var(--mh-gold-medium);
   box-shadow: 0 0 0 3px var(--mh-focus-gold);
   outline: 0;
 }

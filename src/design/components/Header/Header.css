@@ -55,7 +55,7 @@ position: relative;
   padding: 0;
   border: 0;
   background: transparent;
-  color: #60666d;
+  color: var(--mh-ink-navigation);
   text-decoration: none;
   font-family: var(--mh-font);
   font-size: 12.5px;
@@ -74,7 +74,7 @@ position: absolute;
   bottom: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   content: "";
   opacity: 0;
 }
@@ -86,7 +86,7 @@ color: var(--mh-ink);
 
 .mh-header--overlay .mh-header__link:hover,
 .mh-header--overlay .mh-header__link.is-current {
-color: #fff;
+color: var(--mh-ink-inverse);
 }
 
 .mh-header__link.is-current::after {

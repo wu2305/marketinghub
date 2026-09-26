@@ -31,7 +31,7 @@ position: fixed;
   border-left: 1px solid var(--mh-line-neutral-soft);
   border-radius: 0;
   background: var(--mh-surface);
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
   box-shadow: var(--mh-flow-shadow);
   transform: translateX(100%);
   visibility: hidden;
@@ -93,7 +93,7 @@ color: var(--mh-ink-muted-neutral);
 
 .mh-copilot__head-title h2 {
 margin: 0;
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
   font-size: 17px;
   font-weight: 700;
 }
@@ -126,7 +126,7 @@ display: grid;
 
 .mh-copilot__icon:hover {
 border-color: var(--mh-line);
-  background: var(--mh-copilot-hover-bg);
+  background: var(--mh-bg);
   color: var(--mh-reports-ink);
 }
 
@@ -157,7 +157,7 @@ display: grid;
 .mh-copilot__close:hover {
 border-color: var(--mh-line-control-strong);
   background: var(--mh-surface-ai);
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
 }
 
 /* Recent-chats popup — drops below the head-actions bar. The original anchors
@@ -193,7 +193,7 @@ display: flex;
 .mh-copilot__history-head strong {
 font-size: 13px;
   font-weight: 600;
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
 }
 
 .mh-copilot__history-head button {
@@ -231,7 +231,7 @@ display: flex;
 }
 
 .mh-copilot__history-item:hover {
-background: var(--mh-copilot-hover-bg);
+background: var(--mh-bg);
 }
 
 .mh-copilot__history-item strong {
@@ -286,9 +286,9 @@ content: "›";
 
 .mh-copilot__tool:hover,
 .mh-copilot__tool.is-active {
-border-color: var(--mh-copilot-ink);
+border-color: var(--mh-ink-black-soft);
   background: var(--mh-copilot-tool-bg);
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
 }
 
 .mh-copilot__tool:hover::after,
@@ -370,7 +370,7 @@ display: grid;
 
 .mh-copilot__collapse:hover {
 background: transparent;
-  color: var(--mh-copilot-ink);
+  color: var(--mh-ink-black-soft);
 }
 
 .mh-copilot__collapse i {
@@ -940,7 +940,7 @@ display: inline-block;
   width: 8px;
   height: 14px;
   margin-left: 3px;
-  background: var(--mh-hr-cursor);
+  background: var(--mh-line-highlight-chart);
   border-radius: 1px;
   animation: mh-stream-blink 0.7s steps(2) infinite;
   vertical-align: -2px;
@@ -1049,7 +1049,7 @@ display: inline-block;
 }
 
 .mh-hr-dot--g {
-background: var(--mh-hr-dot-pos);
+background: var(--mh-indicator-positive-chart);
 }
 
 .mh-hr-dot--y {
@@ -1057,7 +1057,7 @@ background: var(--mh-hr-dot-warn);
 }
 
 .mh-hr-dot--r {
-background: var(--mh-hr-dot-neg);
+background: var(--mh-indicator-negative-chart);
 }
 
 .mh-hr-dot-cell {
@@ -1121,7 +1121,7 @@ color: var(--mh-ink-negative-bright);
 .mh-hr-insight {
 margin: 10px 0 4px;
   padding: 10px 12px;
-  border-left: 3px solid var(--mh-hr-insight-line);
+  border-left: 3px solid var(--mh-line-highlight-chart);
   border-radius: 0 8px 8px 0;
   background: var(--mh-surface-highlight-warm);
   color: var(--mh-hr-insight-ink);
@@ -1340,7 +1340,7 @@ display: block;
 .mh-ra-insight {
 margin: 12px 0 0;
   padding: 11px 13px;
-  border-left: 3px solid var(--mh-ra-insight-line);
+  border-left: 3px solid var(--mh-line-highlight-chart);
   border-radius: 0 6px 6px 0;
   background: var(--mh-ra-insight-bg);
   color: var(--mh-ra-insight-ink);
@@ -1379,7 +1379,7 @@ display: flex;
 }
 
 .mh-ra-option:hover {
-border-color: var(--mh-ra-option-hover-line);
+border-color: var(--mh-line-highlight-chart);
   background: var(--mh-surface-highlight-warm);
 }
 
@@ -1463,7 +1463,7 @@ content: "";
   height: 12px;
   margin-right: 8px;
   border-radius: 2px;
-  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
+  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   vertical-align: -1px;
 }
 
@@ -1484,7 +1484,7 @@ display: flex;
 }
 
 .mh-copilot__command-box:focus-within {
-border-color: var(--mh-bubble-to);
+border-color: var(--mh-gold-medium);
   box-shadow: 0 0 0 3px var(--mh-copilot-gold-wash);
 }
 
@@ -1549,8 +1549,8 @@ display: inline-flex;
   padding: 0 13px;
   border: 0;
   border-radius: 6px;
-  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
-  color: var(--mh-copilot-send-ink);
+  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
+  color: var(--mh-ink-black);
   font-family: inherit;
   font-size: 12px;
   font-weight: 700;

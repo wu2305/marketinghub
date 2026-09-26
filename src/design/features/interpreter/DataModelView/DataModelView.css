@@ -365,7 +365,7 @@
   place-items: center;
   border-radius: 10px;
   background: var(--mh-surface-neutral-soft);
-  color: var(--mh-bubble-to);
+  color: var(--mh-gold-medium);
 }
 
 .mh-dmview__report-icon svg {
@@ -733,7 +733,7 @@
 .mh-dmview__icon-btn:hover,
 .mh-dmview__icon-btn:focus-visible {
   background: var(--mh-bg);
-  color: var(--mh-toast-bg);
+  color: var(--mh-ink-dark-control);
 }
 
 .mh-dmview__icon-btn svg {

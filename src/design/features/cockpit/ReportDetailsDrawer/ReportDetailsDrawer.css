@@ -242,7 +242,7 @@ display: inline-flex;
 
 .mh-details__pill:hover,
 .mh-details__pill:focus-visible {
-background: var(--mh-reports-pill-hover-bg);
+background: var(--mh-surface-gold-hover-soft);
   color: var(--mh-reports-pill-hover-ink);
   outline: 0;
 }
@@ -314,12 +314,12 @@ color: var(--mh-reports-muted);
 
 .mh-details__scenarios li:hover,
 .mh-details__scenarios li:focus-within {
-border-color: var(--mh-reports-hover-line);
+border-color: var(--mh-gold-medium);
   background: var(--mh-reports-pill-bg);
 }
 
 .mh-details__scenarios li.is-active {
-border-color: var(--mh-reports-hover-line);
+border-color: var(--mh-gold-medium);
   background: var(--mh-reports-pill-bg);
 }
 

@@ -1,6 +1,6 @@
 .mh-empty--unknown {
 border-style: dashed;
-  background: #fbfbfc;
+  background: var(--mh-row-hover);
 }
 
 .mh-interpreter {
@@ -23,7 +23,7 @@ min-width: 0;
 /* Type pages flush the library toolbar to the hero edge
    (.knowledge-main.business-type-page → padding 0 44px 42px). The original's
    later ai-interpreter-overview.css `!important` overrides resolve the canvas
-   to #f6f7f8 on every interpreter state. */
+   to var(--mh-page-bg) on every interpreter state. */
 
 .mh-interpreter__main--type {
 /* column 1 is reserved for the (now fixed) sidebar rail, same as the

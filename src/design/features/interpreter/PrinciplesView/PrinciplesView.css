@@ -7,7 +7,7 @@
 overflow: visible;
   border: 1px solid var(--mh-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--mh-surface);
   box-shadow: 0 10px 28px rgba(31, 41, 55, 0.05);
 }
 
@@ -41,7 +41,7 @@ position: relative;
   padding: 10px 20px;
   border: 1px solid var(--mh-principle-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--mh-surface);
   box-shadow: var(--mh-principle-shadow);
   cursor: default;
 }
@@ -160,7 +160,7 @@ border-radius: 3px;
 padding: 28px;
   border: 1px dashed var(--mh-principle-empty-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--mh-surface);
   color: var(--mh-principle-empty-ink);
   font-size: 13px;
   font-weight: 700;

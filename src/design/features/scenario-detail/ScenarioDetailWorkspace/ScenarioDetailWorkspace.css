@@ -13,7 +13,7 @@
 .mh-scenario-detail__tag--published{background:var(--mh-surface-success-soft);color:var(--mh-green)}
 .mh-scenario-detail__tag--under-review{background:var(--mh-surface-warning-soft);color:var(--mh-ink-warning-brown)}
 .mh-scenario-detail__tag--scope{background:var(--mh-surface-info);color:var(--mh-ink-info)}.mh-scenario-detail__tag--version{background:var(--mh-surface-neutral-soft);color:var(--mh-muted)}
-.mh-scenario-detail__edit{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:40px;padding:0 18px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--mh-bubble-from),var(--mh-bubble-to));color:var(--mh-ink-strong);text-decoration:none;font-size:13px;font-weight:700}
+.mh-scenario-detail__edit{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:40px;padding:0 18px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--mh-gold-light),var(--mh-gold-medium));color:var(--mh-ink-strong);text-decoration:none;font-size:13px;font-weight:700}
 .mh-scenario-detail__edit:hover{filter:brightness(.92)}
 .mh-scenario-detail__edit svg{width:16px;height:16px}
 .mh-scenario-detail__description{margin:24px 0;color:var(--mh-copy);font-size:14px;line-height:1.6}

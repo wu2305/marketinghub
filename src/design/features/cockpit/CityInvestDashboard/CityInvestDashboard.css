@@ -61,7 +61,7 @@ display: flex;
   padding: 10px 14px;
   border: 1px solid var(--mh-line-neutral-faint);
   border-radius: 6px;
-  background: var(--mh-sc-field-bg);
+  background: var(--mh-surface-ai);
 }
 
 .mh-sc-fitem {
@@ -238,11 +238,11 @@ font-size: 22px;
 }
 
 .mh-sc-kpi__uplift.is-pos {
-color: var(--mh-sc-pos);
+color: var(--mh-indicator-positive-chart);
 }
 
 .mh-sc-kpi__uplift.is-neg {
-color: var(--mh-sc-neg);
+color: var(--mh-indicator-negative-chart);
 }
 
 .mh-sc-kpi__arrow {

@@ -104,7 +104,7 @@ function HrInsight({ label, segments }) {
   );
 }
 
-const HR_SERIES_TONES = { ink: "var(--mh-sc-ink)", pos: "var(--mh-sc-pos)", neg: "var(--mh-sc-neg)" };
+const HR_SERIES_TONES = { ink: "var(--mh-sc-ink)", pos: "var(--mh-indicator-positive-chart)", neg: "var(--mh-indicator-negative-chart)" };
 
 function HrTrendChart({ chart }) {
   const { periods, min, max, ticks, series } = chart;

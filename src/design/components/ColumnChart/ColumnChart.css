@@ -6,7 +6,7 @@ display: flex;
   gap: 16px;
   padding: 20px 8px 0;
   border-bottom: 1px solid var(--mh-line);
-  background: #fbfcfd;
+  background: var(--mh-surface-panel-muted);
 }
 
 .mh-columns__item {
@@ -35,7 +35,7 @@ background: var(--mh-green);
 }
 
 .mh-columns__item:nth-child(3) i {
-background: #a23b4f;
+background: var(--mh-danger-muted);
 }
 
 .mh-columns__item span {

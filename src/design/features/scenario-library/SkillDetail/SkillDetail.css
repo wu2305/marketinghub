@@ -33,7 +33,7 @@
 .mh-skill-detail__structure h3{font-size:14px}
 .mh-skill-detail__structure>div{gap:12px}
 .mh-skill-detail__structure-item{padding:14px 16px;border-color:var(--mh-line-panel-subtle)}
-.mh-skill-detail__structure-item:hover{border-color:var(--mh-bubble-to);box-shadow:var(--mh-shadow-chip-soft)}
+.mh-skill-detail__structure-item:hover{border-color:var(--mh-gold-medium);box-shadow:var(--mh-shadow-chip-soft)}
 .mh-skill-detail__structure-icon--triggerWhen{background:var(--mh-surface-review);color:var(--mh-ink-review)}
 .mh-skill-detail__structure-icon--output{background:var(--mh-surface-rose-soft);color:var(--mh-ink-rose)}
 .mh-skill-detail__structure-icon--boundary{background:var(--mh-surface-violet-soft);color:var(--mh-ink-violet)}
@@ -41,14 +41,14 @@
 .mh-skill-detail__structure-item p{font-size:13px;color:var(--mh-ink-secondary-muted)}
 .mh-skill-detail__preview-head h3{font-size:14px}
 .mh-skill-detail__preview-head button{padding:6px 12px;border-color:var(--mh-copilot-box-line);border-radius:6px;font-size:12px}
-.mh-skill-detail__preview-head button:hover{border-color:var(--mh-bubble-to);background:var(--mh-surface-gold-pale)}
+.mh-skill-detail__preview-head button:hover{border-color:var(--mh-gold-medium);background:var(--mh-surface-gold-pale)}
 .mh-skill-detail__preview-body>div{padding:12px 16px;border:0;border-radius:8px;background:var(--mh-line-faintest);color:var(--mh-ink-control-deep);font-size:13px;line-height:1.5}
 .mh-skill-detail__preview-body>div strong{color:var(--mh-ink-strong);font-size:11px;text-transform:uppercase;letter-spacing:.02em}
 .mh-skill-detail__preview-body pre{padding:16px;border-color:var(--mh-line-panel-subtle);border-radius:8px;background:var(--mh-bg-faint);color:var(--mh-ink-strong);font-size:13px;line-height:1.7}
 .mh-skill-detail__usage{padding:14px 16px;border:0;border-radius:8px;background:var(--mh-surface-gold-pale);color:var(--mh-gold-text);font-weight:600;text-decoration:none}
 .mh-skill-detail__usage:hover{background:var(--mh-surface-gold-hover)}
 .mh-skill-detail__actions button{border-color:var(--mh-copilot-box-line);color:var(--mh-ink-control-deep)}
-.mh-skill-detail__actions button:hover{border-color:var(--mh-bubble-to);background:var(--mh-surface-hover-neutral)}
+.mh-skill-detail__actions button:hover{border-color:var(--mh-gold-medium);background:var(--mh-surface-hover-neutral)}
 .mh-skill-detail__actions .mh-skill-detail__danger{border-color:var(--mh-danger-bright);color:var(--mh-copilot-metric-neg)}
 .mh-skill-detail__actions .mh-skill-detail__danger:hover{border-color:var(--mh-copilot-metric-neg);background:var(--mh-surface-danger-hover)}
 @media(max-width:680px){.mh-skill-detail{width:100vw!important}.mh-skill-detail__governance-item{grid-template-columns:18px 105px minmax(0,1fr)}}
