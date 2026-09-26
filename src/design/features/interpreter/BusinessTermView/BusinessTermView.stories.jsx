@@ -92,3 +92,25 @@ export const FilteredEmpty = {
 export const DetailOpen = {
   args: { detail: "business-term-gmv" },
 };
+
+const openAction = (selector, expectedText) => async ({ canvasElement }) => {
+  const doc = canvasElement.ownerDocument;
+  const button = doc.querySelector(selector);
+  if (!button) throw new Error(`Business Term action missing: ${selector}`);
+  button.click();
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (doc.querySelector(".mh-confirm")?.textContent.includes(expectedText)) return;
+    await new Promise((resolve) => setTimeout(resolve, 20));
+  }
+  throw new Error(`Business Term dialog missing: ${expectedText}`);
+};
+
+export const DisableConfirmation = {
+  name: "Confirm disabling own term",
+  play: openAction(".mh-btview__card[data-id='business-term-gmv'] [aria-label^='Disable']", "Confirm Offline"),
+};
+
+export const PermissionDenied = {
+  name: "Cannot edit another creator's term",
+  play: openAction(".mh-btview__card[data-id='business-term-paid-customer'] [aria-label^='Edit']", "Permission denied"),
+};
