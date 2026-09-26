@@ -1,5 +1,6 @@
 {
   "name": "marketing-hub",
+  "private": true,
   "type": "module",
   "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
