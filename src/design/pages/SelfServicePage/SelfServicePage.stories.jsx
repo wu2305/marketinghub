@@ -1,10 +1,11 @@
 import { ASSISTANT_SKILL_MENU, MODEL_FLOW, SELF_SERVICE, buildModelDraft } from "../../content.js";
 import { buildSelfServiceAnswer, useSelfServiceDemo } from "../../demo/self-service-demo.js";
-import { pageShell } from "../../lib/story-helpers.js";
+import { enumProp, pageShell } from "../../lib/story-helpers.js";
 import { SelfServicePage } from "./index.jsx";
 
 export default {
   title: "Pages",
+  component: SelfServicePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
 };
@@ -24,7 +25,7 @@ export const SelfService = {
     assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
   },
   argTypes: {
-    tab: { control: "inline-radio", options: ["analysis", "upload"] },
+    tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", "Active Self-Service section.", "inline-radio"),
     category: { control: "inline-radio", options: ["all", "dg", "dc"] },
     onNavigate: { action: "onNavigate" },
     onTabChange: { action: "onTabChange" },
@@ -75,6 +76,23 @@ const playClicks = (...selectors) => async ({ canvasElement }) => {
     control.click();
     await new Promise((resolve) => setTimeout(resolve, 0));
   }
+};
+
+export const SelfServiceUpload = {
+  ...SelfService,
+  name: "Self-Service data upload",
+  args: { ...SelfService.args, tab: "upload" },
+};
+
+export const SelfServiceUploadHistory = {
+  ...SelfServiceUpload,
+  name: "Self-Service upload history",
+  play: async (context) => {
+    await playClicks(".mh-page__cards--upload .mh-action-card__history")(context);
+    if (!context.canvasElement.ownerDocument.querySelector(".mh-modal .mh-upload-history__table")) {
+      throw new Error("Self-Service upload history did not open");
+    }
+  },
 };
 
 export const SelfServiceAssistantHistory = {
