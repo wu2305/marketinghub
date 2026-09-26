@@ -934,7 +934,8 @@ async function newPage() {
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Campaign Review Reporting") notes.push("known id did not select campaign record");
   await page.locator(".mh-scenario-detail__edit").click();
   const editUrl = new URL(page.url());
-  if (!editUrl.pathname.startsWith(`${BASE}coverage/`) || editUrl.searchParams.get("id") !== "scenario-campaign-review") notes.push(`edit lost selected id: ${editUrl.pathname}${editUrl.search}`);
+  if (editUrl.pathname !== `${BASE}scenario-edit` || editUrl.searchParams.get("id") !== "scenario-campaign-review") notes.push(`edit lost selected id: ${editUrl.pathname}${editUrl.search}`);
+  if ((await page.locator('.mh-scenario-edit-form__field input').first().inputValue()) !== "Campaign Review Reporting") notes.push("edit target did not load selected record");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("edit navigation reloaded host");
   await page.goto(`${origin}${BASE}scenario-detail?id=does-not-exist`, { waitUntil: "networkidle" });
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Channel Performance Analysis") notes.push("unknown id did not fall back to first skill");
