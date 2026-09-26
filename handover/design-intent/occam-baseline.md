@@ -8,7 +8,10 @@ only when it serves a different purpose. The existing AGENTS §3.4 rules ("no pa
 on second use, no unused export") are local checks; they let the same concept be rebuilt in many places, as
 long as each copy is small. This file measures the global picture that Phase 2 is judged against.
 
-Targets are orders of magnitude, not quotas. Each Phase 2 PR reports before/after for the rows it touches.
+Targets are orders of magnitude, not quotas. Each Phase 2 PR reports before/after for the rows it touches,
+measured with `node scripts/concept-count.mjs [--props <file>]` so every PR counts the same way. Rows the
+script prints use its definitions (distinct raw values exclude `var()`, `inherit`, `0`, `none`, and for
+radius `50%`/`999px`).
 
 ## 1. Visual concepts
 
@@ -18,11 +21,11 @@ Targets are orders of magnitude, not quotas. Each Phase 2 PR reports before/afte
 | … unused tokens | 10 | 0 | no `var()` reference anywhere in `src/design` |
 | … tokens with one owner directory | 160 | ≈0 | a token is shared vocabulary; a one-owner value belongs in that component or merges into a role |
 | … legacy component/page-named tokens | 162 | 0 | `css-budget.json` `legacyPrefixExemptions` |
-| distinct `font-size` in component CSS | 34 | 8 | raw values outside tokens.css |
-| distinct `font-weight` | 13 | 3 | only 300/400/700 font files exist; 500 renders as 400, 600–900 as 700 |
-| distinct `border-radius` | 29 | 4 (+0) | |
-| distinct `box-shadow` | 67 | 3 + focus ring | |
-| distinct `rgba()` literals outside tokens | 56 (72 uses) | 0 | not covered by the current hex budget |
+| raw `font-size` values outside tokens.css | 32 | 0 (8 tokens) | script |
+| raw `font-weight` values | 13 | 0 (3 tokens) | only 300/400/700 font files exist; 500 renders as 400, 600–900 as 700 |
+| raw `border-radius` values | 24 | 0 (4 tokens) | script |
+| raw `box-shadow` values | 34 | 0 (3 tokens + focus ring) | script; 67 distinct if `var()`-based shadows are included |
+| raw colour literals outside tokens (hex + `rgb[a]()`) | 56 | 0 | script; hex alone is already 0 by budget, these are `rgba()` |
 | `@media` width values | ~20 | 3 | 1180 / 900 / 760 |
 
 ## 2. Structural concepts
@@ -45,8 +48,8 @@ Targets are orders of magnitude, not quotas. Each Phase 2 PR reports before/afte
 
 | concept | now | target | evidence / note |
 |---|---:|---:|---|
-| page props, max | 50 (`CampaignPage`) | ≤ ~12 | then 36 Cockpit, 32 Media Tracking, 26 Home, 24 Self-Service, 24 Knowledge Create (`@param` count) |
-| callbacks that exist only to model a no-op source control | 5 | 0 | `SkillDetail onClick({action:"delete"})` ("Visible source no-op Delete action", `SkillDetail/index.jsx:18`); `SkillInlineForm onClick` for auto-fill / run-preview / save-draft (`:19`); `ScenarioEditForm onAutoFill`, `onSaveDraft` ("Source button has no resulting behavior", `:28,30`) |
+| page props, max | 49 (`CampaignPage`) | ≤ ~12 | `--props`; next are Cockpit, Media Tracking, Home, Self-Service, Knowledge Create. Out of Phase 2 scope except migrated views |
+| callback props that exist only to model a no-op source control | 4 (6 no-op actions) | 0 | `SkillDetail onClick({action:"delete"})` ("Visible source no-op Delete action", `SkillDetail/index.jsx:18`); `SkillInlineForm onClick` for auto-fill / run-preview / save-draft (`:19`); `ScenarioEditForm onAutoFill`, `onSaveDraft` ("Source button has no resulting behavior", `:28,30`) |
 | filters that store a value and filter nothing | 1 | 0 | Review Center *Submitted* (`domain-model.md` R7) |
 | success feedback defined but never shown | 3 call sites | 1 toast | `domain-model.md` R6 |
 | vocabularies for "availability" | 5 spellings | 1 | `domain-model.md` §3.1 |

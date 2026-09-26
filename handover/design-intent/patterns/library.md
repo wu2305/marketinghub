@@ -55,9 +55,9 @@ product are this one idea:
 | facet (single) | `Select` | yes | for single-choice facets (type, time) |
 | count | part of `LibraryToolbar` | — | always visible: "{shown} of {total} {unit}" or "{n} items" (R7) |
 | create | `Button` variant primary | yes, **needs `href`** | only when the collection allows creation. Creation navigates, so `Button` gains an optional `href` that renders `<a href>` with the same styling (AGENTS §3.1: navigation is a link) |
-| list, cards | **`LibraryList layout="cards"`** (new) | no | responsive grid; 1 column below 760 px |
+| list | **`LibraryList`** (new) | no | one component, `layout: "cards" \| "table"`. `cards` renders a `<ul>` grid of `LibraryItem` (1 column below 760 px); `table` renders `DataTable` with the caller's `columns`. Both render `LibraryEmpty` when there are no items and call `onOpen({ id })`. Views never render `DataTable` or the grid directly |
 | list, table | `DataTable` | yes, **needs extension** | today it only takes `columns`, `rows`, `caption` (1 consumer: Campaign). Add: `onOpen({id})` for row activation (click/Enter/Space on the row, B5), `emptyState` slot, and a 760 px breakpoint where each row stacks as a labelled card. Campaign keeps working unchanged |
-| item (card) | **`LibraryItem`** (new) | no | title, draft marker, description, meta, status, actions; whole card opens detail |
+| item (card) | **`LibraryItem`** (new) | no | props: `title`, `draft`, `description`, `meta` (`[{ label, value }]`), `status` (StatusBadge props), `actions` (ItemActions props). `children` is the one slot for view-specific content marked **keep** in §5 (e.g. synonym chips). Whole card opens detail |
 | status | `StatusBadge` | yes | availability uses tone success/neutral; workflow uses the badge's workflow tones |
 | actions | **`ItemActions`** (new, replaces `features/interpreter/KnowledgeActions`) | partly | icon buttons; gating comes from `lib/governance.js`, never computed in the view |
 | empty | **`LibraryEmpty`** (new) | no | two messages: "no matches" (with a clear-filters action) vs "nothing here yet" |
@@ -87,6 +87,11 @@ B6. **Governed actions** (edit, delete, disable) are shown only when the view's 
     - not creator → blocked, reason `permission` (R1);
     - edit/delete while enabled → blocked, reason `disable-first` (R2);
     - disable while disabled or draft → blocked, reason `already-disabled` (R2, R3).
+    Report Context's description edit is **not** governed: the source lets anyone edit it at any time
+    (`field-library.js:676–679`; the owner/offline checks at `:648–668` apply to Analytical Model only). It
+    stays an ungated single action in the drawer (A2 default = current behaviour). Personal Memory items are
+    always the viewer's own and have no availability: edit and delete are never blocked
+    (`governance/memory.js:279–283`), so Memory does not call `governedActions`.
 B7. **Blocked actions stay focusable and clickable** (`aria-disabled="true"`, never native `disabled`)
     — decision A3. Clicking one opens `ConfirmDialog`:
     - `permission` → purpose `info`, one "OK" button;
