@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 Header PR #21：实际白色导航、48/56px密度、固定/吸顶与窄屏可达导航；全套复核关闭Header遮挡助手按钮回归。M7状态档案、复用交付和人工收敛继续 |
+| 最新独立审核 | 2026-09-26 P01 PR #22：首页15个命名状态、四工作台窄屏完整可读、重复答案反馈复位；独立审核关闭档案遗漏。M7其他页面档案、交付与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 363 stories + 67 docs；2026-09-26 e09e1a9干净构建；故事ID和数量不变 |
-| 测试 | `npm test`：25 文件 224 条通过（e09e1a9） |
-| lint | `npm run lint`：0 errors / 0 warnings，e09e1a9 |
-| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-header-integrate-r2-host`）；字体PR合后rebase并干净构建，stamp e09e1a9 |
+| 故事数 | 377 stories + 67 docs；2026-09-26 9415f96干净构建，新增14个首页可达状态 |
+| 测试 | `npm test`：25 文件 225 条通过（9415f96） |
+| lint | `npm run lint`：0 errors / 0 warnings，9415f96 |
+| 构建验证 | `npm run build-storybook` 377 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-p01-integrate-host`）；Header合后rebase并干净构建，stamp 9415f96 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp e09e1a9，工作区干净）：全站474/474机器通过（`/tmp/mh-header-integrate-r2-visual`），负向38/38按预期失败。Header/Home Hero及窄屏导航已人工聚焦复核；整页人工视觉既有fail/pending继续，Home窄屏卡片由下一包处理。 |
+| 最近视觉对照 | 2026-09-26（stamp 9415f96，工作区干净）：全站488/488机器通过（`/tmp/mh-p01-integrate-visual`），负向38/38按预期失败。首页窄屏合成与全部卡片内容已人工聚焦复核；整页人工视觉既有fail/pending继续。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -36,8 +36,7 @@ npm test               # vitest 行为测试
 |---|---|---|---|
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。WP1 加 CSS 预算棘轮（裸十六进制、token 数、同值别名及新组件前缀）；WP4 冻结现有 47 个公共 demo/content/routes/fixtures 导出身份，新增拒绝、删除允许，待 M7 R5(b) 拆入口；仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
-| M2 | 外壳与完整 Home，包括助手实际可达状态 | 进行中 | 助手抽屉全流已实现；配对验证覆盖答案流/历史/最大化（焦点还原与 Escape 已实现但未入配对场景）；platformGuide/picker/upload 已核为 Home 不可达残留，转属工作区页 |
-| M2 | Header 导航外壳复核与可读性 | 进行中 | 根据 17 个原始入口的浏览器实际生效样式，用共享 Header 的密度、定位与当前项强调接口覆盖已实现页面；Home 白色头部、Review Center 固定定位及窄屏可滚动导航已接通，最终集成门禁与人工像素复核待完成 |
+| M2 | 外壳与完整 Home，包括助手实际可达状态 | 机器集成完成；人工整页收敛继续 | Header PR #21、首页状态/窄屏 PR #22；完整入口与15命名状态见§2.2 P01，原不可达platformGuide/picker/upload残留不复活 |
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；命名状态档案、P04/P05/P06流程迁入demo及人工像素收敛仍待完成，见§4当前复核 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
@@ -48,7 +47,6 @@ npm test               # vitest 行为测试
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
-
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
@@ -59,7 +57,7 @@ npm test               # vitest 行为测试
 
 | ID | 原始入口 | 主要待覆盖范围（以实际生效内容补全） | 里程碑 | 状态 |
 |---|---|---|---|---|
-| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | 已有首页及共享宿主流程；M7补14个助手/技能/模型命名状态（共15页面故事），19/19本页配对；390px四张工作台卡改为可读单列并新增配对；Header与人工视觉收敛另包待办 |
+| P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | PR #22；15个命名页面故事、20个本页配对，四卡390/900/1440可读与链接可达；Header由#21合入；人工整页收敛继续 |
 | P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | 进行中；A2 修正城市默认计算、全选/空选标签及 Copilot 历史大小写/View more 二次点击 |
 | P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | 助手已实现，PR #9；建议即提交、替换答案、历史填充、最大化、技能/模型流、反馈/复制及焦点/Escape；15页面故事、29/29配对；人工像素收敛待办 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
@@ -361,12 +359,13 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P17细微颜色（上传表面、附件与必填态） | 复用现有同用途语义颜色与danger focus ring，不为六个细微差异新增别名 | 用户确认按用途抽象，保留信息层级与可读性；未删减字段或动作 | #18 |
 | P07知识管理确认弹窗（business-term-library.js / field-library.js / scenario-reports.js） | 原小型紧凑确认框统一为可换行、随内容增高的普通确认/删除/通知外观 | 同用途共享一个ConfirmDialog；保留权限、引用、确认动作及结果，不为每页保留外观flag | #19 |
 | Header / Home Hero | 小屏导航在自身区域滚动并保留全部链接，Home Hero随内容增高；P08/P11保留已有sticky可读布局；Header层级低于覆盖层 | 提取导航/内容容器用途，避免原固定宽度/孤立z-index造成不可达或遮挡，不删除统计/链接 | #21 |
+| Home工作台卡片（home.css:353–356） | ≤760px改为单列并保留四卡全部内容、能力链接与入口 | 原固定四列在390px横溢；按入口卡用途保障可读可达，不新增卡片变体 | #22 |
 
 ## 4. 已知缺口
 
 - P15/P16共享区块候选：预览、五段结构和治理信息具有真实共同用途，M7在保留抽屉/整页顺序布局的前提下评估最小共享；不因细微图标尺寸/颜色差复制组件，也不引入通用字段渲染器。证据`/tmp/mh-scenario-shared-boundary.md`。共享Hero的固定高度与页面断点规则也需集中收敛；P16先修900/390统计与说明裁切，不把原页不可读效果作为组件契约。
 
-2026-09-26 外部组件报告复核（干净代码基线10d8e09重新构建；Chromium/Playwright，Header 1440/390，其余指定同态1440；证据 `/tmp/mh-feedback-recheck*/results.json` 与同目录截图，Browser插件不可用）：
+2026-09-26 外部组件报告历史复核（其中确认弹窗、独立字体与Header问题已由PR #19–#21修复；其余徽章/统计等仍待集成。以下保留当时证据，非当前全部缺口。干净代码基线10d8e09重新构建；Chromium/Playwright，Header 1440/390，其余指定同态1440；证据 `/tmp/mh-feedback-recheck*/results.json` 与同目录截图，Browser插件不可用）：
 - **优先补完整形态**：P12风险批准误用P07知识小确认框，原440×301/56px图标/32px 28px内距，React440×122.5/25px图标/0内距且长提示不换行被裁；P14删除原400×177/24px内距/红色Delete，React440×122.5/橙色知识确认；P08 RC描述提交原370×191/25px内距/无警告图标，React320×122.5/知识警告图标。需保留真实内容组合及样式差异，共享Modal覆盖层行为，不全局把ConfirmDialog改成440px。源见review-center.html:401–426/review.css:1091–1148，memory.js:426–440/memory.css:1177–1228，report-context-form.js:81–100。P07同态原/React页面确认框均282.3×122.5，原报告混合不同实例的尺寸不能直接采纳。
 - **共享基础真实问题**：Home Header原白色0.96而React透明；Home/Interpreter/ReviewCenter/KnowledgeView导航项原48px、React56px。P12原fixed/React sticky；独立Metric Dictionary两边均sticky，但原z60/blur16/白0.97，Reactz40/blur18/白0.96。独立ConfirmDialog、Modal、Pagination抽样均回退Times，页面Shell下则DIN；不靠Storybook全局字体掩盖组件问题。Campaign MetricStat标签原none、Reactuppercase；Interpreter箭头缺失的初判撤回：原overview/八类型的::after虽有opacity变化，最终被ai-interpreter-overview.css:309–312的display:none!important隐藏；不新增箭头修复，证据/tmp/mh-sidebar-arrow-source-review.md。P12/P13统计卡可复用MetricStat的共性已登记。
 - **状态/标签形态**：源码复核P07 Scenario卡片与DataModel Basic可复用knowledge状态徽章，前者缺原有圆点；FieldLibrary详情最终源样式经后加载CSS覆盖为76×20（ai-interpreter-overview.css:3059–3088）；采用自然宽detail徽章属于按用途统一的有意设计调整，不能称原样式还原。独立MetricDictionary页头32px无点、ReviewQueue状态等保留真实差异，不把五类小标签机械统一。P08 RC编辑摘要的状态胶囊与Scenario标签现被普通文本替代（report-context-form.js:35–40 vs KnowledgeCreateFields/index.jsx:156），AI Summary还写死enabled，需随该页收敛恢复内容状态接口与标签呈现。
@@ -573,3 +572,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | M7 P01命名档案候选：保留默认首页，新增助手初开/答案/历史/最大化/技能菜单/已选模型及模型历史/生成/手动/必填错误10个真实状态；均复用useHomeDemo，由可见按钮play驱动，不给页面新增截图props。补HomePage Autodocs绑定，scope Controls从既有内容派生。15/15本页配对（/tmp/mh-p01-archive-pairs-r2）、lint0、23文件221测试、328stories/65docs；初次探针中历史条数误写3与错误类名已按原index.html的11条及assistant-skill-menu.js的field-error更正，产品未改。抽看生成表单两侧字段/动作完整，既有Header/助手头部及少量间距差留后续视觉收敛。最终全站门禁与独立审核待集成。 | Codex P01 |
 | 2026-09-26 | P01对抗审核补齐历史回填、技能空搜索、模型零选择错误、Helpful选中四个真实档案；生成/手动表单分别核对标题与Back有无，19/19本页配对通过（/tmp/mh-p01-archive-pairs-r4）。审查还确认重复同问题会保留旧Helpful，源portal.js:754每次替换feed；useHomeDemo现在给每次答案唯一实例键，新DOM回归先红后绿，不增加展示props。lint0、23文件222测试、332stories/65docs；/tmp/mh-p01-state-adversarial.md初审缺口已补，最终独立复审与全站门禁待集成。 | Codex P01 |
 | 2026-09-26 | P01 Home 工作台窄屏收口：原 `assets/css/home/home.css:353–356` 固定四列，390px 浏览器实测文档宽1120px、末卡 x=839，首页四个真实入口横向不可见；React仅在≤760px把既有四张 `WorkspaceCard` 排成单列并放宽内容区，标题、说明、能力链接及整卡入口保持原组件/数据。新增 `p01-home-narrow` 源/故事全页配对并断言四卡内容、入口与故事卡边界；本页20/20机器通过 `/tmp/mh-p01-narrow-all/`，窄屏截图 `/tmp/mh-p01-narrow-pair-r2/`；lint0、25文件225测试、Storybook376stories/67docs。卡片内容可读，整页 Hero/Header 差异仍由独立 Header 包收敛，人工整页不标pass；本布局差异待集成者登记§3。 | Codex P01 |
+| 2026-09-26 | P01 PR #22（https://github.com/wu2305/marketinghub/pull/22）合并aad75de，冻结9415f96：lint0/0、25文件225测试、377stories/67docs、host26/26、visual488/488、negative38/38，证据/tmp/mh-p01-integrate-*。独立审核/tmp/mh-p01-state-adversarial.md及/tmp/mh-p01-narrow-independent-review.md；最终组合复核/tmp/mh-p01-integrator-review.md。补14个可直达状态、答案实例键复位反馈、四工作台窄屏单列，不新增展示组件或截图专用props。Header已合，本文去除旧重复候选行并明确外部报告历史问题的关闭状态；其他页面档案与人工视觉继续。 | Codex integrator |
