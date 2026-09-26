@@ -325,8 +325,8 @@ function DataUploadRoute() {
     toolbar: { ...DATA_UPLOAD.toolbar, backHref: hostHref("self-service?tab=upload") },
     fields: DATA_UPLOAD.fields,
     bulkImport: DATA_UPLOAD.bulkImport,
-    submitLabel: "Submit",
-    submittingLabel: "Submitted",
+    submitLabel: DATA_UPLOAD.submitLabel,
+    submittingLabel: DATA_UPLOAD.submittingLabel,
   });
   return <DataUploadPage {...page} />;
 }

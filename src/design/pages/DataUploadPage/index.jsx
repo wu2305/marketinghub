@@ -14,7 +14,7 @@ import "./DataUploadPage.css";
  * Data Upload entry page (data-upload.html): Self-Service hero shell, a
  * back/template-import toolbar, a carded multi-field form, and the Template
  * Import modal with a file dropzone and tips. Submit disables the button and
- * flashes `submittingLabel` — the host owns the timer (original restores
+ * flashes `submittingLabel` — the demo hook owns the timer (original restores
  * after 1500ms).
  * @param {object} props
  * @param {string} [props.current="self-service"]
