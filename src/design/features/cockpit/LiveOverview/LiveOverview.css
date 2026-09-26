@@ -16,26 +16,26 @@ display: grid;
   min-height: 118px;
   padding: 16px;
   border: 1px solid var(--mh-line);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
 .mh-live-kpi span {
 color: var(--mh-reports-copy);
-  font-size: 9px;
-  font-weight: 740;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-live-kpi strong {
 color: var(--mh-reports-ink);
-  font-size: 28px;
-  font-weight: 560;
+  font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-live-kpi small {
 color: var(--mh-reports-copy);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-live-grid {
@@ -48,7 +48,7 @@ display: grid;
 min-height: 350px;
   padding: 16px;
   border: 1px solid var(--mh-line);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -62,16 +62,16 @@ display: flex;
 
 .mh-live-card__head span {
 color: var(--mh-reports-copy);
-  font-size: 9px;
-  font-weight: 740;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-live-card__head h2 {
 margin: 0;
   color: var(--mh-reports-ink);
-  font-size: 14px;
-  font-weight: 660;
+  font-size: var(--mh-font-size-lg);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-live-chart {
@@ -120,7 +120,7 @@ position: relative;
 .mh-live-chart__group b {
 display: block;
   width: 18px;
-  border-radius: 3px 3px 0 0;
+  border-radius: var(--mh-radius-sm) var(--mh-radius-sm) 0 0;
   background: var(--mh-live-bar);
 }
 
@@ -132,7 +132,7 @@ background: var(--mh-live-bar-alt);
 position: absolute;
   bottom: -19px;
   color: var(--mh-ink-faint-warm);
-  font-size: 9px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-live-ranks {
@@ -149,7 +149,7 @@ display: grid;
 
 .mh-live-rank > span:first-child {
 color: var(--mh-ink-faint-warm);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-live-rank div {
@@ -159,19 +159,19 @@ display: grid;
 
 .mh-live-rank strong {
 color: var(--mh-reports-ink);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-live-rank i {
 display: block;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-live-bar-alt);
 }
 
 .mh-live-rank b {
 color: var(--mh-reports-ink);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 @media (max-width: 1100px) {

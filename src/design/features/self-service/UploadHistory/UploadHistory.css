@@ -17,7 +17,7 @@ flex: 1;
 .mh-upload-history__table {
 width: 100%;
   border-collapse: collapse;
-  font-size: 13.5px;
+  font-size: var(--mh-font-size-md);
   color: var(--mh-ink);
 }
 
@@ -29,8 +29,8 @@ position: sticky;
   border-bottom: 0;
   background: var(--mh-bg-soft);
   color: var(--mh-slate);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 1.2px;
   text-align: left;
   text-transform: uppercase;
@@ -55,7 +55,7 @@ display: inline-flex;
   align-items: center;
   gap: 10px;
   color: var(--mh-ink);
-  font-weight: 600;
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-upload-history__file svg {
@@ -76,7 +76,7 @@ flex: 1;
   place-items: center;
   padding: 36px 18px;
   color: var(--mh-empty);
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
 }
 
 .mh-upload-history__actions {
@@ -91,11 +91,11 @@ display: inline-flex;
   gap: 6px;
   padding: 6px 12px;
   border: 1px solid var(--mh-control-line);
-  border-radius: 3px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   color: var(--mh-ink);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
 }
 

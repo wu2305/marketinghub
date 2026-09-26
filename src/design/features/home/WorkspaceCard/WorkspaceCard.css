@@ -3,14 +3,14 @@ position: relative;
   display: flex;
   min-width: 0;
   flex-direction: column;
-  border-radius: 10px;
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+  border-radius: var(--mh-radius-md);
+  box-shadow: var(--mh-shadow-raised);
 }
 
 .mh-workspace-card__image {
 height: 180px;
   overflow: hidden;
-  border-radius: 10px 10px 0 0;
+  border-radius: var(--mh-radius-md) var(--mh-radius-md) 0 0;
   background: var(--mh-surface-dark-strong);
 }
 
@@ -28,7 +28,7 @@ display: flex;
   margin-top: -58px;
   padding: 18px 18px 16px;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
     linear-gradient(180deg, var(--mh-surface-warning) 0%, var(--mh-gold-light) 100%) border-box;
@@ -38,9 +38,9 @@ display: flex;
 margin: 4px 0 8px;
   color: var(--mh-ink-field);
   font-family: var(--mh-display);
-  font-size: 26px;
+  font-size: var(--mh-font-size-3xl);
   font-style: italic;
-  font-weight: 600;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.1;
 }
 
@@ -48,7 +48,7 @@ margin: 4px 0 8px;
 margin: 10px 0 0;
   color: var(--mh-ink-secondary-muted);
   font-family: var(--mh-font);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
   line-height: 1.45;
 }
 
@@ -64,12 +64,12 @@ position: relative;
   z-index: 2;
   padding: 4px 10px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: var(--mh-surface-gold-pale);
   color: var(--mh-gold-text);
   font-family: var(--mh-font);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
   text-decoration: none;
 }

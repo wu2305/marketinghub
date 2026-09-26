@@ -2,8 +2,8 @@
 margin: 0;
   color: var(--mh-faint);
   font-family: var(--mh-font);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -13,7 +13,7 @@ margin: 0;
 min-width: 0;
   padding: 18px;
   border: 1px solid var(--mh-line);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -36,15 +36,15 @@ display: grid;
 margin: 0;
   color: var(--mh-ink);
   font-family: var(--mh-font);
-  font-size: 15px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
 }
 
 .mh-panel__head small {
 color: var(--mh-faint);
   font-family: var(--mh-font);
-  font-size: 9px;
+  font-size: var(--mh-font-size-xs);
 }
 
 @media (max-width: 600px) {

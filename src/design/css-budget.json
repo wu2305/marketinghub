@@ -178,10 +178,10 @@
     "pages/FeedbackQualityPage"
   ],
   "maxRawFoundationValues": {
-    "fontSize": 30,
-    "fontWeight": 12,
-    "radius": 22,
-    "shadow": 8,
-    "color": 15
+    "fontSize": 22,
+    "fontWeight": 5,
+    "radius": 11,
+    "shadow": 5,
+    "color": 10
   }
 }

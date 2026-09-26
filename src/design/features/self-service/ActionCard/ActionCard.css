@@ -5,25 +5,25 @@ display: flex;
   min-height: 108px;
   padding: 18px 24px;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
     linear-gradient(180deg, var(--mh-surface-warning) 0%, var(--mh-gold-light) 100%) border-box;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--mh-shadow-raised);
   transition: box-shadow 0.18s ease;
 }
 
 .mh-action-card:hover {
-box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+box-shadow: var(--mh-shadow-overlay);
 }
 
 .mh-action-card h3 {
 margin: 0;
   color: var(--mh-ink-field);
   font-family: var(--mh-display);
-  font-size: 24px;
+  font-size: var(--mh-font-size-3xl);
   font-style: italic;
-  font-weight: 600;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.1;
 }
 
@@ -32,7 +32,7 @@ max-width: 528px;
   margin: 0;
   color: var(--mh-copy);
   font-family: var(--mh-font);
-  font-size: 13.5px;
+  font-size: var(--mh-font-size-md);
   line-height: 1.55;
 }
 

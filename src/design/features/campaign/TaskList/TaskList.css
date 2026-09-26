@@ -15,11 +15,11 @@ border-bottom: 0;
 
 .mh-task strong {
 color: var(--mh-ink);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-task p {
 margin: 4px 0 0;
   color: var(--mh-muted);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }

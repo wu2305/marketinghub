@@ -7,7 +7,7 @@ position: sticky;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--mh-line-control-soft);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -21,8 +21,8 @@ padding: 23px 20px 21px;
 margin: 0;
   color: var(--mh-faint);
   font-family: var(--mh-font);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
   text-transform: uppercase;
 }
@@ -30,8 +30,8 @@ margin: 0;
 .mh-rail__head h2 {
 margin: 7px 0 0;
   color: var(--mh-ink);
-  font-size: 27px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.05;
 }
 
@@ -40,7 +40,7 @@ display: block;
   margin-top: 11px;
   color: var(--mh-muted);
   font-family: var(--mh-font);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
   line-height: 1.5;
 }
 
@@ -60,7 +60,7 @@ position: relative;
   gap: 11px;
   padding: 8px 11px;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   background: transparent;
   color: var(--mh-muted);
   text-align: left;
@@ -88,11 +88,11 @@ display: grid;
   height: 28px;
   place-items: center;
   border: 1px solid var(--mh-line-control-strong);
-  border-radius: 3px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   color: var(--mh-ink-empty-muted);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-rail__item.is-active .mh-rail__index {
@@ -108,12 +108,12 @@ display: block;
 }
 
 .mh-rail__item strong {
-font-size: 13px;
+font-size: var(--mh-font-size-md);
 }
 
 .mh-rail__item small {
 color: var(--mh-faint);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }
 
 @media (max-width: 900px) {
