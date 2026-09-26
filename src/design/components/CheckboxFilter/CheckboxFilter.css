@@ -2,6 +2,7 @@
    `.fm-options` multi-select used by knowledge type libraries. */
 
 .mh-check-filter {
+  font-family: var(--mh-font);
 position: relative;
   z-index: 30;
   display: flex;

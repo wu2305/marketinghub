@@ -4,6 +4,7 @@
    React view does not render it. */
 
 .mh-principles {
+  font-family: var(--mh-font);
 overflow: visible;
   border: 1px solid var(--mh-line);
   border-radius: 8px;

@@ -1,3 +1,7 @@
+.mh-live {
+  font-family: var(--mh-font);
+}
+
 /* ------------------------------------------------------------------ */
 
 /* Live report view (reports.html?view=live)                            */

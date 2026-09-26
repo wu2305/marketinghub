@@ -9,6 +9,7 @@ position: fixed;
 }
 
 .mh-details {
+  font-family: var(--mh-font);
 position: fixed;
   inset: 0 0 0 auto;
   z-index: 100;

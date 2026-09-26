@@ -1,6 +1,7 @@
 /* ── BusinessTermView — business-term-library.js dedicated view ────────── */
 
 .mh-btview {
+  font-family: var(--mh-font);
 min-width: 0;
 }
 

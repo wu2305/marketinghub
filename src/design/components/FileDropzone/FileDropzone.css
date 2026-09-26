@@ -1,4 +1,5 @@
 .mh-dropzone {
+  font-family: var(--mh-font);
 display: flex;
   flex-direction: column;
   align-items: center;

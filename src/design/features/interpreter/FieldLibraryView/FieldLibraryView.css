@@ -5,6 +5,7 @@
    normalize the fm chrome to the same look as the Business Term view). */
 
 .mh-flview {
+  font-family: var(--mh-font);
 min-width: 0;
 }
 

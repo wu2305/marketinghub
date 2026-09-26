@@ -18,12 +18,7 @@ export default {
     message: prop("string", { defaultValue: "", description: "Status text announced by the live region." }),
     open: prop("boolean", { defaultValue: false, description: "Visibility — false renders `hidden`.", control: "boolean" }),
   },
-  render: (args) => (
-    <>
-      <p>Toast is pinned to the lower-right viewport regardless of this text.</p>
-      <Toast {...args} />
-    </>
-  ),
+  render: (args) => <Toast {...args} />,
 };
 
 export const Default = {};
