@@ -70,3 +70,20 @@ width: 16px;
 color: var(--mh-ink);
   outline: 0;
 }
+
+@media (max-width: 600px) {
+  .mh-action-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mh-action-card__copy {
+    flex: none;
+    width: 100%;
+  }
+
+  .mh-action-card > :is(a, button).mh-button {
+    width: max-content;
+    max-width: 100%;
+  }
+}

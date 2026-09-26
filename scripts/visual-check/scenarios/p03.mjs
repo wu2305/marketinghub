@@ -17,11 +17,37 @@ export default [
     },
   },
   {
+    id: "p03-self-service-dg",
+    original: {
+      url: "/assets/pages/flexible.html",
+      actions: [{ click: "#categoryTogglesSelfService button[data-category='dg']" }],
+      expect: [
+        { sel: "#categoryTogglesSelfService button[data-category='dg']", attr: { name: "aria-pressed", value: "true" } },
+        { sel: ".report-card[data-category='dg']:not([hidden])", count: 2 },
+        { sel: ".report-card[data-category='dc']", state: "hidden" },
+        { sel: ".report-card[data-category='dg']:has-text('MZ Tracking Detail')" },
+        { sel: ".report-card[data-category='dg']:has-text('Rednote Tracking Detail')" },
+      ],
+    },
+    story: {
+      id: "pages--self-service-dg-reports",
+      actions: [
+        { wait: ".mh-pills[aria-label='Filter reports'] button:nth-child(2)[aria-pressed='true']" },
+        { eval: "document.fonts.ready" },
+      ],
+      expect: [
+        { sel: ".mh-page__cards--two .mh-action-card", count: 2 },
+        { sel: ".mh-action-card:has-text('MZ Tracking Detail')" },
+        { sel: ".mh-action-card:has-text('Rednote Tracking Detail')" },
+        { sel: ".mh-action-card:has-text('ABO Tracking Detail')", state: "detached" },
+      ],
+    },
+  },
+  {
     id: "p03-self-service-upload",
     original: { url: "/assets/pages/flexible.html?tab=upload", expect: [{ sel: "#data-upload-panel", text: "Finance Pilot City" }, { sel: ".upload-card-grid" }] },
     story: {
-      id: "pages--self-service",
-      args: { tab: "upload" },
+      id: "pages--self-service-upload",
       expect: [
         { sel: ".mh-page__cards", text: "Finance Pilot City" },
         { sel: ".mh-page__cards--two", state: "detached" },
@@ -43,10 +69,8 @@ export default [
       ],
     },
     story: {
-      id: "pages--self-service",
-      args: { tab: "upload" },
+      id: "pages--self-service-upload-history",
       actions: [
-        { click: ".mh-action-card__history" },
         { wait: ".mh-modal .mh-upload-history__table" },
       ],
       expect: [
