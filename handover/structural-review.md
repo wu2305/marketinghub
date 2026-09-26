@@ -587,13 +587,13 @@ R5(a)：
 - [x] **WP6 R2**（PR #9及#12；机器验证通过，人工收敛见README）：仅 WP2 和 WP3 全部合并后补齐 P03/P07 助手，只用新变体。
   - [x] P03（PR #9，483bc1b；全套实数见README §1/§5）。
   - [x] P07（PR #12，122e125；全套实数见README §1/§5）。
-- [ ] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。
+- [x] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。
   - [x] P12 Review Center（PR #13，733d99f；全套实数与人工fail见README §1/§5）。
   - [x] P13 Feedback & Quality（PR #14，5a51090；完整性结论、实数与人工fail见README）。
   - [x] P14 Personal Memory（PR #15，7ebf1e1；完整性结论、实数与人工fail见README）。
   - [x] P15 Skill Library（PR #16，391325d；完整性复核与实数见README）。
   - [x] P16 Skill Detail（PR #17，07dd34f；完整性审核与实数见README）。
-  - [ ] P17继续。
+  - [x] P17 Skill Edit（PR #18，052fb2a；完整性/响应式复核与实数见README；M7继续）。
 
 ### WP2 token 预算冲突决策
 

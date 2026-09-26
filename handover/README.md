@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P16 PR #17独立完整性审核完成：六页签、五段结构/九项治理、预览、静态AI/Usage/Version/Activity及助手模型流完整；独立组件故事链接已修。默认/窄屏人工fail，组件复用收敛见§4 |
+| 最新独立审核 | 2026-09-26 P17 PR #18完整性与响应式复核完成：全部字段/五项必填、12报表映射、预览/提交/取消及助手模型流；修复公共回调载荷与900px裁切。17页结构覆盖已建，M7档案/复用/交付与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 341 stories + 66 docs；2026-09-26 eeb12ca干净构建；P16新增22个页面状态与1个专用组件故事 |
-| 测试 | `npm test`：24 文件 223 条通过（eeb12ca） |
-| lint | `npm run lint`：0 errors / 0 warnings，eeb12ca |
-| 构建验证 | `npm run build-storybook` 341 stories/66 docs；`npm run build:host` + host-check 25/25（`/tmp/mh-p16-integrate-r2-host`）；最新origin/main rebase后干净构建，stamp eeb12ca |
+| 故事数 | 362 stories + 67 docs；2026-09-26 763fb68干净构建；P17新增20页面状态+1组件故事 |
+| 测试 | `npm test`：25 文件 224 条通过（763fb68） |
+| lint | `npm run lint`：0 errors / 0 warnings，763fb68 |
+| 构建验证 | `npm run build-storybook` 362 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-p17-integrate-host`）；P16合并后rebase并干净构建，stamp 763fb68 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp eeb12ca，工作区干净）：全站439/439机器通过，P16 29/29（`/tmp/mh-p16-integrate-r2-visual`）；负向35/35按预期失败。P16默认/窄屏人工fail，其他pending；机器结果不替代组件形态/人工验收。 |
+| 最近视觉对照 | 2026-09-26（stamp 763fb68，工作区干净）：全站474/474机器通过，P17 35/35（`/tmp/mh-p17-integrate-visual`）；负向38/38按预期失败。默认/窄屏人工fail已绑定（共享Header/Hero/导航密度待收敛），其他pending；机器通过不代表全部视觉验收。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -40,7 +40,7 @@ npm test               # vitest 行为测试
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；命名状态档案、P04/P05/P06流程迁入demo及人工像素收敛仍待完成，见§4当前复核 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
-| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12–P16已集成，组件形态与人工收敛待办，P17继续 | PR #13–#17 |
+| M6 | 治理与Scenario三页全量结构/流程 | 结构覆盖已实现；P12–P17分别集成，人工视觉与共享组件收敛继续 | PR #13–#18 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
@@ -71,7 +71,7 @@ npm test               # vitest 行为测试
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P15 | assets/pages/scenario-library.html | Skill列表/筛选/空态、九字段详情与五段结构、预览、内联创建编辑、助手/模型 | M6 | 已实现，PR #16；21个页面+3组件故事，本页19/19及全套机器通过；默认/详情人工fail。按用途抽象，不恢复隐藏Use或虚构原无处理器动作 |
 | P16 | assets/pages/scenario-detail.html | 六页签、五结构/九治理、预览/Related/AI/Usage/Version/Activity及助手模型流 | M6 | 已实现，PR #17；22页面+1组件故事，29/29本页及全套机器通过；默认/窄屏人工fail。独立Workspace受控、记录复用P15，Edit保留当前id；P17集成后接通编辑目标 |
-| P17 | assets/pages/scenario-edit.html | Skill 编辑表单、校验、preview、Submit for Review | M6 | 进行中；ScenarioEditPage + 专用受控 ScenarioEditForm 提取五个实际必填字段、四块结构卡、12个报表映射、原生文件选择、预览、提交和lite助手/模型流；命名状态与源配对候选已建，已接P15/P16，待最终全套及审图 |
+| P17 | assets/pages/scenario-edit.html | Skill编辑完整表单、五项必填、报告联动、预览/提交/取消及助手模型流 | M6 | 已实现，PR #18；20页面+1组件故事，35/35本页及全套机器通过；P15/P16/P17宿主导航已接通，人工视觉与共享Header待收敛 |
 
 ### 2.3 细分台账与证据记录格式
 
@@ -350,6 +350,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P15创建/编辑（skills.js:203–229；scenario-library.html:286–293） | 原Create沿用Edit草稿，已存D2C Insights回填丢失；React新建清空并保留当前记录的非标准scope选项 | 修复状态残留和数据回填丢失，不新增全局分类 | #16 |
 | P16 Hero窄屏（skill-detail.css:1080–1105） | 原页单列布局仍固定360px并隐藏溢出，统计与说明裁切；React在≤1100px随内容增高、统计自适应分列 | 保持全部内容可读，390/900/1440边界证据见`/tmp/mh-p16-responsive-clean`；共享Header窄屏问题另包处理 | #17 |
 | P16 Edit Scenario（scenario-detail.html:203；skill-detail.js:1–99） | 原Edit固定链接丢失当前id；React通过hrefFor和onNavigate保留当前记录id | 修复显示记录与编辑目标身份不一致，不增加新业务流程 | #17 |
+| P17报告选择框（scenario-edit.html report字段） | 与同表单其他选择控件统一高度、边框和字体，保留12个选项、选择联动与链接 | 按同一字段用途统一样式，不复刻裸浏览器控件差异 | #18 |
+| P17已存Scope（skill-editor.js:8–31；scenario-edit.html:189–195） | 原脚本回填原选项之外的scope会丢失当前值；React仅补当前记录的非空选项 | 保留编辑数据与既有五项必填规则，不新增全局分类 | #18 |
+| P17窄屏Hero（原skill-editor页固定高度与单列断点） | React在≤1100px随内容增高，390/900/1440标题说明与三统计完整可读 | 不复刻裁切；证据`/tmp/mh-p17-responsive`及独立复核`/tmp/mh-p17-responsive-adversarial.md` | #18 |
+| P17细微颜色（上传表面、附件与必填态） | 复用现有同用途语义颜色与danger focus ring，不为六个细微差异新增别名 | 用户确认按用途抽象，保留信息层级与可读性；未删减字段或动作 | #18 |
 
 ## 4. 已知缺口
 
@@ -547,3 +551,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P16 PR #17（https://github.com/wu2305/marketinghub/pull/17）合并07dd34f，候选eeb12ca：lint0/0、24文件223测试、341stories/66docs、host25/25、visual439/439、negative35/35；证据/tmp/mh-p16-integrate-r2-*。独立审核/tmp/mh-p16-adversarial.md确认全部六面板/预览/助手及记录回退，补独立Workspace故事有效路由；rebase后保留P15宿主/配置及唯一私有记录数据，修宿主函数边界；首轮门禁因发现窄屏Hero裁切主动中止，eeb12ca修复后重启全套，390/900/1440信息完整，未以原参照裁切作为组件要求。默认/窄屏人工fail留视觉收敛，P17继续。 | Codex integrator |
 | 2026-09-26 | WP6 P17 Skill Edit 候选：`ScenarioEditPage` 组合共享 Hero/MetricStat/GovernanceNav 与专用受控 `ScenarioEditForm`，完整提取五个实际必填字段、四块结构卡、12种报告深链、双 AI Auto-fill 可见无结果动作、原生文件选择及两枚静态附件、预览生成/空问题、Save Draft 可见无结果动作、Cancel/Submit 导航和 lite 助手/模型流；私有 `useScenarioEditDemo` 供 Storybook/宿主共用。源 `skill-editor.js:7–31` 将已知记录的 `scope="DC Media Performance"` 赋给仅五个内建值的 select，实测变空并阻断Submit；React只把当前记录非空 scope 加为选项，保留原五项与五个校验门槛，不推测记录与报告映射。空/未知id仍为HTML City Comparison默认；源 Category 查找无DOM不造字段；原始390px Hero统计卡右溢，React让三卡可读，待§3登记。有效提交照源触发原生alert再导航，不造静态成功态。本页35/35机器配对`/tmp/mh-p17-callback-fix-pairs`（含未知id、原生文件选择、长页底部、390px及助手模型状态）；原生alert后的宿主24/24`/tmp/mh-p17-callback-fix-host`（核提示文案、错误焦点、Cancel/Submit），lint0。独立对抗审核后，受控Form的Run Preview/Submit现分别传`{question}`/`{values}`，demo按载荷计算；独立Form故事报表/Cancel锚点使用真实`/assets/pages/`路由，1项直接回调测试及浏览器链接检查通过；独立Form根字体已继承DIN 2014并经计算样式核实。当前已接入P15/P16，待最新main完整门禁与人工绑定；默认/390px像素初审fail，页面内容可读。源码矩阵`/tmp/mh-wp6-p17-source-matrix.md`。 | Codex WP6 |
 | 2026-09-26 | P17 Hero 900px可读性补修：原 `assets/css/governance/skill-editor.css:87–96,794–800` 的固定360px/overflow hidden与≤1100改单列同时生效，三张统计叠放后标题顶部和 AI CHECK 大部被裁；旧React `ScenarioEditPage.css` 同样在621–1100保留固定高度。现只在本页≤1100使Hero随内容增高并给单列布局留上下间距，≤620既有小屏布局及1440桌面形态不改；不隐藏状态、无新prop/token。`/tmp/mh-p17-responsive/{390,900,1440}.png` 与 `bounds.json` 核对标题、说明、三项stats全部落在Hero/视口内（900 Hero 587px）；390全局横溢仅共享Header，非本包。P17定向35/35机器配对`/tmp/mh-p17-responsive-pairs`、lint0、Storybook315故事/63文档候选构建；人工像素与最终clean-head全套待P15/P16顺序合入后集成。 | Codex WP6 |
+| 2026-09-26 | P17 PR #18（https://github.com/wu2305/marketinghub/pull/18）合并052fb2a，候选763fb68：lint0/0、25文件224测试、362stories/67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-p17-integrate-*。独立完整性审查/tmp/mh-p17-adversarial.md返回onRunPreview/onSubmit载荷缺失后补{question}/{values}及独立故事路由；/tmp/mh-p17-responsive-adversarial.md关闭900px裁切阻断。rebase保持P15唯一记录与语义tokens，P16 Edit接到实际编辑并校验预填。17个页面组件结构广度完成，不能替代M7状态档案、共享组件、正式库交付及人工视觉收敛。 | Codex integrator |
