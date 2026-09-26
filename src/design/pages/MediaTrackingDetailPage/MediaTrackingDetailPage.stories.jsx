@@ -14,6 +14,7 @@ export const MediaTrackingDetail = {
   args: {
     ...pageShell,
     toolbar: MEDIA_TRACKING.toolbar,
+    labels: MEDIA_TRACKING.labels,
     head: MEDIA_TRACKING.head,
     periods: MEDIA_TRACKING.periods,
     period: "monthly",

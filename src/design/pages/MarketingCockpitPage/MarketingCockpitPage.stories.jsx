@@ -28,6 +28,7 @@ const args = {
     prompt: "",
     ...pageShell,
     hero: COCKPIT.hero,
+    copy: COCKPIT.copy,
     groups: COCKPIT.groups,
     projects: COCKPIT.projects,
     knowledge: KNOWLEDGE_ASSETS,

@@ -56,6 +56,7 @@ function TaskHost() {
         Open task
       </button>
       <CampaignPage
+        labels={demoContent.CAMPAIGN.labels}
         taskDialog={TASK_DIALOG}
         taskDialogOpen={open}
         onCloseTask={() => setOpen(false)}

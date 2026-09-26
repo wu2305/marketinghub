@@ -22,8 +22,9 @@ import "./MediaTrackingDetailPage.css";
  * @param {string} [props.current] nav id for aria-current; the original media-tracking page marks no item
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {{ backHref?: string, backLabel?: string }} [props.toolbar={}]
- * @param {{ eyebrow?: string, title?: string }} [props.head={}]
+ * @param {{ backHref?: string, backLabel: string }} [props.toolbar={}] Back destination and visible label.
+ * @param {{ periodAria: string, filtersAria: string, tableAria: string }} props.labels Accessible names for page controls and regions.
+ * @param {{ eyebrow: string, title: string }} [props.head={}] Page heading copy.
  * @param {Array<{ id: string, label: string }>} [props.periods=[]]
  * @param {string} [props.period="monthly"]
  * @param {Array<{ name: string, label: string, required?: boolean, options?: Array<string|object>, placeholder?: string, defaultValue?: string }>} [props.filters=[]]
@@ -33,18 +34,18 @@ import "./MediaTrackingDetailPage.css";
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
- * @param {(target: object) => void} [props.onNavigate]
+ * @param {(target: { href: string, id?: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]
- * @param {() => void} [props.onOpenAssistant]
- * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
- * @param {(event: object) => void} [props.onPromptChange]
- * @param {(event: object) => void} [props.onSubmit]
- * @param {(event: object) => void} [props.onSuggestion]
+ * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
+ * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  * @param {() => void} [props.onNewSession]
- * @param {(event: object) => void} [props.onMaximize]
- * @param {(event: object) => void} [props.onHistory]
- * @param {(event: object) => void} [props.onHistorySelect]
+ * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
+ * @param {(event: { open: boolean }) => void} [props.onHistory]
+ * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
  * @param {(event: { names: string[] }) => void} [props.onAttach]
  * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
  * @param {() => void} [props.onClearSkill]
@@ -55,6 +56,7 @@ export function MediaTrackingDetailPage({
   logo,
   navigation = [],
   toolbar = {},
+  labels,
   head = {},
   periods = [],
   period = "monthly",
@@ -90,15 +92,15 @@ export function MediaTrackingDetailPage({
         <div className="mh-tracking__topbar">
           <a className="mh-tracking__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref })}>
             <Icon name="arrow-left" />
-            <span>{toolbar.backLabel || "Back"}</span>
+            <span>{toolbar.backLabel}</span>
           </a>
         </div>
         <header className="mh-tracking__head">
           <span className="mh-tracking__eyebrow">{head.eyebrow}</span>
           <h1>{head.title}</h1>
         </header>
-        <Tabs label="Period" items={periods} value={period} onChange={onPeriodChange} />
-        <section className="mh-tracking__filters" aria-label="Filters">
+        <Tabs label={labels.periodAria} items={periods} value={period} onChange={onPeriodChange} />
+        <section className="mh-tracking__filters" aria-label={labels.filtersAria}>
           {filters.map((field) => (
             <FormField
               key={field.name}
@@ -121,7 +123,7 @@ export function MediaTrackingDetailPage({
             </React.Fragment>
           ))}
         </p>
-        <section className="mh-tracking__table-wrap" aria-label="Data table">
+        <section className="mh-tracking__table-wrap" aria-label={labels.tableAria}>
           <header className="mh-tracking__table-head">
             <h2>{table.title}</h2>
             <span className="mh-tracking__count">

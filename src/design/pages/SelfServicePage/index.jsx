@@ -21,6 +21,7 @@ import "./SelfServicePage.css";
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
  * @param {Array<{ id: string, label: string }>} [props.tabs=[]]
+ * @param {{ tabAria: string, analysisFilterAria: string, uploadFilterAria: string }} props.labels Accessible names for the page tabs and each filter group.
  * @param {{ analysis?: Array<object>, upload?: Array<object> }} [props.filters={}] pills per tab id
  * @param {Array<object>} [props.reports=[]] ActionCard props for the analysis tab
  * @param {Array<object>} [props.uploads=[]] ActionCard props for the upload tab; items may carry `history` rows for the upload-history dialog
@@ -44,6 +45,7 @@ export function SelfServicePage({
   navigation = [],
   hero = {},
   tabs = [],
+  labels,
   filters = {},
   reports = [],
   uploads = [],
@@ -71,8 +73,8 @@ export function SelfServicePage({
       <Hero {...hero} height={260} variant="banner" scrim="none" />
       <main className="mh-page__shell mh-page__shell--self">
         <div className="mh-self-tools">
-          <Tabs label="Data view mode" items={tabs} value={tab} onChange={onTabChange} />
-          <FilterPills label={tab === "upload" ? "Filter uploads" : "Filter reports"} items={filters[tab] || []} value={category} onChange={onCategoryChange} />
+          <Tabs label={labels.tabAria} items={tabs} value={tab} onChange={onTabChange} />
+          <FilterPills label={tab === "upload" ? labels.uploadFilterAria : labels.analysisFilterAria} items={filters[tab] || []} value={category} onChange={onCategoryChange} />
         </div>
         <div className={tab === "upload" ? "mh-page__cards mh-page__cards--upload" : "mh-page__cards mh-page__cards--two"}>
           {items.map((item) => (

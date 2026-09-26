@@ -18,7 +18,7 @@ export const Home = {
   args: {
     assistantOpen: false,
     prompt: "",
-    scope: "All",
+    scope: ASSISTANT.scopes[0],
     ...pageShell,
     hero: HOME.hero,
     heading: HOME.heading,

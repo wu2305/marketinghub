@@ -49,6 +49,7 @@ npm test               # vitest 行为测试
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
+| M7 | S5 页面文案与公开接口（P01–P07） | 候选完成；待独立复核、最新main全套gate与PR | P02搜索/元数据/空态、P03筛选名称、P04模板/提交、P05区块名称、P06账户筛选/任务弹窗均由页面props注入；P01 scope初值移出页面，P07原有copy保持；替换内容测试和定向配对见§5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -460,6 +461,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-26 | S5 页面文案/接口候选：P01–P07核查后将实际写死的页面文案与aria名称移到既有`content.js`默认数据和页面props，移除P04/P05/P06任务文案备用英文；P02/P03/P04/P05/P06故事与P02宿主接入，更新公开props/回调JSDoc。新增5条替换文案渲染验证，旧英文无泄漏；lint0，26文件229测试，Storybook 363 stories/67 docs；P02项目、P04模板弹窗、P06任务操作定向机器配对各1/1，肉眼确认默认文案仍与原页一致，既存几何差异保持人工pending。证据`/tmp/mh-page-copy-p02-cockpit-project`、`/tmp/mh-page-copy-p04-data-upload-import`、`/tmp/mh-page-copy-p06-campaign-task-dialog`。待最新main rebase/完整门禁。 | Codex S5 |
 | 2026-09-22 | PR #6 合入：语义组件设计系统替换 DOM 复刻方案 | Cloud Agent |
 | 2026-09-22 | 深度审核：实跑构建与 1440px 对照，确认 2.4 节缺口；建立 `AGENTS.md` 与本状态文件 | Cloud Agent |
 | 2026-09-22 | PR #8：阶段 A 六条收口（助手抽屉、Cockpit 箭头与搜索符、侧栏图标、Manage 文案与 typeMeta 计数、Campaign props、Header 链接与 Hero id） | Cloud Agent |

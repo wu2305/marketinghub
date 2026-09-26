@@ -31,6 +31,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
+ * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details.
  * @param {string} [props.query=""] catalog search text
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
  * @param {Object<string, object>} [props.projects={}] project records keyed by id
@@ -49,27 +50,28 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
- * @param {(target: { project: string, index: number }) => void} [props.onOpenDetails]
+ * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
  * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
  * @param {boolean} [props.workspaceOpen=false]
- * @param {(target: object) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
+ * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
  * @param {object} [props.assistant={}] AssistantPanel props
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
- * @param {(target: object) => void} [props.onOpenAssistant]
- * @param {(target: object) => void} [props.onCloseAssistant]
+ * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { value: string }) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
  */
 export function MarketingCockpitPage({
   current = "cockpit",
   logo,
   navigation = [],
   hero = {},
+  copy,
   query = "",
   groups = [],
   projects = {},
@@ -135,7 +137,7 @@ export function MarketingCockpitPage({
       <main className="mh-page__shell">
         {isLive ? (
           <LiveReportView
-            kicker={`${liveProject.title.toUpperCase()} / LIVE REPORT`}
+            kicker={`${liveProject.title.toUpperCase()} / ${copy.liveReportLabel}`}
             title={liveReport.title}
             backHref={projectHref(liveKey)}
             onBack={(target) => {
@@ -152,21 +154,21 @@ export function MarketingCockpitPage({
         ) : (
           <React.Fragment>
         <header className="mh-page__search">
-          <SearchField label="Search dashboards" value={query} placeholder="Search dashboards" size="lg" icon="end" onChange={onQueryChange} />
+          <SearchField label={copy.searchLabel} value={query} placeholder={copy.searchLabel} size="lg" icon="end" onChange={onQueryChange} />
         </header>
         {active ? (
           <React.Fragment>
             <ProjectDirectory
               backHref={backHref}
               image={active.image}
-              imageAlt={`${active.title} report preview`}
+              imageAlt={`${active.title} ${copy.imageAltSuffix}`}
               kicker={active.kicker}
               title={active.title}
               description={active.description}
-              countText={pluralize(active.reports.length, "dashboard")}
-              updated={active.sourceStrip[0] || "Update schedule available in project"}
-              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, "dashboard")}
-              onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: "All report projects" })}
+              countText={pluralize(active.reports.length, copy.dashboardUnit)}
+              updated={active.sourceStrip[0] || copy.updatedFallback}
+              listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, copy.dashboardUnit)}
+              onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: copy.catalogBackLabel })}
             >
               {active.reports
                 .map((report, index) => ({ report, index }))
@@ -179,10 +181,10 @@ export function MarketingCockpitPage({
                     title={item.report.title}
                     description={item.report.description}
                     meta={[
-                      { label: "Owner", value: item.report.owner },
-                      { label: "Cadence", value: item.report.cadence },
-                      { label: "Updated", value: item.report.updated },
-                      { label: "Knowledge", value: pluralize(resolveReportAssets(knowledge, project, item.report).length, "asset") },
+                      { label: copy.meta.owner, value: item.report.owner },
+                      { label: copy.meta.cadence, value: item.report.cadence },
+                      { label: copy.meta.updated, value: item.report.updated },
+                      { label: copy.meta.knowledge, value: pluralize(resolveReportAssets(knowledge, project, item.report).length, copy.assetUnit) },
                     ]}
                     href={liveHref(project, item.index)}
                     detailsHref={contextHref(project, item.report)}
@@ -193,8 +195,8 @@ export function MarketingCockpitPage({
             </ProjectDirectory>
             {active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length === 0 ? (
               <div className="mh-empty-state">
-                <strong>No matching reports.</strong>
-                <span>Try another report or project name.</span>
+                <strong>{copy.emptyTitle}</strong>
+                <span>{copy.emptyDescription}</span>
               </div>
             ) : null}
           </React.Fragment>
@@ -215,7 +217,7 @@ export function MarketingCockpitPage({
                       kicker: projects[key].kicker,
                       description: projects[key].description,
                       image: projects[key].image,
-                      updated: projects[key].sourceStrip[0] || "Update schedule available in project",
+                      updated: projects[key].sourceStrip[0] || copy.updatedFallback,
                       href: projectHref(key),
                     })),
                 }))
@@ -226,8 +228,8 @@ export function MarketingCockpitPage({
               .filter((group) => group.id !== "all")
               .every((group) => !Object.keys(projects).some((key) => projects[key].group === group.id && (!search || projectSearchText(knowledge, key, projects[key]).includes(search)))) ? (
               <div className="mh-empty-state">
-                <strong>No matching reports.</strong>
-                <span>Try another report or project name.</span>
+                <strong>{copy.emptyTitle}</strong>
+                <span>{copy.emptyDescription}</span>
               </div>
             ) : null}
           </React.Fragment>
@@ -239,16 +241,16 @@ export function MarketingCockpitPage({
         open={Boolean(detailsTarget)}
         projectLabel={detailsTarget ? detailsTarget.project.title : undefined}
         image={detailsTarget ? detailsTarget.project.image : undefined}
-        imageAlt={detailsTarget ? `${detailsTarget.project.title} report preview` : undefined}
+        imageAlt={detailsTarget ? `${detailsTarget.project.title} ${copy.imageAltSuffix}` : undefined}
         hierarchy={detailsTarget ? `${detailsTarget.project.category} / ${detailsTarget.project.title} / ${detailsTarget.report.type}` : undefined}
         title={detailsTarget ? detailsTarget.report.title : ""}
         explanation={detailsTarget ? detailsTarget.report.description : undefined}
         meta={
           detailsTarget
             ? [
-                { label: "Owner", value: detailsTarget.report.owner },
-                { label: "Cadence", value: detailsTarget.report.cadence },
-                { label: "Updated", value: detailsTarget.report.updated },
+                { label: copy.meta.owner, value: detailsTarget.report.owner },
+                { label: copy.meta.cadence, value: detailsTarget.report.cadence },
+                { label: copy.meta.updated, value: detailsTarget.report.updated },
               ]
             : []
         }

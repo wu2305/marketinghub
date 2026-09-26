@@ -17,6 +17,7 @@ export const SelfService = {
     category: "all",
     ...pageShell,
     hero: SELF_SERVICE.hero,
+    labels: SELF_SERVICE.labels,
     tabs: SELF_SERVICE.tabs,
     filters: SELF_SERVICE.filters,
     reports: SELF_SERVICE.reports,

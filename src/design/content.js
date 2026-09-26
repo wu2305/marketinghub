@@ -252,6 +252,18 @@ export function buildCampaignAnswer(query) {
 }
 
 export const COCKPIT = {
+  copy: {
+    liveReportLabel: "LIVE REPORT",
+    searchLabel: "Search dashboards",
+    imageAltSuffix: "report preview",
+    dashboardUnit: "dashboard",
+    assetUnit: "asset",
+    updatedFallback: "Update schedule available in project",
+    catalogBackLabel: "All report projects",
+    emptyTitle: "No matching reports.",
+    emptyDescription: "Try another report or project name.",
+    meta: { owner: "Owner", cadence: "Cadence", updated: "Updated", knowledge: "Knowledge" },
+  },
   hero: {
     image: assetUrl("assets/images/project-city-tabby.png"),
     eyebrow: "Performance tracking",
@@ -283,6 +295,7 @@ export const COCKPIT = {
 };
 
 export const SELF_SERVICE = {
+  labels: { tabAria: "Data view mode", analysisFilterAria: "Filter reports", uploadFilterAria: "Filter uploads" },
   assistant: {
     title: "Ask AI Interpreter",
     headline: "Ask a question",
@@ -1331,6 +1344,14 @@ export const COCKPIT_SKILL_MENU = {
 };
 
 export const CAMPAIGN = {
+  labels: {
+    channelViewAria: "Channel view",
+    objectiveChartAria: "Marketing objective distribution chart",
+    accountSearch: "Search sub-account",
+    filterLabel: "Filter",
+    resetLabel: "Reset",
+    accountCaption: (count) => `${count} ${count === 1 ? "account" : "accounts"} shown`,
+  },
   rail: {
     eyebrow: "Campaign execution",
     title: "Trading Desk",
@@ -1525,26 +1546,28 @@ export const CAMPAIGN = {
 };
 
 export const DATA_UPLOAD = {
+  submitLabel: "Submit",
+  submittingLabel: "Submitted",
   toolbar: {
     backHref: "/assets/pages/flexible.html?tab=upload",
     backLabel: "Back",
     importLabel: "Template Import",
   },
   fields: [
-    { name: "year", label: "Year" },
-    { name: "year-period", label: "Year Period" },
-    { name: "quarter", label: "Quarter" },
-    { name: "year-week", label: "Year Week" },
-    { name: "channel", label: "Channel" },
-    { name: "channel-group", label: "Channel Group" },
-    { name: "location", label: "Location" },
-    { name: "door", label: "Door" },
-    { name: "sales", label: "Sales" },
-    { name: "sales-ly", label: "Sales LY" },
-    { name: "traffic", label: "Traffic" },
-    { name: "traffic-ly", label: "Traffic LY" },
-    { name: "trans", label: "Trans" },
-    { name: "trans-ly", label: "Trans LY" },
+    { name: "year", label: "Year", placeholder: "Enter" },
+    { name: "year-period", label: "Year Period", placeholder: "Enter" },
+    { name: "quarter", label: "Quarter", placeholder: "Enter" },
+    { name: "year-week", label: "Year Week", placeholder: "Enter" },
+    { name: "channel", label: "Channel", placeholder: "Enter" },
+    { name: "channel-group", label: "Channel Group", placeholder: "Enter" },
+    { name: "location", label: "Location", placeholder: "Enter" },
+    { name: "door", label: "Door", placeholder: "Enter" },
+    { name: "sales", label: "Sales", placeholder: "Enter" },
+    { name: "sales-ly", label: "Sales LY", placeholder: "Enter" },
+    { name: "traffic", label: "Traffic", placeholder: "Enter" },
+    { name: "traffic-ly", label: "Traffic LY", placeholder: "Enter" },
+    { name: "trans", label: "Trans", placeholder: "Enter" },
+    { name: "trans-ly", label: "Trans LY", placeholder: "Enter" },
   ],
   bulkImport: {
     title: "Template Import",
@@ -1642,6 +1665,7 @@ const TRACKING_ROWS = [
 ];
 
 export const MEDIA_TRACKING = {
+  labels: { periodAria: "Period", filtersAria: "Filters", tableAria: "Data table" },
   toolbar: { backHref: "/assets/pages/flexible.html", backLabel: "Back" },
   head: { eyebrow: "MEDIA TRACKING DETAIL", title: "Media Tracking Detail" },
   periods: [

@@ -19,6 +19,7 @@ export const Campaign = {
     prompt: "",
     ...pageShell,
     assistant: CAMPAIGN.assistant,
+    labels: CAMPAIGN.labels,
     rail: CAMPAIGN.rail,
     channels: CAMPAIGN.channels,
     metrics: CAMPAIGN.metrics,

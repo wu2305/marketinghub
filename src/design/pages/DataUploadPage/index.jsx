@@ -21,16 +21,16 @@ import "./DataUploadPage.css";
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
  * @param {object} [props.hero={}] Hero props
- * @param {{ backHref?: string, backLabel?: string, importLabel?: string }} [props.toolbar={}]
- * @param {Array<{ name: string, label: string, placeholder?: string }>} [props.fields=[]]
- * @param {string} [props.submitLabel="Submit"]
- * @param {string} [props.submittingLabel="Submitted"]
+ * @param {{ backHref?: string, backLabel: string, importLabel: string }} [props.toolbar={}] Back destination and visible toolbar copy.
+ * @param {Array<{ name: string, label: string, placeholder: string }>} [props.fields=[]]
+ * @param {string} props.submitLabel
+ * @param {string} props.submittingLabel
  * @param {boolean} [props.submitting=false]
- * @param {object} [props.bulkImport={}] modal copy/state: title, dropzoneTitle, dropzoneHint, selectedPrefix, accept, templateLabel, templateHref, tipsTitle, tips[]
+ * @param {{ title: string, dropzoneTitle: string, dropzoneHint: string, selectedPrefix: string, accept: string, templateLabel: string, templateHref?: string, tipsTitle: string, tips: string[] }} [props.bulkImport={}] modal copy and file constraints
  * @param {boolean} [props.bulkImportOpen=false]
  * @param {string} [props.selectedFile] file name shown in the dropzone hint
- * @param {(target: object) => void} [props.onNavigate]
- * @param {(event: { label: string }) => void} [props.onOpenImport]
+ * @param {(target: { href: string, id?: string, params?: object, label?: string }) => void} [props.onNavigate]
+ * @param {(target: { label: string }) => void} [props.onOpenImport]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]
  * @param {(file: { name: string }) => void} [props.onSelectFile]
  * @param {(target: { href: string }) => void} [props.onDownloadTemplate]
@@ -43,8 +43,8 @@ export function DataUploadPage({
   hero = {},
   toolbar = {},
   fields = [],
-  submitLabel = "Submit",
-  submittingLabel = "Submitted",
+  submitLabel,
+  submittingLabel,
   submitting = false,
   bulkImport = {},
   bulkImportOpen = false,
@@ -65,10 +65,10 @@ export function DataUploadPage({
         <div className="mh-upload__toolbar">
           <a className="mh-upload__back" href={toolbar.backHref || "#"} onClick={() => onNavigate?.({ href: toolbar.backHref || "#" })}>
             <Icon name="arrow-left" />
-            <span>{toolbar.backLabel || "Back"}</span>
+            <span>{toolbar.backLabel}</span>
           </a>
           <Button variant="secondary" icon="upload" onClick={onOpenImport}>
-            {toolbar.importLabel || "Template Import"}
+            {toolbar.importLabel}
           </Button>
         </div>
         <form
@@ -84,7 +84,7 @@ export function DataUploadPage({
           <div className="mh-upload__card">
             <div className="mh-upload__grid">
               {fields.map((field) => (
-                <FormField key={field.name} label={field.label} name={field.name} placeholder={field.placeholder || "Enter"} autoComplete="off" />
+                <FormField key={field.name} label={field.label} name={field.name} placeholder={field.placeholder} autoComplete="off" />
               ))}
             </div>
           </div>
@@ -105,10 +105,10 @@ export function DataUploadPage({
           />
           <a className="mh-bulk-import__template" href={bulkImport.templateHref || "#"} download onClick={() => onDownloadTemplate?.({ href: bulkImport.templateHref || "#" })}>
             <Icon name="download" />
-            <span>{bulkImport.templateLabel || "Download template"}</span>
+            <span>{bulkImport.templateLabel}</span>
           </a>
           <div className="mh-bulk-import__tips">
-            <h4>{bulkImport.tipsTitle || "Tips"}</h4>
+            <h4>{bulkImport.tipsTitle}</h4>
             <ul>
               {(bulkImport.tips || []).map((tip) => (
                 <li key={tip}>{tip}</li>
