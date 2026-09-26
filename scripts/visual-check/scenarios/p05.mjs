@@ -5,6 +5,7 @@ export default [
       url: "/assets/pages/media-tracking-detail.html",
       expect: [
         { sel: ".media-tracking-head", text: "Media Tracking Detail" },
+        { sel: ".nav-link.active[aria-current='page']", text: "Self-Service Center" },
         { sel: ".media-tracking-tab.active", text: "Monthly" },
         { sel: ".media-tracking-count", text: "42 fields displayed" },
         { sel: ".media-tracking-table", text: "2493188" },
@@ -15,6 +16,7 @@ export default [
       id: "pages--media-tracking-detail",
       expect: [
         { sel: ".mh-tracking__head", text: "Media Tracking Detail" },
+        { sel: ".mh-header__link[aria-current='page']", text: "Self-Service Center" },
         { sel: ".mh-tracking .mh-tabs__tab.is-active", text: "Monthly" },
         { sel: ".mh-tracking__count", text: "42 fields displayed" },
         { sel: ".mh-tracking__table", text: "2493188" },
@@ -30,8 +32,7 @@ export default [
       expect: [{ sel: ".media-tracking-tab.active", text: "Daily" }],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [{ click: ".mh-tracking .mh-tabs__tab:first-child" }],
+      id: "pages--media-tracking-detail-daily",
       expect: [{ sel: ".mh-tracking .mh-tabs__tab.is-active", text: "Daily" }],
     },
   },
@@ -54,14 +55,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [
-        { click: ".mh-launcher" },
-        { wait: ".mh-assistant" },
-        { fill: [".mh-assistant__box textarea", "Summarize the latest media tracking performance."] },
-        { click: ".mh-assistant__send .mh-button" },
-        { wait: ".mh-assistant__answer--simple" },
-      ],
+      id: "pages--media-tracking-detail-assistant-answer",
       expect: [
         { sel: ".mh-assistant", text: "Ask AI Interpreter" },
         { sel: ".mh-assistant__answer--simple", text: "I will use the AI Interpreter knowledge context to answer:" },
@@ -89,14 +83,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [
-        { click: ".mh-launcher" },
-        { wait: ".mh-assistant" },
-        { click: "button[aria-label='History']" },
-        { wait: ".mh-assistant__history-pop" },
-        { click: ".mh-assistant__history-item" },
-      ],
+      id: "pages--media-tracking-detail-assistant-history-filled",
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
         { sel: ".mh-assistant__send .mh-button:not([disabled])", text: "ASK" },
@@ -119,12 +106,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [
-        { click: ".mh-launcher" },
-        { wait: ".mh-assistant" },
-        { click: "button[aria-label='Maximize']" },
-      ],
+      id: "pages--media-tracking-detail-assistant-maximized",
       expect: [
         { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
         { sel: "button[aria-label='Restore']", attr: { name: "aria-label", value: "Restore" } },
@@ -210,16 +192,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [
-        { click: ".mh-launcher" },
-        { wait: ".mh-assistant" },
-        { click: ".mh-assistant__skill" },
-        { wait: ".mh-skill" },
-        { click: ".mh-skill__category >> nth=1" },
-        { wait: ".mh-skill__detail" },
-        { click: ".mh-skill__option:has-text('ROI diagnosis')" },
-      ],
+      id: "pages--media-tracking-detail-assistant-selected-skill",
       expect: [
         { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
         { sel: ".mh-skill", state: "detached" },
@@ -294,19 +267,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--media-tracking-detail",
-      actions: [
-        { click: ".mh-launcher" },
-        { wait: ".mh-assistant" },
-        { click: ".mh-assistant__skill" },
-        { wait: ".mh-skill" },
-        { click: ".mh-skill__category >> nth=1" },
-        { wait: ".mh-skill__detail" },
-        { click: ".mh-skill__action >> nth=1" },
-        { wait: ".mh-flow__card--form" },
-        { click: ".mh-flow__foot .mh-flow__btn--primary" },
-        { wait: ".mh-flow__field-error" },
-      ],
+      id: "pages--media-tracking-detail-model-manual-error",
       expect: [
         { sel: ".mh-flow__field-error", text: "Name is required." },
       ],

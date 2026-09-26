@@ -1,18 +1,23 @@
-import React from "react";
-import { LITE_ASSISTANT, MEDIA_TRACKING, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { pageShell, useSynced } from "../../lib/story-helpers.js";
-import { MediaTrackingDetailPage } from "./index.jsx";
+import { LITE_ASSISTANT, MEDIA_TRACKING } from "../../content.js";
+import { useMediaTrackingDemo } from "../../demo/media-tracking-demo.js";
+import { enumProp, pageShell } from "../../lib/story-helpers.js";
+import { MediaTrackingDetailPage, mediaTrackingPeriods } from "./index.jsx";
 
 export default {
   title: "Pages",
+  component: MediaTrackingDetailPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: { description: { component: "Media Tracking's report and lite assistant. The private demo hook drives both these states and the standalone host." } },
+  },
 };
 
 export const MediaTrackingDetail = {
   name: "Media Tracking Detail",
   args: {
     ...pageShell,
+    current: "self-service",
     toolbar: MEDIA_TRACKING.toolbar,
     head: MEDIA_TRACKING.head,
     periods: MEDIA_TRACKING.periods,
@@ -25,7 +30,9 @@ export const MediaTrackingDetail = {
     prompt: "",
   },
   argTypes: {
-    period: { control: "inline-radio", options: ["daily", "weekly", "monthly", "spot"] },
+    period: enumProp(mediaTrackingPeriods, "monthly", "Active report period; the source changes the tab without filtering the static table.", "inline-radio"),
+    assistantOpen: { control: "boolean", description: "Initial lite assistant visibility." },
+    prompt: { control: "text", description: "Initial assistant composer text." },
     onNavigate: { action: "onNavigate" },
     onPeriodChange: { action: "onPeriodChange" },
     onFilterChange: { action: "onFilterChange" },
@@ -46,106 +53,59 @@ export const MediaTrackingDetail = {
     onFlowSubmit: { action: "onFlowSubmit" },
   },
   render: function MediaTrackingStory(args) {
-    const [period, setPeriod] = useSynced(args.period);
-    const [open, setOpen] = useSynced(args.assistantOpen);
-    const [prompt, setPrompt] = useSynced(args.prompt);
-    const [answers, setAnswers] = React.useState([]);
-    const [skill, setSkill] = React.useState(null);
-    const [flow, setFlow] = React.useState(null);
-    return (
-      <MediaTrackingDetailPage
-        {...args}
-        period={period}
-        assistant={{ ...args.assistant, answers, selectedSkill: skill }}
-        assistantOpen={open}
-        prompt={prompt}
-        skillFlow={
-          flow
-            ? {
-                step: flow.step,
-                threads: flow.threads,
-                rule: flow.rule,
-                draft: flow.draft,
-                sections: MODEL_FLOW.sections,
-                onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-                  setFlow((current) => ({
-                    ...current,
-                    threads: current.threads.map((thread, ti) =>
-                      ti === threadIndex
-                        ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                        : thread,
-                    ),
-                  })),
-                onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-                onGenerate: ({ messages, rule }) =>
-                  setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule) })),
-                onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-                onClose: () => setFlow(null),
-                onSave: ({ values }) => args.onFlowSave?.(values),
-                onSubmit: ({ values }) => args.onFlowSubmit?.(values),
-              }
-            : undefined
-        }
-        onNavigate={args.onNavigate}
-        onPeriodChange={(event) => {
-          setPeriod(event.id);
-          args.onPeriodChange?.(event);
-        }}
-        onFilterChange={args.onFilterChange}
-        onOpenAssistant={() => {
-          setOpen(true);
-          args.onOpenAssistant?.();
-        }}
-        onCloseAssistant={() => {
-          setOpen(false);
-          args.onCloseAssistant?.();
-        }}
-        onPromptChange={(event) => {
-          setPrompt(event.value);
-          args.onPromptChange?.(event);
-        }}
-        onSubmit={(event) => {
-          const text = String(event.prompt || "").trim();
-          if (text) {
-            setAnswers([buildLiteAssistantAnswer(text)]);
-            setPrompt("");
-          }
-          args.onSubmit?.(event);
-        }}
-        onSuggestion={(event) => {
-          setPrompt(event.prompt);
-          args.onSuggestion?.(event);
-        }}
-        onNewSession={() => {
-          setAnswers([]);
-          setPrompt("");
-          args.onNewSession?.();
-        }}
-        onMaximize={args.onMaximize}
-        onHistory={args.onHistory}
-        onHistorySelect={(event) => {
-          setPrompt(event.prompt);
-          args.onHistorySelect?.(event);
-        }}
-        onAttach={args.onAttach}
-        onSelectSkill={(event) => {
-          setSkill({ id: event.id, type: event.type, title: event.title });
-          args.onSelectSkill?.(event);
-        }}
-        onClearSkill={() => {
-          setSkill(null);
-          args.onClearSkill?.();
-        }}
-        onSkillAction={({ action }) => {
-          args.onSkillAction?.({ action });
-          setFlow({
-            step: action === "history" ? "history" : "manual",
-            threads: MODEL_FLOW.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-            rule: "",
-            draft: {},
-          });
-        }}
-      />
-    );
+    return <MediaTrackingDetailPage {...useMediaTrackingDemo(args)} />;
   },
 };
+
+// Interactions establish transient page states through the same callbacks a
+// user reaches. The final selector makes every named story self-checking.
+const playClicks = (expected, ...selectors) => async ({ canvasElement }) => {
+  const doc = canvasElement.ownerDocument;
+  const frame = () => new Promise((resolve) => doc.defaultView.requestAnimationFrame(resolve));
+  await frame();
+  await frame();
+  for (const selector of selectors) {
+    let control;
+    for (let i = 0; i < 40; i += 1) {
+      control = doc.querySelector(selector);
+      if (control) break;
+      await frame();
+    }
+    if (!control) throw new Error(`Media Tracking control missing: ${selector}`);
+    control.click();
+    await frame();
+  }
+  let node;
+  for (let i = 0; i < 40; i += 1) {
+    node = doc.querySelector(expected);
+    if (node && node.getBoundingClientRect().height > 0 && getComputedStyle(node).visibility !== "hidden") return;
+    await frame();
+  }
+  throw new Error(`Media Tracking state not visible: ${expected}`);
+};
+
+const state = (name, args = {}, play) => ({
+  ...MediaTrackingDetail,
+  name,
+  args: { ...MediaTrackingDetail.args, ...args },
+  ...(play ? { play } : {}),
+});
+const open = { assistantOpen: true };
+const modelMenu = [".mh-assistant__skill", ".mh-skill__category:nth-child(2)"];
+
+export const MediaTrackingDetailDaily = state("Media Tracking Detail · Daily", { period: "daily" });
+export const MediaTrackingDetailAssistantOpen = state("Media Tracking Detail · Assistant open", open);
+export const MediaTrackingDetailAssistantAnswer = state(
+  "Media Tracking Detail · Assistant answer",
+  { ...open, prompt: "Summarize the latest media tracking performance." },
+  playClicks(".mh-assistant__answer--simple", ".mh-assistant__send .mh-button"),
+);
+export const MediaTrackingDetailAssistantHistory = state("Media Tracking Detail · Recent chats", open, playClicks(".mh-assistant__history-pop", ".mh-assistant__history .mh-assistant__icon"));
+export const MediaTrackingDetailAssistantHistoryFilled = state("Media Tracking Detail · Recent chat fills prompt", open, playClicks(".mh-assistant__send .mh-button:not([disabled])", ".mh-assistant__history .mh-assistant__icon", ".mh-assistant__history-item:first-child"));
+export const MediaTrackingDetailAssistantMaximized = state("Media Tracking Detail · Assistant maximized", open, playClicks(".mh-assistant--expanded", "button[aria-label='Maximize']"));
+export const MediaTrackingDetailAssistantSkills = state("Media Tracking Detail · Skill menu", open, playClicks(".mh-skill", ".mh-assistant__skill"));
+export const MediaTrackingDetailAssistantSelectedSkill = state("Media Tracking Detail · Selected model", open, playClicks(".mh-assistant__chip", ...modelMenu, ".mh-skill__option:nth-child(2)"));
+export const MediaTrackingDetailModelHistory = state("Media Tracking Detail · Model chat history", open, playClicks(".mh-flow__card--history", ...modelMenu, ".mh-skill__action:first-child"));
+export const MediaTrackingDetailModelGenerated = state("Media Tracking Detail · Generated model", open, playClicks(".mh-flow__card--form", ...modelMenu, ".mh-skill__action:first-child", ".mh-flow__foot .mh-flow__btn--primary"));
+export const MediaTrackingDetailModelManual = state("Media Tracking Detail · Manual model", open, playClicks(".mh-flow__card--form", ...modelMenu, ".mh-skill__action:nth-child(2)"));
+export const MediaTrackingDetailModelManualError = state("Media Tracking Detail · Manual required fields", open, playClicks(".mh-flow__field-error", ...modelMenu, ".mh-skill__action:nth-child(2)", ".mh-flow__foot .mh-flow__btn--primary"));

@@ -201,6 +201,7 @@ export {
 } from "./pages/DataUploadPage/index.jsx";
 export {
   MediaTrackingDetailPage,
+  mediaTrackingPeriods,
 } from "./pages/MediaTrackingDetailPage/index.jsx";
 export { DataModelPage } from "./pages/DataModelPage/index.jsx";
 export { KnowledgeCreatePage } from "./pages/KnowledgeCreatePage/index.jsx";

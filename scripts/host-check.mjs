@@ -984,6 +984,40 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P05: the private Media Tracking hook drives the host as well as stories ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}media-tracking-detail`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.locator(".mh-tracking__head h1").waitFor();
+  if (!(await page.locator(".mh-header__link[aria-current='page']").innerText()).includes("Self-Service Center")) notes.push("source active navigation missing");
+  await page.locator(".mh-tracking .mh-tabs__tab:first-child").click();
+  if (!(await page.locator(".mh-tracking .mh-tabs__tab.is-active").innerText()).includes("Daily")) notes.push("period callback did not select Daily");
+  await page.locator(".mh-launcher").click();
+  await page.locator(".mh-assistant__box textarea").fill("Summarize the latest media tracking performance.");
+  await page.locator(".mh-assistant__send .mh-button").click();
+  if (!(await page.locator(".mh-assistant__answer--simple").innerText()).includes("I will use the AI Interpreter knowledge context")) notes.push("lite answer missing");
+  await page.locator(".mh-assistant__skill").click();
+  await page.locator(".mh-skill__category").nth(1).click();
+  await page.locator(".mh-skill__action").first().click();
+  await page.locator(".mh-flow__card--history").waitFor();
+  await page.locator(".mh-flow__foot .mh-flow__btn--primary").click();
+  await page.locator(".mh-flow__card--form").waitFor();
+  await page.locator(".mh-flow__back").click();
+  await page.locator(".mh-flow__card--history").waitFor();
+  await page.locator(".mh-flow__foot .mh-flow__btn--secondary").click();
+  await page.locator(".mh-assistant__close").click();
+  await page.locator(".mh-assistant").waitFor({ state: "hidden" });
+  await page.locator(".mh-tracking__back").click();
+  await page.locator(".mh-page__shell--self").waitFor();
+  if (new URL(page.url()).pathname !== `${BASE}self-service`) notes.push("Media Tracking back link did not stay in host");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Media Tracking flow reloaded the host");
+  notes.push(...errors);
+  record("p05-media-tracking-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 await browser.close();
 server.close();
 
