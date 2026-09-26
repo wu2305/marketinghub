@@ -1,4 +1,4 @@
-import { Header, headerPositions, headerTones } from "./index.jsx";
+import { Header, headerDensities, headerPositions } from "./index.jsx";
 import { LOGO, NAV } from "../../content.js";
 import { callbackProp, enumProp, prop, useSynced } from "../../lib/story-helpers.js";
 
@@ -13,10 +13,12 @@ export default {
       },
     },
   },
-  args: { current: "home", tone: "solid", position: "sticky" },
+  args: { current: "home", highlightCurrent: false, density: "compact", position: "fixed", navigationAriaLabel: "Marketing Portal navigation", logoAriaLabel: "Tapestry Marketing Portal home" },
   argTypes: {
     logo: prop("{ src: string, alt?: string, href?: string }", { description: "Brand lockup.", control: false }),
     items: prop("Array<{ id: string, label: string, href: string }>", { defaultValue: [], description: "Nav items.", control: false }),
+    navigationAriaLabel: prop("string", { defaultValue: "Marketing Portal navigation", description: "Accessible name for the navigation region.", control: "text" }),
+    logoAriaLabel: prop("string", { defaultValue: "Tapestry Marketing Portal home", description: "Accessible name for the logo link.", control: "text" }),
     current: prop("string", {
       description: 'id of the active nav item; always carries aria-current="page".',
       control: "select",
@@ -26,8 +28,8 @@ export default {
       defaultValue: true,
       description: "Render the visual underline; some original pages mark the item semantically but style it identically to the rest.",
     }),
-    tone: enumProp(headerTones, "solid", '"overlay" is transparent with light links, for hero-covered pages.', "inline-radio"),
-    position: enumProp(headerPositions, "sticky", "Positioning mode.", "inline-radio"),
+    density: enumProp(headerDensities, "compact", "Navigation density: 48px or 56px links within the 56px header.", "inline-radio"),
+    position: enumProp(headerPositions, "fixed", "Placement in the page flow.", "inline-radio"),
     onNavigate: callbackProp(
       "onNavigate",
       "(target: { id: string, href?: string, label: string }) => void",
@@ -38,7 +40,7 @@ export default {
   render: function HeaderStory(args) {
     const [current, setCurrent] = useSynced(args.current);
     return (
-      <div style={{ minHeight: 120, background: args.tone === "overlay" ? "#2a211c" : "#f4f6f8" }}>
+      <div style={{ minHeight: 120, background: "#f4f6f8" }}>
         <Header
           logo={LOGO}
           items={NAV}

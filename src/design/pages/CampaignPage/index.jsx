@@ -188,7 +188,7 @@ export function CampaignPage({
   const assistantLauncherRef = React.useRef(null);
   return (
     <Shell>
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
       <div className="mh-campaign">
         <CampaignRail {...rail} current={section} onSelect={onSectionChange} />
         <main>

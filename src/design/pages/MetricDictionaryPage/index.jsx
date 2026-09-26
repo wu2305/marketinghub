@@ -63,7 +63,7 @@ export function MetricDictionaryPage({
   const field = (label, value, type = "text") => <label className="mh-metric-page__field"><span>{label}</span><input key={`${metric?.id}:${label}:${value}`} type={type} defaultValue={value} /></label>;
   return (
     <Shell>
-      <Header logo={{ ...logo, href: hrefFor("home") }} items={headerItems} current="interpreter" highlightCurrent={false} onNavigate={handleHeaderNavigate} />
+      <Header logo={{ ...logo, href: hrefFor("home") }} items={headerItems} density="comfortable" position="sticky" onNavigate={handleHeaderNavigate} />
       <AssistantLauncher ref={launcherRef} label={assistantCopy.launcherLabel} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <main className="mh-metric-page">
         <header className="mh-metric-page__header">

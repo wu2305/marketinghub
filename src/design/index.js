@@ -75,7 +75,7 @@ export {
 } from "./components/Toast/index.jsx";
 export {
   Header,
-  headerTones,
+  headerDensities,
   headerPositions,
 } from "./components/Header/index.jsx";
 export {

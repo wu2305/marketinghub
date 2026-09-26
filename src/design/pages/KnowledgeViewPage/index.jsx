@@ -16,7 +16,7 @@ import "./KnowledgeViewPage.css";
 export function KnowledgeViewPage({ logo, navigation, hrefFor, onNavigate, ...detail }) {
   const nav = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return <Shell className="mh-kview">
-    <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={nav} current="interpreter" highlightCurrent={false} position="fixed" onNavigate={(target) => onNavigate?.({ id: target.id, params: {}, href: target.href })} />
+    <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={nav} current="interpreter" highlightCurrent={false} onNavigate={(target) => onNavigate?.({ id: target.id, params: {}, href: target.href })} />
     <main className="mh-kview__main"><KnowledgeDetail {...detail} hrefFor={hrefFor} onNavigate={onNavigate} /></main>
   </Shell>;
 }

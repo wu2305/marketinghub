@@ -15,7 +15,7 @@ import "./DataModelPage.css";
 export function DataModelPage({ logo, navigation, model, hrefFor, onNavigate }) {
   const links = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return <Shell className="mh-data-model-page">
-    <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={links} current="interpreter" highlightCurrent={false} onNavigate={(target) => onNavigate?.({ id: target.id, params: {}, href: target.href })} />
+    <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={links} position="sticky" onNavigate={(target) => onNavigate?.({ id: target.id, params: {}, href: target.href })} />
     <main className="mh-data-model-page__main"><DataModelView {...model} /></main>
   </Shell>;
 }

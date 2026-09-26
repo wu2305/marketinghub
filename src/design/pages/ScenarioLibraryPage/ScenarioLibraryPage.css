@@ -1,10 +1,8 @@
 .mh-skill-page{min-height:100vh;background:var(--mh-page-bg);color:var(--mh-ink);font-family:var(--mh-font)}
-.mh-skill-page>.mh-hero{margin-top:calc(-2 * var(--mh-header))}
+.mh-skill-page>.mh-hero{margin-top:calc(-1 * var(--mh-header))}
 .mh-skill-page .mh-hero--home .mh-hero__layout{grid-template-columns:560px minmax(0,1fr);gap:40px;transform:translateY(10px)}
 .mh-skill-page .mh-hero__aside{display:block;min-width:0}
 .mh-skill-page .mh-hero__media img{object-position:center 50%}
-.mh-skill-page .mh-header__link.is-current{color:var(--mh-ink-navigation)}
-.mh-skill-page .mh-header__link.is-current::after{display:none}
 .mh-skill-page .mh-governance-nav a[aria-current=page]{background:var(--mh-surface-gold-pale)}
 .mh-skill-page__stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;width:100%}
 .mh-skill-page__stats>.mh-metric--glass{min-height:100px}

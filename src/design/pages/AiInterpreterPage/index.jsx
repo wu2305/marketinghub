@@ -96,7 +96,7 @@ export function AiInterpreterPage({
        from under the header to the viewport bottom and the hero compresses
        into the content column (170px, right of the rail). */
     <Shell tone="interpreter" className={type ? "mh-page--interpreter-type" : undefined}>
-      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" onNavigate={(event) => onNavigate?.({ ...event, typeId: activeType })} />
+      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, typeId: activeType })} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={copy.heroAsideLabel({ typeTitle: type?.title })}>
         {heroStats.map((stat) => (

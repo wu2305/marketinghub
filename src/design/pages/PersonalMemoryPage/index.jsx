@@ -37,7 +37,7 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
   React.useEffect(() => { if (create.open && create.errors?.title) titleRef.current?.focus(); else if (create.open && create.errors?.description) descriptionRef.current?.focus(); }, [create.open, create.errors?.title, create.errors?.description]);
   const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
   return <div className="mh-memory-page" data-memory-category={memory.category || "all"}>
-    <Header logo={logo} items={navigation} current="interpreter" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
+    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={hero.image} eyebrow={hero.eyebrow} title={hero.title} description={hero.description} height={372} variant="home" scrim="none" />
     <div className="mh-memory-page__body">
       <GovernanceNav items={sidebar} current="personal-memory" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />

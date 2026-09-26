@@ -129,7 +129,7 @@ export function MarketingCockpitPage({
   const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="cockpit">
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
