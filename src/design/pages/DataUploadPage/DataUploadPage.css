@@ -80,6 +80,11 @@ align-self: flex-start;
 filter: brightness(0.92);
 }
 
+/* The source disables submission without fading its readable gold feedback. */
+.mh-upload__form > .mh-button:disabled {
+opacity: 1;
+}
+
 .mh-upload__grid .mh-field {
 color: var(--mh-ink-field);
   font-size: 13px;

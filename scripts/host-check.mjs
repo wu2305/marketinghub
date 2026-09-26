@@ -311,6 +311,42 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P04: the same import/submit hook in the standalone routed host ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}self-service?tab=upload`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  await page.locator(".mh-page__cards--upload a.mh-button").first().click();
+  await page.locator(".mh-upload__form").waitFor({ timeout: 5000 });
+  if (new URL(page.url()).pathname !== `${BASE}data-upload`) notes.push("upload card did not reach Data Upload inside host");
+  if ((await page.locator(".mh-upload__grid input").count()) !== 14) notes.push("14 source fields missing");
+  await page.locator(".mh-upload__form .mh-button--gold").click();
+  if (!(await page.locator(".mh-upload__form .mh-button--gold").innerText()).includes("Submitted")) notes.push("submit feedback missing");
+  await page.waitForFunction(() => {
+    const button = document.querySelector(".mh-upload__form .mh-button--gold");
+    return button && !button.disabled && button.textContent.trim() === "Submit";
+  }, null, { timeout: 5000 });
+  await page.locator(".mh-upload__toolbar .mh-button--secondary").click();
+  await page.locator(".mh-modal .mh-dropzone").waitFor({ timeout: 5000 });
+  const picker = page.waitForEvent("filechooser");
+  await page.locator(".mh-dropzone").click();
+  await (await picker).setFiles({ name: "city-sales.xlsx", mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", buffer: Buffer.from("demo") });
+  if (!(await page.locator(".mh-dropzone__hint").innerText()).includes("Selected: city-sales.xlsx")) notes.push("selected file did not update host dialog");
+  await page.screenshot({ path: path.join(OUT, "p04-data-upload-selected.png") });
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-modal").count()) notes.push("Escape did not close Template Import");
+  await page.locator(".mh-upload__toolbar .mh-button--secondary").click();
+  if (!(await page.locator(".mh-dropzone__hint").innerText()).includes("Selected: city-sales.xlsx")) notes.push("reopening import lost selected file");
+  await page.keyboard.press("Escape");
+  await page.locator(".mh-upload__back").click();
+  if (!page.url().endsWith("/mh-host/self-service?tab=upload")) notes.push("Back did not preserve upload tab");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("P04 navigation reloaded host");
+  notes.push(...errors);
+  record("p04-data-upload-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- Interpreter: existing routed type view plus knowledge assistant ---- */
 {
   const { page, errors } = await newPage();
