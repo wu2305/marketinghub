@@ -96,8 +96,8 @@ export const Default = {
                     setFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule, COPILOT.flow.generatedDefaults) })),
                   onBack: () => setFlow((current) => ({ ...current, step: "history" })),
                   onClose: () => setFlow(null),
-                  onSave: ({ values }) => args.onFlowSave?.(values),
-                  onSubmit: ({ values }) => args.onFlowSubmit?.(values),
+                  onSave: ({ values }) => args.onFlowSave?.({ values }),
+                  onSubmit: ({ values }) => args.onFlowSubmit?.({ values }),
                 }
               : undefined
           }

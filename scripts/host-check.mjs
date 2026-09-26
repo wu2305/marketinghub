@@ -617,6 +617,9 @@ async function newPage() {
   if ((await termsA.locator(".mh-btview__card").count()) !== 6) notes.push("terms A cards changed by B's search");
 
   await page.screenshot({ path: path.join(OUT, "compose.png"), fullPage: true });
+  await copA.locator('button[aria-label="Close AI workspace"]').click();
+  if (await copA.getAttribute("aria-hidden") !== "true") notes.push("copilot A did not close through the shared demo state");
+  if (await copB.getAttribute("aria-hidden") !== "false") notes.push("copilot B closed when A closed");
   notes.push(...errors);
   record("dual", notes.length === 0, notes);
   await page.close();

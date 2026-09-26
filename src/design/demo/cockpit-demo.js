@@ -34,7 +34,8 @@ function useSynced(value) {
  *   onWorkspacePromptChange, onWorkspaceExplore, onChatFeedback, onCopy,
  *   onOpenAssistant, onCloseAssistant, onPromptChange, onSubmit, onSuggestion,
  *   onNewSession, onMaximize, onHistory, onHistorySelect, onFeedback, onAttach,
- *   onSelectSkill, onClearSkill, onSkillAction, onFlowSave, onFlowSubmit,
+ *   onSelectSkill, onClearSkill, onSkillAction, onFlowSave({ values }),
+ *   onFlowSubmit({ values }),
  *   onFiltersChange)
  * @param {object} props.demo deterministic content simulators:
  *   `copilot` (Copilot fixture bundle), `modelFlow` (assistant model-flow data),
@@ -156,8 +157,8 @@ export function useCockpitDemo(props) {
             setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule, modelFlow.generatedDefaults) })),
           onBack: () => setFlow((current) => ({ ...current, step: "history" })),
           onClose: () => setFlow(null),
-          onSave: ({ values }) => props.onFlowSave?.(values),
-          onSubmit: ({ values }) => props.onFlowSubmit?.(values),
+          onSave: ({ values }) => props.onFlowSave?.({ values }),
+          onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
         }
       : undefined,
     workspace: {
@@ -198,8 +199,8 @@ export function useCockpitDemo(props) {
               setWsFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule, copilot.flow?.generatedDefaults) })),
             onBack: () => setWsFlow((current) => ({ ...current, step: "history" })),
             onClose: () => setWsFlow(null),
-            onSave: ({ values }) => props.onFlowSave?.(values),
-            onSubmit: ({ values }) => props.onFlowSubmit?.(values),
+            onSave: ({ values }) => props.onFlowSave?.({ values }),
+            onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
           }
         : undefined,
       onClose: (event) => {
