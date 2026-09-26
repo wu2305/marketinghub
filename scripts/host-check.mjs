@@ -381,6 +381,42 @@ async function newPage() {
   await page.close();
 }
 
+/* ---- P15 Skill Library: same private flow as Storybook, routed under host ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}scenario-library`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator(".mh-skill-library__row").count()) !== 9) notes.push("Skill Library should show nine source records");
+  await page.locator(".mh-skill-library__search input").fill("Emily Wang");
+  if ((await page.locator(".mh-skill-library__row").count()) !== 2) notes.push("Skill owner search missed two Emily Wang rows");
+  await page.locator(".mh-skill-library__search input").fill("");
+  await page.locator('[data-skill-id="scenario-channel-performance"]').click();
+  if (!(await page.locator(".mh-skill-detail__structure-item").count() === 5)) notes.push("Skill detail missed five structure blocks");
+  await page.getByRole("button", { name: "Show Preview" }).click();
+  if (!(await page.locator(".mh-skill-detail__preview-body").count())) notes.push("Skill preview did not open");
+  await page.keyboard.press("Escape");
+  if (await page.locator(".mh-skill-detail").count()) notes.push("Skill detail survived Escape");
+  await page.locator(".mh-skill-library__filter select").selectOption("Under Review");
+  await page.locator('[data-skill-id="funnel-optimization"] .mh-skill-library__status').click();
+  if (!(await page.locator(".mh-skill-library__empty").count())) notes.push("Status advance did not empty Under Review filter");
+  if (await page.locator(".mh-skill-detail").count()) notes.push("Status click unexpectedly opened detail");
+  await page.locator(".mh-skill-library__create").click();
+  if (!(await page.locator(".mh-skill-form__structure-item").count() === 5)) notes.push("Inline create missed five structure fields");
+  await page.locator(".mh-skill-form__field input").first().fill("Host skill");
+  await page.locator(".mh-skill-form__footer button").first().click();
+  await page.locator(".mh-skill-library__create").click();
+  if ((await page.locator(".mh-skill-form__field input").first().inputValue()) !== "") notes.push("Fresh create retained old draft values");
+  await page.locator(".mh-skill-form__footer button").first().click();
+  await page.locator('.mh-governance-nav a[href$="/review-center"]').click();
+  if (!page.url().includes("/mh-host/review-center")) notes.push("Skill governance sidebar missed Review Center route");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Skill route navigation reloaded host");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "scenario-library.png") });
+  record("scenario-library-flow", notes.length === 0, notes);
+  await page.close();
+}
+
 /* ---- Review Center queue, decisions, assistant and navigation ---- */
 {
   const { page, errors } = await newPage();

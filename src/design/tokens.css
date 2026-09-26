@@ -207,7 +207,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
   --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
   --mh-launcher-focus: rgba(63, 115, 166, 0.52);
-  --mh-launcher-orb-ink: #111111;
+  --mh-ink-action-strong: #111111;
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: #171b1f;
   --mh-ink-ai-strong: #141414;
@@ -219,7 +219,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-surface-ai: #f7f8fa;
   /* media tracking page palette */
   --mh-page-bg: #f6f7f8;
-  --mh-eyebrow: #8a5a00;
+  --mh-ink-accent-warm: #8a5a00;
   --mh-required: #c0392b;
   --mh-muted-strong: #6a747c;
   --mh-subtle-ai: #4b5563;
@@ -228,7 +228,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-line-faintest: #f0f2f4;
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
   --mh-ai-feedback-line: #edf0f3;
-  --mh-ai-chip-copy: #5d6872;
+  --mh-ink-secondary-muted: #5d6872;
   --mh-ai-chip-pos: #2e7d32;
   --mh-ai-chip-pos-bg: #e8f5e9;
   --mh-ai-chip-neg: #c62828;
@@ -257,7 +257,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-reports-bg: #f3f5f7;
-  --mh-reports-surface-soft: #f7f8fa;
+
   --mh-reports-ink: #17191c;
   --mh-reports-copy: #46505b;
   --mh-reports-muted: #737d88;
@@ -274,43 +274,43 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-reports-badge-bg: #fef8e1;
   --mh-reports-badge-ink: #7a5c3a;
   --mh-reports-pill-bg: #fff8db;
-  --mh-reports-pill-ink: #8a5a00;
+
   --mh-reports-pill-hover-bg: #faeed4;
   --mh-reports-pill-hover-ink: #6f4900;
   --mh-reports-hover-line: #daa860;
   --mh-reports-title-hover: #916732;
   --mh-reports-scrim: rgba(28, 36, 44, 0.28);
   --mh-reports-thumb-bg: #e9edf1;
-  --mh-reports-footer-bg: #fbfcfd;
+  --mh-surface-panel-muted: #fbfcfd;
   --mh-reports-media-bg: #dfe4e8;
   --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
   /* Live report view (reports-core dark accents over the catalog light skin) */
   --mh-live-toolbar-bg: rgba(244, 246, 248, 0.96);
-  --mh-live-line: #dfe3e8;
+  --mh-line-neutral-soft: #dfe3e8;
   --mh-live-inkline: #2a2925;
   --mh-live-chart-bg: #f7f7f7;
-  --mh-live-back-hover: #141414;
-  --mh-live-back-hover-line: #cbd2d9;
+
+  --mh-line-control-strong: #cbd2d9;
   --mh-live-back-hover-bg: #f7f7f7;
   --mh-live-bar: #d8d4c9;
   --mh-live-bar-alt: #79a991;
-  --mh-live-faint: #74726c;
+  --mh-ink-faint-warm: #74726c;
   --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
   --mh-sc-bg: #f0f2f5;
   --mh-sc-ink: #1f2329;
   --mh-sc-label: #5a6068;
-  --mh-sc-faint: #9aa0a8;
+  --mh-ink-faint-neutral: #9aa0a8;
   --mh-sc-note: #8a9099;
-  --mh-sc-line: #eceef1;
+  --mh-line-neutral-faint: #eceef1;
   --mh-sc-line-strong: #d9dde3;
   --mh-sc-field-bg: #f7f8fa;
   --mh-sc-static-bg: #eef0f3;
   --mh-sc-static-line: #e0e3e8;
-  --mh-sc-static-ink: #6b7280;
+  --mh-ink-muted-neutral: #6b7280;
   --mh-sc-row-hover: #f3f5f8;
   --mh-sc-head-line: #eeeeee;
-  --mh-sc-link: #185fa5;
+  --mh-ink-info-accent: #185fa5;
   --mh-sc-pos: #00a06b;
   --mh-sc-neg: #e34d59;
   --mh-sc-gridline: #eef0f3;
@@ -319,12 +319,10 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
-  --mh-copilot-line: #dfe3e8;
-  --mh-copilot-line-strong: #cbd2d9;
+
   --mh-copilot-ink: #141414;
-  --mh-copilot-copy: #3f4854;
-  --mh-copilot-muted: #6b7280;
-  --mh-copilot-head-bg: #fbfcfd;
+  --mh-ink-secondary-dark: #3f4854;
+
   --mh-copilot-hover-bg: #f4f6f8;
   --mh-copilot-tool-bg: #f2f4f7;
   --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
@@ -334,31 +332,29 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-copilot-box-line: #d8e0e6;
   --mh-copilot-send-ink: #000000;
   --mh-copilot-upload-hover-bg: #f0f2f4;
-  --mh-copilot-card-line: #d8dee6;
+  --mh-line-secondary-cool: #d8dee6;
   --mh-copilot-card-faint: #667487;
   --mh-copilot-card-ink: #101820;
-  --mh-copilot-card-copy: #415064;
-  --mh-copilot-card-action-ink: #111111;
-  --mh-copilot-chip-bg: #f6f8fb;
+  --mh-ink-secondary-cool: #415064;
+
+  --mh-surface-chip-cool: #f6f8fb;
   --mh-copilot-action-bg: #edf0f3;
   --mh-copilot-fb-hover-line: rgba(184, 138, 61, 0.68);
   --mh-copilot-fb-hover-bg: rgba(231, 187, 106, 0.16);
   --mh-copilot-fb-pressed-line: rgba(184, 138, 61, 0.8);
   --mh-copilot-fb-pressed-bg: #e7bb6b;
   --mh-copilot-placeholder: #8a939d;
-  --mh-copilot-faint: #74726c;
-  --mh-copilot-hint: #6a747c;
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
-  --mh-hr-ink: #26262a;
+  --mh-ink-primary-neutral: #26262a;
   --mh-hr-muted: #8a8a85;
   --mh-hr-mid: #5f5e5a;
   --mh-hr-index: #a29b8c;
-  --mh-hr-note: #9aa0a8;
-  --mh-hr-line: #eceae4;
+
+  --mh-line-warm-soft: #eceae4;
   --mh-hr-surface: #faf9f6;
   --mh-hr-card-line: #f0ede6;
-  --mh-hr-gridline: #eceef1;
+
   --mh-hr-grid-zero: #c9c7bd;
   --mh-hr-axis: #aab0b8;
   --mh-hr-th-line: #e4e2da;
@@ -366,37 +362,28 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-hr-dot-pos: #00a06b;
   --mh-hr-dot-warn: #e6a23c;
   --mh-hr-dot-neg: #e34d59;
-  --mh-hr-pos: #0a7a54;
-  --mh-hr-neg: #d43d4a;
+  --mh-ink-positive-dark: #0a7a54;
+  --mh-ink-negative-bright: #d43d4a;
   --mh-hr-insight-line: #c9a44a;
-  --mh-hr-insight-bg: #fdfbf6;
+  --mh-surface-highlight-warm: #fdfbf6;
   --mh-hr-insight-ink: #444441;
   --mh-hr-cursor: #c9a44a;
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
-  --mh-ra-ink: #26262a;
-  --mh-ra-up: #0a7a54;
-  --mh-ra-down: #d43d4a;
+
   --mh-ra-badge-up-bg: rgba(0, 160, 107, 0.1);
   --mh-ra-badge-down-bg: rgba(227, 77, 89, 0.12);
-  --mh-ra-line: #eceae4;
-  --mh-ra-card-line: #eceef1;
-  --mh-ra-muted: #9aa0a8;
-  --mh-ra-name: #6b7280;
+
   --mh-ra-stat-line: #f0f2f5;
   --mh-ra-icon-retail-bg: rgba(201, 164, 74, 0.16);
   --mh-ra-icon-retail: #8a6d1f;
   --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
-  --mh-ra-icon-outlet: #185fa5;
+
   --mh-ra-insight-line: #c9a44a;
   --mh-ra-insight-bg: #fbf9f4;
   --mh-ra-insight-ink: #3f3f3c;
   --mh-ra-option-icon-bg: rgba(24, 95, 165, 0.1);
   --mh-ra-option-hover-line: #c9a44a;
-  --mh-ra-option-hover-bg: #fdfbf6;
-  --mh-ra-source-chip-line: #d8dee6;
-  --mh-ra-source-chip-bg: #f6f8fb;
-  --mh-ra-source-chip-ink: #415064;
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
@@ -422,10 +409,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-principle-empty-ink: #6f7a83;
   --mh-principle-search-ink: #292724;
   --mh-principle-search-placeholder: #77716b;
-  --mh-pagination-line: #dfe3e8;
-  --mh-pagination-ink: #6b7280;
-  --mh-pagination-btn-line: #dfe3e8;
-  --mh-pagination-btn-ink: #3f4854;
+
   --mh-pagination-active: #141414;
   --mh-pagination-hover-line: #e6bc73;
   --mh-pagination-hover-bg: #fff9f2;
@@ -470,7 +454,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-bt-status-off-ink: #8b8f94;
   --mh-bt-status-off-dot: #929292;
   --mh-bt-section-title: #20262d;
-  --mh-bt-section-copy: #5d6872;
+
   --mh-bt-chip-bg: #edf1f5;
   --mh-bt-chip-ink: #536576;
   --mh-bt-scope-bg: #edf5f1;
@@ -542,6 +526,35 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-line-dialog-button-hover: #b7813f;
   --mh-surface-dialog-button-disabled: #dbc19b;
   --mh-line-dialog-button-disabled: #e1c9a7;
+  --mh-line-panel-subtle: #e8ecef;
+  --mh-surface-info-strong: #e3f2fd;
+  --mh-ink-info-strong: #1565c0;
+  --mh-surface-review: #fff3e0;
+  --mh-ink-review: #e65100;
+  --mh-surface-rose-soft: #fce4ec;
+  --mh-ink-rose: #c2185b;
+  --mh-surface-violet-soft: #f3e5f5;
+  --mh-ink-violet: #7b1fa2;
+  --mh-indicator-like: #f59e0b;
+  --mh-surface-status-gray: #f5f5f5;
+  --mh-ink-status-gray: #616161;
+  --mh-ink-control-deep: #3f4c55;
+  --mh-ink-row-title: #1d252b;
+  --mh-ink-row-primary: #1f282f;
+  --mh-ink-empty-strong: #202930;
+  --mh-ink-empty-muted: #64717a;
+  --mh-surface-gold-pale: #fff8df;
+  --mh-surface-hover-neutral: #f5f7f8;
+  --mh-ink-filter-label: #74808a;
+  --mh-ink-navigation: #60666d;
+  --mh-scrim-soft-cool: rgba(24, 32, 39, 0.28);
+  --mh-surface-gold-hover: #ffeeb3;
+  --mh-surface-danger-hover: #fef2f2;
+  --mh-shadow-chip-soft: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --mh-ink-required: #e23b3b;
+  --mh-surface-accent-hover: #ffe99b;
+  --mh-shadow-focus-warm-soft: 0 0 0 3px rgba(218, 168, 96, 0.15);
+  --mh-line-panel-divider: #e2e8ed;
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;

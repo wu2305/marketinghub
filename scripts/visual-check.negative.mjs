@@ -14,6 +14,18 @@ export default [
   { id: "neg-p14-missing-detail", base: "p14-detail", story: { id: "pages--personal-memory" }, reason: "Empty detail cannot satisfy selected memory description" },
   { id: "neg-p14-missing-create-errors", base: "p14-create-errors", story: { id: "pages--personal-memory-create" }, reason: "Untouched create form cannot satisfy required-field errors" },
   {
+    id: "neg-p15-wrong-filter",
+    base: "p15-draft",
+    story: { id: "pages--scenario-library-published" },
+    reason: "Published's four rows cannot satisfy the Draft single-row assertions",
+  },
+  {
+    id: "neg-p15-missing-preview",
+    base: "p15-preview",
+    story: { id: "pages--scenario-library-detail" },
+    reason: "Closed example preview cannot satisfy the expanded output assertions",
+  },
+  {
     id: "neg-p12-wrong-tab",
     base: "p12-approved",
     story: { id: "pages--review-center" },

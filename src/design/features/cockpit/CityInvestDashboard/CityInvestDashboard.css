@@ -59,7 +59,7 @@ display: flex;
   gap: 6px;
   margin: 6px 0 14px;
   padding: 10px 14px;
-  border: 1px solid var(--mh-sc-line);
+  border: 1px solid var(--mh-line-neutral-faint);
   border-radius: 6px;
   background: var(--mh-sc-field-bg);
 }
@@ -83,7 +83,7 @@ padding: 4px 10px;
   border: 1px solid var(--mh-sc-static-line);
   border-radius: 4px;
   background: var(--mh-sc-static-bg);
-  color: var(--mh-sc-static-ink);
+  color: var(--mh-ink-muted-neutral);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -109,13 +109,13 @@ content: "";
   right: 9px;
   top: 50%;
   border: 4px solid transparent;
-  border-top-color: var(--mh-sc-faint);
+  border-top-color: var(--mh-ink-faint-neutral);
   transform: translateY(-1px);
 }
 
 .mh-sc-fval.is-open::after {
 border-top-color: transparent;
-  border-bottom-color: var(--mh-sc-faint);
+  border-bottom-color: var(--mh-ink-faint-neutral);
   transform: translateY(-5px);
 }
 
@@ -169,7 +169,7 @@ color: var(--mh-sc-note);
 padding: 0;
   border: 0;
   background: transparent;
-  color: var(--mh-sc-link);
+  color: var(--mh-ink-info-accent);
   font-size: 11px;
   cursor: pointer;
 }
@@ -201,7 +201,7 @@ display: grid;
 .mh-sc-kpi {
 min-height: 104px;
   padding: 12px 12px 10px;
-  border: 1px solid var(--mh-sc-line);
+  border: 1px solid var(--mh-line-neutral-faint);
   border-radius: 6px;
   background: var(--mh-surface);
 }
@@ -226,7 +226,7 @@ margin-bottom: 0;
 
 .mh-sc-kpi__uplift-label {
 margin-bottom: 1px;
-  color: var(--mh-sc-faint);
+  color: var(--mh-ink-faint-neutral);
   font-size: 10px;
   letter-spacing: 0.3px;
 }
@@ -261,7 +261,7 @@ display: flex;
 }
 
 .mh-sc-kpi__var {
-color: var(--mh-sc-faint);
+color: var(--mh-ink-faint-neutral);
   font-size: 11px;
 }
 
@@ -285,12 +285,12 @@ display: flex;
   align-items: center;
   gap: 16px;
   margin: 12px 2px 2px;
-  color: var(--mh-sc-static-ink);
+  color: var(--mh-ink-muted-neutral);
   font-size: 11px;
 }
 
 .mh-sc-formula {
-color: var(--mh-sc-faint);
+color: var(--mh-ink-faint-neutral);
 }
 
 .mh-sc-sec-title {
@@ -308,7 +308,7 @@ display: grid;
 .mh-sc-chart {
 position: relative;
   padding: 8px 10px 4px;
-  border: 1px solid var(--mh-sc-line);
+  border: 1px solid var(--mh-line-neutral-faint);
   border-radius: 6px;
   background: var(--mh-surface);
 }

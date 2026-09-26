@@ -23,7 +23,7 @@
   min-width: 0;
   flex-direction: column;
   border-right: 1px solid var(--mh-line-sidebar-cool);
-  background: var(--mh-reports-footer-bg);
+  background: var(--mh-surface-panel-muted);
 }
 
 .mh-dmview__search {

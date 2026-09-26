@@ -93,7 +93,7 @@ display: grid;
   place-items: center;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
-  color: var(--mh-launcher-orb-ink);
+  color: var(--mh-ink-action-strong);
   font-size: 10px;
   font-weight: 700;
 }
