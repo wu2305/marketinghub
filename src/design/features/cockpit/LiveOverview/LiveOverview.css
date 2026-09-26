@@ -14,7 +14,7 @@ display: grid;
   gap: 10px;
   min-height: 118px;
   padding: 16px;
-  border: 1px solid var(--mh-reports-line);
+  border: 1px solid var(--mh-line);
   border-radius: 8px;
   background: var(--mh-surface);
 }
@@ -46,7 +46,7 @@ display: grid;
 .mh-live-card {
 min-height: 350px;
   padding: 16px;
-  border: 1px solid var(--mh-reports-line);
+  border: 1px solid var(--mh-line);
   border-radius: 8px;
   background: var(--mh-surface);
 }

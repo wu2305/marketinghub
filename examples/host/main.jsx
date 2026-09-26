@@ -29,6 +29,7 @@ import {
   KnowledgeCreatePage,
   ReviewCenterPage,
   FeedbackQualityPage,
+  PersonalMemoryPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -74,6 +75,8 @@ import { REVIEW_CENTER, REVIEW_SHELL } from "../../src/design/demo/content/revie
 import { useReviewCenterDemo } from "../../src/design/demo/review-center-demo.js";
 import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../src/design/demo/content/feedback-quality.js";
 import { useFeedbackQualityDemo } from "../../src/design/demo/feedback-quality-demo.js";
+import { PERSONAL_MEMORY, PERSONAL_MEMORY_SHELL } from "../../src/design/demo/content/personal-memory.js";
+import { usePersonalMemoryDemo } from "../../src/design/demo/personal-memory-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -95,6 +98,7 @@ const ROUTE_MAP = {
   "/assets/pages/knowledge-view.html": "knowledge-view",
   "/assets/pages/review-center.html": "review-center",
   "/assets/pages/feedback-quality.html": "feedback-quality",
+  "/assets/pages/personal-memory.html": "personal-memory",
 };
 
 function mapDemoHref(href) {
@@ -149,6 +153,7 @@ function routeOf(loc) {
   if (rest === "knowledge-view") return { name: "knowledge-view", params };
   if (rest === "review-center") return { name: "review-center", params };
   if (rest === "feedback-quality") return { name: "feedback-quality", params };
+  if (rest === "personal-memory") return { name: "personal-memory", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -399,6 +404,16 @@ function FeedbackQualityRoute() {
   return <FeedbackQualityPage {...props} logo={hostLogo} navigation={hostNav()} hrefFor={hrefFor} />;
 }
 
+function PersonalMemoryRoute() {
+  const props = usePersonalMemoryDemo({ content: PERSONAL_MEMORY, records: PERSONAL_MEMORY.records, ...PERSONAL_MEMORY_SHELL, onNavigate: ({ href }) => navigateHost(href) });
+  const hrefFor = (id, params = {}) => {
+    const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality") })[id];
+    const query = new URLSearchParams(params).toString();
+    return path && query ? `${path}?${query}` : path;
+  };
+  return <PersonalMemoryPage {...props} logo={hostLogo} navigation={hostNav()} hrefFor={hrefFor} />;
+}
+
 /* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
@@ -510,6 +525,7 @@ function App() {
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "review-center") return <ReviewCenterRoute />;
   if (route.name === "feedback-quality") return <FeedbackQualityRoute />;
+  if (route.name === "personal-memory") return <PersonalMemoryRoute />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

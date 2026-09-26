@@ -341,7 +341,47 @@ async function newPage() {
   await page.close();
 }
 
-/* ---- sentinel: host elements identical with and without the design system ---- */
+/* ---- Personal Memory: category, edit, create, delete and lite assistant ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}personal-memory`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator(".mh-memory-workspace__card").count()) !== 18) notes.push("Personal Memory source records missing");
+  await page.getByRole("tab", { name: /Others 3/ }).click();
+  if ((await page.locator(".mh-memory-workspace__card").count()) !== 3) notes.push("Others category should have three records");
+  await page.locator('.mh-memory-workspace__card[data-memory-id="mem-reference-1"] .mh-memory-workspace__card-main').click();
+  if (!(await page.locator(".mh-memory-workspace__detail h3").count())) notes.push("memory detail did not open");
+  await page.locator(".mh-memory-workspace__actions button:has-text('Edit')").click();
+  await page.locator(".mh-memory-workspace__field input").fill("Edited reference memory");
+  await page.getByRole("button", { name: "Save Changes" }).click();
+  if (!(await page.locator(".mh-memory-workspace__detail h3").innerText()).includes("Edited reference memory")) notes.push("memory edit did not save");
+  await page.getByRole("button", { name: /New Memory/ }).click();
+  await page.getByRole("button", { name: "Save Memory" }).click();
+  if ((await page.locator('.mh-memory-page__form [aria-invalid="true"]').count()) !== 2) notes.push("create required validation missing");
+  await page.locator('.mh-memory-page__form input').fill("Host analysis memory");
+  await page.locator('.mh-memory-page__form textarea').fill("Created while the Others filter remains selected.");
+  await page.getByRole("button", { name: "Save Memory" }).click();
+  if ((await page.locator(".mh-memory-workspace__card").count()) !== 3) notes.push("cross-category create changed visible filter");
+  if (!(await page.locator(".mh-memory-workspace__detail h3").innerText()).includes("Host analysis memory")) notes.push("cross-category create did not select new detail");
+  await page.getByRole("button", { name: "Delete Memory" }).click();
+  await page.locator(".mh-confirm__btn--primary").click();
+  if (await page.locator(".mh-memory-workspace__detail h3").count()) notes.push("deleting selected memory retained detail");
+  await page.getByRole("button", { name: "Open AI assistant" }).click();
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  if (await page.locator(".mh-assistant__answer").count()) notes.push("lite suggestion submitted before Ask");
+  await page.locator(".mh-assistant__box textarea").press("Enter");
+  if (await page.locator(".mh-assistant__answer").count()) notes.push("lite assistant Enter submitted against source behavior");
+  await page.locator(".mh-assistant__send button").click();
+  if (!(await page.locator(".mh-assistant__answer").count())) notes.push("memory assistant Ask did not submit");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Personal Memory host reloaded");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "personal-memory.png") });
+  record("personal-memory-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- Review Center queue, decisions, assistant and navigation ---- */
 {
   const { page, errors } = await newPage();
   const notes = [];

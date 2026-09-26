@@ -39,6 +39,10 @@ export const iconNames = [
   "check-circle",
   "grid-four",
   "star-outline",
+  "more-vertical",
+  "share",
+  "info",
+  "close",
 ];
 
 /**
@@ -74,6 +78,18 @@ export function Icon({ name, path, className }) {
         <path d="M21 21l-4.35-4.35" />
       </svg>
     );
+  }
+  if (name === "more-vertical") {
+    return <svg {...common} stroke="none" fill="currentColor"><circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="19" r="1.5" /></svg>;
+  }
+  if (name === "share") {
+    return <svg {...common}><path d="M18 8a3 3 0 100-6 3 3 0 000 6zM6 15a3 3 0 100-6 3 3 0 000 6zM18 22a3 3 0 100-6 3 3 0 000 6z" /><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98" /></svg>;
+  }
+  if (name === "info") {
+    return <svg {...common} strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>;
+  }
+  if (name === "close") {
+    return <svg {...common} strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>;
   }
   if (name === "plus") {
     return (

@@ -1463,7 +1463,7 @@ content: "";
   height: 12px;
   margin-right: 8px;
   border-radius: 2px;
-  background: linear-gradient(135deg, var(--mh-copilot-gold-from) 0%, var(--mh-copilot-gold-to) 100%);
+  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
   vertical-align: -1px;
 }
 
@@ -1484,7 +1484,7 @@ display: flex;
 }
 
 .mh-copilot__command-box:focus-within {
-border-color: var(--mh-copilot-gold-to);
+border-color: var(--mh-bubble-to);
   box-shadow: 0 0 0 3px var(--mh-copilot-gold-wash);
 }
 
@@ -1549,7 +1549,7 @@ display: inline-flex;
   padding: 0 13px;
   border: 0;
   border-radius: 6px;
-  background: linear-gradient(135deg, var(--mh-copilot-gold-from) 0%, var(--mh-copilot-gold-to) 100%);
+  background: linear-gradient(135deg, var(--mh-bubble-from) 0%, var(--mh-bubble-to) 100%);
   color: var(--mh-copilot-send-ink);
   font-family: inherit;
   font-size: 12px;
@@ -1568,8 +1568,8 @@ filter: brightness(0.92);
 }
 
 .mh-copilot__send:disabled {
-background: var(--mh-copilot-send-disabled-bg);
-  color: var(--mh-copilot-send-disabled-ink);
+background: var(--mh-disabled-bg);
+  color: var(--mh-disabled-ink);
   cursor: default;
 }
 

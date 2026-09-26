@@ -17,7 +17,7 @@ display: grid;
   max-height: calc(100vh - 48px);
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 8px;
   background: var(--mh-surface);
   color: var(--mh-ink-ai);
@@ -39,12 +39,12 @@ display: flex;
   justify-content: space-between;
   gap: 12px;
   padding: 16px 18px;
-  border-bottom: 1px solid var(--mh-line-ai);
+  border-bottom: 1px solid var(--mh-line);
 }
 
 .mh-flow__foot {
 justify-content: flex-end;
-  border-top: 1px solid var(--mh-line-ai);
+  border-top: 1px solid var(--mh-line);
   border-bottom: 0;
 }
 
@@ -66,7 +66,7 @@ display: grid;
   width: 32px;
   height: 32px;
   place-items: center;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 6px;
   background: var(--mh-surface);
   color: var(--mh-copy-ai);
@@ -152,7 +152,7 @@ justify-self: end;
 display: grid;
   gap: 6px;
   padding: 10px 12px;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 6px;
   background: var(--mh-surface);
 }
@@ -185,7 +185,7 @@ display: flex;
 
 .mh-flow__sources span {
 padding: 3px 7px;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 999px;
   color: var(--mh-copy-ai);
   font-size: 10px;
@@ -198,7 +198,7 @@ width: 100%;
   min-height: 74px;
   resize: vertical;
   padding: 9px 10px;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 6px;
   color: var(--mh-ink-ai);
   font-family: var(--mh-font);
@@ -237,7 +237,7 @@ display: grid;
 display: grid;
   gap: 10px;
   padding: 14px;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 7px;
 }
 
@@ -272,7 +272,7 @@ color: var(--mh-danger);
 .mh-flow__field textarea {
 width: 100%;
   box-sizing: border-box;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 6px;
   padding: 9px 10px;
   color: var(--mh-ink-ai);
@@ -327,7 +327,7 @@ border: 0;
 }
 
 .mh-flow__btn--secondary {
-border: 1px solid var(--mh-line-ai);
+border: 1px solid var(--mh-line);
   background: var(--mh-surface);
   color: var(--mh-copy-ai);
 }
