@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P07助手 PR #12 对抗审核完成：真实launcher、知识建议/替换答案、单模型数据、共享P03状态及切换类型后所有宿主回调typeId已核；open/answer人工fail，其余pending |
+| 最新独立审核 | 2026-09-26 P12 PR #13 完整性对抗审核完成：队列/详情/决策/助手/模型状态逐项核对，补齐可操作Pass前态、真实消息生成模型与侧栏图标；接口边界已修，默认/窄屏人工fail，其余pending |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 215 stories + 58 docs；2026-09-26 dc97451 构建 index.json 实数；P07新增15助手状态故事，无删除 |
-| 测试 | `npm test`：20 文件 207 条通过（2026-09-26 dc97451） |
-| lint | `npm run lint`：0 errors / 0 warnings，dc97451 |
-| 构建验证 | `npm run build-storybook` 215 stories/58 docs；`npm run build:host` + host-check 20/20通过（`/tmp/mh-p07-assistant-integrate-r2-host`）；dc97451 rebase origin/main后干净构建，构建戳匹配 |
+| 故事数 | 244 stories + 59 docs；2026-09-26 cc956f6 构建 index.json 实数；P12新增28页面状态及1组件故事，无删除 |
+| 测试 | `npm test`：21 文件 216 条通过（2026-09-26 cc956f6） |
+| lint | `npm run lint`：0 errors / 0 warnings，cc956f6 |
+| 构建验证 | `npm run build-storybook` 244 stories/59 docs；`npm run build:host` + host-check 21/21通过（`/tmp/mh-p12-integrate-r3-host`）；cc956f6 rebase origin/main后干净构建，构建戳匹配 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp dc97451，工作区干净）：全站297/297机器通过，P07助手30/30（`/tmp/mh-p07-assistant-integrate-r2-visual`）；负向19/19按预期失败（`/tmp/mh-p07-assistant-integrate-r2-negative`）。P07助手open/answer人工fail已绑定最终截图hash，其余295未审pending；既有人工fail仍列第二轮，P07逐类型状态仅见§2.2 |
+| 最近视觉对照 | 2026-09-26（stamp cc956f6，工作区干净）：全站340/340机器通过，P12 43/43（`/tmp/mh-p12-integrate-r3-visual`）；负向23/23按预期失败（`/tmp/mh-p12-integrate-r3-negative`）。P12默认/390px人工fail已绑定最终截图hash，其余338未审pending；既有人工fail仍列第二轮 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -40,7 +40,7 @@ npm test               # vitest 行为测试
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | #6/#8 有入口/部分 section；详情、表单和交互仍缺 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
-| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12 Review Center 候选已实现，P13–P17 未开始 | P12 PR 待建 |
+| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12已机器集成，人工收敛待办，P13–P17继续 | PR #13 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
@@ -66,8 +66,8 @@ npm test               # vitest 行为测试
 | P09 | assets/pages/knowledge-view.html | 四类详情/版本/模型只读工具及四类重定向 | M5 | 已实现，PR #11；18页面故事、22/22配对、跨页抽屉/编辑/通知Back真实宿主导航及全套机器验证。已修同实例type+detail重置、通知关闭标签；Business Term默认人工fail（面包屑字重/纵向间距、标签颜色与粗细、卡片阴影和表格边框），其余pending，第二轮收敛 |
 | P10 | assets/pages/metric-dictionary.html | 独立指标详情、Basic/Derived三tab、派生公式/校验/保存及lite助手模型流 | M5 | 已实现，PR #10；25页面状态故事、25/25配对和全套机器验证；tab原生输入/勾选保留、任意单位及3秒通知已核。默认人工fail（背景、侧栏/tab/footer、Q&A开关、图标间距），其余pending，第二轮收敛 |
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
-| P12 | assets/pages/review-center.html | Pending/Approved 审核队列、搜索/类型/Submitted 选择、详情、Reject/Approve 风险确认、lite 助手及模型流 | M6 | 候选已实现；28 个页面状态故事 + ReviewQueue 组件故事，43/43 定向机器配对（含 Approved 21 行底部与 390px）；默认/窄屏人工像素 fail，其余待审；最终全套与 PR 待集成 |
-| P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 未开始 |
+| P12 | assets/pages/review-center.html | Pending/Approved 审核队列、搜索/类型/Submitted 选择、详情、Reject/Approve 风险确认、lite 助手及模型流 | M6 | 已实现，PR #13；28 个页面状态故事 + ReviewQueue 组件故事，43/43 配对及全套机器验证（含 Approved 21 行底部与 390px）；默认/窄屏人工像素 fail，其余待审；人工像素第二轮收敛 |
+| P13 | assets/pages/feedback-quality.html | 反馈与质量界面、详情及实际动作 | M6 | 进行中；独立工作树已提取列表/筛选/详情，正接共享导航和助手/宿主；完整性审核与最终集成待完成 |
 | P14 | assets/pages/personal-memory.html | 记忆列表与管理状态 | M6 | 未开始 |
 | P15 | assets/pages/scenario-library.html | 实为 Skill Library（h1/title 均 Skill Library）：列表、筛选、详情面板、内联编辑 | M6 | 未开始 |
 | P16 | assets/pages/scenario-detail.html | Skill 详情：hero + 6 页签 + preview | M6 | 未开始 |
@@ -347,9 +347,13 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P07 answer header（knowledge/workspace.js:createAnswer，assistant-panel.css:2267） | 原输出answer-card-header，CSS只匹配answer-card-head；React复用workspace答案横幅 | 与P03/P06同类源码类名错误，AGENTS §3.5，不添加缺陷开关 | #12 |
 | P07嵌套ModelFlow Escape（knowledge/workspace.js:2690–2694，shared/assistant-skill-menu.js模型流） | 原Escape先关闭助手并留下模型层；React先关顶层模型，第二次关助手并归还launcher焦点 | S2共用覆盖层契约；原侧/React侧分别断言实际行为，不把缺陷复制进组件 | #12 |
 
+| P12 Reject确认定位（assistant-launcher.css:1–5，review.css:641–646） | 原launcher z880遮挡drawer z67的确认按钮，键盘可触达；React覆盖层保持动作可点击 | 原定位缺陷，采用S2覆盖层契约；证据/tmp/mh-wp6-p12-reject-overlay.png | #13 |
+| P12审核卡片（governance/review.js:147–185） | 原卡片只有pointer click；React保留卡片点击并给标题真实button键盘入口 | 实现同一详情动作的键盘可达性，不增加业务流程 | #13 |
+| P12 Upload File（shared/assistant-skill-menu.js:242–245,397–408） | 原可见Upload入口提前return，已有picker代码不执行；React复用原生文件选择入口，无附件结果或持久化 | 原死路径按AGENTS §3.5实现明确设计意图；不将source picker记作实际可达状态 | #13 |
+
 ## 4. 已知缺口
 
-2026-09-26 M7只读复核（`/tmp/mh-m7-readiness-audit.md`）：P12–P17广度推进后，按页面补齐P01–P07独立命名状态档案与Autodocs绑定；P04/P05/P06流程迁入demo并接通宿主，Cockpit移除宿主复制的copilot流程；随后完成全页导航、S7/R5(b)库与资源入口、R8插槽样式隔离及O6 token收敛。现有CI已建立；配对机器通过不替代人工视觉验收。具体可达状态仍以原始运行时核查，不能按每条测试或每个数据记录机械新增故事。
+2026-09-26 M7只读复核（`/tmp/mh-m7-readiness-audit.md`）：P12–P17广度推进后，按页面补齐P01–P07独立命名状态档案与Autodocs绑定；P04/P05/P06流程迁入demo并接通宿主，Cockpit移除宿主复制的copilot流程；随后完成全页导航、S7/R5(b)库与资源入口、R8插槽样式隔离及O6 token收敛。现有CI已建立；配对机器通过不替代人工视觉验收。具体可达状态仍以原始运行时核查，不能按每条测试或每个数据记录机械新增故事。逐页命名故事与流程迁出清单见`/tmp/mh-m7-story-archive-plan.md`；每个可达交互prop至少一个非默认命名态，Controls不替代。
 
 2026-09-26 S3 后：助手外壳重复、调用方预设布尔开关与双答案字段已解决；下方旧审核中对应 S3/R3/O5 描述是历史发现。R2的P03/P07助手已补齐；其他页面流程与人工像素收敛继续。
 
@@ -521,3 +525,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P07助手 PR #12（https://github.com/wu2305/marketinghub/pull/12）合并122e125；候选dc97451最新main干净验证：lint0/0、20文件207测试、215stories/58docs、host20/20、visual297/297（新增助手30）、negative19/19，证据/tmp/mh-p07-assistant-integrate-r2-*。与P03共享私有demo状态hook，保留知识内容与1个数据驱动模型技能，未增公共出口或布尔开关；回调在类型切换后仍带typeId；独立审核补修P03/P07重复相同问题时旧反馈/复制状态残留，每次提交生成独立答案实例，两页回归已覆盖。overview-home缺DOM提前return、隐藏Submit request/Scope/picker及不存在clearPrompt不恢复为故事。open/answer人工fail：头部工具边框、建议区/底层卡片位置、答案卡宽度等仍待第二轮；P12–P17按页继续。 | Codex integrator |
 
 | 2026-09-26 | WP6 P12 Review Center 候选：新增受控 `ReviewCenterPage`、专用七列 `ReviewQueue`、私有源记录与 `useReviewCenterDemo`，故事及 `/mh-host/review-center` 共用；28 页面故事 + 1 组件故事。来源 `assets/js/governance/review.js:21–52,64–102,216–355,382–489` 与 lite 助手/技能脚本，实测矩阵 `/tmp/mh-wp6-p12-source-matrix.md`。保留 Rejected 摘要固定3、Submitted 只改变选择、不凭空过滤、空理由可Reject、Approved的 View in Knowledge Base 仍开同页详情；Warning/Reviewing 风险确认、Pass 直批、恢复记录按id只合并一次。对抗审核修正恢复 props 等价数组重传复活已拒绝记录、补 type/panel 枚举 Controls 与公共出口；最终接口复审把 Reject 确认改为{id,reason}、统计按语义key取值，恢复徽标只读demo归一化的restored字段；页面锚导航、标题键盘入口、原生附件入口按原缺陷判定待集成者登记§3。助手复用私有 `useWorkspaceAssistantDemo` lite 行为，建议仅填充，模型历史/手动/生成/两种错误及 Save/Submit 均有配对；完整性复审改为可操作的 Pending+Pass 命名故事、Generated 草稿确从2会话4条勾选消息生成，并补四个实际可见侧栏图标。候选 lint 0/0、21 文件216测试、Storybook 244 stories/59 docs、host 21/21（`/tmp/mh-wp6-p12-host-candidate`），P12 定向43/43机器配对（`/tmp/mh-wp6-p12-pairs-preview7`）；其后修窄屏Hero遮字，局部2/2重配对（`/tmp/mh-wp6-p12-narrow-preview8`、`/tmp/mh-wp6-p12-default-preview8`）。4个本页负向变异已定义、预跑逐项失败但整套未完成；最终干净提交全套由集成者执行。人工默认/390px仍 fail：统计/队列/侧栏与原页像素差异；标题说明可读性已修，其余场景 pending，留第二轮收敛。 | Codex WP6 |
+| 2026-09-26 | P12 Review Center PR #13（https://github.com/wu2305/marketinghub/pull/13）合并733d99f；候选cc956f6最新main干净全套：lint0/0、21文件216测试、244stories/59docs、host21/21、visual340/340（P12 43）、negative23/23；证据/tmp/mh-p12-integrate-r3-*。独立对抗复审/tmp/mh-p12-adversarial-candidate-review.md无阻断；修恢复记录数组重传复活已拒绝项、模型错误故事mount竞态和390px标题遮字；最终补修受控Reject具名载荷、统计卡语义key及demo边界恢复标记归一化，两条替换夹具/受控接口回归已覆盖。按完整提取复核补齐可操作的pending Pass直接审批故事前态、真实选中消息生成模型故事及侧栏四个图标；其余原始可达区块均有受控组件组合，隐藏残留未恢复。保留源Submitted选择不筛行、Rejected固定3、空理由Reject、Approved同页详情等差异，不改写业务。默认/390px人工fail，最终证据/tmp/mh-p12-root-review.md；统计卡/侧栏样式/队列/徽标/间距等留第二轮，P13–P17继续。 | Codex integrator |
