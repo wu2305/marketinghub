@@ -83,3 +83,18 @@ export default {
 };
 
 export const Default = {};
+
+export const CategorySelected = {
+  name: "System category selected",
+  args: { selectedCategories: ["System"] },
+};
+
+export const NoResults = {
+  name: "No matching principles",
+  args: { query: "zzzz-nothing" },
+};
+
+export const ExpandedDescription = {
+  name: "Expanded principle description",
+  args: { expanded: ["principle-04"] },
+};
