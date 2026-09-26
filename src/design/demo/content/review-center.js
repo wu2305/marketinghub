@@ -10,14 +10,17 @@ export const REVIEW_CENTER = {
     "description": "Review and approve knowledge assets before they are published for AI use.",
     "stats": [
       {
+        "key": "pending",
         "label": "PENDING REVIEW",
         "caption": "assets awaiting your approval"
       },
       {
+        "key": "approved",
         "label": "APPROVED THIS WEEK",
         "caption": "assets published recently"
       },
       {
+        "key": "rejected",
         "label": "REJECTED THIS WEEK",
         "caption": "assets sent back for revision"
       }

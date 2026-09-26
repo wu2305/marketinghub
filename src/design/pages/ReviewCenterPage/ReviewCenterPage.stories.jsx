@@ -31,7 +31,7 @@ export const ReviewCenter = {
     onClosePanel: callbackProp("onClosePanel", "({panel:string,reason:string}) => void", { panel: "detail", reason: "escape" }),
     onConfirmReject: callbackProp("onConfirmReject", "({id:string,reason:string}) => void", { id: "pending-1", reason: "" }),
     onConfirmApprove: callbackProp("onConfirmApprove", "({id:string}) => void", { id: "pending-1" }),
-    onNavigate: callbackProp("onNavigate", "({id:string,href:string,label:string}) => void", { id: "interpreter", href: "/assets/pages/knowledge.html", label: "Knowledge Management" }),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }),
     onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }),
   },
   render: function ReviewCenterStory(args) {

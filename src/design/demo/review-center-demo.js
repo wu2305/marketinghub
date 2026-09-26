@@ -6,11 +6,14 @@ const EMPTY_INITIAL = {};
 
 function mergeRecords(records, restorations) {
   const ids = new Set(records.map((item) => item.id));
-  const merged = records.map((item) => ({ ...item }));
+  // The original demo encodes its Restore badge in an id prefix. Normalize
+  // that source convention here so the feature reads semantic record data.
+  const normalized = (item) => ({ ...item, restored: item.restored ?? item.id.startsWith("restore-") });
+  const merged = records.map(normalized);
   for (const item of restorations) {
     if (ids.has(item.id)) continue;
     ids.add(item.id);
-    merged.push({ ...item });
+    merged.push(normalized(item));
   }
   return merged;
 }

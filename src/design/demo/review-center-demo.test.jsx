@@ -2,6 +2,7 @@ import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ReviewCenterPage } from "../pages/ReviewCenterPage/index.jsx";
+import { ReviewQueue } from "../features/review-center/ReviewQueue/index.jsx";
 import { REVIEW_CENTER, REVIEW_SHELL } from "./content/review-center.js";
 import { useReviewCenterDemo } from "./review-center-demo.js";
 
@@ -15,6 +16,22 @@ const row = (id) => document.querySelector(`[data-review-id="${id}"]`);
 const count = (name) => screen.getByText(name).closest("article").querySelector("strong").textContent;
 
 describe("Review Center demo", () => {
+  it("exposes named Reject payloads and keyed stats to a controlled page consumer", () => {
+    const onConfirmReject = vi.fn();
+    const content = { ...REVIEW_CENTER, hero: { ...REVIEW_CENTER.hero, stats: [REVIEW_CENTER.hero.stats[1], REVIEW_CENTER.hero.stats[0], REVIEW_CENTER.hero.stats[2]] } };
+    render(<ReviewCenterPage content={content} logo={REVIEW_SHELL.logo} navigation={REVIEW_SHELL.navigation} image={REVIEW_SHELL.image} filters={{}} queue={{ items: [], counts: { pending: 6, approved: 21, rejected: 3 } }} decision={{ panel: "reject", selected: REVIEW_CENTER.records[0], reason: "Needs updated lineage", rejectSuggestions: [], onConfirmReject }} assistant={{ open: false }} />);
+    expect(within(screen.getByText("APPROVED THIS WEEK").closest("article")).getByText("21")).toBeTruthy();
+    expect(within(screen.getByText("PENDING REVIEW").closest("article")).getByText("6")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Confirm Reject" }));
+    expect(onConfirmReject).toHaveBeenCalledExactlyOnceWith({ id: "pending-1", reason: "Needs updated lineage" });
+  });
+
+  it("shows the Restore badge from semantic record data rather than an id prefix", () => {
+    render(<ReviewQueue items={[{ ...REVIEW_CENTER.records[0], id: "custom", restored: true }, { ...REVIEW_CENTER.records[0], id: "restore-plain", restored: false }]} columns={REVIEW_CENTER.labels.columns} labels={REVIEW_CENTER.labels} />);
+    expect(within(row("custom")).getByText("Restore")).toBeTruthy();
+    expect(within(row("restore-plain")).queryByText("Restore")).toBeNull();
+  });
+
   it("filters by tab, type and search while Submitted remains only a visible selection", () => {
     mount();
     expect(document.querySelectorAll(".mh-review-queue__row")).toHaveLength(6);
