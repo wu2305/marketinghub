@@ -34,3 +34,9 @@ gap: 10px;
 .mh-page__cards--upload .mh-action-card .mh-button {
 width: 170px;
 }
+
+@media (max-width: 760px) {
+  .mh-page__cards--two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

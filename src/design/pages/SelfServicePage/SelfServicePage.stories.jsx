@@ -78,6 +78,16 @@ const playClicks = (...selectors) => async ({ canvasElement }) => {
   }
 };
 
+export const SelfServiceDgReports = {
+  ...SelfService,
+  name: "Self-Service DG reports",
+  play: async (context) => {
+    const win = context.canvasElement.ownerDocument.defaultView;
+    await new Promise((resolve) => win.requestAnimationFrame(() => win.requestAnimationFrame(resolve)));
+    await playClicks(".mh-pills[aria-label='Filter reports'] button:nth-child(2)")(context);
+  },
+};
+
 export const SelfServiceUpload = {
   ...SelfService,
   name: "Self-Service data upload",
