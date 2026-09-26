@@ -34,9 +34,6 @@ import {
   ScenarioDetailPage,
   ScenarioEditPage,
   MetricDictionaryPage,
-  buildCopilotChatEntry,
-  copilotSkillItems,
-  resolveCopilotAnswer,
 } from "../../src/design/index.js";
 import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
 import {
@@ -470,45 +467,6 @@ function ScenarioEditRoute({ params }) {
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
 
-/** Minimal per-instance copilot wiring: recommendation → answer view,
- *  question → chat entry. Mirrors useCockpitDemo's workspace logic. */
-function useCopilotInstance({ copilot, projects, knowledge, projectKey, rawIndex }) {
-  const [answer, setAnswer] = React.useState(null);
-  const [chat, setChat] = React.useState([]);
-  const [prompt, setPrompt] = React.useState("");
-  const report = projects[projectKey]?.reports?.[rawIndex];
-  return {
-    open: true,
-    title: report?.assistant?.panelTitle || copilot.defaultProfile?.panelTitle,
-    eyebrow: copilot.eyebrow,
-    summary: copilot.summary,
-    recommendations: (report?.recommendations || []).map((rec) => ({ title: rec.title })),
-    periodHint: report?.assistant?.periodHint || copilot.defaultProfile?.periodHint,
-    answer,
-    chat,
-    prompt,
-    history: copilot.history,
-    commandHint: copilot.commandHint,
-    inputPlaceholder: copilot.inputPlaceholder,
-    answerLabel: copilot.answerLabel,
-    skillMenu: copilot.skillMenu ? { ...copilot.skillMenu, items: copilotSkillItems(knowledge, copilot.skillFallback) } : undefined,
-    onRecommendation: ({ index }) => setAnswer(resolveCopilotAnswer(projects, copilot, projectKey, rawIndex, index)),
-    onAsk: ({ question }) => {
-      setChat((current) => [...current, buildCopilotChatEntry(projects, knowledge, copilot, projectKey, rawIndex, question)]);
-    },
-    onPromptChange: ({ value }) => setPrompt(value),
-    onBack: () => {
-      setAnswer(null);
-      setChat([]);
-    },
-    onNewSession: () => {
-      setAnswer(null);
-      setChat([]);
-      setPrompt("");
-    },
-  };
-}
-
 const Sentinel = () => (
   <div className="host-sentinel" data-testid="host-sentinel">
     <button type="button" className="host-btn">Host button</button>
@@ -518,8 +476,8 @@ const Sentinel = () => (
 );
 
 function ComposeRoute() {
-  const copilotA = useCopilotInstance({ copilot: COPILOT, projects: REPORT_PROJECTS, knowledge: KNOWLEDGE_ASSETS, projectKey: "city", rawIndex: 0 });
-  const copilotB = useCopilotInstance({ copilot: ALT_COPILOT, projects: ALT_PROJECTS, knowledge: ALT_KNOWLEDGE, projectKey: "alpha", rawIndex: 0 });
+  const demoA = useCockpitDemo({ projects: REPORT_PROJECTS, knowledge: KNOWLEDGE_ASSETS, project: "city", dashboard: 0, workspaceOpen: true, demo: { copilot: COPILOT } });
+  const demoB = useCockpitDemo({ projects: ALT_PROJECTS, knowledge: ALT_KNOWLEDGE, project: "alpha", dashboard: 0, workspaceOpen: true, demo: { copilot: ALT_COPILOT } });
   const termsA = useBusinessTermDemo({ ...INTERPRETER.businessTermLibrary });
   const termsB = useBusinessTermDemo({ ...ALT_BUSINESS_TERMS });
   return (
@@ -533,8 +491,8 @@ function ComposeRoute() {
         <div className="host-cell" data-instance="b"><CityInvestDashboard {...ALT_CITY_INVEST} baseline={undefined} getScenario={cityInvestScenarioSource(ALT_CITY_INVEST)} /></div>
       </section>
       <section className="host-grid" aria-label="Report copilots">
-        <div className="host-cell host-copilot" data-instance="a"><ReportCopilot {...copilotA} /></div>
-        <div className="host-cell host-copilot" data-instance="b"><ReportCopilot {...copilotB} /></div>
+        <div className="host-cell host-copilot" data-instance="a"><ReportCopilot {...demoA.workspace} open={demoA.workspaceOpen} /></div>
+        <div className="host-cell host-copilot" data-instance="b"><ReportCopilot {...demoB.workspace} open={demoB.workspaceOpen} /></div>
       </section>
       <section className="host-grid" aria-label="Business term libraries">
         <div className="host-cell" data-instance="a"><BusinessTermView {...termsA} /></div>
