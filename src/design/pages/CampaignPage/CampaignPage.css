@@ -233,3 +233,37 @@ display: flex;
   gap: 8px;
   margin-top: 20px;
 }
+
+@media (max-width: 900px) {
+  .mh-campaign {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mh-campaign > main {
+    min-width: 0;
+  }
+
+  .mh-campaign__metrics {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .mh-campaign__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .mh-campaign {
+    width: calc(100% - 32px);
+    gap: 20px;
+  }
+
+  .mh-campaign__tools {
+    flex-wrap: wrap;
+  }
+
+  .mh-campaign__tools .mh-search,
+  .mh-campaign__tools .mh-input {
+    width: min(100%, 190px);
+  }
+}
