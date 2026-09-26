@@ -9,15 +9,11 @@
   backdrop-filter: blur(18px);
 }
 
-.mh-header--comfortable.mh-header--fixed {
-  z-index: 70;
-}
-
 .mh-header--sticky {
   position: sticky;
   inset: auto;
   top: 0;
-  z-index: 60;
+  z-index: 40;
 }
 
 .mh-header__bar {
