@@ -7,8 +7,8 @@ import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
+import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { ReviewQueue } from "../../features/review-center/ReviewQueue/index.jsx";
-import { Icon } from "../../icons.jsx";
 import "./ReviewCenterPage.css";
 
 export const reviewTabs = ["pending", "approved"];
@@ -40,11 +40,6 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
   const launcherRef = React.useRef(null);
   const reasonRef = React.useRef(null);
   const labels = content.labels;
-  const route = (item) => hrefFor?.(item.id, {}) || item.href;
-  const follow = (event, item) => {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    onNavigate?.({ id: item.id, params: {}, href: route(item), label: item.label });
-  };
   const action = (kind) => selected && onReviewAction?.({ id: selected.id, action: kind });
   const ai = assistant || {};
   const { open: aiOpen = false, prompt: aiPrompt = "", answers: aiAnswers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = ai;
@@ -54,7 +49,7 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
       <div className="mh-review-page__stats">{content.hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
     </Hero>
     <div className="mh-review-page__body">
-      <aside className="mh-review-page__sidebar" aria-label={labels.navigationAria}><nav aria-label={labels.categoriesAria}>{content.sidebar.map((item) => <a key={item.id} href={route(item)} aria-current={item.id === "review-center" ? "page" : undefined} onClick={(event) => follow(event, item)}><Icon name={item.icon} />{item.label}</a>)}</nav></aside>
+      <GovernanceNav items={content.sidebar} current="review-center" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />
       <main className="mh-review-page__main">
         <div className="mh-review-page__tabs" role="tablist" aria-label={labels.tabsAria}>{reviewTabs.map((value) => <button key={value} type="button" role="tab" aria-selected={tab === value} onClick={() => onTabChange?.({ value })}>{labels.tabs[value]} <span>{counts[value] ?? 0}</span></button>)}</div>
         <section className="mh-review-page__library" aria-label={labels.itemsAria}>

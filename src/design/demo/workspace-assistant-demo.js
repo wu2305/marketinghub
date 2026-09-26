@@ -6,7 +6,7 @@ const EMPTY_ANSWERS = [];
  * Deterministic state for the shared non-home assistant and model-creation flow.
  * Both real callers supply their own answer builder, copy and skill data.
  * This is private demo composition, not a component or a public library export.
- * @param {{ assistant?: object, variant?: "campaign"|"lite", initial?: {selectedSkill?:object,flow?:object}, demo?: { answerFor?: (query: string) => object, modelFlow?: object, modelDraftFor?: (messages: object[], rule: string) => object }, typeId?: string, onFlowSave?: Function, onFlowSubmit?: Function }} props
+ * @param {{ assistant?: object, variant?: "home"|"campaign"|"lite", initial?: {selectedSkill?:object,flow?:object}, demo?: { answerFor?: (query: string) => object, modelFlow?: object, modelDraftFor?: (messages: object[], rule: string) => object }, typeId?: string, onFlowSave?: Function, onFlowSubmit?: Function }} props
  * @returns {{assistant: object, skillFlow?: object}}
  */
 export function useWorkspaceAssistantDemo(props) {
@@ -63,7 +63,7 @@ export function useWorkspaceAssistantDemo(props) {
       onClose: (event) => { setOpen(false); emit(source.onClose, event); },
       onPromptChange: (event) => { setPrompt(event.value); emit(source.onPromptChange, event); },
       onSubmit: (event) => { submit(event.prompt); emit(source.onSubmit, event); },
-      onSuggestion: (event) => { if (props.variant === "lite") setPrompt(event.prompt); else submit(event.prompt); emit(source.onSuggestion, event); },
+      onSuggestion: (event) => { if (props.variant === "lite" || props.variant === "home") setPrompt(event.prompt); else submit(event.prompt); emit(source.onSuggestion, event); },
       onHistorySelect: (event) => { setPrompt(event.prompt); emit(source.onHistorySelect, event); },
       onNewSession: () => { setPrompt(""); setAnswers([]); emit(source.onNewSession); },
       onSelectSkill: (event) => { setSkill({ id: event.id, type: event.type, title: event.title }); emit(source.onSelectSkill, event); },
