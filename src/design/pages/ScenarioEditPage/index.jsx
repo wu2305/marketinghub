@@ -15,9 +15,9 @@ import "./ScenarioEditPage.css";
  * @param {object} props
  * @param {object} props.content Hero, sidebar, form labels/options, and default values.
  * @param {object} props.logo Header logo.
- * @param {object[]} props.navigation Header destinations.
- * @param {object} props.form ScenarioEditForm values, validation, preview and named callbacks.
- * @param {object} props.assistant Lite assistant content/state/callbacks.
+ * @param {object[]} [props.navigation=[]] Header destinations.
+ * @param {object} [props.form={}] ScenarioEditForm values, validation, preview and named callbacks.
+ * @param {object} [props.assistant={}] Lite assistant content/state/callbacks.
  * @param {object} [props.skillFlow] Model-flow dialog content/state/callbacks.
  * @param {(id:string,params?:object)=>string} [props.hrefFor]
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]

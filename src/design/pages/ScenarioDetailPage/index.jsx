@@ -17,9 +17,9 @@ export { scenarioDetailTabs };
  * @param {object} props
  * @param {object} props.content Hero, navigation and six-panel visible copy.
  * @param {{src:string,alt:string,href:string}} props.logo
- * @param {object[]} props.navigation Header destinations.
- * @param {{record:object,tab:typeof scenarioDetailTabs[number],previewOpen:boolean,onTabChange?:(event:{value:string})=>void,onTogglePreview?:(event:{open:boolean})=>void}} props.detail
- * @param {object} props.assistant Lite assistant state and named callbacks.
+ * @param {object[]} [props.navigation=[]] Header destinations.
+ * @param {{record:object,tab:typeof scenarioDetailTabs[number],previewOpen:boolean,onTabChange?:(event:{value:string})=>void,onTogglePreview?:(event:{open:boolean})=>void}} [props.detail={}] Detail view state.
+ * @param {object} [props.assistant={}] Lite assistant state and named callbacks.
  * @param {object} [props.skillFlow] Model flow state and callbacks.
  * @param {(id:string,params?:object)=>string} [props.hrefFor]
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]

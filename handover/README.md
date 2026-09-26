@@ -56,6 +56,7 @@ npm test               # vitest 行为测试
 | M7 | MetricStat 用途与治理页统计可读性 | 候选完成；待独立审核与最新 main 全套门禁 | Campaign 卡片标签保留文案大小写，Review/Feedback 复用 glass 统计；P12/P13 在390/900保留三项完整统计并让Hero随内容增高，证据见§5 |
 | M7 | DataTable 行动作契约收口 | 候选完成；待独立审核与集成门禁 | 删除仅故事使用的行点击 prop/Action；Campaign 四组静态表格保留，来源和定向证据见 §5 |
 | M7 | 页面独立接口文档入口 | 进行中 | 17个具名附属MDX页面文档，保留现有Pages标题与story id；旧Pages Docs作为索引，独立审核/最终gate待完成 |
+| M7 | S5 页面文案与公开接口（P01–P07文案，P08–P17默认参数文档） | 已重基并定向验证；待独立复核、全套门禁与PR | P02搜索/元数据/空态、P03筛选名称、P04模板/提交、P05区块名称、P06账户筛选/任务弹窗均由页面props注入；P04故事/宿主保留共享hook与具名{values}提交；P01 scope初值移出页面，P07原有copy保持；P08–P17公开JSDoc可选/默认标记按实际解构校准，P05/P06归档待合并后接线；证据见§5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -473,6 +474,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-26 | S5 页面文案/接口候选：P01–P07核查后将实际写死的页面文案与aria名称移到既有`content.js`默认数据和页面props，移除P04/P05/P06任务文案备用英文；P02/P03/P04/P05/P06故事与P02宿主接入，更新公开props/回调JSDoc。P08–P17逐页对照函数解构，将38个实际默认参数的可选/default JSDoc标记校准，必须的content保持必填；用Pages文档表同一解析器核10页无漏项。P04–P06旧故事包装器现完整转发打开/关闭/重置/任务/助手及模型流具名事件，合入归档hook时保留。新增5条替换文案渲染验证，旧英文无泄漏；lint0，26文件229测试，Storybook 363 stories/67 docs；P02项目、P04模板弹窗、P06任务操作初轮定向机器配对各1/1，肉眼确认默认文案仍与原页一致，既存几何差异保持人工pending。修回调后P04弹窗、P05助手、P06任务各1/1再通过（`/tmp/mh-page-copy-r2-*`），lint0、定向33测试通过，Storybook仍363/67。初轮证据`/tmp/mh-page-copy-p02-cockpit-project`、`/tmp/mh-page-copy-p04-data-upload-import`、`/tmp/mh-page-copy-p06-campaign-task-dialog`。待最新main rebase/完整门禁。 | Codex S5 |
 | 2026-09-22 | PR #6 合入：语义组件设计系统替换 DOM 复刻方案 | Cloud Agent |
 | 2026-09-22 | 深度审核：实跑构建与 1440px 对照，确认 2.4 节缺口；建立 `AGENTS.md` 与本状态文件 | Cloud Agent |
 | 2026-09-22 | PR #8：阶段 A 六条收口（助手抽屉、Cockpit 箭头与搜索符、侧栏图标、Manage 文案与 typeMeta 计数、Campaign props、Header 链接与 Hero id） | Cloud Agent |
@@ -617,3 +619,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | M7 P06 Campaign 流程/故事档案候选：私有 `useCampaignDemo` 接管五区切换、搜索、任务草稿/提交 toast、助手及模型流，`CampaignPage` 任务草稿改纯受控；Storybook 与独立宿主 `/mh-host/campaign` 共用同一 hook。默认页加17个可直达命名状态故事（共18），涵盖四个非默认区、账户筛选、任务弹窗/提交、助手历史/技能/答案与模型步骤；关闭重开保留任务草稿，Douyin 导航页签继续禁用。候选预检 lint0、23文件221测试、335stories/65docs、host25/25（`/tmp/mh-p06-host`）、P06配对22/22（`/tmp/mh-p06-pairs-clean`）；22条人工视觉结论仍pending，独立对抗与最新main全套门禁待集成。 | Codex WP6 |
 | 2026-09-26 | M7 P06 Campaign档案独立完整性补齐：按`/tmp/mh-p05-p06-final-archive-review.md`新增五个真实可达的命名页面状态——技能搜索无结果（`assistant-skill-menu.js:234–267,355–358`）、模型历史零消息错误（`:474–520,863–875`）、未经验证的手动模型表单（`:264–267,333–341,830–843`）、答案Helpful选中（`campaign/workspace.js:338–353,450–480`）、账户筛选0行+`0 accounts shown`（`campaign/workspace.js:36–48,85–95`）。全部由既有`useCampaignDemo`/可见控件触发，未加展示props/组件，P06页面故事18→23、场景22→27；从c2d6733主线rebase时保留P04 Data Upload和P06 Campaign两条宿主路由。最新Storybook427stories/67docs、lint通过；五态并入的全页配对27/27`/tmp/mh-p06-final-five-pairs-r2`，账户空态改为故事内真实输入后单条1/1`/tmp/mh-p06-final-account-empty-r4`；宿主P04/P06共存28/28`/tmp/mh-p06-final-host-r2`。截图机器通过不代替人工视觉，整页人工仍pending；最终全套门禁由集成者执行。 | Codex P15 |
 | 2026-09-26 | M7 P06 候选安全 rebase 至 main d816752（P03 PR #25 后）：仅 README 的 P06 状态行及本候选维护日志发生冲突，保留 main §1、P03/P04 状态和其他记录；未引入尚未合并的 P05。23个P06页面故事、27条P06场景定义保持；rebase 后 lint0、Storybook430stories/67docs、独立宿主28/28（`/tmp/mh-p06-rebase-d816-host`，含P04 Data Upload和P06 Campaign），原有27/27 P06配对证据产生于 rebase 前，最新 main 完整门禁由集成者执行。 | Codex WP6 |
+| 2026-09-26 | S5在P04档案合并后重基至d816752：保留主线Header/P01–P04故事与`useDataUploadDemo`；Data Upload故事继续调用hook，宿主提交文案改取`DATA_UPLOAD.submitLabel/submittingLabel`，页面JSDoc明确由demo hook计时并保留`onSubmitForm({values})`、`onOpenImport({label})`。P05/P06流程档案尚未合并，届时需将`MEDIA_TRACKING.labels`和`CAMPAIGN.labels`传入各自新hook的故事入口；宿主P05/P06若用`...MEDIA_TRACKING`/`...CAMPAIGN`则保留，不能回退S5控件/任务文案或具名Actions。此候选lint0、26文件230测试、Storybook408故事/67文档、宿主27/27（`/tmp/mh-s5-host-rebase`）；P04四场景4/4、P02项目/P05助手/P06任务各1/1（`/tmp/mh-s5-{p04,p02,p05,p06}-rebase`）。P04默认与Import的1440px源/故事图已人工查看：文案一致，旧几何差异仍在，人工整页不标pass；最新main完整门禁与独立审核由集成者执行。 | Codex S5 |

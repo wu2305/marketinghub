@@ -51,6 +51,7 @@ const TASK_DIALOG = {
 function TaskHost() {
   const [submitted, setSubmitted] = React.useState(null);
   const props = useCampaignDemo({
+    labels: demoContent.CAMPAIGN.labels,
     taskDialog: TASK_DIALOG,
     onSubmitTask: setSubmitted,
   });

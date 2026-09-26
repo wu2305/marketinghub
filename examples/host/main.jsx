@@ -244,7 +244,7 @@ function HomeRoute() {
     assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
     assistantOpen: false,
     prompt: "",
-    scope: "All",
+    scope: ASSISTANT.scopes[0],
     demo: { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
   });
   return <HomePage {...props} />;
@@ -264,6 +264,7 @@ function CockpitRoute({ params }) {
     logo: hostLogo,
     navigation: hostNav(),
     hero: COCKPIT.hero,
+    copy: COCKPIT.copy,
     groups: COCKPIT.groups,
     projects: REPORT_PROJECTS,
     knowledge: KNOWLEDGE_ASSETS,
@@ -334,8 +335,8 @@ function DataUploadRoute() {
     toolbar: { ...DATA_UPLOAD.toolbar, backHref: hostHref("self-service?tab=upload") },
     fields: DATA_UPLOAD.fields,
     bulkImport: DATA_UPLOAD.bulkImport,
-    submitLabel: "Submit",
-    submittingLabel: "Submitted",
+    submitLabel: DATA_UPLOAD.submitLabel,
+    submittingLabel: DATA_UPLOAD.submittingLabel,
   });
   return <DataUploadPage {...page} />;
 }

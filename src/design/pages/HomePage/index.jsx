@@ -24,13 +24,13 @@ import "./HomePage.css";
  * @param {object} [props.assistant={}] AssistantPanel props
  * @param {boolean} [props.assistantOpen=false]
  * @param {string} [props.prompt=""]
- * @param {string} [props.scope="All"]
+ * @param {string} props.scope Initial assistant scope selected from the supplied `assistant.scopes`.
  * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
  * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
- * @param {() => void} [props.onOpenAssistant]
- * @param {(event: { reason: string }) => void} [props.onCloseAssistant]
+ * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
+ * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
  * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: object) => void} [props.onSubmit]
+ * @param {(event: { prompt: string }) => void} [props.onSubmit]
  * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  * @param {(event: { scope: string }) => void} [props.onScopeChange]
  * @param {() => void} [props.onNewSession]
@@ -51,7 +51,7 @@ export function HomePage({
   assistantOpen = false,
   skillFlow,
   prompt = "",
-  scope = "All",
+  scope,
   onNavigate,
   onOpen,
   onOpenAssistant,

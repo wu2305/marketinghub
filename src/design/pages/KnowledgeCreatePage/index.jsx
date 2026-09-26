@@ -15,16 +15,16 @@ import "./KnowledgeCreatePage.css";
  * @param {object} props
  * @param {object} props.content All visible labels and form fixtures.
  * @param {object} props.logo Header logo model.
- * @param {object[]} props.navigation Header links.
+ * @param {object[]} [props.navigation=[]] Header links.
  * @param {string} props.type One of knowledgeCreateTypes.
- * @param {string} [props.mode] One of knowledgeCreateModes.
- * @param {object} props.values Controlled field values.
- * @param {string[]} props.invalid Required field names to mark invalid.
+ * @param {string} [props.mode="create"] One of knowledgeCreateModes.
+ * @param {object} [props.values={}] Controlled field values.
+ * @param {string[]} [props.invalid=[]] Required field names to mark invalid.
  * @param {object|null} props.result Save/submit confirmation state.
  * @param {string|null} props.dialog Active guidance, history, test, or confirm dialog.
  * @param {string|null} props.menu Open picker name.
- * @param {boolean} [props.unavailable] Analytical Model edit has no editable record or creator access.
- * @param {boolean} [props.reportEditAvailable] A Report Context edit ID resolves to its dedicated record.
+ * @param {boolean} [props.unavailable=false] Analytical Model edit has no editable record or creator access.
+ * @param {boolean} [props.reportEditAvailable=false] A Report Context edit ID resolves to its dedicated record.
  * @param {(id:string, params?:object) => string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params:object,href:string}) => void} [props.onNavigate]
  * @param {(event:{value:string}) => void} [props.onTypeChange]
