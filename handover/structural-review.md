@@ -589,7 +589,8 @@ R5(a)：
   - [x] P07（PR #12，122e125；全套实数见README §1/§5）。
 - [ ] **WP6 P12–P17**：R2 后按页顺序推进，每页独立 PR，沿用 WP5 验证规则。
   - [x] P12 Review Center（PR #13，733d99f；全套实数与人工fail见README §1/§5）。
-  - [ ] P13–P17按页继续。
+  - [x] P13 Feedback & Quality（PR #14，5a51090；完整性结论、实数与人工fail见README）。
+  - [ ] P14–P17按页继续。
 
 ### WP2 token 预算冲突决策
 
