@@ -86,7 +86,7 @@ display: flex;
   justify-content: space-between;
   gap: 12px;
   padding: 14px 18px 14px 20px;
-  border-bottom: 1px solid var(--mh-line-ai);
+  border-bottom: 1px solid var(--mh-line);
 }
 
 .mh-assistant__identity {
@@ -126,7 +126,7 @@ display: grid;
   width: 25px;
   height: 25px;
   place-items: center;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 4px;
   background: var(--mh-surface);
   color: var(--mh-copy-ai);
@@ -165,7 +165,7 @@ display: flex;
 display: grid;
   gap: 8px;
   padding: 12px 20px 14px;
-  border-bottom: 1px solid var(--mh-line-ai);
+  border-bottom: 1px solid var(--mh-line);
   background: var(--mh-surface-ai);
 }
 
@@ -445,7 +445,7 @@ display: flex;
 
 .mh-assistant__sources span {
 padding: 4px 7px;
-  border: 1px solid var(--mh-line-ai);
+  border: 1px solid var(--mh-line);
   border-radius: 4px;
   background: var(--mh-surface-ai);
   color: var(--mh-copy-ai);
@@ -460,7 +460,7 @@ display: flex;
   gap: 16px;
   margin-top: 18px;
   padding-top: 14px;
-  border-top: 1px solid var(--mh-line-ai);
+  border-top: 1px solid var(--mh-line);
   color: var(--mh-reports-muted);
   font-size: 10px;
 }
@@ -512,7 +512,7 @@ display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 4px 10px;
-  border: 1px solid var(--mh-ai-chip-line);
+  border: 1px solid var(--mh-line-control-soft);
   border-radius: 5px;
   background: var(--mh-surface);
   color: var(--mh-ai-chip-copy);
@@ -533,7 +533,7 @@ width: 14px;
 
 .mh-assistant__feedback button:hover,
 .mh-assistant__feedback button:focus-visible {
-border-color: var(--mh-ai-chip-hover-line);
+border-color: var(--mh-line-control-hover);
   background: var(--mh-line-faintest);
   outline: 0;
 }

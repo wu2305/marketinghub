@@ -70,6 +70,8 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-muted: #68727c;
   --mh-faint: #8b949d;
   --mh-line: #dce1e6;
+  --mh-line-control-soft: #d8dde2;
+  --mh-line-control-hover: #b5bcc4;
   --mh-line-strong: #c8d0d8;
   --mh-gold: #e6bc73;
   --mh-gold-deep: #a66f27;
@@ -146,6 +148,15 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-line-attachment: #cbd3df;
   --mh-ink-attachment-muted: #7b8794;
   --mh-blue: #3f73a6;
+  /* P14 exact source category indicators, info banner, and required errors. */
+  --mh-indicator-purple: #7c3aed;
+  --mh-indicator-amber: #b88a3d;
+  --mh-indicator-rose: #db2777;
+  --mh-indicator-teal: #2d7972;
+  --mh-surface-info-pale: #eff6ff;
+  --mh-line-info-pale: #dbeafe;
+  --mh-icon-info-bright: #3b82f6;
+  --mh-danger-bright: #ef4444;
   --mh-amber: #9a7229;
   --mh-header: 56px;
   --mh-kicker: #b8b4ae;
@@ -202,7 +213,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-ink-ai-strong: #141414;
   --mh-copy-ai: #4f5963;
   --mh-muted-ai: #717b85;
-  --mh-line-ai: #dce1e6;
   --mh-line-strong-ai: #bcc5ce;
   --mh-fill-hover: #f2f3f4;
   --mh-fill-soft: #f4f4f4;
@@ -218,9 +228,7 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-line-faintest: #f0f2f4;
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
   --mh-ai-feedback-line: #edf0f3;
-  --mh-ai-chip-line: #d8dde2;
   --mh-ai-chip-copy: #5d6872;
-  --mh-ai-chip-hover-line: #b5bcc4;
   --mh-ai-chip-pos: #2e7d32;
   --mh-ai-chip-pos-bg: #e8f5e9;
   --mh-ai-chip-neg: #c62828;
@@ -249,7 +257,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-reports-bg: #f3f5f7;
-  --mh-reports-line: #dce1e6;
   --mh-reports-surface-soft: #f7f8fa;
   --mh-reports-ink: #17191c;
   --mh-reports-copy: #46505b;
@@ -326,8 +333,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-copilot-metric-neg: #dc2626;
   --mh-copilot-box-line: #d8e0e6;
   --mh-copilot-send-ink: #000000;
-  --mh-copilot-upload-line: #d8dde2;
-  --mh-copilot-upload-hover-line: #b5bcc4;
   --mh-copilot-upload-hover-bg: #f0f2f4;
   --mh-copilot-card-line: #d8dee6;
   --mh-copilot-card-faint: #667487;
@@ -343,10 +348,6 @@ a:where([class*="mh-"], [class*="mh-"] *) {
   --mh-copilot-placeholder: #8a939d;
   --mh-copilot-faint: #74726c;
   --mh-copilot-hint: #6a747c;
-  --mh-copilot-gold-from: #f2d185;
-  --mh-copilot-gold-to: #daa860;
-  --mh-copilot-send-disabled-bg: #e8ebee;
-  --mh-copilot-send-disabled-ink: #8a949e;
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
   --mh-hr-ink: #26262a;
