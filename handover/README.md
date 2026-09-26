@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 独立组件字体 PR #20：组件根显式DIN、保留display/monospace；Toast文档画布可见。17页已建，M7状态档案、复用交付与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 Header PR #21：实际白色导航、48/56px密度、固定/吸顶与窄屏可达导航；全套复核关闭Header遮挡助手按钮回归。M7状态档案、复用交付和人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 363 stories + 67 docs；2026-09-26 562152e干净构建；故事ID和数量不变 |
-| 测试 | `npm test`：25 文件 224 条通过（562152e） |
-| lint | `npm run lint`：0 errors / 0 warnings，562152e |
-| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-fonts-integrate-r3-host`）；最新main上干净构建，stamp 562152e |
+| 故事数 | 363 stories + 67 docs；2026-09-26 e09e1a9干净构建；故事ID和数量不变 |
+| 测试 | `npm test`：25 文件 224 条通过（e09e1a9） |
+| lint | `npm run lint`：0 errors / 0 warnings，e09e1a9 |
+| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-header-integrate-r2-host`）；字体PR合后rebase并干净构建，stamp e09e1a9 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 562152e，工作区干净）：全站474/474机器通过（`/tmp/mh-fonts-integrate-r3-visual`），负向38/38按预期失败。独立组件字体及Toast Docs人工复核通过；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
+| 最近视觉对照 | 2026-09-26（stamp e09e1a9，工作区干净）：全站474/474机器通过（`/tmp/mh-header-integrate-r2-visual`），负向38/38按预期失败。Header/Home Hero及窄屏导航已人工聚焦复核；整页人工视觉既有fail/pending继续，Home窄屏卡片由下一包处理。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -48,6 +48,8 @@ npm test               # vitest 行为测试
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
+
+| M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -358,6 +360,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P17窄屏Hero（原skill-editor页固定高度与单列断点） | React在≤1100px随内容增高，390/900/1440标题说明与三统计完整可读 | 不复刻裁切；证据`/tmp/mh-p17-responsive`及独立复核`/tmp/mh-p17-responsive-adversarial.md` | #18 |
 | P17细微颜色（上传表面、附件与必填态） | 复用现有同用途语义颜色与danger focus ring，不为六个细微差异新增别名 | 用户确认按用途抽象，保留信息层级与可读性；未删减字段或动作 | #18 |
 | P07知识管理确认弹窗（business-term-library.js / field-library.js / scenario-reports.js） | 原小型紧凑确认框统一为可换行、随内容增高的普通确认/删除/通知外观 | 同用途共享一个ConfirmDialog；保留权限、引用、确认动作及结果，不为每页保留外观flag | #19 |
+| Header / Home Hero | 小屏导航在自身区域滚动并保留全部链接，Home Hero随内容增高；P08/P11保留已有sticky可读布局；Header层级低于覆盖层 | 提取导航/内容容器用途，避免原固定宽度/孤立z-index造成不可达或遮挡，不删除统计/链接 | #21 |
 
 ## 4. 已知缺口
 
@@ -566,3 +569,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | Header 候选同步 P15/P16 后，P15 去除页面级当前导航样式覆盖，改由 Header 的 `highlightCurrent` 明确控制；P15/P16 Hero 修正固定 Header 的纵向位移，P14 窄屏 Hero 避开导航且随文案增高。Home 在 ≤760px 将 Hero 文案与四张统计卡排成可读的上下组合并随内容增高，保留全部数据；原静态 Home `home.css:927–946` 已试图单列，但固定300px高度仍会裁切，React 按界面用途避免裁切。Home 390/900/1440 与 P12–P16 390/1440 的导航、标题及统计边界见 `/tmp/mh-header-responsive/`，Home 修复后 `home-390-r2.png` 与定向6/6配对见 `/tmp/mh-header-home-r2/`；机器断言通过不等于人工视觉通过。 | Codex Header repair |
 | 2026-09-26 | Header 候选同步 P17 后，`ScenarioEditPage` 桌面及900px Hero 取消负56px位移，让标题说明和三张统计卡避开固定导航；390px 原本已有自身零位移，保持随内容增高。三档最终边界与截图见 `/tmp/mh-header-responsive/scenario-edit-{390,900,1440}-final.png`、`scenario-edit-final.json`；这是页面布局适配，Header/表单/助手接口不变。 | Codex Header repair |
 | 2026-09-26 | Header 集成门禁发现 comfortable/fixed 的 z70 与 sticky 的 z60 会盖过 AssistantPanel z50，导致 P03/P06 抽屉头部 New session、History、Maximize 无法点击；统一 Header 层级 z40，页面导航仍固定/可滚动，覆盖层恢复置顶。原失败见 `/tmp/mh-header-integrate-visual.log`；重建后五个受影响场景各 1/1 机器通过（`/tmp/mh-header-overlay-p03-assistant-newsession`、`/tmp/mh-header-overlay-p06-assistant-*`），390/1440px 顶部按钮点击命中及 trial 见 `/tmp/mh-header-overlay-hit.json`；这些是定向验证，最终全套与人工视觉由 integrator 复核。 | Codex Header repair |
+| 2026-09-26 | Header PR #21（https://github.com/wu2305/marketinghub/pull/21）合并4015abe，冻结e09e1a9：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-header-integrate-r2-*。源最终生效样式/tmp/mh-header-source-probe.json、响应式/tmp/mh-header-responsive、独立复核/tmp/mh-header-integrator-review.md。首轮完整门禁发现comfortable/fixed z70遮挡z50助手，退回修为共享z40，P03新会话和P06新会话/历史/最大化/还原5项在本轮全套通过；390/1440真实hit证据/tmp/mh-header-overlay-hit.json。Home透明死CSS分支删除，48/56密度及fixed/sticky由真实使用区分。main已含字体包，Home卡片窄屏与状态档案下一包继续；整页人工结果不冒充全过。 | Codex integrator |
