@@ -1,0 +1,11 @@
+.mh-scenario-governance{display:grid;gap:10px}
+.mh-scenario-governance__item{display:flex;align-items:center;gap:10px;min-width:0}
+.mh-scenario-governance__item svg{width:16px;height:16px;flex:0 0 auto;color:var(--mh-faint)}
+.mh-scenario-governance__label{min-width:100px;color:var(--mh-faint);font-size:11px;font-weight:600}
+.mh-scenario-governance__value{min-width:0;color:var(--mh-ink-strong);font-size:12px;font-weight:700;overflow-wrap:anywhere}
+.mh-scenario-governance__value--passed{color:var(--mh-ai-chip-pos)}
+.mh-scenario-governance__value--reviewing{color:var(--mh-ink-review)}
+.mh-scenario-governance--columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mh-scenario-governance--columns .mh-scenario-governance__item{padding:10px 12px;border-radius:6px;background:var(--mh-surface)}
+.mh-scenario-governance--columns .mh-scenario-governance__label{min-width:80px}
+@media(max-width:650px){.mh-scenario-governance--columns{grid-template-columns:1fr}.mh-scenario-governance__label{min-width:80px}}

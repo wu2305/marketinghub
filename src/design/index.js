@@ -225,6 +225,9 @@ export { ScenarioDetailPage, scenarioDetailTabs } from "./pages/ScenarioDetailPa
 export { ScenarioDetailWorkspace } from "./features/scenario-detail/ScenarioDetailWorkspace/index.jsx";
 export { ScenarioEditPage } from "./pages/ScenarioEditPage/index.jsx";
 export { ScenarioEditForm } from "./features/scenario-edit/ScenarioEditForm/index.jsx";
+export { ScenarioGovernance, scenarioGovernanceLayouts } from "./components/ScenarioGovernance/index.jsx";
+export { ScenarioStructure } from "./components/ScenarioStructure/index.jsx";
+export { ScenarioPreview } from "./components/ScenarioPreview/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
