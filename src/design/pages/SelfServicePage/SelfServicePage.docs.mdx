@@ -1,4 +1,6 @@
-import { Meta, Title, Description, Canvas, ArgTypes } from "@storybook/blocks";
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
 import * as PageStories from "./SelfServicePage.stories.jsx";
 
 <Meta of={PageStories} name="SelfServicePage" />
@@ -8,4 +10,4 @@ import * as PageStories from "./SelfServicePage.stories.jsx";
 <Canvas of={PageStories.SelfService} story={{ inline: false, height: "600px" }} />
 <a href="./?path=/story/pages--self-service" target="_top">Open this story’s Controls and Actions</a>
 
-<ArgTypes of={PageStories.SelfService} />
+<PageInterface name="SelfServicePage" source={componentSource} />
