@@ -1,0 +1,59 @@
+.mh-item-actions {
+display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--mh-space-2);
+}
+
+.mh-item-actions__button {
+display: grid;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--mh-radius-md);
+  background: transparent;
+  color: var(--mh-text-muted);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.mh-item-actions__button svg {
+width: 16px;
+  height: 16px;
+}
+
+.mh-item-actions__button:hover {
+border-color: var(--mh-line);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+}
+
+.mh-item-actions__button--danger:hover {
+background: color-mix(in srgb, var(--mh-danger) 6%, var(--mh-surface));
+  color: var(--mh-danger);
+}
+
+.mh-item-actions__button[aria-disabled="true"] {
+color: var(--mh-text-faint);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.mh-item-actions__button[aria-disabled="true"]:hover {
+border-color: transparent;
+  background: transparent;
+  color: var(--mh-text-faint);
+}
+
+.mh-item-actions__button:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mh-item-actions__button {
+    transition: none;
+  }
+}
