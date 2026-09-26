@@ -6,67 +6,98 @@
  * styles into host elements (the compose page carries a host-owned sentinel).
  *
  * Imports components only via src/design/index.js; demo fixtures/containers
- * come from src/design/demo/* and content.js as the integration contract allows.
+ * come from the separate src/design/demo/index.js entry.
  * Never imports .storybook/*, *.stories.jsx, or original assets/js.
  */
 import React from "react";
 import { createRoot } from "react-dom/client";
-import "../../src/design/tokens.css";
 import "./host.css";
 import {
-  HomePage,
   AiInterpreterPage,
-  MarketingCockpitPage,
-  CityInvestDashboard,
-  ReportCopilot,
-  SelfServicePage,
-  DataUploadPage,
-  CampaignPage,
-  KnowledgeViewPage,
-  useCockpitDemo,
-  useHomeDemo,
-  useBusinessTermDemo,
   BusinessTermView,
+  CampaignPage,
+  CityInvestDashboard,
   DataModelPage,
-  KnowledgeCreatePage,
-  ReviewCenterPage,
+  DataUploadPage,
   FeedbackQualityPage,
-  PersonalMemoryPage,
-  ScenarioLibraryPage,
-  ScenarioDetailPage,
-  ScenarioEditPage,
+  Hero,
+  HomePage,
+  KnowledgeCreatePage,
+  KnowledgeViewPage,
+  MarketingCockpitPage,
   MediaTrackingDetailPage,
   MetricDictionaryPage,
+  Modal,
+  PersonalMemoryPage,
+  ReportCopilot,
+  ReviewCenterPage,
+  ScenarioDetailPage,
+  ScenarioEditPage,
+  ScenarioLibraryPage,
+  SelfServicePage,
 } from "../../src/design/index.js";
-import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
-import { useDataUploadDemo } from "../../src/design/demo/data-upload-demo.js";
-import { useCampaignDemo } from "../../src/design/demo/campaign-demo.js";
 import {
   ASSISTANT,
   ASSISTANT_SKILL_MENU,
-  COCKPIT,
   CAMPAIGN,
+  CITY_INVEST,
+  COCKPIT,
   COCKPIT_SKILL_MENU,
+  COPILOT,
+  DATA_MODEL_PAGE,
+  DATA_UPLOAD,
+  FEEDBACK_QUALITY,
   HOME,
   INTERPRETER,
-  LOGO,
+  KNOWLEDGE_ASSETS,
+  KNOWLEDGE_CREATE,
+  KNOWLEDGE_VIEW,
+  LITE_ASSISTANT,
+  METRIC_ASSISTANT,
+  METRIC_DICTIONARY,
   MODEL_FLOW,
   NAV,
+  PERSONAL_MEMORY,
+  REPORT_PROJECTS,
+  REVIEW_CENTER,
+  SCENARIO_DETAIL,
+  SCENARIO_DETAIL_SHELL,
+  SCENARIO_EDIT,
   SELF_SERVICE,
-  DATA_UPLOAD,
-  LITE_ASSISTANT,
-  MEDIA_TRACKING,
-  buildLiteAssistantAnswer,
+  SKILL_LIBRARY,
+  SKILL_LIBRARY_SHELL,
+  SKILL_RECORDS,
   buildHomeAssistantAnswer,
+  buildInterpreterAnswer,
+  buildLiteAssistantAnswer,
   buildModelDraft,
   buildReportAssistantAnswer,
-} from "../../src/design/content.js";
-import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../src/design/demo/content/metric-dictionary.js";
-import { metricDictionaryHrefFor, useMetricDictionaryDemo } from "../../src/design/demo/metric-dictionary-demo.js";
-import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS, REPORT_PROJECTS } from "../../src/design/demo/report-fixtures.js";
-import { cityInvestScenarioSource } from "../../src/design/demo/report-demo.js";
-import { useKnowledgeViewDemo, knowledgeViewHrefFor, knowledgeViewRedirectFor } from "../../src/design/demo/knowledge-view-demo.js";
-import { KNOWLEDGE_VIEW } from "../../src/design/demo/content/knowledge-view.js";
+  cityInvestScenarioSource,
+  dataModelPageHrefFor,
+  knowledgeViewHrefFor,
+  knowledgeViewRedirectFor,
+  makeFeedbackRecords,
+  metricDictionaryHrefFor,
+  normalizedDataModelSearch,
+  useBusinessTermDemo,
+  useCampaignDemo,
+  useCockpitDemo,
+  useDataModelPageDemo,
+  useDataUploadDemo,
+  useFeedbackQualityDemo,
+  useHomeDemo,
+  useInterpreterDemo,
+  useKnowledgeCreateDemo,
+  useKnowledgeViewDemo,
+  useMediaTrackingDemo,
+  useMetricDictionaryDemo,
+  usePersonalMemoryDemo,
+  useReviewCenterDemo,
+  useScenarioDetailDemo,
+  useScenarioEditDemo,
+  useSelfServiceDemo,
+  useSkillLibraryDemo,
+} from "../../src/design/demo/index.js";
 import {
   ALT_CITY_INVEST,
   ALT_COPILOT,
@@ -74,26 +105,6 @@ import {
   ALT_PROJECTS,
 } from "../../src/design/demo/__fixtures__/alt-cockpit.js";
 import { ALT_BUSINESS_TERMS } from "../../src/design/demo/__fixtures__/alt-business-terms.js";
-import { useDataModelPageDemo, dataModelPageHrefFor, normalizedDataModelSearch } from "../../src/design/demo/data-model-page-demo.js";
-import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.js";
-import { KNOWLEDGE_CREATE } from "../../src/design/demo/content/knowledge-create.js";
-import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-demo.js";
-import { buildInterpreterAnswer, useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
-import { REVIEW_CENTER, REVIEW_SHELL } from "../../src/design/demo/content/review-center.js";
-import { useReviewCenterDemo } from "../../src/design/demo/review-center-demo.js";
-import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../src/design/demo/content/feedback-quality.js";
-import { useFeedbackQualityDemo } from "../../src/design/demo/feedback-quality-demo.js";
-import { PERSONAL_MEMORY, PERSONAL_MEMORY_SHELL } from "../../src/design/demo/content/personal-memory.js";
-import { usePersonalMemoryDemo } from "../../src/design/demo/personal-memory-demo.js";
-import { SKILL_LIBRARY, SKILL_LIBRARY_SHELL } from "../../src/design/demo/content/skill-library.js";
-import { useSkillLibraryDemo } from "../../src/design/demo/skill-library-demo.js";
-import { SCENARIO_DETAIL, SCENARIO_DETAIL_SHELL } from "../../src/design/demo/content/scenario-detail.js";
-import { SKILL_RECORDS } from "../../src/design/demo/content/skill-records.js";
-import { useScenarioDetailDemo } from "../../src/design/demo/scenario-detail-demo.js";
-import { SCENARIO_EDIT, SCENARIO_EDIT_SHELL } from "../../src/design/demo/content/scenario-edit.js";
-import { useScenarioEditDemo } from "../../src/design/demo/scenario-edit-demo.js";
-import { useMediaTrackingDemo } from "../../src/design/demo/media-tracking-demo.js";
-
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
 window.__mhHostBoot = window.__mhHostBoot || Math.random().toString(36).slice(2);
@@ -184,6 +195,7 @@ function routeOf(loc) {
   if (rest === "media-tracking-detail") return { name: "media-tracking-detail", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
+  if (rest === "slot-sentinel") return { name: "slot-sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
   return { name: "coverage", params, target: coverage ? coverage[1] : path };
 }
@@ -531,8 +543,36 @@ const Sentinel = () => (
     <button type="button" className="host-btn">Host button</button>
     <a className="host-link" href={hostHref("sentinel")}>Host link</a>
     <input className="host-input" defaultValue="host input" aria-label="host input" />
+    <button type="button" data-testid="host-native-button">Native button</button>
+    <a data-testid="host-native-link" href={hostHref("sentinel")}>Native link</a>
+    <input data-testid="host-native-input" defaultValue="native input" aria-label="native input" />
   </div>
 );
+
+function SlotSentinelRoute() {
+  return (
+    <main>
+      <div className="host-slot-hero">
+        <Hero title="Host slot isolation" height={240} scrim="none"><Sentinel /></Hero>
+      </div>
+      <div className="host-slot-modal">
+        <Modal open title="Host slot isolation"><Sentinel /></Modal>
+      </div>
+      <div className="host-slot-nested">
+        <Hero title="Nested host slot isolation" height={240} scrim="none">
+          <Modal open title="Nested host slot isolation"><Sentinel /></Modal>
+        </Hero>
+      </div>
+      <div className="host-slot-drawer">
+        <Hero title="Drawer host slot isolation" height={240} scrim="none">
+          <Modal open variant="drawer" title="Drawer host slot isolation" titleExtra={<Sentinel />} footer={<Sentinel />}>
+            <Sentinel />
+          </Modal>
+        </Hero>
+      </div>
+    </main>
+  );
+}
 
 function ComposeRoute() {
   const demoA = useCockpitDemo({ projects: REPORT_PROJECTS, knowledge: KNOWLEDGE_ASSETS, project: "city", dashboard: 0, workspaceOpen: true, demo: { copilot: COPILOT } });
@@ -585,6 +625,7 @@ function App() {
       </main>
     );
   }
+  if (route.name === "slot-sentinel") return <SlotSentinelRoute />;
   if (route.name === "cockpit") return <CockpitRoute params={route.params} />;
   if (route.name === "data-model") return <DataModelRoute params={route.params} />;
   if (route.name === "interpreter") return <InterpreterRoute params={route.params} />;

@@ -1,10 +1,10 @@
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 
 /** Source-backed P12 fixtures and visible copy for Storybook and the host. */
 export const REVIEW_CENTER = {
   "hero": {
-    "image": "assets/images/knowledge-hero.jpg",
+    "image": demoImage("assets/images/knowledge-hero.jpg"),
     "eyebrow": "KNOWLEDGE MANAGEMENT",
     "title": "Review Center",
     "description": "Review and approve knowledge assets before they are published for AI use.",
@@ -555,4 +555,4 @@ export const REVIEW_CENTER = {
   ]
 };
 
-export const REVIEW_SHELL = { logo: LOGO, navigation: NAV, assistant: LITE_ASSISTANT, modelFlow: MODEL_FLOW, answerFor: buildLiteAssistantAnswer, modelDraftFor: buildModelDraft, image: assetUrl("assets/images/knowledge-hero.jpg") };
+export const REVIEW_SHELL = { logo: LOGO, navigation: NAV, assistant: LITE_ASSISTANT, modelFlow: MODEL_FLOW, answerFor: buildLiteAssistantAnswer, modelDraftFor: buildModelDraft, image: demoImage("assets/images/knowledge-hero.jpg") };

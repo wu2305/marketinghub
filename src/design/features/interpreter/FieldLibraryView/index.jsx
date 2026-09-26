@@ -6,7 +6,6 @@ import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
-import { assetUrl } from "../../../asset-url.js";
 import { cx } from "../../../cx.js";
 import { Icon, knowledgeActionIconPaths } from "../../../icons.jsx";
 import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
@@ -247,7 +246,7 @@ function DetailBody({ type, record, strings, onAction }) {
       <>
         <div className="mh-flview__rc-thumb">
           {record.report_thumbnail ? (
-            <img src={assetUrl(record.report_thumbnail)} alt={`${record.report_name} thumbnail`} />
+            <img src={record.report_thumbnail} alt={`${record.report_name} thumbnail`} />
           ) : (
             <span>{drawer.previewUnavailable || "Report preview unavailable"}</span>
           )}
@@ -370,7 +369,7 @@ function DetailBody({ type, record, strings, onAction }) {
  * @param {string} [props.createHref] "Add Analytical Model" link (AM only)
  * @param {string} [props.createLabel]
  * @param {string} [props.dashboardHref] RC drawer "Open Dashboard" target
- * @param {React.Ref} [props.searchRef]
+ * @param {React.Ref<HTMLInputElement>} [props.searchRef]
  * @param {object|null} [props.detail] normalized record in the drawer — the
  *   container adds detailTitle, detailStatus, projectLabels (RC), actions
  *   (AM) and scenarioLinks (RC)
@@ -521,7 +520,7 @@ export function FieldLibraryView({
  * page composes this separately when a record is peeked outside its own view.
  * `detail` is the normalized record the container prepared (with detailTitle,
  * detailStatus, projectLabels, actions, scenarioLinks).
- * @param {object} props
+ * @param {Record<string, any>} props
  */
 export function FieldLibraryDrawer({
   type,

@@ -4,7 +4,7 @@
   "pkg": "marketing-hub",
   "globalName": "MarketingHub",
   "storybookStatic": ".design-sync/sb-reference",
-  "buildCmd": "node .design-sync/build-dist.mjs",
+  "buildCmd": "npm run build:lib",
   "cssEntry": "dist/index.css",
   "titleMap": {
     "Foundations": null,
@@ -231,13 +231,9 @@
       "src/design/pages/SelfServicePage/index.jsx",
       "src/design/pages/Shell/index.jsx",
       "src/design/icons.jsx",
-      "src/design/asset-url.js",
       "src/design/cx.js",
-      "src/design/report-logic.js",
-      "src/design/report-routes.js",
-      "src/design/demo/cockpit-demo.js",
-      "src/design/demo/home-demo.js",
-      "src/design/demo/report-demo.js"
+      "src/design/features/cockpit/lib/report-logic.js",
+      "src/design/lib/options.js"
     ]
   },
   "readmeHeader": ".design-sync/conventions.md"

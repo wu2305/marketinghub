@@ -3,6 +3,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { FieldLibraryView } from "../features/interpreter/FieldLibraryView/index.jsx";
 import { useFieldLibraryDemo, normalizeFieldRecord, reportContextProjectLabels } from "./field-library-demo.js";
+import { demoImage } from "./images.js";
 import { INTERPRETER } from "../content.js";
 
 function Harness(props) {
@@ -25,7 +26,7 @@ describe("normalizeFieldRecord", () => {
     expect(record.type).toBe("Report Context");
     expect(record.report_name).toBe("Invest City Strategy Analysis");
     expect(record.ai_interpretation_enabled).toBe(true);
-    expect(record.report_thumbnail).toBe("assets/images/project-city-tabby.png");
+    expect(record.report_thumbnail).toBe(demoImage("assets/images/project-city-tabby.png"));
     expect(record.business_domain).toEqual(["City Strategy"]);
     expect(record.scenario_report_ids).toEqual(["scenario-channel-performance", "scenario-campaign-review"]);
     expect(reportContextProjectLabels(record)).toEqual(["D2C Insights"]);

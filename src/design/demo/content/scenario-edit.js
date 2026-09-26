@@ -1,5 +1,5 @@
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 
 /** The twelve visible source report choices retain their original destination parameters. */
 export const SCENARIO_EDIT_REPORTS = [
@@ -19,7 +19,7 @@ export const SCENARIO_EDIT_REPORTS = [
 
 export const SCENARIO_EDIT = {
   hero: {
-    image: assetUrl("assets/images/project-ottolv-tabby.png"),
+    image: demoImage("assets/images/project-ottolv-tabby.png"),
     eyebrow: "KNOWLEDGE MANAGEMENT",
     title: "Edit Scenario",
     description: "Edit scenario structure, preview example output, and manage governance.",

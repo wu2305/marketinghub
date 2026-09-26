@@ -538,7 +538,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * @param {Array<{ title: string, meta?: string }>} [props.recommendations=[]]
  * @param {string} [props.periodHint=""]
  * @param {Array<{ id: string, title: string, href: string }>} [props.sources=[]]
- * @param {{ kind: "answer"|"holistic", title: string, summary?: string, findings?: Array<{ label: string, text: string> }, report?: object }|null} [props.answer=null] holistic answers carry their data as `report`
+ * @param {{ kind: "answer"|"holistic", title: string, summary?: string, findings?: Array<{ label: string, text: string }>, report?: object }|null} [props.answer=null] holistic answers carry their data as `report`
  * @param {Array<{ id?: string, kind: "standard"|"rich", question: string, summary?: string, card?: object, sources: Array<object> }>} [props.chat=[]] rich entries carry their card data as `card`
  * @param {string} [props.prompt=""]
  * @param {string} props.commandHint helper line above the composer

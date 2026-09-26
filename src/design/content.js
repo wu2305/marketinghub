@@ -1,4 +1,4 @@
-import { assetUrl } from "./asset-url.js";
+import { demoImage } from "./demo/images.js";
 import { DETAILS_ASSET_SECTIONS, REPORT_GROUPS, REPORT_PROJECTS } from "./demo/report-fixtures.js";
 
 export const NAV = [
@@ -9,11 +9,11 @@ export const NAV = [
   { id: "campaign", label: "RedNote Campaign Tool", href: "/assets/pages/campaign.html" },
 ];
 
-export const LOGO = { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry", href: "/index.html" };
+export const LOGO = { src: demoImage("assets/images/tapestry-logo.png"), alt: "Tapestry", href: "/index.html" };
 
 export const HOME = {
   hero: {
-    image: assetUrl("assets/images/hero-bg-coach.jpg"),
+    image: demoImage("assets/images/hero-bg-coach.jpg"),
     title: "Marketing Portal",
     description: "Your daily workspace for campaign planning, activation, optimization and knowledge — all in one place.",
     stats: [
@@ -33,7 +33,7 @@ export const HOME = {
       title: "Marketing Cockpit",
       href: "/assets/pages/reports.html",
       description: "Centralized view for tracking all marketing initiatives' performance and evolving business trends.",
-      image: assetUrl("assets/images/workspace-marketing-overview.png"),
+      image: demoImage("assets/images/workspace-marketing-overview.png"),
       links: [
         { id: "dg", label: "DG Data Insight", href: "/assets/pages/reports.html?project=rednote" },
         { id: "dc", label: "DC Data Insight", href: "/assets/pages/reports.html?project=abo" },
@@ -44,21 +44,21 @@ export const HOME = {
       title: "Self-Service Center",
       href: "/assets/pages/flexible.html",
       description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
-      image: assetUrl("assets/images/workspace-business-explorer.png"),
+      image: demoImage("assets/images/workspace-business-explorer.png"),
       links: [],
     },
     {
       title: "AI Interpreter",
       href: "/assets/pages/knowledge.html",
       description: "Empower business teams to create, manage and evolve trusted knowledge for consistent AI experiences.",
-      image: assetUrl("assets/images/workspace-knowledge-center.png"),
+      image: demoImage("assets/images/workspace-knowledge-center.png"),
       links: [{ id: "knowledge", label: "Knowledge Management", href: "/assets/pages/knowledge.html" }],
     },
     {
       title: "RedNote Campaign Tool",
       href: "/assets/pages/campaign.html",
       description: "Plan, launch and manage every campaign from one connected workspace.",
-      image: assetUrl("assets/images/workspace-campaign-operations.png"),
+      image: demoImage("assets/images/workspace-campaign-operations.png"),
       links: [],
     },
   ],
@@ -265,7 +265,7 @@ export const COCKPIT = {
     meta: { owner: "Owner", cadence: "Cadence", updated: "Updated", knowledge: "Knowledge" },
   },
   hero: {
-    image: assetUrl("assets/images/project-city-tabby.png"),
+    image: demoImage("assets/images/project-city-tabby.png"),
     eyebrow: "Performance tracking",
     title: "Marketing Cockpit",
     description: "Stay connected to the business trends, performance and metrics that matter most.",
@@ -313,7 +313,7 @@ export const SELF_SERVICE = {
     ],
   },
   hero: {
-    image: assetUrl("assets/images/business-explorer-hero.jpg"),
+    image: demoImage("assets/images/business-explorer-hero.jpg"),
     eyebrow: "Flexible analysis",
     title: "Self-Service Center",
     description: "Explore business performance with flexible views, filters and comparisons, and upload datasets to the data lake.",
@@ -439,7 +439,7 @@ export const INTERPRETER = {
     assistantLabel: "AI Interpreter",
   },
   hero: {
-    image: assetUrl("assets/images/knowledge-hero.jpg"),
+    image: demoImage("assets/images/knowledge-hero.jpg"),
     eyebrow: "Knowledge management",
     title: "AI Interpreter",
     description: "Explore and govern the trusted knowledge that powers AI interpretation.",

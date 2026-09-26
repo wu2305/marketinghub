@@ -1,6 +1,7 @@
 import "../../tokens.css";
 import React from "react";
-import { cx, normalizeOptions } from "../../cx.js";
+import { cx } from "../../cx.js";
+import { normalizeOptions } from "../../lib/options.js";
 import "./Select.css";
 
 

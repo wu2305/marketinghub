@@ -1,3 +1,5 @@
+import { demoImage } from "./images.js";
+
 /**
  * Demo state container for FieldLibraryView — the deterministic local
  * stand-in for field-library.js + knowledge-fields.js on the four
@@ -158,7 +160,7 @@ export function normalizeFieldRecord(asset) {
       report_description: asset.report_description || asset.summary,
       ai_interpretation_enabled: asset.ai_interpretation_enabled ?? Boolean(asset.aiUse?.length),
       ai_summary_enabled: asset.ai_summary_enabled ?? Boolean(asset.aiUse?.length),
-      report_thumbnail: asset.report_thumbnail || (project ? `assets/images/project-${project}-tabby.png` : ""),
+      report_thumbnail: demoImage(asset.report_thumbnail || (project ? `assets/images/project-${project}-tabby.png` : "")),
       ai_interpretation_rules: asset.ai_interpretation_rules ?? context.rules,
       scenario_report_ids: asset.scenario_report_ids ?? context.reports,
       report_data_scope: asset.report_data_scope ?? context.scope,

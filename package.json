@@ -2,8 +2,8 @@
   "name": "marketing-hub",
   "private": true,
   "type": "module",
-  "module": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
   "scripts": {
     "preview:html": "vite --config vite.reference.config.js --host 127.0.0.1",
     "storybook": "storybook dev -p 6006 --host 127.0.0.1",
@@ -11,29 +11,53 @@
     "test": "vitest run",
     "lint": "eslint src/design",
     "build:host": "node scripts/build-host.mjs",
-    "preview:host": "vite preview --config examples/host/vite.config.js"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "preview:host": "vite preview --config examples/host/vite.config.js",
+    "build:lib": "node scripts/build-library.mjs"
   },
   "devDependencies": {
-    "acorn": "^8.18.0",
-    "acorn-jsx": "^5.3.2",
     "@storybook/addon-essentials": "^8.6.14",
     "@storybook/blocks": "^8.6.14",
     "@storybook/react": "^8.6.14",
     "@storybook/react-vite": "^8.6.14",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
+    "acorn": "^8.18.0",
+    "acorn-jsx": "^5.3.2",
     "eslint": "^10.11.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^29.1.1",
     "playwright": "^1.63.0",
     "sirv": "^3.0.2",
     "storybook": "^8.6.14",
+    "typescript": "^5.9.3",
     "vite": "^6.2.2",
-    "vitest": "^4.1.11"
-  }
+    "vitest": "^4.1.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./demo": {
+      "types": "./dist/types/demo/index.d.ts",
+      "import": "./dist/demo.js"
+    },
+    "./style.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "version": "0.1.0"
 }

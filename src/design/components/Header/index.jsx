@@ -1,5 +1,5 @@
 import "../../tokens.css";
-import { assetUrl } from "../../asset-url.js";
+import defaultLogo from "../../assets/images/tapestry-logo.png";
 import { cx } from "../../cx.js";
 import "./Header.css";
 
@@ -26,7 +26,7 @@ function isPlainPrimaryLink(event) {
  * @param {(target: { id: string, href?: string, label: string }) => void} [props.onNavigate]
  */
 export function Header({
-  logo = { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry" },
+  logo = { src: defaultLogo, alt: "Tapestry" },
   items = [],
   navigationAriaLabel = "Marketing Portal navigation",
   logoAriaLabel = "Tapestry Marketing Portal home",

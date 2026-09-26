@@ -1,5 +1,5 @@
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 import { REVIEW_CENTER } from "./review-center.js";
 
 /** Source-visible copy. The content and record are supplied separately to the page. */
@@ -7,7 +7,7 @@ export const SCENARIO_DETAIL = {
   logo: LOGO,
   navigation: NAV,
   hero: {
-    image: assetUrl("assets/images/project-ottolv-tabby.png"),
+    image: demoImage("assets/images/project-ottolv-tabby.png"),
     eyebrow: "KNOWLEDGE MANAGEMENT",
     title: "Scenario Detail",
     description: "View scenario structure, governance info, and preview example outputs.",

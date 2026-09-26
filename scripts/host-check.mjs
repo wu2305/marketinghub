@@ -17,9 +17,8 @@
  *                 prompt with ASK disabled, typing re-enables, submit shows
  *                 an answer, close→reopen keeps it, new session clears, and
  *                 the skill menu opens the model-flow dialog
- *   sentinel    — host-owned elements get identical computed styles on the
- *                 bare sentinel page and the compose page (scoped resets do
- *                 not leak)
+ *   sentinel    — host-owned elements retain computed styles outside the
+ *                 library and inside compose, Hero children and Modal children
  *   dual        — two CityInvestDashboard / ReportCopilot instances stay
  *                 independent (filter A ≠ B, both streams complete, ask in A
  *                 leaves B untouched, ALT labels only in B)
@@ -33,7 +32,6 @@ import path from "node:path";
 import { chromium } from "playwright";
 import sirv from "sirv";
 import { ROOT, sourceFingerprint } from "./fingerprint.mjs";
-import { ASSISTANT } from "../src/design/content.js";
 
 const HOST = path.join(ROOT, "examples", "host");
 const DIST = path.join(HOST, "dist");
@@ -275,7 +273,7 @@ async function newPage() {
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-launcher", { timeout: 10000 });
-  const expectedPrompt = ASSISTANT.history[0].prompt;
+  const expectedPrompt = "What's the ROI trend across my active campaigns this quarter?";
   const panel = page.locator(".mh-assistant");
   const box = panel.locator("textarea");
   const ask = panel.locator(".mh-assistant__send button");
@@ -600,18 +598,43 @@ async function newPage() {
   await bare.goto(`${origin}${BASE}sentinel`, { waitUntil: "networkidle" });
   await bare.waitForSelector(".host-btn", { timeout: 10000 });
   const bareStyles = {};
-  for (const sel of [".host-btn", ".host-link", ".host-input"]) bareStyles[sel] = await bare.evaluate(snapshot(sel));
+  const selectors = [".host-btn", ".host-link", ".host-input", "[data-testid=host-native-button]", "[data-testid=host-native-link]", "[data-testid=host-native-input]"];
+  for (const sel of selectors) bareStyles[sel] = await bare.evaluate(snapshot(sel));
   await bare.screenshot({ path: path.join(OUT, "sentinel.png") });
   await bare.close();
 
   const { page: compose } = await newPage();
   await compose.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
   await compose.waitForSelector(".host-btn", { timeout: 10000 });
-  for (const sel of [".host-btn", ".host-link", ".host-input"]) {
+  for (const sel of selectors) {
     const onCompose = await compose.evaluate(snapshot(sel));
     if (onCompose !== bareStyles[sel]) notes.push(`${sel}: sentinel=${bareStyles[sel]} vs compose=${onCompose}`);
   }
   await compose.close();
+
+  const { page: slots } = await newPage();
+  await slots.goto(`${origin}${BASE}slot-sentinel`, { waitUntil: "networkidle" });
+  await slots.waitForSelector(".host-slot-modal .host-input", { timeout: 10000 });
+  for (const slot of [
+    ".host-slot-hero", ".host-slot-modal", ".host-slot-nested",
+    ".host-slot-drawer .mh-modal__titleline", ".host-slot-drawer .mh-modal__body", ".host-slot-drawer .mh-modal__foot",
+  ]) {
+    for (const sel of selectors) {
+      const inside = await slots.evaluate(snapshot(`${slot} ${sel}`));
+      if (inside !== bareStyles[sel]) notes.push(`${slot} ${sel}: sentinel=${bareStyles[sel]} vs slot=${inside}`);
+    }
+  }
+  const dialogBoxes = await slots.locator(".mh-modal__dialog").evaluateAll((dialogs) => dialogs.map((dialog) => ({
+    boxSizing: getComputedStyle(dialog).boxSizing,
+    cssWidth: parseFloat(getComputedStyle(dialog).width),
+    outerWidth: dialog.getBoundingClientRect().width,
+  })));
+  for (const box of dialogBoxes) {
+    if (box.boxSizing !== "border-box" || Math.abs(box.outerWidth - box.cssWidth) > 1) {
+      notes.push("Modal dialog frame expanded beyond CSS width: " + JSON.stringify(box));
+    }
+  }
+  await slots.close();
   record("sentinel", notes.length === 0, notes);
 }
 

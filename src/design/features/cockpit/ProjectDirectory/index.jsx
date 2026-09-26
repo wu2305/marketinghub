@@ -64,7 +64,7 @@ export function ProjectDirectory({
         </div>
         <strong>{listCountText}</strong>
       </div>
-      <div className="mh-report-list">{children}</div>
+      <div className="mh-report-list" data-mh-slot>{children}</div>
     </section>
   );
 }

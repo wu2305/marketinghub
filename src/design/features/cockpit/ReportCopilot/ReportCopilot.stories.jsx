@@ -3,7 +3,7 @@ import { ReportCopilot } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
 import { COPILOT, KNOWLEDGE_ASSETS } from "../../../demo/report-fixtures.js";
 import { buildCopilotChatEntry, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "../../../demo/report-demo.js";
-import { buildReportModelDraft } from "../../../report-logic.js";
+import { buildReportModelDraft } from "../lib/report-logic.js";
 import { useSynced } from "../../../lib/story-helpers.js";
 
 export default {

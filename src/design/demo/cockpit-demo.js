@@ -7,7 +7,8 @@
  */
 import React from "react";
 import { buildModelDraft } from "../content.js";
-import { buildReportModelDraft } from "../report-logic.js";
+import { buildReportModelDraft, resolveReportContext } from "../features/cockpit/lib/report-logic.js";
+import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextHref } from "./report-routes.js";
 import {
   buildCopilotChatEntry,
   copilotProfile,
@@ -95,6 +96,10 @@ export function useCockpitDemo(props) {
 
   return {
     ...props,
+    projectHref: props.projectHref || projectCatalogHref,
+    liveHref: props.liveHref || liveReportHref,
+    contextHref: props.contextHref || ((projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report))),
+    backHref: props.backHref || REPORT_CATALOG_HREF,
     assistant: {
       ...props.assistant,
       answers,
