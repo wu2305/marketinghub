@@ -1,7 +1,7 @@
 import "../../../tokens.css";
 import React from "react";
 import { cx } from "../../../cx.js";
-import { fmtAfter, pickTicks, selectionLabel, storeOptionsFor, storeScopeSuffix, totalLabel } from "../../../report-logic.js";
+import { fmtAfter, pickTicks, selectionLabel, storeOptionsFor, storeScopeSuffix, totalLabel } from "../lib/report-logic.js";
 import "./CityInvestDashboard.css";
 
 

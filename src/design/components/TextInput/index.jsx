@@ -15,7 +15,7 @@ import "./TextInput.css";
  * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false] adds aria-invalid and error styling
- * @param {typeof SIZES[number]} [props.size="md"]
+ * @param {"sm"|"md"|"lg"} [props.size="md"]
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {React.Ref<HTMLInputElement>} [props.inputRef] forwarded to the input
  * @param {(event: { name: string, value: string }) => void} [props.onChange]

@@ -1,4 +1,4 @@
-import { assetUrl } from "../asset-url.js";
+import { demoImage } from "./images.js";
 /**
  * Demo fixtures for the Marketing Cockpit / report path — data only, no logic.
  * Ported verbatim from the original demo:
@@ -48,7 +48,7 @@ export const REPORT_PROJECTS = {
     status: "Ready",
     freshness: "Online, offline, Outlet, and Retail channel data are updated",
     sourceStrip: ["Data updated: 2026-05-28"],
-    image: assetUrl("assets/images/project-city-tabby.png"),
+    image: demoImage("assets/images/project-city-tabby.png"),
     owner: "D2C Insight",
     accent: "#739684",
     reports: [
@@ -330,7 +330,7 @@ export const REPORT_PROJECTS = {
     status: "Ready",
     freshness: "Product, price, channel, and promotion data are synchronized",
     sourceStrip: ["Data updated: 2026-05-29"],
-    image: assetUrl("assets/images/project-fourp-tabby.png"),
+    image: demoImage("assets/images/project-fourp-tabby.png"),
     owner: "Business Planning",
     accent: "#9d8f70",
     reports: [
@@ -504,7 +504,7 @@ export const REPORT_PROJECTS = {
     status: "Ready",
     freshness: "Member and transaction data synchronized through yesterday 24:00",
     sourceStrip: ["Data updated: Yesterday 24:00"],
-    image: assetUrl("assets/images/project-customer-tabby.png"),
+    image: demoImage("assets/images/project-customer-tabby.png"),
     owner: "CRM Analytics",
     accent: "#8799a8",
     reports: [
@@ -722,7 +722,7 @@ export const REPORT_PROJECTS = {
     status: "Data delayed",
     freshness: "Conversion backflow has gaps; some dashboards will show fallback blanks",
     sourceStrip: ["Tmall data: 2026-05-28", "JD data: 2026-05-28", "Douyin data: 2026-05-28"],
-    image: assetUrl("assets/images/project-abo-tabby.png"),
+    image: demoImage("assets/images/project-abo-tabby.png"),
     owner: "DC Media",
     accent: "#a67870",
     reports: [
@@ -898,7 +898,7 @@ export const REPORT_PROJECTS = {
     status: "Ready",
     freshness: "Rednote Juguang API updated through 2026-05-29 10:00",
     sourceStrip: ["Data updated: 2026-05-29 10:00"],
-    image: assetUrl("assets/images/project-rednote-tabby.png"),
+    image: demoImage("assets/images/project-rednote-tabby.png"),
     owner: "DG Media",
     accent: "#a66f72",
     reports: [
@@ -1073,7 +1073,7 @@ export const REPORT_PROJECTS = {
     status: "Ready",
     freshness: "OTT/OLV data and campaign map are updated",
     sourceStrip: ["Data updated: 2026-05-28"],
-    image: assetUrl("assets/images/project-ottolv-tabby.png"),
+    image: demoImage("assets/images/project-ottolv-tabby.png"),
     owner: "Media Measurement",
     accent: "#748aa0",
     reports: [

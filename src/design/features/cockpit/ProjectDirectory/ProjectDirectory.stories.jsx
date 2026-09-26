@@ -1,7 +1,7 @@
 import { ProjectDirectory } from "./index.jsx";
 import { ReportRow } from "../ReportRow/index.jsx";
 import { COCKPIT } from "../../../content.js";
-import { pluralize } from "../../../report-logic.js";
+import { pluralize } from "../lib/report-logic.js";
 
 const project = COCKPIT.projects.city;
 

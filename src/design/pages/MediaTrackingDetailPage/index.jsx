@@ -6,7 +6,7 @@ import { FormField } from "../../components/FormField/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Tabs } from "../../components/Tabs/index.jsx";
-import { normalizeOptions } from "../../cx.js";
+import { normalizeOptions } from "../../lib/options.js";
 import { Icon } from "../../icons.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
 import "./MediaTrackingDetailPage.css";

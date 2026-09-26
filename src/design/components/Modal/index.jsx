@@ -37,6 +37,7 @@ export function Modal({ open = false, eyebrow, title, children, className, close
       <div className="mh-modal__scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <div
         className={cx("mh-modal__dialog", className)}
+        data-mh-slot
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId || generatedTitleId}

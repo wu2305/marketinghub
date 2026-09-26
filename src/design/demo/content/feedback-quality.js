@@ -1,5 +1,5 @@
 import { LOGO, NAV, ASSISTANT_SKILL_MENU, MODEL_FLOW, buildAssistantAnswer, buildModelDraft } from "../../content.js";
-import { assetUrl } from "../../asset-url.js";
+import { demoImage } from "../images.js";
 
 /** Source-backed private fixture. Timestamps derive from one injected clock. */
 const SOURCE_RECORDS = [
@@ -182,7 +182,7 @@ export const FEEDBACK_QUALITY = {
   logo: LOGO,
   navigation: NAV,
   hero: {
-    image: assetUrl("assets/images/knowledge-hero.jpg"),
+    image: demoImage("assets/images/knowledge-hero.jpg"),
     eyebrow: "KNOWLEDGE MANAGEMENT",
     title: "Feedback & Quality",
     description: "User feedback records for thumbs-up and thumbs-down interactions.",

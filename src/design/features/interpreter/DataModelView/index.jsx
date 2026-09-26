@@ -139,7 +139,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * status pill, synonyms, related-report links that open the Report Context
  * drawer), and the pannable/zoomable relationship graph whose nodes open the
  * centered table detail dialog.
- * @param {object} props — prepared by `useDataModelDemo`
+ * @param {Record<string, any>} props — prepared by `useDataModelDemo`
  */
 export function DataModelView({
   strings,

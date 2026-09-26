@@ -119,7 +119,7 @@ function PrincipleDescription({ text, expanded, onToggle }) {
  * @param {number} [props.pageSize=10]
  * @param {Array<string>} [props.expanded=[]] ids of expanded descriptions
  * @param {object} [props.strings={}] copy overrides: searchLabel, searchPlaceholder, categoryLabel, allCategoriesLabel, selectedCategoriesLabel, countUnit, emptyMessage, rowsPerPageLabel, pageSizes
- * @param {React.Ref} [props.searchRef] forwarded to the search input ("/" shortcut)
+ * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" shortcut)
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(event: { id: string, checked: boolean }) => void} [props.onToggleCategory]
  * @param {(event: { page: number }) => void} [props.onPage]

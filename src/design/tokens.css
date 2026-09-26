@@ -1,8 +1,8 @@
 @font-face {
   font-family: "BentonModDisplay";
   src:
-    url("../../assets/fonts/BentonModDisp-SemiboldItalic.woff2") format("woff2"),
-    url("../../assets/fonts/BentonModDisp-SemiboldIt.otf") format("opentype");
+    url("./assets/fonts/BentonModDisp-SemiboldItalic.woff2") format("woff2"),
+    url("./assets/fonts/BentonModDisp-SemiboldIt.otf") format("opentype");
   font-style: italic;
   font-weight: 600;
   font-display: swap;
@@ -11,8 +11,8 @@
 @font-face {
   font-family: "DIN 2014";
   src:
-    url("../../assets/fonts/DIN2014-Light.woff2") format("woff2"),
-    url("../../assets/fonts/DPT45.otf") format("opentype");
+    url("./assets/fonts/DIN2014-Light.woff2") format("woff2"),
+    url("./assets/fonts/DPT45.otf") format("opentype");
   font-style: normal;
   font-weight: 300;
   font-display: swap;
@@ -21,8 +21,8 @@
 @font-face {
   font-family: "DIN 2014";
   src:
-    url("../../assets/fonts/DIN2014-Regular.woff2") format("woff2"),
-    url("../../assets/fonts/DPT55.otf") format("opentype");
+    url("./assets/fonts/DIN2014-Regular.woff2") format("woff2"),
+    url("./assets/fonts/DPT55.otf") format("opentype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -30,33 +30,33 @@
 
 @font-face {
   font-family: "DIN 2014";
-  src: url("../../assets/fonts/DIN2014-Bold.woff2") format("woff2");
+  src: url("./assets/fonts/DIN2014-Bold.woff2") format("woff2");
   font-style: normal;
   font-weight: 700;
   font-display: swap;
 }
 
-/* Scoped resets — the design system must not leak element styles into a host
-   page. `:where()` keeps specificity at zero so component rules always win;
-   the selectors cover `mh-` elements themselves plus their descendants. */
-:where([class*="mh-"], [class*="mh-"] *),
-:where([class*="mh-"], [class*="mh-"] *)::before,
-:where([class*="mh-"], [class*="mh-"] *)::after {
-  box-sizing: border-box;
-}
+/* Each mh- element owns its descendants only up to the next caller slot.
+   An mh- component nested in that slot starts a fresh scope, which also ends
+   at its own slot. This holds for arbitrarily nested component/slot pairs. */
+@scope ([class^="mh-"]:not([data-mh-slot]), [class*=" mh-"]:not([data-mh-slot])) to ([data-mh-slot]) {
+  :scope, *, *::before, *::after {
+    box-sizing: border-box;
+  }
 
-:is(button, input, select, textarea):where([class*="mh-"], [class*="mh-"] *) {
-  font: inherit;
-  color: inherit;
-}
+  :is(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+  }
 
-button:where([class*="mh-"], [class*="mh-"] *) {
-  padding: 0;
-}
+  button {
+    padding: 0;
+  }
 
-a:where([class*="mh-"], [class*="mh-"] *) {
-  color: inherit;
-  text-decoration: none;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 :root {

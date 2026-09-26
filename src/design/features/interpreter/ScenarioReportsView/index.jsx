@@ -13,7 +13,7 @@ import "./ScenarioReportsView.css";
  * + create link, a three-column card grid with status pill + gated icon
  * actions, and the shared `#knowledgeDetail` slide-in drawer (label + title +
  * availability/workflow pills + sectioned body + actions footer).
- * @param {object} props — prepared by `useScenarioDemo`
+ * @param {Record<string, any>} props — prepared by `useScenarioDemo`
  */
 export function ScenarioReportsView({
   strings,

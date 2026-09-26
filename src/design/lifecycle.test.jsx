@@ -9,8 +9,8 @@ import {
   Modal,
   ModelFlowDialog,
   ReportCopilot,
-  demoContent,
 } from "./index.js";
+import { demoContent } from "./demo/index.js";
 import { DataModelView } from "./features/interpreter/DataModelView/index.jsx";
 import { useDataModelDemo } from "./demo/data-model-demo.js";
 import { useOverlayLayer } from "./lib/overlay.js";

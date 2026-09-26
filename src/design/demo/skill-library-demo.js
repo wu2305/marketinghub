@@ -16,7 +16,9 @@ export function filterSkills(records, { search = "", status = "all" } = {}) {
     (!needle || [skill.name, skill.purpose, skill.owner].some((value) => value.toLowerCase().includes(needle))));
 }
 
-/** Private deterministic P15 flow, shared by page stories and the independent host. */
+/** Private deterministic P15 flow, shared by page stories and the independent host.
+ * @param {Record<string, any>} options
+ */
 export function useSkillLibraryDemo({ content = SKILL_LIBRARY, records = SKILL_LIBRARY.records, shell = SKILL_LIBRARY_SHELL, initial = EMPTY_INITIAL, hrefFor, onNavigate, onChange, onSelect, onOpen, onAdvance, onClick, onSubmit, onCancel } = {}) {
   const [skills, setSkills] = React.useState(() => records.map((skill) => ({ ...skill })));
   const [search, setSearch] = React.useState(initial.search || "");

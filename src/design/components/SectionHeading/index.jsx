@@ -22,7 +22,7 @@ export function SectionHeading({ eyebrow, title, description, as = "h2", variant
   const Title = as;
   if (variant === "view") {
     return (
-      <header className="mh-heading mh-heading--view">
+      <header className="mh-heading mh-heading--view" data-mh-slot>
         <div>
           {eyebrow ? <p className="mh-heading__kicker">{eyebrow}</p> : null}
           <Title>{title}</Title>
@@ -33,7 +33,7 @@ export function SectionHeading({ eyebrow, title, description, as = "h2", variant
     );
   }
   return (
-    <header className={cx("mh-heading", !description && !children && "mh-heading--stack")}>
+    <header className={cx("mh-heading", !description && !children && "mh-heading--stack")} data-mh-slot>
       <div>
         {eyebrow ? <p className="mh-heading__kicker">{eyebrow}</p> : null}
         <Title>{title}</Title>

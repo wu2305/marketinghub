@@ -15,8 +15,7 @@ import { ReportCopilot } from "../../features/cockpit/ReportCopilot/index.jsx";
 import { ReportDetailsDrawer } from "../../features/cockpit/ReportDetailsDrawer/index.jsx";
 import { ReportRow } from "../../features/cockpit/ReportRow/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
-import { pluralize, projectSearchText, reportSearchText, resolveReportAssets, resolveReportContext } from "../../report-logic.js";
-import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextHref } from "../../report-routes.js";
+import { pluralize, projectSearchText, reportSearchText, resolveReportAssets } from "../../features/cockpit/lib/report-logic.js";
 import "./MarketingCockpitPage.css";
 
 
@@ -41,10 +40,10 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
  * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
- * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
- * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
- * @param {(id: string, report: object) => string} [props.contextHref] defaults to the resolved report context's knowledge link
- * @param {string} [props.backHref=REPORT_CATALOG_HREF]
+ * @param {(id: string) => string} [props.projectHref] project link resolver supplied by the host or demo
+ * @param {(id: string, index: number) => string} [props.liveHref] report link resolver supplied by the host or demo
+ * @param {(id: string, report: object) => string} [props.contextHref] related knowledge link resolver
+ * @param {string} [props.backHref] report catalog link
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
@@ -80,10 +79,10 @@ export function MarketingCockpitPage({
   detailsSections = [],
   knowledge = [],
   cityInvest,
-  projectHref = projectCatalogHref,
-  liveHref = liveReportHref,
-  contextHref = (projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report)),
-  backHref = REPORT_CATALOG_HREF,
+  projectHref = () => "#",
+  liveHref = () => "#",
+  contextHref = () => "#",
+  backHref = "#",
   onNavigate,
   onQueryChange,
   onOpenProject,

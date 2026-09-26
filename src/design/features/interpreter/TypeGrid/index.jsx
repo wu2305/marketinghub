@@ -29,6 +29,7 @@ export function TypeGrid({ items = [], activeId, onSelect }) {
           action={item.action}
           manageable={item.manageable}
           art={item.art ?? index}
+          image={item.image}
           active={item.id === activeId}
           onSelect={() => onSelect?.({ id: item.id, title: item.title })}
         />

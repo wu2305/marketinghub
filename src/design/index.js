@@ -1,10 +1,11 @@
+import "./tokens.css";
+
 /**
  * Public entry point for the Marketing Hub design system.
  * Import components and option constants from here — internal module layout
  * (atoms/molecules/organisms/pages) is not part of the public API.
  *
- * `demoContent` holds the static copy and sample records used by the stories;
- * hosts should pass their own data via props.
+ * Deterministic fixtures and demo hooks are available only from `./demo`.
  */
 export {
   Button,
@@ -224,54 +225,6 @@ export { MemoryWorkspace } from "./features/personal-memory/MemoryWorkspace/inde
 export { ScenarioDetailPage, scenarioDetailTabs } from "./pages/ScenarioDetailPage/index.jsx";
 export { ScenarioDetailWorkspace } from "./features/scenario-detail/ScenarioDetailWorkspace/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
-export { assetUrl } from "./asset-url.js";
-export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
-export * as demoContent from "./content.js";
-/* Pure report/knowledge logic — all inputs explicit. */
-export {
-  pluralize,
-  resolveReportAssets,
-  projectSearchText,
-  reportSearchText,
-  resolveReportContext,
-  storeOptionsFor,
-  storeScopeSuffix,
-  totalLabel,
-  selectionLabel,
-  pickTicks,
-  fmtAfter,
-  isPilotCitySalesQuestion,
-  buildReportModelDescription,
-  buildReportModelLogic,
-  buildReportModelDraft,
-} from "./report-logic.js";
-export {
-  projectCatalogHref,
-  liveReportHref,
-  reportContextHref,
-  copilotSourceHref,
-  REPORT_CATALOG_HREF,
-  KNOWLEDGE_HREF,
-} from "./report-routes.js";
-/* Deterministic demo state + simulators for hosts and tests. */
-export { useCockpitDemo } from "./demo/cockpit-demo.js";
-export { useHomeDemo } from "./demo/home-demo.js";
-export { useBusinessTermDemo } from "./demo/business-term-demo.js";
-export { useDataModelDemo, dataModelFieldFormat } from "./demo/data-model-demo.js";
-export { DATA_MODEL_DOMAINS } from "./demo/data-model-domains.js";
-export { useFieldLibraryDemo, normalizeFieldRecord } from "./demo/field-library-demo.js";
-export { useScenarioDemo, normalizeScenarioRecord } from "./demo/scenario-demo.js";
-export { useInterpreterDemo } from "./demo/interpreter-demo.js";
-export {
-  generateCityInvestScenario,
-  cityInvestScenarioSource,
-  copilotProfile,
-  copilotSources,
-  resolveCopilotAnswer,
-  buildCopilotChatEntry,
-  copilotSkillItems,
-} from "./demo/report-demo.js";
-
 export { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./pages/MetricDictionaryPage/index.jsx";
 export { ScenarioLibraryPage, skillLibraryModes } from "./pages/ScenarioLibraryPage/index.jsx";
 export { SkillLibrary, skillStatuses } from "./features/scenario-library/SkillLibrary/index.jsx";

@@ -22,6 +22,10 @@ const emptyDraft = () => ({ domain: "", name: "", unit: "", description: "", syn
  * @param {object} options.content page copy and initial metrics
  * @param {object} [options.initial] named story state
  * @param {Function} [options.onNavigate]
+ * @param {Function} [options.hrefFor]
+ * @param {object} [options.modelFlow]
+ * @param {Function} [options.modelDraftFor]
+ * @param {Function} [options.assistantAnswerFor]
  */
 export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metricDictionaryHrefFor, onNavigate, modelFlow, modelDraftFor, assistantAnswerFor } = {}) {
   const [metrics, setMetrics] = React.useState(() => [...content.metrics, ...(initial.extraMetrics || [])].map((metric) => ({ ...metric })));

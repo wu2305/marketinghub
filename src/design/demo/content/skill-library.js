@@ -1,9 +1,10 @@
+import { demoImage } from "../images.js";
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
 import { SKILL_RECORDS } from "./skill-records.js";
 
 /** Private P15 fixture. Hero summary intentionally retains the source's six/1,353/89% copy. */
 export const SKILL_LIBRARY = {
-  hero: { image: "assets/images/knowledge-hero.jpg", eyebrow: "KNOWLEDGE MANAGEMENT", title: "Skill Library", description: "A modular set of AI skills to decode marketing performance outputs into actionable business insights.", stats: [
+  hero: { image: demoImage("assets/images/knowledge-hero.jpg"), eyebrow: "KNOWLEDGE MANAGEMENT", title: "Skill Library", description: "A modular set of AI skills to decode marketing performance outputs into actionable business insights.", stats: [
     { label: "ACTIVE SCENARIOS", value: "6", caption: "published scenarios ready for use" },
     { label: "TOTAL CALLS", value: "1,353", caption: "invocations in the last 30 days" },
     { label: "AVG LIKE RATE", value: "89%", caption: "user satisfaction across scenarios" },
