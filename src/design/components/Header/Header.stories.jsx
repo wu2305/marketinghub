@@ -13,10 +13,12 @@ export default {
       },
     },
   },
-  args: { current: "home", highlightCurrent: false, density: "compact", position: "fixed" },
+  args: { current: "home", highlightCurrent: false, density: "compact", position: "fixed", navigationAriaLabel: "Marketing Portal navigation", logoAriaLabel: "Tapestry Marketing Portal home" },
   argTypes: {
     logo: prop("{ src: string, alt?: string, href?: string }", { description: "Brand lockup.", control: false }),
     items: prop("Array<{ id: string, label: string, href: string }>", { defaultValue: [], description: "Nav items.", control: false }),
+    navigationAriaLabel: prop("string", { defaultValue: "Marketing Portal navigation", description: "Accessible name for the navigation region.", control: "text" }),
+    logoAriaLabel: prop("string", { defaultValue: "Tapestry Marketing Portal home", description: "Accessible name for the logo link.", control: "text" }),
     current: prop("string", {
       description: 'id of the active nav item; always carries aria-current="page".',
       control: "select",

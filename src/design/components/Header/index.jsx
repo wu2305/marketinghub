@@ -15,6 +15,8 @@ function isPlainPrimaryLink(event) {
  * @param {object} props
  * @param {{ src: string, alt?: string, href?: string }} [props.logo]
  * @param {Array<{ id: string, label: string, href: string }>} [props.items=[]]
+ * @param {string} [props.navigationAriaLabel="Marketing Portal navigation"] Accessible name for the navigation region.
+ * @param {string} [props.logoAriaLabel="Tapestry Marketing Portal home"] Accessible name for the logo link.
  * @param {string} [props.current] id of the active nav item; always carries aria-current="page"
  * @param {boolean} [props.highlightCurrent=true] whether the current nav item has a visible underline
  * @param {typeof headerDensities[number]} [props.density="compact"] compact uses 48px links; comfortable uses 56px links
@@ -24,6 +26,8 @@ function isPlainPrimaryLink(event) {
 export function Header({
   logo = { src: assetUrl("assets/images/tapestry-logo.png"), alt: "Tapestry" },
   items = [],
+  navigationAriaLabel = "Marketing Portal navigation",
+  logoAriaLabel = "Tapestry Marketing Portal home",
   current,
   highlightCurrent = true,
   density = "compact",
@@ -32,11 +36,11 @@ export function Header({
 }) {
   return (
     <header className={cx("mh-header", `mh-header--${density}`, `mh-header--${position}`)}>
-      <nav className="mh-header__bar" aria-label="Marketing Portal navigation">
+      <nav className="mh-header__bar" aria-label={navigationAriaLabel}>
         <a
           className="mh-header__logo"
           href={logo.href || "/index.html"}
-          aria-label="Tapestry Marketing Portal home"
+          aria-label={logoAriaLabel}
           onClick={(event) => isPlainPrimaryLink(event) && onNavigate?.({ id: "home", href: logo.href || "/index.html", label: "Home" })}
         >
           <img src={logo.src} alt={logo.alt || "Tapestry"} />
