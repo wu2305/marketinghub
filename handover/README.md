@@ -64,6 +64,8 @@ npm test               # vitest 行为测试
 | M7 | S5 页面文案与公开接口（P01–P07文案，P08–P17默认参数文档） | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | P02搜索/元数据/空态、P03筛选名称、P04模板/提交、P05区块名称、P06账户筛选/任务弹窗均由页面props注入；P04故事/宿主保留共享hook与具名{values}提交；P01 scope初值移出页面，P07原有copy保持；P08–P17公开JSDoc可选/默认标记按实际解构校准，P05/P06归档待合并后接线；证据见§5 |
 | M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
 | M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
+| DI | 设计意图提取 Phase 1：基础层、领域模型、奥卡姆基线（仅文档） | Phase 1 完成（用户已批准 D1–D5、A1–A5）；Phase 2 未开始 | 分支 `design-intent/phase1`；`handover/design-intent/{foundations,domain-model,occam-baseline}.md`；AGENTS §1/§3.3/§3.5/§4/§5 按 2026-09-27 用户决定改写 |
+| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 未开始（执行指南已就绪） | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -386,6 +388,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+- 2026-09-27 设计意图 Phase 1 决定：foundations D1–D5 与 domain A1–A5 全部按推荐方案由用户批准（见两文件“Decisions”节）。Phase 2 按 `handover/design-intent/phase2-guide.md` 执行。§4 配对视觉流程与 visual-check 仍按逐像素参照运行，改为“状态可达+内容存在”的覆盖检查属 Phase 2 第 6 项。
+
 - 2026-09-26 积压集成（integrate/drain 85a5066）后仍存：①21个分支合入前均未做独立对抗审核，§2.1对应行标“已集成；独立对抗审核与人工视觉待办”。②52个导出枚举尚缺 m7/enum-types 的 readonly `@type` 声明（该分支早于这些枚举）。③`ConfirmDialog.css` 引用未定义的 `--mh-bt-section-copy`（main 已存在），文字色回退为继承。④仓库根 `node_modules` 与锁文件漂移（typescript 7.0.2 vs 锁定 5.9.3），所有以符号链接共享它的 worktree 会使 `build:lib` 失败；应 `npm ci`。⑤Modal 设计字体改到自身 eyebrow/标题/关闭按钮，对话框、标题行扩展、正文与页脚为插槽，调用方内容不再继承 DIN；ConfirmDialog、UploadHistory、Field Library 抽屉/编辑框在自身类上声明字体。
 
 - P15/P16共享区块候选：预览、五段结构和治理信息具有真实共同用途，M7在保留抽屉/整页顺序布局的前提下评估最小共享；不因细微图标尺寸/颜色差复制组件，也不引入通用字段渲染器。证据`/tmp/mh-scenario-shared-boundary.md`。共享Hero的固定高度与页面断点规则也需集中收敛；P16先修900/390统计与说明裁切，不把原页不可读效果作为组件契约。
@@ -483,6 +487,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-27 | 用户批准 Phase 1 全部决定（D1–D5、A1–A5）。新增 Phase 2 执行材料：`phase2-guide.md`（9 个有序工作包、MUST/MUST NOT、完整门禁命令、PR 清单与汇报模板、停止并提问条件、审核清单、启动提示）、`patterns/library.md`（12 个视图的统一库模式：结构、行为规则 B1–B16、必需状态、逐视图保留/删除表、视觉规则）、`dispositions.md`（处置规则与 17 条已定种子，含 Skill Delete/Auto-fill/Run Preview/Save Draft 按意图实现）。foundations 字号/字重/页头 token 更名为 `--mh-font-size-*`/`--mh-font-weight-*`/`--mh-layout-header-height`，避免与文字色族及保留组件前缀冲突。AGENTS §4/§5 对齐“像而不必一样”。 | Claude |
+| 2026-09-27 | 设计意图提取 Phase 1（仅文档，`src/design` 未改）：按用户决定“原始 Demo 是意图证据而非规格；界面要像而不必一样；奥卡姆剃刀按概念计量”改写 AGENTS §1、§3.3、§3.5。新增 `handover/design-intent/`：foundations.md（50 个原始 CSS 的 1,478 种颜色按角色聚为约 22 类，原作者四次声明的同一主题为锚；提出约 65 个基础 token 取代 445 个，附全部现有 token 的首轮映射；DIN 仅有 300/400/700 字体文件，21 种字重实际只渲染 3 种）、domain-model.md（可用性与流程两条独立轴、创建者专属操作、先下线再改、草稿私有、审批风险确认等规则及源码行号；3 处缺陷、5 个待决）、occam-baseline.md（概念计数现状与目标）。探针脚本在会话 scratchpad，不入库。 | Claude |
 | 2026-09-26 | S5 页面文案/接口候选：P01–P07核查后将实际写死的页面文案与aria名称移到既有`content.js`默认数据和页面props，移除P04/P05/P06任务文案备用英文；P02/P03/P04/P05/P06故事与P02宿主接入，更新公开props/回调JSDoc。P08–P17逐页对照函数解构，将38个实际默认参数的可选/default JSDoc标记校准，必须的content保持必填；用Pages文档表同一解析器核10页无漏项。P04–P06旧故事包装器现完整转发打开/关闭/重置/任务/助手及模型流具名事件，合入归档hook时保留。新增5条替换文案渲染验证，旧英文无泄漏；lint0，26文件229测试，Storybook 363 stories/67 docs；P02项目、P04模板弹窗、P06任务操作初轮定向机器配对各1/1，肉眼确认默认文案仍与原页一致，既存几何差异保持人工pending。修回调后P04弹窗、P05助手、P06任务各1/1再通过（`/tmp/mh-page-copy-r2-*`），lint0、定向33测试通过，Storybook仍363/67。初轮证据`/tmp/mh-page-copy-p02-cockpit-project`、`/tmp/mh-page-copy-p04-data-upload-import`、`/tmp/mh-page-copy-p06-campaign-task-dialog`。待最新main rebase/完整门禁。 | Codex S5 |
 | 2026-09-22 | PR #6 合入：语义组件设计系统替换 DOM 复刻方案 | Cloud Agent |
 | 2026-09-22 | 深度审核：实跑构建与 1440px 对照，确认 2.4 节缺口；建立 `AGENTS.md` 与本状态文件 | Cloud Agent |
