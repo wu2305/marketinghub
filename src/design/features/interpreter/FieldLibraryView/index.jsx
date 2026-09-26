@@ -1,227 +1,82 @@
 import "../../../tokens.css";
 import React from "react";
-import { CheckboxFilter } from "../../../components/CheckboxFilter/index.jsx";
+import { Button } from "../../../components/Button/index.jsx";
+import { ChipList } from "../../../components/ChipList/index.jsx";
 import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
+import { ItemActions } from "../../../components/ItemActions/index.jsx";
+import { LibraryList } from "../../../components/LibraryList/index.jsx";
+import { LibraryToolbar } from "../../../components/LibraryToolbar/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Pagination } from "../../../components/Pagination/index.jsx";
-import { SearchField } from "../../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
+import { Toast } from "../../../components/Toast/index.jsx";
 import { cx } from "../../../cx.js";
 import { Icon, knowledgeActionIconPaths } from "../../../icons.jsx";
-import { KnowledgeActions } from "../KnowledgeActions/index.jsx";
 import "./FieldLibraryView.css";
 
 
 /** @type {readonly ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"]} */
 export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
 
-function ChipTags({ values = [], domain = false }) {
-  if (!values.length) return <span className="mh-flview__dash">—</span>;
-  return (
-    <div className="mh-flview__tags">
-      {values.map((value) => (
-        <span key={value} className={cx("mh-flview__chip", domain && "mh-flview__domain")}>
-          {value}
-        </span>
-      ))}
-    </div>
-  );
-}
+const availabilityStatus = (enabled, labels = {}) =>
+  enabled ? { status: "enabled", label: labels.enabled || "Enabled" } : { status: "disabled", label: labels.disabled || "Disabled" };
 
-const cardKeyDown = (record, onOpen) => (event) => {
-  if (event.target !== event.currentTarget) return;
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    onOpen?.({ id: record.id });
+/* Card content per type (field-library.js reportContextCard / metricCard /
+   analysisCard / emailCard) mapped onto LibraryItem (patterns/library.md §5). */
+function toItem(type, record, strings) {
+  const labels = strings.cardLabels || {};
+  const states = strings.statusLabels || {};
+  if (type === "Report Context") {
+    return {
+      id: record.id,
+      title: record.report_name,
+      description: record.report_description,
+      status: availabilityStatus(record.ai_interpretation_enabled, states),
+      meta: [{ label: labels.project || "Project", value: (record.projectLabels || []).join(", ") || "—" }],
+    };
   }
-};
-const cardClick = (record, onOpen) => (event) => {
-  if (event.target.closest("button, a, input, select, textarea")) return;
-  onOpen?.({ id: record.id });
-};
-
-/* reportContextCard() — title + AI-Interpreter status pill + description +
-   Project meta row. No action buttons (actions() returns "" for this type). */
-function ReportContextCard({ record, onOpen, strings }) {
-  const labels = strings.cardLabels || {};
-  return (
-    <article
-      className="mh-flview__card mh-flview__report-card"
-      data-id={record.id}
-      tabIndex={0}
-      aria-label={`View ${record.report_name}`}
-      onClick={cardClick(record, onOpen)}
-      onKeyDown={cardKeyDown(record, onOpen)}
-    >
-      <div className="mh-flview__report-title-row">
-        <h3 title={record.report_name}>{record.report_name}</h3>
-        <StatusBadge variant="knowledge" status={record.ai_interpretation_enabled ? "Enabled" : "Disabled"} />
-      </div>
-      <p title={record.report_description}>{record.report_description}</p>
-      <dl className="mh-flview__report-meta">
-        <div>
-          <dt>{labels.project || "Project"}</dt>
-          <dd>{(record.projectLabels || []).join(", ") || "—"}</dd>
-        </div>
-      </dl>
-    </article>
-  );
-}
-
-/* metricCard() — title + status pill + definition + Unit/Type/Data model
-   meta + a single visible synonym chip plus the "…" overflow marker. */
-function MetricCard({ record, onOpen, strings }) {
-  const labels = strings.cardLabels || {};
-  const aliases = record.metric_aliases || [];
-  const first = aliases[0] || "";
-  const showFirst = first && first.length <= 24;
-  const showMore = aliases.length > 1 || (first && first.length > 24);
-  return (
-    <article
-      className={cx("mh-flview__card mh-flview__metric-card", record.status === "Disable" ? "is-disabled" : "is-enabled")}
-      data-id={record.id}
-      tabIndex={0}
-      aria-label={`View ${record.metric_name}`}
-      onClick={cardClick(record, onOpen)}
-      onKeyDown={cardKeyDown(record, onOpen)}
-    >
-      <header className="mh-flview__metric-head">
-        <h3 title={record.metric_name}>{record.metric_name}</h3>
-        <StatusBadge variant="knowledge" status={record.status === "Disable" ? "Disabled" : "Enabled"} />
-      </header>
-      <p className="mh-flview__metric-definition" title={record.business_definition}>
-        {record.business_definition || "—"}
-      </p>
-      <dl className="mh-flview__metric-meta">
-        <div>
-          <dt>{labels.unit || "Unit"}</dt>
-          <dd>{record.unit || "—"}</dd>
-        </div>
-        <div>
-          <dt>{labels.type || "Type"}</dt>
-          <dd>{record.metric_type || "Base"}</dd>
-        </div>
-        <div className="mh-flview__metric-data-model">
-          <dt>{labels.dataModel || "Data model"}</dt>
-          <dd>{(record.business_domain || []).join(", ") || "General"}</dd>
-        </div>
-      </dl>
-      {showFirst || showMore ? (
-        <div className="mh-flview__metric-synonyms">
-          <span>{labels.synonyms || "Synonyms"}</span>
-          <div>
-            {showFirst ? <span className="mh-flview__synonym">{first}</span> : null}
-            {showMore ? (
-              <span className="mh-flview__synonym mh-flview__synonym--more" aria-label={labels.moreSynonyms || "More synonyms"}>
-                …
-              </span>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-    </article>
-  );
-}
-
-/* analysisCard() — title + status pill + description + Data Model/Referenced
-   Metrics meta + Creator/action footer. The original also renders a hidden
-   fm-analysis-domains chip row (display:none under the overview cascade) —
-   the domains stay visible in the "Data Model" meta row instead. */
-function AnalysisCard({ record, onOpen, onAction, strings }) {
-  const labels = strings.cardLabels || {};
-  const domains = (record.business_domain || []).length ? record.business_domain : ["General"];
-  const referenced = record.referenced_metrics || [];
-  return (
-    <article
-      className={cx("mh-flview__card mh-flview__analysis-card", record.status === "Disable" ? "is-disabled" : "is-enabled")}
-      data-id={record.id}
-      tabIndex={0}
-      aria-label={`View ${record.analysis_name}`}
-      onClick={cardClick(record, onOpen)}
-      onKeyDown={cardKeyDown(record, onOpen)}
-    >
-      <header className="mh-flview__analysis-head">
-        <div className="mh-flview__analysis-title">
-          <h3 title={record.analysis_name}>{record.analysis_name}</h3>
-        </div>
-        <StatusBadge variant="knowledge" status={record.status === "Disable" ? "Disabled" : "Enabled"} />
-      </header>
-      <p className="mh-flview__analysis-description" title={record.applicable_scenarios || record.trigger_when || record.summary}>
-        {record.applicable_scenarios || record.trigger_when || record.summary || "—"}
-      </p>
-      <div className="mh-flview__analysis-meta">
-        <div>
-          <span>{labels.dataModelTitle || "Data Model"}</span>
-          <strong title={domains.join(", ")}>{domains.join(", ")}</strong>
-        </div>
-        <div className="mh-flview__analysis-referenced">
-          <span>{labels.referencedMetrics || "Referenced Metrics"}</span>
-          {referenced.length ? (
-            <div className="mh-flview__analysis-ref-tags">
-              <span className="mh-flview__analysis-ref-chip">{referenced[0]}</span>
-              {referenced.length > 1 ? (
-                <span className="mh-flview__analysis-ref-chip mh-flview__analysis-ref-more" aria-label={labels.moreReferenced || "More referenced metrics"}>
-                  …
-                </span>
-              ) : null}
-            </div>
-          ) : (
-            <strong>—</strong>
-          )}
-        </div>
-      </div>
-      <footer className="mh-flview__analysis-footer">
-        <div className="mh-flview__analysis-creator">
-          <span>{labels.creator || "Creator"}</span>
-          <strong title={record.created_by}>{record.created_by || "Current User"}</strong>
-        </div>
-        <div className="mh-flview__analysis-actions">
-          <KnowledgeActions variant="field-library" actions={record.actions} record={record} onAction={onAction} />
-        </div>
-      </footer>
-    </article>
-  );
-}
-
-/* emailCard() — title + Send time/Recipients/Data Model meta. Disabled
-   reports render the same card (the is-disabled class carries no extra
-   cascade, matching the original). */
-function EmailCard({ record, onOpen, strings }) {
-  const labels = strings.cardLabels || {};
+  if (type === "Metric Dictionary") {
+    return {
+      id: record.id,
+      title: record.metric_name,
+      description: record.business_definition || "—",
+      status: availabilityStatus(record.status !== "Disable", states),
+      meta: [
+        { label: labels.unit || "Unit", value: record.unit || "—" },
+        { label: labels.type || "Type", value: record.metric_type || "Base" },
+        { label: labels.dataModel || "Data model", value: (record.business_domain || []).join(", ") || "General" },
+      ],
+      children: <ChipList label={labels.synonyms || "Synonyms"} values={record.metric_aliases || []} moreLabel={labels.moreSynonyms || "More synonyms"} />,
+    };
+  }
+  if (type === "Analytical Model") {
+    const domains = (record.business_domain || []).length ? record.business_domain : ["General"];
+    return {
+      id: record.id,
+      title: record.analysis_name,
+      draft: record.stage === "Draft",
+      draftLabel: labels.draft || "Draft",
+      description: record.applicable_scenarios || record.trigger_when || record.summary || "—",
+      status: availabilityStatus(record.status !== "Disable", states),
+      meta: [
+        { label: labels.dataModelTitle || "Data Model", value: domains.join(", ") },
+        { label: labels.creator || "Creator", value: record.created_by || "—" },
+      ],
+      children: <ChipList label={labels.referencedMetrics || "Referenced Metrics"} values={record.referenced_metrics || []} moreLabel={labels.moreReferenced || "More referenced metrics"} />,
+      actions: { actions: record.actions, labels: strings.actions, messages: strings.tooltips },
+    };
+  }
   const sendTime = String(record.trigger_type || record.schedule || record.sent_at || "Not configured").replace(/^Scheduled\s*·\s*/, "");
-  const recipients = record.recipients || [];
-  return (
-    <article
-      className={cx("mh-flview__card mh-flview__email-card", record.status === "Disable" ? "is-disabled" : "is-enabled")}
-      data-id={record.id}
-      tabIndex={0}
-      aria-label={`View ${record.title || record.email_subject}`}
-      onClick={cardClick(record, onOpen)}
-      onKeyDown={cardKeyDown(record, onOpen)}
-    >
-      <header className="mh-flview__email-head">
-        <div className="mh-flview__email-titleline">
-          <h3 title={record.title || record.email_subject}>{record.title || record.email_subject}</h3>
-        </div>
-      </header>
-      <div className="mh-flview__email-meta">
-        <div>
-          <span>{labels.sendTime || "Send time"}</span>
-          <strong title={sendTime}>{sendTime}</strong>
-        </div>
-        <div className="mh-flview__email-recipients">
-          <span>{labels.recipients || "Recipients"}</span>
-          <div className="mh-flview__email-recipient-tags">
-            {recipients.length ? recipients.map((name) => <span key={name}>{name}</span>) : <em>—</em>}
-          </div>
-        </div>
-        <div>
-          <span>{labels.dataModelTitle || "Data Model"}</span>
-          <strong title={record.data_model || "All models"}>{record.data_model || "All models"}</strong>
-        </div>
-      </div>
-    </article>
-  );
+  return {
+    id: record.id,
+    title: record.title || record.email_subject,
+    status: availabilityStatus(record.status !== "Disable", states),
+    meta: [
+      { label: labels.sendTime || "Send time", value: sendTime },
+      { label: labels.dataModelTitle || "Data Model", value: record.data_model || "All models" },
+    ],
+    children: <ChipList label={labels.recipients || "Recipients"} values={record.recipients || []} moreLabel={labels.moreRecipients || "More recipients"} />,
+  };
 }
 
 /* Drawer detail bodies — field-library.js open() per type. MD/AM/ER use the
@@ -268,7 +123,7 @@ function DetailBody({ type, record, strings, onAction }) {
           <div className="mh-flview__rc-meta">
             <div>
               <span>{drawer.project || "Project"}</span>
-              <ChipTags values={record.projectLabels || []} domain />
+              <ChipList values={record.projectLabels || []} tone="success" max={Infinity} />
             </div>
             <div>
               <span>{drawer.aiInterpreterStatus || "AI Interpreter Status"}</span>
@@ -306,9 +161,9 @@ function DetailBody({ type, record, strings, onAction }) {
       {(sections[type] || []).map(([key, label, format]) => (
         <Section key={key} title={label}>
           {format === "tags" ? (
-            <ChipTags values={record[key] || []} />
+            <ChipList values={record[key] || []} max={Infinity} />
           ) : format === "domain" ? (
-            <ChipTags values={record[key] || []} domain />
+            <ChipList values={record[key] || []} tone="success" max={Infinity} />
           ) : key === "output_requirements" ? (
             <SectionParagraph text={record.output_requirements || (record.analysis_steps || []).join("\n")} />
           ) : key === "applicable_scenarios" ? (
@@ -339,14 +194,13 @@ function DetailBody({ type, record, strings, onAction }) {
 }
 
 /**
- * Shared field-mapping library view (field-library.js `#fmLibrary`) serving
- * `?type=Report Context | Metric Dictionary | Analytical Model | Email
- * Reports` on the AI Interpreter page — per-type checkbox filters + search +
- * compact pagination + a 3-column card grid + the detail drawer. The four
- * types share the toolbar/drawer chrome but keep their own card composition
- * and drawer sections, matching the original's per-type renderers.
- * Presentational: useFieldLibraryDemo owns normalization, filtering,
- * pagination and every dialog/action rule.
+ * Field-mapping libraries (field-library.js) for `?type=Report Context |
+ * Metric Dictionary | Analytical Model | Email Reports` on the governed-library
+ * pattern (patterns/library.md): LibraryToolbar, LibraryList cards, compact
+ * pagination, the detail drawer and a success Toast. What each type keeps
+ * (§5): its card fields and chip row (`toItem`), its drawer sections, and for
+ * Report Context the description editor. Presentational: useFieldLibraryDemo
+ * owns normalization, filtering, pagination and every dialog/action rule.
  * @param {object} props
  * @param {typeof fieldLibraryTypes[number]} props.type active knowledge type
  * @param {Array<object>} [props.records=[]] filtered + paged normalized records
@@ -365,7 +219,7 @@ function DetailBody({ type, record, strings, onAction }) {
  *   aiInterpreterStatus, aiSummary, scenarioReportings, noScenarios,
  *   reportDataScope, noScope, previewUnavailable, openDashboard, close,
  *   states {open, close}, editDialog, sections, metaLabels}, dialogs
- * @param {string} [props.countUnit="records"] plural unit for the hidden count line
+ * @param {string} [props.countUnit="records"] plural unit in the toolbar count (`strings.countLabel`, default "Showing {shown} of {total} {unit}")
  * @param {string} [props.createHref] "Add Analytical Model" link (AM only)
  * @param {string} [props.createLabel]
  * @param {string} [props.dashboardHref] RC drawer "Open Dashboard" target
@@ -377,13 +231,15 @@ function DetailBody({ type, record, strings, onAction }) {
  * @param {object|null} [props.descriptionEdit] RC description dialog state —
  *   { id, value, original, eyebrow, title, fieldLabel, cancelLabel,
  *   confirmLabel, closeLabel }
+ * @param {string} [props.toast=""] success message after disable/delete; empty = hidden
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(event: { id: string, value: string, checked: boolean }) => void} [props.onFilterToggle]
+ * @param {(event: { reason: string }) => void} [props.onClearFilters] from the no-results state
  * @param {(event: { page: number }) => void} [props.onPage]
  * @param {(event: { pageSize: number }) => void} [props.onPageSize]
- * @param {(event: { id: string }) => void} [props.onOpen] card click / Enter / Space
- * @param {(event: { action: string, id: string }) => void} [props.onAction]
- *   AM icon buttons + the RC drawer's edit-description pencil
+ * @param {(event: { id: string }) => void} [props.onOpen] title button or card click
+ * @param {(event: { action: string, id: string, blocked?: boolean, reason?: string|null }) => void} [props.onAction]
+ *   Analytical Model actions (governed, pattern B6-B7) + the RC drawer's edit-description pencil
  * @param {(event: { reason: string }) => void} [props.onCloseDetail]
  * @param {(event: { confirmed: true }) => void} [props.onDialogConfirm]
  * @param {(event: { reason: string }) => void} [props.onDialogCancel]
@@ -410,8 +266,10 @@ export function FieldLibraryView({
   detail = null,
   dialog = null,
   descriptionEdit = null,
+  toast = "",
   onQueryChange,
   onFilterToggle,
+  onClearFilters,
   onPage,
   onPageSize,
   onOpen,
@@ -429,58 +287,36 @@ export function FieldLibraryView({
     searchPlaceholder = "Search knowledge...",
     selectedLabel = "{labels}",
     emptyMessage = "No knowledge matches your filters.",
+    clearFiltersLabel = "Clear filters",
+    countLabel = "Showing {shown} of {total} {unit}",
     units = ["records", "records"],
     rowsPerPageLabel = "Rows per page",
     previousLabel = "Previous",
     nextLabel = "Next",
   } = strings;
-  const Card =
-    type === "Report Context"
-      ? ReportContextCard
-      : type === "Metric Dictionary"
-        ? MetricCard
-        : type === "Analytical Model"
-          ? AnalysisCard
-          : EmailCard;
+  const count = countLabel.replace("{shown}", totals.shown).replace("{total}", totals.total).replace("{unit}", countUnit);
   return (
     <section className="mh-flview" data-fl-type={type} aria-label={`${type} library`}>
-      {/* unified-type-toolbar.css order: the search pill is DOM-last but
-          visually first (order:-1); the create link hugs the filters. */}
-      <div className="mh-flview__tools">
-        {filters.map((filter) => (
-          <CheckboxFilter
-            key={filter.id}
-            label={filter.label}
-            allLabel={filter.allLabel}
-            selectedLabel={filter.selectedLabel || selectedLabel}
-            options={filter.options}
-            selected={filter.selected}
-            onToggle={(event) => onFilterToggle?.({ id: filter.id, value: event.id, checked: event.checked })}
-          />
-        ))}
-        <div className="mh-flview__search">
-          <SearchField label={searchLabel} value={query} placeholder={searchPlaceholder} variant="plain" inputRef={searchRef} onChange={onQueryChange} />
-        </div>
-        {createLabel ? (
-          <a className="mh-flview__create" href={createHref} target="_blank" rel="noopener" onClick={() => onCreate?.({ href: createHref })}>
-            <span aria-hidden="true">＋</span>
-            {createLabel}
-          </a>
-        ) : null}
-      </div>
-      {/* fm-overview-countline — rendered but display:none on type pages. */}
-      <div className="mh-flview__countline" aria-live="polite" hidden>
-        Showing <strong>{totals.shown}</strong> of <strong>{totals.total}</strong> {countUnit}
-      </div>
-      {records.length ? (
-        <div className="mh-flview__cards">
-          {records.map((record) => (
-            <Card key={record.id} record={record} strings={strings} onOpen={onOpen} onAction={onAction} />
-          ))}
-        </div>
-      ) : (
-        <div className={cx("mh-flview__empty", type === "Report Context" && "mh-flview__empty--card")}>{emptyMessage}</div>
-      )}
+      <LibraryToolbar
+        search={{ label: searchLabel, placeholder: searchPlaceholder, value: query }}
+        searchRef={searchRef}
+        facets={filters.map((filter) => ({ ...filter, kind: "multi", selectedLabel: filter.selectedLabel || selectedLabel }))}
+        count={count}
+        create={createLabel && createHref ? { label: createLabel, href: createHref } : undefined}
+        onChange={({ field, value, checked }) => {
+          if (field === "search") onQueryChange?.({ name: "search", value });
+          else onFilterToggle?.({ id: field, value, checked });
+        }}
+        onCreate={onCreate}
+      />
+      <LibraryList
+        label={`${type} records`}
+        items={records.map((record) => toItem(type, record, strings))}
+        empty={{ kind: totals.total ? "no-results" : "empty", title: emptyMessage, clearLabel: clearFiltersLabel }}
+        onOpen={onOpen}
+        onAction={onAction}
+        onClear={() => onClearFilters?.({ reason: "empty-state" })}
+      />
       <Pagination
         variant="compact"
         total={totals.shown}
@@ -509,6 +345,7 @@ export function FieldLibraryView({
         onDescriptionConfirm={onDescriptionConfirm}
         onDescriptionCancel={onDescriptionCancel}
       />
+      <Toast open={Boolean(toast)} message={toast} />
     </section>
   );
 }
@@ -557,19 +394,15 @@ export function FieldLibraryDrawer({
         footer={
           detail && type === "Report Context" ? (
             <>
-              <button type="button" className="mh-flview__foot-btn" onClick={() => onCloseDetail?.({ reason: "button" })}>
+              <Button variant="secondary" onClick={() => onCloseDetail?.({ reason: "button" })}>
                 {drawerStrings.close || "Close"}
-              </button>
-              <a className="mh-flview__foot-btn mh-flview__open-dashboard" href={dashboardHref} target="_blank" rel="noopener">
-                {drawerStrings.openDashboard || "Open Dashboard"} <span aria-hidden="true">→</span>
-              </a>
+              </Button>
+              <Button variant="primary" href={dashboardHref}>
+                {drawerStrings.openDashboard || "Open Dashboard"}
+              </Button>
             </>
           ) : detail && type === "Analytical Model" ? (
-            <KnowledgeActions variant="field-library" actions={detail.actions} record={detail} onAction={onAction} />
-          ) : detail && type === "Metric Dictionary" ? (
-            /* The original leaves the MD footer rendered but empty (only Email
-               Reports hides it). */
-            <React.Fragment />
+            <ItemActions id={detail.id} name={detail.detailTitle} actions={detail.actions} labels={strings.actions} messages={strings.tooltips} onAction={onAction} />
           ) : undefined
         }
         onClose={(event) => onCloseDetail?.({ reason: event.reason })}
@@ -611,17 +444,16 @@ export function FieldLibraryDrawer({
               />
             </label>
             <div className="mh-flview__edit-foot">
-              <button type="button" className="mh-flview__edit-btn" onClick={() => onDescriptionCancel?.({ reason: "cancel" })}>
+              <Button variant="secondary" onClick={() => onDescriptionCancel?.({ reason: "cancel" })}>
                 {descriptionEdit.cancelLabel || editStrings.cancelLabel || "Cancel"}
-              </button>
-              <button
-                type="button"
-                className="mh-flview__edit-btn mh-flview__edit-btn--primary"
+              </Button>
+              <Button
+                variant="gold"
                 disabled={descriptionEdit.value === descriptionEdit.original}
                 onClick={() => onDescriptionConfirm?.({ id: descriptionEdit.id })}
               >
                 {descriptionEdit.confirmLabel || editStrings.confirmLabel || "Confirm"}
-              </button>
+              </Button>
             </div>
           </>
         ) : null}

@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { ChipList } from "../../../components/ChipList/index.jsx";
 import { ConfirmDialog } from "../../../components/ConfirmDialog/index.jsx";
 import { ItemActions } from "../../../components/ItemActions/index.jsx";
 import { LibraryList } from "../../../components/LibraryList/index.jsx";
@@ -9,26 +10,9 @@ import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { Toast } from "../../../components/Toast/index.jsx";
 import "./BusinessTermView.css";
 
-/** Cards show this many synonyms; the rest are counted in a "+N" chip (dispositions D07). */
-const VISIBLE_SYNONYMS = 3;
-
 /** Data-model pill text — business-term-library.js:104-105 domainTags(). */
 function scopeLabel(record) {
   return record.kind === "Global Synonym" || record.scope?.[0] === "Global" ? "All models" : record.scope?.[0] || "—";
-}
-
-function SynonymChips({ label, synonyms = [], moreLabel }) {
-  const shown = synonyms.slice(0, VISIBLE_SYNONYMS);
-  const hidden = synonyms.length - shown.length;
-  return (
-    <div className="mh-btview__synonyms">
-      <span>{label}</span>
-      <ul>
-        {shown.map((value) => <li key={value}>{value}</li>)}
-        {hidden > 0 ? <li className="mh-btview__more" aria-label={`${moreLabel}: ${synonyms.slice(VISIBLE_SYNONYMS).join(", ")}`}>+{hidden}</li> : null}
-      </ul>
-    </div>
-  );
 }
 
 const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
@@ -38,8 +22,8 @@ const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => St
  * built on the governed-library pattern (handover/design-intent/patterns/library.md).
  * Presentational: `useBusinessTermDemo` owns filtering, the governance rules
  * (lib/governance.js), dialogs and the success toast. What the pattern keeps
- * for this view: synonym chips on cards, and term type / synonyms / data model
- * sections in the drawer.
+ * for this view: the synonym row on cards (ChipList), and term type / synonyms
+ * / data model sections in the drawer.
  * @param {object} props
  * @param {Array<object>} [props.records=[]] current page; each has id, title, description, synonyms, scope, kind, creator, status ("Enable"|"Disable"), optional stage ("Draft"), and `actions` from governedActions()
  * @param {{ shown: number, total: number }} [props.totals]
@@ -130,7 +114,7 @@ export function BusinessTermView({
     status: statusOf(record),
     meta: [{ label: creatorLabel, value: record.creator }],
     actions: { actions: record.actions, labels: actionLabels, messages: tooltips },
-    children: <SynonymChips label={synonymsLabel} synonyms={record.synonyms} moreLabel={moreSynonymsLabel} />,
+    children: <ChipList label={synonymsLabel} values={record.synonyms} moreLabel={moreSynonymsLabel} />,
   }));
   return (
     <section className="mh-btview" aria-label="Business Term library">
@@ -185,12 +169,10 @@ export function BusinessTermView({
             <dd>{detail.description}</dd>
             <dt>{sections.synonyms}</dt>
             <dd>
-              <ul className="mh-btview__chips">
-                {(detail.synonyms || []).map((value) => <li key={value}>{value}</li>)}
-              </ul>
+              <ChipList values={detail.synonyms || []} max={Infinity} />
             </dd>
             <dt>{sections.dataModel}</dt>
-            <dd><span className="mh-btview__scope">{scopeLabel(detail)}</span></dd>
+            <dd><ChipList values={[scopeLabel(detail)]} tone="success" /></dd>
             <dt>{sections.creator}</dt>
             <dd>{detail.creator}</dd>
           </dl>

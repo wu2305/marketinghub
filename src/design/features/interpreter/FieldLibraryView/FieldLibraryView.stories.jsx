@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          "Shared field-mapping library view (field-library.js `#fmLibrary`) serving the Report Context, Metric Dictionary, Analytical Model and Email Reports knowledge types: per-type checkbox filters + the gold search pill (rendered first visually, last in DOM order) + compact fm-pagination + a three-column card grid + the right-side detail drawer. Each type keeps its own card composition and drawer sections; Analytical Model adds the create link and owner/status-gated edit·delete·disable icon actions, Report Context adds the thumbnail drawer with the editable Report Description dialog. Driven by `useFieldLibraryDemo` so canvas interactions are live.",
+          "Field-mapping libraries (Report Context, Metric Dictionary, Analytical Model, Email Reports) on the governed-library pattern: LibraryToolbar, LibraryList cards (per-type fields and chip row), compact pagination, the per-type detail drawer, the Report Context description editor and a success Toast. `useFieldLibraryDemo` owns normalization, filters and lib/governance.js rules.",
       },
     },
   },
@@ -51,15 +51,17 @@ export default {
     detail: prop("string | null", { defaultValue: null, description: "Record id opened in the detail drawer (the `?detail=` deep link)." }),
     descriptionEdit: prop("string | null", { defaultValue: null, description: "Record id with the Report Description edit dialog open.", control: false }),
     dialog: prop('{ kind: "disable-confirm" | "delete-confirm" | "delete-blocked", id: string } | null', { defaultValue: null, description: "Seeds an open confirm/info dialog (stories only — normally opened via the AM action buttons).", control: false }),
-    totals: prop("{ shown: number, total: number }", { description: "Count line data — rendered but hidden, matching the original's display:none rule.", control: false }),
+    totals: prop("{ shown: number, total: number }", { description: "Result count shown in the toolbar.", control: false }),
+    toast: prop("string", { description: "Success message after disable/delete; empty = hidden.", control: false }),
     filters: prop("Array<FilterDef>", { description: "Checkbox disclosure descriptors computed by the container (per type).", control: false }),
     searchRef: prop("React.Ref", { description: "Forwarded to the search input so page-level '/' and Cmd/Ctrl+K shortcuts focus it.", control: false }),
     onQueryChange: callbackProp("onQueryChange", "(event: { name, value }) => void", { name: "search", value: "gmv" }, "Search input change; resets to page 1."),
     onFilterToggle: callbackProp("onFilterToggle", "(event: { id, value, checked }) => void", { id: "status", value: "Disable", checked: true }, "Checkbox toggle inside a filter disclosure; resets to page 1."),
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, "Previous/Next page."),
     onPageSize: callbackProp("onPageSize", "(event: { pageSize: number }) => void", { pageSize: 20 }, "Rows-per-page change; resets to page 1."),
-    onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "city-report-context" }, "Card click / Enter / Space opens the detail drawer."),
-    onAction: callbackProp("onAction", "(event: { action, id }) => void", { action: "disable", id: AM_ID }, "AM edit/delete/disable icon button, or the RC drawer's edit-description pencil (action \"edit-description\")."),
+    onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "city-report-context" }, "Title button or card click opens the detail drawer."),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked?, reason? }) => void", { action: "edit", id: AM_ID, blocked: false, reason: null }, "Analytical Model actions (blocked ones report why, pattern B7), or the RC drawer's edit-description pencil (action \"edit-description\")."),
+    onClearFilters: callbackProp("onClearFilters", "(event: { reason }) => void", { reason: "empty-state" }, "Clear filters from the no-results state."),
     onCloseDetail: callbackProp("onCloseDetail", "(event: { reason }) => void", { reason: "button" }, "Detail drawer dismissed (×, scrim, Escape, Close button)."),
     onDialogConfirm: callbackProp("onDialogConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, "Confirm dialog's primary action — runs the pending operation."),
     onDialogCancel: callbackProp("onDialogCancel", "(event: { reason }) => void", { reason: "cancel" }, "Confirm/info dialog dismissed."),
@@ -105,17 +107,16 @@ export const AnalyticalModelDetail = {
   args: { type: "Analytical Model", detail: AM_ID },
 };
 
+/* The seeded model is a draft, so it is offline (R3). These two stories use
+   a published copy to show the enabled → disabled flow. */
+const published = (status) => INTERPRETER.records.map((record) => (record.id === AM_ID ? { ...record, stage: "Published", status } : record));
+
 export const AnalyticalModelDisabled = {
-  args: {
-    type: "Analytical Model",
-    records: INTERPRETER.records.map((record) =>
-      record.id === AM_ID ? { ...record, status: "Disable" } : record,
-    ),
-  },
+  args: { type: "Analytical Model", records: published("Disable") },
 };
 
 export const AnalyticalModelDisableConfirm = {
-  args: { type: "Analytical Model", dialog: { kind: "disable-confirm", id: AM_ID } },
+  args: { type: "Analytical Model", records: published("Enable"), dialog: { kind: "disable-confirm", id: AM_ID } },
 };
 
 export const AnalyticalModelDeleteBlocked = {

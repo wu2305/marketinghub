@@ -1,1054 +1,239 @@
-/* ── FieldLibraryView — field-library.js #fmLibrary shared view ─────────
-   Report Context / Metric Dictionary / Analytical Model / Email Reports on
-   the AI Interpreter type pages. All values probed from the rendered
-   original (the unified-type-toolbar + ai-interpreter-overview cascades
-   normalize the fm chrome to the same look as the Business Term view). */
-
+/* Field Library keeps only what the pattern leaves to the view
+   (patterns/library.md §5): the per-type drawer sections and the Report
+   Context description editor. List, toolbar and chips are pattern parts. */
 .mh-flview {
-  font-family: var(--mh-font);
-min-width: 0;
-}
-
-/* `.fm-tools` — transparent strip; search is DOM-last but visually first
-   (order:-1); filters are the shared 180px box (CheckboxFilter.css). */
-
-.mh-flview__tools {
-display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 10px;
-  min-height: 71px;
-  padding: 13px 0 14px;
-}
-
-.mh-flview__search {
-order: -1;
-  flex: 0 0 300px;
-  width: 300px;
-}
-
-@media (max-width: 1100px) {
-  .mh-flview__tools {
-    flex-wrap: wrap;
-  }
-
-  .mh-flview__search {
-    flex: 1 1 300px;
-    min-width: min(100%, 240px);
-    width: auto;
-  }
-}
-
-@media (max-width: 600px) {
-  .mh-flview__search {
-    flex-basis: 100%;
-    min-width: 0;
-    width: 100%;
-  }
-
-  .mh-flview .mh-flview__tools > .mh-check-filter {
-    flex: 1 1 100%;
-    min-width: 0;
-    width: 100%;
-  }
-
-  .mh-flview .mh-flview__tools .mh-check-filter__options {
-    box-sizing: border-box;
-    min-width: 0;
-    width: 100%;
-  }
-}
-
-/* `.knowledge-add-button` — gold gradient pill (AM only). */
-
-.mh-flview__create {
-display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  padding: 0 15px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
-  box-shadow: var(--mh-bt-create-shadow);
-  color: var(--mh-ink-inverse);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.mh-flview__create:hover {
-background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
-}
-
-.mh-flview__create:focus-visible {
-outline: 2px solid var(--mh-principle-focus-ring);
-  outline-offset: 2px;
-}
-
-.mh-flview__create > span {
-font-size: 12px;
-  line-height: 1;
-}
-
-.mh-flview__countline {
-font-size: 12px;
-  color: var(--mh-bt-countline);
-}
-
-/* `.fm-card-wrap` — every fm type is a 3-column grid at desktop (2 ≤980px,
-   1 ≤760px); the RC/MD/AM/ER padding/background variants are all normalized
-   away by the overview cascade. */
-
-.mh-flview__cards {
 display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-@media (max-width: 980px) {
-  .mh-flview__cards {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 760px) {
-  .mh-flview__cards {
-  grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.mh-flview__card {
-position: relative;
+  gap: var(--mh-space-6);
   min-width: 0;
-  border: 1px solid var(--mh-principle-line);
-  background: var(--mh-surface);
-  box-shadow: var(--mh-principle-shadow);
-  color: var(--mh-ink-card-copy);
-  cursor: pointer;
-  outline: 0;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  font-family: var(--mh-font-sans);
 }
 
-.mh-flview__card:hover {
-transform: translateY(-1px);
-  border-color: var(--mh-line-card-hover-gold);
-  box-shadow: var(--mh-shadow-card-hover-gold);
-}
-
-.mh-flview__card:focus-visible {
-border-color: var(--mh-line-card-hover-gold);
-  box-shadow: var(--mh-shadow-card-hover-gold);
-}
-
-.mh-flview__card h3 {
-min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  color: var(--mh-ink-heading-warm);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Shared status capsule — 76×20 Enabled/Disabled pill on every fm card and
-   the drawer title. */
-
-/* ── fm-report-card (Report Context) ─────────────────────────────────── */
-
-.mh-flview__report-card {
-display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  padding: 16px;
-  border-color: var(--mh-line-card-warm);
-  border-radius: 12px;
-  box-shadow: none;
-  color: var(--mh-ink-report-copy);
-}
-
-.mh-flview__report-card:hover {
-border-color: var(--mh-line-card-active);
-  box-shadow: var(--mh-shadow-card-active);
-}
-
-.mh-flview__report-card:focus-visible {
-border-color: var(--mh-line-card-active);
-  box-shadow: var(--mh-shadow-card-focus), var(--mh-shadow-card-active);
-}
-
-.mh-flview__report-title-row {
-display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.mh-flview__report-title-row h3 {
-flex: 1 1 auto;
-}
-
-.mh-flview__report-card p {
-display: -webkit-box;
-  max-width: 100%;
-  margin: 10px 0 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  line-height: 1.45;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.mh-flview__report-meta {
-display: grid;
-  gap: 8px;
-  margin: 12px 0 0;
-}
-
-.mh-flview__report-meta > div {
-display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 12px;
-  align-items: start;
-}
-
-.mh-flview__report-meta dt {
-color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mh-flview__report-meta dd {
-min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-@media (max-width: 1180px) {
-  .mh-flview__report-meta > div {
-  grid-template-columns: 1fr;
-    gap: 4px;
-  }
-}
-
-/* ── fm-metric-card (Metric Dictionary) ──────────────────────────────── */
-
-.mh-flview__metric-card {
-display: block;
-  padding: 16px;
-  border-radius: 12px;
-  color: var(--mh-ink-metric-copy);
-}
-
-.mh-flview__metric-head {
-display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.mh-flview__metric-head h3 {
-flex: 1 1 auto;
-}
-
-.mh-flview__metric-definition {
-display: -webkit-box;
-  margin: 10px 0 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.mh-flview__metric-meta {
-display: grid;
-  grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
-  gap: 8px;
-  margin: 14px 0 0;
-}
-
-.mh-flview__metric-meta > div {
-display: flex;
-  height: 24px;
-  align-items: center;
-  gap: 7px;
-  min-width: 0;
-}
-
-.mh-flview__metric-meta dt {
-flex: 0 0 auto;
-  color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mh-flview__metric-meta dd {
-min-width: 0;
-  margin: 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-flview__metric-data-model {
-grid-column: 1 / -1;
-}
-
-.mh-flview__metric-synonyms {
-display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 14px 0 0;
-}
-
-.mh-flview__metric-synonyms > span {
-flex: 0 0 auto;
-  color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mh-flview__metric-synonyms > div {
-display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  flex-wrap: nowrap;
-  gap: 6px;
-  overflow: hidden;
-}
-
-.mh-flview__synonym {
-display: inline-flex;
-  flex: 0 0 auto;
-  height: 24px;
-  box-sizing: border-box;
-  align-items: center;
-  min-width: 0;
-  padding: 0 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--mh-bt-tag-bg);
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-flview__synonym--more {
-padding: 0 11px;
-}
-
-@media (max-width: 1180px) {
-  .mh-flview__metric-meta {
-  grid-template-columns: 1fr;
-    gap: 6px;
-  }
-}
-
-/* ── fm-analysis-card (Analytical Model) ─────────────────────────────── */
-
-.mh-flview__analysis-card {
-display: flex;
-  flex-direction: column;
-  padding: 20px;
-  border-radius: 14px;
-}
-
-.mh-flview__analysis-head {
-display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.mh-flview__analysis-title {
-display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-}
-
-.mh-flview__analysis-title h3 {
-flex: 1 1 auto;
-}
-
-.mh-flview__analysis-description {
-display: -webkit-box;
-  margin: 10px 0 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.mh-flview__analysis-meta {
-display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 10px;
-  margin-top: 14px;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  line-height: 1.3;
-}
-
-.mh-flview__analysis-meta > div {
-display: flex;
-  height: 24px;
-  margin: 0;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-}
-
-.mh-flview__analysis-meta span {
-flex: 0 0 auto;
-  color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mh-flview__analysis-meta strong {
-min-width: 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-flview__analysis-ref-tags {
-display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  gap: 6px;
-  overflow: hidden;
-}
-
-.mh-flview__analysis-ref-chip {
-display: inline-flex;
-  flex: 0 0 auto;
-  height: 24px;
-  box-sizing: border-box;
-  align-items: center;
-  max-width: calc(100% - 42px);
-  padding: 0 10px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--mh-bt-tag-bg);
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-flview__analysis-ref-chip:only-child {
-max-width: 100%;
-}
-
-.mh-flview__analysis-footer {
-display: flex;
-  width: 100%;
-  min-height: 24px;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.mh-flview__analysis-creator {
-display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 12px;
-}
-
-.mh-flview__analysis-creator span {
-flex: 0 0 auto;
-  color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-.mh-flview__analysis-creator strong {
-min-width: 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 24px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* fm icon actions — 30px transparent gold buttons on the card, 28px in the
-   drawer footer; blocked ones render `disabled` (clicks never reach the
-   handler in the original either). */
-
-/* ── fm-email-card (Email Reports) ───────────────────────────────────── */
-
-.mh-flview__email-card {
-display: block;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-.mh-flview__email-card:hover,
-.mh-flview__email-card:focus-visible {
-border-color: var(--mh-line-card-hover-warm);
-  box-shadow: var(--mh-shadow-card-hover-warm);
-}
-
-.mh-flview__email-titleline {
-display: block;
-  min-width: 0;
-}
-
-.mh-flview__email-titleline h3 {
-max-width: 100%;
-}
-
-.mh-flview__email-meta {
-display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.mh-flview__email-meta > div {
-display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 12px;
-  align-items: center;
-  min-width: 0;
-}
-
-.mh-flview__email-meta > div > span:first-child {
-flex: 0 0 auto;
-  color: var(--mh-bt-label);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mh-flview__email-meta strong {
-min-width: 0;
-  overflow: hidden;
-  color: var(--mh-ink-heading-warm);
-  font-size: 12px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-flview__email-recipients {
-align-items: flex-start;
-}
-
-.mh-flview__email-recipient-tags {
-display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-wrap: wrap;
-  gap: 6px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--mh-bt-tag-bg);
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.mh-flview__email-recipient-tags span {
-flex: 0 1 auto;
-  min-width: 0;
-  padding: 5px 9px;
-  overflow: hidden;
-  background: var(--mh-surface-recipient);
-  color: var(--mh-ink-recipient);
-  font-size: 12px;
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Empty states — fm-card-empty (RC) vs fm-email-empty (the rest). Both sit
-   inside the card grid. */
-
-.mh-flview__empty {
-grid-column: 1 / -1;
-  padding: 36px 20px;
-  color: var(--mh-ink-empty);
-  font-size: 13px;
-  text-align: center;
-}
-
-.mh-flview__empty--card {
-grid-column: auto;
-  padding: 34px 18px;
-  border: 1px dashed var(--mh-line-empty);
-  border-radius: 8px;
-  background: var(--mh-surface);
-  color: var(--mh-ink-empty-report);
-}
-
-/* fm-pagination padding — AM/ER flush with the grid, RC/MD keep the 20px
-   side inset (the original's per-type rules survive the cascade). */
-
-.mh-flview .mh-pagination {
-padding: 16px 0 0;
-}
-
-.mh-flview[data-fl-type="Report Context"] .mh-pagination,
-.mh-flview[data-fl-type="Metric Dictionary"] .mh-pagination {
-padding: 16px 20px;
-}
-
-/* ── Drawer body — the RC variant re-pads to 22/24/30; the shared
-   scenario-report-detail sections serve MD/AM/ER. ─────────────────────── */
-
-/* Drawer and edit dialog content render inside Modal slots, outside the view root. */
 .mh-flview__drawer,
 .mh-flview__edit {
-  font-family: var(--mh-font);
+font-family: var(--mh-font-sans);
 }
-
-.mh-flview__drawer--rc .mh-modal__body {
-padding: 22px 24px 30px;
-}
-
-.mh-flview__foot-btn {
-display: inline-flex;
-  align-items: center;
-  min-height: 33px;
-  padding: 7px 10px;
-  border: 1px solid var(--mh-line-secondary-button);
-  border-radius: 6px;
-  background: var(--mh-surface);
-  color: var(--mh-ink-secondary-button);
-  font: inherit;
-  font-size: 12px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.mh-flview__foot-btn:hover,
-.mh-flview__foot-btn:focus-visible {
-border-color: var(--mh-bt-action);
-  background: var(--mh-bt-action-hover-bg);
-}
-
-.mh-flview__open-dashboard {
-border-color: var(--mh-line-primary-button);
-  background: var(--mh-surface-primary-button);
-  color: var(--mh-ink-primary-button);
-  font-weight: 700;
-}
-
-.mh-flview__open-dashboard:hover,
-.mh-flview__open-dashboard:focus-visible {
-border-color: var(--mh-line-primary-button-hover);
-  background: var(--mh-surface-primary-button-hover);
-  color: var(--mh-ink-primary-button);
-}
-
-/* Detail sections — library.css `.scenario-report-detail`. */
 
 .mh-flview__detail {
 display: grid;
-  gap: 18px;
+  gap: var(--mh-space-6);
 }
 
-.mh-flview__section {
-display: grid;
-  gap: 8px;
+.mh-flview__section h3,
+.mh-flview__rc-heading {
+margin: 0 0 var(--mh-space-3);
+  color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.mh-flview__section h3 {
-margin: 0;
-  color: var(--mh-bt-section-title);
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.mh-flview__section p {
-margin: 0;
-  color: var(--mh-ink-secondary-muted);
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-
+.mh-flview__section p,
 .mh-flview__prewrap {
-white-space: pre-wrap;
+margin: 0;
+  color: var(--mh-text);
+  font-size: var(--mh-font-size-md);
+  line-height: 1.5;
+  white-space: pre-line;
 }
 
-/* AM created-by/at meta — plain inline dl (the bordered meta cells are
-   normalized away on the fm drawer). */
+.mh-flview__detail--metric .mh-flview__section:nth-child(3) p {
+font-family: var(--mh-font-mono);
+  font-size: var(--mh-font-size-sm);
+}
 
 .mh-flview__detail-meta {
 display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 8px 18px;
+  gap: var(--mh-space-3) var(--mh-space-7);
   margin: 0;
+  padding-top: var(--mh-space-5);
+  border-top: 1px solid var(--mh-line-subtle);
 }
 
-.mh-flview__detail-meta > div {
-display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
+.mh-flview__detail-meta div {
+display: flex;
+  gap: var(--mh-space-3);
 }
 
-.mh-flview__detail-meta dt,
+.mh-flview__detail-meta dt {
+color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
+}
+
 .mh-flview__detail-meta dd {
 margin: 0;
-  color: var(--mh-faint);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.45;
+  color: var(--mh-text-muted);
+  font-size: var(--mh-font-size-sm);
 }
 
-.mh-flview__detail-meta dt::after {
-content: ":";
+.mh-flview__drawer--rc .mh-modal__body {
+display: grid;
+  gap: var(--mh-space-6);
 }
-
-/* fm chips — .fm-chip base + the gold domain variant. */
-
-.mh-flview__tags {
-display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-
-.mh-flview__chip {
-display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 8px;
-  border-radius: 20px;
-  background: var(--mh-bt-chip-bg);
-  color: var(--mh-bt-chip-ink);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.mh-flview__domain {
-border: 1px solid var(--mh-line-domain-warm);
-  background: var(--mh-bt-status-on-bg);
-  color: var(--mh-bt-status-on-ink);
-}
-
-.mh-flview__dash {
-color: var(--mh-faint);
-}
-
-/* Report Context drawer body. */
 
 .mh-flview__rc-thumb {
-width: 100%;
+display: grid;
   min-height: 70px;
   overflow: hidden;
-  border: 1px solid var(--mh-line-thumbnail);
-  border-radius: 9px;
-  background: var(--mh-bt-drawer-bg);
-  color: var(--mh-ink-thumbnail-muted);
-  font-size: 13px;
+  place-items: center;
+  border: 1px solid var(--mh-line);
+  border-radius: var(--mh-radius-md);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-flview__rc-thumb img {
 display: block;
   width: 100%;
-  height: 190px;
-  object-fit: cover;
+  height: auto;
 }
 
 .mh-flview__rc-overview {
-padding: 19px 0 22px;
-  border-bottom: 1px solid var(--mh-line-overview);
+display: grid;
+  gap: var(--mh-space-4);
+  padding: var(--mh-space-5);
+  border: 1px solid var(--mh-line-subtle);
+  border-radius: var(--mh-radius-md);
+  background: var(--mh-surface-subtle);
 }
 
 .mh-flview__rc-desc-title {
 display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin: 0 0 18px;
-  color: var(--mh-ink-state);
-  font-size: 15px;
-  font-weight: 750;
-  line-height: 1.35;
+  margin: 0;
+  color: var(--mh-text-strong);
+  font-size: var(--mh-font-size-lg);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-flview__rc-edit {
 display: grid;
   width: 30px;
   height: 30px;
-  flex: 0 0 30px;
   padding: 0;
   place-items: center;
-  border: 0;
-  border-radius: 8px;
-  background: var(--mh-surface-edit);
-  color: var(--mh-ink-edit);
+  border: 1px solid transparent;
+  border-radius: var(--mh-radius-md);
+  background: transparent;
+  color: var(--mh-text-muted);
   cursor: pointer;
 }
 
-.mh-flview__rc-edit:hover,
-.mh-flview__rc-edit:focus-visible {
-background: var(--mh-surface-edit-hover);
-  color: var(--mh-ink-edit-hover);
-}
-
 .mh-flview__rc-edit svg {
-width: 15px;
-  height: 15px;
+width: 16px;
+  height: 16px;
 }
 
-.mh-flview__rc-overview p {
+.mh-flview__rc-edit:hover {
+border-color: var(--mh-line);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+}
+
+.mh-flview__rc-edit:focus-visible,
+.mh-flview__scenario-link:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
+}
+
+.mh-flview__rc-overview p,
+.mh-flview__rc-scope {
 margin: 0;
-  color: var(--mh-ink-description);
-  font-size: 14px;
-  line-height: 1.7;
+  color: var(--mh-text);
+  font-size: var(--mh-font-size-md);
+  line-height: 1.5;
 }
 
 .mh-flview__rc-meta {
-display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  margin-top: 16px;
+display: grid;
+  gap: var(--mh-space-3);
 }
 
 .mh-flview__rc-meta > div {
 display: flex;
-  width: 100%;
   align-items: center;
-  gap: 9px;
+  gap: var(--mh-space-4);
 }
 
 .mh-flview__rc-meta > div > span:first-child {
-color: var(--mh-ink-meta-label);
-  font-size: 11px;
-  font-weight: 650;
+min-width: 150px;
+  color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-flview__state-text {
-display: inline;
-  color: var(--mh-ink-state);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.35;
+color: var(--mh-text-strong);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
-.mh-flview__rc-section {
-margin-top: 24px;
-}
-
-.mh-flview__rc-linked {
+.mh-flview__tags {
 display: flex;
-  align-items: baseline;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: var(--mh-space-3);
+  color: var(--mh-text-muted);
+  font-size: var(--mh-font-size-sm);
 }
 
-.mh-flview__rc-heading {
-flex-shrink: 0;
-  margin: 0 0 10px;
-  color: var(--mh-ink-section-deep);
-  font-size: 15px;
-  font-weight: 700;
+.mh-flview__chip.mh-flview__scenario-link {
+padding: var(--mh-space-1) var(--mh-space-4);
+  border: 1px solid color-mix(in srgb, var(--mh-accent) 40%, transparent);
+  border-radius: var(--mh-radius-pill);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
-.mh-flview__rc-linked > .mh-flview__rc-heading {
-margin: 0;
-}
-
-.mh-flview__rc-linked > .mh-flview__tags {
-gap: 8px;
-}
-
-.mh-flview__scenario-link {
-border: 1px solid var(--mh-line-domain-warm);
-  background: var(--mh-bt-status-on-bg);
-  box-shadow: 0 1px 0 rgba(183, 122, 39, 0.08);
-  color: var(--mh-bt-status-on-ink);
-  font-weight: 650;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.mh-flview__scenario-link:hover,
-.mh-flview__scenario-link:focus-visible {
-border-color: var(--mh-line-scenario-hover);
-  background: var(--mh-surface-scenario-hover);
-  color: var(--mh-ink-scenario-hover);
-}
-
-.mh-flview__scenario-link:focus-visible {
-outline: 2px solid var(--mh-line-scenario-focus);
-  outline-offset: 2px;
-}
-
-.mh-flview__rc-scope {
-margin: 0;
-  color: var(--mh-ink-meta-label);
-  font-size: 14px;
-  line-height: 1.8;
-  white-space: pre-wrap;
-}
-
-/* ── Report Description edit dialog (editReportDescriptionDialog) ────── */
-
-.mh-flview__edit {
-width: min(560px, calc(100vw - 32px));
-  max-width: min(560px, calc(100vw - 32px));
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid rgba(205, 215, 225, 0.95);
-  border-radius: 14px;
-  background: var(--mh-surface-dialog);
-  box-shadow: var(--mh-shadow-dialog);
-}
-
-.mh-flview__edit .mh-modal__header {
-padding: 26px 28px 18px;
-  border-bottom: 1px solid var(--mh-line-dialog-header);
-  background: linear-gradient(180deg, var(--mh-surface) 0%, var(--mh-surface-dialog-tint) 100%);
-}
-
-.mh-flview__edit .mh-modal__eyebrow {
-color: var(--mh-ink-edit-hover);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-}
-
-.mh-flview__edit .mh-modal__title {
-margin: 6px 0 0;
-  color: var(--mh-ink-dialog-title);
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.mh-flview__edit .mh-modal__close {
-width: 34px;
-  height: 34px;
-  border: 1px solid var(--mh-line-dialog-close);
-  border-radius: 9px;
-  background: var(--mh-surface);
-  color: var(--mh-ink-control-slate);
-  font-size: 20px;
-}
-
-.mh-flview__edit .mh-modal__close:hover,
-.mh-flview__edit .mh-modal__close:focus-visible {
-border-color: var(--mh-line-scenario-focus);
-  background: var(--mh-surface-edit);
-  color: var(--mh-bt-status-on-ink);
+.mh-flview__chip.mh-flview__scenario-link:hover {
+border-color: var(--mh-accent);
 }
 
 .mh-flview__edit-field {
-display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 24px 28px 0;
-  color: var(--mh-ink-dialog-label);
-  font-size: 12px;
-  font-weight: 650;
-}
-
-.mh-flview__edit-field > span {
-font-size: 12px;
-  line-height: 1.2;
+display: grid;
+  gap: var(--mh-space-3);
+  color: var(--mh-text-muted);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-flview__edit-field textarea {
-width: 100%;
-  min-height: 164px;
-  box-sizing: border-box;
-  padding: 15px 16px;
-  border: 1px solid var(--mh-line-dialog-input);
-  border-radius: 12px;
+min-height: 160px;
+  padding: var(--mh-space-4);
+  border: 1px solid var(--mh-line-strong);
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 2px rgba(23, 34, 50, 0.04);
-  color: var(--mh-ink-dialog-input);
+  color: var(--mh-text-strong);
   font: inherit;
-  font-size: 14px;
-  line-height: 1.7;
+  font-weight: var(--mh-font-weight-regular);
+  line-height: 1.5;
   resize: vertical;
 }
 
-.mh-flview__edit-field textarea:focus {
-border-color: var(--mh-line-dialog-input-focus);
-  outline: 3px solid rgba(214, 155, 61, 0.18);
-  outline-offset: 0;
+.mh-flview__edit-field textarea:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
 }
 
 .mh-flview__edit-foot {
 display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin: 24px 0 0;
-  padding: 18px 28px 24px;
-  border-top: 1px solid var(--mh-line-dialog-header);
-  background: var(--mh-surface);
+  gap: var(--mh-space-4);
+  margin-top: var(--mh-space-5);
 }
 
-.mh-flview__edit-btn {
-min-width: 88px;
-  height: 38px;
-  padding: 0 14px;
-  border: 1px solid var(--mh-line-secondary-button);
-  border-radius: 9px;
-  background: var(--mh-surface);
-  color: var(--mh-ink-secondary-button);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 650;
-  cursor: pointer;
-}
+@media (max-width: 760px) {
+  .mh-flview__rc-meta > div {
+    display: grid;
+    gap: var(--mh-space-2);
+  }
 
-.mh-flview__edit-btn--primary {
-border-color: var(--mh-line-dialog-button);
-  background: var(--mh-surface-dialog-button);
-  color: var(--mh-surface);
-}
-
-.mh-flview__edit-btn--primary:not(:disabled):hover,
-.mh-flview__edit-btn--primary:not(:disabled):focus-visible {
-border-color: var(--mh-line-dialog-button-hover);
-  background: var(--mh-surface-dialog-button-hover);
-}
-
-.mh-flview__edit-btn--primary:disabled {
-border-color: var(--mh-line-dialog-button-disabled);
-  background: var(--mh-surface-dialog-button-disabled);
-  color: rgba(255, 255, 255, 0.72);
-  cursor: not-allowed;
+  .mh-flview__rc-meta > div > span:first-child {
+    min-width: 0;
+  }
 }

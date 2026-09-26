@@ -16,9 +16,13 @@ const AM_ID = "playbook-opportunity-scan";
 function renderView(props = {}) {
   return render(<Harness {...bundle} records={INTERPRETER.records} {...props} />);
 }
+/* The seeded Analytical Model is a draft (offline, R3); these tests need a published, enabled one. */
+const publishedRecords = INTERPRETER.records.map((record) => (record.id === AM_ID ? { ...record, stage: "Published", status: "Enable" } : record));
 
-const cards = () => [...document.querySelectorAll(".mh-flview__card")];
-const cardTitles = () => cards().map((card) => card.querySelector("h3").textContent);
+const cards = () => [...document.querySelectorAll(".mh-flview .mh-library-item")];
+const cardTitles = () => cards().map((card) => card.querySelector(".mh-library-item__title button").textContent);
+const AM_NAME = "Opportunity scan playbook";
+const listButton = (name) => within(screen.getByRole("list", { name: "Analytical Model records" })).getByRole("button", { name });
 
 describe("normalizeFieldRecord", () => {
   it("maps Report Context records to the fm shape (report name, AI flags, thumbnail, project domains)", () => {
@@ -55,7 +59,7 @@ describe("FieldLibraryView", () => {
     ]);
     expect(screen.getAllByText("Enabled").length).toBe(6);
     /* The card meta dd + the filter option label both carry the name. */
-    expect(cards().some((card) => card.querySelector(".mh-flview__report-meta dd").textContent === "DC Media Performance")).toBe(true);
+    expect(cards().some((card) => card.querySelector(".mh-library-item__meta dd").textContent === "DC Media Performance")).toBe(true);
     /* The create link only exists for Analytical Model. */
     expect(screen.queryByRole("link", { name: /Add/ })).toBeNull();
     /* Cards have no action buttons on this type. */
@@ -107,8 +111,9 @@ describe("FieldLibraryView", () => {
   it("renders Metric Dictionary cards with unit/type/data-model meta and the synonym overflow chip", () => {
     renderView({ type: "Metric Dictionary" });
     expect(cardTitles()).toEqual(["Member conversion", "Campaign ROI", "Promotion lift"]);
-    /* The "…" overflow marker is an aria-labelled span, matching the original. */
-    expect(screen.getAllByLabelText("More synonyms").length).toBe(3);
+    /* D07: three aliases shown, the fourth counted in a "+1" chip. */
+    expect(screen.getAllByLabelText(/^More synonyms:/).length).toBe(3);
+    expect(cards()[0].querySelectorAll(".mh-chip-list li").length).toBe(4);
     /* Metric-type filter narrows to Base only. */
     fireEvent.click(screen.getByLabelText("Base"));
     expect(cardTitles()).toEqual(["Member conversion"]);
@@ -135,32 +140,49 @@ describe("FieldLibraryView", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("gates Analytical Model actions by owner+status and runs disable → delete-blocked", () => {
+  it("governs Analytical Model actions: blocked actions explain, offline-first continues, references block delete", () => {
     const onNavigate = vi.fn();
-    renderView({ type: "Analytical Model", onNavigate });
-    expect(cardTitles()).toEqual(["Opportunity scan playbook"]);
+    renderView({ type: "Analytical Model", onNavigate, records: publishedRecords });
+    expect(cardTitles()).toEqual([AM_NAME]);
     expect(screen.getByRole("link", { name: /Add Analytical Model/ }).getAttribute("href")).toContain("knowledge-create.html");
 
-    /* Enabled + owner: only "Disable" is clickable (edit/delete render disabled). */
-    const edit = screen.getByRole("button", { name: "Edit" });
-    expect(edit.disabled).toBe(true);
-    expect(screen.getByRole("button", { name: "Delete" }).disabled).toBe(true);
-    const disable = screen.getByRole("button", { name: "Disable" });
-    expect(disable.disabled).toBe(false);
+    /* Enabled + owner: edit/delete are blocked but operable (pattern B7). */
+    const edit = listButton(`Edit ${AM_NAME}`);
+    expect(edit.getAttribute("aria-disabled")).toBe("true");
+    expect(edit.getAttribute("title")).toBe("Disable knowledge first");
+    expect(listButton(`Disable ${AM_NAME}`).hasAttribute("aria-disabled")).toBe(false);
 
-    fireEvent.click(disable);
-    fireEvent.click(screen.getByRole("button", { name: "Confirm Offline" }));
-    expect(cards()[0].querySelector(".mh-badge--knowledge").textContent).toBe("Disabled");
-
-    /* Now disabled: edit navigates, delete hits the references guard. */
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    /* Edit offers to go offline, then continues to the edit page. */
+    fireEvent.click(edit);
+    fireEvent.click(screen.getByRole("button", { name: "Go Offline" }));
+    expect(cards()[0].querySelector(".mh-library-item__head > .mh-badge").textContent).toBe("Disabled");
+    expect(document.querySelector(".mh-toast").textContent).toBe("Disabled successfully");
     expect(onNavigate).toHaveBeenCalledWith(expect.objectContaining({ id: AM_ID }));
     expect(onNavigate.mock.calls[0][0].href).toContain("mode=edit");
 
-    fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+    /* Now disabled: delete hits the references guard (field-library.js:702-710). */
+    fireEvent.click(listButton(`Delete ${AM_NAME}`));
     const blocked = screen.getByRole("dialog");
     expect(within(blocked).getByText("Deletion blocked")).toBeTruthy();
     expect(within(blocked).getByText(/City Strategy Dashboard/)).toBeTruthy();
+  });
+
+  it("shows the seeded draft model as offline: disabled status, Draft marker, edit allowed", () => {
+    renderView({ type: "Analytical Model" });
+    expect(cards()[0].querySelector(".mh-library-item__head > .mh-badge").textContent).toBe("Disabled");
+    expect(cards()[0].querySelector(".mh-library-item__draft")).toBeTruthy();
+    expect(listButton(`Edit ${AM_NAME}`).hasAttribute("aria-disabled")).toBe(false);
+    expect(listButton(`Disable ${AM_NAME}`).getAttribute("title")).toBe("This knowledge is already disabled.");
+  });
+
+  it("disables an Analytical Model after confirmation and shows a toast", () => {
+    renderView({ type: "Analytical Model", records: publishedRecords });
+    fireEvent.click(listButton(`Disable ${AM_NAME}`));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm Offline" }));
+    expect(cards()[0].querySelector(".mh-library-item__head > .mh-badge").textContent).toBe("Disabled");
+    expect(document.querySelector(".mh-toast").hidden).toBe(false);
+    fireEvent.click(listButton(`Disable ${AM_NAME}`));
+    expect(within(screen.getByRole("dialog")).getByText("Knowledge already disabled")).toBeTruthy();
   });
 
   it("renders Email Reports cards with send time, recipient chips and data model", () => {
@@ -174,11 +196,9 @@ describe("FieldLibraryView", () => {
     /* Every card's Data Model value is "All models" (the filter summary is a
        separate element with the same text). */
     expect(
-      cards().map((card) => card.querySelector(".mh-flview__email-meta > div:last-child strong").textContent),
+      cards().map((card) => card.querySelector(".mh-library-item__meta > div:last-child dd").textContent),
     ).toEqual(["All models", "All models", "All models"]);
-    /* The disabled record carries the is-disabled class. */
-    const monthly = screen.getByText("Monthly Customer Growth Review").closest("article");
-    expect(monthly.className).toContain("is-disabled");
+    expect(cards()[0].querySelectorAll(".mh-chip-list li").length).toBe(3);
   });
 
   it("opens the Email Reports drawer with subject/trigger/recipients sections", () => {
@@ -199,6 +219,8 @@ describe("FieldLibraryView", () => {
     fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "zzzzz" } });
     expect(cards().length).toBe(0);
     expect(screen.getByText("No knowledge matches your filters.")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
+    expect(cards().length).toBe(3);
   });
 
   it("paginates compact style and resets to page 1 on query/filter changes", () => {
@@ -213,7 +235,7 @@ describe("FieldLibraryView", () => {
   });
 
   it("seeds an open dialog for stories via the dialog prop", () => {
-    renderView({ type: "Analytical Model", dialog: { kind: "disable-confirm", id: AM_ID } });
+    renderView({ type: "Analytical Model", records: publishedRecords, dialog: { kind: "disable-confirm", id: AM_ID } });
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByText("Confirm Operation")).toBeTruthy();
     expect(within(dialog).getByText(/offline this knowledge/)).toBeTruthy();

@@ -80,3 +80,28 @@ Source: `assets/js/knowledge/business-term-library.js`; React before: `features/
 | BT-20 | React prop `strings.tooltips.permission(action)` and `dialogs.permissionDenied(action)` functions | content.js | Normalize (D05) | one string per reason (`tooltips.permission`, `"disable-first"`, `"already-disabled"`) | — |
 | BT-21 | React `SynonymClamp` component, `ResizeObserver` shim in tests | view `:20-66` | Drop (D07) | removed | — |
 | BT-22 | geometry pairs (`layout:`) comparing BT internals with the original | `p07.mjs` | Drop | not a design-intent check; shell pairs kept | 16 pairs removed (list, drawer and dialog internals) |
+
+### Field Library (Report Context, Metric Dictionary, Analytical Model, Email Reports) — WP7b + WP7c
+
+Source: `assets/js/knowledge/field-library.js`, `knowledge-fields.js`. One PR covers 7b and 7c because all four types share one view file (`features/interpreter/FieldLibraryView`).
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| FL-01 | every type renders cards; a table is built but always hidden | `field-library.js:234-262,320-323` | Drop (dead code) | `LibraryList` cards for all four types | pattern/guide layout corrected |
+| FL-02 | per-type facets: RC Project; MD Data Model + Type; AM Status + Data Model + Creator; ER Status + Data Model | `:124-138,320` | Intent | `LibraryToolbar` multi facets, same sets | scenario selectors updated |
+| FL-03 | search: substring over the whole record | `:139-150` | Intent | same (hook unchanged) | — |
+| FL-04 | count line rendered but hidden (D08) | `:320` `fm-overview-countline` | Normalize (R7) | visible count line between toolbar and list, the place the source reserved | — |
+| FL-05 | card fields per type (RC title/status/description/Project; MD definition/Unit/Type/Data model/synonyms; AM description/Data Model/Referenced Metrics/Creator/actions; ER Send time/Recipients/Data Model) | `:110-216` | Intent + Normalize | `LibraryItem` (title, status, description, meta, `ChipList`) | — |
+| FL-06 | MD synonyms: first alias if ≤24 chars, then a "…" marker; AM referenced metrics: first + "…" (D07) | `:204-216,190-199` | Normalize | `ChipList`: three values + "+N" with the rest in its accessible name | `…` assertion → `.mh-chip-list__more` |
+| FL-07 | ER cards show no availability; disabled ones only carry `is-disabled` | `:172-181` | Normalize (pattern §5) | Enabled/Disabled `StatusBadge` on ER cards | scenario asserts the neutral badge |
+| FL-08 | AM stored as Draft + Enable is shown enabled; edit/delete blocked "disable first" | `field-library.js:94-107`, `knowledge-fields.js` normalize | Fix (R3) | drafts are offline: Disabled status, Draft marker, edit/delete allowed, disable explains | `p07-field-library-analytical-model`, `-am-disable`, `-am-delete-blocked` story sides; stories `AnalyticalModelDisabled`, `…DisableConfirm` use a published copy |
+| FL-09 | AM blocked buttons natively `disabled`; the "Disable knowledge first" dialog is unreachable (D04) | `:106,657-668` | Normalize (A3) | `ItemActions`: operable, explains; going offline continues the edit/delete | tests |
+| FL-10 | AM delete of a referenced model blocked with its references listed | `:702-710` | Intent | info dialog "Deletion blocked" | `-am-delete-blocked` kept |
+| FL-11 | success toast called but undefined (D03) | `:618` | Fix | Toast after disable/delete | tests |
+| FL-12 | permission message | `:104` | Intent (D05) | "Knowledge created by others cannot be operated." | — |
+| FL-13 | RC description edit from the drawer, confirm enabled once changed, history kept | `:409,676-679,60-75` | Intent (ungated, pattern B6) | same; buttons are `Button` | `.mh-flview__edit-btn--primary` → `.mh-button--gold` |
+| FL-14 | RC drawer footer: Close + Open Dashboard (new tab) | `:420-428` | Intent | `Button` secondary + `Button href` | selector updated |
+| FL-15 | MD drawer footer rendered empty; ER footer hidden | `field-library.js` open() | Drop | no footer for MD and ER | — |
+| FL-16 | Open/Close labels for RC AI status | `:55` | Kept in the drawer body only (they describe two switches, AI interpretation and AI summary); cards use Enabled/Disabled (D06) | — | — |
+| FL-17 | card geometry pairs in scenarios | `p07.mjs` | Drop | view-internal pairs removed; shell pairs kept | 13 pairs removed |
+| FL-18 | 54 view-named tokens (`--mh-ink-dialog-*`, `--mh-*-card-*` …) | `tokens.css` | Remove (unused after the rewrite) | deleted | — |

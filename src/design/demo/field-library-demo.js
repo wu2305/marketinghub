@@ -13,8 +13,9 @@ import { demoImage } from "./images.js";
  * state the way the original's sync() does.
  */
 import React from "react";
-import { knowledgeActions, knowledgeStatus } from "./knowledge-actions.js";
-import { useKnowledgeDialog } from "./knowledge-dialog.js";
+import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
+
+const TOAST_MS = 3000;
 
 export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
 
@@ -147,7 +148,8 @@ export function normalizeFieldRecord(asset) {
     business_domain:
       asset.business_domain !== undefined ? list(asset.business_domain) : list(domain).length ? list(domain) : ["Marketing"],
     updated_at: asset.updated_at || asset.updated || "Not recorded",
-    status: knowledgeStatus({ ...asset, disabled: legacyDisabled }),
+    /* One availability vocabulary (domain-model §3.1); drafts are offline (R3). */
+    status: legacyDisabled || availabilityOf(asset) === "disabled" ? "Disable" : "Enable",
   };
   if (asset.typeId === "Report Context" || asset.type === "Report Context") {
     const project = (asset.projects || []).find((key) => REPORT_CONTEXTS[key]);
@@ -216,6 +218,9 @@ export function normalizeFieldRecord(asset) {
       created_at: asset.created_at || asset.created || "Not recorded",
       references: asset.references ?? (asset.connections || []).map((x) => x.name),
     };
+    /* R3: a draft is offline even when stored as enabled (the source's
+       Draft + Enable record could be neither edited nor disabled). */
+    if (model.stage === "Draft") Object.assign(model, { status: "Disable", availability: "disabled" });
     delete model.workflow_status;
     delete model.statusDisplay;
     return model;
@@ -286,41 +291,31 @@ export function useFieldLibraryDemo(props) {
   const now = () => new Date().toLocaleString("en-GB");
   const patchRecord = (id, patch) =>
     setAll((current) => current.map((item) => (item.id === id ? { ...item, ...patch } : item)));
-  /* The three reachable dialog shapes (field-library.js notice()): the
-     disable/delete confirms and the referenced-delete info dialog. `run`
-     closures only execute on confirm, so this is safe to call in the lazy
-     initializer below even though patchRecord/now are consts. */
-  const management = useKnowledgeDialog({
-    seed: props.dialog,
-    resolveSeed: (seedDialog) => seed().find((record) => record.id === seedDialog.id),
-    blockReferenced: true,
-    buildDialog: (kind, record) => {
-      if (kind === "delete-blocked") return {
-        purpose: "info",
-        title: dialogs.deleteBlockedTitle || "Deletion blocked",
-        message: dialogs.deleteBlocked?.(record.references || []) ||
-          `This analysis is referenced by: ${(record.references || []).join(", ")}. Remove these references before deleting.`,
-        closeLabel: dialogs.closeLabel || "Close",
-      };
-      return {
-        purpose: kind === "delete-confirm" ? "danger" : "confirm",
-        title: dialogs.confirmTitle || "Confirm Operation",
-        message: kind === "delete-confirm" ? dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
-        confirmLabel: kind === "delete-confirm" ? dialogs.deleteConfirm || "Confirm Delete" : dialogs.offlineConfirm || "Confirm Offline",
-        cancelLabel: dialogs.cancelLabel || "Cancel",
-      };
-    },
-    onDisable: (record) => patchRecord(record.id, { status: "Disable", isDisabled: true, updated_at: now() }),
-    onDelete: (record) => {
-      setAll((current) => current.filter((item) => item.id !== record.id));
-      setDetailId((current) => current === record.id ? null : current);
-    },
-    onEdit: (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id }),
-    onConfirm: (event) => props.onDialogConfirm?.(event),
-    onCancel: (event) => props.onDialogCancel?.(event),
+  /* Pattern B6-B8 (field-library.js:643-712): permission and availability
+     blocks explain themselves; going offline first continues the requested
+     edit/delete; a referenced model cannot be deleted; completed changes
+     show a toast. `props.dialog` seeds an open dialog for stories. */
+  const tooltips = { ...governanceMessages, ...(strings.tooltips || {}) };
+  const [pending, setPending] = React.useState(() => {
+    const seedDialog = props.dialog;
+    if (!seedDialog) return null;
+    const record = seed().find((item) => item.id === seedDialog.id);
+    if (!record) return null;
+    const kind = { "disable-confirm": "disable", "delete-confirm": "delete", "delete-blocked": "delete-blocked" }[seedDialog.kind] || seedDialog.kind;
+    return { kind, record };
   });
-  const actionPolicy = { currentUser, strings: { ...strings, draftCannotDisable: false } };
-  const clearDialog = management.clear;
+  const [toast, setToast] = React.useState("");
+  const toastTimer = React.useRef(null);
+  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
+  const showToast = (message) => {
+    clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
+  };
+  const clearDialog = React.useCallback(() => setPending(null), []);
+  const editRecord = (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id });
+  const requestDelete = (record) =>
+    setPending({ kind: (record.references || []).length ? "delete-blocked" : "delete", record });
   const [descriptionEdit, setDescriptionEdit] = React.useState(() =>
     props.descriptionEdit ? { id: props.descriptionEdit, value: null } : null,
   );
@@ -386,7 +381,66 @@ export function useFieldLibraryDemo(props) {
       return;
     }
     if (record.type !== "Analytical Model") return;
-    management.request(action, record, actionPolicy);
+    const gate = governedActions(record, { currentUser }).find((item) => item.action === action);
+    const reason = gate?.reason ?? null;
+    if (reason === "permission") setPending({ kind: "info", title: dialogs.permissionDeniedTitle || "Permission denied", message: tooltips.permission });
+    else if (reason === "already-disabled") setPending({ kind: "info", title: dialogs.alreadyDisabledTitle || "Knowledge already disabled", message: tooltips["already-disabled"] });
+    else if (reason === "disable-first") setPending({ kind: "disable-first", record, then: action });
+    else if (action === "edit") editRecord(record);
+    else if (action === "delete") requestDelete(record);
+    else setPending({ kind: "disable", record });
+  };
+  const dialogFor = (state) => {
+    if (!state) return null;
+    if (state.kind === "info") return { purpose: "info", title: state.title, message: state.message, closeLabel: dialogs.closeLabel || "Close" };
+    if (state.kind === "delete-blocked") {
+      const refs = state.record.references || [];
+      return {
+        purpose: "info",
+        title: dialogs.deleteBlockedTitle || "Deletion blocked",
+        message: dialogs.deleteBlocked?.(refs) || `This analysis is referenced by: ${refs.join(", ")}. Remove these references before deleting.`,
+        closeLabel: dialogs.closeLabel || "Close",
+      };
+    }
+    if (state.kind === "disable-first") {
+      return {
+        purpose: "warning",
+        title: dialogs.offlineFirstTitle || governanceMessages.dialogs["disable-first"].title,
+        message: dialogs.offlineFirstMessage || governanceMessages.dialogs["disable-first"].message,
+        confirmLabel: dialogs.offlineFirstConfirm || "Go Offline",
+        cancelLabel: dialogs.cancelLabel || "Cancel",
+      };
+    }
+    const isDelete = state.kind === "delete";
+    return {
+      purpose: isDelete ? "danger" : "warning",
+      title: dialogs.confirmTitle || "Confirm Operation",
+      message: isDelete ? dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
+      confirmLabel: isDelete ? dialogs.deleteConfirm || "Confirm Delete" : dialogs.offlineConfirm || "Confirm Offline",
+      cancelLabel: dialogs.cancelLabel || "Cancel",
+    };
+  };
+  const disableRecord = (record) => {
+    patchRecord(record.id, { status: "Disable", availability: "disabled", isDisabled: true, updated_at: now() });
+    showToast(dialogs.disabledToast || "Disabled successfully");
+  };
+  const confirmDialog = (event) => {
+    const state = pending;
+    setPending(null);
+    props.onDialogConfirm?.(event);
+    if (!state || state.kind === "info" || state.kind === "delete-blocked") return;
+    if (state.kind === "disable-first") {
+      disableRecord(state.record);
+      if (state.then === "edit") editRecord(state.record);
+      if (state.then === "delete") requestDelete({ ...state.record, status: "Disable" });
+      return;
+    }
+    if (state.kind === "disable") disableRecord(state.record);
+    if (state.kind === "delete") {
+      setAll((current) => current.filter((item) => item.id !== state.record.id));
+      setDetailId((current) => (current === state.record.id ? null : current));
+      showToast(dialogs.deletedToast || "Deleted successfully");
+    }
   };
 
   /* Filter descriptors per type — field-library.js render(): insertion-order
@@ -466,7 +520,7 @@ export function useFieldLibraryDemo(props) {
     .map((record) => ({
       ...record,
       projectLabels: type === "Report Context" ? reportContextProjectLabels(record) : undefined,
-      actions: type === "Analytical Model" ? knowledgeActions(record, actionPolicy) : [],
+      actions: type === "Analytical Model" ? governedActions(record, { currentUser }) : [],
     }));
   /* field-library.js open(): drawer title + status pill per record type —
      keyed off record.type so the peeked detail resolves the same on any page. */
@@ -486,7 +540,7 @@ export function useFieldLibraryDemo(props) {
     detailTitle: record.report_name || record.metric_name || record.analysis_name || record.email_subject,
     detailStatus: drawerStatus(record),
     projectLabels: record.type === "Report Context" ? reportContextProjectLabels(record) : undefined,
-    actions: record.type === "Analytical Model" ? knowledgeActions(record, actionPolicy) : [],
+    actions: record.type === "Analytical Model" ? governedActions(record, { currentUser }) : [],
     scenarioLinks: (record.scenario_report_ids || [])
       .map((id) => (props.records || []).find((item) => item.id === id && item.typeId === "Scenario Reporting"))
       .filter(Boolean)
@@ -507,14 +561,15 @@ export function useFieldLibraryDemo(props) {
     page: currentPage,
     pageSize,
     pageSizes: props.pageSizes || [5, 10, 20],
-    strings,
+    strings: { ...strings, tooltips },
     countUnit,
     createHref: type === "Analytical Model" ? props.createHref : undefined,
     createLabel: (strings.createLabels || {})[type],
     dashboardHref: props.dashboardHref,
     detail: detailRecord,
     peek: peekDetail ? { type: peeked.type, detail: peekDetail } : null,
-    dialog: management.dialog,
+    dialog: dialogFor(pending),
+    toast,
     descriptionEdit: descriptionEdit
       ? {
           id: descriptionEdit.id,
@@ -563,8 +618,17 @@ export function useFieldLibraryDemo(props) {
       setDetailId(null);
       props.onCloseDetail?.(event);
     },
-    onDialogConfirm: management.confirm,
-    onDialogCancel: management.cancel,
+    onDialogConfirm: confirmDialog,
+    onDialogCancel: (event) => {
+      setPending(null);
+      props.onDialogCancel?.(event);
+    },
+    onClearFilters: (event) => {
+      setQuery("");
+      setSelected({});
+      setPage(1);
+      props.onClearFilters?.(event);
+    },
     onDescriptionChange: (event) => {
       setDescriptionEdit((current) => (current ? { ...current, value: event.value } : current));
       props.onDescriptionChange?.(event);

@@ -272,6 +272,8 @@ For every WP7 package:
      the control exists, and the story side asserts the correct result (AGENTS §3.5). Rename the scenario
      id if its name described the defect (e.g. `p12-time-noop` → `p12-time`).
    - `--negative` must still fail every mutated scenario.
+   - A blocked action is `aria-disabled` but operable (B7). Playwright's `click` refuses such elements, so
+     click them with `{ eval: "document.querySelector('…').click()" }`.
 8. Record before/after counts (§5 report).
 
 ### WP8 — Close out

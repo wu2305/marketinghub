@@ -1,6 +1,6 @@
 {
   "maxRawHexColors": 0,
-  "maxTokenDefinitions": 485,
+  "maxTokenDefinitions": 431,
   "maxDuplicateValues": 39,
   "legacyPrefixExemptions": [
     "--mh-header",
@@ -129,7 +129,6 @@
     "--mh-pagination-select-ink",
     "--mh-bt-copy",
     "--mh-bt-label",
-    "--mh-bt-tag-bg",
     "--mh-bt-state-bg",
     "--mh-bt-state-ink",
     "--mh-bt-state-off-bg",
@@ -137,7 +136,6 @@
     "--mh-bt-action",
     "--mh-bt-action-disabled",
     "--mh-bt-action-hover-bg",
-    "--mh-bt-countline",
     "--mh-bt-empty",
     "--mh-bt-create-shadow",
     "--mh-bt-drawer-bg",
@@ -164,7 +162,6 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/interpreter/FieldLibraryView",
     "features/interpreter/ScenarioReportsView",
     "features/interpreter/PrinciplesView",
     "features/interpreter/KnowledgeActions",

@@ -1,49 +1,10 @@
 /* Business Term keeps only what the pattern leaves to the view
-   (patterns/library.md §5): synonym chips and the drawer's sections. */
+   (patterns/library.md §5): the drawer's sections. Chips use ChipList. */
 .mh-btview {
 display: grid;
   gap: var(--mh-space-6);
   min-width: 0;
   font-family: var(--mh-font-sans);
-}
-
-.mh-btview__synonyms {
-display: flex;
-  align-items: center;
-  gap: var(--mh-space-4);
-  min-width: 0;
-}
-
-.mh-btview__synonyms > span {
-flex: 0 0 auto;
-  color: var(--mh-text-faint);
-  font-size: var(--mh-font-size-sm);
-  font-weight: var(--mh-font-weight-bold);
-}
-
-.mh-btview__synonyms ul,
-.mh-btview__chips {
-display: flex;
-  flex-wrap: wrap;
-  gap: var(--mh-space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.mh-btview__synonyms li,
-.mh-btview__chips li {
-padding: var(--mh-space-1) var(--mh-space-4);
-  border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-muted);
-  color: var(--mh-text);
-  font-size: var(--mh-font-size-sm);
-}
-
-.mh-btview__synonyms .mh-btview__more {
-background: var(--mh-accent-wash);
-  color: var(--mh-accent-ink);
-  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-btview__detail {
@@ -70,14 +31,4 @@ margin: 0;
   color: var(--mh-text);
   font-size: var(--mh-font-size-md);
   line-height: 1.5;
-}
-
-.mh-btview__scope {
-display: inline-block;
-  padding: var(--mh-space-1) var(--mh-space-3);
-  border-radius: var(--mh-radius-pill);
-  background: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
-  color: var(--mh-success);
-  font-size: var(--mh-font-size-sm);
-  font-weight: var(--mh-font-weight-bold);
 }

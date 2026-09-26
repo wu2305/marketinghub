@@ -191,7 +191,7 @@ describe("AI Interpreter type contract", () => {
       // field-library.js swaps in #fmLibrary's per-type card grid.
       if (type.view === "field-library") {
         const expected = INTERPRETER.records.filter((record) => record.typeId === type.id);
-        const cards = document.querySelectorAll(".mh-flview__card");
+        const cards = document.querySelectorAll(".mh-flview .mh-library-item");
         expect(cards.length).toBe(expected.length);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;

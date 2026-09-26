@@ -98,7 +98,8 @@ export function useBusinessTermDemo(props) {
     setToast(message);
     toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
   };
-  const setStatus = (id, status) => setList((current) => current.map((item) => item.id === id ? { ...item, status } : item));
+  /* Keep both availability spellings in step; lib/governance.js reads `availability` first. */
+  const setStatus = (id, status) => setList((current) => current.map((item) => item.id === id ? { ...item, status, availability: status === "Disable" ? "disabled" : "enabled" } : item));
   const remove = (id) => {
     setList((current) => current.filter((item) => item.id !== id));
     setDetailId((current) => current === id ? null : current);
