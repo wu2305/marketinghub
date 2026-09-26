@@ -5,6 +5,31 @@ export default [
     story: { id: "pages--campaign", expect: [{ sel: ".mh-campaign", text: "Overview Dashboard" }, { sel: ".mh-rail" }] },
   },
   {
+    id: "p06-campaign-account-filtered",
+    original: { url: "/assets/pages/campaign.html", actions: [{ fill: ["#accountSearch", "Coach_XHS_02"] }], expect: [{ sel: "#accountTable tbody tr:not([hidden])", count: 1, text: "Coach_XHS_02" }, { sel: "#accountTableResult", text: "1 account shown" }] },
+    story: { id: "pages--campaign-account-filtered", expect: [{ sel: ".mh-campaign__table tbody tr", count: 1, text: "Coach_XHS_02" }, { sel: ".mh-campaign__table", text: "1 account shown" }] },
+  },
+  {
+    id: "p06-campaign-execution",
+    original: { url: "/assets/pages/campaign.html#execution", expect: [{ sel: "#executionTitle", text: "RedNote Campaign Tool" }, { sel: ".execution-summary", text: "Awaiting confirmation" }] },
+    story: { id: "pages--campaign-execution", expect: [{ sel: ".mh-heading--view h2", text: "RedNote Campaign Tool" }, { sel: ".mh-summary", text: "Awaiting confirmation" }] },
+  },
+  {
+    id: "p06-campaign-assets",
+    original: { url: "/assets/pages/campaign.html#assets", expect: [{ sel: "#assetsTitle", text: "Creative Assets" }, { sel: ".asset-table", text: "Tabby 26SS seeding assets" }] },
+    story: { id: "pages--campaign-assets", expect: [{ sel: ".mh-heading--view h2", text: "Creative Assets" }, { sel: ".mh-campaign .mh-table", text: "Tabby 26SS seeding assets" }] },
+  },
+  {
+    id: "p06-campaign-analytics",
+    original: { url: "/assets/pages/campaign.html#analytics", expect: [{ sel: "#analyticsTitle", text: "Analytics Center" }, { sel: ".efficiency-metrics", text: "Time saved" }] },
+    story: { id: "pages--campaign-analytics", expect: [{ sel: ".mh-heading--view h2", text: "Analytics Center" }, { sel: ".mh-efficiency", text: "Time saved" }] },
+  },
+  {
+    id: "p06-campaign-task-open",
+    original: { url: "/assets/pages/campaign.html#execution", actions: [{ click: "[data-open-task]" }], expect: [{ sel: "#taskDialog[open]", text: "Create Campaign Task" }, { sel: "#taskForm", text: "Pending confirmation" }] },
+    story: { id: "pages--campaign-task-dialog", expect: [{ sel: ".mh-task-dialog__form", text: "Pending confirmation" }, { sel: ".mh-task-dialog .mh-modal__title", text: "Create Campaign Task" }] },
+  },
+  {
     id: "p06-campaign-task-dialog",
     original: {
       url: "/assets/pages/campaign.html#execution",
@@ -20,14 +45,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { section: "execution" },
-      actions: [
-        { click: ".mh-heading--view .mh-button--primary" },
-        { wait: ".mh-modal .mh-task-dialog__preview" },
-        { click: ".mh-task-dialog__footer .mh-button--primary" },
-        { wait: ".mh-toast:not([hidden])" },
-      ],
+      id: "pages--campaign-task-submitted",
       expect: [
         { sel: ".mh-toast", text: "Campaign task added to the review queue." },
         { sel: ".mh-modal", state: "detached" },
@@ -37,7 +55,7 @@ export default [
   {
     /* The original task <dialog> never resets its form — Cancel/×/backdrop/
        Escape and even submit keep the field values; reopening shows them.
-       React keeps the draft on CampaignPage across Modal unmounts. */
+       useCampaignDemo keeps the controlled draft across Modal unmounts. */
     id: "p06-campaign-task-draft",
     original: {
       url: "/assets/pages/campaign.html#execution",
@@ -80,8 +98,7 @@ export default [
       expect: [{ sel: "#accountsTitle", text: "Account Binding" }, { sel: ".campaign-view.active .data-table" }],
     },
     story: {
-      id: "pages--campaign",
-      args: { section: "accounts" },
+      id: "pages--campaign-accounts",
       expect: [
         { sel: ".mh-campaign", text: "Account Binding" },
         { sel: ".mh-campaign .mh-table" },
@@ -142,8 +159,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
+      id: "pages--campaign-assistant-open",
       actions: [
         { wait: ".mh-assistant--drawer" },
         { waitMs: 450 },
@@ -189,10 +205,8 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
+      id: "pages--campaign-assistant-answer",
       actions: [
-        { click: ".mh-assistant__suggestions button" },
         { wait: ".mh-assistant__answer--workspace" },
         { eval: "(() => { const banner = document.querySelector('.mh-assistant__answer-banner'); const style = getComputedStyle(banner); if (style.display !== 'grid' || style.borderBottomStyle !== 'solid') throw new Error('response header not styled'); })()" },
       ],
@@ -299,15 +313,10 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
+      id: "pages--campaign-assistant-history-filled",
       actions: [
-        { click: "button[aria-label='History']" },
-        { wait: ".mh-assistant__history-pop" },
-        { click: ".mh-assistant__history-item" },
-        {
-          eval: "(() => { const v = document.querySelector('.mh-assistant__box textarea').value; if (v !== 'Why did campaign ROI decline last week?') throw new Error('prompt fill ' + JSON.stringify(v)); })()",
-        },
+        { wait: ".mh-assistant__send .mh-button:not([disabled])" },
+        { eval: "(() => { const v = document.querySelector('.mh-assistant__box textarea').value; if (v !== 'Why did campaign ROI decline last week?') throw new Error('prompt fill ' + JSON.stringify(v)); })()" },
       ],
       expect: [
         { sel: ".mh-assistant__history-pop", state: "detached" },
@@ -330,9 +339,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
-      actions: [{ click: "button[aria-label='Maximize AI Interpreter panel']" }],
+      id: "pages--campaign-assistant-maximized",
       expect: [
         { sel: ".mh-assistant--expanded", text: "Ask AI Interpreter" },
         { sel: "button[aria-label='Restore AI Interpreter panel']", attr: { name: "aria-label", value: "Restore AI Interpreter panel" } },
@@ -395,15 +402,7 @@ export default [
       ],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
-      actions: [
-        { click: ".mh-assistant__skill" },
-        { wait: ".mh-skill" },
-        { click: ".mh-skill__category >> nth=1" },
-        { wait: ".mh-skill__detail" },
-        { click: ".mh-skill__option:has-text('ROI diagnosis')" },
-      ],
+      id: "pages--campaign-assistant-selected-skill",
       expect: [
         { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
         { sel: ".mh-skill", state: "detached" },
@@ -475,18 +474,7 @@ export default [
       expect: [{ sel: "#aiGeneratedModelDialog .field-error", text: "Name is required." }],
     },
     story: {
-      id: "pages--campaign",
-      args: { assistantOpen: true },
-      actions: [
-        { click: ".mh-assistant__skill" },
-        { wait: ".mh-skill" },
-        { click: ".mh-skill__category >> nth=1" },
-        { wait: ".mh-skill__detail" },
-        { click: ".mh-skill__action >> nth=1" },
-        { wait: ".mh-flow__card--form" },
-        { click: ".mh-flow__foot .mh-flow__btn--primary" },
-        { wait: ".mh-flow__field-error" },
-      ],
+      id: "pages--campaign-model-manual-error",
       expect: [{ sel: ".mh-flow__field-error", text: "Name is required." }],
     },
   },

@@ -21,6 +21,7 @@ import {
   ReportCopilot,
   SelfServicePage,
   DataUploadPage,
+  CampaignPage,
   KnowledgeViewPage,
   useCockpitDemo,
   useHomeDemo,
@@ -38,10 +39,12 @@ import {
 } from "../../src/design/index.js";
 import { useSelfServiceDemo } from "../../src/design/demo/self-service-demo.js";
 import { useDataUploadDemo } from "../../src/design/demo/data-upload-demo.js";
+import { useCampaignDemo } from "../../src/design/demo/campaign-demo.js";
 import {
   ASSISTANT,
   ASSISTANT_SKILL_MENU,
   COCKPIT,
+  CAMPAIGN,
   COCKPIT_SKILL_MENU,
   HOME,
   INTERPRETER,
@@ -105,6 +108,7 @@ const ROUTE_MAP = {
   "/assets/pages/knowledge-create.html": "knowledge-create",
   "/assets/pages/flexible.html": "self-service",
   "/assets/pages/data-upload.html": "data-upload",
+  "/assets/pages/campaign.html": "campaign",
   "/assets/pages/metric-dictionary.html": "metric-dictionary",
   "/assets/pages/knowledge-view.html": "knowledge-view",
   "/assets/pages/review-center.html": "review-center",
@@ -164,6 +168,7 @@ function routeOf(loc) {
   if (rest === "knowledge-create") return { name: "knowledge-create", params };
   if (rest === "self-service") return { name: "self-service", params };
   if (rest === "data-upload") return { name: "data-upload", params };
+  if (rest === "campaign") return { name: "campaign", params };
   if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
   if (rest === "knowledge-view") return { name: "knowledge-view", params };
   if (rest === "review-center") return { name: "review-center", params };
@@ -328,6 +333,21 @@ function DataUploadRoute() {
     submittingLabel: "Submitted",
   });
   return <DataUploadPage {...page} />;
+}
+
+function CampaignRoute() {
+  const props = useCampaignDemo({
+    ...CAMPAIGN,
+    logo: hostLogo,
+    navigation: hostNav(),
+    section: "overview",
+    channel: "rednote",
+    assistantOpen: false,
+    prompt: "",
+    demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, toasts: CAMPAIGN.toasts },
+    onNavigate: ({ href }) => navigateHost(href),
+  });
+  return <CampaignPage {...props} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -551,6 +571,7 @@ function App() {
   if (route.name === "knowledge-create") return <KnowledgeCreateRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
   if (route.name === "data-upload") return <DataUploadRoute />;
+  if (route.name === "campaign") return <CampaignRoute />;
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
   if (route.name === "review-center") return <ReviewCenterRoute />;
