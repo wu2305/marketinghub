@@ -32,6 +32,7 @@ import {
   PersonalMemoryPage,
   ScenarioLibraryPage,
   ScenarioDetailPage,
+  ScenarioEditPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -84,6 +85,8 @@ import { useSkillLibraryDemo } from "../../src/design/demo/skill-library-demo.js
 import { SCENARIO_DETAIL, SCENARIO_DETAIL_SHELL } from "../../src/design/demo/content/scenario-detail.js";
 import { SKILL_RECORDS } from "../../src/design/demo/content/skill-records.js";
 import { useScenarioDetailDemo } from "../../src/design/demo/scenario-detail-demo.js";
+import { SCENARIO_EDIT, SCENARIO_EDIT_SHELL } from "../../src/design/demo/content/scenario-edit.js";
+import { useScenarioEditDemo } from "../../src/design/demo/scenario-edit-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -108,6 +111,7 @@ const ROUTE_MAP = {
   "/assets/pages/personal-memory.html": "personal-memory",
   "/assets/pages/scenario-library.html": "scenario-library",
   "/assets/pages/scenario-detail.html": "scenario-detail",
+  "/assets/pages/scenario-edit.html": "scenario-edit",
 };
 
 function mapDemoHref(href) {
@@ -165,6 +169,7 @@ function routeOf(loc) {
   if (rest === "personal-memory") return { name: "personal-memory", params };
   if (rest === "scenario-library") return { name: "scenario-library", params };
   if (rest === "scenario-detail") return { name: "scenario-detail", params };
+  if (rest === "scenario-edit") return { name: "scenario-edit", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -437,7 +442,7 @@ function ScenarioLibraryRoute() {
 
 function ScenarioDetailRoute({ params }) {
   const hrefFor = (id, query = {}) => {
-    const path = ({ home: hostHref(""), cockpit: hostHref("cockpit"), interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality"), "scenario-edit": hostHref("coverage/scenario-edit") })[id];
+    const path = ({ home: hostHref(""), cockpit: hostHref("cockpit"), interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality"), "scenario-edit": hostHref("scenario-edit") })[id];
     const search = new URLSearchParams(query).toString();
     return path && search ? `${path}?${search}` : path;
   };
@@ -449,6 +454,16 @@ function ScenarioDetailRoute({ params }) {
     hrefFor,
   });
   return <ScenarioDetailPage {...page} logo={hostLogo} navigation={hostNav()} />;
+}
+
+function ScenarioEditRoute({ params }) {
+  const hrefFor = (id, query = {}) => {
+    const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality"), cockpit: hostHref("cockpit") })[id];
+    const search = new URLSearchParams(query).toString();
+    return path && search ? `${path}?${search}` : path;
+  };
+  const props = useScenarioEditDemo({ content: SCENARIO_EDIT, records: SKILL_RECORDS, scenarioId: params.get("id") || "", ...SCENARIO_EDIT_SHELL, hrefFor, onNavigate: ({ href }) => navigateHost(href) });
+  return <ScenarioEditPage {...props} logo={hostLogo} navigation={hostNav()} />;
 }
 
 /* ------------------------------------------------------------------ */
@@ -565,6 +580,7 @@ function App() {
   if (route.name === "personal-memory") return <PersonalMemoryRoute />;
   if (route.name === "scenario-library") return <ScenarioLibraryRoute />;
   if (route.name === "scenario-detail") return <ScenarioDetailRoute params={route.params} />;
+  if (route.name === "scenario-edit") return <ScenarioEditRoute key={route.params.toString()} params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;
