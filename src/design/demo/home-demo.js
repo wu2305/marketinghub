@@ -39,6 +39,7 @@ export function useHomeDemo(props) {
   const [prompt, setPrompt] = useSynced(props.prompt);
   const [scope, setScope] = useSynced(props.scope);
   const [answers, setAnswers] = React.useState([]);
+  const answerSequence = React.useRef(0);
   const [skill, setSkill] = React.useState(null);
   const [flow, setFlow] = React.useState(null);
 
@@ -122,7 +123,8 @@ export function useHomeDemo(props) {
       const text = String(event.prompt || "").trim();
       if (text) {
         const entry = answerFor?.(text, scope);
-        if (entry) setAnswers([entry]);
+        // portal.js:754 replaces the feed on every send, including repeated questions.
+        if (entry) setAnswers([{ ...entry, id: `home-answer-${++answerSequence.current}` }]);
         setPrompt("");
       }
       props.onSubmit?.(event);

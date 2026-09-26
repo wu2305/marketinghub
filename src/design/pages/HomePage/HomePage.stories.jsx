@@ -127,3 +127,46 @@ export const HomeModelManualError = {
   name: "Home model required fields",
   play: playSteps([...modelMenu, ".mh-skill__action:last-child", ".mh-flow__foot .mh-flow__btn--primary"], ".mh-flow__field-error"),
 };
+
+export const HomeAssistantHistoryFilled = {
+  ...HomeAssistantOpen,
+  name: "Home assistant history fills prompt",
+  play: async (context) => {
+    await playSteps(["button[aria-label='History']", ".mh-assistant__history-item"], ".mh-assistant__box textarea")(context);
+    const doc = context.canvasElement.ownerDocument;
+    if (!doc.querySelector(".mh-assistant__box textarea").value.includes("ROI trend across my active campaigns") || doc.querySelector(".mh-assistant__send .mh-button").disabled) {
+      throw new Error("Home history must fill an enabled composer");
+    }
+  },
+};
+
+export const HomeAssistantSkillSearchEmpty = {
+  ...HomeAssistantOpen,
+  name: "Home assistant skill search empty",
+  play: async (context) => {
+    await playSteps(modelMenu, ".mh-skill__search input")(context);
+    const doc = context.canvasElement.ownerDocument;
+    const input = doc.querySelector(".mh-skill__search input");
+    Object.getOwnPropertyDescriptor(doc.defaultView.HTMLInputElement.prototype, "value").set.call(input, "no matching model");
+    input.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    if (!doc.querySelector(".mh-skill__empty")) throw new Error("Skill empty result missing");
+  },
+};
+
+export const HomeModelEmptySelection = {
+  ...HomeAssistantOpen,
+  name: "Home model requires a message",
+  play: async (context) => {
+    await HomeModelHistory.play(context);
+    const doc = context.canvasElement.ownerDocument;
+    for (const input of doc.querySelectorAll(".mh-flow__msg input:checked")) input.click();
+    await playSteps([".mh-flow__foot .mh-flow__btn--primary"], ".mh-flow__error:not([hidden])")(context);
+  },
+};
+
+export const HomeAssistantFeedback = {
+  ...HomeAssistantOpen,
+  name: "Home assistant helpful feedback",
+  play: playSteps([".mh-assistant__suggestions button", ".mh-assistant__send .mh-button", ".mh-assistant__feedback button[data-kind='helpful']"], ".mh-assistant__feedback button[aria-pressed='true']"),
+};
