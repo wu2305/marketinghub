@@ -312,7 +312,7 @@ export default [
       ],
       expect: [
         { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge", text: "Disabled" },
-        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge.mh-badge--paused" },
+        { sel: ".mh-btview__card:has-text('GMV') .mh-badge--knowledge.mh-badge--neutral" },
       ],
     },
   },
@@ -463,7 +463,7 @@ export default [
       id: "pages--interpreter-scenario-reporting",
       expect: [
         { sel: ".mh-srview__card", count: 3, text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__state.is-off", count: 2, text: "Disabled" },
+        { sel: ".mh-srview__pills .mh-badge--knowledge.mh-badge--neutral", count: 2, text: "Disabled" },
         { sel: ".mh-srview__card .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 9 },
         { sel: ".mh-srview__countline", state: "hidden" },
         { sel: ".mh-srview__pagination", text: "3 records" },
@@ -499,7 +499,7 @@ export default [
       expect: [
         { sel: ".mh-srview__drawer .mh-modal__eyebrow", text: "SCENARIO REPORTING" },
         { sel: ".mh-srview__drawer .mh-modal__title", text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__drawer .mh-srview__title-pill", text: "Disabled" },
+        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--detail", text: "Disabled" },
         { sel: ".mh-srview__drawer .mh-srview__flow--head", text: "Building" },
         { sel: ".mh-srview__drawer .mh-srview__detail-link", text: "Invest City Strategy Analysis" },
         { sel: ".mh-srview__drawer .mh-srview__note", text: "AI Interpreter is enabled automatically" },
@@ -886,7 +886,7 @@ export default [
       expect: [
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Report Context" },
         { sel: ".mh-modal--drawer .mh-modal__title", text: "Invest City Strategy Analysis" },
-        { sel: ".mh-modal--drawer .mh-badge--knowledge", text: "Enabled" },
+        { sel: ".mh-modal--drawer .mh-badge--detail", text: "Enabled" },
         { sel: ".mh-modal--drawer .mh-flview__domain", text: "D2C Insights" },
         { sel: ".mh-modal--drawer .mh-flview__scenario-link", count: 2, text: "Channel Performance Analysis" },
         { sel: ".mh-flview__open-dashboard", text: "Open Dashboard" },
@@ -1164,7 +1164,7 @@ export default [
       { orig: ".dm-domain-card", story: ".mh-dmview__domain", props: ["x", "y", "width"], tol: 8 },
       { orig: ".dm-domain-tabs", story: ".mh-dmview__tabs", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-basic-card", story: ".mh-dmview__basic", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic-status", props: ["x", "y", "width", "height"], tol: 8 },
+      { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic .mh-badge--knowledge", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-related-report", story: ".mh-dmview__report", props: ["x", "y", "width"], tol: 8 },
     ],
     original: {
@@ -1189,7 +1189,7 @@ export default [
         { sel: ".mh-dmview__domain.is-active", text: "D2C Insight" },
         { sel: ".mh-dmview__tab.is-active", text: "Basic information" },
         { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
-        { sel: ".mh-dmview__basic-status", text: "Enabled" },
+        { sel: ".mh-dmview__basic .mh-badge--knowledge", text: "Enabled" },
         { sel: ".mh-dmview__synonym", count: 5 },
         { sel: ".mh-dmview__report", count: 3 },
         { sel: ".mh-dmview__report:has-text(\"4P Report\")" },

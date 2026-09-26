@@ -543,7 +543,7 @@ export default [
   {
     id: "p06-campaign-account-empty",
     original: { url: "/assets/pages/campaign.html", actions: [{ fill: ["#accountSearch", "no matching account"] }], expect: [{ sel: "#accountTable tbody tr:not([hidden])", state: "detached", count: 0 }, { sel: "#accountTableResult", text: "0 accounts shown" }] },
-    story: { id: "pages--campaign-account-empty", expect: [{ sel: ".mh-campaign__table tbody tr", state: "detached", count: 0 }, { sel: ".mh-campaign__table", text: "0 accounts shown" }] },
+    story: { id: "pages--campaign-account-empty", actions: [{ wait: ".mh-campaign__table:has-text('0 accounts shown')" }], expect: [{ sel: ".mh-campaign__table tbody tr", state: "detached", count: 0 }, { sel: ".mh-campaign__table", text: "0 accounts shown" }] },
   },
   {
     id: "p06-assistant-skill-empty",
