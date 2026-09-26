@@ -36,19 +36,21 @@ export function LibraryItem({ id, title, draft = false, draftLabel = "Draft", de
           {draft ? <sup className="mh-library-item__draft"><StatusBadge status="draft">{draftLabel}</StatusBadge></sup> : null}
         </h3>
         {status ? <StatusBadge status={status.status} tone={status.tone}>{status.label}</StatusBadge> : null}
-        {actions ? <ItemActions {...actions} id={id} name={title} onAction={onAction} /> : null}
       </header>
       {description ? <p className="mh-library-item__description">{description}</p> : null}
       {children ? <div className="mh-library-item__extra">{children}</div> : null}
-      {meta.length ? (
-        <dl className="mh-library-item__meta">
-          {meta.map((entry) => (
-            <div key={entry.label}>
-              <dt>{entry.label}</dt>
-              <dd>{entry.value}</dd>
-            </div>
-          ))}
-        </dl>
+      {meta.length || actions ? (
+        <footer className="mh-library-item__foot">
+          <dl className="mh-library-item__meta">
+            {meta.map((entry) => (
+              <div key={entry.label}>
+                <dt>{entry.label}</dt>
+                <dd>{entry.value}</dd>
+              </div>
+            ))}
+          </dl>
+          {actions ? <ItemActions {...actions} id={id} name={title} onAction={onAction} /> : null}
+        </footer>
       ) : null}
     </article>
   );

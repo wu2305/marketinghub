@@ -35,6 +35,7 @@ export function LibraryToolbar({ search, searchRef, facets = [], count, create, 
             label={search.label}
             placeholder={search.placeholder ?? search.label}
             value={search.value ?? ""}
+            variant="plain"
             inputRef={searchRef}
             onChange={({ value }) => onChange?.({ field: "search", value })}
           />
