@@ -1,0 +1,59 @@
+.mh-scenario-detail{min-width:0;color:var(--mh-ink-strong);font-family:var(--mh-font)}
+.mh-scenario-detail__tabs{display:flex;align-items:center;gap:0;overflow:auto;margin-bottom:24px;padding:0 20px;border-bottom:1px solid var(--mh-line);border-radius:8px 8px 0 0;background:var(--mh-surface)}
+.mh-scenario-detail__tabs button{flex:0 0 auto;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--mh-muted);padding:17px 22px;font:700 13px var(--mh-font);cursor:pointer}
+.mh-scenario-detail__tabs button:hover,.mh-scenario-detail__tabs button:focus-visible{color:var(--mh-ink-strong);background:var(--mh-bg-soft)}
+.mh-scenario-detail__tabs button:focus-visible,.mh-scenario-detail__preview button:focus-visible,.mh-scenario-detail a:focus-visible{outline:2px solid var(--mh-focus-blue);outline-offset:2px}
+.mh-scenario-detail__tabs button.is-active{border-color:var(--mh-gold-deep);color:var(--mh-ink-strong)}
+.mh-scenario-detail__panel{min-height:520px;padding:24px;border:1px solid var(--mh-line);border-radius:0 0 8px 8px;background:var(--mh-surface)}
+.mh-scenario-detail__panel h3{margin:0 0 20px;font:700 18px var(--mh-font);color:var(--mh-ink-strong)}
+.mh-scenario-detail__info-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.mh-scenario-detail__info-head h2{margin:0 0 12px;font:700 25px var(--mh-font)}
+.mh-scenario-detail__meta{display:flex;flex-wrap:wrap;gap:8px}
+.mh-scenario-detail__tag{display:inline-flex;padding:3px 10px;border-radius:999px;color:var(--mh-ink-strong);font-size:11px;font-weight:600}
+.mh-scenario-detail__tag--published{background:var(--mh-surface-success-soft);color:var(--mh-green)}
+.mh-scenario-detail__tag--under-review{background:var(--mh-surface-warning-soft);color:var(--mh-ink-warning-brown)}
+.mh-scenario-detail__tag--scope{background:var(--mh-surface-info);color:var(--mh-ink-info)}.mh-scenario-detail__tag--version{background:var(--mh-surface-neutral-soft);color:var(--mh-muted)}
+.mh-scenario-detail__edit{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:40px;padding:0 18px;border:0;border-radius:6px;background:linear-gradient(135deg,var(--mh-bubble-from),var(--mh-bubble-to));color:var(--mh-ink-strong);text-decoration:none;font-size:13px;font-weight:700}
+.mh-scenario-detail__edit:hover{filter:brightness(.92)}
+.mh-scenario-detail__edit svg{width:16px;height:16px}
+.mh-scenario-detail__description{margin:24px 0;color:var(--mh-copy);font-size:14px;line-height:1.6}
+.mh-scenario-detail__structure{display:grid;gap:12px;margin-bottom:24px}
+.mh-scenario-detail__structure-item{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--mh-line-panel-soft);border-radius:10px;background:var(--mh-surface)}
+.mh-scenario-detail__structure-item:hover{background:var(--mh-bg-soft)}
+.mh-scenario-detail__structure-icon{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:10px;background:var(--mh-surface-info);color:var(--mh-ink-info)}
+.mh-scenario-detail__structure-icon--when{background:var(--mh-surface-warning);color:var(--mh-ink-warning)}
+.mh-scenario-detail__structure-icon--logic{background:var(--mh-surface-draft);color:var(--mh-ink-draft)}
+.mh-scenario-detail__structure-icon--output{background:var(--mh-surface-success-soft);color:var(--mh-green)}
+.mh-scenario-detail__structure-icon--boundary{background:var(--mh-surface-status-warm);color:var(--mh-ink-status-warm)}
+.mh-scenario-detail__structure-icon svg{width:20px;height:20px}
+.mh-scenario-detail__structure-item strong{font-size:12px;text-transform:uppercase;letter-spacing:.02em}
+.mh-scenario-detail__structure-item p{margin:6px 0 0;color:var(--mh-muted);font-size:13px;line-height:1.6}
+.mh-scenario-detail__governance{padding:20px;border:1px solid var(--mh-line-panel-soft);border-radius:10px;background:var(--mh-bg-soft)}
+.mh-scenario-detail__governance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mh-scenario-detail__governance-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;background:var(--mh-surface)}
+.mh-scenario-detail__governance-item svg{width:16px;height:16px;flex:0 0 auto;color:var(--mh-faint)}
+.mh-scenario-detail__field-label{min-width:80px;font-size:11px;font-weight:600;color:var(--mh-faint)}
+.mh-scenario-detail__field-value{font-size:12px;font-weight:700;overflow-wrap:anywhere}
+.mh-scenario-detail__field-value--passed{color:var(--mh-green)}
+.mh-scenario-detail__field-value--reviewing{color:var(--mh-ink-warning)}
+.mh-scenario-detail__preview{margin-top:30px;padding:22px;border:1px solid var(--mh-line-panel-soft);border-radius:8px}
+.mh-scenario-detail__preview-head{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.mh-scenario-detail__preview-head h3{margin:0}
+.mh-scenario-detail__preview button{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border:1px solid var(--mh-line);border-radius:6px;background:var(--mh-surface);color:var(--mh-ink-strong);font:700 12px var(--mh-font);cursor:pointer}
+.mh-scenario-detail__preview button svg{width:17px;height:17px}
+.mh-scenario-detail__preview-body{margin-top:20px;border-top:1px solid var(--mh-line-panel-soft);padding-top:20px}
+.mh-scenario-detail__preview-question{display:grid;gap:9px;margin-bottom:15px;font-size:13px}.mh-scenario-detail__preview-question span{color:var(--mh-copy)}
+.mh-scenario-detail__preview-output{padding:18px;border:1px solid var(--mh-line-panel-soft);border-radius:6px;background:var(--mh-bg-soft)}
+.mh-scenario-detail__preview-output pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:12px/1.6 var(--mh-font)}
+.mh-scenario-detail__usage-link{display:inline-flex;align-items:center;gap:10px;margin-top:24px;color:var(--mh-ink-link-strong);font-size:13px;font-weight:700;text-decoration:none}
+.mh-scenario-detail__usage-link:hover{text-decoration:underline}.mh-scenario-detail__usage-link svg{width:18px;height:18px}
+.mh-scenario-detail__related-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mh-scenario-detail__related-grid a{display:flex;align-items:center;gap:13px;min-height:82px;padding:18px;border:1px solid var(--mh-line-panel-soft);border-radius:8px;background:var(--mh-surface);color:var(--mh-ink-strong);text-decoration:none}
+.mh-scenario-detail__related-grid a:hover{border-color:var(--mh-line-active-warm);background:var(--mh-surface-gold-wash)}
+.mh-scenario-detail__related-icon{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:8px;background:var(--mh-surface-info);color:var(--mh-ink-info)}
+.mh-scenario-detail__related-icon svg{width:21px;height:21px}.mh-scenario-detail__related-grid a>span:nth-child(2){display:grid;gap:5px}.mh-scenario-detail__related-grid strong{font-size:13px}.mh-scenario-detail__related-grid small{font-size:11px;color:var(--mh-muted)}.mh-scenario-detail__related-arrow{margin-left:auto;color:var(--mh-muted)}
+.mh-scenario-detail__ai-head{display:flex;align-items:center;gap:9px}.mh-scenario-detail__ai-head>svg{width:23px;height:23px}.mh-scenario-detail__ai-head h3{margin:0}.mh-scenario-detail__ai-head span{display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding:6px 10px;border-radius:16px;background:var(--mh-surface-success-soft);color:var(--mh-green);font-size:11px;font-weight:700}.mh-scenario-detail__ai-head span svg{width:14px;height:14px}
+.mh-scenario-detail__ai-card{margin-top:24px;padding:24px;border:1px solid var(--mh-line-panel-soft);border-radius:8px}.mh-scenario-detail__ai-score{display:flex;justify-content:space-between;gap:20px;font-size:13px}.mh-scenario-detail__ai-progress{height:8px;margin:15px 0 22px;border-radius:8px;background:var(--mh-surface-neutral-soft);overflow:hidden}.mh-scenario-detail__ai-progress span{display:block;height:100%;background:var(--mh-green)}.mh-scenario-detail__ai-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mh-scenario-detail__ai-field{display:flex;align-items:center;gap:9px;font-size:13px}.mh-scenario-detail__ai-field svg{width:17px;height:17px;flex:0 0 auto}.mh-scenario-detail__ai-field--filled svg{color:var(--mh-green)}.mh-scenario-detail__ai-field--missing svg{color:var(--mh-ink-warning)}
+.mh-scenario-detail__version-row,.mh-scenario-detail__activity-row{display:flex;align-items:center;gap:16px;padding:19px 0;border-bottom:1px solid var(--mh-line-panel-soft)}.mh-scenario-detail__version-row:last-child,.mh-scenario-detail__activity-row:last-child{border-bottom:0}.mh-scenario-detail__version-row>div,.mh-scenario-detail__activity-row>div{display:grid;gap:6px;min-width:0}.mh-scenario-detail__version-row strong,.mh-scenario-detail__activity-row strong{font-size:13px}.mh-scenario-detail__version-row small,.mh-scenario-detail__activity-row small{color:var(--mh-muted);font-size:12px}.mh-scenario-detail__version-number{display:grid;place-items:center;width:54px;height:48px;flex:0 0 auto;border-radius:6px;background:var(--mh-surface-neutral-soft);font-size:14px;font-weight:700}.mh-scenario-detail__version-row.is-current .mh-scenario-detail__version-number{background:var(--mh-surface-gold-wash);color:var(--mh-gold-deep)}.mh-scenario-detail__version-badge{margin-left:auto;padding:5px 10px;border-radius:12px;background:var(--mh-surface-success-soft);color:var(--mh-green);font-size:11px;font-weight:700}.mh-scenario-detail__activity-avatar{display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;border-radius:50%;background:var(--mh-surface-gold-wash);color:var(--mh-gold-deep);font-size:11px;font-weight:700}.mh-scenario-detail__activity-row time{margin-left:auto;color:var(--mh-muted);font-size:11px;white-space:nowrap}
+@media(max-width:850px){.mh-scenario-detail__panel{padding:20px}.mh-scenario-detail__governance-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mh-scenario-detail__related-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.mh-scenario-detail__info-head,.mh-scenario-detail__preview-head{flex-direction:column;align-items:flex-start}.mh-scenario-detail__governance-grid,.mh-scenario-detail__ai-fields{grid-template-columns:1fr}.mh-scenario-detail__tabs button{padding:14px 16px}.mh-scenario-detail__activity-row{flex-wrap:wrap}.mh-scenario-detail__activity-row time{width:100%;margin-left:54px}}

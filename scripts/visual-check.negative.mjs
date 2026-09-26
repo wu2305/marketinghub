@@ -25,6 +25,10 @@ export default [
     story: { id: "pages--scenario-library-detail" },
     reason: "Closed example preview cannot satisfy the expanded output assertions",
   },
+  { id: "neg-p16-wrong-record", base: "p16-known-record", story: { id: "pages--scenario-detail" }, reason: "City Comparison cannot satisfy Campaign Review record identity and governance assertions" },
+  { id: "neg-p16-wrong-tab", base: "p16-ai-check", story: { id: "pages--scenario-detail-related" }, reason: "Related Objects cannot satisfy AI Check fields and panel assertions" },
+  { id: "neg-p16-missing-preview", base: "p16-preview", story: { id: "pages--scenario-detail" }, reason: "Closed Content preview cannot satisfy expanded question, output and aria state" },
+  { id: "neg-p16-assistant-closed", base: "p16-assistant-open", story: { id: "pages--scenario-detail" }, reason: "Closed launcher state cannot satisfy open lite assistant assertions" },
   {
     id: "neg-p12-wrong-tab",
     base: "p12-approved",

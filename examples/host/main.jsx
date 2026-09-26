@@ -31,6 +31,7 @@ import {
   FeedbackQualityPage,
   PersonalMemoryPage,
   ScenarioLibraryPage,
+  ScenarioDetailPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -80,6 +81,9 @@ import { PERSONAL_MEMORY, PERSONAL_MEMORY_SHELL } from "../../src/design/demo/co
 import { usePersonalMemoryDemo } from "../../src/design/demo/personal-memory-demo.js";
 import { SKILL_LIBRARY, SKILL_LIBRARY_SHELL } from "../../src/design/demo/content/skill-library.js";
 import { useSkillLibraryDemo } from "../../src/design/demo/skill-library-demo.js";
+import { SCENARIO_DETAIL, SCENARIO_DETAIL_SHELL } from "../../src/design/demo/content/scenario-detail.js";
+import { SKILL_RECORDS } from "../../src/design/demo/content/skill-records.js";
+import { useScenarioDetailDemo } from "../../src/design/demo/scenario-detail-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -103,6 +107,7 @@ const ROUTE_MAP = {
   "/assets/pages/feedback-quality.html": "feedback-quality",
   "/assets/pages/personal-memory.html": "personal-memory",
   "/assets/pages/scenario-library.html": "scenario-library",
+  "/assets/pages/scenario-detail.html": "scenario-detail",
 };
 
 function mapDemoHref(href) {
@@ -159,6 +164,7 @@ function routeOf(loc) {
   if (rest === "feedback-quality") return { name: "feedback-quality", params };
   if (rest === "personal-memory") return { name: "personal-memory", params };
   if (rest === "scenario-library") return { name: "scenario-library", params };
+  if (rest === "scenario-detail") return { name: "scenario-detail", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -429,6 +435,22 @@ function ScenarioLibraryRoute() {
   return <ScenarioLibraryPage {...page} logo={hostLogo} navigation={hostNav()} />;
 }
 
+function ScenarioDetailRoute({ params }) {
+  const hrefFor = (id, query = {}) => {
+    const path = ({ home: hostHref(""), cockpit: hostHref("cockpit"), interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": hostHref("feedback-quality"), "scenario-edit": hostHref("coverage/scenario-edit") })[id];
+    const search = new URLSearchParams(query).toString();
+    return path && search ? `${path}?${search}` : path;
+  };
+  const page = useScenarioDetailDemo({
+    content: SCENARIO_DETAIL,
+    records: SKILL_RECORDS,
+    shell: SCENARIO_DETAIL_SHELL,
+    initial: React.useMemo(() => ({ id: params.get("id") }), [params.toString()]),
+    hrefFor,
+  });
+  return <ScenarioDetailPage {...page} logo={hostLogo} navigation={hostNav()} />;
+}
+
 /* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
@@ -542,6 +564,7 @@ function App() {
   if (route.name === "feedback-quality") return <FeedbackQualityRoute />;
   if (route.name === "personal-memory") return <PersonalMemoryRoute />;
   if (route.name === "scenario-library") return <ScenarioLibraryRoute />;
+  if (route.name === "scenario-detail") return <ScenarioDetailRoute params={route.params} />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;
