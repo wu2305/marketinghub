@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 Self-Service状态档案 PR #25：18个命名页面状态含DG筛选/Upload页签/Upload History；窄屏卡片完整可读，保留report助手全流程；独立对抗审核见/tmp/mh-p03-state-adversarial.md。M7其余条目与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 408 stories + 67 docs；2026-09-26 215dfdc干净构建 |
-| 测试 | `npm test`：25 文件 225 条通过（215dfdc） |
-| lint | `npm run lint`：0 errors / 0 warnings，215dfdc |
-| 构建验证 | `npm run build-storybook` 408 stories/67 docs；`npm run build:host` + host-check 27/27（`/tmp/mh-p03-integrate-r2-host`）；最新main上rebase并干净构建，stamp 215dfdc |
+| 故事数 | 461 stories + 87 docs；2026-09-26 85a5066 干净构建 |
+| 测试 | `npm test`：27 文件 235 条通过（85a5066） |
+| lint | `npm run lint`：0 errors / 0 warnings，85a5066 |
+| 构建验证 | `npm run build-storybook` 461 stories/87 docs；`npm run build:host` + host-check 30/30（`/tmp/mh-drain-final3-host`）；`npm run build:lib` 通过（需锁文件 typescript 5.9.3）；stamp 85a5066 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 215dfdc，工作区干净）：全站493/493机器通过（`/tmp/mh-p03-integrate-r2-visual`），负向39/39按预期失败。P03本页30场景；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
+| 最近视觉对照 | 2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -43,27 +43,27 @@ npm test               # vitest 行为测试
 | M6 | 治理与Scenario三页全量结构/流程 | 结构覆盖已实现；P12–P17分别集成，人工视觉与共享组件收敛继续 | PR #13–#18 |
 | M7 | 独立组件字体自包含 | 完成（机器集成；独立字体与Toast Docs可见性已复核） | PR #20；25个根作用域字体，Modal依赖已由#19合入，display/monospace保留 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
-| M7 | P04 Data Upload 流程/命名故事归档 | 候选；待独立审核与最新 main 全套 gate | `useDataUploadDemo` 供 4 个页面故事和 `/mh-host/data-upload` 共用；提交、导入打开、已选文件三态可直达；P04 定向 4/4 机器配对、宿主 25/25，人工像素仍待第二轮；本分支 PR 待开 |
-| M7 | P15/P16 Scenario 详情共用区块 | 进行中（候选；人工视觉待审核） | `ScenarioStructure` 五段、`ScenarioGovernance` 九字段、`ScenarioPreview` 受控预览共用；抽屉与整页保留各自外壳和顺序，仅治理布局按单列/双列区分；见 §5 本包记录 |
-| M7 | 共享基础控件非颜色 token 小包 | 候选完成；待独立审核、颜色包后集成全套 gate 与 PR | 同用途Data Model中性计数面替换腾1定义，4px控件圆角进语义token；三个输入焦点阴影与SearchField暖色阴影复用同值token，定义数净零、旧BT前缀豁免缩减；证据`/tmp/mh-control-tokens-evidence.md` |
-| M7 | O6/P2 组件颜色 token 收敛 | 候选（定向机器验证通过；全量门禁与人工审图待集成） | 实际组件 CSS 裸hex 141→0；定义456→449，同值组15→9，旧前缀豁免缩至169；预算上限同步收紧为0/449/9。保留文字/背景/边框用途边界，同用途细微色差统一见§5本项记录；故事数不变。 |
-| M7 | S7 + R5(b) + R8 自包含资源、正式库与插槽隔离 | 候选（待最新主线集成与全套门禁） | Vite ESM/CSS/JSDoc 声明与 `.`/`./demo` 分入口；字体/图片随包，独立 npm pack 消费者严格 TS、构建及浏览器资源通过；Hero/Modal 单层与嵌套宿主插槽样式隔离；候选证据见 §5 当日记录 |
-| M7 | R6 全页语义导航与独立宿主 | 进行中（候选待 P04–P06 档案合入） | `m7/navigation-closeout`：Home/Self-Service/Cockpit/Interpreter 存量入口统一 `hrefFor(id,params)` 与具名 `onNavigate`；宿主单一语义表覆盖17个页面 id，原 HTML URL 只在私有 demo adapter 解释。当前 main 的 P04–P06 尚未提供独立宿主路由，合入后消除临时 coverage 并做最新 main 全套；证据见 §5 本包记录。 |
+| M7 | P04 Data Upload 流程/命名故事归档 | 完成（PR #24 已合入）；人工像素第二轮 | `useDataUploadDemo` 供 4 个页面故事和 `/mh-host/data-upload` 共用；提交、导入打开、已选文件三态可直达；P04 定向 4/4 机器配对、宿主 25/25，人工像素仍待第二轮；本分支 PR 待开 |
+| M7 | P15/P16 Scenario 详情共用区块 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `ScenarioStructure` 五段、`ScenarioGovernance` 九字段、`ScenarioPreview` 受控预览共用；抽屉与整页保留各自外壳和顺序，仅治理布局按单列/双列区分；见 §5 本包记录 |
+| M7 | 共享基础控件非颜色 token 小包 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 同用途Data Model中性计数面替换腾1定义，4px控件圆角进语义token；三个输入焦点阴影与SearchField暖色阴影复用同值token，定义数净零、旧BT前缀豁免缩减；证据`/tmp/mh-control-tokens-evidence.md` |
+| M7 | O6/P2 组件颜色 token 收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 实际组件 CSS 裸hex 141→0；定义456→449，同值组15→9，旧前缀豁免缩至169；预算上限同步收紧为0/449/9。保留文字/背景/边框用途边界，同用途细微色差统一见§5本项记录；故事数不变。 |
+| M7 | S7 + R5(b) + R8 自包含资源、正式库与插槽隔离 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | Vite ESM/CSS/JSDoc 声明与 `.`/`./demo` 分入口；字体/图片随包，独立 npm pack 消费者严格 TS、构建及浏览器资源通过；Hero/Modal 单层与嵌套宿主插槽样式隔离；候选证据见 §5 当日记录 |
+| M7 | R6 全页语义导航与独立宿主 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `m7/navigation-closeout`：Home/Self-Service/Cockpit/Interpreter 存量入口统一 `hrefFor(id,params)` 与具名 `onNavigate`；宿主单一语义表覆盖17个页面 id，原 HTML URL 只在私有 demo adapter 解释。当前 main 的 P04–P06 尚未提供独立宿主路由，合入后消除临时 coverage 并做最新 main 全套；证据见 §5 本包记录。 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
-| M7 | LiveReportView 独立故事标题与粘性返回条 | 候选完成；待独立审核、全套 gate 与 PR | 独立使用时工具栏贴视口顶部；Cockpit 页壳按 Header 高度提供 72px 偏移，完整页面原布局不变。1440/900/390 浏览器前后证据与 P02 live 配对见 §5 |
-| M7 | Data Model关联报表与表格标题窄屏可读性 | 候选待独立审核/集成 | DataModelView自身CSS：≤680px关联报表单列，表格弹窗标题按内容换行；P11页与组件故事390/900定向浏览器已核，P07页壳待已冻结的响应式包先合后复核 |
-| M7 | TypeCard 内容布局与窄宽可读性 | 进行中 | 标题/计数自然换行，保留八类入口和插画；独立审核与最终整套集成待完成 |
-| M7 | P07 Interpreter 窄屏可读性 | 候选完成；待独立审核与集成门禁 | ≤1100px导航回流，≤860px Hero与统计堆叠；八类工具栏/卡片入口可达。原页横滚与隐藏导航的差异及定向证据见 §5 |
-| M7 | MetricStat 用途与治理页统计可读性 | 候选完成；待独立审核与最新 main 全套门禁 | Campaign 卡片标签保留文案大小写，Review/Feedback 复用 glass 统计；P12/P13 在390/900保留三项完整统计并让Hero随内容增高，证据见§5 |
-| M7 | DataTable 行动作契约收口 | 候选完成；待独立审核与集成门禁 | 删除仅故事使用的行点击 prop/Action；Campaign 四组静态表格保留，来源和定向证据见 §5 |
-| M7 | 页面独立接口文档入口 | 进行中 | 17个具名附属MDX页面文档，保留现有Pages标题与story id；旧Pages Docs作为索引，独立审核/最终gate待完成 |
-| M7 | S5 页面文案与公开接口（P01–P07文案，P08–P17默认参数文档） | 已重基并定向验证；待独立复核、全套门禁与PR | P02搜索/元数据/空态、P03筛选名称、P04模板/提交、P05区块名称、P06账户筛选/任务弹窗均由页面props注入；P04故事/宿主保留共享hook与具名{values}提交；P01 scope初值移出页面，P07原有copy保持；P08–P17公开JSDoc可选/默认标记按实际解构校准，P05/P06归档待合并后接线；证据见§5 |
-| M7 | 知识可用状态与P08只读关联标签收敛 | 候选完成；待集成全套 gate 与 PR | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
-| M7 | P2 公开枚举声明精度 | 候选完成；待集成门禁与 PR | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
+| M7 | LiveReportView 独立故事标题与粘性返回条 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 独立使用时工具栏贴视口顶部；Cockpit 页壳按 Header 高度提供 72px 偏移，完整页面原布局不变。1440/900/390 浏览器前后证据与 P02 live 配对见 §5 |
+| M7 | Data Model关联报表与表格标题窄屏可读性 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | DataModelView自身CSS：≤680px关联报表单列，表格弹窗标题按内容换行；P11页与组件故事390/900定向浏览器已核，P07页壳待已冻结的响应式包先合后复核 |
+| M7 | TypeCard 内容布局与窄宽可读性 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 标题/计数自然换行，保留八类入口和插画；独立审核与最终整套集成待完成 |
+| M7 | P07 Interpreter 窄屏可读性 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | ≤1100px导航回流，≤860px Hero与统计堆叠；八类工具栏/卡片入口可达。原页横滚与隐藏导航的差异及定向证据见 §5 |
+| M7 | MetricStat 用途与治理页统计可读性 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | Campaign 卡片标签保留文案大小写，Review/Feedback 复用 glass 统计；P12/P13 在390/900保留三项完整统计并让Hero随内容增高，证据见§5 |
+| M7 | DataTable 行动作契约收口 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 删除仅故事使用的行点击 prop/Action；Campaign 四组静态表格保留，来源和定向证据见 §5 |
+| M7 | 页面独立接口文档入口 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 17个具名附属MDX页面文档，保留现有Pages标题与story id；旧Pages Docs作为索引，独立审核/最终gate待完成 |
+| M7 | S5 页面文案与公开接口（P01–P07文案，P08–P17默认参数文档） | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | P02搜索/元数据/空态、P03筛选名称、P04模板/提交、P05区块名称、P06账户筛选/任务弹窗均由页面props注入；P04故事/宿主保留共享hook与具名{values}提交；P01 scope初值移出页面，P07原有copy保持；P08–P17公开JSDoc可选/默认标记按实际解构校准，P05/P06归档待合并后接线；证据见§5 |
+| M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
+| M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -386,6 +386,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+- 2026-09-26 积压集成（integrate/drain 85a5066）后仍存：①21个分支合入前均未做独立对抗审核，§2.1对应行标“已集成；独立对抗审核与人工视觉待办”。②52个导出枚举尚缺 m7/enum-types 的 readonly `@type` 声明（该分支早于这些枚举）。③`ConfirmDialog.css` 引用未定义的 `--mh-bt-section-copy`（main 已存在），文字色回退为继承。④仓库根 `node_modules` 与锁文件漂移（typescript 7.0.2 vs 锁定 5.9.3），所有以符号链接共享它的 worktree 会使 `build:lib` 失败；应 `npm ci`。⑤Modal 设计字体改到自身 eyebrow/标题/关闭按钮，对话框、标题行扩展、正文与页脚为插槽，调用方内容不再继承 DIN；ConfirmDialog、UploadHistory、Field Library 抽屉/编辑框在自身类上声明字体。
+
 - P15/P16共享区块候选：预览、五段结构和治理信息具有真实共同用途，M7在保留抽屉/整页顺序布局的前提下评估最小共享；不因细微图标尺寸/颜色差复制组件，也不引入通用字段渲染器。证据`/tmp/mh-scenario-shared-boundary.md`。共享Hero的固定高度与页面断点规则也需集中收敛；P16先修900/390统计与说明裁切，不把原页不可读效果作为组件契约。
 
 2026-09-26 外部组件报告历史复核（其中确认弹窗、独立字体与Header问题已由PR #19–#21修复；其余徽章/统计等仍待集成。以下保留当时证据，非当前全部缺口。干净代码基线10d8e09重新构建；Chromium/Playwright，Header 1440/390，其余指定同态1440；证据 `/tmp/mh-feedback-recheck*/results.json` 与同目录截图，Browser插件不可用）：
@@ -636,3 +638,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | S7 + R5(b) + R8 正式库候选（基于 b0e3243，待后续主线包顺序集成）：Vite 库构建生成 ESM、合并 CSS 与 TypeScript 5 从 JSDoc 发出的声明；`package.json` 将 `.` 限于组件/页面，`./demo` 承载夹具、流程和原始路由，`report-logic` 移 Cockpit 私有层，`cx` 保留纯类名工具。字体/图片复制到 `src/design/assets` 并由模块导入，六张大型演示 PNG 以质量 90 WebP 随包（同尺寸展示并排证据 `/tmp/mh-library-image-comparison.png` 与 JSON，非逐像素相同）；移除 assetUrl、临时 `.design-sync/build-dist.mjs` 和宿主资源拷贝。`npm pack` 安装到全新 `/tmp/mh-library-consumer-pkg`，无 staticDirs/publicDir，严格 TS `skipLibCheck:false` 0 错、Vite 构建成功；Chromium 验证 Header/八张 TypeCard 图/Home、字体及所有图片正常，见 `/tmp/mh-library-consumer-final.png` 与 browser JSON。根 ESM 不含三条抽查的 fixture 文案，均仅在 demo ESM。`@scope` reset 在每层 `data-mh-slot` 截断，Hero/Modal 及 Hero→Modal 的无 class 宿主控件计算样式与页外一致；drawer 的 body、titleExtra、footer 也分别终止 reset，slot 容器自身仍保留 border-box 与原 Modal 宽度；host 25/25（`/tmp/mh-library-host-r7`）。lint 0、23 文件 223 测试、Storybook 341 stories/66 docs；受影响 P01 Home 6/6、P07 overview 2/2、P08 Business Term 1/1、P08 确认框 1/1、P07 详情 drawer 1/1 定向机器配对通过（`/tmp/mh-library-visual-{p01,p07,p08,modal,drawer}`），人工视觉仍 pending；完整配对/负向由集成者在最新 main 复核。声明已可被严格消费者解析，部分枚举仍被 JSDoc 推导为宽 `string[]`，属于已知类型精度债，不影响本次可消费性。 | Codex S7 |
 | 2026-09-26 | M7 R6 导航候选：`demo/navigation.js` 私有适配17页原始HTML URL与语义id/params，展示页只接收 `hrefFor`，Home四卡/能力链接、Self-Service入口、Cockpit项目/报表、Interpreter Overview/类型选择与宿主统一接线；`examples/host` 以单一语义表替代14条原始URL映射及页面重复href表，原链接保留a的修饰键/新窗口行为。Cockpit `Knowledge` 按原 `report-core.js:1494–1514` 改回按钮，`useCockpitDemo` 打开真实详情抽屉而非误跳知识页；Report Copilot与首页答案链接在宿主保留report/asset参数。当前基线 lint0/0、26文件226测试、Storybook362stories/67docs、host27/27（`/tmp/mh-navigation-host-preview-r7`）、受影响P01/P02/P03/P07配对14/14（`/tmp/mh-navigation-visual-r3-*`），截图人工仍pending；P04–P06路由等待其独立归档包合入后再做全17页最终门禁。 | Codex R6 navigation |
 | 2026-09-26 | R6 独立审核补修：原 `knowledge.html:84–99` 的 Overview 是普通锚，`types.js:855–862` 只拦截类型按钮；`SidebarItem` 现在对普通点击只通知 `onSelect`，浏览器默认导航由锚保留，独立页面没有宿主回调或仅有日志回调时不会被组件吞掉，宿主仍由委托适配器接管。保留私有 `content.js` 中有用的原 Demo href，同时语义 target 供新宿主解析。定向 lint0、Interpreter/navigation 25测试通过、host27/27（`/tmp/mh-navigation-host-reviewfix`）；最终全套待P04–P06合入后执行。 | Codex R6 navigation |
+| 2026-09-26 | 积压集成：21个仅存本地、未推送的分支（repair×11、M7档案/文案/文档/场景共用/徽章/token×2/枚举/库交付/语义导航）按冲突风险依次 `--no-ff` 合入 integrate/drain，未改原分支；本地备份 `~/Documents/repos/marketinghub-unmerged-2026-09-26.bundle`。handover 冲突取两侧并集后统一改写§2.1状态。实质冲突：p07 场景采用新故事ID并保留窄屏检查；p06/page-copy 保留 demo hook 并接入 labels；token-cleanup 以记录的替换对重放到 control-tokens 后的规则并保持裸hex 0；enum-types 注释套用到现有枚举；library-delivery 按组件/`demo` 两入口拆宿主导入并补新 demo 模块；navigation-closeout 保留 Header density 与 page-copy 文案，采用单一 HOST_PATHS。集成后修复：宿主遗漏导入、Modal 插槽字体（R8 哨兵）、P06/P07 场景选择器随徽章统一更新。门禁（85a5066）：lint0/0、27文件235测试、461stories/87docs、host 30/30、visual 505/505、negative 39/39、build:lib 通过。 | Claude integrator |
