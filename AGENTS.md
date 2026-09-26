@@ -55,7 +55,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **覆盖层**：Modal（含 ConfirmDialog、UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；仅栈顶响应 Escape 与焦点环，滚动锁在最后一层关闭时释放，ModelFlowDialog 可用 Escape 关闭。原有不同覆盖层外壳保持各自真实视觉形态。
 - **组件边界**：AssistantPanel 与 ReportCopilot 共用私有 AssistantShell 的头部、历史与覆盖层行为，各自保留真实不同的外层布局、答案与输入组合；页面持有助手变体预设。页面组件 props 平铺（最多 49 个）仍待后续流程收敛。
 - **文案**：AiInterpreterPage 页壳文案已由 props 注入；部分存量有机体仍含写死可见文案，随页面改动继续补齐。
-- **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；部分故事的文字回退为浏览器默认衬线字体。
+- **样式**：组件 CSS 仍有裸十六进制色值；`tokens.css` 大量为单组件别名；独立组件根已显式采用设计字体，公式与代码保留等宽字体。
 - **资源与交付**：字体和图片依赖参照物 `assets/`；已有最小 CI，但尚无正式库构建；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
 - **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 

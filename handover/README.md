@@ -4,19 +4,19 @@
 
 ## 1. 当前状态
 
-**最新目标（2026-09-23 用户确认）**：全量重建现有静态 Demo 的全部界面与既有前端交互，按奥卡姆剃刀提取最小必要 React 组件体系及各层 Storybook。覆盖不能缩水，抽象不能膨胀。当前仍为早期部分实现；旧阶段“完成”不代表页面全量验收。长程执行 prompt 见 [execution-prompt.md](./execution-prompt.md)。本文件是唯一状态台账，不另建 HANDOFF.md。
+**最新目标（2026-09-23 用户确认）**：全量重建现有静态 Demo 的全部界面与既有前端交互，按奥卡姆剃刀提取最小必要 React 组件体系及各层 Storybook。覆盖不能缩水，抽象不能膨胀。当前17页结构广度已实现，M7状态档案、独立复用交付与人工视觉收敛仍在推进；页面存在不代表全量验收。长程执行 prompt 见 [execution-prompt.md](./execution-prompt.md)。本文件是唯一状态台账，不另建 HANDOFF.md。
 
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 ConfirmDialog用途收敛 PR #19：普通确认/通知/风险审批/破坏删除保持可达动作，正文与移动视口可读；17页已建，M7独立状态档案、复用交付与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 独立组件字体 PR #20：组件根显式DIN、保留display/monospace；Toast文档画布可见。17页已建，M7状态档案、复用交付与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 363 stories + 67 docs；2026-09-26 6740791干净构建；新增Scenario自有记录删除确认故事 |
-| 测试 | `npm test`：25 文件 224 条通过（6740791） |
-| lint | `npm run lint`：0 errors / 0 warnings，6740791 |
-| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-dialog-integrate-host`）；P17合并后rebase并干净构建，stamp 6740791 |
+| 故事数 | 363 stories + 67 docs；2026-09-26 562152e干净构建；故事ID和数量不变 |
+| 测试 | `npm test`：25 文件 224 条通过（562152e） |
+| lint | `npm run lint`：0 errors / 0 warnings，562152e |
+| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-fonts-integrate-r3-host`）；最新main上干净构建，stamp 562152e |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 6740791，工作区干净）：全站474/474机器通过（`/tmp/mh-dialog-integrate-visual`），负向38/38按预期失败。P08/P12/P14确认弹窗本体人工可读，整页仍fail（底层页面既存差异），其他pending；机器通过不代表全部视觉验收。 |
+| 最近视觉对照 | 2026-09-26（stamp 562152e，工作区干净）：全站474/474机器通过（`/tmp/mh-fonts-integrate-r3-visual`），负向38/38按预期失败。独立组件字体及Toast Docs人工复核通过；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -41,12 +41,11 @@ npm test               # vitest 行为测试
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
 | M6 | 治理与Scenario三页全量结构/流程 | 结构覆盖已实现；P12–P17分别集成，人工视觉与共享组件收敛继续 | PR #13–#18 |
-| M7 | 独立组件字体自包含 | 进行中；组件根作用域声明设计字体，保留display/monospace覆盖；Modal字体依赖独立弹窗修复包 | 待PR |
+| M7 | 独立组件字体自包含 | 完成（机器集成；独立字体与Toast Docs可见性已复核） | PR #20；25个根作用域字体，Modal依赖已由#19合入，display/monospace保留 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
-| M7 | 确认弹窗用途与形态收敛（P07/P08/P12/P14） | 候选完成；待集成全套 gate 与 PR | `ConfirmDialog` 单轴 `purpose`（confirm/info/warning/danger）共享 Modal 层栈，长文案自然换行；P07 Scenario 删除补危险用途与命名故事；原生与定向渲染证据 `/tmp/mh-feedback-recheck*`，结果见 §5 |
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
@@ -70,7 +69,6 @@ npm test               # vitest 行为测试
 | P11 | assets/pages/data-model.html | 模型/表/字段/关系浏览及切换 | M5 | 已实现，PR #7；复用 DataModelView 与 demo hook，8 个页面故事、15/15 本页配对及全套验证通过；默认页人工 fail（徽标、圆角/阴影、图标色和间距），其余 pending，第二轮收敛 |
 | P12 | assets/pages/review-center.html | Pending/Approved 审核队列、搜索/类型/Submitted 选择、详情、Reject/Approve 风险确认、lite 助手及模型流 | M6 | 已实现，PR #13；28 个页面状态故事 + ReviewQueue 组件故事，43/43 配对及全套机器验证（含 Approved 21 行底部与 390px）；默认/窄屏人工像素 fail，其余待审；人工像素第二轮收敛 |
 | P13 | assets/pages/feedback-quality.html | 七列反馈、搜索/类型/时间筛选、完整详情、恢复助手和模型流 | M6 | 已实现，PR #14；23个页面命名状态、15/15配对及全套机器验证；原页助手初始化缺陷与恢复后状态分开登记，三条真实历史已补齐。默认/390px人工fail，第二轮收敛 |
-| P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P15 | assets/pages/scenario-library.html | Skill列表/筛选/空态、九字段详情与五段结构、预览、内联创建编辑、助手/模型 | M6 | 已实现，PR #16；21个页面+3组件故事，本页19/19及全套机器通过；默认/详情人工fail。按用途抽象，不恢复隐藏Use或虚构原无处理器动作 |
 | P16 | assets/pages/scenario-detail.html | 六页签、五结构/九治理、预览/Related/AI/Usage/Version/Activity及助手模型流 | M6 | 已实现，PR #17；22页面+1组件故事，29/29本页及全套机器通过；默认/窄屏人工fail。独立Workspace受控、记录复用P15，Edit保留当前id；P17集成后接通编辑目标 |
@@ -561,3 +559,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | ConfirmDialog PR #19（https://github.com/wu2305/marketinghub/pull/19）合并7aaeb3f，冻结6740791：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-dialog-integrate-*。独立复核/tmp/mh-dialog-integrator-review.md；P08/P12/P14最终截图已看，弹窗本体信息/层级/动作清晰，整页底层差异仍fail绑定。confirmDialogTones改为confirmDialogPurposes，全部消费者同步，确认样式从Modal移回自身CSS，Modal显式DIN字体，新增Scenario删除确认故事与删除结果。P07仅移除被有意外观统一替代的旧固定几何比对，保留内容/动作/视口/结果。 | Codex integrator |
 | 2026-09-26 | 独立组件字体修复候选：52个故事实测存在Times文本；25个组件/feature各在自身根CSS声明var(--mh-font)，不改全局body、不靠页面Shell/Storybook兜底，不覆盖代码/公式已有等宽字体。复查已消除除Modal派生内容外的组件Times回退，Modal由独立弹窗修复包覆盖；Toast说明段落已由现有组件Docs承载，故事直接展示组件。证据/tmp/mh-fonts-current.log、/tmp/mh-fonts-after.log；lint/Storybook预检通过，最终gate待集成。 | Codex integrator |
 | 2026-09-26 | 字体包Docs复核发现Toast移除非组件说明段落后自动画布高度不足，fixed通知被裁；故事采用120px最小展示容器与fullscreen布局（同浮动助手既有展示方式），保留原故事ID、Controls和组件fixed定位，无新增组件或props。集成器将重跑干净提交全套。 | Codex integrator |
+| 2026-09-26 | 独立字体 PR #20（https://github.com/wu2305/marketinghub/pull/20）合并5e1478d，冻结562152e：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-fonts-integrate-r3-*。全索引字体探针/tmp/mh-fonts-final-probe.log无Times，仅32条公式/代码等宽命中；根CSS字体与原52故事问题对照已审。Toast移除非组件说明后Docs画布裁切被root复核发现，补120px故事容器/fullscreen，独立agent复核实际可见及Controls。原r2端口冲突和后续取消不作通过依据；最终r3重跑。清理已合Dialog候选重复行和重复P14状态行；Header遮挡回修及其他候选继续逐包集成。 | Codex integrator |

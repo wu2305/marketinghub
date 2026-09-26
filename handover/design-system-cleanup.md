@@ -8,7 +8,7 @@
 
 优先级：P1 影响每个使用者的可见缺陷；P2 接口/工程问题；P3 结构性清理。
 
-- [ ] **P1 字体回退为浏览器默认衬线（Times）**。19 个故事中有文字节点未继承 `--mh-font`：CheckboxFilter、FileDropzone、Pagination、SearchField（`mh-sr`/`mh-search__mark`）、Toast、ViewHeading、AssistantPanel、CampaignRail、KnowledgeLibrary、LibraryToolbar、LiveOverview、LiveReportView、Panel、PrinciplesView、ProjectDirectory、ReportCopilot、ReportDetailsDrawer、ReportRow、UploadHistory。根因：`tokens.css` 的作用域 reset（`:where([class*="mh-"], [class*="mh-"] *)`）不设 `font-family`，组件只在部分元素上声明字体，页面故事靠页面外壳兜底。修复方向：在作用域 reset 中给 `mh-` 根设置 `font-family: var(--mh-font)`（或每个有机体根声明一次），不要逐元素补丁。验收：重跑字体探针，输出为空。
+- [x] **P1 字体回退为浏览器默认衬线（Times）**。PR #20，冻结562152e：25个组件/feature根显式声明设计字体，Modal由#19先行修复；全363故事探针没有Times回退，仅公式/代码保留等宽字体（不作为误报修掉）。证据 `/tmp/mh-fonts-final-probe.log`、`/tmp/mh-component-fonts-evidence/`；完整状态见README。
 - [ ] **P1 LiveReportView 粘性 “Report library” 条遮住页标题 “4P Executive Overview”**（Storybook 与预览一致）。检查粘性条的 `top`/`z-index` 与标题容器的 `scroll-margin`/上边距；对照原始 `assets/pages/reports.html` 的 live 视图。
 - [ ] **P1 TypeGrid/TypeCard 标题被截断并与右上角计数徽标重叠**（“Report Conte…”、“Metric Dictio…”、“Analytical Mod…”、“Scenario Rep…”）。卡片内文字绝对定位，未给徽标预留宽度。对照原始 knowledge.html 概览网格。
 - [ ] **P2 组件 CSS 仍有 146 处裸十六进制色值**（非 `var()` 回退；molecules 48、organisms 70、atoms 27、pages 1），违反 AGENTS.md §3.2 “目标为 0”。
