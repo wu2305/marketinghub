@@ -174,6 +174,29 @@ export default [
     },
   },
   {
+    id: "p05-skill-search-empty",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { click: "#uploadFile" },
+        { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" },
+        { fill: [".ai-skill-search input", "no matching model"] },
+      ],
+      expect: [
+        { sel: ".ai-skill-empty", text: "No matching skills" },
+        { sel: ".ai-skill-detail-panel:not([hidden])" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail-assistant-skill-search-empty",
+      expect: [
+        { sel: ".mh-skill__empty", text: "No matching skills" },
+        { sel: ".mh-skill__option", state: "detached" },
+      ],
+    },
+  },
+  {
     id: "p05-skill-menu",
     original: {
       url: "/assets/pages/media-tracking-detail.html",
@@ -196,6 +219,31 @@ export default [
       expect: [
         { sel: ".mh-assistant__chip", text: "Analytical Model: ROI diagnosis model" },
         { sel: ".mh-skill", state: "detached" },
+      ],
+    },
+  },
+  {
+    id: "p05-model-empty-selection",
+    original: {
+      url: "/assets/pages/media-tracking-detail.html",
+      actions: [
+        { click: ".global-ai-launcher" },
+        { click: "#uploadFile" },
+        { click: ".ai-skill-category[data-ai-skill-category='Analytical Model']" },
+        { click: "[data-ai-skill-action='history']" },
+        { eval: "document.querySelectorAll('#aiHistoryGenerateDialog [data-ai-history-msg]:checked').forEach(input => input.click())" },
+        { click: "[data-ai-generate-model]" },
+      ],
+      expect: [
+        { sel: "#aiHistoryGenerateDialog [data-ai-generate-error]:not([hidden])", text: "Select at least one message to continue." },
+        { sel: "#aiHistoryGenerateDialog [data-ai-history-msg]:checked", count: 0, state: "detached" },
+      ],
+    },
+    story: {
+      id: "pages--media-tracking-detail-model-empty-selection",
+      expect: [
+        { sel: ".mh-flow__card--history", text: "Selected 0 / 6 messages" },
+        { sel: ".mh-flow__error:not([hidden])", text: "Select at least one message to continue." },
       ],
     },
   },

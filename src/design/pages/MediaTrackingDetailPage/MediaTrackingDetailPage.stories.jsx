@@ -104,8 +104,29 @@ export const MediaTrackingDetailAssistantHistory = state("Media Tracking Detail 
 export const MediaTrackingDetailAssistantHistoryFilled = state("Media Tracking Detail · Recent chat fills prompt", open, playClicks(".mh-assistant__send .mh-button:not([disabled])", ".mh-assistant__history .mh-assistant__icon", ".mh-assistant__history-item:first-child"));
 export const MediaTrackingDetailAssistantMaximized = state("Media Tracking Detail · Assistant maximized", open, playClicks(".mh-assistant--expanded", "button[aria-label='Maximize']"));
 export const MediaTrackingDetailAssistantSkills = state("Media Tracking Detail · Skill menu", open, playClicks(".mh-skill", ".mh-assistant__skill"));
+export const MediaTrackingDetailAssistantSkillSearchEmpty = state("Media Tracking Detail · No matching models", open, async (context) => {
+  await playClicks(".mh-skill__search input", ...modelMenu)(context);
+  const doc = context.canvasElement.ownerDocument;
+  const input = doc.querySelector(".mh-skill__search input");
+  Object.getOwnPropertyDescriptor(doc.defaultView.HTMLInputElement.prototype, "value").set.call(input, "no matching model");
+  input.dispatchEvent(new doc.defaultView.Event("input", { bubbles: true }));
+  for (let i = 0; i < 40; i += 1) {
+    if (doc.querySelector(".mh-skill__empty")?.getBoundingClientRect().height) return;
+    await new Promise((resolve) => doc.defaultView.requestAnimationFrame(resolve));
+  }
+  throw new Error("Media Tracking no-results state did not appear");
+});
 export const MediaTrackingDetailAssistantSelectedSkill = state("Media Tracking Detail · Selected model", open, playClicks(".mh-assistant__chip", ...modelMenu, ".mh-skill__option:nth-child(2)"));
 export const MediaTrackingDetailModelHistory = state("Media Tracking Detail · Model chat history", open, playClicks(".mh-flow__card--history", ...modelMenu, ".mh-skill__action:first-child"));
+export const MediaTrackingDetailModelEmptySelection = state("Media Tracking Detail · Model requires a message", open, async (context) => {
+  await MediaTrackingDetailModelHistory.play(context);
+  const doc = context.canvasElement.ownerDocument;
+  const selected = [...doc.querySelectorAll(".mh-flow__msg input:checked")];
+  if (!selected.length) throw new Error("Media Tracking history has no selected messages");
+  selected.forEach((input) => input.click());
+  await playClicks(".mh-flow__error:not([hidden])", ".mh-flow__foot .mh-flow__btn--primary")(context);
+  if (doc.querySelector(".mh-flow__msg input:checked")) throw new Error("Media Tracking history still has a selected message");
+});
 export const MediaTrackingDetailModelGenerated = state("Media Tracking Detail · Generated model", open, playClicks(".mh-flow__card--form", ...modelMenu, ".mh-skill__action:first-child", ".mh-flow__foot .mh-flow__btn--primary"));
 export const MediaTrackingDetailModelManual = state("Media Tracking Detail · Manual model", open, playClicks(".mh-flow__card--form", ...modelMenu, ".mh-skill__action:nth-child(2)"));
 export const MediaTrackingDetailModelManualError = state("Media Tracking Detail · Manual required fields", open, playClicks(".mh-flow__field-error", ...modelMenu, ".mh-skill__action:nth-child(2)", ".mh-flow__foot .mh-flow__btn--primary"));

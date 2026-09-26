@@ -333,6 +333,8 @@ function DataUploadRoute() {
     submittingLabel: "Submitted",
   });
   return <DataUploadPage {...page} />;
+}
+
 function MediaTrackingRoute() {
   const props = useMediaTrackingDemo({
     ...MEDIA_TRACKING,
