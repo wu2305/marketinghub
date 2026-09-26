@@ -48,4 +48,12 @@ display: grid;
     min-width: 0;
     width: 100%;
   }
+
+  .mh-page__inset {
+    width: calc(100% - 32px);
+  }
+
+  .mh-workspace-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

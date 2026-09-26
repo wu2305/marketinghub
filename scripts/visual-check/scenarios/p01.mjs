@@ -19,6 +19,30 @@ const scenarios = [
     },
   },
   {
+    id: "p01-home-narrow",
+    viewport: { width: 390, height: 844 },
+    original: {
+      url: "/index.html",
+      fullPage: true,
+      actions: [{ eval: "(() => { const cards = [...document.querySelectorAll('.workspace-card')]; if (document.documentElement.scrollWidth <= innerWidth + 100 || cards.at(-1).getBoundingClientRect().left <= innerWidth) throw new Error('Original four-column mobile overflow changed'); })()" }],
+      expect: [
+        { sel: ".workspace-card", count: 4 },
+        { sel: ".workspace-card-link", count: 4 },
+        { sel: ".workspace-card:last-child h3", text: "RedNote Campaign Tool" },
+      ],
+    },
+    story: {
+      id: "pages--home",
+      fullPage: true,
+      actions: [{ eval: "(() => { const cards = [...document.querySelectorAll('.mh-workspace-card')]; if (cards.length !== 4) throw new Error('Expected four workspaces'); for (const card of cards) { const box = card.getBoundingClientRect(); const heading = card.querySelector('h3'); const description = card.querySelector('p'); const open = card.querySelector('.mh-workspace-card__open'); if (box.width < 300 || box.left < 0 || box.right > innerWidth + 1 || !heading?.textContent?.trim() || !description?.textContent?.trim() || !open?.getAttribute('href')) throw new Error('Workspace card content or entry is unreadable'); if (heading.scrollWidth > heading.clientWidth + 1 || description.scrollWidth > description.clientWidth + 1) throw new Error('Workspace text is horizontally clipped'); } })()" }],
+      expect: [
+        { sel: ".mh-workspace-card", count: 4 },
+        { sel: ".mh-workspace-card__open", count: 4 },
+        { sel: ".mh-workspace-card:last-child h3", text: "RedNote Campaign Tool" },
+      ],
+    },
+  },
+  {
     id: "p01-home-assistant",
     original: {
       url: "/index.html",
