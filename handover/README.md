@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P01 PR #22：首页15个命名状态、四工作台窄屏完整可读、重复答案反馈复位；独立审核关闭档案遗漏。M7其他页面档案、交付与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 Cockpit状态档案与共享宿主流程 PR #23：26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}；独立对抗审核见/tmp/mh-p02-flow-adversarial.md。M7其余条目与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 377 stories + 67 docs；2026-09-26 9415f96干净构建，新增14个首页可达状态 |
-| 测试 | `npm test`：25 文件 225 条通过（9415f96） |
-| lint | `npm run lint`：0 errors / 0 warnings，9415f96 |
-| 构建验证 | `npm run build-storybook` 377 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-p01-integrate-host`）；Header合后rebase并干净构建，stamp 9415f96 |
+| 故事数 | 402 stories + 67 docs；2026-09-26 dded96e干净构建 |
+| 测试 | `npm test`：25 文件 225 条通过（dded96e） |
+| lint | `npm run lint`：0 errors / 0 warnings，dded96e |
+| 构建验证 | `npm run build-storybook` 402 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-p02-integrate-host`）；最新main上rebase并干净构建，stamp dded96e |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 9415f96，工作区干净）：全站488/488机器通过（`/tmp/mh-p01-integrate-visual`），负向38/38按预期失败。首页窄屏合成与全部卡片内容已人工聚焦复核；整页人工视觉既有fail/pending继续。 |
+| 最近视觉对照 | 2026-09-26（stamp dded96e，工作区干净）：全站492/492机器通过（`/tmp/mh-p02-integrate-visual`），负向38/38按预期失败。P02本页57场景；整页人工视觉既有fail/pending继续，不把机器结果当全量视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -58,7 +58,7 @@ npm test               # vitest 行为测试
 | ID | 原始入口 | 主要待覆盖范围（以实际生效内容补全） | 里程碑 | 状态 |
 |---|---|---|---|---|
 | P01 | index.html | 全首页、入口卡/导航、助手及其可达状态 | M2 | PR #22；15个命名页面故事、20个本页配对，四卡390/900/1440可读与链接可达；Header由#21合入；人工整页收敛继续 |
-| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | M7 候选新增目录/搜索空态、两类 live、目录助手及 Copilot 各真实状态的命名故事；复用 `useCockpitDemo` 给独立宿主双 Copilot 实例，保存/提交回调统一 `{values}`。本页30条非Copilot与27条Copilot配对机器通过，人工审图待集成。A2 已修正城市默认计算、全选/空选标签及 Copilot 历史大小写/View more 二次点击。原 `openDetails()` 无调用方，不新增伪页面入口 |
+| P02 | assets/pages/reports.html | Cockpit 目录、各 project/dashboard、报表详情与助手 | M3 | PR #23机器集成；26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}；本页57/57机器配对；人工整页收敛继续 |
 | P03 | assets/pages/flexible.html | Self-Service页签、筛选、上传历史及report助手全流 | M3 | 助手已实现，PR #9；建议即提交、替换答案、历史填充、最大化、技能/模型流、反馈/复制及焦点/Escape；15页面故事、29/29配对；人工像素收敛待办 |
 | P04 | assets/pages/data-upload.html | 上传页全部区块、选择/校验/反馈等实际流程 | M3 | 已实现+配对验证（15/15）；14 字段表单、提交瞬态、Template Import 弹窗/dropzone/Tips 完成 |
 | P05 | assets/pages/media-tracking-detail.html | 完整详情、筛选/表格/图表及实际页内交互 | M3 | 已实现+配对验证（26/26）；四粒度 tab、15 项筛选、5 条说明、1800px 长表（42 字段 15 行）、lite 助手抽屉/简单答案卡、+ 技能菜单（Upload/Analytical Model/搜索/芯片）与 Generate Model 三段流（历史勾选→生成表单/手动表单）完成 |
@@ -575,3 +575,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P01 PR #22（https://github.com/wu2305/marketinghub/pull/22）合并aad75de，冻结9415f96：lint0/0、25文件225测试、377stories/67docs、host26/26、visual488/488、negative38/38，证据/tmp/mh-p01-integrate-*。独立审核/tmp/mh-p01-state-adversarial.md及/tmp/mh-p01-narrow-independent-review.md；最终组合复核/tmp/mh-p01-integrator-review.md。补14个可直达状态、答案实例键复位反馈、四工作台窄屏单列，不新增展示组件或截图专用props。Header已合，本文去除旧重复候选行并明确外部报告历史问题的关闭状态；其他页面档案与人工视觉继续。 | Codex integrator |
 | 2026-09-26 | M7 P02 Cockpit 流程/故事档案候选：页面默认故事加22个可直达真实状态（23个页面故事），覆盖项目目录/空搜索、通用live/City dashboard、目录助手、Copilot标准/holistic/rich/追加回答、上下文dock、历史、技能回填、手动/历史生成模型及反馈等；`dashboard:null` 初态使 Storybook URL Controls 的 live 值真实生效。独立宿主 Compose 双实例删除复制的 `useCopilotInstance`，直接复用 `useCockpitDemo` 的 `workspace` 与 `workspaceOpen`，关闭 A 时 B 仍保持打开；两条模型流保存/提交及专用组件故事回调统一 `{values}`。原 `openDetails()` 无调用方，保留组件但不伪造页面可达故事。候选预检 lint0、23文件221测试、340stories/65docs、host24/24（`/tmp/mh-p02-host-final2`）、非Copilot配对30/30（`/tmp/mh-p02-pairs-final`）与Copilot24/24（`/tmp/mh-p02-copilot-clean`），错误项目参数负向浏览器探针失败如期；人工54条仍pending，最新main全套门禁与独立对抗待集成。 | Codex WP6 |
 | 2026-09-26 | P02 独立复核补齐三种稳定可见缺口：`report-core.js:2385–2397`模型搜索无结果、`:2629–2642,2999–3007`历史消息全不选时Generate错误、`:2753–2776`手动模型三个必填错误。复用既有故事play和控件，新增三个命名页面态与源/React配对，不加组件或截图专用props；页面故事23→26，全站故事340→343。三条新场景及相邻模型流定向配对见`/tmp/mh-p02-errors-flow`与`/tmp/mh-p02-errors-search`；人工三条pending，最终门禁仍待集成。 | Codex WP6 |
+| 2026-09-26 | P02 PR #23（https://github.com/wu2305/marketinghub/pull/23）合并e7db1e6，冻结dded96e：lint0/0、25文件225测试、402stories/67docs、host26/26、visual492/492、negative38/38，证据/tmp/mh-p02-integrate-*。26个页面状态，独立宿主双Copilot共用useCockpitDemo；模型保存/提交载荷{values}。独立审核/tmp/mh-p02-flow-adversarial.md已关闭该包阻断；最新main全套通过，不将机器结果当作人工视觉全过。 | Codex integrator |
