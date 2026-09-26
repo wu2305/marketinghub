@@ -27,6 +27,7 @@ import {
   BusinessTermView,
   DataModelPage,
   KnowledgeCreatePage,
+  ReviewCenterPage,
   MetricDictionaryPage,
   buildCopilotChatEntry,
   copilotSkillItems,
@@ -68,6 +69,8 @@ import { DATA_MODEL_PAGE } from "../../src/design/demo/content/data-model-page.j
 import { KNOWLEDGE_CREATE } from "../../src/design/demo/content/knowledge-create.js";
 import { useKnowledgeCreateDemo } from "../../src/design/demo/knowledge-create-demo.js";
 import { buildInterpreterAnswer, useInterpreterDemo } from "../../src/design/demo/interpreter-demo.js";
+import { REVIEW_CENTER, REVIEW_SHELL } from "../../src/design/demo/content/review-center.js";
+import { useReviewCenterDemo } from "../../src/design/demo/review-center-demo.js";
 
 /* Set once per boot; host-check asserts it survives every in-app navigation
    (i.e. clicks never trigger a full page load). */
@@ -87,6 +90,7 @@ const ROUTE_MAP = {
   "/assets/pages/flexible.html": "self-service",
   "/assets/pages/metric-dictionary.html": "metric-dictionary",
   "/assets/pages/knowledge-view.html": "knowledge-view",
+  "/assets/pages/review-center.html": "review-center",
 };
 
 function mapDemoHref(href) {
@@ -139,6 +143,7 @@ function routeOf(loc) {
   if (rest === "self-service") return { name: "self-service", params };
   if (rest === "metric-dictionary") return { name: "metric-dictionary", params };
   if (rest === "knowledge-view") return { name: "knowledge-view", params };
+  if (rest === "review-center") return { name: "review-center", params };
   if (rest === "compose") return { name: "compose", params };
   if (rest === "sentinel") return { name: "sentinel", params };
   const coverage = rest.match(/^coverage\/(.+)$/);
@@ -352,6 +357,25 @@ function KnowledgeViewRoute({ params }) {
   return <KnowledgeViewPage {...demo} logo={hostLogo} navigation={hostNav().filter((item) => ["home", "cockpit", "interpreter"].includes(item.id))} />;
 }
 
+function ReviewCenterRoute() {
+  const props = useReviewCenterDemo({
+    content: REVIEW_CENTER,
+    records: REVIEW_CENTER.records,
+    suggestions: REVIEW_CENTER.suggestions,
+    fallbackSuggestions: REVIEW_CENTER.fallbackSuggestions,
+    ...REVIEW_SHELL,
+    logo: hostLogo,
+    navigation: hostNav(),
+    hrefFor: (id, params = {}) => {
+      const path = ({ interpreter: hostHref("interpreter"), "review-center": hostHref("review-center"), "scenario-library": mapDemoHref("scenario-library.html"), "feedback-quality": mapDemoHref("feedback-quality.html") })[id];
+      const query = new URLSearchParams(params).toString();
+      return path && query ? `${path}?${query}` : path;
+    },
+    onNavigate: ({ href }) => navigateHost(href),
+  });
+  return <ReviewCenterPage {...props} />;
+}
+
 /* ------------------------------------------------------------------ */
 /* Compose — dual instances + host sentinel                              */
 /* ------------------------------------------------------------------ */
@@ -461,6 +485,7 @@ function App() {
   if (route.name === "self-service") return <SelfServiceRoute params={route.params} />;
   if (route.name === "metric-dictionary") return <MetricDictionaryRoute />;
   if (route.name === "knowledge-view") return <KnowledgeViewRoute params={route.params} />;
+  if (route.name === "review-center") return <ReviewCenterRoute />;
   if (route.name === "compose") return <ComposeRoute />;
   if (route.name === "coverage") return <CoverageRoute target={route.target} />;
   return <HomeRoute />;

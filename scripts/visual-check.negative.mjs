@@ -11,6 +11,30 @@
  */
 export default [
   {
+    id: "neg-p12-wrong-tab",
+    base: "p12-approved",
+    story: { id: "pages--review-center" },
+    reason: "Pending six-row queue cannot satisfy Approved 21-row assertions",
+  },
+  {
+    id: "neg-p12-wrong-search",
+    base: "p12-search",
+    story: { id: "pages--review-center-empty" },
+    reason: "No-match queue cannot satisfy Campaign ROI search result assertions",
+  },
+  {
+    id: "neg-p12-missing-answer",
+    base: "p12-assistant-answer",
+    story: { id: "pages--review-center-assistant" },
+    reason: "Open lite assistant without Ask cannot satisfy answer assertions",
+  },
+  {
+    id: "neg-p12-escape-left-open",
+    base: "p12-assistant-escape",
+    story: { actions: [] },
+    reason: "Assistant left open cannot satisfy Escape closure and launcher assertions",
+  },
+  {
     id: "neg-p08-wrong-type",
     base: "p08-business-term",
     story: { id: "pages--knowledge-create-analysis" },

@@ -343,6 +343,41 @@ async function newPage() {
 
 /* ---- sentinel: host elements identical with and without the design system ---- */
 {
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}review-center`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator(".mh-review-queue__row").count()) !== 6) notes.push("Review Center pending queue should have six records");
+  await page.locator(".mh-review-page__filters select").first().selectOption("Data Model");
+  if ((await page.locator(".mh-review-queue__row").count()) !== 2) notes.push("Review Center type filter missed Data Model rows");
+  await page.locator(".mh-review-page__filters select").nth(1).selectOption("today");
+  if ((await page.locator(".mh-review-queue__row").count()) !== 2) notes.push("source time selector must not filter rows");
+  await page.locator(".mh-review-page__filters select").first().selectOption("all");
+  await page.locator('[data-review-id="pending-1"] .mh-review-queue__title button').click();
+  if (!(await page.getByRole("dialog", { name: "Campaign investment decision principles" }).count())) notes.push("Review Center detail did not open");
+  await page.keyboard.press("Escape");
+  if (await page.getByRole("dialog", { name: "Campaign investment decision principles" }).count()) notes.push("Review Center detail survived Escape");
+  await page.locator('[data-review-id="pending-1"] .mh-review-queue__reject').click();
+  await page.getByRole("button", { name: "Confirm Reject" }).click();
+  if ((await page.locator(".mh-review-queue__row").count()) !== 5) notes.push("empty-reason Reject did not remove pending record");
+  if ((await page.locator(".mh-review-page__stats article").nth(2).locator("strong").innerText()) !== "3") notes.push("Rejected summary should stay static at three");
+  await page.locator(".mh-launcher").click();
+  await page.locator(".mh-assistant__suggestions button").first().click();
+  if (await page.locator(".mh-assistant__answer").count()) notes.push("lite suggestion submitted unexpectedly");
+  await page.getByRole("button", { name: "Ask" }).click();
+  if (!(await page.locator(".mh-assistant__answer--simple").count())) notes.push("lite answer missing after Ask");
+  await page.keyboard.press("Escape");
+  await page.locator('.mh-review-page__sidebar a[href$="/interpreter"]').click();
+  if (!page.url().includes("/mh-host/interpreter")) notes.push("governance sidebar anchor missed Interpreter route");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Review Center navigation reloaded host");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "review-center.png") });
+  record("review-center-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- sentinel: host elements identical with and without the design system ---- */
+{
   const props = ["fontFamily", "boxSizing", "padding", "border", "backgroundColor", "color", "textDecorationLine"];
   const snapshot = (sel) => `(() => { const el = document.querySelector("${sel}"); if (!el) return null; const cs = getComputedStyle(el); return ${JSON.stringify(props)}.map((k) => cs[k]).join("|"); })()`;
   const notes = [];

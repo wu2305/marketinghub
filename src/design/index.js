@@ -214,6 +214,8 @@ export {
   knowledgeModelTabs,
 } from "./features/knowledge-view/KnowledgeDetail/index.jsx";
 export { KnowledgeViewPage } from "./pages/KnowledgeViewPage/index.jsx";
+export { ReviewCenterPage, reviewTabs, reviewTypes, reviewTimes, reviewPanels } from "./pages/ReviewCenterPage/index.jsx";
+export { ReviewQueue } from "./features/review-center/ReviewQueue/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
