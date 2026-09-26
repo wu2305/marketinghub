@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P17 PR #18完整性与响应式复核完成：全部字段/五项必填、12报表映射、预览/提交/取消及助手模型流；修复公共回调载荷与900px裁切。17页结构覆盖已建，M7档案/复用/交付与人工收敛继续 |
+| 最新独立审核 | 2026-09-26 ConfirmDialog用途收敛 PR #19：普通确认/通知/风险审批/破坏删除保持可达动作，正文与移动视口可读；17页已建，M7独立状态档案、复用交付与人工收敛继续 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 362 stories + 67 docs；2026-09-26 763fb68干净构建；P17新增20页面状态+1组件故事 |
-| 测试 | `npm test`：25 文件 224 条通过（763fb68） |
-| lint | `npm run lint`：0 errors / 0 warnings，763fb68 |
-| 构建验证 | `npm run build-storybook` 362 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-p17-integrate-host`）；P16合并后rebase并干净构建，stamp 763fb68 |
+| 故事数 | 363 stories + 67 docs；2026-09-26 6740791干净构建；新增Scenario自有记录删除确认故事 |
+| 测试 | `npm test`：25 文件 224 条通过（6740791） |
+| lint | `npm run lint`：0 errors / 0 warnings，6740791 |
+| 构建验证 | `npm run build-storybook` 363 stories/67 docs；`npm run build:host` + host-check 26/26（`/tmp/mh-dialog-integrate-host`）；P17合并后rebase并干净构建，stamp 6740791 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 763fb68，工作区干净）：全站474/474机器通过，P17 35/35（`/tmp/mh-p17-integrate-visual`）；负向38/38按预期失败。默认/窄屏人工fail已绑定（共享Header/Hero/导航密度待收敛），其他pending；机器通过不代表全部视觉验收。 |
+| 最近视觉对照 | 2026-09-26（stamp 6740791，工作区干净）：全站474/474机器通过（`/tmp/mh-dialog-integrate-visual`），负向38/38按预期失败。P08/P12/P14确认弹窗本体人工可读，整页仍fail（底层页面既存差异），其他pending；机器通过不代表全部视觉验收。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -46,6 +46,7 @@ npm test               # vitest 行为测试
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
 | M7 | 确认弹窗用途与形态收敛（P07/P08/P12/P14） | 候选完成；待集成全套 gate 与 PR | `ConfirmDialog` 单轴 `purpose`（confirm/info/warning/danger）共享 Modal 层栈，长文案自然换行；P07 Scenario 删除补危险用途与命名故事；原生与定向渲染证据 `/tmp/mh-feedback-recheck*`，结果见 §5 |
+| M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -356,6 +357,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P17已存Scope（skill-editor.js:8–31；scenario-edit.html:189–195） | 原脚本回填原选项之外的scope会丢失当前值；React仅补当前记录的非空选项 | 保留编辑数据与既有五项必填规则，不新增全局分类 | #18 |
 | P17窄屏Hero（原skill-editor页固定高度与单列断点） | React在≤1100px随内容增高，390/900/1440标题说明与三统计完整可读 | 不复刻裁切；证据`/tmp/mh-p17-responsive`及独立复核`/tmp/mh-p17-responsive-adversarial.md` | #18 |
 | P17细微颜色（上传表面、附件与必填态） | 复用现有同用途语义颜色与danger focus ring，不为六个细微差异新增别名 | 用户确认按用途抽象，保留信息层级与可读性；未删减字段或动作 | #18 |
+| P07知识管理确认弹窗（business-term-library.js / field-library.js / scenario-reports.js） | 原小型紧凑确认框统一为可换行、随内容增高的普通确认/删除/通知外观 | 同用途共享一个ConfirmDialog；保留权限、引用、确认动作及结果，不为每页保留外观flag | #19 |
 
 ## 4. 已知缺口
 
@@ -555,3 +557,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P17 Hero 900px可读性补修：原 `assets/css/governance/skill-editor.css:87–96,794–800` 的固定360px/overflow hidden与≤1100改单列同时生效，三张统计叠放后标题顶部和 AI CHECK 大部被裁；旧React `ScenarioEditPage.css` 同样在621–1100保留固定高度。现只在本页≤1100使Hero随内容增高并给单列布局留上下间距，≤620既有小屏布局及1440桌面形态不改；不隐藏状态、无新prop/token。`/tmp/mh-p17-responsive/{390,900,1440}.png` 与 `bounds.json` 核对标题、说明、三项stats全部落在Hero/视口内（900 Hero 587px）；390全局横溢仅共享Header，非本包。P17定向35/35机器配对`/tmp/mh-p17-responsive-pairs`、lint0、Storybook315故事/63文档候选构建；人工像素与最终clean-head全套待P15/P16顺序合入后集成。 | Codex WP6 |
 | 2026-09-26 | P17 PR #18（https://github.com/wu2305/marketinghub/pull/18）合并052fb2a，候选763fb68：lint0/0、25文件224测试、362stories/67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-p17-integrate-*。独立完整性审查/tmp/mh-p17-adversarial.md返回onRunPreview/onSubmit载荷缺失后补{question}/{values}及独立故事路由；/tmp/mh-p17-responsive-adversarial.md关闭900px裁切阻断。rebase保持P15唯一记录与语义tokens，P16 Edit接到实际编辑并校验预填。17个页面组件结构广度完成，不能替代M7状态档案、共享组件、正式库交付及人工视觉收敛。 | Codex integrator |
 | 2026-09-26 | 确认弹窗二次复核修复候选：`ConfirmDialog` 用单一 `purpose=confirm/info/warning/danger` 表达普通提交、单按钮通知、风险继续审批与破坏性删除；P08 报表描述提交、P12 Warning/Reviewing、P14 Memory 删除及 P07 知识管理/Scenario 下线与删除按用途迁移。Scenario 新增禁用自有记录删除确认命名故事，浏览器核对红色主动作后删除记录、弹窗关闭、空态出现（`/tmp/mh-feedback-recheck-dialogs/scenario-delete.json`）。确认框专属 CSS 归还组件，Modal 延用原覆盖层栈并显式采用 DIN 字体；所有正文可换行，高度受视口约束并可滚动，1035 字移动视口风险提示从顶部阅读且滚动后按钮可见。P07 知识操作原小警示框改为统一语义外观，属于此包的有意视觉差异；未改其确认结果。原页 CSS/运行时证据 `/tmp/mh-feedback-recheck-delete/results.json`、`/tmp/mh-feedback-recheck-extra/results.json`；新 1440/390 渲染与长提示记录 `/tmp/mh-feedback-recheck-dialogs/results.json`。旧 P07 确认框尺寸/图标坐标配对与共享用途外观冲突；仅移除该条固定几何比对，保留正文、按钮、视口内完整可读与下线结果断言；定向 `p07-business-term-dialog`、`disable-confirm`、`permission` 各1/1，证据 `/tmp/mh-dialog-p07-layout-after`、`/tmp/mh-dialog-p07-disable-after`、`/tmp/mh-dialog-p07-info-before`。定向 76 个测试（含 CSS 预算 5/5）、lint、Storybook 295 stories 构建通过；集成全套与 PR 待 root gate。 | Codex dialog repair |
+| 2026-09-26 | ConfirmDialog PR #19（https://github.com/wu2305/marketinghub/pull/19）合并7aaeb3f，冻结6740791：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-dialog-integrate-*。独立复核/tmp/mh-dialog-integrator-review.md；P08/P12/P14最终截图已看，弹窗本体信息/层级/动作清晰，整页底层差异仍fail绑定。confirmDialogTones改为confirmDialogPurposes，全部消费者同步，确认样式从Modal移回自身CSS，Modal显式DIN字体，新增Scenario删除确认故事与删除结果。P07仅移除被有意外观统一替代的旧固定几何比对，保留内容/动作/视口/结果。 | Codex integrator |
