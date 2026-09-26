@@ -5,8 +5,9 @@ export default [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".v20-type-card", story: ".mh-type-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".v20-type-card:last-of-type", story: ".mh-type-card:last-of-type", props: ["x", "y", "width", "height"], tol: 8 },
+      // Card height follows content so headings/counts never overlap at narrow widths.
+      { orig: ".v20-type-card", story: ".mh-type-card", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".v20-type-card:last-of-type", story: ".mh-type-card:last-of-type", props: ["x", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html",

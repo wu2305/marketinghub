@@ -1,10 +1,11 @@
 .mh-type-card {
 position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 171px;
+  min-height: 171px;
   font-family: var(--mh-font);
-  padding: 0 24px;
+  padding: 18px 8px 20px 24px;
   overflow: hidden;
   border: 1px solid #ebe6de;
   border-radius: 12px;
@@ -30,29 +31,41 @@ position: absolute;
   pointer-events: none;
 }
 
+.mh-type-card__heading,
 .mh-type-card strong,
 .mh-type-card small,
 .mh-type-card em,
 .mh-type-card__count {
-position: absolute;
+position: relative;
   z-index: 1;
   font-family: var(--mh-font);
   font-style: normal;
 }
 
+.mh-type-card__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+}
+
 .mh-type-card strong {
-top: 30px;
-  left: 24px;
+  min-width: 0;
+  overflow-wrap: anywhere;
   color: #17202d;
   font-size: 18px;
   font-weight: 700;
 }
 
 .mh-type-card__count {
-top: 18px;
-  right: 8px;
+  align-self: flex-start;
+  flex-shrink: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   display: inline-flex;
-  height: 26px;
+  min-height: 26px;
   align-items: center;
   padding: 0 13px;
   border-radius: 999px;
@@ -63,18 +76,18 @@ top: 18px;
 }
 
 .mh-type-card small {
-top: 62px;
-  left: 24px;
-  width: 60%;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  width: 70%;
+  overflow-wrap: anywhere;
   color: #69707b;
   font-size: 14px;
   line-height: 1.45;
 }
 
 .mh-type-card em {
-bottom: 20px;
-  left: 24px;
-  width: 178px;
+  margin-top: auto;
+  width: min(178px, 100%);
   padding-top: 11px;
   color: #a95d08;
   font-size: 12px;
@@ -100,4 +113,9 @@ background: #fffaf3;
 
 .mh-type-card.is-manageable {
 border-top-color: var(--mh-line-warm-strong);
+}
+
+.mh-type-card:focus-visible {
+  outline: 2px solid var(--mh-focus-strong);
+  outline-offset: 2px;
 }

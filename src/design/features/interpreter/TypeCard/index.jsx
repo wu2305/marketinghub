@@ -27,8 +27,10 @@ export function TypeCard({ title, count, summary, action, manageable = false, ar
       style={{ "--mh-art": ART[art] || ART[0] }}
       onClick={() => onSelect?.({ title })}
     >
-      <strong>{title}</strong>
-      <span className="mh-type-card__count">{count}</span>
+      <span className="mh-type-card__heading">
+        <strong>{title}</strong>
+        <span className="mh-type-card__count">{count}</span>
+      </span>
       <small>{summary}</small>
       <em>{action} →</em>
     </button>
