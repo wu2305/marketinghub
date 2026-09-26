@@ -12,13 +12,16 @@ export const iconNames = [
   "plus",
   "home",
   "history",
+  "clock",
   "expand",
   "spark",
   "layers",
   "thumb-up",
   "thumb-down",
   "file",
+  "user",
   "eye",
+  "eye-off",
   "download",
   "upload",
   "file-upload",
@@ -42,6 +45,7 @@ export const iconNames = [
   "more-vertical",
   "share",
   "info",
+  "alert-triangle",
   "close",
 ];
 
@@ -117,6 +121,9 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "clock") {
+    return <svg {...common}><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>;
+  }
   if (name === "expand") {
     return (
       <svg {...common}>
@@ -176,6 +183,9 @@ export function Icon({ name, path, className }) {
       </svg>
     );
   }
+  if (name === "user") {
+    return <svg {...common}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>;
+  }
   if (name === "eye") {
     return (
       <svg {...common} strokeWidth="2">
@@ -183,6 +193,9 @@ export function Icon({ name, path, className }) {
         <circle cx="12" cy="12" r="3" />
       </svg>
     );
+  }
+  if (name === "eye-off") {
+    return <svg {...common}><path d="M13.875 18.825A10.05 10.05 0 0 1 12 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 0 1 1.574-2.99M9.88 9.88l-3.29-3.29m7.532 7.532 3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a10.058 10.058 0 0 1-3.704 4.976m0 0L21 21" /></svg>;
   }
   if (name === "download") {
     return (
@@ -319,6 +332,9 @@ export function Icon({ name, path, className }) {
         <path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2l.1.2h4.8l.1-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z" />
       </svg>
     );
+  }
+  if (name === "alert-triangle") {
+    return <svg {...common}><path d="M12 9v2m0 4h.01M10.268 4 3.34 16c-.77 1.333.192 3 1.732 3h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0Z" /></svg>;
   }
   return null;
 }
