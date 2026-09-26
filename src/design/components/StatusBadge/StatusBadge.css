@@ -55,11 +55,11 @@
   border-radius: 50%;
   background: currentColor;
 }
-.mh-badge--knowledge.mh-badge--auto.mh-badge--success {
+:where(.mh-badge--knowledge.mh-badge--auto).mh-badge--success {
   background: var(--mh-bt-state-bg);
   color: var(--mh-bt-state-ink);
 }
-.mh-badge--knowledge.mh-badge--auto.mh-badge--neutral {
+:where(.mh-badge--knowledge.mh-badge--auto).mh-badge--neutral {
   background: var(--mh-bt-state-off-bg);
   color: var(--mh-bt-state-off-ink);
 }
@@ -82,18 +82,18 @@
   border-radius: 50%;
   background: currentColor;
 }
-.mh-badge--detail.mh-badge--auto.mh-badge--success {
+:where(.mh-badge--detail.mh-badge--auto).mh-badge--success {
   background: var(--mh-bt-status-on-bg);
   color: var(--mh-bt-status-on-ink);
 }
-.mh-badge--detail.mh-badge--auto.mh-badge--success::before {
+:where(.mh-badge--detail.mh-badge--auto).mh-badge--success::before {
   background: var(--mh-bt-status-on-dot);
 }
-.mh-badge--detail.mh-badge--auto.mh-badge--neutral {
+:where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral {
   background: var(--mh-bt-status-off-bg);
   color: var(--mh-bt-status-off-ink);
 }
-.mh-badge--detail.mh-badge--auto.mh-badge--neutral::before {
+:where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral::before {
   background: var(--mh-bt-status-off-dot);
 }
 
