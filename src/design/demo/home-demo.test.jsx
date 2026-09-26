@@ -81,6 +81,19 @@ describe("useHomeDemo", () => {
     expect(document.querySelectorAll(".mh-assistant__answer").length).toBe(1);
   });
 
+  it("a repeated question replaces the answer and resets its feedback", () => {
+    renderHome();
+    openAssistant();
+    fireEvent.change(promptBox(), { target: { value: "Why did ROI move?" } });
+    fireEvent.click(askButton());
+    fireEvent.click(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']"));
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']").getAttribute("aria-pressed")).toBe("true");
+    fireEvent.change(promptBox(), { target: { value: "Why did ROI move?" } });
+    fireEvent.click(askButton());
+    expect(document.querySelectorAll(".mh-assistant__answer").length).toBe(1);
+    expect(document.querySelector(".mh-assistant__feedback button[data-kind='helpful']").getAttribute("aria-pressed")).toBe("false");
+  });
+
   it("new session clears answer and prompt; close/reopen keeps the answer", () => {
     renderHome();
     openAssistant();
