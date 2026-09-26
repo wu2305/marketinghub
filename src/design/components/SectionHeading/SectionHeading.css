@@ -10,8 +10,8 @@ display: flex;
 margin: 0;
   color: var(--mh-ink-table-muted);
   font-family: var(--mh-font);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
   line-height: 1;
   text-transform: uppercase;
@@ -22,9 +22,9 @@ margin: 0;
 margin: 8px 0 0;
   color: var(--mh-ink-row-primary);
   font-family: var(--mh-display);
-  font-size: 30px;
+  font-size: var(--mh-font-size-3xl);
   font-style: italic;
-  font-weight: 600;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.1;
 }
 
@@ -33,7 +33,7 @@ max-width: 420px;
   margin: 0 0 2px;
   color: var(--mh-muted);
   font-family: var(--mh-font);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.4;
   text-align: right;
 }
@@ -48,7 +48,7 @@ display: grid;
 max-width: 640px;
   margin-top: 8px;
   text-align: left;
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-heading--view {
@@ -63,9 +63,9 @@ min-height: 104px;
 margin: 5px 0 0;
   color: var(--mh-ink);
   font-family: var(--mh-font);
-  font-size: 34px;
+  font-size: var(--mh-font-size-3xl);
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.02;
 }
 
@@ -73,7 +73,7 @@ margin: 5px 0 0;
 max-width: 720px;
   margin: 9px 0 0;
   color: var(--mh-muted);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.5;
 }
 
@@ -82,8 +82,8 @@ max-width: none;
   margin: 0;
   color: var(--mh-faint);
   letter-spacing: normal;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
   text-transform: uppercase;
 }

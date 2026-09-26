@@ -23,7 +23,7 @@ position: absolute;
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid var(--mh-line-strong-ai);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-ink-ai);
   box-shadow: var(--mh-flow-shadow);
@@ -57,15 +57,15 @@ min-height: 100%;
 }
 
 .mh-assistant--drawer .mh-assistant__stage h3 {
-font-size: 22px;
-  font-weight: 700;
+font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.15;
 }
 
 .mh-assistant--drawer .mh-assistant__stage p {
 margin: 10px 0 0;
   color: var(--mh-copy-ai);
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
   line-height: 1.4;
 }
 
@@ -101,17 +101,17 @@ display: grid;
   width: 30px;
   height: 30px;
   place-items: center;
-  border-radius: 5px;
+  border-radius: var(--mh-radius-sm);
   background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   color: var(--mh-ink-action-strong);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-assistant__header h2 {
 margin: 0;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xl);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-assistant__actions {
@@ -128,7 +128,7 @@ display: grid;
   height: 25px;
   place-items: center;
   border: 1px solid var(--mh-line);
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   color: var(--mh-copy-ai);
   cursor: pointer;
@@ -148,7 +148,7 @@ display: grid;
 
 .mh-assistant__stage h3 {
 margin: 0;
-  font-size: 28px;
+  font-size: var(--mh-font-size-3xl);
 }
 
 .mh-assistant__stage p {
@@ -186,7 +186,7 @@ display: grid;
   gap: 8px;
   padding: 8px;
   border: 1px solid var(--mh-line-strong-ai);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-composer-shadow);
   transition:
@@ -228,7 +228,7 @@ top: 50%;
   min-height: 520px;
   max-height: calc(100vh - 80px);
   border: 1px solid var(--mh-line-strong-ai);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   box-shadow: var(--mh-flow-shadow);
   transform: translate(-50%, -50%);
 }
@@ -306,7 +306,7 @@ animation-name: mhAssistantModalEnter;
       height: min(720px, calc(100vh - 32px));
       max-height: calc(100vh - 32px);
       border: 1px solid var(--mh-line-strong-ai);
-      border-radius: 8px;
+      border-radius: var(--mh-radius-md);
       transform: translate(-50%, -50%);
   }
 }
@@ -317,7 +317,7 @@ animation-name: mhAssistantModalEnter;
   }
 
   .mh-assistant:not(.mh-assistant--home) .mh-assistant__stage h3 {
-  font-size: 20px;
+  font-size: var(--mh-font-size-2xl);
   }
 
   .mh-assistant:not(.mh-assistant--home) .mh-assistant__suggestions {
@@ -359,11 +359,11 @@ display: flex;
 display: inline-block;
   max-width: 80%;
   padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: var(--mh-radius-lg);
   background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   color: var(--mh-ink-action-strong);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.45;
   word-break: break-word;
 }
@@ -373,7 +373,7 @@ display: grid;
   gap: 12px;
   padding: 18px 19px;
   border: 1px solid var(--mh-line-strong-ai);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-ink-ai);
 }
@@ -387,23 +387,23 @@ display: flex;
 
 .mh-assistant__answer-head > span {
 color: var(--mh-info);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-assistant__answer-head small {
 color: var(--mh-muted-ai);
-  font-size: 9px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-assistant__answer h3 {
 margin: 0;
   color: var(--mh-ink-ai);
   font-family: var(--mh-font);
-  font-size: 18px;
+  font-size: var(--mh-font-size-2xl);
   font-style: normal;
-  font-weight: 700;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
 }
 
@@ -411,7 +411,7 @@ margin: 0;
 margin: 0;
   color: var(--mh-copy-ai);
   font-family: var(--mh-font);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.5;
 }
 
@@ -430,7 +430,7 @@ color: var(--mh-ink-black-soft);
 .mh-assistant__answer--workspace .mh-assistant__finding p {
 margin: 0;
   color: var(--mh-copy-ai);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.5;
 }
 
@@ -447,11 +447,11 @@ display: flex;
 .mh-assistant__sources span {
 padding: 4px 7px;
   border: 1px solid var(--mh-line);
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface-ai);
   color: var(--mh-copy-ai);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-assistant__sources-row {
@@ -463,7 +463,7 @@ display: flex;
   padding-top: 14px;
   border-top: 1px solid var(--mh-line);
   color: var(--mh-reports-muted);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-assistant__sources-row > div {
@@ -483,9 +483,9 @@ display: flex;
 .mh-assistant__answer-actions a,
 .mh-assistant__answer-actions span {
 padding: 6px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
+  border-radius: var(--mh-radius-sm);
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
 }
 
@@ -514,12 +514,12 @@ display: inline-flex;
   gap: 4px;
   padding: 4px 10px;
   border: 1px solid var(--mh-line-control-soft);
-  border-radius: 5px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   color: var(--mh-ink-secondary-muted);
   font-family: var(--mh-font);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-regular);
   cursor: pointer;
   transition:
     background 0.15s ease,
@@ -574,7 +574,7 @@ position: absolute;
   flex-direction: column;
   overflow: hidden;
   border: 1px solid var(--mh-line-strong);
-  border-radius: 10px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-popover-shadow);
 }
@@ -601,15 +601,15 @@ display: flex;
 .mh-assistant__history-head h4 {
 margin: 0;
   color: var(--mh-ink);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-assistant__history-count {
 margin-left: 4px;
   color: var(--mh-muted);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-assistant__history-head button {
@@ -619,7 +619,7 @@ display: grid;
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: transparent;
   color: var(--mh-muted);
   cursor: pointer;
@@ -646,11 +646,11 @@ display: flex;
   min-height: 30px;
   padding: 6px 10px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: none;
   color: var(--mh-copy);
   font-family: var(--mh-font);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   text-align: left;
   cursor: pointer;
   white-space: nowrap;
@@ -688,7 +688,7 @@ gap: 0;
 .mh-assistant__answer--simple p {
 margin: 0;
   color: var(--mh-copy);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.5;
 }
 
@@ -703,11 +703,11 @@ display: inline-flex;
   margin: 0 0 8px;
   padding: 5px 7px 5px 9px;
   border: 1px solid var(--mh-chip-line);
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: var(--mh-chip-bg);
   color: var(--mh-chip-ink);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
 }
 
@@ -718,10 +718,10 @@ display: grid;
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: transparent;
   color: var(--mh-chip-icon);
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
   line-height: 1;
   cursor: pointer;
 }

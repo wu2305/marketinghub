@@ -4,7 +4,7 @@ font-family: var(--mh-font);
 }
 
 .mh-select:focus-visible {
-outline: 2px solid rgba(63, 115, 166, 0.55);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
@@ -14,7 +14,7 @@ width: 100%;
   border-radius: var(--mh-radius-control);
   background: var(--mh-surface);
   color: var(--mh-ink);
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-select {
@@ -24,8 +24,8 @@ height: 40px;
 
 .mh-select--sm {
 height: 32px;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: var(--mh-radius-md);
+  font-size: var(--mh-font-size-sm);
 }
 
 .mh-select:focus {
@@ -42,5 +42,5 @@ cursor: not-allowed;
 
 .mh-select.is-invalid {
 border-color: var(--mh-red);
-  box-shadow: 0 0 0 3px rgba(155, 18, 48, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mh-danger) 12%, transparent);
 }

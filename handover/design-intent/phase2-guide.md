@@ -145,16 +145,20 @@ Mapping rules (from `foundations.md` §2):
 | `font-size` | ≤ 11.5 px → `xs`; 12–12.5 → `sm`; 13–13.5 → `md`; 14 → `lg`; 15–17 → `xl`; 18–21 → `2xl`; 22–34 → `3xl`; ≥ 36 and `clamp()` headlines → `display`. rem: ×16 first |
 | `font-weight` | 300 → light; 400–500 → regular; 560–900 → bold |
 | `border-radius` | 1–5 px → `sm`; 6–10 → `md`; 11–26 → `lg`; ≥ 99 px or `50%` → `pill`; per-corner values map each corner the same way |
-| `box-shadow` (elevation) | largest blur ≤ 12 px → `raised`; 13–40 → `overlay`; > 40 → `modal` |
+| `box-shadow` (elevation) | largest blur > 40 px → `modal`; otherwise a *resting* element (selector has no hover/focus/active/open state and is not a popover, menu, tooltip, toast, panel, drawer or dialog) → `raised`; a lifted state or floating layer → `raised` if blur ≤ 12, else `overlay` |
 | `box-shadow: 0 0 0 Npx …` on `:focus`/`:focus-visible` | replace with `outline: 2px solid var(--mh-focus-ring); outline-offset: 2px` |
-| `box-shadow: 0 0 0 Npx …` on a selected/active/hover state | keep the shape, colour becomes `color-mix(in srgb, var(--mh-accent) 20%, transparent)` |
+| `box-shadow: 0 0 0 Npx …` on a selected/active/invalid state | keep the shape; map its colour like any colour literal (an invalid-field ring stays danger, a selection ring stays accent) |
+| focus style mixing a ring with a drop shadow | outline as above; the drop shadow follows the elevation rule. Remove any `outline: 0` in the same rule |
+| colour inside `outline` | `var(--mh-focus-ring)` (D2) |
 | raw `rgba()` / `rgb()` / hex | nearest role token, or `color-mix()` of one (same rule as WP2 derive) |
 | formulas / code | keep `var(--mh-font-mono)` |
 
 - In 3a, first add budget checks to `css-budget.test.js` for distinct raw `font-size`, `font-weight`,
   radius, `box-shadow` and colour-literal values outside `tokens.css` (same definitions as
   `scripts/concept-count.mjs`), excluding `pendingMigration` files, with limits in `css-budget.json` set
-  to today's counts. Every later sub-PR lowers them to its new count. After 3d they are 0.
+  to today's counts. Every later sub-PR lowers them to its new count. After 3d they are 0. A composite value
+  counts only while it still holds a literal: a shadow counts if it contains a colour literal, a radius if
+  it contains a non-zero number outside `var()`.
 - Spacing is **not** in scope (too many values to move safely). New code uses the space scale.
 
 ### WP4 — `lib/governance.js`

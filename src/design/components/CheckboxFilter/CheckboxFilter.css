@@ -13,7 +13,7 @@ position: relative;
   height: 44px;
   padding: 0 13px;
   border: 1px solid var(--mh-check-filter-line);
-  border-radius: 12px;
+  border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
   color: var(--mh-check-filter-ink);
 }
@@ -21,8 +21,8 @@ position: relative;
 .mh-check-filter__label {
 flex: 0 0 auto;
   color: var(--mh-check-filter-label);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
   line-height: 1.2;
 }
 
@@ -42,8 +42,8 @@ display: flex;
   border: 0;
   background: transparent;
   color: var(--mh-check-filter-ink);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
   list-style: none;
   cursor: pointer;
@@ -82,7 +82,7 @@ position: absolute;
   overflow-y: auto;
   padding: 8px;
   border: 1px solid var(--mh-check-filter-line);
-  border-radius: 10px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-check-filter-shadow);
 }
@@ -95,7 +95,7 @@ position: relative;
   gap: 8px;
   padding: 7px;
   color: var(--mh-check-filter-option);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.2;
   white-space: nowrap;
   cursor: pointer;
@@ -131,7 +131,7 @@ width: 180px;
 }
 
 :is(.mh-btview, .mh-flview) .mh-check-filter__label {
-font-size: 11px;
+font-size: var(--mh-font-size-xs);
 }
 
 :is(.mh-btview, .mh-flview) .mh-check-filter__options {
