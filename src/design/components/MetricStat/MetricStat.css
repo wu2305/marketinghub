@@ -21,6 +21,10 @@ min-height: 84px;
 color: rgba(255, 255, 255, 0.72);
 }
 
+.mh-metric--glass .mh-metric__label {
+  text-transform: uppercase;
+}
+
 .mh-metric--glass .mh-metric__value {
 color: #fff;
   font-size: 32px;
@@ -83,7 +87,6 @@ color: var(--mh-muted);
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 1.15;
-  text-transform: uppercase;
 }
 
 .mh-metric__value {

@@ -2,6 +2,7 @@ import "../../tokens.css";
 import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
+import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
@@ -38,7 +39,7 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
   return <div className="mh-feedback-page" data-feedback-type={type} data-feedback-time={time}>
     <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={hero.image} eyebrow={hero.eyebrow} title={hero.title} description={hero.description} height={372} variant="home" scrim="none" asideLabel={hero.summaryAria}>
-      <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
+      <div className="mh-feedback-page__stats">{hero.stats.map((stat) => <MetricStat key={stat.key} label={stat.label} value={counts[stat.key] ?? 0} caption={stat.caption} variant="glass" />)}</div>
     </Hero>
     <div className="mh-feedback-page__body">
       <GovernanceNav items={sidebar} current="feedback-quality" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />
