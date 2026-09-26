@@ -9,9 +9,8 @@ import "./DataTable.css";
  * @param {Array<{ key: string, header: React.ReactNode }>} [props.columns=[]]
  * @param {Array<{ id?: string|number, [key: string]: React.ReactNode }>} [props.rows=[]]
  * @param {React.ReactNode} [props.caption] note under the table
- * @param {(row: object) => void} [props.onRowClick] makes rows clickable
  */
-export function DataTable({ columns = [], rows = [], caption, onRowClick }) {
+export function DataTable({ columns = [], rows = [], caption }) {
   return (
     <div className="mh-table-wrap">
       <table className="mh-table">
@@ -24,7 +23,7 @@ export function DataTable({ columns = [], rows = [], caption, onRowClick }) {
         </thead>
         <tbody>
           {rows.map((row, index) => (
-            <tr key={row.id || index} onClick={onRowClick ? () => onRowClick(row) : undefined}>
+            <tr key={row.id || index}>
               {columns.map((column) => (
                 <td key={column.key}>{row[column.key]}</td>
               ))}

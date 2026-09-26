@@ -1,5 +1,5 @@
 import { DataTable } from "./index.jsx";
-import { callbackProp, prop } from "../../lib/story-helpers.js";
+import { prop } from "../../lib/story-helpers.js";
 
 export default {
   title: "Molecules/Data table",
@@ -28,12 +28,6 @@ export default {
     columns: prop("Array<{ key: string, header: React.ReactNode }>", { defaultValue: [], description: "Column definitions." }),
     rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: "Row objects keyed by column key." }),
     caption: prop("React.ReactNode", { description: "Note rendered under the table.", control: "text" }),
-    onRowClick: callbackProp(
-      "onRowClick",
-      "(row: object) => void",
-      { id: "1", name: "Coach_XHS_01", feed: "82", total: "99" },
-      "When set, rows are clickable and the clicked row object is emitted.",
-    ),
   },
   render: (args) => <DataTable {...args} />,
 };
