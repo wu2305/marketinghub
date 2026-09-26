@@ -8,7 +8,7 @@
 
 2026-09-23 用户澄清：全量覆盖与克制抽象同时成立。目标不是局部样板、仅五页首屏、通用列表替代原有视图，也不是另建知识管理产品。全部页面、页内视图、区块、弹窗/抽屉、表单及可达交互状态都在范围内；原始 Demo 的后端/AI 模拟行为通过确定性本地故事状态演示。
 
-- 原始页面的实际生效视觉与交互是重建验收依据；提取后的组件接口是使用与组合的事实来源，不能反过来用现有接口删减参照物能力。
+- 原始页面的实际生效视觉与交互用于核对覆盖和辨认设计用途；组件按内容、状态、动作与布局职责建立语义接口。同用途可以统一没有用途差异支撑的细微样式差别，记录有意差异；不得据此删减原始可达能力。
 - 奥卡姆剃刀约束实现复杂度，不删减覆盖范围：同构结构与行为共享，真实差异保留专用组合；不逐标签拆组件、不预建万能渲染器、不以组件数量多或少为目标。
 - 原始 HTML 不是运行时，不是组件 props，也不是验收时逐标签对比的对象。
 - 一个新页面必须能只 `import` 组件来搭建，不复制原始 HTML、不复制任何中间 JSON。
@@ -50,7 +50,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 本节只列约束后续工作方式的现存事实（截至 2026-09-24，ad7ba3a）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
-- **覆盖**：17 个原始页面对应 14 个页面组件；P08–P11表单、详情和独立工具已实现并接通主要跨页导航；P12–P14治理三页已实现，P15–P17仍待集成。P07 八类全部有专用视图并经 `typeViews` 注册分派（Report Context/Metric Dictionary/Analytical Model/Email Reports 共用 FieldLibraryView）；overview 与 Principles 通过人工审图，其余人工 pending；P08独立创建/编辑已建，跨页组合与人工像素收敛仍待完成。
+- **覆盖**：17 个原始页面对应 15 个页面组件；P08–P11表单、详情和独立工具已实现并接通主要跨页导航；P12–P14治理三页已实现，P15 Skill Library已实现，P16–P17仍待集成。P07 八类全部有专用视图并经 `typeViews` 注册分派（Report Context/Metric Dictionary/Analytical Model/Email Reports 共用 FieldLibraryView）；overview 与 Principles 通过人工审图，其余人工 pending；P08独立创建/编辑已建，跨页组合与人工像素收敛仍待完成。
 - **流程宿主**：Home、Cockpit、Self-Service、Interpreter类型视图、知识创建及独立Data Model已有demo hooks；其余存量页面流程仍需从故事迁出。`examples/host` 的 `useCopilotInstance` 仍复制Cockpit copilot逻辑，待S4/M7收敛。
 - **覆盖层**：Modal（含 ConfirmDialog、UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；仅栈顶响应 Escape 与焦点环，滚动锁在最后一层关闭时释放，ModelFlowDialog 可用 Escape 关闭。原有不同覆盖层外壳保持各自真实视觉形态。
 - **组件边界**：AssistantPanel 与 ReportCopilot 共用私有 AssistantShell 的头部、历史与覆盖层行为，各自保留真实不同的外层布局、答案与输入组合；页面持有助手变体预设。页面组件 props 平铺（最多 49 个）仍待后续流程收敛。
@@ -82,7 +82,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 ### 3.3 内容与数据
 
 - 组件 props 中出现的文案、计数、状态取值，必须与原始 Demo 当前版本一致；发现原文自身不一致时，以 `assets/js/knowledge/types.js` 的 `typeMeta` 为知识类型计数来源，并在 `handover/README.md` 记录取舍。
-- 有意的视觉差异（为稳定接口调整 DOM 层级或 class）必须在 `handover/README.md` 的“有意差异”表中登记，写明位置与理由。
+- 有意的视觉差异（包括按同一设计用途统一样式，以及为稳定接口调整 DOM 层级或 class）必须在 `handover/README.md` 的“有意差异”表中登记，写明位置与理由。
 
 ### 3.4 故事与文档
 
@@ -96,7 +96,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 3.5 参照物缺陷
 
-- 视觉（布局、尺寸、颜色、字体、文案、动效）按原始页面实际生效的效果复刻，这是验收依据。
+- 视觉（布局、尺寸、颜色、字体、文案、动效）以原始页面实际生效效果为参照，在此基础上按设计目标和用途设计组件。保留信息层级、状态与动作含义、可读性和全部可达能力；允许同用途的细微颜色、间距、尺寸统一，须登记理由，不逐页面或逐像素制造变体。
 - 原始 Demo 的**逻辑缺陷不进入 `src/design` 组件**。组件实现明显的设计意图。缺陷包括：错误的计算或判定（永假条件、错误回退）、状态 quirk（例如回填后按钮不恢复）、定位错误或恒不可达的界面、CSS 级联泄漏造成的非设计效果、死代码路径。
 - 判定为缺陷必须写明原始源码位置与证据。原始行为合理但少见的，不算缺陷，照常复刻。拿不准时登记为待决，不自行决定。
 - 需要在故事中重现原始缺陷（例如做配对截图）时，只能通过 `demo/` 层的 fixture 或 hook 参数表达；组件不为复刻缺陷新增专用 props 或分支。

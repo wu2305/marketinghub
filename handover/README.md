@@ -9,14 +9,14 @@
 | 项 | 值 |
 |---|---|
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
-| 最新独立审核 | 2026-09-26 P14 PR #15 完整性对抗审核完成：18条记录、空详情、内联编辑、分类创建、删除与助手/模型区块已核；修草稿接口错接、错误焦点、遗漏SVG及窄屏说明裁切；人工像素仍fail |
+| 最新独立审核 | 2026-09-26 P15 PR #16完整性复核完成：Skill Library九条完整记录、治理字段、结构内容、内联表单与预览/助手状态；默认/详情人工fail。外部组件复核及修复包仍见§4 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 294 stories + 62 docs；2026-09-26 c6df66d 构建 index.json 实数；P14页面可达状态与MemoryWorkspace档案新增，无删除 |
-| 测试 | `npm test`：23 文件 221 条通过（2026-09-26 c6df66d） |
-| lint | `npm run lint`：0 errors / 0 warnings，c6df66d |
-| 构建验证 | `npm run build-storybook` 294 stories/62 docs；`npm run build:host` + host-check 23/23通过（`/tmp/mh-p14-integrate-host`）；c6df66d rebase origin/main后干净构建，构建戳匹配 |
+| 故事数 | 318 stories + 65 docs；2026-09-26 5b8fbe4干净构建；21个P15页面状态与3个专用组件故事新增 |
+| 测试 | `npm test`：23 文件 221 条通过（5b8fbe4） |
+| lint | `npm run lint`：0 errors / 0 warnings，5b8fbe4 |
+| 构建验证 | `npm run build-storybook` 318 stories/65 docs；`npm run build:host` + host-check 24/24（`/tmp/mh-p15-integrate-r2-host`）；最新origin/main rebase后干净构建，stamp 5b8fbe4 |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp c6df66d，工作区干净）：全站391/391机器通过，P14 36/36（`/tmp/mh-p14-integrate-visual`）；负向29/29按预期失败（`/tmp/mh-p14-integrate-negative`）。P14默认/390px人工fail已绑定最终截图hash，其余389未审pending；既有人工fail仍列第二轮 |
+| 最近视觉对照 | 2026-09-26（stamp 5b8fbe4，工作区干净）：全站410/410机器通过，P15 19/19（`/tmp/mh-p15-integrate-r2-visual`）；负向31/31按预期失败。默认/详情人工fail，其他pending；机器结果不替代组件形态/人工验收，已确认修复清单见§4。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -40,7 +40,7 @@ npm test               # vitest 行为测试
 | M3 | Cockpit、Self-Service、Campaign 完整模块 | 进行中 | 现有区块与主要交互已提取；命名状态档案、P04/P05/P06流程迁入demo及人工像素收敛仍待完成，见§4当前复核 |
 | M4 | 八种知识类型真实区块与状态，替换通用占位列表 | 进行中 | 八类均已注册专用视图；P07 的逐类型覆盖、机器与人工状态及 M5 边界见 §2.2 P07 行。WP2 已收掉三类管理动作重复、过渡通用列表与 Field Library / Data Model / Scenario 的裸色值；人工审图与创建/编辑仍按 P07 行推进 |
 | M5 | 知识创建/编辑/详情、关联、版本、公式、模型浏览器 | 进行中 | P08–P11均已实现并完成机器验证及主要跨页宿主导航；全部原始可达状态最终核对与人工像素收敛仍待办 |
-| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12–P14已机器集成，人工收敛待办，P15–P17继续 | PR #13、#14、#15 |
+| M6 | 治理三页与 Scenario Library/Detail/Edit | 进行中；P12–P15已集成，组件形态与人工收敛待办，P16/P17继续 | PR #13–#16 |
 | M7 | 全台账收敛、独立宿主/新组合验证、构建交付与 CI | 进行中 | 纠偏批 E 提前建立最小宿主 `examples/host`（base `/mh-host/`：Home、Cockpit 导航闭环、compose 双实例/不同内容、哨兵样式、未重建页显式覆盖缺口）；CI已建立，全页宿主覆盖与库交付仍待完成 |
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
@@ -69,7 +69,7 @@ npm test               # vitest 行为测试
 | P13 | assets/pages/feedback-quality.html | 七列反馈、搜索/类型/时间筛选、完整详情、恢复助手和模型流 | M6 | 已实现，PR #14；23个页面命名状态、15/15配对及全套机器验证；原页助手初始化缺陷与恢复后状态分开登记，三条真实历史已补齐。默认/390px人工fail，第二轮收敛 |
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
 | P14 | assets/pages/personal-memory.html | 全部18条记忆、分类/空态、内联详情/编辑、创建/校验、独立删除目标、lite助手及模型流 | M6 | 已实现，PR #15；可达状态命名故事、36/36配对及全套机器验证；跨分类创建保持过滤并显示新详情、菜单删除不改选择；默认/390px人工fail，第二轮收敛 |
-| P15 | assets/pages/scenario-library.html | 实为 Skill Library（h1/title 均 Skill Library）：9行列表、搜索/状态筛选、详情与预览、内联创建/编辑、lite 助手 | M6 | 进行中；21 个页面命名状态 + 3 个专用组件故事、19 个本页配对场景及宿主流程已接通；独立完整性与最终集成门禁待复核，人工像素第二轮收敛 |
+| P15 | assets/pages/scenario-library.html | Skill列表/筛选/空态、九字段详情与五段结构、预览、内联创建编辑、助手/模型 | M6 | 已实现，PR #16；21个页面+3组件故事，本页19/19及全套机器通过；默认/详情人工fail。按用途抽象，不恢复隐藏Use或虚构原无处理器动作 |
 | P16 | assets/pages/scenario-detail.html | Skill 详情：hero + 6 页签 + preview | M6 | 未开始 |
 | P17 | assets/pages/scenario-edit.html | Skill 编辑表单、校验、preview、Submit for Review | M6 | 未开始 |
 
@@ -346,13 +346,15 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | P13助手初始化（shared/portal.js:336–348,766；feedback-quality.html缺少.assistant-subtitle） | 原可见launcher未绑定open，真实点击保持关闭；React恢复原脚本明确意图：建议填充、Enter提交、grounded答案、历史/技能/模型流 | AGENTS §3.5初始化缺陷；只做1项原closed→React open对照，恢复子态以完整命名故事/源码意图和宿主核对；最终CSS隐藏的Scope/pickers不恢复 | #14 |
 | P14创建覆盖层（governance/memory.js:69–105；assistant-launcher.css） | 原launcher遮挡Save Memory中心点、Escape未绑定；React共享S2覆盖层使动作可点击并支持Escape | 原定位缺陷与统一键盘关闭；原键盘Enter保存可达，未增加业务流程 | #15 |
 | P14新建表单重开（governance/memory.js:69–105,110–145） | 原Cancel→New清表单值但残留必填错误；React新开同时清错误 | AGENTS §3.5状态quirk不进入展示组件；提交仍校验title/description且聚焦首个错误 | #15 |
+| P15状态点击（governance/skills.js:55–60,146–168） | 原状态点击同时冒泡打开详情；React只推进状态 | 独立状态动作不误触整行，保留真实状态转换 | #16 |
+| P15创建/编辑（skills.js:203–229；scenario-library.html:286–293） | 原Create沿用Edit草稿，已存D2C Insights回填丢失；React新建清空并保留当前记录的非标准scope选项 | 修复状态残留和数据回填丢失，不新增全局分类 | #16 |
 
 ## 4. 已知缺口
 
 2026-09-26 外部组件报告复核（干净代码基线10d8e09重新构建；Chromium/Playwright，Header 1440/390，其余指定同态1440；证据 `/tmp/mh-feedback-recheck*/results.json` 与同目录截图，Browser插件不可用）：
 - **优先补完整形态**：P12风险批准误用P07知识小确认框，原440×301/56px图标/32px 28px内距，React440×122.5/25px图标/0内距且长提示不换行被裁；P14删除原400×177/24px内距/红色Delete，React440×122.5/橙色知识确认；P08 RC描述提交原370×191/25px内距/无警告图标，React320×122.5/知识警告图标。需保留真实内容组合及样式差异，共享Modal覆盖层行为，不全局把ConfirmDialog改成440px。源见review-center.html:401–426/review.css:1091–1148，memory.js:426–440/memory.css:1177–1228，report-context-form.js:81–100。P07同态原/React页面确认框均282.3×122.5，原报告混合不同实例的尺寸不能直接采纳。
-- **共享基础真实问题**：Home Header原白色0.96而React透明；Home/Interpreter/ReviewCenter/KnowledgeView导航项原48px、React56px。P12原fixed/React sticky；独立Metric Dictionary两边均sticky，但原z60/blur16/白0.97，Reactz40/blur18/白0.96。独立ConfirmDialog、Modal、Pagination抽样均回退Times，页面Shell下则DIN；不靠Storybook全局字体掩盖组件问题。Campaign MetricStat标签原none、Reactuppercase；Interpreter overview与动态8类型真实hover箭头缺失。P12/P13统计卡可复用MetricStat的共性已登记。
-- **状态/标签形态**：源码复核P07 Scenario卡片与DataModel Basic可复用knowledge状态徽章，前者缺原有圆点；FieldLibrary详情标题却误用卡片固定76×20变体（原为自然宽/min22/7px点）。独立MetricDictionary页头32px无点、ReviewQueue状态等保留真实差异，不把五类小标签机械统一。P08 RC编辑摘要的状态胶囊与Scenario标签现被普通文本替代（report-context-form.js:35–40 vs KnowledgeCreateFields/index.jsx:156），AI Summary还写死enabled，需随该页收敛恢复内容状态接口与标签呈现。
+- **共享基础真实问题**：Home Header原白色0.96而React透明；Home/Interpreter/ReviewCenter/KnowledgeView导航项原48px、React56px。P12原fixed/React sticky；独立Metric Dictionary两边均sticky，但原z60/blur16/白0.97，Reactz40/blur18/白0.96。独立ConfirmDialog、Modal、Pagination抽样均回退Times，页面Shell下则DIN；不靠Storybook全局字体掩盖组件问题。Campaign MetricStat标签原none、Reactuppercase；Interpreter箭头缺失的初判撤回：原overview/八类型的::after虽有opacity变化，最终被ai-interpreter-overview.css:309–312的display:none!important隐藏；不新增箭头修复，证据/tmp/mh-sidebar-arrow-source-review.md。P12/P13统计卡可复用MetricStat的共性已登记。
+- **状态/标签形态**：源码复核P07 Scenario卡片与DataModel Basic可复用knowledge状态徽章，前者缺原有圆点；FieldLibrary详情最终源样式经后加载CSS覆盖为76×20（ai-interpreter-overview.css:3059–3088）；采用自然宽detail徽章属于按用途统一的有意设计调整，不能称原样式还原。独立MetricDictionary页头32px无点、ReviewQueue状态等保留真实差异，不把五类小标签机械统一。P08 RC编辑摘要的状态胶囊与Scenario标签现被普通文本替代（report-context-form.js:35–40 vs KnowledgeCreateFields/index.jsx:156），AI Summary还写死enabled，需随该页收敛恢复内容状态接口与标签呈现。
 - **不采纳/范围**：KnowledgeView当前故事与host均3链接，不是5；治理页已共享GovernanceNav；类型项源types.js:428本来是button，不能全部改anchor；默认选择器零命中不能推出81%死CSS；不复验/背书50/244与114项统计。Campaign同态任务框仍有padding/高度差（原600×413/0，React600×452/22），不是用占位Modal故事174px高度直接判缺陷。此次为审核，未修实现、未运行全套测试，既有机器通过不代表这些形态已完整验收。
 
 - 2026-09-26 完整提取复核：P07八类已有语义视图，本轮未发现有证据的结构性功能遗漏；八个整页类型入口及Principles筛选/空/展开、Business Term权限/确认、Data Model→Report Context peek仍缺可直达命名故事，见 `/tmp/mh-p07-completeness-archive-review.md`，M7补档而不重复造组件。P12/P13 Hero统计结构后续复用现有MetricStat glass，沿用P15/P16已确认共性。
@@ -533,5 +535,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | WP6 P14 Personal Memory 候选：从`data/memories.js`提取18条源记录，`PersonalMemoryPage`+专用`MemoryWorkspace`完整组合AI横幅、5类tab计数、18卡长页/空类、卡更多菜单、内联空/只读/编辑详情、创建抽屉/双必填、跨类创建结果、删除确认及lite助手/模型流；24个命名页面状态故事+1组件故事。私有`usePersonalMemoryDemo`供Storybook与`/mh-host/personal-memory`共用，替换记录和双实例隔离、编辑保存与删另一卡时详情保留已验证；Share/AI Auto-fill原无处理器，只保留可见动作回调不虚构结果。源`memory.js:91–169`创建取消再开残留错误属状态quirk，React清错；源Create按钮受launcher遮挡属定位缺陷，React可键盘/指针操作；跨类创建保留当前筛选且显示新详情按原行为；原侧栏Personal Memory anchor虽有DOM但实际`display:none`，只提取四条可见导航。P14定向配对36/36机器通过（`/tmp/mh-p14-pairs-candidate`，最后表单标签微调后2/2`/tmp/mh-p14-create-final`、Hero布局后default/narrow各1/1），host23/23`/tmp/mh-p14-host-final`，lint0、23文件221测试、294stories/62docs本地构建；3个本页负向变异已定义待最新main干净全套。为保留8个原始精确色值且不增token预算，同值同义收敛8个既有别名（AI/报表标准边框、助手/上传控件边框、金色渐变、禁用按钮色），新增8个语义色token，旧豁免同步删除；其他页计算色值不变。默认/390px初审人工像素fail：Hero字位、侧栏/卡片密度及调色仍不同，标题说明现完整可读，留第二轮。源码矩阵`/tmp/mh-wp6-p14-source-matrix.md`、独立完整性复审`/tmp/mh-p14-completeness-review.md`。 | Codex WP6 |
 | 2026-09-26 | P14 Personal Memory PR #15（https://github.com/wu2305/marketinghub/pull/15）合并7ebf1e1；候选c6df66d最新main干净全套：lint0/0、23文件221测试、294stories/62docs、host23/23、visual391/391（P14 36）、negative29/29；证据/tmp/mh-p14-integrate-*。PersonalMemoryPage组合受控MemoryWorkspace与现有导航/覆盖层/助手；全部18记录及创建/编辑/删除、空详情、跨分类创建等真实差异完整提取。对抗审核/tmp/mh-p14-completeness-review.md修editDraft/draft错接、description-only错误焦点、菜单/详情/banner/New SVG；实际浏览器走通预填编辑保存，窄屏说明可读性已修。8个原始精确色值以语义token保留，通过同值同用途的标准边框、控件边框、禁用态与金色渐变别名合并腾出8个定义，预算上限不变、旧前缀豁免缩减；未采用近似色或跨背景/边框混并。源Personal Memory自身sidebar anchor经Chromium证实display:none，仅4条可见，不复活隐藏入口；Share/AI Auto-fill保留无结果callback，不扩建原未实现流程。默认/390px人工像素fail，其余pending，P15–P17继续。 | Codex integrator |
 | 2026-09-26 | 用户要求外部组件反馈二次复核：基线10d8e09重新构建并用现有Playwright实测原页/故事，独立对抗源码复核确认P08/P12/P14弹层误用、P07徽标形态及P08标签退化；Header/字体/MetricStat/hover差异与过时断言分开记录§4，临时证据/tmp/mh-feedback-recheck*。本轮不修改实现、不扩测试框架。 | Codex integrator |
-
 | 2026-09-26 | WP6 P15 Skill Library 候选：新增 `ScenarioLibraryPage` 与 `SkillLibrary`、`SkillDetail`、`SkillInlineForm` 三个专用模块；私有 `SKILL_RECORDS` 精确提取源9行、`useSkillLibraryDemo` 供21个页面故事和独立宿主共用。覆盖列表搜索/状态/空态、完整治理9字段与5段结构、预览、内联创建/编辑、可见无处理器控件回调及lite助手；19条本页配对场景含下部、缺陷修正与负向断言；默认/详情人工初审fail（侧栏高度/表格密度、治理卡纵向间距），其余pending。源 `assets/js/governance/skills.js:55–60,146–168` 状态点击冒泡开详情与 `:201–208` Create沿用Edit草稿属逻辑缺陷，React仅推进状态、新建清空；空提交源alert后隐藏照保留。源 `:222–229` 把D2C Insights回填到HTML `scenario-library.html:286–293` 不含该值的select，React保持当前记录值并动态补该项。来源矩阵 `/tmp/mh-wp6-p15-source-matrix.md`；精确色依赖按 `/tmp/mh-p15-token-map.json` 23组同值同角色旧别名合并，腾出29个定义，新源色按语义token记录，预算上限不变。在P14已合main的10d8e09基线上 lint0、221/221测试、Storybook 318 stories/65 docs、host 24/24 预检通过；本页19/19最新机器配对通过（`/tmp/mh-p15-rebased-pairs-r2`），完整门禁由集成者复核；人工像素第二轮收敛。 | Codex WP6 P15 |
+| 2026-09-26 | P15 PR #16（https://github.com/wu2305/marketinghub/pull/16）合并391325d，候选5b8fbe4：lint0/0、23文件221测试、318stories/65docs、host24/24、visual410/410、negative31/31；证据/tmp/mh-p15-integrate-r2-*。初轮409/410定位为Storybook play尚处Edit阶段时误读输入，补等待Create模式并保留实时input.value空断言，产品清空逻辑未放宽。完整性对抗确认九条记录/表单/治理字段/动作及现有MetricStat复用；默认/详情人工fail留收敛，P16/P17继续；按用户最新用途抽象指示同步AGENTS视觉规则，保留完整可达能力并允许有理由的同用途细微样式统一。撤回侧栏hover箭头与FieldLibrary自然宽属于原效果的错误判断。 | Codex integrator |
