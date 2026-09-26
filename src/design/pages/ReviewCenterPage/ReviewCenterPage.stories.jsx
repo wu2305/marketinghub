@@ -8,6 +8,7 @@ const restoration = { id: "restore-warning", title: "Restored validation item", 
 const passRestoration = { ...restoration, id: "restore-pass", title: "Restored checked item", aiCheck: "Pass", warning: "" };
 const missingSuggestion = { ...restoration, id: "restore-fallback", title: "Restored item without suggestions", aiCheck: "Reviewing", warning: "" };
 const flowThreads = () => REVIEW_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
+const selectedFlowMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
 export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Review Center page with source-backed Pending and Approved queues, detail and decision overlays, and the lite AI assistant. The private demo hook drives Storybook and the standalone host." } } } };
 
@@ -76,7 +77,7 @@ export const ReviewCenterReject = state("Review Center · Reject with AI suggest
 export const ReviewCenterRejectFallback = state("Review Center · Reject fallback suggestions", { selectedId: "restore-fallback", panel: "reject" }, { restorations: [missingSuggestion] });
 export const ReviewCenterRiskReviewing = state("Review Center · AI review in progress", { selectedId: "pending-3", panel: "risk" });
 export const ReviewCenterRiskWarning = state("Review Center · AI warning", { selectedId: "restore-warning", panel: "risk" }, { restorations: [restoration] });
-export const ReviewCenterDirectPass = state("Review Center · Direct approval after Pass", {}, { records: [...REVIEW_CENTER.records, { ...passRestoration, status: "approved" }] });
+export const ReviewCenterDirectPass = state("Review Center · Pending Pass approves directly", { selectedId: "restore-pass" }, { restorations: [passRestoration] });
 export const ReviewCenterRejectedResult = state("Review Center · Empty-reason rejection result", {});
 ReviewCenterRejectedResult.play = playClicks('[data-review-id="pending-1"] .mh-review-queue__reject', '.mh-review-page__reject-actions button:last-child');
 export const ReviewCenterAssistant = state("Review Center · Assistant open", { assistantOpen: true });
@@ -99,7 +100,7 @@ ReviewCenterAssistantSkillSearch.play = async (context) => {
 export const ReviewCenterAssistantSelected = state("Review Center · Assistant selected model", { assistantOpen: true, selectedSkill: { id: "roi-diagnosis", type: "Analytical Model", title: "ROI diagnosis model" } });
 export const ReviewCenterModelHistory = state("Review Center · Model chat history", { assistantOpen: true, flow: { step: "history", threads: flowThreads(), rule: "", draft: {} } });
 export const ReviewCenterModelManual = state("Review Center · Manual model", { assistantOpen: true, flow: { step: "manual", threads: flowThreads(), rule: "", draft: {} } });
-export const ReviewCenterModelGenerated = state("Review Center · Generated model", { assistantOpen: true, flow: { step: "generated", threads: flowThreads(), rule: "Use checked context", draft: REVIEW_SHELL.modelDraftFor([], "Use checked context") } });
+export const ReviewCenterModelGenerated = state("Review Center · Generated model", { assistantOpen: true, flow: { step: "generated", threads: flowThreads(), rule: "", draft: REVIEW_SHELL.modelDraftFor(selectedFlowMessages(), "") } });
 export const ReviewCenterModelError = state("Review Center · Model required fields", { assistantOpen: true, flow: { step: "manual", threads: flowThreads(), rule: "", draft: {} } });
 ReviewCenterModelError.play = playClicks('.mh-flow__foot .mh-flow__btn--primary');
 export const ReviewCenterModelEmpty = state("Review Center · Model needs a selected message", { assistantOpen: true, flow: { step: "history", threads: flowThreads().map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message, checked: false })) })), rule: "", draft: {} } });

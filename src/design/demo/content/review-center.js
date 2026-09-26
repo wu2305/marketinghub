@@ -29,21 +29,25 @@ export const REVIEW_CENTER = {
   "sidebar": [
     {
       "id": "interpreter",
+      "icon": "book-open",
       "label": "Knowledge Management",
       "href": "knowledge.html"
     },
     {
       "id": "review-center",
+      "icon": "check-circle",
       "label": "Review Center",
       "href": "review-center.html"
     },
     {
       "id": "scenario-library",
+      "icon": "grid-four",
       "label": "Skill Library",
       "href": "scenario-library.html"
     },
     {
       "id": "feedback-quality",
+      "icon": "star-outline",
       "label": "Feedback & Quality",
       "href": "feedback-quality.html"
     }

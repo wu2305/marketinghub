@@ -8,6 +8,7 @@ import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
 import { ReviewQueue } from "../../features/review-center/ReviewQueue/index.jsx";
+import { Icon } from "../../icons.jsx";
 import "./ReviewCenterPage.css";
 
 export const reviewTabs = ["pending", "approved"];
@@ -53,7 +54,7 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
       <div className="mh-review-page__stats">{content.hero.stats.map((stat) => <article key={stat.key}><span>{stat.label}</span><strong>{counts[stat.key] ?? 0}</strong><small>{stat.caption}</small></article>)}</div>
     </Hero>
     <div className="mh-review-page__body">
-      <aside className="mh-review-page__sidebar" aria-label={labels.navigationAria}><nav aria-label={labels.categoriesAria}>{content.sidebar.map((item) => <a key={item.id} href={route(item)} aria-current={item.id === "review-center" ? "page" : undefined} onClick={(event) => follow(event, item)}>{item.label}</a>)}</nav></aside>
+      <aside className="mh-review-page__sidebar" aria-label={labels.navigationAria}><nav aria-label={labels.categoriesAria}>{content.sidebar.map((item) => <a key={item.id} href={route(item)} aria-current={item.id === "review-center" ? "page" : undefined} onClick={(event) => follow(event, item)}><Icon name={item.icon} />{item.label}</a>)}</nav></aside>
       <main className="mh-review-page__main">
         <div className="mh-review-page__tabs" role="tablist" aria-label={labels.tabsAria}>{reviewTabs.map((value) => <button key={value} type="button" role="tab" aria-selected={tab === value} onClick={() => onTabChange?.({ value })}>{labels.tabs[value]} <span>{counts[value] ?? 0}</span></button>)}</div>
         <section className="mh-review-page__library" aria-label={labels.itemsAria}>
