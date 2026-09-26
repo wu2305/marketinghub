@@ -6,7 +6,7 @@ display: grid;
   gap: 8px;
   margin-top: 20px;
   border: 1px solid var(--mh-line);
-  border-radius: 5px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   color: var(--mh-reports-muted);
 }

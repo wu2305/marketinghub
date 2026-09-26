@@ -3,7 +3,7 @@ min-height: 100vh;
   background: var(--mh-bg);
   color: var(--mh-ink);
   font-family: var(--mh-font);
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
   line-height: 1.45;
 }
 
