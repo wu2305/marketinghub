@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          "Status pill with independent size and tone controls. Auto tone recognizes exact known states; unknown labels remain neutral. Use an explicit tone when a state needs a different emphasis.",
+          "Status pill with independent size and semantic tone controls. Auto tone recognizes exact known states and preserves knowledge/detail availability colors; unknown labels remain neutral. Explicit tone overrides the availability palette.",
       },
     },
   },
@@ -21,8 +21,8 @@ export default {
       control: "text",
     }),
     variant: enumProp(statusBadgeVariants, "default", "General status, fixed-slot knowledge status, or naturally sized detail status."),
-    size: enumProp(statusBadgeSizes, "sm", "Plain status pill density; knowledge/detail variants keep their own shape."),
-    tone: enumProp(statusBadgeTones, "auto", "Explicit semantic tone, or exact known-state mapping in auto mode."),
+    size: enumProp(statusBadgeSizes, "sm", "lg makes every variant 32px high; sm keeps each variant's compact shape."),
+    tone: enumProp(statusBadgeTones, "auto", "Explicit semantic tone across all variants, or exact known-state mapping with knowledge/detail availability colors in auto mode."),
     outline: prop("boolean", { defaultValue: false, description: "Outline variant." }),
     children: prop("React.ReactNode", { description: "Overrides `status` as the visible label.", control: "text" }),
   },

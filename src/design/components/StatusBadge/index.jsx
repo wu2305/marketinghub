@@ -5,25 +5,25 @@ import "./StatusBadge.css";
 
 export const statusBadgeVariants = ["default", "knowledge", "detail"];
 export const statusBadgeSizes = ["sm", "lg"];
-export const statusBadgeTones = ["auto", "neutral", "success", "review", "pending", "paused", "draft", "warning"];
+export const statusBadgeTones = ["auto", "neutral", "success", "info", "warning", "danger"];
 
 const toneForStatus = {
   published: "success",
   success: "success",
   "token-valid": "success",
   enabled: "success",
-  review: "review",
-  "under-review": "review",
-  syncing: "review",
-  building: "review",
-  pending: "pending",
-  "pending-confirmation": "pending",
-  watch: "pending",
-  queued: "pending",
-  paused: "paused",
-  danger: "paused",
-  disabled: "paused",
-  draft: "draft",
+  review: "info",
+  "under-review": "info",
+  syncing: "info",
+  building: "info",
+  pending: "warning",
+  "pending-confirmation": "warning",
+  watch: "warning",
+  queued: "warning",
+  paused: "danger",
+  danger: "danger",
+  disabled: "neutral",
+  draft: "neutral",
 };
 
 /**
@@ -32,13 +32,13 @@ const toneForStatus = {
  * @param {object} props
  * @param {string} [props.status="draft"]
  * @param {typeof statusBadgeVariants[number]} [props.variant="default"] knowledge reserves a card slot; detail grows with its label
- * @param {typeof statusBadgeSizes[number]} [props.size="sm"] lg gives the plain status pill the 32px header-action height
- * @param {typeof statusBadgeTones[number]} [props.tone="auto"] exact status mapping or explicit semantic tone
+ * @param {typeof statusBadgeSizes[number]} [props.size="sm"] lg makes any variant 32px high
+ * @param {typeof statusBadgeTones[number]} [props.tone="auto"] exact status mapping or explicit semantic tone; auto preserves knowledge/detail availability colors
  * @param {boolean} [props.outline=false]
  * @param {React.ReactNode} [props.children] overrides `status` as label
  */
 export function StatusBadge({ status = "draft", variant = "default", size = "sm", tone = "auto", outline = false, children }) {
   const key = String(status).trim().toLowerCase().replace(/\s+/g, "-");
   const resolvedTone = tone === "auto" ? (Object.hasOwn(toneForStatus, key) ? toneForStatus[key] : "neutral") : tone;
-  return <span className={cx("mh-badge", `mh-badge--${resolvedTone}`, variant !== "default" && `mh-badge--${variant}`, size !== "sm" && `mh-badge--${size}`, outline && "mh-badge--outline")}>{children || status}</span>;
+  return <span className={cx("mh-badge", `mh-badge--${resolvedTone}`, tone === "auto" && "mh-badge--auto", variant !== "default" && `mh-badge--${variant}`, size !== "sm" && `mh-badge--${size}`, outline && "mh-badge--outline")}>{children || status}</span>;
 }

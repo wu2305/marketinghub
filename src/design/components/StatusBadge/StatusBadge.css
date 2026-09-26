@@ -1,5 +1,5 @@
 .mh-badge {
-display: inline-flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 22px;
@@ -14,23 +14,9 @@ display: inline-flex;
   white-space: nowrap;
 }
 
-.mh-badge--lg {
-  box-sizing: border-box;
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .mh-badge--success {
-background: #edf6f1;
+  background: #edf6f1;
   color: var(--mh-green);
-}
-
-.mh-badge--draft {
-background: #f3f5f7;
-  color: #66717b;
 }
 
 .mh-badge--warning {
@@ -38,24 +24,14 @@ background: #f3f5f7;
   color: var(--mh-ink-warning-brown);
 }
 
-.mh-badge--review {
-background: #eef3f8;
+.mh-badge--info {
+  background: #eef3f8;
   color: var(--mh-blue);
 }
 
-.mh-badge--pending {
-background: #fbf5ea;
-  color: var(--mh-amber);
-}
-
-.mh-badge--paused {
-background: #faeff1;
+.mh-badge--danger {
+  background: #faeff1;
   color: #a23b4f;
-}
-
-.mh-badge--outline {
-border: 1px solid currentColor;
-  background: #fff;
 }
 
 /* P07 field-mapping and Business Term availability capsule, 76×20 with dot. */
@@ -68,8 +44,6 @@ border: 1px solid currentColor;
   gap: 7px;
   padding: 0;
   border-radius: 5px;
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
   font-size: 12px;
   font-weight: 500;
 }
@@ -81,7 +55,11 @@ border: 1px solid currentColor;
   border-radius: 50%;
   background: currentColor;
 }
-.mh-badge--knowledge.mh-badge--paused {
+.mh-badge--knowledge.mh-badge--auto.mh-badge--success {
+  background: var(--mh-bt-state-bg);
+  color: var(--mh-bt-state-ink);
+}
+.mh-badge--knowledge.mh-badge--auto.mh-badge--neutral {
   background: var(--mh-bt-state-off-bg);
   color: var(--mh-bt-state-off-ink);
 }
@@ -93,8 +71,6 @@ border: 1px solid currentColor;
   min-height: 22px;
   padding: 5px 10px 5px 9px;
   border-radius: 999px;
-  background: var(--mh-bt-status-on-bg);
-  color: var(--mh-bt-status-on-ink);
   font-size: 11px;
   font-weight: 600;
 }
@@ -104,12 +80,42 @@ border: 1px solid currentColor;
   height: 7px;
   flex: 0 0 7px;
   border-radius: 50%;
+  background: currentColor;
+}
+.mh-badge--detail.mh-badge--auto.mh-badge--success {
+  background: var(--mh-bt-status-on-bg);
+  color: var(--mh-bt-status-on-ink);
+}
+.mh-badge--detail.mh-badge--auto.mh-badge--success::before {
   background: var(--mh-bt-status-on-dot);
 }
-.mh-badge--detail.mh-badge--paused {
+.mh-badge--detail.mh-badge--auto.mh-badge--neutral {
   background: var(--mh-bt-status-off-bg);
   color: var(--mh-bt-status-off-ink);
 }
-.mh-badge--detail.mh-badge--paused::before {
+.mh-badge--detail.mh-badge--auto.mh-badge--neutral::before {
   background: var(--mh-bt-status-off-dot);
+}
+
+.mh-badge--lg,
+.mh-badge--knowledge.mh-badge--lg,
+.mh-badge--detail.mh-badge--lg {
+  box-sizing: border-box;
+  height: 32px;
+  min-height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.mh-badge--knowledge.mh-badge--lg {
+  width: auto;
+  min-width: 76px;
+}
+.mh-badge--lg:not(.mh-badge--knowledge, .mh-badge--detail) {
+  border-radius: 6px;
+}
+
+.mh-badge--outline {
+  border: 1px solid currentColor;
+  background: #fff;
 }
