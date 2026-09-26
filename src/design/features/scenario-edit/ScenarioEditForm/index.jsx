@@ -56,7 +56,7 @@ export function ScenarioEditForm({ content, values, errors = {}, preview = null,
   return <form className="mh-scenario-edit-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.(); }}>
     <header className="mh-scenario-edit-form__header"><h2>{labels.formTitle}</h2><span><FormIcon name="clock" weight={2} />{labels.saved}</span></header>
     <div className="mh-scenario-edit-form__body">
-      {field("name", labels.name, input("name", labels.namePlaceholder))}
+      <div className="mh-scenario-edit-form__row">{field("name", labels.name, input("name", labels.namePlaceholder))}</div>
       {field("purpose", labels.purpose, <textarea ref={refs.purpose} id={ids.purpose} rows={3} value={values.purpose || ""} placeholder={labels.purposePlaceholder} required aria-invalid={Boolean(errors.purpose)} onChange={update("purpose")} />)}
       <div className="mh-scenario-edit-form__row">
         {field("scope", labels.scope, <select ref={refs.scope} id={ids.scope} value={values.scope || ""} required aria-invalid={Boolean(errors.scope)} onChange={update("scope")}>{!values.scope && <option value="">{labels.scope}</option>}{scopeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>)}
