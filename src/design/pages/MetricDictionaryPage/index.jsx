@@ -2,6 +2,7 @@ import React from "react";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";
 import { Shell } from "../Shell/index.jsx";
@@ -77,7 +78,7 @@ export function MetricDictionaryPage({
             <p>{metric?.desc}</p>
           </div>
           <div className="mh-metric-page__actions">
-            <span className={`mh-metric-page__status mh-metric-page__status--${metric?.status?.toLowerCase()}`}>{metric?.status}</span>
+            {metric?.status ? <StatusBadge status={metric.status} size="lg" tone={metric.status === "Draft" ? "warning" : "auto"} /> : null}
             <button type="button" className="mh-metric-page__action">✎ {header.edit}</button>
             <button type="button" className="mh-metric-page__action mh-metric-page__action--primary" onClick={onOpen}>＋ {header.add}</button>
           </div>

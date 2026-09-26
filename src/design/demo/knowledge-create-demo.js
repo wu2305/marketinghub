@@ -57,7 +57,11 @@ export function useKnowledgeCreateDemo({
   const unavailable = mode === "edit" && type === "Analytical Model" &&
     (!record.type || record.created_by !== content.identity.currentUser);
   const reportEditAvailable = type === "Report Context" && mode === "edit" && record.type === "Report Context";
-  const [values, setValues] = useState(() => ({ ...initialValues, ...record, ...initial }));
+  const [values, setValues] = useState(() => ({
+    ...initialValues, ...record, ...initial,
+    aiInterpretationEnabled: initial.aiInterpretationEnabled ?? initial.ai_interpretation_enabled ?? initial.status ?? record.aiInterpretationEnabled ?? record.ai_interpretation_enabled ?? record.status ?? initialValues.status,
+    aiSummaryEnabled: initial.aiSummaryEnabled ?? initial.ai_summary_enabled ?? record.aiSummaryEnabled ?? record.ai_summary_enabled ?? false,
+  }));
   const [invalid, setInvalid] = useState(state.invalid || []);
   const [result, setResult] = useState(state.result || null);
   const [dialog, setDialog] = useState(state.dialog || null);

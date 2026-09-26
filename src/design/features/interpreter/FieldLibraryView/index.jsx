@@ -553,7 +553,7 @@ export function FieldLibraryDrawer({
         eyebrow={detail?.type}
         title={detail?.detailTitle}
         closeLabel={detailCloseLabel}
-        titleExtra={detail?.detailStatus ? <StatusBadge variant="knowledge" status={drawerStatusOn ? "Enabled" : "Disabled"}>{detail.detailStatus}</StatusBadge> : undefined}
+        titleExtra={detail?.detailStatus ? <StatusBadge variant="detail" status={drawerStatusOn ? "Enabled" : "Disabled"}>{detail.detailStatus}</StatusBadge> : undefined}
         footer={
           detail && type === "Report Context" ? (
             <>

@@ -2,6 +2,7 @@ import "../../../tokens.css";
 import React from "react";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import { Icon } from "../../../icons.jsx";
+import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { cx } from "../../../cx.js";
 import "./DataModelView.css";
 
@@ -267,10 +268,9 @@ export function DataModelView({
                   <section className="mh-dmview__basic-section">
                     <div className="mh-dmview__basic-name">
                       <strong>{domain.name}</strong>
-                      <span className={cx("mh-dmview__basic-status", !isEnabled && "is-disabled")}>
-                        <i aria-hidden="true" />
+                      <StatusBadge variant="knowledge" status={isEnabled ? "Enabled" : "Disabled"}>
                         {isEnabled ? strings.enabled : strings.disabled}
-                      </span>
+                      </StatusBadge>
                     </div>
                     <p className="mh-dmview__basic-summary">{domain.description}</p>
                   </section>

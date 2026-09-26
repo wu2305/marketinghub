@@ -4,8 +4,8 @@
 export default [
   {
     id: "p10-metric-default",
-    original: { url: "/assets/pages/metric-dictionary.html", expect: [{ sel: "#metricName", text: "Exposure Count" }, { sel: "#metricList .metric-item", count: 7 }] },
-    story: { id: "pages--metric-dictionary", expect: [{ sel: ".mh-metric-page h1", text: "Exposure Count" }, { sel: ".mh-metric-page__list button", count: 7 }] },
+    original: { url: "/assets/pages/metric-dictionary.html", expect: [{ sel: "#metricName", text: "Exposure Count" }, { sel: "#metricStatus", text: "Published" }, { sel: "#metricList .metric-item", count: 7 }] },
+    story: { id: "pages--metric-dictionary", expect: [{ sel: ".mh-metric-page h1", text: "Exposure Count" }, { sel: ".mh-metric-page__actions .mh-badge", text: "Published" }, { sel: ".mh-metric-page__list button", count: 7 }] },
   },
   {
     id: "p10-metric-derived-category",
@@ -15,7 +15,7 @@ export default [
   {
     id: "p10-metric-derived-detail",
     original: { url: "/assets/pages/metric-dictionary.html", actions: [{ click: '.metric-tab[data-category="derived"]' }, { click: '#metricList .metric-item:first-child' }], expect: [{ sel: "#metricName", text: "Effective traffic" }, { sel: "#metricStatus", text: "Draft" }] },
-    story: { id: "pages--metric-dictionary-derived-detail", expect: [{ sel: ".mh-metric-page h1", text: "Effective traffic" }, { sel: ".mh-metric-page__status", text: "Draft" }] },
+    story: { id: "pages--metric-dictionary-derived-detail", expect: [{ sel: ".mh-metric-page h1", text: "Effective traffic" }, { sel: ".mh-metric-page__actions .mh-badge", text: "Draft" }] },
   },
   {
     id: "p10-metric-formula",
