@@ -1,5 +1,5 @@
 import { DataTable } from "./index.jsx";
-import { prop } from "../../lib/story-helpers.js";
+import { callbackProp, prop } from "../../lib/story-helpers.js";
 
 export default {
   title: "Molecules/Data table",
@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Simple data table. `columns[].key` indexes into each row object; `columns[].header` is the displayed heading.",
+        component: "Data table. `columns[].key` indexes into each row object; `columns[].header` is the displayed heading. Below 760px each row stacks as a labelled block.",
       },
     },
   },
@@ -28,8 +28,20 @@ export default {
     columns: prop("Array<{ key: string, header: React.ReactNode }>", { defaultValue: [], description: "Column definitions." }),
     rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: "Row objects keyed by column key." }),
     caption: prop("React.ReactNode", { description: "Note rendered under the table.", control: "text" }),
+    emptyState: prop("React.ReactNode", { description: "Shown in place of the rows when `rows` is empty.", control: "text" }),
+    onOpen: callbackProp("onOpen", "(event: { id: string|number }) => void", { id: "1" }, "Makes rows openable: the first cell becomes a button; a click elsewhere on the row (outside other controls) also opens it."),
   },
   render: (args) => <DataTable {...args} />,
 };
 
-export const Default = {};
+// Rows are openable only when a story opts in; the Actions panel supplies onOpen.
+const withoutOpen = ({ onOpen: _onOpen, ...args }) => <DataTable {...args} />;
+
+export const Default = { render: withoutOpen };
+
+export const OpenableRows = {};
+
+export const Empty = {
+  args: { rows: [], caption: "0 accounts shown", emptyState: "No accounts match the current filters." },
+  render: withoutOpen,
+};

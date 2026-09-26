@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Action button. Renders `<button type=\"button\">`; never use it for navigation.",
+        component: "Action button. Renders `<button type=\"button\">`; with `href` it renders a link with the same look, for actions that navigate.",
       },
     },
   },
@@ -27,6 +27,7 @@ export default {
     icon: enumProp(iconNames, undefined, "Optional icon rendered before the label."),
     label: prop("string", { description: "aria-label override when the visible text isn't the right accessible name." }),
     children: prop("React.ReactNode", { description: "Visible button label.", control: "text" }),
+    href: prop("string", { description: "Navigation target. Renders `<a href>` with the same look; with `disabled` the link has no href and is `aria-disabled`.", control: "text" }),
     onClick: callbackProp(
       "onClick",
       "(event: { label: string }) => void",
@@ -38,3 +39,7 @@ export default {
 };
 
 export const Default = {};
+
+export const AsLink = {
+  args: { href: "#knowledge-create", children: "Add Business Term", variant: "gold" },
+};
