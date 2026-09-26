@@ -65,33 +65,95 @@
 }
 
 :root {
+  /* Foundations (handover/design-intent/foundations.md §3). Role tokens; every
+     legacy token below should resolve to one of these.
+     Breakpoints (media queries cannot read custom properties): 1180px (wide
+     layouts drop a column), 900px (sidebars stack), 760px (single column). */
+  --mh-text-strong: #16191d;
+  --mh-text: #3f4852;
+  --mh-text-muted: #68727c;
+  --mh-text-faint: #8b949d;
+  --mh-text-inverse: #ffffff;
+  --mh-text-inverse-muted: rgba(255, 255, 255, 0.7);
+  --mh-surface-page: #f4f6f8;
+  --mh-surface: #ffffff;
+  --mh-surface-subtle: #f7f9fa;
+  --mh-surface-muted: #f0f2f4;
+  --mh-surface-inverse: #20262c;
+  --mh-scrim: rgba(31, 41, 55, 0.3);
+  --mh-line-subtle: #e8ecef;
+  --mh-line: #dce1e6;
+  --mh-line-strong: #c8d0d8;
+  --mh-line-inverse: rgba(255, 255, 255, 0.12);
+  --mh-accent-soft: #f2d185;
+  --mh-accent: #daa860;
+  --mh-accent-ink: #986525;
+  --mh-accent-wash: #fff8df;
+  --mh-accent-fill: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  --mh-success: #34765b;
+  --mh-warning: #b45309;
+  --mh-danger: #9b1230;
+  --mh-info: #3f73a6;
+  --mh-data-teal: #2d7972;
+  --mh-data-violet: #6941c6;
+  --mh-data-rose: #c2185b;
+  --mh-focus-ring: rgba(63, 115, 166, 0.55);
+  --mh-font-sans: "DIN 2014", Arial, sans-serif;
+  --mh-font-display: "BentonModDisplay", Georgia, serif;
+  --mh-font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --mh-font-weight-light: 300;
+  --mh-font-weight-regular: 400;
+  --mh-font-weight-bold: 700;
+  --mh-font-size-xs: 11px;
+  --mh-font-size-sm: 12px;
+  --mh-font-size-md: 13px;
+  --mh-font-size-lg: 14px;
+  --mh-font-size-xl: 16px;
+  --mh-font-size-2xl: 20px;
+  --mh-font-size-3xl: 28px;
+  --mh-font-size-display: clamp(40px, 5vw, 56px);
+  --mh-radius-sm: 4px;
+  --mh-radius-md: 8px;
+  --mh-radius-lg: 14px;
+  --mh-radius-pill: 999px;
+  --mh-shadow-raised: 0 2px 8px rgba(31, 41, 55, 0.06);
+  --mh-shadow-overlay: 0 16px 40px rgba(24, 33, 42, 0.18);
+  --mh-shadow-modal: 0 28px 80px rgba(31, 41, 55, 0.2);
+  --mh-space-1: 2px;
+  --mh-space-2: 4px;
+  --mh-space-3: 8px;
+  --mh-space-4: 12px;
+  --mh-space-5: 16px;
+  --mh-space-6: 20px;
+  --mh-space-7: 24px;
+  --mh-space-8: 32px;
+  --mh-space-9: 48px;
+  --mh-layout-header-height: 56px;
+
   /* Shared foreground, action, and status colors extracted from component CSS. */
-  --mh-ink-inverse: #ffffff;
+  --mh-ink-inverse: var(--mh-text-inverse);
   --mh-surface-dark-strong: #14171a;
   --mh-surface-action-slate: #39444e;
   --mh-surface-action-blue: #344f60;
   --mh-surface-dark-cool: #1c2328;
   --mh-indicator-selection-warm: #b08d57;
   --mh-danger-muted: #a23b4f;
-  --mh-font: "DIN 2014", Arial, sans-serif;
-  --mh-display: "BentonModDisplay", Georgia, serif;
-  --mh-radius-control: 4px;
-  --mh-bg: #f4f6f8;
-  --mh-bg-soft: #f7f9fa;
-  --mh-surface: #ffffff;
-  --mh-ink: #16191d;
-  --mh-copy: #3f4852;
-  --mh-muted: #68727c;
-  --mh-faint: #8b949d;
-  --mh-line: #dce1e6;
+  --mh-font: var(--mh-font-sans);
+  --mh-display: var(--mh-font-display);
+  --mh-radius-control: var(--mh-radius-sm);
+  --mh-bg: var(--mh-surface-page);
+  --mh-bg-soft: var(--mh-surface-subtle);
+  --mh-ink: var(--mh-text-strong);
+  --mh-copy: var(--mh-text);
+  --mh-muted: var(--mh-text-muted);
+  --mh-faint: var(--mh-text-faint);
   --mh-line-control-soft: #d8dde2;
   --mh-line-control-hover: #b5bcc4;
-  --mh-line-strong: #c8d0d8;
   --mh-gold: #e6bc73;
   --mh-gold-deep: #a66f27;
-  --mh-gold-text: #986525;
-  --mh-green: #34765b;
-  --mh-red: #9b1230;
+  --mh-gold-text: var(--mh-accent-ink);
+  --mh-green: var(--mh-success);
+  --mh-red: var(--mh-danger);
   --mh-danger-border: #c03b3b;
   --mh-ink-disabled-soft: #c9d2dc;
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
@@ -151,7 +213,7 @@
   --mh-ink-warning-brown: #9f6b24;
   --mh-ink-flow-secondary: #667085;
   --mh-surface-draft: #f4f0ff;
-  --mh-ink-draft: #6941c6;
+  --mh-ink-draft: var(--mh-data-violet);
   --mh-surface-status-neutral: #f1f2f3;
   --mh-ink-status-neutral: #607080;
   --mh-surface-status-warm: #f6efe4;
@@ -160,18 +222,18 @@
   --mh-ink-link-hover: #12386b;
   --mh-line-attachment: #cbd3df;
   --mh-ink-attachment-muted: #7b8794;
-  --mh-blue: #3f73a6;
+  --mh-blue: var(--mh-info);
   /* P14 exact source category indicators, info banner, and required errors. */
   --mh-indicator-purple: #7c3aed;
   --mh-indicator-amber: #b88a3d;
   --mh-indicator-rose: #db2777;
-  --mh-indicator-teal: #2d7972;
+  --mh-indicator-teal: var(--mh-data-teal);
   --mh-surface-info-pale: #eff6ff;
   --mh-line-info-pale: #dbeafe;
   --mh-icon-info-bright: #3b82f6;
   --mh-danger-bright: #ef4444;
   --mh-amber: #9a7229;
-  --mh-header: 56px;
+  --mh-header: var(--mh-layout-header-height);
   --mh-kicker: #b8b4ae;
   --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
   --mh-disabled-bg: #e8ebee;
@@ -179,20 +241,17 @@
   --mh-disabled-ink: #8a949e;
   --mh-index-line: #d8c76f;
   --mh-index-ink: #6c5800;
-  --mh-gold-light: #f2d185;
-  --mh-gold-medium: #daa860;
-  --mh-info: #2f6ea6;
-  --mh-popover-shadow: 0 16px 40px rgba(24, 33, 42, 0.18);
-  --mh-scrim: rgba(31, 41, 55, 0.3);
-  --mh-modal-shadow: 0 28px 80px rgba(31, 41, 55, 0.2);
+  --mh-gold-light: var(--mh-accent-soft);
+  --mh-gold-medium: var(--mh-accent);
+  --mh-popover-shadow: var(--mh-shadow-overlay);
+  --mh-modal-shadow: var(--mh-shadow-modal);
   --mh-toast-shadow: 0 14px 40px rgba(31, 41, 55, 0.22);
   --mh-surface-warning-pale: #fff9df;
   --mh-warn-line: #e5d58b;
   --mh-warn-note: #776f4b;
   --mh-focus-blue: #8da7c0;
-  --mh-focus-ring: rgba(63, 115, 166, 0.1);
   /* workspace.css global :focus-visible ring */
-  --mh-focus-strong: rgba(63, 115, 166, 0.55);
+  --mh-focus-strong: var(--mh-focus-ring);
   --mh-line-hover: #929da7;
   --mh-scrim-deep: rgba(15, 18, 24, 0.55);
   --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
@@ -211,8 +270,8 @@
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: #303840;
-  --mh-surface-dark: #20262c;
-  --mh-ink-dark-control: #20262c;
+  --mh-surface-dark: var(--mh-surface-inverse);
+  --mh-ink-dark-control: var(--mh-surface-inverse);
   --mh-launcher-bg-hover: #171c21;
   --mh-launcher-aura: rgba(218, 168, 96, 0.2);
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
@@ -235,7 +294,7 @@
   --mh-subtle-ai: #4b5563;
   --mh-line-soft: #e1e7ec;
   --mh-line-tab: #e5e7eb;
-  --mh-line-faintest: #f0f2f4;
+  --mh-line-faintest: var(--mh-surface-muted);
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
   --mh-ai-feedback-line: #edf0f3;
   --mh-ink-secondary-muted: #5d6872;
@@ -249,7 +308,6 @@
   --mh-bg-faint: #f9fafb;
   --mh-field-line: #cfd6db;
   /* skill menu / model-flow dialog */
-  --mh-danger: #d8222a;
   --mh-danger-ring: rgba(216, 34, 42, 0.1);
   --mh-gold-rule: #b28c2d;
   --mh-gold-faint: rgba(178, 140, 45, 0.07);
@@ -280,7 +338,7 @@
   --mh-reports-row-shadow: 0 6px 18px rgba(34, 45, 58, 0.035);
   --mh-reports-row-shadow-hover: 0 10px 26px rgba(34, 45, 58, 0.065);
   --mh-reports-card-edge: linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%);
-  --mh-reports-gold-btn: linear-gradient(135deg, #f2d185 0%, #daa860 100%);
+  --mh-reports-gold-btn: var(--mh-accent-fill);
   --mh-reports-badge-bg: #fef8e1;
   --mh-reports-badge-ink: #7a5c3a;
   --mh-reports-pill-bg: #fff8db;
@@ -449,7 +507,7 @@
   --mh-bt-status-on-bg: #fff4df;
   --mh-bt-status-on-ink: #8c5622;
   --mh-bt-status-on-dot: #c17d22;
-  --mh-surface-control-muted: #f0f2f4;
+  --mh-surface-control-muted: var(--mh-surface-muted);
   --mh-bt-status-off-ink: #8b8f94;
   --mh-bt-status-off-dot: #929292;
   --mh-bt-section-title: #20262d;
@@ -462,7 +520,7 @@
   --mh-bt-dialog-ink: #354253;
   --mh-bt-dialog-scrim: rgba(23, 34, 50, 0.4);
   --mh-surface-warning-icon: #fef3c7;
-  --mh-ink-warning-icon: #b45309;
+  --mh-ink-warning-icon: var(--mh-warning);
   --mh-bt-confirm-copy: #737e90;
   --mh-bt-confirm-btn-line: #dce2e9;
   --mh-bt-pag-ink: #6c7785;
@@ -521,13 +579,13 @@
   --mh-line-dialog-button-hover: #b7813f;
   --mh-surface-dialog-button-disabled: #dbc19b;
   --mh-line-dialog-button-disabled: #e1c9a7;
-  --mh-line-panel-subtle: #e8ecef;
+  --mh-line-panel-subtle: var(--mh-line-subtle);
   --mh-surface-info-strong: #e3f2fd;
   --mh-ink-info-strong: #1565c0;
   --mh-surface-review: #fff3e0;
   --mh-ink-review: #e65100;
   --mh-surface-rose-soft: #fce4ec;
-  --mh-ink-rose: #c2185b;
+  --mh-ink-rose: var(--mh-data-rose);
   --mh-surface-violet-soft: #f3e5f5;
   --mh-ink-violet: #7b1fa2;
   --mh-indicator-like: #f59e0b;
@@ -538,7 +596,7 @@
   --mh-ink-row-primary: #1f282f;
   --mh-ink-empty-strong: #202930;
   --mh-ink-empty-muted: #64717a;
-  --mh-surface-gold-pale: #fff8df;
+  --mh-surface-gold-pale: var(--mh-accent-wash);
   --mh-surface-hover-neutral: #f5f7f8;
   --mh-ink-filter-label: #74808a;
   --mh-ink-navigation: #60666d;

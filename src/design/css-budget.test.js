@@ -344,6 +344,7 @@ const SEMANTIC_FAMILIES = new Set(`
   amber bg blue bubble copy danger disabled display empty eyebrow faint field
   fill focus font gold green hover icon index indicator info ink kicker line muted page
   placeholder radius red required row scrim search shadow slate stroke subtle surface tooltip warn z
+  text accent success warning data space layout
 `.trim().split(/\s+/));
 
 // Historical short aliases are reserved even when they do not resemble the

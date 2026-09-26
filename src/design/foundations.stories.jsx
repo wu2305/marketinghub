@@ -1,37 +1,100 @@
 import "./tokens.css";
 
-const colors = [
-  ["Ink", "var(--mh-ink)"],
-  ["Copy", "var(--mh-copy)"],
-  ["Muted", "var(--mh-muted)"],
-  ["Line", "var(--mh-line)"],
-  ["Gold", "var(--mh-gold)"],
-  ["Green", "var(--mh-green)"],
-  ["Blue", "var(--mh-blue)"],
-  ["Red", "var(--mh-red)"],
+// Role tokens from handover/design-intent/foundations.md §3.
+const colorGroups = [
+  ["Text", ["text-strong", "text", "text-muted", "text-faint", "text-inverse", "text-inverse-muted"]],
+  ["Surface", ["surface-page", "surface", "surface-subtle", "surface-muted", "surface-inverse", "scrim"]],
+  ["Line", ["line-subtle", "line", "line-strong", "line-inverse"]],
+  ["Accent", ["accent-soft", "accent", "accent-ink", "accent-wash", "accent-fill"]],
+  ["Status", ["success", "warning", "danger", "info"]],
+  ["Data", ["data-teal", "data-violet", "data-rose"]],
 ];
+const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "display"];
+const weights = ["light", "regular", "bold"];
+const radii = ["sm", "md", "lg", "pill"];
+const shadows = ["raised", "overlay", "modal"];
+const spaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const label = { margin: "0 0 12px", fontSize: "var(--mh-font-size-xs)", fontWeight: "var(--mh-font-weight-bold)", letterSpacing: "0.08em", color: "var(--mh-text-faint)" };
+const caption = { display: "block", marginTop: 6, fontSize: "var(--mh-font-size-sm)", color: "var(--mh-text-muted)" };
+const page = { display: "grid", gap: 32, fontFamily: "var(--mh-font-sans)", color: "var(--mh-text)", background: "var(--mh-surface-page)", padding: 24 };
 
 export default { title: "Foundations", tags: ["autodocs"] };
 
 export const Tokens = {
   name: "Color and type",
   render: () => (
-    <div style={{ display: "grid", gap: 28, fontFamily: "var(--mh-font)" }}>
+    <div style={page}>
       <div>
-        <p style={{ margin: 0, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em" }}>TYPE</p>
-        <h1 style={{ margin: "8px 0 0", fontFamily: "var(--mh-display)", fontStyle: "italic", fontWeight: 600, fontSize: 56 }}>
+        <p style={label}>TYPE</p>
+        <h1 style={{ margin: 0, fontFamily: "var(--mh-font-display)", fontStyle: "italic", fontWeight: 600, fontSize: "var(--mh-font-size-display)", color: "var(--mh-text-strong)" }}>
           Marketing Portal
         </h1>
-        <p style={{ maxWidth: 480, color: "var(--mh-copy)" }}>DIN 2014 for interface text. BentonMod Display for editorial titles.</p>
+        <p style={{ maxWidth: 480 }}>DIN 2014 for interface text. BentonMod Display for editorial titles.</p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 140px)", gap: 12 }}>
-        {colors.map(([name, value]) => (
-          <div key={name}>
-            <div style={{ height: 64, borderRadius: 8, background: value, border: "1px solid var(--mh-line)" }} />
-            <strong style={{ display: "block", marginTop: 8, fontSize: 12 }}>{name}</strong>
+      {colorGroups.map(([group, names]) => (
+        <section key={group}>
+          <p style={label}>{group.toUpperCase()}</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+            {names.map((name) => (
+              <div key={name} style={{ width: 132 }}>
+                <div style={{ height: 56, borderRadius: "var(--mh-radius-md)", background: `var(--mh-${name})`, border: "1px solid var(--mh-line)" }} />
+                <span style={caption}>--mh-{name}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  ),
+};
+
+export const Scales = {
+  name: "Type, shape, depth and space",
+  render: () => (
+    <div style={page}>
+      <section>
+        <p style={label}>FONT SIZE</p>
+        {sizes.map((size) => (
+          <p key={size} style={{ margin: "0 0 8px", fontSize: `var(--mh-font-size-${size})`, color: "var(--mh-text-strong)" }}>
+            {size} — Governed knowledge
+          </p>
+        ))}
+      </section>
+      <section>
+        <p style={label}>FONT WEIGHT</p>
+        {weights.map((weight) => (
+          <p key={weight} style={{ margin: "0 0 8px", fontSize: "var(--mh-font-size-xl)", fontWeight: `var(--mh-font-weight-${weight})` }}>
+            {weight} — Governed knowledge
+          </p>
+        ))}
+      </section>
+      <section>
+        <p style={label}>RADIUS AND SHADOW</p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+          {radii.map((radius) => (
+            <div key={radius}>
+              <div style={{ width: 96, height: 56, background: "var(--mh-surface)", border: "1px solid var(--mh-line)", borderRadius: `var(--mh-radius-${radius})` }} />
+              <span style={caption}>radius-{radius}</span>
+            </div>
+          ))}
+          {shadows.map((shadow) => (
+            <div key={shadow}>
+              <div style={{ width: 96, height: 56, background: "var(--mh-surface)", borderRadius: "var(--mh-radius-md)", boxShadow: `var(--mh-shadow-${shadow})` }} />
+              <span style={caption}>shadow-{shadow}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section>
+        <p style={label}>SPACE</p>
+        {spaces.map((step) => (
+          <div key={step} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
+            <span style={{ width: 96, fontSize: "var(--mh-font-size-sm)" }}>space-{step}</span>
+            <div style={{ height: 12, width: `var(--mh-space-${step})`, background: "var(--mh-accent)" }} />
           </div>
         ))}
-      </div>
+      </section>
     </div>
   ),
 };
