@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./AiInterpreterPage.stories.jsx";
+
+<Meta of={PageStories} name="AiInterpreterPage" />
+
+<Title>AiInterpreterPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.Interpreter} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--interpreter" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="AiInterpreterPage" source={componentSource} />

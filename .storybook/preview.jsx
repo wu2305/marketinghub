@@ -1,4 +1,5 @@
 import React from "react";
+import { DocsPage, useOf } from "@storybook/blocks";
 import "../src/design/tokens.css";
 
 /**
@@ -27,11 +28,23 @@ function DemoLinkGuard({ children }) {
   return children;
 }
 
+const pageNames = Object.keys(import.meta.glob("../src/design/pages/*/*.docs.mdx"))
+  .map((file) => file.split("/").at(-2)).sort();
+
+// Shared Pages metadata has one automatic docs id. Keep that stable entry as
+// an index; each attached MDX page documents its own module and existing story.
+function DocumentationPage() {
+  const { preparedMeta } = useOf("meta", ["meta"]);
+  if (preparedMeta.title !== "Pages") return <DocsPage />;
+  return <><h1>Page components</h1><p>Open a page to inspect its inputs, callbacks and working preview. Named states remain in the Pages story list.</p><ul>{pageNames.map((name) => <li key={name}><a href={`./?path=/docs/pages--${name.toLowerCase()}`} target="_top">{name}</a></li>)}</ul></>;
+}
+
 /** @type { import('@storybook/react').Preview } */
 const preview = {
   decorators: [(Story) => <DemoLinkGuard><Story /></DemoLinkGuard>],
   parameters: {
     layout: "padded",
+    docs: { page: DocumentationPage },
     controls: { expanded: true, matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
       storySort: {

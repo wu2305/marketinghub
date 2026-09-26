@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./FeedbackQualityPage.stories.jsx";
+
+<Meta of={PageStories} name="FeedbackQualityPage" />
+
+<Title>FeedbackQualityPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.FeedbackQuality} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--feedback-quality" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="FeedbackQualityPage" source={componentSource} />

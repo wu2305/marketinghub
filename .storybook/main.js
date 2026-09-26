@@ -2,7 +2,7 @@ import { mergeConfig } from "vite";
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
-  stories: ["../src/design/**/*.stories.jsx"],
+  stories: ["../src/design/**/*.stories.jsx", "../src/design/**/*.docs.mdx"],
   addons: ["@storybook/addon-essentials"],
   framework: {
     name: "@storybook/react-vite",

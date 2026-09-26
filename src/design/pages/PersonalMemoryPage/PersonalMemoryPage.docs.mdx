@@ -1,0 +1,13 @@
+import { Meta, Title, Description, Canvas } from "@storybook/blocks";
+import { PageInterface } from "../../../../.storybook/PageInterface.jsx";
+import componentSource from "./index.jsx?raw";
+import * as PageStories from "./PersonalMemoryPage.stories.jsx";
+
+<Meta of={PageStories} name="PersonalMemoryPage" />
+
+<Title>PersonalMemoryPage</Title>
+<Description of={PageStories} />
+<Canvas of={PageStories.PersonalMemory} story={{ inline: false, height: "600px" }} />
+<a href="./?path=/story/pages--personal-memory" target="_top">Open this story’s Controls and Actions</a>
+
+<PageInterface name="PersonalMemoryPage" source={componentSource} />
