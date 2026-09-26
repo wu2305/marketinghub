@@ -50,6 +50,7 @@ npm test               # vitest 行为测试
 | M7 | ConfirmDialog用途与独立字体修复 | 完成（机器集成；页面人工收敛继续） | PR #19；confirm/info/warning/danger，P07/P08/P12/P14共用，保留Modal覆盖层生命周期 |
 
 | M7 | Header导航密度、定位与窄屏可读性 | 完成（机器集成；页面人工收敛继续） | PR #21；headerDensities取代无消费者overlay，固定/吸顶均在助手层之下，所有导航保持锚点 |
+| M7 | DataTable 行动作契约收口 | 候选完成；待独立审核与集成门禁 | 删除仅故事使用的行点击 prop/Action；Campaign 四组静态表格保留，来源和定向证据见 §5 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -570,3 +571,4 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | Header 候选同步 P17 后，`ScenarioEditPage` 桌面及900px Hero 取消负56px位移，让标题说明和三张统计卡避开固定导航；390px 原本已有自身零位移，保持随内容增高。三档最终边界与截图见 `/tmp/mh-header-responsive/scenario-edit-{390,900,1440}-final.png`、`scenario-edit-final.json`；这是页面布局适配，Header/表单/助手接口不变。 | Codex Header repair |
 | 2026-09-26 | Header 集成门禁发现 comfortable/fixed 的 z70 与 sticky 的 z60 会盖过 AssistantPanel z50，导致 P03/P06 抽屉头部 New session、History、Maximize 无法点击；统一 Header 层级 z40，页面导航仍固定/可滚动，覆盖层恢复置顶。原失败见 `/tmp/mh-header-integrate-visual.log`；重建后五个受影响场景各 1/1 机器通过（`/tmp/mh-header-overlay-p03-assistant-newsession`、`/tmp/mh-header-overlay-p06-assistant-*`），390/1440px 顶部按钮点击命中及 trial 见 `/tmp/mh-header-overlay-hit.json`；这些是定向验证，最终全套与人工视觉由 integrator 复核。 | Codex Header repair |
 | 2026-09-26 | Header PR #21（https://github.com/wu2305/marketinghub/pull/21）合并4015abe，冻结e09e1a9：lint0/0、25文件224测试、363stories67docs、host26/26、visual474/474、negative38/38，证据/tmp/mh-header-integrate-r2-*。源最终生效样式/tmp/mh-header-source-probe.json、响应式/tmp/mh-header-responsive、独立复核/tmp/mh-header-integrator-review.md。首轮完整门禁发现comfortable/fixed z70遮挡z50助手，退回修为共享z40，P03新会话和P06新会话/历史/最大化/还原5项在本轮全套通过；390/1440真实hit证据/tmp/mh-header-overlay-hit.json。Home透明死CSS分支删除，48/56密度及fixed/sticky由真实使用区分。main已含字体包，Home卡片窄屏与状态档案下一包继续；整页人工结果不冒充全过。 | Codex integrator |
+| 2026-09-26 | M7 DataTable 行动作契约收口候选：原 `assets/pages/campaign.html:729–730` 加载的 `assets/js/campaign/workspace.js:8,36–47,71–112` 只对账户行做搜索筛选，未绑定表格行点击；React `CampaignPage/index.jsx:235,253,264,310` 的四组表格也从未传 `onRowClick`。删除 `DataTable` 内仅故事能触发的 `<tr onClick>`/裸 row 回调和故事 Actions 参数，保留列、行、caption、原有 hover 样式及 story id。Storybook 363 stories/67 docs 不减、lint0、`stories.test.jsx` 13/13、P06 Accounts 1440px 配对机器1/1（`/tmp/mh-data-table-contract-pair`，两侧截图人工核表格内容/列/三行保留，整体像素仍属P06待收敛）、独立组件故事2行/说明无pageerror（`/tmp/mh-data-table-contract-story.png`/`.json`）。最终全套集成门禁及PR由root执行；六个单页共享组件降级保留待办，不混入此包。 | Codex DataTable contract |
