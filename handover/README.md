@@ -45,6 +45,7 @@ npm test               # vitest 行为测试
 | M7 | A2 参照物逻辑缺陷回退（Home、Cockpit、Campaign 助手及城市图表） | 完成（机器验证；全页人工审图仍待办） | PR #2 已合入；原始证据与有意差异见 §3 |
 | M7 | S2 统一覆盖层栈、Escape、焦点环与滚动锁 | 完成（机器验证；全页人工审图仍待办） | PR #5 已合入；Modal（含 ConfirmDialog/UploadHistory）、ReportDetailsDrawer、AssistantPanel、ReportCopilot、ModelFlowDialog 与 DataModelView 表详情共用按 document 划分的层栈；外壳 DOM/CSS 保持原有形态，避免仅转发 props 的包装层。嵌套/双 root/StrictMode/跨文档及实际浏览器证据见 §5 当日记录 |
 | M7 | S3 + R3 + O5 助手外壳、页面预设与枚举收敛 | 完成（机器验证；全页人工审图仍待办） | 私有 AssistantShell 共用头部动作、历史与覆盖层生命周期；真实不同的答案/输入区保留组合；assistantVariants 与 assistantAnswerVariants 替代五个布尔开关及 answer.simple；PR #6 已合入，证据见 §5 |
+| M7 | TypeCard 内容布局与窄宽可读性 | 进行中 | 标题/计数自然换行，保留八类入口和插画；独立审核与最终整套集成待完成 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -545,3 +546,5 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 2026-09-26 | P16 独立完整性复核补修：`ScenarioDetailWorkspace` 组件故事与页面故事使用同一原始路由空间的 `hrefFor`，Edit保留所选记录id、四个Related锚可在Storybook独立故事中导航；组件及页面实现未改，原29组配对无需重跑。独立复核记录`/tmp/mh-p16-adversarial.md`。 | Codex P16 review |
 | 2026-09-26 | P16 Hero 窄屏可读性补修：原 `assets/css/governance/skill-detail.css:1080–1105` 在 ≤1100px 将文案/统计改单列，却保持 360px 高度与 overflow hidden；原390px 截图 `/tmp/mh-p16-pairs-preview3/p16-narrow-original.png` 三项统计被裁/推出视口。候选 React 的 `ScenarioDetailPage.css` 原 @560 同样绝对定位推出统计，现仅在本页 ≤1100 使 Hero 随内容增高、统计按可用宽度自动分列，保留全部三项与标题说明；1440px 桌面组合不变。`/tmp/mh-p16-responsive/{390,900,1440}.png` 与 `bounds.json` 验证这五块均在 Hero/视口内；390px 仍存在共享 Header 横溢，非本包范围。定向 `p16-narrow`/`p16-default` 各1/1机器通过（`/tmp/mh-p16-responsive-{narrow,default}-pair`），lint0、Storybook341故事/66文档候选构建；原窄屏视觉差异为保证可读性而有意保留，最终干净提交门禁由集成者执行。 | Codex WP6 |
 | 2026-09-26 | P16 PR #17（https://github.com/wu2305/marketinghub/pull/17）合并07dd34f，候选eeb12ca：lint0/0、24文件223测试、341stories/66docs、host25/25、visual439/439、negative35/35；证据/tmp/mh-p16-integrate-r2-*。独立审核/tmp/mh-p16-adversarial.md确认全部六面板/预览/助手及记录回退，补独立Workspace故事有效路由；rebase后保留P15宿主/配置及唯一私有记录数据，修宿主函数边界；首轮门禁因发现窄屏Hero裁切主动中止，eeb12ca修复后重启全套，390/900/1440信息完整，未以原参照裁切作为组件要求。默认/窄屏人工fail留视觉收敛，P17继续。 | Codex integrator |
+
+| 2026-09-26 | TypeCard 内容布局候选：原 ai-interpreter-overview.css:2044–2092 固定171px与绝对定位被保留到组件后，900px实测7张、390px6张标题与计数相交。改为自然布局，标题/计数可换行、正文和动作参与高度；不新增组件/API/token，不改变八类入口行为。1440/900/390相交数均降为0，证据/tmp/mh-type-card-before.json、after.json、mh-type-card-*.png。卡片高度/后续行Y按可读内容变化，配对保留列位置宽度及内容检查；有意差异将在合并时登记。 | Codex integrator |
