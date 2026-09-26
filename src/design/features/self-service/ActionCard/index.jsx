@@ -1,6 +1,7 @@
 import "../../../tokens.css";
 import { Button } from "../../../components/Button/index.jsx";
 import { Icon } from "../../../icons.jsx";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./ActionCard.css";
 
 
@@ -35,7 +36,7 @@ export function ActionCard({ title, description, actionLabel, href, history, onO
         <p>{description}</p>
       </div>
       {href ? (
-        <a className="mh-button mh-button--gold mh-button--md" href={href} onClick={() => onOpen?.({ title, href })}>
+        <a className="mh-button mh-button--gold mh-button--md" href={href} onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}>
           {actionLabel}
         </a>
       ) : (

@@ -25,6 +25,7 @@ export const Home = {
     assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     scope: { control: "select", options: ["All", "Campaigns", "Dashboards", "Knowledge"] },
     onNavigate: { action: "onNavigate" },
     onOpen: { action: "onOpen" },

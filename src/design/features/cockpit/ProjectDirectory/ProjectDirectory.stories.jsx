@@ -45,7 +45,6 @@ export default {
             { label: "Updated", value: report.updated },
           ]}
           href={`/assets/pages/reports.html?project=city&dashboard=${index}&view=live`}
-          detailsHref="/assets/pages/knowledge.html?type=Report%20Context"
           onOpen={args.onOpen}
           onDetails={args.onDetails}
         />

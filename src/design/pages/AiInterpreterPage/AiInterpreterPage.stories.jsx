@@ -35,6 +35,7 @@ export const Interpreter = {
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     activeType: {
       control: "select",
       options: ["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)],

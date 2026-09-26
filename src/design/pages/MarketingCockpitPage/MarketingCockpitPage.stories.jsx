@@ -37,6 +37,7 @@ export const MarketingCockpit = {
     assistant: { ...COCKPIT.assistant, skillMenu: COCKPIT_SKILL_MENU },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     project: { control: "select", options: ["all", "city", "fourp", "customer", "abo", "rednote", "ottolv"] },
     view: { control: "select", options: cockpitViews },
     dashboard: { control: { type: "number", min: 0, max: 1 } },

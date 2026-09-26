@@ -7,6 +7,7 @@
  * set. No Storybook imports; any host can drive the page the same way.
  */
 import React from "react";
+import { demoHrefFor } from "./navigation.js";
 
 /** Controlled-prop mirror: local state re-syncs when the input value changes. */
 function useSynced(value) {
@@ -44,6 +45,7 @@ export function useHomeDemo(props) {
 
   return {
     ...props,
+    hrefFor: props.hrefFor || demoHrefFor,
     assistant: {
       ...props.assistant,
       answers,

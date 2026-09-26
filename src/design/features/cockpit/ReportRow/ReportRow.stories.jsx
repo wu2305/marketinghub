@@ -30,7 +30,6 @@ export default {
     detailsLabel: "Knowledge",
     openLabel: "Open Dashboard",
     href: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
-    detailsHref: "/assets/pages/knowledge.html?type=Report%20Context",
   },
   argTypes: {
     index: prop("number", { description: 'Zero-based report index, displayed as REPORT 01…', control: { type: "number", min: 0 } }),
@@ -41,10 +40,9 @@ export default {
       defaultValue: [],
       description: "Owner/Cadence/Updated/Knowledge cells.",
     }),
-    detailsLabel: prop("string", { defaultValue: "Knowledge", description: "Label on the knowledge-context link." }),
+    detailsLabel: prop("string", { defaultValue: "Knowledge", description: "Label on the report details action." }),
     openLabel: prop("string", { defaultValue: "Open Dashboard", description: "Label on the live-report link." }),
     href: prop("string", { description: "Live-report link target." }),
-    detailsHref: prop("string", { description: "Knowledge-context link target." }),
     onOpen: callbackProp(
       "onOpen",
       "(target: { title: string, href?: string }) => void",
@@ -53,9 +51,9 @@ export default {
     ),
     onDetails: callbackProp(
       "onDetails",
-      "(target: { title: string, href?: string }) => void",
-      { title: report.title, href: "/assets/pages/knowledge.html?type=Report%20Context" },
-      "Fired when the Knowledge link is clicked.",
+      "(target: { title: string }) => void",
+      { title: report.title },
+      "Fired when the Knowledge button opens report details.",
     ),
   },
   render: (args) => (

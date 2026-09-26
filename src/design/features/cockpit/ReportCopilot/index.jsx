@@ -387,7 +387,7 @@ function PilotSalesBody({ data, sources, stream = true, trailing, onExplore }) {
   );
 }
 
-function CopilotChatEntry({ entry, stream = true, onChatFeedback, onCopy, onExplore }) {
+function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, onCopy, onExplore }) {
   const [feedback, setFeedback] = React.useState(null);
   const cardRef = React.useRef(null);
   const entryRef = React.useRef(null);
@@ -460,7 +460,7 @@ function CopilotChatEntry({ entry, stream = true, onChatFeedback, onCopy, onExpl
               ))}
             </div>
             <div className="mh-copilot__card-actions" aria-label="Related actions">
-              <a href={entry.sources[0]?.href || "/assets/pages/knowledge.html"}>Open report context</a>
+              <a href={entry.sources[0]?.href || contextHref}>Open report context</a>
               <span>Compare movement</span>
               <span>Save learning</span>
             </div>
@@ -538,6 +538,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * @param {Array<{ title: string, meta?: string }>} [props.recommendations=[]]
  * @param {string} [props.periodHint=""]
  * @param {Array<{ id: string, title: string, href: string }>} [props.sources=[]]
+ * @param {string} [props.contextHref] fallback report-context destination when a chat entry has no linked source
  * @param {{ kind: "answer"|"holistic", title: string, summary?: string, findings?: Array<{ label: string, text: string> }, report?: object }|null} [props.answer=null] holistic answers carry their data as `report`
  * @param {Array<{ id?: string, kind: "standard"|"rich", question: string, summary?: string, card?: object, sources: Array<object> }>} [props.chat=[]] rich entries carry their card data as `card`
  * @param {string} [props.prompt=""]
@@ -573,6 +574,7 @@ export function ReportCopilot({
   recommendations = [],
   periodHint = "",
   sources = [],
+  contextHref,
   answer = null,
   chat = [],
   prompt = "",
@@ -858,6 +860,7 @@ export function ReportCopilot({
                   <CopilotChatEntry
                     key={entry.id || index}
                     entry={entry}
+                    contextHref={contextHref}
                     stream={stream}
                     onChatFeedback={onChatFeedback}
                     onCopy={onCopy}

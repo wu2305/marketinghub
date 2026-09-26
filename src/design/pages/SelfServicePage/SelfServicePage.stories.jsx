@@ -24,6 +24,7 @@ export const SelfService = {
     assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
   },
   argTypes: {
+    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
     tab: { control: "inline-radio", options: ["analysis", "upload"] },
     category: { control: "inline-radio", options: ["all", "dg", "dc"] },
     onNavigate: { action: "onNavigate" },

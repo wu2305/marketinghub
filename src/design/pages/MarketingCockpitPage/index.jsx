@@ -15,8 +15,7 @@ import { ReportCopilot } from "../../features/cockpit/ReportCopilot/index.jsx";
 import { ReportDetailsDrawer } from "../../features/cockpit/ReportDetailsDrawer/index.jsx";
 import { ReportRow } from "../../features/cockpit/ReportRow/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
-import { pluralize, projectSearchText, reportSearchText, resolveReportAssets, resolveReportContext } from "../../report-logic.js";
-import { REPORT_CATALOG_HREF, liveReportHref, projectCatalogHref, reportContextHref } from "../../report-routes.js";
+import { pluralize, projectSearchText, reportSearchText, resolveReportAssets } from "../../report-logic.js";
 import "./MarketingCockpitPage.css";
 
 
@@ -41,11 +40,8 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
  * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
- * @param {(id: string) => string} [props.projectHref=projectCatalogHref]
- * @param {(id: string, index: number) => string} [props.liveHref=liveReportHref]
- * @param {(id: string, report: object) => string} [props.contextHref] defaults to the resolved report context's knowledge link
- * @param {string} [props.backHref=REPORT_CATALOG_HREF]
- * @param {(target: object) => void} [props.onNavigate]
+ * @param {(id: string, params?: object) => string} props.hrefFor semantic route resolver supplied by story or host
+ * @param {(target: { id: string, params: object, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
@@ -80,10 +76,7 @@ export function MarketingCockpitPage({
   detailsSections = [],
   knowledge = [],
   cityInvest,
-  projectHref = projectCatalogHref,
-  liveHref = liveReportHref,
-  contextHref = (projectId, report) => reportContextHref(resolveReportContext(knowledge, projectId, report)),
-  backHref = REPORT_CATALOG_HREF,
+  hrefFor,
   onNavigate,
   onQueryChange,
   onOpenProject,
@@ -127,9 +120,13 @@ export function MarketingCockpitPage({
     if (detailReport) detailsTarget = { project: detailProject, report: detailReport };
   }
   const assistantLauncherRef = React.useRef(null);
+  const projectTarget = (id) => ({ id: "cockpit", params: id === "all" ? {} : { project: id } });
+  const liveTarget = (id, index) => ({ id: "cockpit", params: { project: id, dashboard: index, view: "live" } });
+  const emitNavigation = (target, label) => onNavigate?.({ ...target, href: hrefFor(target.id, target.params), label });
+  const navItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return (
     <Shell tone="cockpit">
-      <Header logo={logo} items={navigation} current={current} position="fixed" onNavigate={onNavigate} />
+      <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={navItems} current={current} position="fixed" onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...hero} height={260} variant="banner" scrim="banner" />
       <main className="mh-page__shell">
@@ -137,10 +134,10 @@ export function MarketingCockpitPage({
           <LiveReportView
             kicker={`${liveProject.title.toUpperCase()} / LIVE REPORT`}
             title={liveReport.title}
-            backHref={projectHref(liveKey)}
+            backHref={hrefFor("cockpit", projectTarget(liveKey).params)}
             onBack={(target) => {
               onBack?.({ project: liveKey, href: target.href });
-              onNavigate?.({ id: "cockpit-project", href: target.href, label: liveProject.title });
+              emitNavigation(projectTarget(liveKey), liveProject.title);
             }}
           >
             {liveProject.reports[rawIndex]?.embed === "city-invest" && cityInvest ? (
@@ -157,7 +154,7 @@ export function MarketingCockpitPage({
         {active ? (
           <React.Fragment>
             <ProjectDirectory
-              backHref={backHref}
+              backHref={hrefFor("cockpit", {})}
               image={active.image}
               imageAlt={`${active.title} report preview`}
               kicker={active.kicker}
@@ -166,7 +163,7 @@ export function MarketingCockpitPage({
               countText={pluralize(active.reports.length, "dashboard")}
               updated={active.sourceStrip[0] || "Update schedule available in project"}
               listCountText={pluralize(active.reports.filter((report) => !search || reportSearchText(knowledge, project, active, report).includes(search)).length, "dashboard")}
-              onBack={(target) => onNavigate?.({ id: "cockpit-all", href: target.href, label: "All report projects" })}
+              onBack={() => emitNavigation(projectTarget("all"), "All report projects")}
             >
               {active.reports
                 .map((report, index) => ({ report, index }))
@@ -184,10 +181,12 @@ export function MarketingCockpitPage({
                       { label: "Updated", value: item.report.updated },
                       { label: "Knowledge", value: pluralize(resolveReportAssets(knowledge, project, item.report).length, "asset") },
                     ]}
-                    href={liveHref(project, item.index)}
-                    detailsHref={contextHref(project, item.report)}
-                    onOpen={() => onOpenReport?.({ project, index: item.index, href: liveHref(project, item.index) })}
-                    onDetails={() => onOpenDetails?.({ project, index: item.index, href: contextHref(project, item.report) })}
+                    href={hrefFor("cockpit", liveTarget(project, item.index).params)}
+                    onOpen={() => {
+                      onOpenReport?.({ project, index: item.index, href: hrefFor("cockpit", liveTarget(project, item.index).params) });
+                      emitNavigation(liveTarget(project, item.index), item.report.title);
+                    }}
+                    onDetails={() => onOpenDetails?.({ project, index: item.index })}
                   />
                 ))}
             </ProjectDirectory>
@@ -216,11 +215,14 @@ export function MarketingCockpitPage({
                       description: projects[key].description,
                       image: projects[key].image,
                       updated: projects[key].sourceStrip[0] || "Update schedule available in project",
-                      href: projectHref(key),
+                      href: hrefFor("cockpit", projectTarget(key).params),
                     })),
                 }))
                 .filter((group) => group.projects.length)}
-              onOpen={(target) => onOpenProject?.({ id: target.id, href: projectHref(target.id) })}
+              onOpen={(target) => {
+                onOpenProject?.({ id: target.id, href: hrefFor("cockpit", projectTarget(target.id).params) });
+                emitNavigation(projectTarget(target.id), target.title);
+              }}
             />
             {groups
               .filter((group) => group.id !== "all")
@@ -254,10 +256,13 @@ export function MarketingCockpitPage({
         }
         sections={detailsSections}
         scenarios={detailsTarget ? (detailsTarget.report.recommendations || []).map((item) => ({ title: item.title, meta: item.meta })) : []}
-        liveHref={details ? liveHref(details.project, details.index) : undefined}
+        liveHref={details ? hrefFor("cockpit", liveTarget(details.project, details.index).params) : undefined}
         resetKey={details ? `${details.project}:${details.index}` : undefined}
         onClose={onCloseDetails}
-        onOpenLive={onOpenLive}
+        onOpenLive={(target) => {
+          onOpenLive?.(target);
+          if (details) emitNavigation(liveTarget(details.project, details.index), detailsTarget?.report.title);
+        }}
       />
       {/* body:has(#aiWorkspace.open) hides the launcher in the original too */}
       <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />

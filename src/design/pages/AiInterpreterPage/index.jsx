@@ -34,6 +34,7 @@ const typeViews = {
  * @param {string} [props.current="interpreter"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
+ * @param {(id:string,params?:object)=>string} props.hrefFor semantic link resolver supplied by story or host
  * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
  * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
@@ -44,13 +45,14 @@ const typeViews = {
  * @param {object} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
- * @param {(target: object & { typeId: string }) => void} [props.onNavigate]
+ * @param {(target: { id:string, params:object, href:string, typeId:string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType]
  */
 export function AiInterpreterPage({
   current = "interpreter",
   logo,
   navigation = [],
+  hrefFor,
   hero = { stats: [] },
   overviewItem,
   sidebarTitle,
@@ -89,6 +91,11 @@ export function AiInterpreterPage({
   const heroProps = type ? { ...hero, title: type.title, description: type.summary } : hero;
 
   const View = type ? typeViews[type.view] : undefined;
+  const selectType = (event) => {
+    onSelectType?.({ ...event, typeId: activeType });
+    const params = event.id === "overview" ? {} : { type: event.id };
+    onNavigate?.({ id: "interpreter", params, href: hrefFor("interpreter", params), typeId: activeType, label: event.label || event.title });
+  };
 
   return (
     /* Type pages rearrange the shell like the original's
@@ -96,7 +103,7 @@ export function AiInterpreterPage({
        from under the header to the viewport bottom and the hero compresses
        into the content column (170px, right of the rail). */
     <Shell tone="interpreter" className={type ? "mh-page--interpreter-type" : undefined}>
-      <Header logo={logo} items={navigation} current={current} highlightCurrent={false} position="fixed" onNavigate={(event) => onNavigate?.({ ...event, typeId: activeType })} />
+      <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }))} current={current} highlightCurrent={false} position="fixed" onNavigate={(event) => onNavigate?.({ ...event, params: {}, typeId: activeType })} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={copy.heroAsideLabel({ typeTitle: type?.title })}>
         {heroStats.map((stat) => (
@@ -119,17 +126,18 @@ export function AiInterpreterPage({
       <div className="mh-interpreter" ref={rootRef}>
         <KnowledgeSidebar
           overview={overviewItem}
+          overviewHref={hrefFor("interpreter", {})}
           title={sidebarTitle}
           types={types}
           activeId={activeType}
-          onSelect={(event) => onSelectType?.({ ...event, typeId: activeType })}
+          onSelect={selectType}
         />
         <div
           className={cx("mh-interpreter__main", !overview && known && "mh-interpreter__main--type")}
           data-active-type={type ? activeType : "Overview"}
         >
           {overview ? (
-            <TypeGrid items={types} activeId={activeType} onSelect={(event) => onSelectType?.({ ...event, typeId: activeType })} />
+            <TypeGrid items={types} activeId={activeType} onSelect={selectType} />
           ) : !known ? (
             <div className="mh-empty mh-empty--unknown" role="status">
               <strong>{copy.unknown.typeTitle}</strong>

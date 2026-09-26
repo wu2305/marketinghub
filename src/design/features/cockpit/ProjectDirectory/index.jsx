@@ -1,5 +1,6 @@
 import "../../../tokens.css";
 import React from "react";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./ProjectDirectory.css";
 
 
@@ -40,7 +41,7 @@ export function ProjectDirectory({
   const titleId = React.useId();
   return (
     <section className="mh-project-directory" aria-labelledby={titleId}>
-      <a className="mh-project-directory__back" href={backHref || "#"} onClick={() => onBack?.({ href: backHref })}>
+      <a className="mh-project-directory__back" href={backHref || "#"} onClick={(event) => isPlainPrimaryLink(event) && onBack?.({ href: backHref })}>
         <span aria-hidden="true">←</span> {backLabel}
       </a>
       <header className="mh-project-directory__intro">

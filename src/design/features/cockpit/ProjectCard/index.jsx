@@ -1,4 +1,5 @@
 import "../../../tokens.css";
+import { isPlainPrimaryLink } from "../../../lib/link-activation.js";
 import "./ProjectCard.css";
 
 
@@ -15,7 +16,7 @@ import "./ProjectCard.css";
  * @param {(target: { title: string, href?: string, part: string }) => void} [props.onOpen]
  */
 export function ProjectCard({ title, kicker, description, image, updated, href, actionLabel = "View Dashboards", onOpen }) {
-  const open = (part) => () => onOpen?.({ title, href, part });
+  const open = (part) => (event) => isPlainPrimaryLink(event) && onOpen?.({ title, href, part });
   return (
     <article className="mh-project-card">
       <a className="mh-project-card__image" href={href || "#"} aria-label={`View ${title} reports`} onClick={open("image")}>

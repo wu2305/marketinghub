@@ -3,11 +3,13 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { AiInterpreterPage } from "./pages/AiInterpreterPage/index.jsx";
 import { buildInterpreterAnswer, useInterpreterDemo } from "./demo/interpreter-demo.js";
+import { demoHrefFor } from "./demo/navigation.js";
 import { INTERPRETER, MODEL_FLOW, buildModelDraft } from "./content.js";
 
 Element.prototype.scrollTo ??= () => {};
 
 const baseProps = {
+  hrefFor: demoHrefFor,
   hero: INTERPRETER.hero,
   overviewItem: INTERPRETER.overview,
   sidebarTitle: INTERPRETER.sidebarTitle,
