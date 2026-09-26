@@ -418,6 +418,40 @@ async function newPage() {
 }
 
 /* ---- Review Center queue, decisions, assistant and navigation ---- */
+/* ---- Skill Edit: seeded scope, report link, preview, validation, submit ---- */
+{
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}scenario-edit?id=scenario-campaign-review`, { waitUntil: "networkidle" });
+  const boot = await page.evaluate(() => window.__mhHostBoot);
+  if ((await page.locator('.mh-scenario-edit-form__field input').first().inputValue()) !== "Campaign Review Reporting") notes.push("known scenario did not prefill name");
+  if ((await page.locator('.mh-scenario-edit-form__field select').first().inputValue()) !== "DC Media Performance") notes.push("unsupported source scope was lost on edit");
+  await page.locator('.mh-scenario-edit-form__card-body select').selectOption("Source Integrity Monitor");
+  const reportHref = await page.locator('.mh-scenario-edit-form__card-body a').getAttribute("href");
+  if (!reportHref?.includes("cockpit?project=ottolv&dashboard=1")) notes.push(`selected report link did not update: ${reportHref}`);
+  await page.getByRole("button", { name: "Run Preview" }).click();
+  if (!(await page.locator('.mh-scenario-edit-form__preview-body pre').innerText()).includes("Summarize delivery")) notes.push("preview did not use seeded logic");
+  await page.locator('.mh-scenario-edit-form__field textarea').fill("");
+  await page.getByRole("button", { name: "Submit for Review" }).click();
+  if ((await page.locator('.mh-scenario-edit-form__field [aria-invalid="true"]').count()) !== 1) notes.push("purpose validation did not appear");
+  if (!(await page.locator('.mh-scenario-edit-form__field textarea').evaluate((field) => field === document.activeElement))) notes.push("first invalid field did not receive focus");
+  await page.locator('.mh-scenario-edit-form__field textarea').fill("Reviewed campaign results.");
+  let alertMessage = null;
+  page.once("dialog", (dialog) => { alertMessage = dialog.message(); void dialog.accept(); });
+  await page.getByRole("button", { name: "Submit for Review" }).click();
+  if (alertMessage !== "Scenario submitted for review successfully!") notes.push("source success alert was not shown");
+  if (!page.url().includes("scenario-library")) notes.push("valid submit did not navigate to Skill Library");
+  await page.goBack({ waitUntil: "domcontentloaded" });
+  await page.locator('.mh-scenario-edit-form__actions a').click();
+  if (!page.url().includes("scenario-library")) notes.push("Cancel did not navigate to Skill Library");
+  if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Skill Edit reloaded host");
+  notes.push(...errors);
+  await page.screenshot({ path: path.join(OUT, "scenario-edit.png") });
+  record("scenario-edit-flow", notes.length === 0, notes);
+  await page.close();
+}
+
+/* ---- Review Center queue, decisions, assistant and navigation ---- */
 {
   const { page, errors } = await newPage();
   const notes = [];
@@ -900,7 +934,8 @@ async function newPage() {
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Campaign Review Reporting") notes.push("known id did not select campaign record");
   await page.locator(".mh-scenario-detail__edit").click();
   const editUrl = new URL(page.url());
-  if (!editUrl.pathname.startsWith(`${BASE}coverage/`) || editUrl.searchParams.get("id") !== "scenario-campaign-review") notes.push(`edit lost selected id: ${editUrl.pathname}${editUrl.search}`);
+  if (editUrl.pathname !== `${BASE}scenario-edit` || editUrl.searchParams.get("id") !== "scenario-campaign-review") notes.push(`edit lost selected id: ${editUrl.pathname}${editUrl.search}`);
+  if ((await page.locator('.mh-scenario-edit-form__field input').first().inputValue()) !== "Campaign Review Reporting") notes.push("edit target did not load selected record");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("edit navigation reloaded host");
   await page.goto(`${origin}${BASE}scenario-detail?id=does-not-exist`, { waitUntil: "networkidle" });
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Channel Performance Analysis") notes.push("unknown id did not fall back to first skill");

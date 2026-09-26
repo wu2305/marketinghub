@@ -223,6 +223,8 @@ export { PersonalMemoryPage, memoryCategories } from "./pages/PersonalMemoryPage
 export { MemoryWorkspace } from "./features/personal-memory/MemoryWorkspace/index.jsx";
 export { ScenarioDetailPage, scenarioDetailTabs } from "./pages/ScenarioDetailPage/index.jsx";
 export { ScenarioDetailWorkspace } from "./features/scenario-detail/ScenarioDetailWorkspace/index.jsx";
+export { ScenarioEditPage } from "./pages/ScenarioEditPage/index.jsx";
+export { ScenarioEditForm } from "./features/scenario-edit/ScenarioEditForm/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { assetUrl } from "./asset-url.js";
 export { cx, normalizeOptions, recordFieldValues, uniqueFilterOptions, recordMatchesFilter } from "./cx.js";
