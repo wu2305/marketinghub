@@ -479,6 +479,13 @@ function SlotSentinelRoute() {
           <Modal open title="Nested host slot isolation"><Sentinel /></Modal>
         </Hero>
       </div>
+      <div className="host-slot-drawer">
+        <Hero title="Drawer host slot isolation" height={240} scrim="none">
+          <Modal open variant="drawer" title="Drawer host slot isolation" titleExtra={<Sentinel />} footer={<Sentinel />}>
+            <Sentinel />
+          </Modal>
+        </Hero>
+      </div>
     </main>
   );
 }

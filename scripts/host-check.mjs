@@ -506,7 +506,10 @@ async function newPage() {
   const { page: slots } = await newPage();
   await slots.goto(`${origin}${BASE}slot-sentinel`, { waitUntil: "networkidle" });
   await slots.waitForSelector(".host-slot-modal .host-input", { timeout: 10000 });
-  for (const slot of [".host-slot-hero", ".host-slot-modal", ".host-slot-nested"]) {
+  for (const slot of [
+    ".host-slot-hero", ".host-slot-modal", ".host-slot-nested",
+    ".host-slot-drawer .mh-modal__titleline", ".host-slot-drawer .mh-modal__body", ".host-slot-drawer .mh-modal__foot",
+  ]) {
     for (const sel of selectors) {
       const inside = await slots.evaluate(snapshot(`${slot} ${sel}`));
       if (inside !== bareStyles[sel]) notes.push(`${slot} ${sel}: sentinel=${bareStyles[sel]} vs slot=${inside}`);
