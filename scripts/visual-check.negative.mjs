@@ -10,6 +10,9 @@
  * (merged per-key; `args` merges into the base args), reason.
  */
 export default [
+  { id: "neg-p14-wrong-category", base: "p14-analysis", story: { id: "pages--personal-memory" }, reason: "All eighteen memories cannot satisfy six Analysis cards" },
+  { id: "neg-p14-missing-detail", base: "p14-detail", story: { id: "pages--personal-memory" }, reason: "Empty detail cannot satisfy selected memory description" },
+  { id: "neg-p14-missing-create-errors", base: "p14-create-errors", story: { id: "pages--personal-memory-create" }, reason: "Untouched create form cannot satisfy required-field errors" },
   {
     id: "neg-p12-wrong-tab",
     base: "p12-approved",
