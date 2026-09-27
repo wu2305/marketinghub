@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #33审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr33-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP2d：37 个阴影/焦点旧 token 改指向 `--mh-shadow-*`/`--mh-focus-ring`；删除 10 个无引用 token；图片滤镜 `--mh-reports-filter` 移入其两个使用组件并删除（同步移出豁免表）。更正写入附录 A：三个整值 box-shadow 焦点 token 改为 `0 0 0 2px var(--mh-focus-ring)` 以保持合法；无效字段环改为危险色派生而非焦点蓝；6 个卡片/行/输入框静止阴影改为 raised（悬停仍为 overlay）。至此除 z 轴、页头高度与三个焦点环外，全部旧 token 均解析到基础层角色。token 498→487；`maxDuplicateValues` 34→39。 | Claude |
 | 2026-09-27 | Phase 2 WP2c：142 个强调/状态/数据旧 token 改指向角色或 `color-mix()` 派生（透明原值用 `transparent` 混合保持透明度）；更正 12 条写入附录 A：StatusBadge 警告色调及待审/审核中/构建中徽章改用 `--mh-warning`（D3，与品牌金区分），Copilot 警示点同；金色按钮悬停/禁用改为可区分的派生色；创建按钮保留 accent-fill 渐变端点。`maxDuplicateValues` 21→34。 | Claude |
