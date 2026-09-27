@@ -1,7 +1,7 @@
 {
   "maxRawHexColors": 0,
   "maxTokenDefinitions": 498,
-  "maxDuplicateValues": 17,
+  "maxDuplicateValues": 16,
   "legacyPrefixExemptions": [
     "--mh-header",
     "--mh-drawer-shadow",
