@@ -95,7 +95,7 @@ const scenarios = [
         { wait: ".assistant-panel:not([hidden]) .assistant-modal" },
         { waitMs: 450 },
         {
-          eval: "(() => { const b = document.querySelector('#sendQuery'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(139, 148, 157)') throw new Error('ASK ink must use foundation text-faint: ' + cs.color); })()",
+          eval: "(() => { const b = document.querySelector('#sendQuery'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(138, 148, 158)') throw new Error('ASK ink ' + cs.color); })()",
         },
       ],
       expect: [
@@ -113,7 +113,7 @@ const scenarios = [
       actions: [
         { wait: ".mh-assistant--drawer" },
         {
-          eval: "(() => { const b = document.querySelector('.mh-assistant__send .mh-button'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(138, 148, 158)') throw new Error('ASK ink ' + cs.color); })()",
+          eval: "(() => { const b = document.querySelector('.mh-assistant__send .mh-button'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(232, 235, 238)') throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== 'rgb(139, 148, 157)') throw new Error('ASK ink must use foundation text-faint: ' + cs.color); })()",
         },
       ],
       expect: [
