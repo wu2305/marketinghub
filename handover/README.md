@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #41远端CI补修：稳定复现双Copilot仍打开时，卡片pointerdown触发焦点约束并将scrollY 1459→460，pointerup落到Copilot，导致未触发停用；并非确认框需要更长timeout。host-check先保留A关闭/B独立断言，再关闭B后操作下方知识库，增加B确已关闭的断言；保留所有知识库检查，不force-click、不关闭焦点约束。增加compose-copilots截图保留助手证据。真实复现 `/tmp/mh-pr41-host-focus-probe.json`；仅验证顺序和handover变化，组件源与98e0e67已通过的完整配对/负向证据一致。 | Codex（GPT-6） |
 | 2026-09-28 | PR #41审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同步#38窄屏空态完整宽度修复；同步#40草稿可见性修复；availability同步原已继承7b修复。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr41-fix-*`。 | Codex（GPT-6） |
 | 2026-09-28 | PR #41审核修复：先停用再编辑向URL传停用后记录，保留Published处理阶段；替换records/currentUser清理本地修改、旧确认框和toast，普通active切换保留状态。证据 `/tmp/mh-pr41-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
