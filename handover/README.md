@@ -487,6 +487,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #40审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色；同步#38窄屏空态完整宽度修复。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr40-fix-*`。 | Codex（GPT-6） |
+| 2026-09-28 | PR #40审核修复：R3草稿可见性应用于records/drafts合并集合，保留他人已发布内容；停用同步status与availability，编辑动作不再重复要求停用。复用本地7b候选已有同步修复；具名载荷与展示接口不变。证据 `/tmp/mh-pr40-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP3a 更正：`--mh-font-size-3xl` 28→24px（22–34px 簇以 22/24px 为主；28px 使原 22–23px 的弹窗/抽屉标题变大 5–6px，被 Report Context 抽屉场景发现）。foundations §2.2、§3.2 与附录更正同步。 | Claude |
 | 2026-09-27 | Phase 2 WP7a（试点：卡片布局）：Business Terms 改用通用库模式（LibraryToolbar/LibraryList/LibraryItem/ItemActions + Pagination/Modal/ConfirmDialog/Toast），视图只保留同义词标签与抽屉分节；`useBusinessTermDemo` 改用 `lib/governance.js`：受阻动作可点击并解释，“先下线”确认后继续原操作，停用/删除后显示成功提示（D03），草稿先规范化再按创建者隐藏（BT-04），草稿即停用（BT-05），权限文案统一（D05），同义词最多 3 个 + “+N”（D07），计数常显（D08）。处置 BT-01…BT-22 见 dispositions.md。视图 CSS 364→82 行；删除 2 个失去引用的 token；移出 pendingMigration。p07 BT 场景 11 个改为新选择器，移除 16 个内部几何配对（保留外壳配对），“…”断言改为标签断言，13/13 通过；host 双实例检查更新选择器。试点审阅后调整模式：卡片动作移到底部与元信息同行、工具栏搜索用金色胶囊（见 library.md 末注）。 | Claude |

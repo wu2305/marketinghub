@@ -48,10 +48,11 @@ function buildList(records, drafts, currentUser) {
      draft before deriving its stage (business-term-library.js:85-89), so a
      stage-less draft of another user leaked through; normalising first
      applies the rule to every draft (dispositions BT-04). */
-  const visibleDrafts = (drafts || [])
-    .map((item) => normalizeDraft(item, currentUser))
-    .filter((item) => item.stage !== "Draft" || item.creator === currentUser);
-  return [...visibleDrafts, ...(records || []).map(cloneRecord)];
+  const normalized = [
+    ...(drafts || []).map((item) => normalizeDraft(item, currentUser)),
+    ...(records || []).map(cloneRecord),
+  ];
+  return normalized.filter((item) => item.stage !== "Draft" || (item.created_by ?? item.creator) === currentUser);
 }
 
 const TOAST_MS = 3000;
@@ -98,7 +99,7 @@ export function useBusinessTermDemo(props) {
     setToast(message);
     toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
   };
-  const setStatus = (id, status) => setList((current) => current.map((item) => item.id === id ? { ...item, status } : item));
+  const setStatus = (id, status) => setList((current) => current.map((item) => item.id === id ? { ...item, status, availability: status === "Disable" ? "disabled" : "enabled" } : item));
   const remove = (id) => {
     setList((current) => current.filter((item) => item.id !== id));
     setDetailId((current) => current === id ? null : current);
