@@ -119,6 +119,10 @@ background: none;
     text-transform: uppercase;
   }
 
+  .mh-table .mh-table__empty {
+    display: block;
+  }
+
   .mh-table .mh-table__empty::before {
     content: none;
   }

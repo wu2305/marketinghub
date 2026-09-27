@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #39审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色；同步#38窄屏空态完整宽度修复。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr39-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP3a 更正：`--mh-font-size-3xl` 28→24px（22–34px 簇以 22/24px 为主；28px 使原 22–23px 的弹窗/抽屉标题变大 5–6px，被 Report Context 抽屉场景发现）。foundations §2.2、§3.2 与附录更正同步。 | Claude |
 | 2026-09-27 | Phase 2 WP6：新增通用库模式组件（均在 `components/`，Organisms/Library 故事）：`LibraryToolbar`（搜索、多选/单选分面、常显计数、创建链接、可选标签页，统一 `onChange({field,value,checked?})`）、`LibraryList`（`cards`/`table` 两种布局与空态，视图不再直接渲染网格或 DataTable）、`LibraryItem`（标题即打开按钮、草稿标记、两行描述、元信息、状态、动作、唯一内容插槽）、`ItemActions`（渲染 `governedActions()` 结果；受阻动作 `aria-disabled` 可聚焦可点击并上报原因，取代 KnowledgeActions 的三种变体行为）、`LibraryEmpty`（无结果可清除筛选 / 暂无内容）。`index.js` 导出上述组件与 `lib/governance.js`。21 个新故事、5 组测试；尚无页面使用（WP7 迁移）。 | Claude |
