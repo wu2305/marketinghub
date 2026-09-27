@@ -14,7 +14,7 @@
   - `MetricStat` `variant`: card | glass, `accent`: gold | green | amber | blue | red
   - `Tabs` `variant`: underline | segmented
   - `Hero` `variant`: banner | home | knowledge
-  - `Header` `tone`: solid | overlay, `position`: sticky | fixed
+  - `Header` `density`: compact | comfortable, `position`: fixed | sticky
   - `Modal` `variant`: modal | sheet | drawer
   - `SearchField` `variant`: field | plain
   - `AssistantPanel` `placement`: modal | drawer
@@ -34,17 +34,19 @@
 
 **Overlays** (`Modal`, `AssistantPanel`, `ReportDetailsDrawer`, `UploadHistory`, `ModelFlowDialog`, `Toast`, `AssistantLauncher`) are `position: fixed` and cover the viewport. Render them at the page root. `Modal`, `AssistantPanel`, `ReportDetailsDrawer`, `UploadHistory` and `Toast` take `open`, plus `onClose` on all but `Toast`. Mount and unmount `ModelFlowDialog` and `AssistantLauncher` instead.
 
-**Where the truth lives.** Before styling, read `styles.css`, which imports `_ds_bundle.css` (every `mh-*` rule and every `--mh-*` token). For each component's props and callback payloads, read its `<Name>.d.ts` and `<Name>.prompt.md`. `window.MarketingHub.demoContent` holds the sample copy and data behind every preview. Use it as a realistic starting point, but pass your own data through props.
-
+**Where the truth lives.** Before styling, read `styles.css`, which imports `_ds_bundle.css` (every `mh-*` rule and every `--mh-*` token). For each component's props and callback payloads, read its `<Name>.d.ts` and `<Name>.prompt.md`.
 **Example:**
 
 ```jsx
-const { Header, Hero, SectionHeading, MetricStat, Button, demoContent } = window.MarketingHub;
+const { Header, SectionHeading, MetricStat, Button } = window.MarketingHub;
 
 function Dashboard() {
   return (
     <main style={{ fontFamily: "var(--mh-font)", background: "var(--mh-page-bg)", minHeight: "100vh" }}>
-      <Header logo={demoContent.LOGO} items={demoContent.NAV} current="home" />
+      <Header position="sticky" current="home" items={[
+        { id: "home", label: "Home", href: "#" },
+        { id: "cockpit", label: "Marketing Cockpit", href: "#cockpit" },
+      ]} />
       <section style={{ padding: "32px 48px", display: "grid", gap: 24 }}>
         <SectionHeading eyebrow="Workspaces" title="Enter the work that matters" />
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>

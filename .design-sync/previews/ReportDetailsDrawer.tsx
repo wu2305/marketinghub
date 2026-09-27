@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as S from "@ds-stories/src/design/stories/organisms/ReportDetailsDrawer.stories";
+import * as S from "@ds-stories/src/design/features/cockpit/ReportDetailsDrawer/ReportDetailsDrawer.stories";
 
 // Overlay story (position:fixed); the single-card wrapper is a zero-height
 // transform containing block, so give the story a full-viewport frame.

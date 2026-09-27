@@ -90,13 +90,28 @@
       "cardMode": "column"
     },
     "Header": {
-      "cardMode": "column"
+      "cardMode": "single",
+      "primaryStory": "Default"
     },
     "ProjectDirectory": {
       "cardMode": "column"
     },
     "ReportRow": {
       "cardMode": "column"
+    },
+    "FeedbackList": {
+      "cardMode": "column",
+      "viewport": "1280x900"
+    },
+    "PrinciplesView": {
+      "cardMode": "column"
+    },
+    "SkillLibrary": {
+      "cardMode": "column"
+    },
+    "SkillDetail": {
+      "cardMode": "single",
+      "primaryStory": "Default"
     }
   },
   "componentSrcMap": {
@@ -232,7 +247,6 @@
       "src/design/pages/Shell/index.jsx",
       "src/design/icons.jsx",
       "src/design/cx.js",
-      "src/design/features/cockpit/lib/report-logic.js",
       "src/design/lib/options.js"
     ]
   },

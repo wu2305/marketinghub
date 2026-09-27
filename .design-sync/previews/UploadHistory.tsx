@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as S from "@ds-stories/src/design/stories/organisms/UploadHistory.stories";
+import * as S from "@ds-stories/src/design/features/self-service/UploadHistory/UploadHistory.stories";
 
 // Overlay stories use position:fixed; the preview card wrapper is a
 // containing block (transform) with no height of its own, so give the story a

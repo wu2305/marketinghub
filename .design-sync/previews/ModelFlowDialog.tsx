@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as S from "@ds-stories/src/design/stories/organisms/ModelFlowDialog.stories";
+import * as S from "@ds-stories/src/design/components/ModelFlowDialog/ModelFlowDialog.stories";
 
 // Overlay story (position:fixed); the single-card wrapper is a zero-height
 // transform containing block, so give the story a full-viewport frame.

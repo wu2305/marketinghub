@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as S from "@ds-stories/src/design/stories/molecules/Toast.stories";
+import * as S from "@ds-stories/src/design/components/Toast/Toast.stories";
 
 // Fixed-position story (pinned to a viewport corner); the single-card wrapper
 // is a zero-height transform containing block, so give it a viewport frame.
