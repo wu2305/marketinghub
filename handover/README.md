@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
 | M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
 | DI | 设计意图提取 Phase 1：基础层、领域模型、奥卡姆基线（仅文档） | Phase 1 完成（用户已批准 D1–D5、A1–A5）；Phase 2 未开始 | 分支 `design-intent/phase1`；`handover/design-intent/{foundations,domain-model,occam-baseline}.md`；AGENTS §1/§3.3/§3.5/§4/§5 按 2026-09-27 用户决定改写 |
-| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4、WP2a（#42）已合入；WP2b 背景、边框与遮罩归并候选，待完整验收与用户合并 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
+| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4、WP2a（#42）已合入；WP2b #43 对抗性审核修复：补回hover反馈、反色边框与图表柱色，待修复版验收和用户合并 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | WP2b #43对抗性修复：与旧#31逐项核对后，恢复主按钮hover/focus与默认态的颜色差异（inverse 86%与surface混合，按原#39444e计算最接近整数比例，修正旧候选85%）；launcher边框改line-inverse；LiveOverview中性柱改line-strong。三处全部使用点一致，按指南在foundations附录登记映射纠正，未新增角色/组件/接口。修复前桌面与390px实测按钮rest/hover同为rgb(32,38,44)，launcher边框与底色同值；证据 `/tmp/mh-wp2b-adversarial-before/`。修复版独立证据使用 `/tmp/mh-wp2b-r2-*`，不以eb56b13旧检查替代。后续已有PR的对抗审核另见 `/tmp/mh-phase2-adversarial-review.md`；本包不混入后续工作包。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP2b（`di/wp2b-surfaces`，基于 main `0c7ffec`）：按 foundations 附录 A 将98个背景/边框/遮罩别名归并到9个基础角色，连同WP1已有6项共104条merge映射；卡片与表单的中性底色、表格分隔线及覆盖层遮罩统一，未改组件布局/接口/交互/故事。保留498个定义供兼容迁移，同值组预算按实测16→21；未处理WP2c颜色混合与WP2d删除项。仅调整P01故事侧禁用ASK背景期望至surface-muted，原侧与文字/禁用态断言保留。D17/foundations D4沿用，无新增设计决策。构建、配对和审图证据以 `/tmp/mh-wp2b-{host,visual,neg,shots}/` 与 `/tmp/mh-wp2b-report.md` 中最终head/stamp及结果为准；人工结论待审核。本轮继续按用户要求聚焦Storybook实现与实际呈现，验证不扩展范围。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP2a 审核修复（`di/wp2a-review`，基于 GitHub main `4d3270c`）：逐项核对附录 A 的 124 个文字 merge 行，复用旧候选的 118 项改指向并补漏 `--mh-ink-dark-control`→`--mh-text-strong`（唯一用途 `DataModelView.css:705` 为 hover/focus 文字）；共119项改动、5项已由WP1完成。498个定义与162个旧前缀不变，同值组预算15→16（补漏后消除一个反色表面的重复组），未改组件CSS/接口/故事。P01配对仅把故事侧禁用ASK文字期望从原RGB改为基础层text-faint的RGB；保留disabled、背景与原侧断言，未纳入旧候选提前修改的P06状态色断言。审核发现旧配对实际504/505且head不匹配、negative浏览器中断，不能作为本候选通过证据；最新完整输出与核对报告分别保存 `/tmp/mh-wp2a-review-{host,visual,neg}` 和 `/tmp/mh-wp2a-review-report.md`，以其中最终head/stamp及各项结果为准。人工视觉仍待审核；后续WP2b–WP7本地候选不等于已验收，不越过指南依赖与试点审核停点。 | Codex GPT-6 |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |

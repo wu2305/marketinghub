@@ -133,7 +133,7 @@
   /* Shared foreground, action, and status colors extracted from component CSS. */
   --mh-ink-inverse: var(--mh-text-inverse);
   --mh-surface-dark-strong: var(--mh-surface-inverse);
-  --mh-surface-action-slate: var(--mh-surface-inverse);
+  --mh-surface-action-slate: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
   --mh-surface-action-blue: var(--mh-surface-inverse);
   --mh-surface-dark-cool: var(--mh-surface-inverse);
   --mh-indicator-selection-warm: #b08d57;
@@ -269,7 +269,7 @@
   --mh-icon-slate: var(--mh-text-muted);
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
   /* global AI launcher (assistant-launcher.css) */
-  --mh-launcher-line: var(--mh-surface-inverse);
+  --mh-launcher-line: var(--mh-line-inverse);
   --mh-surface-dark: var(--mh-surface-inverse);
   --mh-ink-dark-control: var(--mh-text-strong);
   --mh-launcher-bg-hover: var(--mh-surface-inverse);
@@ -358,7 +358,7 @@
   --mh-surface-chart-neutral: var(--mh-surface-subtle);
 
   --mh-line-control-strong: var(--mh-line-strong);
-  --mh-live-bar: var(--mh-surface-muted);
+  --mh-live-bar: var(--mh-line-strong);
   --mh-live-bar-alt: #79a991;
   --mh-ink-faint-warm: var(--mh-text-muted);
   --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);

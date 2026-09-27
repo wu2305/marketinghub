@@ -904,3 +904,9 @@ Actions: **keep** (already the role token) · **rename** · **merge** (replace r
 | `--mh-ra-badge-up-bg` | `rgba(0, 160, 107, 0.1)` | 3 | 3 | derive |
 | `--mh-bt-scope-bg` | `#edf5f1` | 4 | 3 | derive |
 
+
+### Corrections applied during WP2b adversarial review
+
+- corrected in WP2b: `--mh-surface-action-slate` `--mh-surface-inverse` → `color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface))` because every use is primary-button hover/focus fill or border (`components/Button/Button.css:55–58`); the resting fill is already inverse, so a direct merge removes hover feedback. Original `#39444e` → sRGB `(63.22, 68.38, 73.54)`, approximately `#3f444a`. N=86 minimizes squared sRGB channel distance over whole percentages 0–100, correcting the old #31 candidate's unmeasured 85%.
+- corrected in WP2b: `--mh-launcher-line` `--mh-surface-inverse` → `--mh-line-inverse` because its only use is a border on the dark launcher (`components/AssistantLauncher/AssistantLauncher.css:19`); inverse fill would hide the border. Preserves the justified correction from old PR #31.
+- corrected in WP2b: `--mh-live-bar` `--mh-surface-muted` → `--mh-line-strong` because its only use fills neutral data bars on the light chart panel (`features/cockpit/LiveOverview/LiveOverview.css:119–125`); the muted surface washes out the data. Preserves the justified correction from old PR #31.
