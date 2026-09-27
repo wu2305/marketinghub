@@ -155,73 +155,73 @@
   --mh-green: var(--mh-success);
   --mh-red: var(--mh-danger);
   --mh-danger-border: #c03b3b;
-  --mh-ink-disabled-soft: #c9d2dc;
+  --mh-ink-disabled-soft: var(--mh-text-faint);
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
-  --mh-ink-card-copy: #2f3a45;
-  --mh-ink-report-copy: #344054;
-  --mh-ink-metric-copy: #343230;
-  --mh-ink-thumbnail-muted: #788493;
-  --mh-ink-section-deep: #20272e;
+  --mh-ink-card-copy: var(--mh-text);
+  --mh-ink-report-copy: var(--mh-text);
+  --mh-ink-metric-copy: var(--mh-text);
+  --mh-ink-thumbnail-muted: var(--mh-text-faint);
+  --mh-ink-section-deep: var(--mh-text-strong);
   --mh-surface-dialog-tint: #f7f9fc;
-  --mh-ink-control-slate: #334155;
+  --mh-ink-control-slate: var(--mh-text);
   --mh-line-subtle-cool: #dfe5ea;
   --mh-line-sidebar-cool: #e4e9ed;
-  --mh-ink-sidebar-muted: #87919b;
+  --mh-ink-sidebar-muted: var(--mh-text-faint);
   --mh-surface-neutral-soft: #f1f3f5;
-  --mh-ink-primary-deep: #1f252b;
+  --mh-ink-primary-deep: var(--mh-text-strong);
   --mh-line-panel-soft: #edf0f2;
   --mh-line-input-cool: #dfe6ec;
   --mh-line-gold-active: #d9ad67;
   --mh-surface-gold-wash: #fffaf2;
   --mh-line-gold-soft: #ecd7bd;
-  --mh-indicator-muted: #8c96a0;
+  --mh-indicator-muted: var(--mh-text-faint);
   --mh-indicator-active: #b87926;
-  --mh-ink-label-steel: #69747f;
-  --mh-ink-copy-dark: #3e464e;
-  --mh-ink-copy-slate: #6b7682;
-  --mh-ink-icon-muted: #77828d;
-  --mh-ink-control-muted: #a2a9b0;
-  --mh-ink-table-caption: #596570;
-  --mh-ink-neutral-mid: #8c8c8c;
-  --mh-ink-neutral-light: #b0b0b0;
-  --mh-ink-neutral-copy: #5f6367;
-  --mh-ink-placeholder-cool: #a5aeb7;
-  --mh-stroke-graph-muted: #9ba8b5;
-  --mh-fill-graph-muted: #9aa9b8;
+  --mh-ink-label-steel: var(--mh-text-muted);
+  --mh-ink-copy-dark: var(--mh-text);
+  --mh-ink-copy-slate: var(--mh-text-muted);
+  --mh-ink-icon-muted: var(--mh-text-muted);
+  --mh-ink-control-muted: var(--mh-text-faint);
+  --mh-ink-table-caption: var(--mh-text-muted);
+  --mh-ink-neutral-mid: var(--mh-text-faint);
+  --mh-ink-neutral-light: var(--mh-text-faint);
+  --mh-ink-neutral-copy: var(--mh-text-muted);
+  --mh-ink-placeholder-cool: var(--mh-text-faint);
+  --mh-stroke-graph-muted: var(--mh-text-faint);
+  --mh-fill-graph-muted: var(--mh-text-faint);
   --mh-line-graph-panel: #dce3e8;
   --mh-surface-info-soft: #f3f8fc;
   --mh-line-gold-detail: #e5d4b6;
   --mh-surface-gold-detail: #fff9ef;
-  --mh-ink-secondary-slate: #66717b;
+  --mh-ink-secondary-slate: var(--mh-text-muted);
   --mh-surface-info: #eef6ff;
   --mh-ink-info: #296a9b;
   --mh-surface-warning: #fff5e4;
   --mh-ink-warning: #9b6218;
   --mh-line-table-soft: #edf1f4;
-  --mh-ink-table-muted: #65717c;
-  --mh-ink-row-muted: #68737e;
+  --mh-ink-table-muted: var(--mh-text-muted);
+  --mh-ink-row-muted: var(--mh-text-muted);
   --mh-surface-warm-soft: #f7efe2;
-  --mh-ink-darkest: #111820;
-  --mh-ink-heading-slate: #313941;
+  --mh-ink-darkest: var(--mh-text-strong);
+  --mh-ink-heading-slate: var(--mh-text);
   --mh-line-active-warm: #b08d57;
-  --mh-ink-heading-charcoal: #2e343a;
-  --mh-ink-flow-muted: #536170;
+  --mh-ink-heading-charcoal: var(--mh-text);
+  --mh-ink-flow-muted: var(--mh-text-muted);
   --mh-surface-flow-neutral: #eef2f6;
   --mh-surface-success-soft: #e7f6ed;
   --mh-ink-success-bright: #0f9f5d;
   --mh-surface-warning-soft: #fff2d8;
   --mh-ink-warning-brown: #9f6b24;
-  --mh-ink-flow-secondary: #667085;
+  --mh-ink-flow-secondary: var(--mh-text-muted);
   --mh-surface-draft: #f4f0ff;
   --mh-ink-draft: var(--mh-data-violet);
   --mh-surface-status-neutral: #f1f2f3;
-  --mh-ink-status-neutral: #607080;
+  --mh-ink-status-neutral: var(--mh-text-muted);
   --mh-surface-status-warm: #f6efe4;
   --mh-ink-status-warm: #a16616;
   --mh-ink-link-strong: #184a8c;
   --mh-ink-link-hover: #12386b;
   --mh-line-attachment: #cbd3df;
-  --mh-ink-attachment-muted: #7b8794;
+  --mh-ink-attachment-muted: var(--mh-text-faint);
   --mh-blue: var(--mh-info);
   /* P14 exact source category indicators, info banner, and required errors. */
   --mh-indicator-purple: #7c3aed;
@@ -234,11 +234,11 @@
   --mh-danger-bright: #ef4444;
   --mh-amber: #9a7229;
   --mh-header: var(--mh-layout-header-height);
-  --mh-kicker: #b8b4ae;
+  --mh-kicker: var(--mh-text-faint);
   --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
   --mh-disabled-bg: #e8ebee;
   --mh-disabled-line: #d0d4d8;
-  --mh-disabled-ink: #8a949e;
+  --mh-disabled-ink: var(--mh-text-faint);
   --mh-index-line: #d8c76f;
   --mh-index-ink: #6c5800;
   --mh-gold-light: var(--mh-accent-soft);
@@ -260,28 +260,28 @@
   --mh-line-warm-strong: #e6e1d8;
   --mh-row-hover: #fafbfc;
   --mh-hover-warm: #fffbeb;
-  --mh-subtle: #4a5260;
-  --mh-slate: #5b6678;
-  --mh-empty: #8a93a5;
+  --mh-subtle: var(--mh-text);
+  --mh-slate: var(--mh-text-muted);
+  --mh-empty: var(--mh-text-faint);
   --mh-control-line: #c8d2d8;
-  --mh-ink-strong: #1a1d20;
-  --mh-ink-field: #1c2328;
-  --mh-icon-slate: #5b6470;
+  --mh-ink-strong: var(--mh-text-strong);
+  --mh-ink-field: var(--mh-text-strong);
+  --mh-icon-slate: var(--mh-text-muted);
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: #303840;
   --mh-surface-dark: var(--mh-surface-inverse);
-  --mh-ink-dark-control: var(--mh-surface-inverse);
+  --mh-ink-dark-control: var(--mh-text-strong);
   --mh-launcher-bg-hover: #171c21;
   --mh-launcher-aura: rgba(218, 168, 96, 0.2);
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
   --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
   --mh-launcher-focus: rgba(63, 115, 166, 0.52);
-  --mh-ink-action-strong: #111111;
+  --mh-ink-action-strong: var(--mh-text-strong);
   /* assistant surface scale (assistant-panel.css --ai-*) */
-  --mh-ink-ai: #171b1f;
-  --mh-copy-ai: #4f5963;
-  --mh-muted-ai: #717b85;
+  --mh-ink-ai: var(--mh-text-strong);
+  --mh-copy-ai: var(--mh-text);
+  --mh-muted-ai: var(--mh-text-muted);
   --mh-line-strong-ai: #bcc5ce;
   --mh-fill-hover: #f2f3f4;
   --mh-fill-soft: #f4f4f4;
@@ -290,14 +290,14 @@
   --mh-page-bg: #f6f7f8;
   --mh-ink-accent-warm: #8a5a00;
   --mh-required: #c0392b;
-  --mh-muted-strong: #6a747c;
-  --mh-subtle-ai: #4b5563;
+  --mh-muted-strong: var(--mh-text-muted);
+  --mh-subtle-ai: var(--mh-text);
   --mh-line-soft: #e1e7ec;
   --mh-line-tab: #e5e7eb;
   --mh-line-faintest: var(--mh-surface-muted);
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
   --mh-ai-feedback-line: #edf0f3;
-  --mh-ink-secondary-muted: #5d6872;
+  --mh-ink-secondary-muted: var(--mh-text-muted);
   --mh-ai-chip-pos: #2e7d32;
   --mh-ai-chip-pos-bg: #e8f5e9;
   --mh-ai-chip-neg: #c62828;
@@ -318,17 +318,17 @@
   --mh-chip-icon: #6f5a35;
   --mh-chip-hover: rgba(93, 68, 30, 0.12);
   --mh-tooltip: #262626;
-  --mh-placeholder: #a8afb8;
-  --mh-search-placeholder: #8e959d;
+  --mh-placeholder: var(--mh-text-faint);
+  --mh-search-placeholder: var(--mh-text-faint);
   --mh-scrim-mid: rgba(31, 41, 55, 0.42);
   --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-surface-neutral-cool: #f3f5f7;
 
-  --mh-reports-ink: #17191c;
-  --mh-reports-copy: #46505b;
-  --mh-reports-muted: #737d88;
+  --mh-reports-ink: var(--mh-text-strong);
+  --mh-reports-copy: var(--mh-text);
+  --mh-reports-muted: var(--mh-text-muted);
   --mh-reports-blue: #315f88;
   --mh-reports-blue-soft: #edf4fa;
   --mh-reports-green: #39745b;
@@ -360,19 +360,19 @@
   --mh-line-control-strong: #cbd2d9;
   --mh-live-bar: #d8d4c9;
   --mh-live-bar-alt: #79a991;
-  --mh-ink-faint-warm: #74726c;
+  --mh-ink-faint-warm: var(--mh-text-muted);
   --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
   --mh-sc-bg: #f0f2f5;
-  --mh-sc-ink: #1f2329;
-  --mh-sc-label: #5a6068;
-  --mh-ink-faint-neutral: #9aa0a8;
-  --mh-sc-note: #8a9099;
+  --mh-sc-ink: var(--mh-text-strong);
+  --mh-sc-label: var(--mh-text-muted);
+  --mh-ink-faint-neutral: var(--mh-text-faint);
+  --mh-sc-note: var(--mh-text-faint);
   --mh-line-neutral-faint: #eceef1;
   --mh-sc-line-strong: #d9dde3;
   --mh-sc-static-bg: #eef0f3;
   --mh-sc-static-line: #e0e3e8;
-  --mh-ink-muted-neutral: #6b7280;
+  --mh-ink-muted-neutral: var(--mh-text-muted);
   --mh-sc-row-hover: #f3f5f8;
   --mh-sc-head-line: #eeeeee;
   --mh-ink-info-accent: #185fa5;
@@ -385,9 +385,9 @@
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
-  --mh-ink-black-soft: #141414;
+  --mh-ink-black-soft: var(--mh-text-strong);
   --mh-surface-control-black-soft: #141414;
-  --mh-ink-secondary-dark: #3f4854;
+  --mh-ink-secondary-dark: var(--mh-text);
 
   --mh-copilot-tool-bg: #f2f4f7;
   --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
@@ -395,11 +395,11 @@
   --mh-copilot-metric-pos: #16a34a;
   --mh-copilot-metric-neg: #dc2626;
   --mh-copilot-box-line: #d8e0e6;
-  --mh-ink-black: #000000;
+  --mh-ink-black: var(--mh-text-strong);
   --mh-line-secondary-cool: #d8dee6;
-  --mh-copilot-card-faint: #667487;
-  --mh-copilot-card-ink: #101820;
-  --mh-ink-secondary-cool: #415064;
+  --mh-copilot-card-faint: var(--mh-text-muted);
+  --mh-copilot-card-ink: var(--mh-text-strong);
+  --mh-ink-secondary-cool: var(--mh-text);
 
   --mh-surface-chip-cool: #f6f8fb;
   --mh-copilot-action-bg: #edf0f3;
@@ -407,20 +407,20 @@
   --mh-copilot-fb-hover-bg: rgba(231, 187, 106, 0.16);
   --mh-copilot-fb-pressed-line: rgba(184, 138, 61, 0.8);
   --mh-copilot-fb-pressed-bg: #e7bb6b;
-  --mh-copilot-placeholder: #8a939d;
+  --mh-copilot-placeholder: var(--mh-text-faint);
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
-  --mh-ink-primary-neutral: #26262a;
-  --mh-hr-muted: #8a8a85;
-  --mh-hr-mid: #5f5e5a;
-  --mh-hr-index: #a29b8c;
+  --mh-ink-primary-neutral: var(--mh-text-strong);
+  --mh-hr-muted: var(--mh-text-faint);
+  --mh-hr-mid: var(--mh-text-muted);
+  --mh-hr-index: var(--mh-text-faint);
 
   --mh-line-warm-soft: #eceae4;
   --mh-hr-surface: #faf9f6;
   --mh-hr-card-line: #f0ede6;
 
-  --mh-hr-grid-zero: #c9c7bd;
-  --mh-hr-axis: #aab0b8;
+  --mh-hr-grid-zero: var(--mh-text-faint);
+  --mh-hr-axis: var(--mh-text-faint);
   --mh-hr-th-line: #e4e2da;
   --mh-hr-td-line: #f0efe9;
   --mh-hr-dot-warn: #e6a23c;
@@ -428,7 +428,7 @@
   --mh-ink-negative-bright: #d43d4a;
   --mh-line-highlight-chart: #c9a44a;
   --mh-surface-highlight-warm: #fdfbf6;
-  --mh-hr-insight-ink: #444441;
+  --mh-hr-insight-ink: var(--mh-text);
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
 
@@ -441,15 +441,15 @@
   --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
 
   --mh-ra-insight-bg: #fbf9f4;
-  --mh-ra-insight-ink: #3f3f3c;
+  --mh-ra-insight-ink: var(--mh-text);
   --mh-ra-option-icon-bg: rgba(24, 95, 165, 0.1);
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
   --mh-check-filter-line: #e4e0d9;
-  --mh-check-filter-label: #969188;
-  --mh-check-filter-ink: #383634;
-  --mh-check-filter-option: #4a4743;
+  --mh-check-filter-label: var(--mh-text-faint);
+  --mh-check-filter-ink: var(--mh-text);
+  --mh-check-filter-option: var(--mh-text);
   --mh-check-filter-checked-bg: #f7f2e8;
   --mh-check-filter-checked-ink: #84611f;
   --mh-check-filter-shadow: 0 8px 24px rgba(25, 34, 48, 0.1);
@@ -458,39 +458,39 @@
   --mh-principle-number-bg: #f4ede0;
   --mh-principle-number-ink: #9a661a;
   --mh-principle-badge-bg: #eef1f3;
-  --mh-principle-badge-ink: #5e6872;
-  --mh-principle-title: #20252a;
-  --mh-principle-copy: #4d5963;
+  --mh-principle-badge-ink: var(--mh-text-muted);
+  --mh-principle-title: var(--mh-text-strong);
+  --mh-principle-copy: var(--mh-text);
   --mh-principle-toggle: #956318;
   --mh-principle-toggle-hover: #71480d;
   --mh-principle-focus-ring: rgba(185, 130, 52, 0.35);
   --mh-principle-empty-line: #d8dfe4;
-  --mh-principle-empty-ink: #6f7a83;
-  --mh-principle-search-ink: #292724;
-  --mh-principle-search-placeholder: #77716b;
+  --mh-principle-empty-ink: var(--mh-text-muted);
+  --mh-principle-search-ink: var(--mh-text-strong);
+  --mh-principle-search-placeholder: var(--mh-text-muted);
 
   --mh-pagination-hover-bg: #fff9f2;
   --mh-pagination-select-line: #d9dee3;
-  --mh-pagination-select-ink: #404850;
+  --mh-pagination-select-ink: var(--mh-text);
   /* Business Term dedicated view (business-term.css / business-term-reference.css /
      ai-interpreter-overview.css / unified-type-toolbar.css / field-components.css) */
-  --mh-ink-heading-warm: #1d1c1b;
-  --mh-bt-copy: #403e3b;
-  --mh-bt-label: #99948a;
+  --mh-ink-heading-warm: var(--mh-text-strong);
+  --mh-bt-copy: var(--mh-text);
+  --mh-bt-label: var(--mh-text-faint);
   --mh-bt-tag-bg: #f1efeb;
   --mh-bt-state-bg: #f7f1e5;
   --mh-bt-state-ink: #b4872d;
   --mh-bt-state-off-bg: #f1f1ef;
-  --mh-bt-state-off-ink: #77736d;
+  --mh-bt-state-off-ink: var(--mh-text-muted);
   --mh-bt-action: #c8892b;
-  --mh-bt-action-disabled: #858b91;
+  --mh-bt-action-disabled: var(--mh-text-faint);
   --mh-bt-action-hover-bg: #fff6e8;
   --mh-line-control-warm: #d9bd91;
   --mh-line-control-focus-warm: #b98234;
-  --mh-ink-icon-warm-muted: #6f665d;
+  --mh-ink-icon-warm-muted: var(--mh-text-muted);
   --mh-shadow-search-warm: 0 8px 24px rgba(116, 78, 31, 0.08);
-  --mh-bt-countline: #6f6961;
-  --mh-bt-empty: #78838d;
+  --mh-bt-countline: var(--mh-text-muted);
+  --mh-bt-empty: var(--mh-text-muted);
   --mh-bt-draft-bg: #f6ede0;
   --mh-bt-draft-ink: #a76412;
   --mh-gold-action-start: #e3ba6d;
@@ -501,36 +501,36 @@
   --mh-bt-drawer-bg: #f6f7f9;
   --mh-bt-drawer-line: #dfe5eb;
   --mh-bt-drawer-eyebrow: #a57531;
-  --mh-bt-drawer-title: #252423;
+  --mh-bt-drawer-title: var(--mh-text-strong);
   --mh-bt-drawer-shadow: -8px 0 32px rgba(23, 32, 42, 0.15);
   --mh-bt-drawer-scrim: rgba(20, 32, 50, 0.4);
   --mh-bt-status-on-bg: #fff4df;
   --mh-bt-status-on-ink: #8c5622;
   --mh-bt-status-on-dot: #c17d22;
   --mh-surface-control-muted: var(--mh-surface-muted);
-  --mh-bt-status-off-ink: #8b8f94;
-  --mh-bt-status-off-dot: #929292;
-  --mh-bt-section-title: #20262d;
+  --mh-bt-status-off-ink: var(--mh-text-faint);
+  --mh-bt-status-off-dot: var(--mh-text-faint);
+  --mh-bt-section-title: var(--mh-text-strong);
 
   --mh-bt-chip-bg: #edf1f5;
-  --mh-bt-chip-ink: #536576;
+  --mh-bt-chip-ink: var(--mh-text-muted);
   --mh-bt-scope-bg: #edf5f1;
   --mh-bt-scope-ink: #28785f;
   --mh-bt-dialog-line: #dbe1e8;
-  --mh-bt-dialog-ink: #354253;
+  --mh-bt-dialog-ink: var(--mh-text);
   --mh-bt-dialog-scrim: rgba(23, 34, 50, 0.4);
   --mh-surface-warning-icon: #fef3c7;
   --mh-ink-warning-icon: var(--mh-warning);
-  --mh-bt-confirm-copy: #737e90;
+  --mh-bt-confirm-copy: var(--mh-text-muted);
   --mh-bt-confirm-btn-line: #dce2e9;
-  --mh-bt-pag-ink: #6c7785;
+  --mh-bt-pag-ink: var(--mh-text-muted);
   /* Field-mapping library shared view — Report Context, Metric Dictionary,
      Analytical Model, Email Reports (field-library.js / field-components.css /
      ai-interpreter-overview.css / library.css). Effective values probed from
      the rendered type pages; the toolbar/search/filter chrome reuses the
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
-  --mh-ink-empty: #8f9aa5;
-  --mh-ink-empty-report: #778391;
+  --mh-ink-empty: var(--mh-text-faint);
+  --mh-ink-empty-report: var(--mh-text-muted);
   --mh-line-empty: #d9e1e8;
   --mh-line-card-warm: #e6e2db;
   --mh-line-card-active: #d69b3d;
@@ -541,12 +541,12 @@
   --mh-line-card-hover-warm: #d8a24f;
   --mh-shadow-card-hover-warm: 0 10px 26px rgba(31, 41, 55, 0.08);
   --mh-line-domain-warm: rgba(183, 122, 39, 0.28);
-  --mh-ink-action-disabled: #aeb7c1;
+  --mh-ink-action-disabled: var(--mh-text-faint);
   --mh-surface-recipient: #f4f1eb;
-  --mh-ink-recipient: #2d2b29;
-  --mh-ink-meta-label: #697789;
-  --mh-ink-state: #25313d;
-  --mh-ink-description: #6b7787;
+  --mh-ink-recipient: var(--mh-text-strong);
+  --mh-ink-meta-label: var(--mh-text-muted);
+  --mh-ink-state: var(--mh-text);
+  --mh-ink-description: var(--mh-text-muted);
   --mh-line-thumbnail: #dfe5ec;
   --mh-line-overview: #e6eaf0;
   --mh-surface-edit: #fff8ec;
@@ -558,16 +558,16 @@
   --mh-line-scenario-hover: rgba(183, 122, 39, 0.5);
   --mh-line-scenario-focus: #b67a27;
   --mh-line-secondary-button: #d7dee5;
-  --mh-ink-secondary-button: #303d4c;
+  --mh-ink-secondary-button: var(--mh-text);
   --mh-surface-primary-button: #f4c766;
   --mh-line-primary-button: #d6a447;
-  --mh-ink-primary-button: #1c2630;
+  --mh-ink-primary-button: var(--mh-text-strong);
   --mh-surface-primary-button-hover: #ecc05c;
   --mh-line-primary-button-hover: #bd8624;
-  --mh-ink-dialog-title: #243143;
-  --mh-ink-dialog-label: #5a6778;
+  --mh-ink-dialog-title: var(--mh-text);
+  --mh-ink-dialog-label: var(--mh-text-muted);
   --mh-line-dialog-input: #cfd9e5;
-  --mh-ink-dialog-input: #2b394a;
+  --mh-ink-dialog-input: var(--mh-text);
   --mh-line-dialog-input-focus: #c99a4a;
   --mh-line-dialog-header: #e8edf3;
   --mh-line-dialog-close: #d8e0ea;
@@ -591,15 +591,15 @@
   --mh-indicator-like: #f59e0b;
   --mh-surface-status-gray: #f5f5f5;
   --mh-ink-status-gray: #616161;
-  --mh-ink-control-deep: #3f4c55;
-  --mh-ink-row-title: #1d252b;
-  --mh-ink-row-primary: #1f282f;
-  --mh-ink-empty-strong: #202930;
-  --mh-ink-empty-muted: #64717a;
+  --mh-ink-control-deep: var(--mh-text);
+  --mh-ink-row-title: var(--mh-text-strong);
+  --mh-ink-row-primary: var(--mh-text-strong);
+  --mh-ink-empty-strong: var(--mh-text-strong);
+  --mh-ink-empty-muted: var(--mh-text-muted);
   --mh-surface-gold-pale: var(--mh-accent-wash);
   --mh-surface-hover-neutral: #f5f7f8;
-  --mh-ink-filter-label: #74808a;
-  --mh-ink-navigation: #60666d;
+  --mh-ink-filter-label: var(--mh-text-muted);
+  --mh-ink-navigation: var(--mh-text-muted);
   --mh-scrim-soft-cool: rgba(24, 32, 39, 0.28);
   --mh-surface-gold-hover: #ffeeb3;
   --mh-surface-danger-hover: #fef2f2;
