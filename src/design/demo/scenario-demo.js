@@ -1,6 +1,7 @@
 import React from "react";
-import { knowledgeActions, knowledgeStatus } from "./knowledge-actions.js";
-import { useKnowledgeDialog } from "./knowledge-dialog.js";
+import { governanceMessages, governedActions } from "../lib/governance.js";
+
+const TOAST_MS = 3000;
 
 /**
  * Deterministic demo state for the Scenario Reporting library —
@@ -52,7 +53,8 @@ export function normalizeScenarioRecord(asset) {
     asset.workflow_status || asset.stage || asset.statusDisplay || asset.status,
     asset.published ? "Published" : "Draft",
   );
-  const enabled =
+  /* R3: a draft is always offline, whatever it stored. */
+  const enabled = workflow === "Draft" ? false :
     typeof asset.ai_interpreter_enabled === "boolean"
       ? asset.ai_interpreter_enabled
       : asset.status === "Enable" ||
@@ -73,7 +75,8 @@ export function normalizeScenarioRecord(asset) {
     updated: asset.updated || asset.update || "Not recorded",
     workflow_status: workflow,
     ai_interpreter_enabled: Boolean(enabled),
-    status: knowledgeStatus({ ...asset, ai_interpreter_enabled: Boolean(enabled) }),
+    status: enabled ? "Enable" : "Disable",
+    availability: enabled ? "enabled" : "disabled",
     stage: workflow,
     statusDisplay: workflow,
     structure_guidance: structureGuidance,
@@ -109,8 +112,21 @@ const DEFAULT_STRINGS = {
   createLabel: "Add Scenario reporting",
   filters: [
     { id: "status", label: "Status", allLabel: "All statuses", options: ["Enabled", "Disabled"].map((id) => ({ id, label: id })) },
+    /* D16: options are the workflow values the records carry. */
     { id: "process", label: "Process", allLabel: "All statuses", options: WORKFLOW_STATES.map((id) => ({ id, label: id })) },
   ],
+  clearFiltersLabel: "Clear filters",
+  countLabel: "Showing {shown} of {total} scenarios",
+  reportLabel: "Report",
+  creatorLabel: "Creator",
+  processLabel: "Process",
+  disabledToast: "Disabled successfully",
+  deletedToast: "Deleted successfully",
+  permissionDeniedTitle: "Permission denied",
+  alreadyDisabledTitle: "Knowledge already disabled",
+  offlineFirstTitle: "Please take the knowledge offline first",
+  offlineFirstConfirm: "Go Offline",
+  closeLabel: "Close",
   empty: "No matching records",
   recordsLabel: "records",
   rowsPerPage: "Rows per page",
@@ -162,17 +178,23 @@ function useSynced(value) {
  * @param {string|object|null} [props.detail] record id (or record) open in the drawer
  * @param {object} [props.dialog] seeded dialog `{ kind, record }` — kinds:
  *   `"disable-first"`, `"delete-confirm"`, `"disable-confirm"`
- * @param {(href: string) => void} [props.onNavigate] create/edit/report links
- * @param {(record: object) => void} [props.onOpen] / [props.onCloseDetail]
- * @param {(event: { action: string, record: object }) => void} [props.onAction]
- * @param {(dialog: object) => void} [props.onDialogConfirm] / [props.onDialogCancel]
- * @param {(value: string) => void} [props.onQueryChange]
+ * @param {(event: { href: string, id: string }) => void} [props.onNavigate] edit target
+ * @param {(event: { id: string }) => void} [props.onOpen]
+ * @param {(event: { reason: string }) => void} [props.onCloseDetail]
+ * @param {(event: { action: string, id: string, blocked: boolean, reason: string|null }) => void} [props.onAction]
+ * @param {(event: { confirmed: true }) => void} [props.onDialogConfirm]
+ * @param {(event: { reason: string }) => void} [props.onDialogCancel]
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(event: { id: string, value: string }) => void} [props.onFilterChange]
- * @param {(page: number) => void} [props.onPage] / [props.onPageSize]
- * @param {() => void} [props.onCreate]
+ * @param {(event: { reason: string }) => void} [props.onClearFilters]
+ * @param {(event: { page: number }) => void} [props.onPage]
+ * @param {(event: { pageSize: number }) => void} [props.onPageSize]
+ * @param {(event: { href: string }) => void} [props.onCreate]
  */
 export function useScenarioDemo(props = {}) {
   const strings = { ...DEFAULT_STRINGS, ...(props.strings || {}) };
+  const tooltips = { ...governanceMessages, permission: strings.permissionTitle, "already-disabled": strings.alreadyDisabled, ...(strings.tooltips || {}) };
+  const actionLabels = { edit: strings.editLabel, delete: strings.deleteLabel, disable: strings.disableLabel };
   const pageSizes = props.pageSizes || [5, 10, 20];
   const currentUser = props.currentUser || "Current User";
   const all = React.useMemo(() => props.active === false ? [] : (props.records || []).map(normalizeScenarioRecord), [props.records, props.active]);
@@ -186,6 +208,18 @@ export function useScenarioDemo(props = {}) {
   );
   const [records, setRecords] = React.useState(null);
   const list = records || all;
+  /* { kind: "info"|"disable-first"|"disable"|"delete", record?, then?, title?, message? }.
+     Stories seed `{ kind: "disable-confirm" | "delete-confirm" | "disable-first", record: { id } }`. */
+  const [pending, setPending] = React.useState(() => {
+    const seed = props.dialog;
+    const record = seed && all.find((item) => item.id === seed.record?.id);
+    if (!record) return null;
+    const kind = { "disable-confirm": "disable", "delete-confirm": "delete" }[seed.kind] || seed.kind;
+    return { kind, record, then: seed.kind === "disable-first" ? "edit" : undefined };
+  });
+  const [toast, setToast] = React.useState("");
+  const toastTimer = React.useRef(null);
+  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
 
   const statusPick = props.active === false ? undefined : selected.status;
   const processPick = props.active === false ? undefined : selected.process;
@@ -193,54 +227,70 @@ export function useScenarioDemo(props = {}) {
     if (props.active !== false) setPage(1);
   }, [props.active, query, statusPick, processPick, pageSize, setPage]);
 
-  const patch = (id, next) =>
-    setRecords((prev) => (prev || all).map((item) => (item.id === id ? { ...item, ...next } : item)));
-
-  /* Seeded shape is light: `{ kind, record: { id } }` resolves to the
-     normalized record, matching how stories seed the dialog. */
-  const management = useKnowledgeDialog({
-    seed: props.dialog,
-    resolveSeed: (seedDialog) => all.find((item) => item.id === seedDialog.record?.id),
-    buildDialog: (kind, record) => ({
-      kind, record,
-      purpose: kind === "delete-confirm" ? "danger" : "confirm",
-      title: strings.confirmTitle,
-      message: kind === "delete-confirm" ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
-      confirmLabel: kind === "delete-confirm" ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
-      cancelLabel: strings.cancelLabel,
-    }),
-    onDisable: (record) => patch(record.id, { ai_interpreter_enabled: false, status: "Disable" }),
-    onDelete: (record) => {
-      setRecords((prev) => (prev || all).filter((item) => item.id !== record.id));
-      if (detailId === record.id) {
-        setDetailId(null);
-        props.onCloseDetail?.();
-      }
-    },
-    onEdit: (record) => props.onNavigate?.(editScenarioHref(record)),
-    onConfirm: (_event, pending) => props.onDialogConfirm?.({
-      ...pending, ...({ title: strings.confirmTitle }),
-    }),
-    onCancel: (_event, pending) => props.onDialogCancel?.(pending),
-  });
-  const actionPolicy = { currentUser, strings: { draftCannotDisable: false,
-    actions: { edit: strings.editLabel, delete: strings.deleteLabel, disable: strings.disableLabel },
-    tooltips: {
-      permission: strings.permissionTitle,
-      alreadyDisabled: strings.alreadyDisabled,
-      offlineFirst: strings.disableFirstTitle,
-    },
-  } };
-  const act = (action, record) => {
-    props.onAction?.({ action, record });
-    management.request(action, record, actionPolicy);
-  };
-
   if (props.active === false) return null;
 
-  const isOwn = (item) => (item.creator || item.owner) === currentUser;
+  const showToast = (message) => {
+    clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
+  };
+  const patch = (id, next) =>
+    setRecords((prev) => (prev || all).map((item) => (item.id === id ? { ...item, ...next } : item)));
+  const disable = (record) => {
+    patch(record.id, { ai_interpreter_enabled: false, status: "Disable", availability: "disabled" });
+    showToast(strings.disabledToast);
+  };
+  const edit = (record) => props.onNavigate?.({ href: editScenarioHref(record), id: record.id });
+
+  /* Pattern B6-B8; scenario-reports.js:191-214,1015-1080 is the source flow. */
+  const act = (event) => {
+    const record = list.find((item) => item.id === event.id);
+    if (!record) return;
+    props.onAction?.(event);
+    if (event.reason === "permission") setPending({ kind: "info", title: strings.permissionDeniedTitle, message: tooltips.permission });
+    else if (event.reason === "already-disabled") setPending({ kind: "info", title: strings.alreadyDisabledTitle, message: tooltips["already-disabled"] });
+    else if (event.reason === "disable-first") setPending({ kind: "disable-first", record, then: event.action });
+    else if (event.action === "edit") edit(record);
+    else setPending({ kind: event.action, record });
+  };
+  const dialogFor = (state) => {
+    if (!state) return null;
+    if (state.kind === "info") return { purpose: "info", title: state.title, message: state.message, closeLabel: strings.closeLabel };
+    if (state.kind === "disable-first") {
+      return { purpose: "warning", title: strings.offlineFirstTitle, message: governanceMessages.dialogs["disable-first"].message, confirmLabel: strings.offlineFirstConfirm, cancelLabel: strings.cancelLabel };
+    }
+    const isDelete = state.kind === "delete";
+    return {
+      purpose: isDelete ? "danger" : "warning",
+      title: strings.confirmTitle,
+      message: isDelete ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
+      confirmLabel: isDelete ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
+      cancelLabel: strings.cancelLabel,
+    };
+  };
+  const confirm = (event) => {
+    const state = pending;
+    setPending(null);
+    props.onDialogConfirm?.(event);
+    if (!state || state.kind === "info") return;
+    if (state.kind === "disable-first") {
+      disable(state.record);
+      if (state.then === "edit") edit(state.record);
+      if (state.then === "delete") setPending({ kind: "delete", record: state.record });
+      return;
+    }
+    if (state.kind === "disable") disable(state.record);
+    if (state.kind === "delete") {
+      setRecords((prev) => (prev || all).filter((item) => item.id !== state.record.id));
+      if (detailId === state.record.id) setDetailId(null);
+      showToast(strings.deletedToast);
+    }
+  };
+
+  const isOwn = (item) => item.creator === currentUser;
   const queryText = query.trim().toLowerCase();
   const filtered = list.filter((item) => {
+    /* R3: drafts are visible only to their creator. */
     if (item.workflow_status === "Draft" && !isOwn(item)) return false;
     const matchesQuery =
       !queryText ||
@@ -264,62 +314,63 @@ export function useScenarioDemo(props = {}) {
   });
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
-  const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const withActions = (record) => ({ ...record, actions: governedActions(record, { currentUser }) });
+  const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(withActions);
   const detailRecord = list.find((record) => record.id === detailId) || null;
 
-  const openDetail = (record) => {
-    setDetailId(record.id);
-    props.onOpen?.(record);
-  };
-  const closeDetail = () => {
-    setDetailId(null);
-    props.onCloseDetail?.();
-  };
-
-  /** Card/drawer action buttons — identical gating to the original. */
-  const actionsFor = (record) => knowledgeActions(record, actionPolicy);
-
   return {
-    strings,
+    strings: { ...strings, actions: actionLabels, tooltips },
     filters: strings.filters,
     filterValues: selected,
     query,
-    onQueryChange: (value) => {
-      setQuery(typeof value === "string" ? value : value?.value || "");
-      props.onQueryChange?.(value);
+    onQueryChange: (event) => {
+      setQuery(event.value);
+      props.onQueryChange?.(event);
     },
     onFilterChange: (event) => {
       setSelected((prev) => ({ ...prev, [event.id]: event.value }));
       props.onFilterChange?.(event);
     },
+    onClearFilters: (event) => {
+      setQuery("");
+      setSelected(EMPTY_SELECTED);
+      props.onClearFilters?.(event);
+    },
     records: visible,
     total: filtered.length,
     totalAll: list.length,
     page: currentPage,
-    totalPages,
-    onPage: (next) => {
-      setPage(next);
-      props.onPage?.(next);
+    onPage: (event) => {
+      setPage(event.page);
+      props.onPage?.(event);
     },
     pageSize,
     pageSizeOptions: pageSizes,
-    onPageSize: (next) => {
-      setPageSize(Number(next));
-      props.onPageSize?.(next);
+    onPageSize: (event) => {
+      setPageSize(Number(event.pageSize));
+      props.onPageSize?.(event);
     },
-    actionsFor,
     onAction: act,
-    detail: detailRecord,
-    detailEnabled: detailRecord ? Boolean(detailRecord.ai_interpreter_enabled) : false,
+    detail: detailRecord ? withActions(detailRecord) : null,
     showWorkflowNote: detailRecord
       ? !detailRecord.ai_interpreter_enabled && detailRecord.workflow_status !== "Published"
       : false,
-    onOpen: openDetail,
-    onCloseDetail: closeDetail,
-    dialog: management.dialog,
-    onDialogConfirm: management.confirm,
-    onDialogCancel: management.cancel,
+    onOpen: (event) => {
+      setDetailId(event.id);
+      props.onOpen?.(event);
+    },
+    onCloseDetail: (event) => {
+      setDetailId(null);
+      props.onCloseDetail?.(event);
+    },
+    dialog: dialogFor(pending),
+    toast,
+    onDialogConfirm: confirm,
+    onDialogCancel: (event) => {
+      setPending(null);
+      props.onDialogCancel?.(event);
+    },
     createHref: props.createHref || "/assets/pages/knowledge-create.html?type=Scenario%20Reporting",
-    onCreate: props.onCreate,
+    onCreate: (event) => props.onCreate?.(event),
   };
 }

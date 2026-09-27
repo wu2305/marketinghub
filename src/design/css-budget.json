@@ -162,9 +162,7 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/interpreter/ScenarioReportsView",
     "features/interpreter/PrinciplesView",
-    "features/interpreter/KnowledgeActions",
     "features/review-center/ReviewQueue",
     "features/feedback-quality/FeedbackList",
     "features/scenario-library/SkillLibrary",

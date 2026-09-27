@@ -412,19 +412,14 @@ export default [
     },
   },
   {
-    /* scenario-reports.js #scenarioReportOverview — the toolbar is normalized
-       to the unified look (300px search first via order:-1, two 180px boxed
-       selects, gold create pushed right) and the card grid to 3 columns. */
+    /* scenario-reports.js #scenarioReportOverview — the toolbar and source
+       cards are composed from the governed library pattern; both availability
+       and workflow axes remain visible. */
     id: "p07-interpreter-scenario",
     layout: [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".scenario-report-toolbar", story: ".mh-srview__tools", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".scenario-report-toolbar .overview-global-search", story: ".mh-srview__search", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".scenario-report-card", story: ".mh-srview__card", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".scenario-report-card .bt-flow-status", story: ".mh-srview__card .mh-srview__flow", props: ["x", "y", "height"], tol: 8 },
-      { orig: ".scenario-report-pagination", story: ".mh-srview__pagination", props: ["x", "y"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
@@ -441,24 +436,19 @@ export default [
     story: {
       id: "pages--interpreter-scenario-reporting",
       expect: [
-        { sel: ".mh-srview__card", count: 3, text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__pills .mh-badge--knowledge.mh-badge--neutral", count: 2, text: "Disabled" },
-        { sel: ".mh-srview__card .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 9 },
-        { sel: ".mh-srview__countline", state: "hidden" },
-        { sel: ".mh-srview__pagination", text: "3 records" },
-        { sel: ".mh-srview__filter", count: 2 },
+        { sel: ".mh-srview .mh-library-item", count: 3, text: "Channel Performance Analysis" },
+        { sel: ".mh-srview .mh-library-item .mh-badge--neutral", count: 2, text: "Disabled" },
+        { sel: ".mh-srview .mh-item-actions__button", count: 9 },
+        { sel: ".mh-library-toolbar__count", text: "Showing 3 of 3 scenarios" },
+        { sel: ".mh-pagination--compact", text: "3 records" },
+        { sel: ".mh-library-toolbar__facet", count: 2 },
       ],
     },
   },
   {
-    /* The card click opens the shared #knowledgeDetail drawer: label + title +
-       availability/workflow pills, sectioned body, icon-action footer. The
-       drawer sits below the 56px header (unlike the fm overlay). */
+    /* The card title opens the shared #knowledgeDetail drawer: label + title
+       availability/workflow pills, sectioned body and icon-action footer. */
     id: "p07-scenario-report-drawer",
-    layout: [
-      { orig: "#knowledgeDetail", story: ".mh-srview__drawer", props: ["x", "y", "width"], tol: 8 },
-      { orig: "#knowledgeDetail .detail-drawer-head", story: ".mh-srview__drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
       actions: [{ waitMs: 800 }, { click: ".scenario-report-card[data-sr-id='scenario-channel-performance'] h3" }, { wait: "#knowledgeDetail.open" }],
@@ -474,15 +464,15 @@ export default [
     },
     story: {
       id: "pages--interpreter-scenario-reporting",
-      actions: [{ click: ".mh-srview__card[data-id='scenario-channel-performance'] h3" }, { wait: ".mh-srview__drawer" }],
+      actions: [{ click: ".mh-srview .mh-library-item__title button" }, { wait: ".mh-srview__drawer" }],
       expect: [
         { sel: ".mh-srview__drawer .mh-modal__eyebrow", text: "SCENARIO REPORTING" },
         { sel: ".mh-srview__drawer .mh-modal__title", text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--detail", text: "Disabled" },
-        { sel: ".mh-srview__drawer .mh-srview__flow--head", text: "Building" },
-        { sel: ".mh-srview__drawer .mh-srview__detail-link", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--neutral", text: "Disabled" },
+        { sel: ".mh-srview__drawer .mh-badge--info", text: "Building" },
+        { sel: ".mh-srview__drawer .mh-srview__report", text: "Invest City Strategy Analysis" },
         { sel: ".mh-srview__drawer .mh-srview__note", text: "AI Interpreter is enabled automatically" },
-        { sel: ".mh-srview__drawer .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 3 },
+        { sel: ".mh-srview__drawer .mh-item-actions__button", count: 3 },
       ],
     },
   },

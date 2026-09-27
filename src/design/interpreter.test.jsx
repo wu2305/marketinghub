@@ -83,8 +83,8 @@ describe("AI Interpreter type contract", () => {
       type.id === "Scenario Reporting" ? { ...type, title: "Renamed Scenarios" } : type,
     );
     renderPage({ types: renamed, activeType: "Scenario Reporting" });
-    /* scenario-reports.js swaps in its own card grid — assert on the cards. */
-    const titles = [...document.querySelectorAll(".mh-srview__card h3")].map((el) => el.textContent);
+    /* scenario-reports.js swaps in its own governed-library cards — assert on the titles. */
+    const titles = [...document.querySelectorAll(".mh-srview .mh-library-item__title button")].map((el) => el.textContent);
     expect(titles.some((text) => text.includes("Channel Performance Analysis"))).toBe(true);
     expect(titles.every((text) => !text.includes("GMV (Gross Merchandise Value)"))).toBe(true);
     expect(screen.getAllByText("Renamed Scenarios").length).toBeGreaterThan(0);
@@ -196,9 +196,9 @@ describe("AI Interpreter type contract", () => {
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
       }
-      // scenario-reports.js swaps in #scenarioReportOverview's two-column cards.
+      // scenario-reports.js swaps in #scenarioReportOverview's governed-library cards.
       if (type.view === "scenario-reports") {
-        const cards = document.querySelectorAll(".mh-srview__card");
+        const cards = document.querySelectorAll(".mh-srview .mh-library-item");
         expect(cards.length).toBe(INTERPRETER.scenarioReports.records.length);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
@@ -280,7 +280,7 @@ describe("AI Interpreter type contract", () => {
 
   it("filters scenario records by process stage and AI availability independently", () => {
     render(<Harness activeType="Scenario Reporting" />);
-    const cardTitles = () => [...document.querySelectorAll(".mh-srview__card h3")].map((el) => el.textContent);
+    const cardTitles = () => [...document.querySelectorAll(".mh-srview .mh-library-item__title button")].map((el) => el.textContent);
     const process = screen.getByLabelText("Process");
     fireEvent.change(process, { target: { value: "Queued" } });
     let titles = cardTitles();
