@@ -48,10 +48,11 @@ function buildList(records, drafts, currentUser) {
      draft before deriving its stage (business-term-library.js:85-89), so a
      stage-less draft of another user leaked through; normalising first
      applies the rule to every draft (dispositions BT-04). */
-  const visibleDrafts = (drafts || [])
-    .map((item) => normalizeDraft(item, currentUser))
-    .filter((item) => item.stage !== "Draft" || item.creator === currentUser);
-  return [...visibleDrafts, ...(records || []).map(cloneRecord)];
+  const normalized = [
+    ...(drafts || []).map((item) => normalizeDraft(item, currentUser)),
+    ...(records || []).map(cloneRecord),
+  ];
+  return normalized.filter((item) => item.stage !== "Draft" || (item.created_by ?? item.creator) === currentUser);
 }
 
 const TOAST_MS = 3000;

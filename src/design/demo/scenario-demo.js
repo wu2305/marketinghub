@@ -220,6 +220,18 @@ export function useScenarioDemo(props = {}) {
   const [toast, setToast] = React.useState("");
   const toastTimer = React.useRef(null);
   React.useEffect(() => () => clearTimeout(toastTimer.current), []);
+  // Reset local mutations when the host supplies a different collection or identity.
+  // Ordinary active/type switches keep the same seed and preserve local changes.
+  const seed = React.useRef({ records: props.records, currentUser });
+  React.useEffect(() => {
+    if (seed.current.records === props.records && seed.current.currentUser === currentUser) return;
+    seed.current = { records: props.records, currentUser };
+    setRecords(null);
+    setPending(null);
+    setDetailId(null);
+    clearTimeout(toastTimer.current);
+    setToast("");
+  }, [props.records, currentUser, setDetailId]);
 
   const statusPick = props.active === false ? undefined : selected.status;
   const processPick = props.active === false ? undefined : selected.process;
@@ -239,6 +251,7 @@ export function useScenarioDemo(props = {}) {
   const disable = (record) => {
     patch(record.id, { ai_interpreter_enabled: false, status: "Disable", availability: "disabled" });
     showToast(strings.disabledToast);
+    return { ...record, ai_interpreter_enabled: false, status: "Disable", availability: "disabled" };
   };
   const edit = (record) => props.onNavigate?.({ href: editScenarioHref(record), id: record.id });
 
@@ -274,9 +287,9 @@ export function useScenarioDemo(props = {}) {
     props.onDialogConfirm?.(event);
     if (!state || state.kind === "info") return;
     if (state.kind === "disable-first") {
-      disable(state.record);
-      if (state.then === "edit") edit(state.record);
-      if (state.then === "delete") setPending({ kind: "delete", record: state.record });
+      const disabledRecord = disable(state.record);
+      if (state.then === "edit") edit(disabledRecord);
+      if (state.then === "delete") setPending({ kind: "delete", record: disabledRecord });
       return;
     }
     if (state.kind === "disable") disable(state.record);

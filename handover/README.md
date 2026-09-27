@@ -487,6 +487,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #41审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同步#38窄屏空态完整宽度修复；同步#40草稿可见性修复；availability同步原已继承7b修复。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr41-fix-*`。 | Codex（GPT-6） |
+| 2026-09-28 | PR #41审核修复：先停用再编辑向URL传停用后记录，保留Published处理阶段；替换records/currentUser清理本地修改、旧确认框和toast，普通active切换保留状态。证据 `/tmp/mh-pr41-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP7b+7c：Field Library 四类（Report Context、Metric Dictionary、Analytical Model、Email Reports）改用通用库模式；原始表格为死代码，四类均为卡片（模式与指南已更正，表格试点改为 7f）。新增共享 `ChipList`（同义词/引用指标/收件人/数据模型标签：前 3 个 + “+N”），Business Terms 同步改用。AM 草稿按 R3 视为停用；受阻动作可点击并解释，先下线后继续编辑/删除，引用阻止删除保留，成功提示（D03）；ER 卡片显示可用性；RC 描述编辑与抽屉页脚改用 `Button`。试点复核调整：工具栏搜索上限 320px，计数移到工具栏与列表之间（原始隐藏计数行的位置）。视图 CSS 1054→239 行；删除 54 个失去引用的视图命名 token；处置 FL-01…FL-18。p07 Field Library 场景 9/9 通过；移除 13 个内部几何配对。 | Claude |
 | 2026-09-27 | Phase 2 WP7d：Scenario Reports 改用通用库卡片模式；`useScenarioDemo` 接入 `lib/governance.js`，统一可用性/流程筛选、草稿可见性、受阻动作说明、先下线后继续操作、确认与成功 Toast（D03/D04/D05/D06/D16）。移除旧 `KnowledgeActions` 三变体及 `knowledge-actions`/`knowledge-dialog` 演示适配器，`pendingMigration` 移出 ScenarioReportsView 与 KnowledgeActions；处置 SR-01…SR-15，保留页面故事与抽屉场景；移除抽屉内部 2 个依赖 56px 壳偏移的几何对照。 | Claude |
