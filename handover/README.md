@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #36审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr36-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP3a 更正：`--mh-font-size-3xl` 28→24px（22–34px 簇以 22/24px 为主；28px 使原 22–23px 的弹窗/抽屉标题变大 5–6px，被 Report Context 抽屉场景发现）。foundations §2.2、§3.2 与附录更正同步。 | Claude |
 | 2026-09-27 | Phase 2 WP3c：其余 `features/*`（cockpit、campaign、home、self-service、scenario-*、knowledge-*、metric-dictionary、personal-memory 等 24 个 CSS）：299 处字号、153 处字重、175 处圆角、4 处阴影、1 处颜色改为 token（含一处注释内规则手工改），目录内原始值清零。棘轮更新为 {"fontSize": 22, "fontWeight": 5, "radius": 11, "shadow": 5, "color": 10}。 | Claude |
