@@ -487,6 +487,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | PR #32审核修复：三组hover不再与静止态同色，沿用既有角色混色并登记Appendix A；无新增token/故事/接口。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订现有PR。验证证据 `/tmp/mh-pr32-fix-*`；人工视觉待审。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP2c：142 个强调/状态/数据旧 token 改指向角色或 `color-mix()` 派生（透明原值用 `transparent` 混合保持透明度）；更正 12 条写入附录 A：StatusBadge 警告色调及待审/审核中/构建中徽章改用 `--mh-warning`（D3，与品牌金区分），Copilot 警示点同；金色按钮悬停/禁用改为可区分的派生色；创建按钮保留 accent-fill 渐变端点。`maxDuplicateValues` 21→34。 | Claude |
 | 2026-09-27 | Phase 2 WP2b：98 个表面/遮罩/线条旧 token 改为 `var(--mh-surface*|scrim|line*)`；逐行复核后更正 3 条（写入附录 A“Corrections”）：主按钮悬停色改为 `color-mix(inverse 85%)` 以保留悬停反馈，启动器边框改 `--mh-line-inverse` 以免与深色底同色，实时图表柱改 `--mh-line-strong` 以免淡到不可读。遮罩统一为 0.3 透明度（原 0.28–0.55）。`maxDuplicateValues` 17→21。 | Claude |
