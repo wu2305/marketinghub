@@ -4,9 +4,11 @@
  *
  * Serves the repo root (original pages) and storybook-static/ (stories) with sirv,
  * loads each pair in isolated Playwright Chromium contexts, runs interactions and
- * assertions, screenshots serially, and writes a report to --out (default
+ * assertions, screenshots, and writes a report to --out (default
  * /tmp/mh-visual): index.html side-by-side, results.json machine record,
  * reviews.json human verdicts (preserved across runs into the same --out).
+ * Scenarios run --jobs at a time (default: up to 4, or MH_VC_JOBS), each side
+ * in its own browser context; results and log lines keep scenario order.
  *
  * Evidence discipline:
  * - Requires a build stamp (storybook-static/mh-build-stamp.json, written by
@@ -22,13 +24,14 @@
  *
  * Usage:
  *   npm run build-storybook   # first, so storybook-static exists and is stamped
- *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--verbose]
- *   node scripts/visual-check.mjs --negative [--out DIR]
+ *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--jobs N] [--verbose]
+ *   node scripts/visual-check.mjs --negative [--out DIR] [--jobs N]
  *   node scripts/visual-check.mjs --review <out> <scenarioId> pass|fail "note"
  */
 import http from "node:http";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { availableParallelism } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
@@ -61,6 +64,7 @@ const OUT = flag("out") || "/tmp/mh-visual";
 const ONLY = flag("only");
 const NEGATIVE = args.includes("--negative");
 const VERBOSE = args.includes("--verbose");
+const JOBS = Math.max(1, Number(flag("jobs") || process.env.MH_VC_JOBS || Math.min(4, availableParallelism())));
 const REVIEW_AT = args.indexOf("--review");
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
@@ -230,6 +234,47 @@ async function checkStoryHealth(page, res, phase) {
 }
 
 /**
+ * Wait for finite CSS animations and transitions (drawers sliding in, fades)
+ * to finish, so eval geometry checks and expects never see a mid-motion
+ * frame. Infinite animations (spinners, pulses) are ignored.
+ */
+async function animationsDone(page) {
+  await page
+    .waitForFunction(
+      () =>
+        document.getAnimations().every((a) => a.playState !== "running" || a.effect?.getTiming().iterations === Infinity),
+      null,
+      { timeout: 5000 },
+    )
+    .catch(() => {});
+}
+
+/**
+ * Wait until the page is ready to photograph: an explicit `settleMs` is kept
+ * as a fixed wait (scenarios that need time-based UI); otherwise wait for
+ * fonts and in-document images, two animation frames, and a short grace
+ * period so late console errors still land in this side's record.
+ */
+async function settle(page, settleMs) {
+  if (settleMs !== undefined) {
+    await page.waitForTimeout(settleMs);
+    return;
+  }
+  await page
+    .waitForFunction(
+      () =>
+        document.fonts.status === "loaded" &&
+        [...document.images].every((img) => img.complete),
+      null,
+      { timeout: 5000 },
+    )
+    .catch(() => {});
+  await animationsDone(page);
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.waitForTimeout(150);
+}
+
+/**
  * Run one side of a scenario. Errors are tagged with the phase in which they
  * occurred: [load] covers navigation, pageerrors, request failures and console
  * errors up to the first action (plus the post-load Storybook health check);
@@ -249,7 +294,18 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
   }
   const page = await context.newPage();
   page.on("pageerror", (e) => err(`pageerror: ${e.message}`));
-  page.on("requestfailed", (r) => err(`requestfailed: ${r.url()} ${r.failure()?.errorText || ""}`));
+  // A request aborted because its document navigated away (the original
+  // pages normalise their URL with location.replace while <head> still loads)
+  // is only an error if the resource never loads afterwards; whether it was
+  // still in flight at the redirect is timing, so it is judged after the run.
+  const aborted = [];
+  const finished = new Set();
+  page.on("requestfinished", (r) => finished.add(r.url()));
+  page.on("requestfailed", (r) => {
+    const text = r.failure()?.errorText || "";
+    if (text === "net::ERR_ABORTED") aborted.push({ url: r.url(), phase });
+    else err(`requestfailed: ${r.url()} ${text}`);
+  });
   page.on("response", (r) => {
     if (r.status() >= 400) err(`HTTP ${r.status()} ${r.url()}`);
   });
@@ -296,7 +352,10 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
           });
         else if (step.wait) await page.waitForSelector(step.wait, { state: "visible", timeout: 8000 });
         else if (step.waitMs) await page.waitForTimeout(step.waitMs);
-        else if (step.eval) await page.evaluate(step.eval);
+        else if (step.eval) {
+          await animationsDone(page);
+          await page.evaluate(step.eval);
+        }
       } catch (e) {
         err(`action ${describeStep(step)} failed: ${e.message.split("\n")[0]}`);
         break;
@@ -304,13 +363,19 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
     }
     if (side === "story") await checkStoryHealth(page, res, "behavior");
 
+    await animationsDone(page);
     for (const exp of spec.expect || []) {
       const state = exp.state || "visible";
       const countOnly = exp.count !== undefined && (state === "hidden" || state === "detached");
       try {
         if (!countOnly) await page.waitForSelector(exp.sel, { state, timeout: 8000 });
         if (exp.text) {
-          const t = await page.locator(exp.sel).first().innerText();
+          // Poll: a story may still be applying its state after first paint.
+          let t = "";
+          for (const deadline = Date.now() + 8000; ; await page.waitForTimeout(100)) {
+            t = await page.locator(exp.sel).first().innerText();
+            if (t.includes(exp.text) || Date.now() > deadline) break;
+          }
           if (!t.includes(exp.text)) err(`expect text "${exp.text}" not found in ${exp.sel}`);
         }
         if (exp.count !== undefined) {
@@ -325,9 +390,11 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
         err(`expect selector not ${state}: ${exp.sel}`);
       }
     }
-    await page.waitForTimeout(spec.settleMs ?? 700);
+    await settle(page, spec.settleMs);
     const shotPath = path.join(OUT, `${name}.png`);
-    await page.screenshot({ path: shotPath, fullPage: Boolean(spec.fullPage) });
+    // Finite CSS animations/transitions jump to their end state, so the shot
+    // and the layout boxes below never catch a drawer or toast mid-motion.
+    await page.screenshot({ path: shotPath, fullPage: Boolean(spec.fullPage), animations: "disabled" });
     res.shot = `${name}.png`;
     res.shotHash = sha256(readFileSync(shotPath));
     for (const sel of layoutSels || []) {
@@ -337,6 +404,9 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
     err(`exception: ${e.message.split("\n")[0]}`);
   } finally {
     await context.close();
+  }
+  for (const a of aborted) {
+    if (!finished.has(a.url)) res.errors.push(`[${a.phase}] requestfailed: ${a.url} net::ERR_ABORTED`);
   }
   res.load = res.errors.every((e) => !e.startsWith("[load]")) ? "pass" : "fail";
   res.behavior = res.errors.every((e) => !e.startsWith("[behavior]")) ? "pass" : "fail";
@@ -457,7 +527,8 @@ const { head, dirtyPaths } = gitInfo();
 const entries = [];
 const allowancesUsed = [];
 
-for (const scenario of list) {
+async function runScenario(scenario) {
+  const lines = [];
   const viewport = scenario.viewport || BASELINE;
   const entry = {
     id: scenario.id,
@@ -481,18 +552,16 @@ for (const scenario of list) {
     entry.story.load = entry.story.behavior = "skipped";
     entry.original.errors = topErrors;
     entry.story.errors = [];
-    entries.push(entry);
-    console.log(`FAIL ${scenario.id}`);
-    for (const e of topErrors) console.log(`  ${e}`);
-    continue;
+    lines.push(`FAIL ${scenario.id}`, ...topErrors.map((e) => `  ${e}`));
+    return { entry, lines };
   }
 
   const origLayoutSels = (scenario.layout || []).map((l) => l.orig);
   const storyLayoutSels = (scenario.layout || []).map((l) => l.story);
-  const [orig, story] = [
-    await runSide(browser, `${scenario.id}-original`, scenario.original, entry.original.url, viewport, "original", scenario.id, origLayoutSels),
-    await runSide(browser, `${scenario.id}-story`, scenario.story, entry.story.url, viewport, "story", scenario.id, storyLayoutSels),
-  ];
+  const [orig, story] = await Promise.all([
+    runSide(browser, `${scenario.id}-original`, scenario.original, entry.original.url, viewport, "original", scenario.id, origLayoutSels),
+    runSide(browser, `${scenario.id}-story`, scenario.story, entry.story.url, viewport, "story", scenario.id, storyLayoutSels),
+  ]);
   entry.original = { ...entry.original, ...orig, storage: scenario.original.storage };
   entry.story = { ...entry.story, ...story };
   delete entry.original.boxes;
@@ -501,11 +570,30 @@ for (const scenario of list) {
   entry.layout = compareLayout(scenario, orig, story, layoutErrors);
   entry.story.errors.push(...layoutErrors);
   entry.machine = orig.errors.length === 0 && story.errors.length === 0 && layoutErrors.length === 0 ? "pass" : "fail";
-  entries.push(entry);
-  console.log(`${entry.machine === "pass" ? "PASS" : "FAIL"} ${scenario.id}${NEGATIVE ? ` (negative: expected fail)` : ""}`);
-  for (const e of [...orig.errors.map((x) => `  orig: ${x}`), ...story.errors.map((x) => `  story: ${x}`), ...layoutErrors.map((x) => `  ${x}`)]) console.log(e);
-  if (VERBOSE) for (const w of [...orig.warnings, ...story.warnings]) console.log(`  warn: ${w}`);
+  lines.push(`${entry.machine === "pass" ? "PASS" : "FAIL"} ${scenario.id}${NEGATIVE ? ` (negative: expected fail)` : ""}`);
+  lines.push(...orig.errors.map((x) => `  orig: ${x}`), ...story.errors.map((x) => `  story: ${x}`), ...layoutErrors.map((x) => `  ${x}`));
+  if (VERBOSE) lines.push(...[...orig.warnings, ...story.warnings].map((w) => `  warn: ${w}`));
+  return { entry, lines };
 }
+
+// Worker pool: JOBS scenarios in flight; entries and log lines are flushed in
+// scenario order so reports and logs read the same as a serial run.
+const done = new Array(list.length);
+let next = 0;
+let flushed = 0;
+async function worker() {
+  while (next < list.length) {
+    const i = next++;
+    done[i] = await runScenario(list[i]);
+    while (flushed < list.length && done[flushed]) {
+      entries.push(done[flushed].entry);
+      for (const line of done[flushed].lines) console.log(line);
+      flushed += 1;
+    }
+  }
+}
+await Promise.all(Array.from({ length: Math.min(JOBS, list.length) }, worker));
+
 
 // collect which console allowances actually fired
 for (const e of entries) {
