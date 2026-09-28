@@ -1,6 +1,6 @@
 {
   "maxRawHexColors": 0,
-  "maxTokenDefinitions": 487,
+  "maxTokenDefinitions": 483,
   "maxDuplicateValues": 35,
   "legacyPrefixExemptions": [
     "--mh-header",
@@ -162,7 +162,6 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/interpreter/PrinciplesView",
     "features/review-center/ReviewQueue",
     "features/feedback-quality/FeedbackList",
     "features/scenario-library/SkillLibrary",

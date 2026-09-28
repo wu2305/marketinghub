@@ -30,7 +30,7 @@ export default {
   args: { label: "Business terms", layout: "cards", items: records.map(toItem), columns, rows, empty },
   argTypes: {
     label: prop("string", { description: "Accessible name." }),
-    layout: enumProp(libraryLayouts, "cards", "Card grid or table.", "inline-radio"),
+    layout: enumProp(libraryLayouts, "cards", "Card grid, one card per row, or table.", "inline-radio"),
     items: prop("Array<LibraryItem props>", { description: "cards layout." }),
     columns: prop("Array<{ key, header }>", { description: "table layout." }),
     rows: prop("Array<{ id, ...cells }>", { description: "table layout." }),
@@ -42,6 +42,7 @@ export default {
 };
 
 export const Cards = {};
+export const List = { name: "List (one per row)", args: { layout: "list", label: "Principles" } };
 export const Table = { args: { layout: "table", label: "Analytical models" } };
 export const NoResults = { args: { items: [] } };
 export const TableNoResults = { name: "Table, no results", args: { layout: "table", rows: [] } };

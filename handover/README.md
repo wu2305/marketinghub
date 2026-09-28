@@ -11,12 +11,12 @@
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 491 stories + 92 docs；2026-09-28 `fix/workpack-css-budget`，基于 GitHub main 29c4762 的工作区构建；本次未改故事 |
-| 测试 | `npm test`：30 文件 276 条通过（2026-09-28，29c4762 + 本次修复）；日志 `/tmp/mh-workpack-tests.log` |
-| lint | `npm run lint`：0 errors / 0 warnings（2026-09-28，29c4762 + 本次修复）；日志 `/tmp/mh-workpack-lint.log` |
-| 构建验证 | 2026-09-28 `npm run build-storybook`、`build:host`、`build:lib` 均通过；host-check 30/30（`/tmp/mh-workpack-host`）；stamp head 29c4762 + 两个设计源文件修改，Storybook sourceHash `be7c7426103d`、host `858d11f3ff4c` |
+| 故事数 | 493 stories + 92 docs（index.json 585 条）；2026-09-28 WP7e（`claude/determined-brahmagupta-aajdlz`，基于 main f064184 + WP7e 工作区，sourceHash e7e81cdf71c7）；+2：LibraryItem Selected、LibraryList List |
+| 测试 | `npm test`：30 文件 278 条通过（2026-09-28，WP7e） |
+| lint | `npm run lint`：0 errors / 0 warnings（2026-09-28，WP7e） |
+| 构建验证 | 2026-09-28 WP7e：`build-storybook`、`build:host`、`build:lib` 均通过；host-check 30/30（`/tmp/mh-wp7e/host`）；字体探针 33 条，均为既有公式/代码等宽字体（`/tmp/mh-wp7e/font.log`）。本环境 Playwright 期望的浏览器版本未安装，改用预装 Chromium 1194（在 scratchpad 建符号链接并设 `PLAYWRIGHT_BROWSERS_PATH`；脚本未改） |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；最新main run 36370462815 在两条CSS-budget断言失败，本分支已本地修复，远端重跑结果见修复PR检查；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-28 本次 Home 7/7 机器通过（`/tmp/mh-workpack-visual`）；人工抽看1440px/390px默认态，产品结构可识别，既有基础层与响应式差异保留；其余人工pending。本次只删无消费者token，无新增视觉差异。上次全站：2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
+| 最近视觉对照 | 2026-09-28 WP7e 单列版（9cef3ca）：全站 505/505 机器通过（`/tmp/mh-wp7e/visual2`），负向 39/39 按预期失败（`/tmp/mh-wp7e/neg2`），host 30/30；Principles 单列由用户决定；设计师另做的详情抽屉（取代原地展开）尚未提交，待其版本到位后替换。人工审图 pending。2026-09-28 本次 Home 7/7 机器通过（`/tmp/mh-workpack-visual`）；人工抽看1440px/390px默认态，产品结构可识别，既有基础层与响应式差异保留；其余人工pending。本次只删无消费者token，无新增视觉差异。上次全站：2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
 | M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
 | DI | 设计意图提取 Phase 1：基础层、领域模型、奥卡姆基线（仅文档） | Phase 1 完成（用户已批准 D1–D5、A1–A5）；Phase 2 未开始 | 分支 `design-intent/phase1`；`handover/design-intent/{foundations,domain-model,occam-baseline}.md`；AGENTS §1/§3.3/§3.5/§4/§5 按 2026-09-27 用户决定改写 |
-| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4、WP2a（#42）已合入；WP2b #43 对抗性审核修复：补回hover反馈、反色边框与图表柱色，待修复版验收和用户合并 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
+| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP2a–2d（#30–#33，复核修复 #42/#43）、WP3a–3d、WP4、WP5、WP6、WP7a（卡片试点）、WP7b+7c、WP7d 已合入；WP7e（Principles + Data Model 域卡片）本分支 `claude/determined-brahmagupta-aajdlz` 待审；下一步 WP7f 表格试点（审核停点）；WP7g–7k、WP8 未开始 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -489,6 +489,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | Phase 2 复核 + WP7e（分支 `claude/determined-brahmagupta-aajdlz`，基于 main f064184）。复核（#28–#45 合并内容）：`lib/governance.js`、五个库模式组件、BT/FL/SR 三个演示 hook 的受阻动作→先下线→继续原操作→Toast 流程与 B6–B8 一致，未发现正确性缺陷；记录的跟进项：三个 hook 各自重复约 50 行相同的 act/dialogFor/confirm 逻辑（建议 WP8 或单独 PR 抽成一个 demo 层 helper）；WP7a/7b/7d 以“视图内部几何配对”为由删除 31 个 layout 对照（BT-22/FL-17/SR-13，已登记，但指南第 7 步只允许删除断言存根的场景，待审核确认）；7b+7c 合并在无独立 PR 的分支；`FieldLibraryView` 未按 7c 删除/改名；CSS 规则首行缩进异常为 Phase 2 之前遗留。WP7e：Principles 改用 LibraryToolbar/LibraryList/Pagination（compact 5/10/20），计数常显，空态用 LibraryEmpty 并可清除筛选，二分截断改为 CSS 两行截断 + 单次溢出检测，按用户 2026-09-28 决定改为单列（`LibraryList` 新增布局值 `list`，每行一张卡，与原始单列一致；网格下展开会拉伸同行卡片，masonry 会改变阅读顺序，均被否决）；Data Model 域卡片改用 LibraryItem（新增 `selected`，取自 pattern §6 选中态）+ SearchField + LibraryEmpty，并显示可用性徽章。处置 PR-01…PR-12、DM-01…DM-06。删除 4 个失去引用的 token（487→483），`pendingMigration` 移出 PrinciplesView。场景：p07 Principles 9 个与 Data Model、p11、host-check 仅更新故事侧选择器；未删除故事或场景（故事 +2：LibraryItem Selected、LibraryList List）。门禁见 §1。 | Claude |
 | 2026-09-28 | visual-check 提速（分支 `di/visual-check-speed`，基于 main f064184，只改 `scripts/visual-check.mjs`）：场景改为并发执行（`--jobs N`，默认 min(4, CPU 数)，或 `MH_VC_JOBS`），每个场景的原始侧与故事侧同时跑；结果、日志与报告仍按场景顺序输出。截图前固定等待 700ms 改为等待字体与图片加载、有限 CSS 动画结束、两帧绘制，再留 150ms 收集迟到的 console 错误；场景显式 `settleMs` 仍按原值等待；截图用 `animations: "disabled"`。并发暴露的三类时序竞态已在运行器中修正，未放宽断言：文本断言改为 8 秒内轮询（故事首帧后仍在应用状态）；eval 步骤与断言前等待有限动画结束（p06 抽屉滑入中测几何）；因页面 `location.replace` 被中止（`net::ERR_ABORTED`）的请求，只有之后从未加载成功才记为错误（原始 data-model.html 在 `<head>` 中规范化 URL）。验证：main 上全套连续两次 505/505 机器通过（`/tmp/mh-vc/visual3`、`visual4`，各约 6 分钟，原约 24 分钟），`--negative` 39/39 按预期失败（`/tmp/mh-vc/neg3`）。原始侧结果缓存留作后续。 | Claude |
 | 2026-09-28 | 按用户要求复核最近15次合并（#30–#44）：读取15条main完整日志及相关所有失败日志；main为13成功/2失败，PR分支67次中50成功/17失败，另加相关WP7b失败，共检查20份失败日志。根因归并：#34–#40 push/PR共14次重复值40>39（合并前已修）；#41三次及WP7b一次host确认框超时（已由main内c06d3c4关闭双Copilot后再测试库动作修复）；#43/#44两次为本分支已修的预算/删除token回退。13条成功main均完成host30/30，本地完整门禁见§1；未发现额外尚存CI阻断。非阻断警告记§4，不冒充已修。全15合并矩阵、20条失败run链接与证据：`/tmp/mh-ci-audit/audit.md`。 | Codex |
 | 2026-09-28 | 合并后 CI 修复（`fix/workpack-css-budget`，基于最新 GitHub main 29c4762）：读取失败 run 36370462815 并本地复现两条 CSS-budget 失败。#43 将预算从431/39回退为旧快照498/21，同时恢复了已删除且现已无消费者的 `--mh-reports-filter`、`--mh-bt-tag-bg`、`--mh-bt-draft-bg`、`--mh-bt-draft-ink`；删除这四项，定义491→487，定义上限498→487，重复值组按 Phase 2 guide WP2 的明确要求同步为实测35（原上限21），保留157项前缀豁免及全部测试断言。无组件/接口/故事/有意视觉差异；其余概念计数不变。验证结果与构建证据见§1，负向抽查日志 `/tmp/mh-workpack-negative.log` 中错误记录、隐藏预览、隐藏验证等均触发预期断言；脚本的`--negative`忽略`--only`并启动全套，本次已中止额外全套运行，不计全套通过。原main CI失败记录保留，修复后的远端结果见本次PR检查。`origin`代理落后于GitHub，创建分支前已从`github`同步`origin/main`。 | Codex |
