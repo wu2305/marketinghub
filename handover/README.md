@@ -16,7 +16,7 @@
 | lint | `npm run lint`：0 errors / 0 warnings（2026-09-28，WP7e） |
 | 构建验证 | 2026-09-28 WP7e：`build-storybook`、`build:host`、`build:lib` 均通过；host-check 30/30（`/tmp/mh-wp7e/host`）；字体探针 33 条，均为既有公式/代码等宽字体（`/tmp/mh-wp7e/font.log`）。本环境 Playwright 期望的浏览器版本未安装，改用预装 Chromium 1194（在 scratchpad 建符号链接并设 `PLAYWRIGHT_BROWSERS_PATH`；脚本未改） |
 | CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；最新main run 36370462815 在两条CSS-budget断言失败，本分支已本地修复，远端重跑结果见修复PR检查；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-28 WP7e：全站 505/505 机器通过（`/tmp/mh-wp7e/visual`），负向 39/39 按预期失败（`/tmp/mh-wp7e/neg`）；人工审图 pending（Principles 网格/单列待用户决定，截图见本轮会话）。2026-09-28 本次 Home 7/7 机器通过（`/tmp/mh-workpack-visual`）；人工抽看1440px/390px默认态，产品结构可识别，既有基础层与响应式差异保留；其余人工pending。本次只删无消费者token，无新增视觉差异。上次全站：2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
+| 最近视觉对照 | 2026-09-28 WP7e 单列版（9cef3ca）：全站 505/505 机器通过（`/tmp/mh-wp7e/visual2`），负向 39/39 按预期失败（`/tmp/mh-wp7e/neg2`），host 30/30；Principles 单列由用户决定；设计师另做的详情抽屉（取代原地展开）尚未提交，待其版本到位后替换。人工审图 pending。2026-09-28 本次 Home 7/7 机器通过（`/tmp/mh-workpack-visual`）；人工抽看1440px/390px默认态，产品结构可识别，既有基础层与响应式差异保留；其余人工pending。本次只删无消费者token，无新增视觉差异。上次全站：2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
