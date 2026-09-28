@@ -183,6 +183,7 @@ export {
 } from "./features/campaign/TaskList/index.jsx";
 export {
   BusinessTermForm,
+  businessTermKinds,
 } from "./features/interpreter/BusinessTermForm/index.jsx";
 export {
   Modal,
