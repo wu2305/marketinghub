@@ -253,7 +253,6 @@ export { KnowledgeViewPage } from "./pages/KnowledgeViewPage/index.jsx";
 export { ReviewCenterPage, reviewTabs, reviewTypes, reviewTimes, reviewPanels } from "./pages/ReviewCenterPage/index.jsx";
 export { GovernanceNav } from "./components/GovernanceNav/index.jsx";
 export { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes } from "./pages/FeedbackQualityPage/index.jsx";
-export { FeedbackList } from "./features/feedback-quality/FeedbackList/index.jsx";
 export { PersonalMemoryPage, memoryCategories } from "./pages/PersonalMemoryPage/index.jsx";
 export { MemoryWorkspace } from "./features/personal-memory/MemoryWorkspace/index.jsx";
 export { ScenarioDetailPage, scenarioDetailTabs } from "./pages/ScenarioDetailPage/index.jsx";
