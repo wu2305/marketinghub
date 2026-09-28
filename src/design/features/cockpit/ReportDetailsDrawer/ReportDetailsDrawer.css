@@ -50,13 +50,13 @@ display: grid;
 
 .mh-details__head > div > span {
 color: var(--mh-reports-muted);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-details__head strong {
 color: var(--mh-reports-ink);
-  font-size: 15px;
+  font-size: var(--mh-font-size-xl);
 }
 
 .mh-details__actions {
@@ -72,7 +72,7 @@ display: grid;
   place-items: center;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   background: transparent;
   color: var(--mh-reports-muted);
   cursor: pointer;
@@ -99,10 +99,10 @@ display: grid;
   height: 32px;
   place-items: center;
   border: 1px solid var(--mh-line-strong);
-  border-radius: 50%;
+  border-radius: var(--mh-radius-pill);
   background: var(--mh-surface);
   color: var(--mh-reports-copy);
-  font-size: 16px;
+  font-size: var(--mh-font-size-xl);
   cursor: pointer;
 }
 
@@ -115,7 +115,7 @@ overflow-y: auto;
 height: 210px;
   overflow: hidden;
   border: 1px solid var(--mh-line);
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-reports-thumb-bg);
 }
 
@@ -128,23 +128,23 @@ width: 100%;
 .mh-details__hierarchy {
 margin: 18px 0 0;
   color: var(--mh-reports-muted);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-details h2 {
 margin: 7px 0 0;
   color: var(--mh-reports-ink);
-  font-size: 25px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
 }
 
 .mh-details__explanation {
 margin: 12px 0 0;
   color: var(--mh-reports-copy);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.6;
 }
 
@@ -166,15 +166,15 @@ display: grid;
 
 .mh-details__meta dt {
 color: var(--mh-reports-muted);
-  font-size: 8px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-details__meta dd {
 margin: 0;
   color: var(--mh-reports-copy);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
   line-height: 1.45;
 }
 
@@ -191,8 +191,8 @@ display: flex;
 
 .mh-details__section header > span {
 color: var(--mh-reports-muted);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-details__view-more {
@@ -202,8 +202,8 @@ margin-left: auto;
   background: transparent;
   color: var(--mh-reports-muted);
   font-family: var(--mh-font);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
   transition: color 0.15s ease;
 }
@@ -230,11 +230,11 @@ display: inline-flex;
   height: 20px;
   padding: 0 12px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: var(--mh-reports-pill-bg);
   color: var(--mh-ink-accent-warm);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
   transition:
     background 0.15s ease,
@@ -262,7 +262,7 @@ display: none;
 
 .mh-details__scenarios li {
 border: 1px solid var(--mh-line);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   transition:
     border-color 0.15s ease,
@@ -286,15 +286,15 @@ display: grid;
 
 .mh-details__scenarios li > button::after {
 color: var(--mh-reports-muted);
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
   text-align: right;
   content: "→";
 }
 
 .mh-details__scenarios li > button > span:first-child {
 color: var(--mh-reports-muted);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-details__scenario-copy {
@@ -304,13 +304,13 @@ display: grid;
 
 .mh-details__scenario-copy strong {
 color: var(--mh-reports-ink);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-details__scenario-copy small {
 color: var(--mh-reports-muted);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-details__scenarios li:hover,
@@ -345,8 +345,8 @@ display: flex;
   border: none;
   background: var(--mh-reports-gold-btn);
   color: var(--mh-ink-strong);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
 }
 

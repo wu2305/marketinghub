@@ -7,7 +7,7 @@ display: grid;
   min-height: 146px;
   padding: 17px 18px;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
     var(--mh-reports-card-edge) border-box;
@@ -32,13 +32,13 @@ display: grid;
 
 .mh-report-row__index span {
 color: var(--mh-reports-muted);
-  font-size: 7px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-report-row__index strong {
 color: var(--mh-reports-blue);
-  font-size: 18px;
+  font-size: var(--mh-font-size-2xl);
   line-height: 1;
 }
 
@@ -50,8 +50,8 @@ min-width: 0;
 display: block;
   overflow: hidden;
   color: var(--mh-reports-blue);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -60,8 +60,8 @@ display: block;
 .mh-report-row__main h3 {
 margin: 6px 0 0;
   color: var(--mh-reports-ink);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-2xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1.25;
 }
 
@@ -80,7 +80,7 @@ display: -webkit-box;
   overflow: hidden;
   margin: 7px 0 0;
   color: var(--mh-reports-copy);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
   line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -101,8 +101,8 @@ display: grid;
 
 .mh-report-row__meta dt {
 color: var(--mh-reports-muted);
-  font-size: 8px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
@@ -110,8 +110,8 @@ color: var(--mh-reports-muted);
 overflow: hidden;
   margin: 0;
   color: var(--mh-reports-copy);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -127,10 +127,10 @@ display: inline-flex;
   height: 34px;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   font-family: var(--mh-font);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
   cursor: pointer;
 }

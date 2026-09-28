@@ -33,11 +33,11 @@ display: inline-flex;
   height: 36px;
   padding: 0 13px 0 0;
   border: 1px solid transparent;
-  border-radius: 3px;
+  border-radius: var(--mh-radius-sm);
   background: transparent;
   color: var(--mh-reports-copy);
-  font-size: 13px;
-  font-weight: 650;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
 }
 
@@ -64,8 +64,8 @@ display: flex;
 .mh-live-heading .mh-eyebrow {
 margin: 0;
   color: var(--mh-reports-muted);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0;
   text-transform: uppercase;
 }
@@ -73,8 +73,8 @@ margin: 0;
 .mh-live-heading h1 {
 margin: 7px 0 0;
   color: var(--mh-reports-ink);
-  font-size: 42px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-display);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1;
 }
 
