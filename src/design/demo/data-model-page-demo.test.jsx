@@ -22,10 +22,10 @@ describe("P11 standalone Data Model page", () => {
     const onSelect = vi.fn();
     const onChange = vi.fn();
     render(<Fixture onSelect={onSelect} onChange={onChange} />);
-    expect(screen.getAllByRole("option")).toHaveLength(3);
+    expect(within(screen.getByRole("list", { name: "Data models" })).getAllByRole("listitem")).toHaveLength(3);
     expect(screen.queryByText("Customer Growth")).toBeNull();
     expect(screen.getByText("D2C Insight", { selector: ".mh-dmview__basic-name strong" })).toBeTruthy();
-    fireEvent.click(screen.getByRole("option", { name: /DC Media Performance/ }));
+    fireEvent.click(screen.getByRole("button", { name: "DC Media Performance" }));
     expect(onSelect).toHaveBeenCalledWith({ kind: "domain", id: "finance-analysis" });
     fireEvent.change(screen.getByRole("searchbox", { name: "Search data model" }), { target: { value: "NO_SUCH_MODEL_123" } });
     expect(onChange).toHaveBeenCalledWith({ name: "query", value: "NO_SUCH_MODEL_123" });

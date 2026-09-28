@@ -502,9 +502,10 @@ export default [
       expect: [
         { sel: ".mh-interpreter__main[data-active-type='Principles']" },
         { sel: ".mh-check-filter" },
-        { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-principles .mh-library-item", text: "Interactive Agent for Business Questions" },
         { sel: ".mh-library", state: "detached" },
-        { sel: ".mh-pagination__pages button.is-active", text: "1" },
+        { sel: ".mh-pagination__page", text: "1 / 1" },
+        { sel: ".mh-library-toolbar__count", text: "Showing 10 of 10 principles" },
       ],
     },
   },
@@ -572,8 +573,8 @@ export default [
       ],
       expect: [
         { sel: ".mh-check-filter__summary", text: "1 selected" },
-        { sel: ".mh-principle", text: "Handle Runtime Context Carefully" },
-        { sel: ".mh-principle:has-text('Interactive Agent')", state: "detached" },
+        { sel: ".mh-principles .mh-library-item", text: "Handle Runtime Context Carefully" },
+        { sel: ".mh-principles .mh-library-item:has-text('Interactive Agent')", state: "detached" },
         { sel: ".mh-pagination", text: "1 principle" },
       ],
     },
@@ -600,8 +601,8 @@ export default [
       id: "pages--interpreter-principles",
       actions: [{ fill: [".mh-principles input[type='search']", "requested scope"] }, { waitMs: 300 }],
       expect: [
-        { sel: ".mh-principle", text: "Match the Requested Scope" },
-        { sel: ".mh-principle:has-text('Interactive Agent')", state: "detached" },
+        { sel: ".mh-principles .mh-library-item", text: "Match the Requested Scope" },
+        { sel: ".mh-principles .mh-library-item:has-text('Interactive Agent')", state: "detached" },
         { sel: ".mh-pagination", text: "1 principle" },
       ],
     },
@@ -621,7 +622,7 @@ export default [
     story: {
       id: "pages--interpreter-principles",
       actions: [{ fill: [".mh-principles input[type='search']", "zzzz-nothing"] }, { waitMs: 300 }],
-      expect: [{ sel: ".mh-principles__empty", text: "No matching principles" }],
+      expect: [{ sel: ".mh-principles .mh-library-empty", text: "No matching principles" }],
     },
   },
   {
@@ -648,13 +649,13 @@ export default [
     story: {
       id: "pages--interpreter-principles",
       actions: [
-        { wait: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
-        { click: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle" },
+        { wait: ".mh-principles .mh-library-item:has-text('Resolve Requests') .mh-principles__toggle" },
+        { click: ".mh-principles .mh-library-item:has-text('Resolve Requests') .mh-principles__toggle" },
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__desc.is-expanded", text: "Users primarily request business data" },
-        { sel: ".mh-principle:has-text('Resolve Requests') .mh-principle__toggle", attr: { name: "aria-expanded", value: "true" } },
+        { sel: ".mh-principles .mh-library-item:has-text('Resolve Requests') .mh-principles__text.is-expanded", text: "Users primarily request business data" },
+        { sel: ".mh-principles .mh-library-item:has-text('Resolve Requests') .mh-principles__toggle", attr: { name: "aria-expanded", value: "true" } },
       ],
     },
   },
@@ -707,7 +708,7 @@ export default [
       id: "pages--interpreter-principles",
       actions: [{ eval: "window.scrollTo(0, document.body.scrollHeight)" }, { waitMs: 300 }],
       expect: [
-        { sel: ".mh-principle:has-text('Respect Session Guidance')", text: "Respect Session Guidance" },
+        { sel: ".mh-principles .mh-library-item:has-text('Respect Session Guidance')", text: "Respect Session Guidance" },
         { sel: ".mh-pagination", text: "10 principles" },
       ],
     },
@@ -741,9 +742,9 @@ export default [
     },
     story: {
       id: "pages--interpreter-principles",
-      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-principles__toolbar", ".mh-principle:first-child"]) }],
+      actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-library-toolbar", ".mh-principles .mh-library-list > li:first-child"]) }],
       expect: [
-        { sel: ".mh-principle", text: "Interactive Agent for Business Questions" },
+        { sel: ".mh-principles .mh-library-item", text: "Interactive Agent for Business Questions" },
         { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
         { sel: ".mh-hero__aside .mh-metric", count: 2 },
         { sel: ".mh-pagination", text: "10 principles" },
@@ -1112,7 +1113,7 @@ export default [
       { orig: ".dm-domain-shell", story: ".mh-dmview__shell", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-domain-sidebar", story: ".mh-dmview__sidebar", props: ["x", "width"], tol: 8 },
       { orig: ".dm-search-wrap", story: ".mh-dmview__search", props: ["x", "y", "height"], tol: 8 },
-      { orig: ".dm-domain-card", story: ".mh-dmview__domain", props: ["x", "y", "width"], tol: 8 },
+      { orig: ".dm-domain-card", story: ".mh-dmview__domains .mh-library-item", props: ["x", "y", "width"], tol: 8 },
       { orig: ".dm-domain-tabs", story: ".mh-dmview__tabs", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".dm-basic-card", story: ".mh-dmview__basic", props: ["x", "y", "width"], tol: 8 },
       { orig: ".dm-basic-card .fm-report-card-status", story: ".mh-dmview__basic .mh-badge--knowledge", props: ["x", "y", "width", "height"], tol: 8 },
@@ -1135,9 +1136,9 @@ export default [
     story: {
       id: "pages--interpreter-data-model",
       expect: [
-        { sel: ".mh-dmview__domain", count: 3 },
-        { sel: ".mh-dmview__domain:has-text(\"Customer Growth\")", count: 0, state: "detached" },
-        { sel: ".mh-dmview__domain.is-active", text: "D2C Insight" },
+        { sel: ".mh-dmview__domains .mh-library-item", count: 3 },
+        { sel: ".mh-dmview__domains .mh-library-item:has-text(\"Customer Growth\")", count: 0, state: "detached" },
+        { sel: ".mh-dmview__domains .mh-library-item--selected", text: "D2C Insight" },
         { sel: ".mh-dmview__tab.is-active", text: "Basic information" },
         { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
         { sel: ".mh-dmview__basic .mh-badge--knowledge", text: "Enabled" },
@@ -1278,7 +1279,7 @@ export default [
         { fill: [".mh-dmview__search input[type='search']", "audience"] },
         { waitMs: 300 },
       ],
-      expect: [{ sel: ".mh-dmview__domain", count: 1, text: "DC Media Performance" }],
+      expect: [{ sel: ".mh-dmview__domains .mh-library-item", count: 1, text: "DC Media Performance" }],
     },
   },
   {

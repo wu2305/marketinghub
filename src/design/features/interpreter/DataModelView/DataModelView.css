@@ -28,139 +28,26 @@
 }
 
 .mh-dmview__search {
-  position: relative;
-  display: block;
-  margin: 16px;
+  margin: var(--mh-space-5) var(--mh-space-5) var(--mh-space-3);
 }
 
-.mh-dmview__search .mh-search__icon,
-.mh-dmview__search-icon {
-  position: absolute;
-  top: 50%;
-  left: 14px;
-  width: 17px;
-  height: 17px;
-  color: var(--mh-ink-sidebar-muted);
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.mh-dmview__search input {
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  padding: 0 14px 0 40px;
-  border: 1px solid var(--mh-line-subtle-cool);
-  border-radius: var(--mh-radius-lg);
-  background: var(--mh-surface-neutral-soft);
-  color: var(--mh-ink-primary-deep);
-  font: inherit;
-  font-size: var(--mh-font-size-md);
-  outline: 0;
-}
-
-.mh-dmview__search input:focus {
-  border-color: var(--mh-bt-action);
-  background: var(--mh-surface);
-  box-shadow: none; outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
-
+/* Domain cards are LibraryItems (patterns/library.md §5 Data Models); the
+   view only stacks them in the sidebar. */
 .mh-dmview__domains {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--mh-space-4);
+  margin: 0;
   overflow: auto;
-  padding: 10px 12px 14px;
-  border-top: 1px solid var(--mh-line-panel-soft);
+  padding: var(--mh-space-4) var(--mh-space-4) var(--mh-space-5);
+  border-top: 1px solid var(--mh-line-subtle);
+  list-style: none;
 }
 
-.mh-dmview__domain {
+.mh-dmview__domains > li {
   display: grid;
-  grid-template-columns: 12px minmax(0, 1fr) auto;
-  gap: 10px;
-  align-items: start;
-  width: 100%;
-  min-height: 98px;
-  padding: 14px 12px;
-  border: 1px solid var(--mh-line-input-cool);
-  border-radius: var(--mh-radius-lg);
-  background: var(--mh-surface);
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: var(--mh-shadow-raised);
-  transition:
-    background 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
-}
-
-.mh-dmview__domain:hover {
-  border-color: var(--mh-line-gold-active);
-  background: var(--mh-surface-gold-wash);
-  box-shadow: var(--mh-shadow-overlay);
-  transform: translateY(-1px);
-}
-
-.mh-dmview__domain.is-active {
-  border-color: var(--mh-line-gold-soft);
-  background: var(--mh-pagination-hover-bg);
-  box-shadow: var(--mh-shadow-overlay);
-}
-
-.mh-dmview__domain-dot {
-  width: 7px;
-  height: 7px;
-  margin-top: 7px;
-  border-radius: var(--mh-radius-pill);
-  background: var(--mh-indicator-muted);
-}
-
-.mh-dmview__domain.is-active .mh-dmview__domain-dot {
-  background: var(--mh-indicator-active);
-}
-
-.mh-dmview__domain-copy {
   min-width: 0;
-}
-
-.mh-dmview__domain-copy strong {
-  display: block;
-  color: var(--mh-ink-primary-deep);
-  font-size: var(--mh-font-size-md);
-  font-weight: var(--mh-font-weight-bold);
-  line-height: 1.25;
-}
-
-.mh-dmview__domain-copy small {
-  display: -webkit-box;
-  margin-top: 7px;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  color: var(--mh-ink-label-steel);
-  font-size: var(--mh-font-size-sm);
-  font-weight: var(--mh-font-weight-regular);
-  line-height: 1.55;
-}
-
-.mh-dmview__domain > b {
-  align-self: start;
-  padding: 4px 9px;
-  border-radius: var(--mh-radius-pill);
-  color: var(--mh-ink-copy-dark);
-  font-size: var(--mh-font-size-xs);
-  font-weight: var(--mh-font-weight-bold);
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.mh-dmview__empty {
-  padding: 32px 8px;
-  color: var(--mh-ink-copy-slate);
-  font-size: var(--mh-font-size-sm);
-  text-align: center;
 }
 
 /* ── main: tabs + panel ── */

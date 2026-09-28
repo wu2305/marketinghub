@@ -9,12 +9,13 @@ function Harness(props) {
   return <DataModelView {...viewProps} />;
 }
 
-const domainCards = () => [...document.querySelectorAll(".mh-dmview__domain")];
+/* Each domain is a LibraryItem; its title button opens (selects) it. */
+const domainCards = () => [...document.querySelectorAll(".mh-dmview__domains .mh-library-item__title button")];
 
 describe("useDataModelDemo + DataModelView", () => {
   it("lists the visible domains and hides the hidden one", () => {
     render(<Harness />);
-    const names = domainCards().map((el) => el.querySelector("strong").textContent);
+    const names = domainCards().map((el) => el.textContent);
     expect(names).toEqual(["D2C Insight", "DC Media Performance", "DG Media Tracking"]);
     expect(screen.queryByText("Customer Growth")).toBeNull();
     expect(document.querySelector(".mh-dmview__basic-name .mh-badge--knowledge")?.textContent).toBeTruthy();
@@ -37,7 +38,7 @@ describe("useDataModelDemo + DataModelView", () => {
     const input = screen.getByLabelText("Search data model");
     fireEvent.change(input, { target: { value: "ABO" } });
     expect(domainCards()).toHaveLength(1);
-    expect(domainCards()[0].getAttribute("aria-selected")).toBe("true");
+    expect(domainCards()[0].getAttribute("aria-current")).toBe("true");
     expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
     fireEvent.change(input, { target: { value: "NO_SUCH_MODEL_123" } });
     expect(domainCards()).toHaveLength(0);
@@ -55,7 +56,7 @@ describe("useDataModelDemo + DataModelView", () => {
       expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
       fireEvent.change(screen.getByLabelText("Search data model"), { target: { value: "" } });
       expect(document.querySelector(".mh-dmview__basic-name strong")?.textContent).toBe("DC Media Performance");
-      expect(domainCards()[1].getAttribute("aria-selected")).toBe("true");
+      expect(domainCards()[1].getAttribute("aria-current")).toBe("true");
       unmount();
     }
   });
@@ -72,7 +73,7 @@ describe("useDataModelDemo + DataModelView", () => {
     fireEvent.click(screen.getByRole("tab", { name: /Relationship graph/ }));
     fireEvent.click(domainCards()[1]);
     expect(onSelectDomain).toHaveBeenCalled();
-    expect(domainCards()[1].getAttribute("aria-selected")).toBe("true");
+    expect(domainCards()[1].getAttribute("aria-current")).toBe("true");
     expect(screen.getByRole("tab", { name: "Basic information" }).getAttribute("aria-selected")).toBe("true");
   });
 
