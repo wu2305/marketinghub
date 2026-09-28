@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
 | M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
 | DI | 设计意图提取 Phase 1：基础层、领域模型、奥卡姆基线（仅文档） | Phase 1 完成（用户已批准 D1–D5、A1–A5）；Phase 2 未开始 | 分支 `design-intent/phase1`；`handover/design-intent/{foundations,domain-model,occam-baseline}.md`；AGENTS §1/§3.3/§3.5/§4/§5 按 2026-09-27 用户决定改写 |
-| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4 完成 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
+| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4 已合入；WP2a 审核修复候选，待完整验收与用户合并 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
