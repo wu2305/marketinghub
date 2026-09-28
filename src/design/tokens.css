@@ -132,10 +132,10 @@
 
   /* Shared foreground, action, and status colors extracted from component CSS. */
   --mh-ink-inverse: var(--mh-text-inverse);
-  --mh-surface-dark-strong: #14171a;
-  --mh-surface-action-slate: #39444e;
-  --mh-surface-action-blue: #344f60;
-  --mh-surface-dark-cool: #1c2328;
+  --mh-surface-dark-strong: var(--mh-surface-inverse);
+  --mh-surface-action-slate: color-mix(in srgb, var(--mh-surface-inverse) 85%, var(--mh-surface));
+  --mh-surface-action-blue: var(--mh-surface-inverse);
+  --mh-surface-dark-cool: var(--mh-surface-inverse);
   --mh-indicator-selection-warm: #b08d57;
   --mh-danger-muted: #a23b4f;
   --mh-font: var(--mh-font-sans);
@@ -147,8 +147,8 @@
   --mh-copy: var(--mh-text);
   --mh-muted: var(--mh-text-muted);
   --mh-faint: var(--mh-text-faint);
-  --mh-line-control-soft: #d8dde2;
-  --mh-line-control-hover: #b5bcc4;
+  --mh-line-control-soft: var(--mh-line);
+  --mh-line-control-hover: var(--mh-line-strong);
   --mh-gold: #e6bc73;
   --mh-gold-deep: #a66f27;
   --mh-gold-text: var(--mh-accent-ink);
@@ -162,15 +162,15 @@
   --mh-ink-metric-copy: var(--mh-text);
   --mh-ink-thumbnail-muted: var(--mh-text-faint);
   --mh-ink-section-deep: var(--mh-text-strong);
-  --mh-surface-dialog-tint: #f7f9fc;
+  --mh-surface-dialog-tint: var(--mh-surface-subtle);
   --mh-ink-control-slate: var(--mh-text);
-  --mh-line-subtle-cool: #dfe5ea;
-  --mh-line-sidebar-cool: #e4e9ed;
+  --mh-line-subtle-cool: var(--mh-line);
+  --mh-line-sidebar-cool: var(--mh-line-subtle);
   --mh-ink-sidebar-muted: var(--mh-text-faint);
-  --mh-surface-neutral-soft: #f1f3f5;
+  --mh-surface-neutral-soft: var(--mh-surface-muted);
   --mh-ink-primary-deep: var(--mh-text-strong);
-  --mh-line-panel-soft: #edf0f2;
-  --mh-line-input-cool: #dfe6ec;
+  --mh-line-panel-soft: var(--mh-line-subtle);
+  --mh-line-input-cool: var(--mh-line);
   --mh-line-gold-active: #d9ad67;
   --mh-surface-gold-wash: #fffaf2;
   --mh-line-gold-soft: #ecd7bd;
@@ -188,8 +188,8 @@
   --mh-ink-placeholder-cool: var(--mh-text-faint);
   --mh-stroke-graph-muted: var(--mh-text-faint);
   --mh-fill-graph-muted: var(--mh-text-faint);
-  --mh-line-graph-panel: #dce3e8;
-  --mh-surface-info-soft: #f3f8fc;
+  --mh-line-graph-panel: var(--mh-line);
+  --mh-surface-info-soft: var(--mh-surface-page);
   --mh-line-gold-detail: #e5d4b6;
   --mh-surface-gold-detail: #fff9ef;
   --mh-ink-secondary-slate: var(--mh-text-muted);
@@ -197,7 +197,7 @@
   --mh-ink-info: #296a9b;
   --mh-surface-warning: #fff5e4;
   --mh-ink-warning: #9b6218;
-  --mh-line-table-soft: #edf1f4;
+  --mh-line-table-soft: var(--mh-line-subtle);
   --mh-ink-table-muted: var(--mh-text-muted);
   --mh-ink-row-muted: var(--mh-text-muted);
   --mh-surface-warm-soft: #f7efe2;
@@ -206,7 +206,7 @@
   --mh-line-active-warm: #b08d57;
   --mh-ink-heading-charcoal: var(--mh-text);
   --mh-ink-flow-muted: var(--mh-text-muted);
-  --mh-surface-flow-neutral: #eef2f6;
+  --mh-surface-flow-neutral: var(--mh-surface-muted);
   --mh-surface-success-soft: #e7f6ed;
   --mh-ink-success-bright: #0f9f5d;
   --mh-surface-warning-soft: #fff2d8;
@@ -214,13 +214,13 @@
   --mh-ink-flow-secondary: var(--mh-text-muted);
   --mh-surface-draft: #f4f0ff;
   --mh-ink-draft: var(--mh-data-violet);
-  --mh-surface-status-neutral: #f1f2f3;
+  --mh-surface-status-neutral: var(--mh-surface-muted);
   --mh-ink-status-neutral: var(--mh-text-muted);
   --mh-surface-status-warm: #f6efe4;
   --mh-ink-status-warm: #a16616;
   --mh-ink-link-strong: #184a8c;
   --mh-ink-link-hover: #12386b;
-  --mh-line-attachment: #cbd3df;
+  --mh-line-attachment: var(--mh-line-strong);
   --mh-ink-attachment-muted: var(--mh-text-faint);
   --mh-blue: var(--mh-info);
   /* P14 exact source category indicators, info banner, and required errors. */
@@ -236,8 +236,8 @@
   --mh-header: var(--mh-layout-header-height);
   --mh-kicker: var(--mh-text-faint);
   --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
-  --mh-disabled-bg: #e8ebee;
-  --mh-disabled-line: #d0d4d8;
+  --mh-disabled-bg: var(--mh-surface-muted);
+  --mh-disabled-line: var(--mh-line-strong);
   --mh-disabled-ink: var(--mh-text-faint);
   --mh-index-line: #d8c76f;
   --mh-index-ink: #6c5800;
@@ -252,27 +252,27 @@
   --mh-focus-blue: #8da7c0;
   /* workspace.css global :focus-visible ring */
   --mh-focus-strong: var(--mh-focus-ring);
-  --mh-line-hover: #929da7;
-  --mh-scrim-deep: rgba(15, 18, 24, 0.55);
+  --mh-line-hover: var(--mh-line-strong);
+  --mh-scrim-deep: var(--mh-scrim);
   --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
-  --mh-line-faint: #eef1f4;
-  --mh-line-warm: #e7e3dc;
-  --mh-line-warm-strong: #e6e1d8;
-  --mh-row-hover: #fafbfc;
+  --mh-line-faint: var(--mh-line-subtle);
+  --mh-line-warm: var(--mh-line-subtle);
+  --mh-line-warm-strong: var(--mh-line-subtle);
+  --mh-row-hover: var(--mh-surface-subtle);
   --mh-hover-warm: #fffbeb;
   --mh-subtle: var(--mh-text);
   --mh-slate: var(--mh-text-muted);
   --mh-empty: var(--mh-text-faint);
-  --mh-control-line: #c8d2d8;
+  --mh-control-line: var(--mh-line-strong);
   --mh-ink-strong: var(--mh-text-strong);
   --mh-ink-field: var(--mh-text-strong);
   --mh-icon-slate: var(--mh-text-muted);
   --mh-focus-gold: rgba(218, 168, 96, 0.18);
   /* global AI launcher (assistant-launcher.css) */
-  --mh-launcher-line: #303840;
+  --mh-launcher-line: var(--mh-line-inverse);
   --mh-surface-dark: var(--mh-surface-inverse);
-  --mh-ink-dark-control: var(--mh-text-strong);
-  --mh-launcher-bg-hover: #171c21;
+  --mh-ink-dark-control: var(--mh-surface-inverse);
+  --mh-launcher-bg-hover: var(--mh-surface-inverse);
   --mh-launcher-aura: rgba(218, 168, 96, 0.2);
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
   --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
@@ -282,21 +282,21 @@
   --mh-ink-ai: var(--mh-text-strong);
   --mh-copy-ai: var(--mh-text);
   --mh-muted-ai: var(--mh-text-muted);
-  --mh-line-strong-ai: #bcc5ce;
-  --mh-fill-hover: #f2f3f4;
-  --mh-fill-soft: #f4f4f4;
-  --mh-surface-ai: #f7f8fa;
+  --mh-line-strong-ai: var(--mh-line-strong);
+  --mh-fill-hover: var(--mh-surface-muted);
+  --mh-fill-soft: var(--mh-surface-page);
+  --mh-surface-ai: var(--mh-surface-subtle);
   /* media tracking page palette */
-  --mh-page-bg: #f6f7f8;
+  --mh-page-bg: var(--mh-surface-subtle);
   --mh-ink-accent-warm: #8a5a00;
   --mh-required: #c0392b;
   --mh-muted-strong: var(--mh-text-muted);
   --mh-subtle-ai: var(--mh-text);
-  --mh-line-soft: #e1e7ec;
-  --mh-line-tab: #e5e7eb;
+  --mh-line-soft: var(--mh-line);
+  --mh-line-tab: var(--mh-line-subtle);
   --mh-line-faintest: var(--mh-surface-muted);
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
-  --mh-ai-feedback-line: #edf0f3;
+  --mh-ai-feedback-line: var(--mh-surface-muted);
   --mh-ink-secondary-muted: var(--mh-text-muted);
   --mh-ai-chip-pos: #2e7d32;
   --mh-ai-chip-pos-bg: #e8f5e9;
@@ -305,8 +305,8 @@
   /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
   --mh-composer-shadow: 0 5px 16px rgba(31, 41, 55, 0.06);
   --mh-composer-focus: 0 0 0 3px rgba(218, 168, 96, 0.18);
-  --mh-bg-faint: #f9fafb;
-  --mh-field-line: #cfd6db;
+  --mh-bg-faint: var(--mh-surface-subtle);
+  --mh-field-line: var(--mh-line-strong);
   /* skill menu / model-flow dialog */
   --mh-danger-ring: rgba(216, 34, 42, 0.1);
   --mh-gold-rule: #b28c2d;
@@ -317,14 +317,14 @@
   --mh-chip-ink: #3b2b14;
   --mh-chip-icon: #6f5a35;
   --mh-chip-hover: rgba(93, 68, 30, 0.12);
-  --mh-tooltip: #262626;
+  --mh-tooltip: var(--mh-surface-inverse);
   --mh-placeholder: var(--mh-text-faint);
   --mh-search-placeholder: var(--mh-text-faint);
-  --mh-scrim-mid: rgba(31, 41, 55, 0.42);
+  --mh-scrim-mid: var(--mh-scrim);
   --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
-  --mh-surface-neutral-cool: #f3f5f7;
+  --mh-surface-neutral-cool: var(--mh-surface-page);
 
   --mh-reports-ink: var(--mh-text-strong);
   --mh-reports-copy: var(--mh-text);
@@ -346,39 +346,39 @@
   --mh-surface-gold-hover-soft: #faeed4;
   --mh-reports-pill-hover-ink: #6f4900;
   --mh-reports-title-hover: #916732;
-  --mh-reports-scrim: rgba(28, 36, 44, 0.28);
-  --mh-reports-thumb-bg: #e9edf1;
-  --mh-surface-panel-muted: #fbfcfd;
-  --mh-reports-media-bg: #dfe4e8;
+  --mh-reports-scrim: var(--mh-scrim);
+  --mh-reports-thumb-bg: var(--mh-surface-muted);
+  --mh-surface-panel-muted: var(--mh-surface-subtle);
+  --mh-reports-media-bg: var(--mh-surface-muted);
   --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
   /* Live report view (reports-core dark accents over the catalog light skin) */
-  --mh-live-toolbar-bg: rgba(244, 246, 248, 0.96);
-  --mh-line-neutral-soft: #dfe3e8;
-  --mh-live-inkline: #2a2925;
-  --mh-surface-chart-neutral: #f7f7f7;
+  --mh-live-toolbar-bg: var(--mh-surface-page);
+  --mh-line-neutral-soft: var(--mh-line);
+  --mh-live-inkline: var(--mh-surface-inverse);
+  --mh-surface-chart-neutral: var(--mh-surface-subtle);
 
-  --mh-line-control-strong: #cbd2d9;
-  --mh-live-bar: #d8d4c9;
+  --mh-line-control-strong: var(--mh-line-strong);
+  --mh-live-bar: var(--mh-line-strong);
   --mh-live-bar-alt: #79a991;
   --mh-ink-faint-warm: var(--mh-text-muted);
   --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
-  --mh-sc-bg: #f0f2f5;
+  --mh-sc-bg: var(--mh-surface-muted);
   --mh-sc-ink: var(--mh-text-strong);
   --mh-sc-label: var(--mh-text-muted);
   --mh-ink-faint-neutral: var(--mh-text-faint);
   --mh-sc-note: var(--mh-text-faint);
-  --mh-line-neutral-faint: #eceef1;
-  --mh-sc-line-strong: #d9dde3;
-  --mh-sc-static-bg: #eef0f3;
-  --mh-sc-static-line: #e0e3e8;
+  --mh-line-neutral-faint: var(--mh-line-subtle);
+  --mh-sc-line-strong: var(--mh-line);
+  --mh-sc-static-bg: var(--mh-surface-muted);
+  --mh-sc-static-line: var(--mh-line);
   --mh-ink-muted-neutral: var(--mh-text-muted);
-  --mh-sc-row-hover: #f3f5f8;
-  --mh-sc-head-line: #eeeeee;
+  --mh-sc-row-hover: var(--mh-surface-page);
+  --mh-sc-head-line: var(--mh-line-subtle);
   --mh-ink-info-accent: #185fa5;
   --mh-indicator-positive-chart: #00a06b;
   --mh-indicator-negative-chart: #e34d59;
-  --mh-sc-gridline: #eef0f3;
+  --mh-sc-gridline: var(--mh-line-subtle);
   --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -386,23 +386,23 @@
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
   --mh-ink-black-soft: var(--mh-text-strong);
-  --mh-surface-control-black-soft: #141414;
+  --mh-surface-control-black-soft: var(--mh-surface-inverse);
   --mh-ink-secondary-dark: var(--mh-text);
 
-  --mh-copilot-tool-bg: #f2f4f7;
+  --mh-copilot-tool-bg: var(--mh-surface-page);
   --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
   --mh-copilot-gold-wash: rgba(218, 168, 96, 0.14);
   --mh-copilot-metric-pos: #16a34a;
   --mh-copilot-metric-neg: #dc2626;
-  --mh-copilot-box-line: #d8e0e6;
+  --mh-copilot-box-line: var(--mh-line);
   --mh-ink-black: var(--mh-text-strong);
-  --mh-line-secondary-cool: #d8dee6;
+  --mh-line-secondary-cool: var(--mh-line);
   --mh-copilot-card-faint: var(--mh-text-muted);
   --mh-copilot-card-ink: var(--mh-text-strong);
   --mh-ink-secondary-cool: var(--mh-text);
 
-  --mh-surface-chip-cool: #f6f8fb;
-  --mh-copilot-action-bg: #edf0f3;
+  --mh-surface-chip-cool: var(--mh-surface-page);
+  --mh-copilot-action-bg: var(--mh-surface-muted);
   --mh-copilot-fb-hover-line: rgba(184, 138, 61, 0.68);
   --mh-copilot-fb-hover-bg: rgba(231, 187, 106, 0.16);
   --mh-copilot-fb-pressed-line: rgba(184, 138, 61, 0.8);
@@ -415,19 +415,19 @@
   --mh-hr-mid: var(--mh-text-muted);
   --mh-hr-index: var(--mh-text-faint);
 
-  --mh-line-warm-soft: #eceae4;
-  --mh-hr-surface: #faf9f6;
-  --mh-hr-card-line: #f0ede6;
+  --mh-line-warm-soft: var(--mh-line-subtle);
+  --mh-hr-surface: var(--mh-surface-subtle);
+  --mh-hr-card-line: var(--mh-line-subtle);
 
   --mh-hr-grid-zero: var(--mh-text-faint);
   --mh-hr-axis: var(--mh-text-faint);
-  --mh-hr-th-line: #e4e2da;
-  --mh-hr-td-line: #f0efe9;
+  --mh-hr-th-line: var(--mh-line-subtle);
+  --mh-hr-td-line: var(--mh-line-subtle);
   --mh-hr-dot-warn: #e6a23c;
   --mh-ink-positive-dark: #0a7a54;
   --mh-ink-negative-bright: #d43d4a;
   --mh-line-highlight-chart: #c9a44a;
-  --mh-surface-highlight-warm: #fdfbf6;
+  --mh-surface-highlight-warm: var(--mh-surface);
   --mh-hr-insight-ink: var(--mh-text);
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
@@ -435,52 +435,52 @@
   --mh-ra-badge-up-bg: rgba(0, 160, 107, 0.1);
   --mh-ra-badge-down-bg: rgba(227, 77, 89, 0.12);
 
-  --mh-ra-stat-line: #f0f2f5;
+  --mh-ra-stat-line: var(--mh-line-subtle);
   --mh-ra-icon-retail-bg: rgba(201, 164, 74, 0.16);
   --mh-ra-icon-retail: #8a6d1f;
   --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
 
-  --mh-ra-insight-bg: #fbf9f4;
+  --mh-ra-insight-bg: var(--mh-surface);
   --mh-ra-insight-ink: var(--mh-text);
   --mh-ra-option-icon-bg: rgba(24, 95, 165, 0.1);
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
-  --mh-check-filter-line: #e4e0d9;
+  --mh-check-filter-line: var(--mh-line);
   --mh-check-filter-label: var(--mh-text-faint);
   --mh-check-filter-ink: var(--mh-text);
   --mh-check-filter-option: var(--mh-text);
   --mh-check-filter-checked-bg: #f7f2e8;
   --mh-check-filter-checked-ink: #84611f;
   --mh-check-filter-shadow: 0 8px 24px rgba(25, 34, 48, 0.1);
-  --mh-principle-line: #d8dfe5;
+  --mh-principle-line: var(--mh-line);
   --mh-principle-shadow: 0 4px 14px rgba(25, 31, 37, 0.08);
   --mh-principle-number-bg: #f4ede0;
   --mh-principle-number-ink: #9a661a;
-  --mh-principle-badge-bg: #eef1f3;
+  --mh-principle-badge-bg: var(--mh-surface-muted);
   --mh-principle-badge-ink: var(--mh-text-muted);
   --mh-principle-title: var(--mh-text-strong);
   --mh-principle-copy: var(--mh-text);
   --mh-principle-toggle: #956318;
   --mh-principle-toggle-hover: #71480d;
   --mh-principle-focus-ring: rgba(185, 130, 52, 0.35);
-  --mh-principle-empty-line: #d8dfe4;
+  --mh-principle-empty-line: var(--mh-line);
   --mh-principle-empty-ink: var(--mh-text-muted);
   --mh-principle-search-ink: var(--mh-text-strong);
   --mh-principle-search-placeholder: var(--mh-text-muted);
 
   --mh-pagination-hover-bg: #fff9f2;
-  --mh-pagination-select-line: #d9dee3;
+  --mh-pagination-select-line: var(--mh-line);
   --mh-pagination-select-ink: var(--mh-text);
   /* Business Term dedicated view (business-term.css / business-term-reference.css /
      ai-interpreter-overview.css / unified-type-toolbar.css / field-components.css) */
   --mh-ink-heading-warm: var(--mh-text-strong);
   --mh-bt-copy: var(--mh-text);
   --mh-bt-label: var(--mh-text-faint);
-  --mh-bt-tag-bg: #f1efeb;
+  --mh-bt-tag-bg: var(--mh-surface-muted);
   --mh-bt-state-bg: #f7f1e5;
   --mh-bt-state-ink: #b4872d;
-  --mh-bt-state-off-bg: #f1f1ef;
+  --mh-bt-state-off-bg: var(--mh-surface-muted);
   --mh-bt-state-off-ink: var(--mh-text-muted);
   --mh-bt-action: #c8892b;
   --mh-bt-action-disabled: var(--mh-text-faint);
@@ -498,12 +498,12 @@
   --mh-gold-action-hover-start: #ecc673;
   --mh-gold-action-hover-end: #d59a33;
   --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
-  --mh-bt-drawer-bg: #f6f7f9;
-  --mh-bt-drawer-line: #dfe5eb;
+  --mh-bt-drawer-bg: var(--mh-surface-page);
+  --mh-bt-drawer-line: var(--mh-line);
   --mh-bt-drawer-eyebrow: #a57531;
   --mh-bt-drawer-title: var(--mh-text-strong);
   --mh-bt-drawer-shadow: -8px 0 32px rgba(23, 32, 42, 0.15);
-  --mh-bt-drawer-scrim: rgba(20, 32, 50, 0.4);
+  --mh-bt-drawer-scrim: var(--mh-scrim);
   --mh-bt-status-on-bg: #fff4df;
   --mh-bt-status-on-ink: #8c5622;
   --mh-bt-status-on-dot: #c17d22;
@@ -512,17 +512,17 @@
   --mh-bt-status-off-dot: var(--mh-text-faint);
   --mh-bt-section-title: var(--mh-text-strong);
 
-  --mh-bt-chip-bg: #edf1f5;
+  --mh-bt-chip-bg: var(--mh-surface-muted);
   --mh-bt-chip-ink: var(--mh-text-muted);
   --mh-bt-scope-bg: #edf5f1;
   --mh-bt-scope-ink: #28785f;
-  --mh-bt-dialog-line: #dbe1e8;
+  --mh-bt-dialog-line: var(--mh-line);
   --mh-bt-dialog-ink: var(--mh-text);
-  --mh-bt-dialog-scrim: rgba(23, 34, 50, 0.4);
+  --mh-bt-dialog-scrim: var(--mh-scrim);
   --mh-surface-warning-icon: #fef3c7;
   --mh-ink-warning-icon: var(--mh-warning);
   --mh-bt-confirm-copy: var(--mh-text-muted);
-  --mh-bt-confirm-btn-line: #dce2e9;
+  --mh-bt-confirm-btn-line: var(--mh-line);
   --mh-bt-pag-ink: var(--mh-text-muted);
   /* Field-mapping library shared view — Report Context, Metric Dictionary,
      Analytical Model, Email Reports (field-library.js / field-components.css /
@@ -531,8 +531,8 @@
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
   --mh-ink-empty: var(--mh-text-faint);
   --mh-ink-empty-report: var(--mh-text-muted);
-  --mh-line-empty: #d9e1e8;
-  --mh-line-card-warm: #e6e2db;
+  --mh-line-empty: var(--mh-line);
+  --mh-line-card-warm: var(--mh-line-subtle);
   --mh-line-card-active: #d69b3d;
   --mh-shadow-card-active: 0 14px 32px rgba(31, 41, 55, 0.08);
   --mh-shadow-card-focus: 0 0 0 3px rgba(214, 155, 61, 0.18);
@@ -547,8 +547,8 @@
   --mh-ink-meta-label: var(--mh-text-muted);
   --mh-ink-state: var(--mh-text);
   --mh-ink-description: var(--mh-text-muted);
-  --mh-line-thumbnail: #dfe5ec;
-  --mh-line-overview: #e6eaf0;
+  --mh-line-thumbnail: var(--mh-line);
+  --mh-line-overview: var(--mh-line-subtle);
   --mh-surface-edit: #fff8ec;
   --mh-ink-edit: #d09135;
   --mh-surface-edit-hover: #f9ead1;
@@ -557,7 +557,7 @@
   --mh-ink-scenario-hover: #6f3f12;
   --mh-line-scenario-hover: rgba(183, 122, 39, 0.5);
   --mh-line-scenario-focus: #b67a27;
-  --mh-line-secondary-button: #d7dee5;
+  --mh-line-secondary-button: var(--mh-line);
   --mh-ink-secondary-button: var(--mh-text);
   --mh-surface-primary-button: #f4c766;
   --mh-line-primary-button: #d6a447;
@@ -566,12 +566,12 @@
   --mh-line-primary-button-hover: #bd8624;
   --mh-ink-dialog-title: var(--mh-text);
   --mh-ink-dialog-label: var(--mh-text-muted);
-  --mh-line-dialog-input: #cfd9e5;
+  --mh-line-dialog-input: var(--mh-line-strong);
   --mh-ink-dialog-input: var(--mh-text);
   --mh-line-dialog-input-focus: #c99a4a;
-  --mh-line-dialog-header: #e8edf3;
-  --mh-line-dialog-close: #d8e0ea;
-  --mh-surface-dialog: #fbfcfe;
+  --mh-line-dialog-header: var(--mh-line-subtle);
+  --mh-line-dialog-close: var(--mh-line);
+  --mh-surface-dialog: var(--mh-surface-subtle);
   --mh-shadow-dialog: 0 24px 70px rgba(23, 34, 50, 0.22);
   --mh-surface-dialog-button: #d3ad78;
   --mh-line-dialog-button: #c79652;
@@ -589,7 +589,7 @@
   --mh-surface-violet-soft: #f3e5f5;
   --mh-ink-violet: #7b1fa2;
   --mh-indicator-like: #f59e0b;
-  --mh-surface-status-gray: #f5f5f5;
+  --mh-surface-status-gray: var(--mh-surface-page);
   --mh-ink-status-gray: #616161;
   --mh-ink-control-deep: var(--mh-text);
   --mh-ink-row-title: var(--mh-text-strong);

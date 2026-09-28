@@ -904,3 +904,8 @@ Actions: **keep** (already the role token) · **rename** · **merge** (replace r
 | `--mh-ra-badge-up-bg` | `rgba(0, 160, 107, 0.1)` | 3 | 3 | derive |
 | `--mh-bt-scope-bg` | `#edf5f1` | 4 | 3 | derive |
 
+### Corrections applied during WP2
+
+- corrected in WP2b: `--mh-surface-action-slate` `--mh-surface-inverse` → `color-mix(in srgb, var(--mh-surface-inverse) 85%, var(--mh-surface))` because its one use is the primary button's hover/focus fill (`components/Button/Button.css:55–58`), whose resting fill is already `--mh-surface-inverse`; a merge would remove the hover feedback.
+- corrected in WP2b: `--mh-launcher-line` `--mh-surface-inverse` → `--mh-line-inverse` because its one use is the launcher border drawn on the inverse surface (`components/AssistantLauncher/AssistantLauncher.css:19`); a merge would make the border invisible.
+- corrected in WP2b: `--mh-live-bar` `--mh-surface-muted` → `--mh-line-strong` because it fills chart bars on a light panel (`features/cockpit/LiveOverview/LiveOverview.css:119–125`); `--mh-surface-muted` is too close to the panel to read as data.
