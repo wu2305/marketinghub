@@ -16,10 +16,10 @@ product are this one idea:
 |---|---|---|---|---|
 | 1 | Business Terms | `features/interpreter/BusinessTermView` | knowledge | cards |
 | 2 | Report Context | `features/interpreter/FieldLibraryView` (type) | knowledge | cards |
-| 3 | Metric Dictionary | same | knowledge | table |
-| 4 | Analytical Models | same | knowledge | table |
-| 5 | Email Reports | same | knowledge | table |
-| 6 | Scenario Reports | `features/interpreter/ScenarioReportsView` | knowledge | table |
+| 3 | Metric Dictionary | same | knowledge | cards |
+| 4 | Analytical Models | same | knowledge | cards |
+| 5 | Email Reports | same | knowledge | cards |
+| 6 | Scenario Reports | `features/interpreter/ScenarioReportsView` | knowledge | cards |
 | 7 | Principles | `features/interpreter/PrinciplesView` | knowledge | cards |
 | 8 | Data Models (domain list only) | `features/interpreter/DataModelView` | knowledge | cards |
 | 9 | Review Center queue | `features/review-center/ReviewQueue` + `pages/ReviewCenterPage` | review items | table |
@@ -27,7 +27,9 @@ product are this one idea:
 | 11 | Skill Library | `features/scenario-library/SkillLibrary` | skills | table |
 | 12 | Personal Memory list | `features/personal-memory/MemoryWorkspace` (left column) | memories | cards |
 
-"Layout" is today's layout; §5 says which differences are purposeful.
+"Layout" is what the original renders. Correction 2026-09-27: all Field Library types and Scenario Reports
+render cards; the table built in `field-library.js:320-323` is always hidden (`:234-243`), so it is dead
+code, not a layout. Tables are Review Center, Feedback & Quality and Skill Library.
 
 ## 2. Anatomy
 
@@ -146,10 +148,10 @@ filter/count function, and one render test per new component.
 |---|---|---|---|---|---|---|---|---|---|
 | Business Terms | cards | title, description, synonyms | status (incl. Draft), domain, creator | yes | yes → create page | availability | definition, synonyms table, scope | synonym chips (content-specific meta) | warm-grey palette; rAF "…" synonym clamp → CSS clamp + "+N" chip; `aria-disabled`-only variant |
 | Report Context | cards | report name, description | project, status, AI summary | edit description only | no | availability | description (editable), project, AI switches | description edit dialog (only editable field) | Open/Close label; hidden count line |
-| Metric Dictionary | table | name, definition, keywords | domain, type, status | no (A2 default) | no | availability | definition, formula, references | formula as monospace | hover-title-only definitions → visible 2-line clamp |
-| Analytical Models | table | name, scenarios | status (incl. Draft), creator | yes | yes | availability | steps, constraints | — | native-`disabled` variant; dead "disable first" dialog |
-| Email Reports | table | name, related report | status, recipients | no (A2 default) | no | availability | recipients, schedule | recipient chips | `paused` class name for Disabled |
-| Scenario Reports | table | title, description | workflow, availability, creator | yes | yes | availability + workflow | outline, linked reports | two axes shown together | filter vocabulary (In Development/Live) → Building/Published |
+| Metric Dictionary | cards | name, definition, keywords | domain, type, status | no (A2 default) | no | availability | definition, formula, references | formula as monospace | hover-title-only definitions → visible 2-line clamp |
+| Analytical Models | cards | name, scenarios | status (incl. Draft), creator | yes | yes | availability | steps, constraints | — | native-`disabled` variant; dead "disable first" dialog |
+| Email Reports | cards | name, related report | status, recipients | no (A2 default) | no | availability | recipients, schedule | recipient chips | `paused` class name for Disabled |
+| Scenario Reports | cards | title, description | workflow, availability, creator | yes | yes | availability + workflow | outline, linked reports | two axes shown together | filter vocabulary (In Development/Live) → Building/Published |
 | Principles | cards | category, title, description | category | no (A2 default) | no | — | none (expand in place) | expand/collapse long description | — |
 | Data Models (domains) | cards | domain name | — | no | no | availability | opens Data Model browser | — | — |
 | Review Center | table + tabs | title, summary, submitter | type, submitted (time) | review actions instead (B14) | no | workflow + AI check | review detail, AI suggestions | approve/reject; risk dialog | literal Rejected count; no-op time filter; Rejected items vanish |

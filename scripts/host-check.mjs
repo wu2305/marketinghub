@@ -732,25 +732,25 @@ async function newPage() {
   const termsA = page.locator('section[aria-label="Business term libraries"] .host-cell[data-instance="a"] .mh-btview');
   const termsB = page.locator('section[aria-label="Business term libraries"] .host-cell[data-instance="b"] .mh-btview');
   await termsA.waitFor({ timeout: 8000 });
-  if ((await termsA.locator(".mh-btview__card").count()) !== 6) notes.push("terms A: expected 6 seed cards");
-  if ((await termsB.locator(".mh-btview__card").count()) !== 3) notes.push("terms B: expected 2 records + 1 draft");
+  if ((await termsA.locator(".mh-library-item").count()) !== 6) notes.push("terms A: expected 6 seed cards");
+  if ((await termsB.locator(".mh-library-item").count()) !== 3) notes.push("terms B: expected 2 records + 1 draft");
   const bText = await termsB.innerText();
   if (!bText.includes("Alt Alpha Metric") || !bText.includes("Alt Draft Term")) notes.push("terms B missing ALT content");
   if (bText.includes("GMV (Gross Merchandise Value)") || bText.includes("Add Business Term")) notes.push("terms B shows default demo strings");
 
   await termsA.locator('[aria-label="Disable GMV (Gross Merchandise Value)"]').click();
-  await page.locator(".mh-confirm--confirm").waitFor({ timeout: 8000 });
-  await page.locator(".mh-confirm--confirm button:has-text('Confirm Offline')").click();
-  const aGmvPill = await termsA.locator('.mh-btview__card:has-text("GMV") .mh-badge--knowledge').innerText();
+  await page.locator(".mh-confirm--warning").waitFor({ timeout: 8000 });
+  await page.locator(".mh-confirm--warning button:has-text('Confirm Offline')").click();
+  const aGmvPill = await termsA.locator('.mh-library-item:has-text("GMV") .mh-library-item__head > .mh-badge').innerText();
   if (!aGmvPill.includes("Disabled")) notes.push(`terms A: GMV pill still ${aGmvPill}`);
   if (await page.locator(".mh-confirm").count()) notes.push("confirm dialog did not close");
   if (await termsB.locator(".mh-confirm, .mh-modal").count()) notes.push("terms B opened a dialog from A's action");
-  if ((await termsB.locator(".mh-btview__card").count()) !== 3) notes.push("terms B cards changed by A's disable");
+  if ((await termsB.locator(".mh-library-item").count()) !== 3) notes.push("terms B cards changed by A's disable");
 
-  await termsB.locator(".mh-btview__search input").fill("beta");
+  await termsB.locator(".mh-library-toolbar__search input").fill("beta");
   await page.waitForTimeout(300);
-  if ((await termsB.locator(".mh-btview__card").count()) !== 1) notes.push("terms B search did not narrow to 1 card");
-  if ((await termsA.locator(".mh-btview__card").count()) !== 6) notes.push("terms A cards changed by B's search");
+  if ((await termsB.locator(".mh-library-item").count()) !== 1) notes.push("terms B search did not narrow to 1 card");
+  if ((await termsA.locator(".mh-library-item").count()) !== 6) notes.push("terms A cards changed by B's search");
 
   await page.screenshot({ path: path.join(OUT, "compose.png"), fullPage: true });
   await copA.locator('button[aria-label="Close AI workspace"]').click();

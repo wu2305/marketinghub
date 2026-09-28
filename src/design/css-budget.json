@@ -1,6 +1,6 @@
 {
   "maxRawHexColors": 0,
-  "maxTokenDefinitions": 487,
+  "maxTokenDefinitions": 485,
   "maxDuplicateValues": 40,
   "legacyPrefixExemptions": [
     "--mh-header",
@@ -139,8 +139,6 @@
     "--mh-bt-action-hover-bg",
     "--mh-bt-countline",
     "--mh-bt-empty",
-    "--mh-bt-draft-bg",
-    "--mh-bt-draft-ink",
     "--mh-bt-create-shadow",
     "--mh-bt-drawer-bg",
     "--mh-bt-drawer-line",
@@ -166,7 +164,6 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/interpreter/BusinessTermView",
     "features/interpreter/FieldLibraryView",
     "features/interpreter/ScenarioReportsView",
     "features/interpreter/PrinciplesView",
