@@ -18,6 +18,12 @@ border-color: var(--mh-line-strong);
   box-shadow: var(--mh-shadow-overlay);
 }
 
+.mh-library-item--selected,
+.mh-library-item--selected:hover {
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
+}
+
 .mh-library-item:focus-within {
 border-color: var(--mh-accent);
 }

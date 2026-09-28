@@ -12,6 +12,11 @@ display: grid;
   min-width: 0;
 }
 
+/* An expanded card spans the row instead of stretching its neighbours. */
+.mh-library-list--cards > .mh-library-list__item--expanded {
+grid-column: 1 / -1;
+}
+
 .mh-library-list--table {
 overflow: hidden;
   border: 1px solid var(--mh-line);

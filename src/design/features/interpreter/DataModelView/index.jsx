@@ -2,6 +2,9 @@ import "../../../tokens.css";
 import React from "react";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import { Icon } from "../../../icons.jsx";
+import { LibraryEmpty } from "../../../components/LibraryEmpty/index.jsx";
+import { LibraryItem } from "../../../components/LibraryItem/index.jsx";
+import { SearchField } from "../../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { cx } from "../../../cx.js";
 import "./DataModelView.css";
@@ -136,7 +139,8 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
 
 /**
  * Data Model knowledge type — `data-model-browser.js` `#dataModelOverview`:
- * domain sidebar (search + domain cards), Basic information card (name +
+ * domain sidebar (SearchField + one `LibraryItem` per domain, the shown one
+ * `selected`; patterns/library.md §5 Data Models), Basic information card (name +
  * status pill, synonyms, related-report links that open the Report Context
  * drawer), and the pannable/zoomable relationship graph whose nodes open the
  * centered table detail dialog.
@@ -202,43 +206,35 @@ export function DataModelView({
     <section className="mh-dmview" {...rest}>
       <div className="mh-dmview__shell">
         <aside className="mh-dmview__sidebar">
-          <label className="mh-dmview__search">
-            <Icon name="search" className="mh-dmview__search-icon" />
-            <input
-              type="search"
-              value={query || ""}
+          <div className="mh-dmview__search">
+            <SearchField
+              label={strings.searchLabel}
               placeholder={strings.searchPlaceholder}
-              aria-label={strings.searchLabel}
-              autoComplete="off"
-              onChange={(event) => onQueryChange?.(event.target.value)}
+              value={query || ""}
+              onChange={({ value }) => onQueryChange?.(value)}
             />
-          </label>
-          <div className="mh-dmview__domains" role="listbox" aria-label={strings.listAria}>
-            {domains.length ? (
-              domains.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={cx("mh-dmview__domain", item.id === domain?.id && "is-active")}
-                  data-id={item.id}
-                  role="option"
-                  aria-selected={item.id === domain?.id}
-                  onClick={() => onSelectDomain?.(item.id)}
-                >
-                  <span className="mh-dmview__domain-dot" aria-hidden="true" />
-                  <span className="mh-dmview__domain-copy">
-                    <strong>{item.name}</strong>
-                    <small>{item.description}</small>
-                  </span>
-                  <b>
-                    {item.tables?.length || 0} {strings.tablesUnit}
-                  </b>
-                </button>
-              ))
-            ) : (
-              <div className="mh-dmview__empty">{strings.emptyDomains}</div>
-            )}
           </div>
+          {domains.length ? (
+            <ul className="mh-dmview__domains" aria-label={strings.listAria}>
+              {domains.map((item) => (
+                <li key={item.id}>
+                  <LibraryItem
+                    id={item.id}
+                    title={item.name}
+                    description={item.description}
+                    selected={item.id === domain?.id}
+                    status={item.status === "enable" ? { status: "enabled", label: strings.enabled } : { status: "disabled", label: strings.disabled }}
+                    meta={[{ label: strings.tablesLabel, value: item.tables?.length || 0 }]}
+                    onOpen={() => onSelectDomain?.(item.id)}
+                  />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mh-dmview__domains">
+              <LibraryEmpty title={strings.emptyDomains} />
+            </div>
+          )}
         </aside>
         <section className="mh-dmview__main">
           <div className="mh-dmview__tabs" role="tablist" aria-label={strings.tabsAria}>

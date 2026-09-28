@@ -42,6 +42,10 @@ export default {
 };
 
 export const Cards = {};
+export const ExpandedCard = {
+  name: "Cards, one expanded",
+  args: { items: records.map((record, index) => ({ ...toItem(record), expanded: index === 1 })) },
+};
 export const Table = { args: { layout: "table", label: "Analytical models" } };
 export const NoResults = { args: { items: [] } };
 export const TableNoResults = { name: "Table, no results", args: { layout: "table", rows: [] } };

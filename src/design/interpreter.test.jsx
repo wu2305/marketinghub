@@ -176,7 +176,7 @@ describe("AI Interpreter type contract", () => {
       fireEvent.click(screen.getAllByRole("button", { name: new RegExp(type.title) })[0]);
       // types.js: ?type=Principles swaps the asset table for the card grid.
       if (type.view === "principles") {
-        const cards = document.querySelectorAll(".mh-principle");
+        const cards = document.querySelectorAll(".mh-principles .mh-library-item");
         expect(cards.length).toBe(INTERPRETER.principles.length);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
@@ -206,7 +206,7 @@ describe("AI Interpreter type contract", () => {
       // data-model-browser.js swaps in #dataModelOverview's domain browser —
       // the hidden "Customer Growth" domain never renders.
       if (type.view === "data-model") {
-        const cards = document.querySelectorAll(".mh-dmview__domain");
+        const cards = document.querySelectorAll(".mh-dmview__domains .mh-library-item");
         expect(cards.length).toBe(3);
         expect(document.querySelector(".mh-asset")).toBeNull();
         continue;
@@ -250,7 +250,7 @@ describe("AI Interpreter type contract", () => {
     }
     render(<ActiveProbe />);
     expect(screen.getByTestId("host-overlay").textContent).toBe("Host overlay");
-    expect(document.querySelectorAll(".mh-principle").length).toBe(INTERPRETER.principles.length);
+    expect(document.querySelectorAll(".mh-principles .mh-library-item").length).toBe(INTERPRETER.principles.length);
   });
 
   it("includes typeId in view, Data Model, overlay, and shell callbacks", () => {
@@ -262,7 +262,7 @@ describe("AI Interpreter type contract", () => {
     expect(onOpenReportContext).toHaveBeenCalledWith({ typeId: "Data Model", id: "fourp-report-context" });
     fireEvent.click(screen.getByRole("button", { name: "Close details" }));
     expect(onCloseDetail).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Data Model" }));
-    fireEvent.click(document.querySelectorAll(".mh-dmview__domain")[1]);
+    fireEvent.click(document.querySelectorAll(".mh-dmview__domains .mh-library-item")[1]);
     expect(onSelectDomain).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Data Model" }));
     unmount();
     const onAction = vi.fn();
@@ -310,19 +310,23 @@ describe("AI Interpreter type contract", () => {
   it("query narrows principle cards and produces the dedicated empty state", () => {
     render(<Harness activeType="Principles" />);
     fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "requested scope" } });
-    expect(document.querySelectorAll(".mh-principle").length).toBe(1);
-    expect(document.querySelector(".mh-principle").textContent).toContain("Match the Requested Scope");
+    expect(document.querySelectorAll(".mh-principles .mh-library-item").length).toBe(1);
+    expect(document.querySelector(".mh-principles .mh-library-item").textContent).toContain("Match the Requested Scope");
 
     fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "zzzzz" } });
-    expect(document.querySelectorAll(".mh-principle").length).toBe(0);
-    expect(screen.getByText("No matching principles. Change the category or search.")).toBeTruthy();
+    expect(document.querySelectorAll(".mh-principles .mh-library-item").length).toBe(0);
+    expect(screen.getByText("No matching principles.")).toBeTruthy();
+    expect(screen.getByText("Change the category or search.")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
+    expect(document.querySelectorAll(".mh-principles .mh-library-item").length).toBe(INTERPRETER.principles.length);
+    expect(screen.getByLabelText("Search knowledge").value).toBe("");
   });
 
   it("filters principle cards by the category checkbox set", () => {
     render(<Harness activeType="Principles" />);
     fireEvent.click(screen.getByLabelText("System"));
-    expect(document.querySelectorAll(".mh-principle").length).toBe(1);
-    expect(document.querySelector(".mh-principle").textContent).toContain("Handle Runtime Context Carefully");
+    expect(document.querySelectorAll(".mh-principles .mh-library-item").length).toBe(1);
+    expect(document.querySelector(".mh-principles .mh-library-item").textContent).toContain("Handle Runtime Context Carefully");
     expect(screen.getByText("1 selected")).toBeTruthy();
   });
 

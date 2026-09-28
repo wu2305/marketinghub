@@ -41,9 +41,25 @@ describe("LibraryItem", () => {
     expect(screen.getByText("Draft")).toBeTruthy();
     expect(screen.getByText("Domain")).toBeTruthy();
   });
+
+  it("marks the selected item on its title button", () => {
+    const { container, rerender } = render(<LibraryItem id="x" title="GMV" />);
+    expect(screen.getByRole("button", { name: "GMV" }).hasAttribute("aria-current")).toBe(false);
+    rerender(<LibraryItem id="x" title="GMV" selected />);
+    expect(screen.getByRole("button", { name: "GMV" }).getAttribute("aria-current")).toBe("true");
+    expect(container.querySelector(".mh-library-item--selected")).toBeTruthy();
+  });
 });
 
 describe("LibraryList", () => {
+  it("gives an expanded card the full row without passing the flag on", () => {
+    render(<LibraryList label="Principles" items={[{ id: "a", title: "Alpha" }, { id: "b", title: "Beta", expanded: true }]} />);
+    const [first, second] = within(screen.getByRole("list", { name: "Principles" })).getAllByRole("listitem");
+    expect(first.className).toBe("");
+    expect(second.className).toBe("mh-library-list__item--expanded");
+    expect(second.querySelector("[expanded]")).toBeNull();
+  });
+
   it("renders cards, a table, or the empty state with its clear action", () => {
     const onClear = vi.fn();
     const { rerender } = render(<LibraryList label="Terms" items={[{ id: "a", title: "Alpha" }]} />);

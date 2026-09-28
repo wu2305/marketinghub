@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          'Principles library view — the dedicated card list that replaces the generic asset table when `?type=Principles`: gold search pill, category checkbox filter, "Showing X of Y" count line, numbered cards with clamped descriptions, and shared pagination.',
+          'Principles library (`?type=Principles`) on the governed-library pattern: LibraryToolbar (search, Category facet, "Showing X of Y" count), read-only LibraryList cards whose long descriptions expand in place, compact Pagination. List states (filtered, empty, paged) are shown by the Organisms/Library stories.',
       },
     },
   },
@@ -27,9 +27,10 @@ export default {
       control: "check",
       options: INTERPRETER.principles.map((item) => item.category),
     },
-    pageSize: { control: "inline-radio", options: [10, 20, 50] },
+    pageSize: { control: "inline-radio", options: [5, 10, 20] },
     onQueryChange: { action: "onQueryChange" },
     onToggleCategory: { action: "onToggleCategory" },
+    onClearFilters: { action: "onClearFilters" },
     onPage: { action: "onPage" },
     onPageSize: { action: "onPageSize" },
     onToggleExpand: { action: "onToggleExpand" },
@@ -46,7 +47,7 @@ export default {
     return (
       <PrinciplesView
         items={window_.rows}
-        total={window_.total}
+        totals={{ shown: window_.total, total: INTERPRETER.principles.length }}
         categories={categories}
         strings={INTERPRETER.principlesLibrary}
         query={query}
@@ -63,6 +64,12 @@ export default {
           setSelected(event.checked ? [...selected, event.id] : selected.filter((id) => id !== event.id));
           setPage(1);
           args.onToggleCategory?.(event);
+        }}
+        onClearFilters={(event) => {
+          setQuery("");
+          setSelected([]);
+          setPage(1);
+          args.onClearFilters?.(event);
         }}
         onPage={(event) => {
           setPage(event.page);

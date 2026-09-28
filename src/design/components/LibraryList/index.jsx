@@ -14,7 +14,7 @@ export const libraryLayouts = ["cards", "table"];
  * @param {object} props
  * @param {string} props.label accessible name of the list
  * @param {typeof libraryLayouts[number]} [props.layout="cards"]
- * @param {Array<object>} [props.items=[]] cards: LibraryItem props, each with `id`
+ * @param {Array<object>} [props.items=[]] cards: LibraryItem props, each with `id`; `expanded: true` gives that card the full row (content expanded in place, e.g. a long Principles description) so its neighbours keep their own height
  * @param {Array<{ key: string, header: React.ReactNode }>} [props.columns=[]] table only
  * @param {Array<{ id: string, [key: string]: React.ReactNode }>} [props.rows=[]] table only
  * @param {{ kind?: "no-results"|"empty", title: string, message?: string, clearLabel?: string }} [props.empty] shown when there are no items/rows
@@ -34,8 +34,8 @@ export function LibraryList({ label, layout = "cards", items = [], columns = [],
   }
   return (
     <ul className="mh-library-list mh-library-list--cards" aria-label={label}>
-      {items.map((item) => (
-        <li key={item.id}>
+      {items.map(({ expanded, ...item }) => (
+        <li key={item.id} className={expanded ? "mh-library-list__item--expanded" : undefined}>
           <LibraryItem {...item} onOpen={onOpen} onAction={onAction} />
         </li>
       ))}
