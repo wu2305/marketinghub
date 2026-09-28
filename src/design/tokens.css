@@ -235,7 +235,7 @@
   --mh-amber: var(--mh-accent-ink);
   --mh-header: var(--mh-layout-header-height);
   --mh-kicker: var(--mh-text-faint);
-  --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
+  --mh-drawer-shadow: var(--mh-shadow-modal);
   --mh-disabled-bg: var(--mh-surface-muted);
   --mh-disabled-line: var(--mh-line-strong);
   --mh-disabled-ink: var(--mh-text-faint);
@@ -245,16 +245,16 @@
   --mh-gold-medium: var(--mh-accent);
   --mh-popover-shadow: var(--mh-shadow-overlay);
   --mh-modal-shadow: var(--mh-shadow-modal);
-  --mh-toast-shadow: 0 14px 40px rgba(31, 41, 55, 0.22);
+  --mh-toast-shadow: var(--mh-shadow-overlay);
   --mh-surface-warning-pale: var(--mh-accent-wash);
   --mh-warn-line: var(--mh-accent-soft);
   --mh-warn-note: var(--mh-accent-ink);
-  --mh-focus-blue: #8da7c0;
+  --mh-focus-blue: var(--mh-focus-ring);
   /* workspace.css global :focus-visible ring */
   --mh-focus-strong: var(--mh-focus-ring);
   --mh-line-hover: var(--mh-line-strong);
   --mh-scrim-deep: var(--mh-scrim);
-  --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
+  --mh-modal-shadow-soft: var(--mh-shadow-modal);
   --mh-line-faint: var(--mh-line-subtle);
   --mh-line-warm: var(--mh-line-subtle);
   --mh-line-warm-strong: var(--mh-line-subtle);
@@ -267,16 +267,16 @@
   --mh-ink-strong: var(--mh-text-strong);
   --mh-ink-field: var(--mh-text-strong);
   --mh-icon-slate: var(--mh-text-muted);
-  --mh-focus-gold: rgba(218, 168, 96, 0.18);
+  --mh-focus-gold: var(--mh-focus-ring);
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: var(--mh-line-inverse);
   --mh-surface-dark: var(--mh-surface-inverse);
   --mh-ink-dark-control: var(--mh-text-strong);
   --mh-launcher-bg-hover: var(--mh-surface-inverse);
   --mh-launcher-aura: color-mix(in srgb, var(--mh-accent) 20%, transparent);
-  --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
-  --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
-  --mh-launcher-focus: rgba(63, 115, 166, 0.52);
+  --mh-launcher-shadow: var(--mh-shadow-overlay);
+  --mh-launcher-shadow-hover: var(--mh-shadow-overlay);
+  --mh-launcher-focus: var(--mh-focus-ring);
   --mh-ink-action-strong: var(--mh-text-strong);
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: var(--mh-text-strong);
@@ -303,15 +303,15 @@
   --mh-ai-chip-neg: var(--mh-danger);
   --mh-ai-chip-neg-bg: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
-  --mh-composer-shadow: 0 5px 16px rgba(31, 41, 55, 0.06);
-  --mh-composer-focus: 0 0 0 3px rgba(218, 168, 96, 0.18);
+  --mh-composer-shadow: var(--mh-shadow-raised);
+  --mh-composer-focus: 0 0 0 2px var(--mh-focus-ring);
   --mh-bg-faint: var(--mh-surface-subtle);
   --mh-field-line: var(--mh-line-strong);
   /* skill menu / model-flow dialog */
-  --mh-danger-ring: rgba(216, 34, 42, 0.1);
+  --mh-danger-ring: color-mix(in srgb, var(--mh-danger) 12%, transparent);
   --mh-gold-rule: var(--mh-accent);
   --mh-gold-faint: color-mix(in srgb, var(--mh-accent) 7%, transparent);
-  --mh-gold-ring: rgba(178, 140, 45, 0.14);
+  --mh-gold-ring: var(--mh-focus-ring);
   --mh-chip-line: var(--mh-accent-soft);
   --mh-chip-bg: var(--mh-accent-wash);
   --mh-chip-ink: var(--mh-accent-ink);
@@ -321,7 +321,7 @@
   --mh-placeholder: var(--mh-text-faint);
   --mh-search-placeholder: var(--mh-text-faint);
   --mh-scrim-mid: var(--mh-scrim);
-  --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
+  --mh-flow-shadow: var(--mh-shadow-modal);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-surface-neutral-cool: var(--mh-surface-page);
@@ -332,11 +332,11 @@
   --mh-reports-blue: var(--mh-info);
   --mh-reports-blue-soft: color-mix(in srgb, var(--mh-info) 8%, var(--mh-surface));
   --mh-reports-green: var(--mh-success);
-  --mh-reports-shadow: 0 18px 48px rgba(34, 45, 58, 0.12);
-  --mh-reports-card-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
-  --mh-reports-card-shadow-hover: 0 16px 34px rgba(34, 45, 58, 0.09);
-  --mh-reports-row-shadow: 0 6px 18px rgba(34, 45, 58, 0.035);
-  --mh-reports-row-shadow-hover: 0 10px 26px rgba(34, 45, 58, 0.065);
+  --mh-reports-shadow: var(--mh-shadow-modal);
+  --mh-reports-card-shadow: var(--mh-shadow-raised);
+  --mh-reports-card-shadow-hover: var(--mh-shadow-overlay);
+  --mh-reports-row-shadow: var(--mh-shadow-raised);
+  --mh-reports-row-shadow-hover: var(--mh-shadow-overlay);
   --mh-reports-card-edge: var(--mh-accent-fill);
   --mh-reports-gold-btn: var(--mh-accent-fill);
   --mh-reports-badge-bg: var(--mh-accent-wash);
@@ -350,7 +350,6 @@
   --mh-reports-thumb-bg: var(--mh-surface-muted);
   --mh-surface-panel-muted: var(--mh-surface-subtle);
   --mh-reports-media-bg: var(--mh-surface-muted);
-  --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
   /* Live report view (reports-core dark accents over the catalog light skin) */
   --mh-live-toolbar-bg: var(--mh-surface-page);
   --mh-line-neutral-soft: var(--mh-line);
@@ -361,7 +360,7 @@
   --mh-live-bar: var(--mh-line-strong);
   --mh-live-bar-alt: var(--mh-success);
   --mh-ink-faint-warm: var(--mh-text-muted);
-  --mh-live-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
+  --mh-live-shadow: var(--mh-shadow-raised);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
   --mh-sc-bg: var(--mh-surface-muted);
   --mh-sc-ink: var(--mh-text-strong);
@@ -379,9 +378,9 @@
   --mh-indicator-positive-chart: var(--mh-success);
   --mh-indicator-negative-chart: var(--mh-danger);
   --mh-sc-gridline: var(--mh-line-subtle);
-  --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --mh-sc-panel-shadow: var(--mh-shadow-raised);
+  --mh-sc-tip-shadow: var(--mh-shadow-raised);
+  --mh-sc-canvas-shadow: var(--mh-shadow-raised);
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
@@ -390,7 +389,7 @@
   --mh-ink-secondary-dark: var(--mh-text);
 
   --mh-copilot-tool-bg: var(--mh-surface-page);
-  --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
+  --mh-copilot-shadow-expanded: var(--mh-shadow-modal);
   --mh-copilot-gold-wash: color-mix(in srgb, var(--mh-accent) 14%, transparent);
   --mh-copilot-metric-pos: var(--mh-success);
   --mh-copilot-metric-neg: var(--mh-danger);
@@ -452,9 +451,9 @@
   --mh-check-filter-option: var(--mh-text);
   --mh-check-filter-checked-bg: var(--mh-accent-wash);
   --mh-check-filter-checked-ink: var(--mh-accent-ink);
-  --mh-check-filter-shadow: 0 8px 24px rgba(25, 34, 48, 0.1);
+  --mh-check-filter-shadow: var(--mh-shadow-overlay);
   --mh-principle-line: var(--mh-line);
-  --mh-principle-shadow: 0 4px 14px rgba(25, 31, 37, 0.08);
+  --mh-principle-shadow: var(--mh-shadow-raised);
   --mh-principle-number-bg: var(--mh-accent-wash);
   --mh-principle-number-ink: var(--mh-accent-ink);
   --mh-principle-badge-bg: var(--mh-surface-muted);
@@ -463,7 +462,7 @@
   --mh-principle-copy: var(--mh-text);
   --mh-principle-toggle: var(--mh-accent-ink);
   --mh-principle-toggle-hover: color-mix(in srgb, var(--mh-accent-ink) 67%, var(--mh-text-strong));
-  --mh-principle-focus-ring: rgba(185, 130, 52, 0.35);
+  --mh-principle-focus-ring: var(--mh-focus-ring);
   --mh-principle-empty-line: var(--mh-line);
   --mh-principle-empty-ink: var(--mh-text-muted);
   --mh-principle-search-ink: var(--mh-text-strong);
@@ -488,7 +487,7 @@
   --mh-line-control-warm: var(--mh-accent);
   --mh-line-control-focus-warm: var(--mh-accent);
   --mh-ink-icon-warm-muted: var(--mh-text-muted);
-  --mh-shadow-search-warm: 0 8px 24px rgba(116, 78, 31, 0.08);
+  --mh-shadow-search-warm: var(--mh-shadow-raised);
   --mh-bt-countline: var(--mh-text-muted);
   --mh-bt-empty: var(--mh-text-muted);
   --mh-bt-draft-bg: var(--mh-accent-wash);
@@ -497,12 +496,12 @@
   --mh-gold-action-end: var(--mh-accent);
   --mh-gold-action-hover-start: var(--mh-accent);
   --mh-gold-action-hover-end: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
+  --mh-bt-create-shadow: var(--mh-shadow-raised);
   --mh-bt-drawer-bg: var(--mh-surface-page);
   --mh-bt-drawer-line: var(--mh-line);
   --mh-bt-drawer-eyebrow: var(--mh-accent-ink);
   --mh-bt-drawer-title: var(--mh-text-strong);
-  --mh-bt-drawer-shadow: -8px 0 32px rgba(23, 32, 42, 0.15);
+  --mh-bt-drawer-shadow: var(--mh-shadow-overlay);
   --mh-bt-drawer-scrim: var(--mh-scrim);
   --mh-bt-status-on-bg: var(--mh-accent-wash);
   --mh-bt-status-on-ink: var(--mh-accent-ink);
@@ -534,12 +533,12 @@
   --mh-line-empty: var(--mh-line);
   --mh-line-card-warm: var(--mh-line-subtle);
   --mh-line-card-active: var(--mh-accent);
-  --mh-shadow-card-active: 0 14px 32px rgba(31, 41, 55, 0.08);
-  --mh-shadow-card-focus: 0 0 0 3px rgba(214, 155, 61, 0.18);
+  --mh-shadow-card-active: var(--mh-shadow-overlay);
+  --mh-shadow-card-focus: 0 0 0 2px var(--mh-focus-ring);
   --mh-line-card-hover-gold: var(--mh-accent);
-  --mh-shadow-card-hover-gold: 0 14px 28px rgba(31, 41, 55, 0.08), 0 0 0 3px rgba(217, 170, 99, 0.12);
+  --mh-shadow-card-hover-gold: var(--mh-shadow-overlay);
   --mh-line-card-hover-warm: var(--mh-accent);
-  --mh-shadow-card-hover-warm: 0 10px 26px rgba(31, 41, 55, 0.08);
+  --mh-shadow-card-hover-warm: var(--mh-shadow-overlay);
   --mh-line-domain-warm: color-mix(in srgb, var(--mh-accent) 28%, transparent);
   --mh-ink-action-disabled: var(--mh-text-faint);
   --mh-surface-recipient: var(--mh-accent-wash);
@@ -572,7 +571,7 @@
   --mh-line-dialog-header: var(--mh-line-subtle);
   --mh-line-dialog-close: var(--mh-line);
   --mh-surface-dialog: var(--mh-surface-subtle);
-  --mh-shadow-dialog: 0 24px 70px rgba(23, 34, 50, 0.22);
+  --mh-shadow-dialog: var(--mh-shadow-modal);
   --mh-surface-dialog-button: var(--mh-accent);
   --mh-line-dialog-button: var(--mh-accent);
   --mh-surface-dialog-button-hover: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
@@ -583,31 +582,21 @@
   --mh-surface-info-strong: color-mix(in srgb, var(--mh-info) 11%, var(--mh-surface));
   --mh-ink-info-strong: var(--mh-info);
   --mh-surface-review: var(--mh-accent-wash);
-  --mh-ink-review: #e65100;
   --mh-surface-rose-soft: color-mix(in srgb, var(--mh-data-rose) 11%, var(--mh-surface));
-  --mh-ink-rose: var(--mh-data-rose);
   --mh-surface-violet-soft: color-mix(in srgb, var(--mh-data-violet) 12%, var(--mh-surface));
-  --mh-ink-violet: #7b1fa2;
-  --mh-indicator-like: #f59e0b;
   --mh-surface-status-gray: var(--mh-surface-page);
-  --mh-ink-status-gray: #616161;
   --mh-ink-control-deep: var(--mh-text);
   --mh-ink-row-title: var(--mh-text-strong);
   --mh-ink-row-primary: var(--mh-text-strong);
   --mh-ink-empty-strong: var(--mh-text-strong);
   --mh-ink-empty-muted: var(--mh-text-muted);
   --mh-surface-gold-pale: var(--mh-accent-wash);
-  --mh-surface-hover-neutral: #f5f7f8;
   --mh-ink-filter-label: var(--mh-text-muted);
   --mh-ink-navigation: var(--mh-text-muted);
-  --mh-scrim-soft-cool: rgba(24, 32, 39, 0.28);
-  --mh-surface-gold-hover: #ffeeb3;
   --mh-surface-danger-hover: color-mix(in srgb, var(--mh-danger) 5%, var(--mh-surface));
-  --mh-shadow-chip-soft: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --mh-shadow-chip-soft: var(--mh-shadow-raised);
   --mh-ink-required: var(--mh-danger);
-  --mh-surface-accent-hover: #ffe99b;
-  --mh-shadow-focus-warm-soft: 0 0 0 3px rgba(218, 168, 96, 0.15);
-  --mh-line-panel-divider: #e2e8ed;
+  --mh-shadow-focus-warm-soft: 0 0 0 2px var(--mh-focus-ring);
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;

@@ -42,7 +42,7 @@ position: absolute;
 width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: var(--mh-reports-filter);
+  filter: saturate(0.86) contrast(0.96) brightness(1.04);
   transition: transform 300ms ease;
 }
 
