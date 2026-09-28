@@ -42,7 +42,7 @@
 
 .mh-confirm__message {
   margin: 12px 0 0;
-  color: var(--mh-bt-section-copy);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-lg);
   line-height: 1.65;
   white-space: normal;
@@ -138,7 +138,7 @@
   min-height: 38px;
   padding: 10px 20px;
   border-radius: var(--mh-radius-md);
-  color: var(--mh-bt-section-copy);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-md);
 }
 

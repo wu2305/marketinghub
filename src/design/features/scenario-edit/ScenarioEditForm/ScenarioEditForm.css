@@ -32,7 +32,7 @@
 .mh-scenario-edit-form__fill{position:relative}
 .mh-scenario-edit-form__fill textarea{padding-bottom:40px}
 .mh-scenario-edit-form__fill button{position:absolute;right:8px;bottom:8px;padding:4px 10px;border:0;border-radius:var(--mh-radius-pill);background:var(--mh-reports-pill-bg);color:var(--mh-ink-accent-warm);box-shadow:var(--mh-shadow-chip-soft);cursor:pointer;font:inherit;font-size:var(--mh-font-size-xs);font-weight:var(--mh-font-weight-bold)}
-.mh-scenario-edit-form__fill button:hover{background:var(--mh-surface-accent-hover)}
+.mh-scenario-edit-form__fill button:hover{background:var(--mh-accent-wash)}
 .mh-scenario-edit-form__upload{position:relative;display:grid;gap:5px;padding:14px 16px;border:1px dashed var(--mh-field-line);border-radius:var(--mh-radius-md);background:var(--mh-surface-info-soft);cursor:pointer}
 .mh-scenario-edit-form__upload input{position:absolute;width:1px;height:1px;opacity:0}
 .mh-scenario-edit-form__upload:focus-within,.mh-scenario-edit-form :is(a,button,input,textarea,select):focus-visible{outline:2px solid var(--mh-gold-medium);outline-offset:2px}
@@ -49,11 +49,11 @@
 .mh-scenario-edit-form__preview-body label{color:var(--mh-ink-control-deep);font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold)}
 .mh-scenario-edit-form__preview-body textarea{min-height:60px;margin-top:-10px}
 .mh-scenario-edit-form__preview-body pre{overflow-x:auto;margin:0;padding:16px;border:1px solid var(--mh-line-panel-subtle);border-radius:var(--mh-radius-md);background:var(--mh-bg-faint);color:var(--mh-ink-strong);font:inherit;font-size:var(--mh-font-size-md);line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
-.mh-scenario-edit-form__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px;padding-top:20px;border-top:1px solid var(--mh-line-panel-divider)}
+.mh-scenario-edit-form__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px;padding-top:20px;border-top:1px solid var(--mh-line-subtle)}
 .mh-scenario-edit-form__saved{display:inline-flex;align-items:center;gap:6px;color:var(--mh-faint);font-size:var(--mh-font-size-xs)}
 .mh-scenario-edit-form__actions{display:flex;gap:10px}
 .mh-scenario-edit-form__actions :is(a,button){display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 18px;border:1px solid var(--mh-copilot-box-line);border-radius:var(--mh-radius-md);background:var(--mh-surface);color:var(--mh-ink-control-deep);cursor:pointer;font:inherit;font-size:var(--mh-font-size-md);font-weight:var(--mh-font-weight-bold);text-decoration:none}
-.mh-scenario-edit-form__actions :is(a,button):hover{border-color:var(--mh-gold-medium);background:var(--mh-surface-hover-neutral)}
+.mh-scenario-edit-form__actions :is(a,button):hover{border-color:var(--mh-gold-medium);background:var(--mh-surface-subtle)}
 .mh-scenario-edit-form__actions svg{width:14px;height:14px}
 .mh-scenario-edit-form__actions button[type="submit"]{border-color:var(--mh-gold-medium);background:linear-gradient(135deg,var(--mh-gold-light),var(--mh-gold-medium));color:var(--mh-ink-strong)}
 .mh-scenario-edit-form__actions button[type="submit"]:hover{filter:brightness(.92)}
