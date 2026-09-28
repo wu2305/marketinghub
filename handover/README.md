@@ -11,12 +11,12 @@
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 461 stories + 87 docs；2026-09-26 85a5066 干净构建 |
-| 测试 | `npm test`：27 文件 235 条通过（85a5066） |
-| lint | `npm run lint`：0 errors / 0 warnings，85a5066 |
-| 构建验证 | `npm run build-storybook` 461 stories/87 docs；`npm run build:host` + host-check 30/30（`/tmp/mh-drain-final3-host`）；`npm run build:lib` 通过（需锁文件 typescript 5.9.3）；stamp 85a5066 |
-| CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；visual-check 依赖本地参照服务与浏览器，不入 CI |
-| 最近视觉对照 | 2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
+| 故事数 | 491 stories + 92 docs；2026-09-28 `fix/workpack-css-budget`，基于 GitHub main 29c4762 的工作区构建；本次未改故事 |
+| 测试 | `npm test`：30 文件 276 条通过（2026-09-28，29c4762 + 本次修复）；日志 `/tmp/mh-workpack-tests.log` |
+| lint | `npm run lint`：0 errors / 0 warnings（2026-09-28，29c4762 + 本次修复）；日志 `/tmp/mh-workpack-lint.log` |
+| 构建验证 | 2026-09-28 `npm run build-storybook`、`build:host`、`build:lib` 均通过；host-check 30/30（`/tmp/mh-workpack-host`）；stamp head 29c4762 + 两个设计源文件修改，Storybook sourceHash `be7c7426103d`、host `858d11f3ff4c` |
+| CI | `.github/workflows/ci.yml`（node 24：`npm ci` → lint → test → build-storybook → build:host → playwright chromium → host-check），首个通过 run：https://github.com/wu2305/marketinghub/actions/runs/36060649232（898ab8d，2026-09-25）；最新main run 36370462815 在两条CSS-budget断言失败，本分支已本地修复，远端重跑结果见修复PR检查；visual-check 依赖本地参照服务与浏览器，不入 CI |
+| 最近视觉对照 | 2026-09-28 本次 Home 7/7 机器通过（`/tmp/mh-workpack-visual`）；人工抽看1440px/390px默认态，产品结构可识别，既有基础层与响应式差异保留；其余人工pending。本次只删无消费者token，无新增视觉差异。上次全站：2026-09-26（stamp 85a5066，工作区干净）：全站505/505机器通过（`/tmp/mh-drain-final3-visual`），负向39/39按预期失败（`/tmp/mh-drain-final3-neg`）；字体探针仅32条既有等宽命中、无 Times 回退（`/tmp/mh-drain-final-fonts-r2.log`）。人工视觉结论不变，不把机器结果当视觉通过。 |
 | 原始 Demo 参照 | `index.html`、`assets/pages/*.html`，`npm run preview:html` 于 127.0.0.1:4173 |
 
 启动：
@@ -388,6 +388,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+- 2026-09-28 最近15次合并CI复核：仍有非阻断警告——`PilotSalesBody`缺少list key、知识详情版本面板重复`v1.0` key、`DataModelView`将`centralId`/`searchRef`透传DOM、jsdom整页导航未实现；另有依赖/Actions运行时弃用与bundle大小警告。276测试通过不代表这些警告已修；本次预算修复不扩大到组件行为清理。逐run日志与完整审核见`/tmp/mh-ci-audit/audit.md`。
+
 - 2026-09-27 设计意图 Phase 1 决定：foundations D1–D5 与 domain A1–A5 全部按推荐方案由用户批准（见两文件“Decisions”节）。Phase 2 按 `handover/design-intent/phase2-guide.md` 执行。§4 配对视觉流程与 visual-check 仍按逐像素参照运行，改为“状态可达+内容存在”的覆盖检查属 Phase 2 第 6 项。
 
 - 2026-09-26 积压集成（integrate/drain 85a5066）后仍存：①21个分支合入前均未做独立对抗审核，§2.1对应行标“已集成；独立对抗审核与人工视觉待办”。②52个导出枚举尚缺 m7/enum-types 的 readonly `@type` 声明（该分支早于这些枚举）。③`ConfirmDialog.css` 引用未定义的 `--mh-bt-section-copy`（main 已存在），文字色回退为继承。④仓库根 `node_modules` 与锁文件漂移（typescript 7.0.2 vs 锁定 5.9.3），所有以符号链接共享它的 worktree 会使 `build:lib` 失败；应 `npm ci`。⑤Modal 设计字体改到自身 eyebrow/标题/关闭按钮，对话框、标题行扩展、正文与页脚为插槽，调用方内容不再继承 DIN；ConfirmDialog、UploadHistory、Field Library 抽屉/编辑框在自身类上声明字体。
@@ -487,6 +489,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-09-28 | 按用户要求复核最近15次合并（#30–#44）：读取15条main完整日志及相关所有失败日志；main为13成功/2失败，PR分支67次中50成功/17失败，另加相关WP7b失败，共检查20份失败日志。根因归并：#34–#40 push/PR共14次重复值40>39（合并前已修）；#41三次及WP7b一次host确认框超时（已由main内c06d3c4关闭双Copilot后再测试库动作修复）；#43/#44两次为本分支已修的预算/删除token回退。13条成功main均完成host30/30，本地完整门禁见§1；未发现额外尚存CI阻断。非阻断警告记§4，不冒充已修。全15合并矩阵、20条失败run链接与证据：`/tmp/mh-ci-audit/audit.md`。 | Codex |
+| 2026-09-28 | 合并后 CI 修复（`fix/workpack-css-budget`，基于最新 GitHub main 29c4762）：读取失败 run 36370462815 并本地复现两条 CSS-budget 失败。#43 将预算从431/39回退为旧快照498/21，同时恢复了已删除且现已无消费者的 `--mh-reports-filter`、`--mh-bt-tag-bg`、`--mh-bt-draft-bg`、`--mh-bt-draft-ink`；删除这四项，定义491→487，定义上限498→487，重复值组按 Phase 2 guide WP2 的明确要求同步为实测35（原上限21），保留157项前缀豁免及全部测试断言。无组件/接口/故事/有意视觉差异；其余概念计数不变。验证结果与构建证据见§1，负向抽查日志 `/tmp/mh-workpack-negative.log` 中错误记录、隐藏预览、隐藏验证等均触发预期断言；脚本的`--negative`忽略`--only`并启动全套，本次已中止额外全套运行，不计全套通过。原main CI失败记录保留，修复后的远端结果见本次PR检查。`origin`代理落后于GitHub，创建分支前已从`github`同步`origin/main`。 | Codex |
 | 2026-09-27 | 公共导出修复（`fix/business-term-kind-export`）：补出BusinessTermForm既有枚举businessTermKinds，恢复同步预览对标准故事的导入；无新增枚举、故事或渲染变化。本地design-sync临时BusinessTermForm预览随导出补齐删除（该临时文件不在github/main）；不改同步配置。Claude所提19故事字体回退为旧记录，已由#20修复，本轮WP2b全故事字体探针仅保留公式/代码等宽字体。后续组件合并/改名继续登记旧→新路径及story id，供同步配置维护；不为预览暴露无真实消费者的私有helper；Phase 2合并后再执行design-sync。本修复构建与公共包导入证据见 `/tmp/mh-business-term-export-check.log`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP2a 审核修复（`di/wp2a-review`，基于 GitHub main `4d3270c`）：逐项核对附录 A 的 124 个文字 merge 行，复用旧候选的 118 项改指向并补漏 `--mh-ink-dark-control`→`--mh-text-strong`（唯一用途 `DataModelView.css:705` 为 hover/focus 文字）；共119项改动、5项已由WP1完成。498个定义与162个旧前缀不变，同值组预算15→16（补漏后消除一个反色表面的重复组），未改组件CSS/接口/故事。P01配对仅把故事侧禁用ASK文字期望从原RGB改为基础层text-faint的RGB；保留disabled、背景与原侧断言，未纳入旧候选提前修改的P06状态色断言。审核发现旧配对实际504/505且head不匹配、negative浏览器中断，不能作为本候选通过证据；最新完整输出与核对报告分别保存 `/tmp/mh-wp2a-review-{host,visual,neg}` 和 `/tmp/mh-wp2a-review-report.md`，以其中最终head/stamp及各项结果为准。人工视觉仍待审核；后续WP2b–WP7本地候选不等于已验收，不越过指南依赖与试点审核停点。 | Codex GPT-6 |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
