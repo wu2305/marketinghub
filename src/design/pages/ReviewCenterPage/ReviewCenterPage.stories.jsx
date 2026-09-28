@@ -10,7 +10,7 @@ const missingSuggestion = { ...restoration, id: "restore-fallback", title: "Rest
 const flowThreads = () => REVIEW_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const selectedFlowMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Review Center page with source-backed Pending and Approved queues, detail and decision overlays, and the lite AI assistant. The private demo hook drives Storybook and the standalone host." } } } };
+export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Review Center page on the governed-library table pattern: Pending / Approved / Rejected tabs, search, Type and Submitted facets, the review queue, detail and decision overlays with success toasts, and the lite AI assistant. List states (filtered, empty) are shown by the Organisms/Library stories; the private demo hook drives Storybook and the standalone host." } } } };
 
 export const ReviewCenter = {
   name: "Review Center",
@@ -21,12 +21,13 @@ export const ReviewCenter = {
     restorations: { control: "object", description: "One-time records merged by id, without localStorage." },
     tab: enumProp(reviewTabs, "pending", "Review tab (the demo hook owns interactive state)."),
     type: enumProp(reviewTypes, "all", "Source type filter."),
-    time: enumProp(reviewTimes, "all", "Visible Submitted selection; source does not filter rows by time."),
+    time: enumProp(reviewTimes, "all", "Submitted window: today, this week or this month (D01)."),
     panel: enumProp(reviewPanels, "none", "Selected review overlay; choose an item in initial.selectedId."),
     onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "approved" }),
     onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "Campaign ROI" }),
     onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "Data Model" }),
     onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "today" }),
+    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }),
     onOpenDetail: callbackProp("onOpenDetail", "({id:string}) => void", { id: "pending-1" }),
     onReviewAction: callbackProp("onReviewAction", "({id:string,action:string}) => void", { id: "pending-1", action: "reject" }),
     onClosePanel: callbackProp("onClosePanel", "({panel:string,reason:string}) => void", { panel: "detail", reason: "escape" }),
@@ -66,10 +67,8 @@ const playClicks = (...selectors) => async ({ canvasElement }) => {
   }
 };
 export const ReviewCenterApproved = state("Review Center · Approved", { tab: "approved" });
-export const ReviewCenterSearch = state("Review Center · Search hit", { search: "Campaign ROI" });
 export const ReviewCenterEmpty = state("Review Center · No matching items", { search: "no matching review" });
-export const ReviewCenterType = state("Review Center · Type filtered", { type: "Data Model" });
-export const ReviewCenterTime = state("Review Center · Submitted Today selection", { time: "today" });
+export const ReviewCenterDirectPass = state("Review Center · Pending Pass approves directly", { selectedId: "restore-pass" }, { restorations: [passRestoration] });
 export const ReviewCenterPendingDetail = state("Review Center · Pending detail and warning", { selectedId: "pending-1", panel: "detail" });
 export const ReviewCenterPendingPlain = state("Review Center · Pending detail without AI notes", { selectedId: "restore-fallback", panel: "detail" }, { restorations: [missingSuggestion] });
 export const ReviewCenterApprovedDetail = state("Review Center · Approved detail", { tab: "approved", selectedId: "approved-1", panel: "detail" });
@@ -77,9 +76,6 @@ export const ReviewCenterReject = state("Review Center · Reject with AI suggest
 export const ReviewCenterRejectFallback = state("Review Center · Reject fallback suggestions", { selectedId: "restore-fallback", panel: "reject" }, { restorations: [missingSuggestion] });
 export const ReviewCenterRiskReviewing = state("Review Center · AI review in progress", { selectedId: "pending-3", panel: "risk" });
 export const ReviewCenterRiskWarning = state("Review Center · AI warning", { selectedId: "restore-warning", panel: "risk" }, { restorations: [restoration] });
-export const ReviewCenterDirectPass = state("Review Center · Pending Pass approves directly", { selectedId: "restore-pass" }, { restorations: [passRestoration] });
-export const ReviewCenterRejectedResult = state("Review Center · Empty-reason rejection result", {});
-ReviewCenterRejectedResult.play = playClicks('[data-review-id="pending-1"] .mh-review-queue__reject', '.mh-review-page__reject-actions button:last-child');
 export const ReviewCenterAssistant = state("Review Center · Assistant open", { assistantOpen: true });
 export const ReviewCenterAssistantFilled = state("Review Center · Suggestion fills prompt", { assistantOpen: true, assistantPrompt: "Definition of Attributed ROI" });
 export const ReviewCenterAssistantAnswer = state("Review Center · Simple assistant answer", { assistantOpen: true, assistantAnswers: [REVIEW_SHELL.answerFor("Definition of Attributed ROI")] });

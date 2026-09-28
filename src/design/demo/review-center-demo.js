@@ -3,6 +3,41 @@ import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 const EMPTY = [];
 const EMPTY_INITIAL = {};
+const TOAST_MS = 3000;
+/* Same windows as Feedback & Quality (feedback.js:101-107). */
+const LIMIT_DAYS = { today: 1, week: 7, month: 30 };
+
+/**
+ * Whole days since submission, read from the source's relative text
+ * ("2 hours ago", "Today", "Yesterday", "3 days ago"); review records carry
+ * no timestamp (data/reviews.js). Unknown text counts as old.
+ * @param {string} submitted
+ * @returns {number}
+ */
+export function reviewAgeDays(submitted = "") {
+  const text = String(submitted).trim().toLowerCase();
+  if (text === "today" || /^\d+\s+(minute|hour)s?\s+ago$/.test(text)) return 0;
+  if (text === "yesterday") return 1;
+  const days = text.match(/^(\d+)\s+days?\s+ago$/);
+  if (days) return Number(days[1]);
+  const weeks = text.match(/^(\d+)\s+weeks?\s+ago$/);
+  if (weeks) return Number(weeks[1]) * 7;
+  return Infinity;
+}
+
+/**
+ * review.js getFilteredItems() plus the Submitted window it never applied (D01).
+ * @param {Array<object>} records
+ * @param {{ tab?: string, search?: string, type?: string, time?: string }} filters
+ */
+export function filterReviews(records, { tab = "pending", search = "", type = "all", time = "all" } = {}) {
+  const query = search.trim().toLowerCase();
+  return records.filter((item) =>
+    item.status === tab &&
+    (type === "all" || item.type === type) &&
+    (time === "all" || reviewAgeDays(item.submitted) < LIMIT_DAYS[time]) &&
+    (!query || `${item.title} ${item.summary} ${item.submittedBy}`.toLowerCase().includes(query)));
+}
 
 function mergeRecords(records, restorations) {
   const ids = new Set(records.map((item) => item.id));
@@ -37,6 +72,15 @@ export function useReviewCenterDemo(props) {
   const [panel, setPanel] = React.useState(initial.panel || null);
   const [selectedId, setSelectedId] = React.useState(initial.selectedId || null);
   const [reason, setReason] = React.useState(initial.reason || "");
+  const [toast, setToast] = React.useState("");
+  const toastTimer = React.useRef(null);
+  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
+  const showToast = (message) => {
+    clearTimeout(toastTimer.current);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
+  };
+  const toasts = props.content?.labels?.toasts || {};
 
   // The source consumes pendingRestorations once. New equivalent restoration
   // props must not replay a rejected record; changing records is an explicit
@@ -49,9 +93,8 @@ export function useReviewCenterDemo(props) {
   React.useEffect(() => { setTab(initial.tab || "pending"); setSearch(initial.search || ""); setType(initial.type || "all"); setTime(initial.time || "all"); setPanel(initial.panel || null); setSelectedId(initial.selectedId || null); setReason(initial.reason || ""); }, [initial]);
 
   const selected = records.find((item) => item.id === selectedId) || null;
-  const pendingCount = records.filter((item) => item.status === "pending").length;
-  const approvedCount = records.filter((item) => item.status === "approved").length;
-  const shown = records.filter((item) => item.status === tab && (type === "all" || item.type === type) && (!search.trim() || `${item.title} ${item.summary} ${item.submittedBy}`.toLowerCase().includes(search.trim().toLowerCase())));
+  const countOf = (status) => records.filter((item) => item.status === status).length;
+  const shown = filterReviews(records, { tab, search, type, time });
   const detailSuggestions = selected ? props.suggestions?.[selected.id] || EMPTY : EMPTY;
   const rejectSuggestions = selected ? props.suggestions?.[selected.id] || props.fallbackSuggestions || EMPTY : EMPTY;
 
@@ -65,9 +108,13 @@ export function useReviewCenterDemo(props) {
     if (kind === "reject") { setReason(""); setPanel("reject"); return; }
     if (kind === "approve") {
       if (item.aiCheck === "Warning" || item.aiCheck === "Reviewing") { setPanel("risk"); return; }
-      setRecords((current) => current.map((record) => record.id === id ? { ...record, status: "approved", aiCheck: "Pass" } : record));
-      setPanel(null);
+      approve(id);
     }
+  };
+  const approve = (id) => {
+    setRecords((current) => current.map((record) => record.id === id ? { ...record, status: "approved", aiCheck: "Pass" } : record));
+    setPanel(null);
+    showToast(toasts.approved || "Approved");
   };
   const workspace = useWorkspaceAssistantDemo({
     variant: "lite",
@@ -106,10 +153,11 @@ export function useReviewCenterDemo(props) {
       onSearchChange: ({ value }) => { setSearch(value); props.onSearchChange?.({ value }); },
       onTypeChange: ({ value }) => { setType(value); props.onTypeChange?.({ value }); },
       onTimeChange: ({ value }) => { setTime(value); props.onTimeChange?.({ value }); },
+      onClear: (event) => { setSearch(""); setType("all"); setTime("all"); props.onClearFilters?.(event); },
     },
     queue: {
       items: shown,
-      counts: { pending: pendingCount, approved: approvedCount, rejected: 3 },
+      counts: { pending: countOf("pending"), approved: countOf("approved"), rejected: countOf("rejected") },
       onOpenDetail: ({ id }) => { setSelectedId(id); setPanel("detail"); props.onOpenDetail?.({ id }); },
       onReviewAction: action,
     },
@@ -117,9 +165,17 @@ export function useReviewCenterDemo(props) {
       panel, selected, reason, detailSuggestions, rejectSuggestions,
       onClose: closePanel,
       onReasonChange: ({ value }) => { setReason(value); props.onReasonChange?.({ value }); },
-      onConfirmReject: () => { if (!selected) return; setRecords((current) => current.map((item) => item.id === selected.id ? { ...item, status: "rejected" } : item)); setPanel(null); props.onConfirmReject?.({ id: selected.id, reason }); },
-      onConfirmApprove: () => { if (!selected) return; setRecords((current) => current.map((item) => item.id === selected.id ? { ...item, status: "approved", aiCheck: "Pass" } : item)); setPanel(null); props.onConfirmApprove?.({ id: selected.id }); },
+      onConfirmReject: () => {
+        if (!selected) return;
+        const note = reason.trim();
+        setRecords((current) => current.map((item) => item.id === selected.id ? { ...item, status: "rejected", rejectionReason: note } : item));
+        setPanel(null);
+        showToast(toasts.rejected || "Rejected");
+        props.onConfirmReject?.({ id: selected.id, reason });
+      },
+      onConfirmApprove: () => { if (!selected) return; approve(selected.id); props.onConfirmApprove?.({ id: selected.id }); },
     },
+    toast,
     ...workspace,
   };
 }

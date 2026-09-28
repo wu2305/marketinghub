@@ -65,7 +65,8 @@ export const REVIEW_CENTER = {
     "closeReject": "Close reject panel",
     "tabs": {
       "pending": "Pending Review",
-      "approved": "Approved"
+      "approved": "Approved",
+      "rejected": "Rejected"
     },
     "search": "Search review items...",
     "type": "Type",
@@ -123,6 +124,12 @@ export const REVIEW_CENTER = {
     "restore": "Restore",
     "pending": "Pending",
     "approved": "Approved",
+    "rejected": "Rejected",
+    "clearFilters": "Clear filters",
+    "toasts": {
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
     "aiSuggestion": "AI Suggestion",
     "rejectionReason": "Rejection Reason",
     "rejectionPlaceholder": "Describe why this item is being rejected...",

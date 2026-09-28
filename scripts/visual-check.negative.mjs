@@ -47,8 +47,8 @@ export default [
   {
     id: "neg-p12-wrong-search",
     base: "p12-search",
-    story: { id: "pages--review-center-empty" },
-    reason: "No-match queue cannot satisfy Campaign ROI search result assertions",
+    story: { actions: [{ fill: [".mh-library-toolbar input[type='search']", "no matching review"] }] },
+    reason: "A search that matches nothing cannot satisfy Campaign ROI search result assertions",
   },
   {
     id: "neg-p12-missing-answer",

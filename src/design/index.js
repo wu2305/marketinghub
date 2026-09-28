@@ -251,7 +251,6 @@ export {
 } from "./features/knowledge-view/KnowledgeDetail/index.jsx";
 export { KnowledgeViewPage } from "./pages/KnowledgeViewPage/index.jsx";
 export { ReviewCenterPage, reviewTabs, reviewTypes, reviewTimes, reviewPanels } from "./pages/ReviewCenterPage/index.jsx";
-export { ReviewQueue } from "./features/review-center/ReviewQueue/index.jsx";
 export { GovernanceNav } from "./components/GovernanceNav/index.jsx";
 export { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes } from "./pages/FeedbackQualityPage/index.jsx";
 export { FeedbackList } from "./features/feedback-quality/FeedbackList/index.jsx";
