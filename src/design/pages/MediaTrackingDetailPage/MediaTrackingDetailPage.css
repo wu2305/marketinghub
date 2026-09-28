@@ -22,11 +22,11 @@ display: inline-flex;
   gap: 6px;
   padding: 8px 14px;
   border: 1px solid var(--mh-line-soft);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-ink-strong);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
   transition: background 0.15s ease;
 }
@@ -50,8 +50,8 @@ margin-bottom: 20px;
 display: inline-block;
   margin-bottom: 8px;
   color: var(--mh-ink-accent-warm);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -59,8 +59,8 @@ display: inline-block;
 .mh-tracking__head h1 {
 margin: 0;
   color: var(--mh-ink-strong);
-  font-size: 32px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-tracking .mh-tabs {
@@ -73,7 +73,7 @@ gap: 4px;
 padding: 10px 18px;
   margin-bottom: -1px;
   color: var(--mh-muted-strong);
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-tracking .mh-tabs__tab:hover,
@@ -93,14 +93,14 @@ display: grid;
   margin-bottom: 18px;
   padding: 16px;
   border: 1px solid var(--mh-line-soft);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
 .mh-tracking__filters .mh-field > span {
 color: var(--mh-muted-strong);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-tracking__filters .mh-field__required {
@@ -112,30 +112,30 @@ height: 32px;
   padding: 0 10px;
   border-color: var(--mh-field-line);
   color: var(--mh-ink-strong);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-tracking__description {
 margin: 0 0 20px;
   padding: 14px 18px;
   border: 1px solid var(--mh-line-tab);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-bg-faint);
   color: var(--mh-subtle-ai);
-  font-size: 11.5px;
+  font-size: var(--mh-font-size-xs);
   line-height: 1.7;
 }
 
 .mh-tracking__description strong {
 color: var(--mh-ink-strong);
-  font-weight: 700;
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-tracking__table-wrap {
 overflow: hidden;
   border: 1px solid var(--mh-line-soft);
-  border-radius: 8px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -151,8 +151,8 @@ display: flex;
 .mh-tracking__table-head h2 {
 margin: 0;
   color: var(--mh-ink-strong);
-  font-size: 16px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xl);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-tracking__count {
@@ -160,8 +160,8 @@ display: inline-flex;
   align-items: center;
   gap: 6px;
   color: var(--mh-muted-strong);
-  font-size: 12px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-tracking__count svg {
@@ -178,7 +178,7 @@ max-height: 600px;
 width: 100%;
   min-width: 1800px;
   border-collapse: collapse;
-  font-size: 11.5px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-tracking__table thead th {
@@ -189,8 +189,8 @@ position: sticky;
   border-bottom: 1px solid var(--mh-line-soft);
   background: var(--mh-line-faintest);
   color: var(--mh-subtle-ai);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   text-align: left;
   white-space: nowrap;
 }

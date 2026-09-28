@@ -8,4 +8,4 @@
 .mh-skill-page__stats>.mh-metric--glass{min-height:100px}
 .mh-skill-page__body{display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;width:min(1440px,calc(100% - 88px));margin:34px auto 84px;align-items:start}.mh-skill-page__main{min-width:0}
 @media(max-width:1100px){.mh-skill-page__body{grid-template-columns:1fr;width:calc(100% - 40px)}.mh-skill-page .mh-hero--home .mh-hero__layout{grid-template-columns:1fr;gap:24px}.mh-skill-page__stats{min-width:0}}
-@media(max-width:690px){.mh-skill-page>.mh-hero .mh-hero__layout{display:block}.mh-skill-page .mh-hero__aside{display:none}.mh-skill-page .mh-hero__copy h1{font-size:42px}}
+@media(max-width:690px){.mh-skill-page>.mh-hero .mh-hero__layout{display:block}.mh-skill-page .mh-hero__aside{display:none}.mh-skill-page .mh-hero__copy h1{font-size:var(--mh-font-size-display)}}

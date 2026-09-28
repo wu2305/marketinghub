@@ -37,11 +37,11 @@ display: grid;
   }
 
   .mh-page--home .mh-hero__copy h1 {
-    font-size: 42px;
+    font-size: var(--mh-font-size-display);
   }
 
   .mh-page--home .mh-hero__copy p {
-    font-size: 15px;
+    font-size: var(--mh-font-size-xl);
   }
 
   .mh-page--home .mh-hero__aside {

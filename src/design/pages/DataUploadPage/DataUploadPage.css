@@ -16,10 +16,10 @@ display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   color: var(--mh-ink);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-lg);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
   transition: background 0.15s ease;
 }
@@ -39,10 +39,10 @@ background: var(--mh-bg-soft);
 height: auto;
   padding: 8px 14px;
   border-color: var(--mh-control-line);
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   color: var(--mh-ink-strong);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-upload__toolbar .mh-button__icon {
@@ -70,9 +70,9 @@ align-self: flex-start;
   min-height: 40px;
   padding: 0 24px;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--mh-radius-sm);
   box-shadow: none;
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
 }
 
 .mh-upload__form > .mh-button:hover,
@@ -87,14 +87,14 @@ opacity: 1;
 
 .mh-upload__grid .mh-field {
 color: var(--mh-ink-field);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-upload__grid .mh-input {
 height: 40px;
   border-color: var(--mh-control-line);
-  font-size: 13.5px;
+  font-size: var(--mh-font-size-md);
   transition:
     border-color 0.15s ease,
     box-shadow 0.15s ease;
@@ -103,14 +103,12 @@ height: 40px;
 .mh-upload__grid .mh-input:focus,
 .mh-upload__grid .mh-input:focus-visible {
 border-color: var(--mh-gold-medium);
-  box-shadow: 0 0 0 3px var(--mh-focus-gold);
-  outline: 0;
-}
+  box-shadow: none; outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
 
 .mh-upload__card {
 padding: 32px 36px;
   border: 1px solid var(--mh-line-strong);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -148,8 +146,8 @@ display: inline-flex;
   margin: 16px 0 22px;
   padding: 0;
   color: var(--mh-gold-text);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
 }
 
@@ -172,8 +170,8 @@ border-top: 1px solid var(--mh-line);
 .mh-bulk-import__tips h4 {
 margin: 0 0 10px;
   color: var(--mh-ink);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.6px;
 }
 
@@ -181,7 +179,7 @@ margin: 0 0 10px;
 margin: 0;
   padding-left: 18px;
   color: var(--mh-copy);
-  font-size: 12.5px;
+  font-size: var(--mh-font-size-sm);
   line-height: 1.7;
 }
 
