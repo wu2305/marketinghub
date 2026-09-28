@@ -81,7 +81,7 @@ export const DATA_MODEL_STRINGS = {
   enabled: "Enabled",
   disabled: "Disabled",
   emptyDomains: "No matching data models.",
-  tablesUnit: "tables",
+  tablesLabel: "Tables",
   none: "None",
   fact: "Fact",
   dimension: "Dimension",

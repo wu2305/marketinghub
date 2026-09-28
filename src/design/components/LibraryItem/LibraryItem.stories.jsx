@@ -11,6 +11,7 @@ export default {
   argTypes: {
     title: prop("string", { description: "Item name; also the open button." }),
     draft: prop("boolean", { defaultValue: false, description: "Shows the Draft marker." }),
+    selected: prop("boolean", { defaultValue: false, description: "The item the surrounding view currently shows (e.g. the Data Model domain in the browser)." }),
     description: prop("string", { description: "Clamped to two lines." }),
     meta: prop("Array<{ label, value }>", { description: "Label/value pairs under the description." }),
     status: prop("{ status, tone?, label? }", { description: "StatusBadge content." }),
@@ -26,6 +27,7 @@ export const Enabled = {};
 export const Disabled = { args: toItem(records[0]) };
 export const Draft = { args: toItem(records[2]) };
 export const OtherCreator = { name: "Created by others", args: toItem(records[3]) };
+export const Selected = { args: { ...toItem(records[1]), actions: undefined, selected: true } };
 export const ReadOnly = { name: "Without actions", args: { ...toItem(records[1]), actions: undefined } };
 export const WithExtraContent = {
   name: "With view-specific content",

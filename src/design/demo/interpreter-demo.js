@@ -224,7 +224,7 @@ export function useInterpreterDemo(props) {
     : null;
   const principles = activeView === "principles" ? {
         items: principleWindow.rows,
-        total: principleWindow.total,
+        totals: { shown: principleWindow.total, total: (props.principles?.items || []).length },
         categories,
         query,
         selectedCategories,
@@ -241,6 +241,12 @@ export function useInterpreterDemo(props) {
           );
           setPrinciplePage(1);
           typed(props.onToggleCategory)(event);
+        },
+        onClearFilters: (event) => {
+          setQuery("");
+          setSelectedCategories(EMPTY_ARRAY);
+          setPrinciplePage(1);
+          typed(props.onClearFilters)(event);
         },
         onPage: (event) => {
           setPrinciplePage(event.page);

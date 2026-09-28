@@ -1,4 +1,5 @@
 import "../../tokens.css";
+import { cx } from "../../cx.js";
 import { ItemActions } from "../ItemActions/index.jsx";
 import { StatusBadge } from "../StatusBadge/index.jsx";
 import "./LibraryItem.css";
@@ -12,6 +13,7 @@ import "./LibraryItem.css";
  * @param {string} props.id
  * @param {string} props.title
  * @param {boolean} [props.draft=false] shows the draft marker next to the title
+ * @param {boolean} [props.selected=false] the item the surrounding view currently shows (pattern §6 selected/active); sets `aria-current` on the title button
  * @param {string} [props.draftLabel="Draft"]
  * @param {string} [props.description] clamped to two lines
  * @param {Array<{ label: string, value: React.ReactNode }>} [props.meta=[]]
@@ -21,10 +23,10 @@ import "./LibraryItem.css";
  * @param {(event: { id: string }) => void} [props.onOpen]
  * @param {(event: { action: string, id: string, blocked: boolean, reason: string|null }) => void} [props.onAction]
  */
-export function LibraryItem({ id, title, draft = false, draftLabel = "Draft", description, meta = [], status, actions, children, onOpen, onAction }) {
+export function LibraryItem({ id, title, draft = false, selected = false, draftLabel = "Draft", description, meta = [], status, actions, children, onOpen, onAction }) {
   return (
     <article
-      className="mh-library-item"
+      className={cx("mh-library-item", selected && "mh-library-item--selected")}
       onClick={(event) => {
         if (event.target.closest("a, button, input, select, textarea, label, summary")) return;
         onOpen?.({ id });
@@ -32,7 +34,7 @@ export function LibraryItem({ id, title, draft = false, draftLabel = "Draft", de
     >
       <header className="mh-library-item__head">
         <h3 className="mh-library-item__title">
-          <button type="button" onClick={() => onOpen?.({ id })}>{title}</button>
+          <button type="button" aria-current={selected || undefined} onClick={() => onOpen?.({ id })}>{title}</button>
           {draft ? <sup className="mh-library-item__draft"><StatusBadge status="draft">{draftLabel}</StatusBadge></sup> : null}
         </h3>
         {status ? <StatusBadge status={status.status} tone={status.tone}>{status.label}</StatusBadge> : null}

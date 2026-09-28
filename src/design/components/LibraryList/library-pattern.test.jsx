@@ -41,9 +41,24 @@ describe("LibraryItem", () => {
     expect(screen.getByText("Draft")).toBeTruthy();
     expect(screen.getByText("Domain")).toBeTruthy();
   });
+
+  it("marks the selected item on its title button", () => {
+    const { container, rerender } = render(<LibraryItem id="x" title="GMV" />);
+    expect(screen.getByRole("button", { name: "GMV" }).hasAttribute("aria-current")).toBe(false);
+    rerender(<LibraryItem id="x" title="GMV" selected />);
+    expect(screen.getByRole("button", { name: "GMV" }).getAttribute("aria-current")).toBe("true");
+    expect(container.querySelector(".mh-library-item--selected")).toBeTruthy();
+  });
 });
 
 describe("LibraryList", () => {
+  it("stacks list items one per row with the same cards", () => {
+    render(<LibraryList label="Principles" layout="list" items={[{ id: "a", title: "Alpha" }, { id: "b", title: "Beta" }]} />);
+    const list = screen.getByRole("list", { name: "Principles" });
+    expect(list.className).toBe("mh-library-list mh-library-list--list");
+    expect(within(list).getAllByRole("button").map((button) => button.textContent)).toEqual(["Alpha", "Beta"]);
+  });
+
   it("renders cards, a table, or the empty state with its clear action", () => {
     const onClear = vi.fn();
     const { rerender } = render(<LibraryList label="Terms" items={[{ id: "a", title: "Alpha" }]} />);

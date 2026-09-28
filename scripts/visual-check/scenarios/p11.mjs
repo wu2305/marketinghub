@@ -15,7 +15,8 @@ export default [
       { sel: ".dm-related-report", count: 3 }, { sel: "#assistantPanel,#aiEntry", count: 0, state: "detached" },
     ] },
     story: graphStory("default", [
-      { sel: ".mh-dmview__domain", count: 3 }, { sel: ".mh-dmview__domain.is-active", text: "D2C Insight" },
+      { sel: ".mh-dmview__domains .mh-library-item", count: 3 }, { sel: ".mh-dmview__domains .mh-library-item--selected", text: "D2C Insight" },
+      { sel: ".mh-dmview__domains .mh-library-item .mh-badge", count: 3 },
       { sel: ".mh-dmview__tab.is-active", text: "Basic information" }, { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
       { sel: ".mh-dmview__report", count: 3 }, { sel: ".mh-assistant,.mh-launcher", count: 0, state: "detached" },
     ]),
@@ -23,7 +24,7 @@ export default [
   {
     id: "p11-type-normalized",
     original: { url: source("?foo=kept&type=Other"), actions: [{ eval: "const params = new URLSearchParams(location.search); if (params.get('type') !== 'Data Model' || params.get('foo') !== 'kept') throw new Error('source URL did not normalize type while preserving foo')" }], expect: [{ sel: ".dm-domain-card.active", text: "D2C Insight" }] },
-    story: graphStory("default", [{ sel: ".mh-dmview__domain.is-active", text: "D2C Insight" }]),
+    story: graphStory("default", [{ sel: ".mh-dmview__domains .mh-library-item--selected", text: "D2C Insight" }]),
   },
   {
     id: "p11-domain",
@@ -32,7 +33,7 @@ export default [
       { sel: ".dm-related-report", count: 1 },
     ] },
     story: graphStory("domain", [
-      { sel: ".mh-dmview__domain.is-active", text: "DC Media Performance" },
+      { sel: ".mh-dmview__domains .mh-library-item--selected", text: "DC Media Performance" },
       { sel: ".mh-dmview__basic-name strong", text: "DC Media Performance" }, { sel: ".mh-dmview__report", count: 1 },
     ]),
   },
@@ -43,8 +44,8 @@ export default [
       { sel: ".dm-domain-card.active", text: "DC Media Performance" }, { sel: ".dm-basic-name-row strong", text: "DC Media Performance" },
     ] },
     story: graphStory("search-hit", [
-      { sel: ".mh-dmview__domain", count: 1, text: "DC Media Performance" },
-      { sel: ".mh-dmview__domain.is-active", text: "DC Media Performance" }, { sel: ".mh-dmview__basic-name strong", text: "DC Media Performance" },
+      { sel: ".mh-dmview__domains .mh-library-item", count: 1, text: "DC Media Performance" },
+      { sel: ".mh-dmview__domains .mh-library-item--selected", text: "DC Media Performance" }, { sel: ".mh-dmview__basic-name strong", text: "DC Media Performance" },
     ]),
   },
   {
@@ -54,7 +55,7 @@ export default [
       { sel: ".dm-basic-name-row strong", text: "D2C Insight" },
     ] },
     story: graphStory("search-empty", [
-      { sel: ".mh-dmview__domain", count: 0, state: "detached" }, { sel: ".mh-dmview__empty", text: "No matching data models." },
+      { sel: ".mh-dmview__domains .mh-library-item", count: 0, state: "detached" }, { sel: ".mh-dmview__domains .mh-library-empty", text: "No matching data models." },
       { sel: ".mh-dmview__basic-name strong", text: "D2C Insight" },
     ]),
   },
