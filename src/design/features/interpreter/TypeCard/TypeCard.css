@@ -8,9 +8,9 @@ position: relative;
   padding: 18px 8px 20px 24px;
   overflow: hidden;
   border: 1px solid var(--mh-line-card-warm);
-  border-radius: 12px;
+  border-radius: var(--mh-radius-lg);
   background: linear-gradient(135deg, var(--mh-surface) 0%, var(--mh-surface-highlight-warm) 100%);
-  box-shadow: 0 8px 22px rgba(57, 43, 25, 0.045);
+  box-shadow: var(--mh-shadow-raised);
   text-align: left;
   cursor: pointer;
 }
@@ -55,8 +55,8 @@ position: relative;
   min-width: 0;
   overflow-wrap: anywhere;
   color: var(--mh-ink-row-title);
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-2xl);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-type-card__count {
@@ -68,11 +68,11 @@ position: relative;
   min-height: 26px;
   align-items: center;
   padding: 0 13px;
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: var(--mh-surface-warning);
   color: var(--mh-ink-warning);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-type-card small {
@@ -81,7 +81,7 @@ position: relative;
   width: 70%;
   overflow-wrap: anywhere;
   color: var(--mh-muted);
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
   line-height: 1.45;
 }
 
@@ -90,8 +90,8 @@ position: relative;
   width: min(178px, 100%);
   padding-top: 11px;
   color: var(--mh-ink-warning);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-type-card em::before {
