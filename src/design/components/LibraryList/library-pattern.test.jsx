@@ -52,12 +52,11 @@ describe("LibraryItem", () => {
 });
 
 describe("LibraryList", () => {
-  it("gives an expanded card the full row without passing the flag on", () => {
-    render(<LibraryList label="Principles" items={[{ id: "a", title: "Alpha" }, { id: "b", title: "Beta", expanded: true }]} />);
-    const [first, second] = within(screen.getByRole("list", { name: "Principles" })).getAllByRole("listitem");
-    expect(first.className).toBe("");
-    expect(second.className).toBe("mh-library-list__item--expanded");
-    expect(second.querySelector("[expanded]")).toBeNull();
+  it("stacks list items one per row with the same cards", () => {
+    render(<LibraryList label="Principles" layout="list" items={[{ id: "a", title: "Alpha" }, { id: "b", title: "Beta" }]} />);
+    const list = screen.getByRole("list", { name: "Principles" });
+    expect(list.className).toBe("mh-library-list mh-library-list--list");
+    expect(within(list).getAllByRole("button").map((button) => button.textContent)).toEqual(["Alpha", "Beta"]);
   });
 
   it("renders cards, a table, or the empty state with its clear action", () => {

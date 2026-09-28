@@ -4,22 +4,24 @@ import { LibraryEmpty } from "../LibraryEmpty/index.jsx";
 import { LibraryItem } from "../LibraryItem/index.jsx";
 import "./LibraryList.css";
 
-/** @type {readonly ["cards", "table"]} */
-export const libraryLayouts = ["cards", "table"];
+/** @type {readonly ["cards", "list", "table"]} */
+export const libraryLayouts = ["cards", "list", "table"];
 
 /**
- * The item region of a governed library (patterns/library.md §2). Owns both
- * layouts — views never render the grid or DataTable directly — and shows
- * `LibraryEmpty` when there is nothing to list.
+ * The item region of a governed library (patterns/library.md §2). Owns every
+ * layout — views never render the grid, the list or DataTable directly — and
+ * shows `LibraryEmpty` when there is nothing to list. `cards` is a grid of
+ * LibraryItems; `list` stacks them one per row for items whose body is long
+ * text read in full (Principles); `table` is a DataTable.
  * @param {object} props
  * @param {string} props.label accessible name of the list
  * @param {typeof libraryLayouts[number]} [props.layout="cards"]
- * @param {Array<object>} [props.items=[]] cards: LibraryItem props, each with `id`; `expanded: true` gives that card the full row (content expanded in place, e.g. a long Principles description) so its neighbours keep their own height
+ * @param {Array<object>} [props.items=[]] cards/list: LibraryItem props, each with `id`
  * @param {Array<{ key: string, header: React.ReactNode }>} [props.columns=[]] table only
  * @param {Array<{ id: string, [key: string]: React.ReactNode }>} [props.rows=[]] table only
  * @param {{ kind?: "no-results"|"empty", title: string, message?: string, clearLabel?: string }} [props.empty] shown when there are no items/rows
  * @param {(event: { id: string }) => void} [props.onOpen]
- * @param {(event: { action: string, id: string, blocked: boolean, reason: string|null }) => void} [props.onAction] cards only; table rows carry their own ItemActions
+ * @param {(event: { action: string, id: string, blocked: boolean, reason: string|null }) => void} [props.onAction] cards and list; table rows carry their own ItemActions
  * @param {(event: { kind: string }) => void} [props.onClear] clears filters from the no-results state
  */
 export function LibraryList({ label, layout = "cards", items = [], columns = [], rows = [], empty, onOpen, onAction, onClear }) {
@@ -33,9 +35,9 @@ export function LibraryList({ label, layout = "cards", items = [], columns = [],
     );
   }
   return (
-    <ul className="mh-library-list mh-library-list--cards" aria-label={label}>
-      {items.map(({ expanded, ...item }) => (
-        <li key={item.id} className={expanded ? "mh-library-list__item--expanded" : undefined}>
+    <ul className={`mh-library-list mh-library-list--${layout}`} aria-label={label}>
+      {items.map((item) => (
+        <li key={item.id}>
           <LibraryItem {...item} onOpen={onOpen} onAction={onAction} />
         </li>
       ))}

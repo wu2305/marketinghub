@@ -58,7 +58,8 @@ function PrincipleText({ text, expanded, labels, onToggle }) {
 /**
  * Principles library (`?type=Principles`, types.js:718-772) on the governed-
  * library pattern: LibraryToolbar (search, Category facet, count), LibraryList
- * cards and compact Pagination. Read-only — no status, actions or create
+ * `list` (one card per row, like the original's single column) and compact
+ * Pagination. Read-only — no status, actions or create
  * (pattern §5); "detail" is the description expanding in place, so opening a
  * card toggles it. Controlled: `useInterpreterDemo` filters, pages and keeps
  * the expanded set.
@@ -126,7 +127,6 @@ export function PrinciplesView({
   const cards = items.map((item) => ({
     id: item.id,
     title: item.title,
-    expanded: expanded.includes(item.id),
     meta: [{ label: categoryMetaLabel, value: item.category }],
     children: <PrincipleText text={item.description} expanded={expanded.includes(item.id)} labels={labels} onToggle={() => toggle(item.id)} />,
   }));
@@ -153,6 +153,7 @@ export function PrinciplesView({
       />
       <LibraryList
         label="Principles"
+        layout="list"
         items={cards}
         empty={{ kind: counts.total ? "no-results" : "empty", title: emptyTitle, message: emptyMessage, clearLabel: clearFiltersLabel }}
         onOpen={({ id }) => toggle(id)}

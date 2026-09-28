@@ -7,14 +7,20 @@ display: grid;
   list-style: none;
 }
 
-.mh-library-list--cards > li {
+/* One card per row: long text reads in full and expands without
+   stretching neighbours (Principles, patterns/library.md §5). */
+.mh-library-list--list {
 display: grid;
-  min-width: 0;
+  gap: var(--mh-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* An expanded card spans the row instead of stretching its neighbours. */
-.mh-library-list--cards > .mh-library-list__item--expanded {
-grid-column: 1 / -1;
+.mh-library-list--cards > li,
+.mh-library-list--list > li {
+display: grid;
+  min-width: 0;
 }
 
 .mh-library-list--table {
