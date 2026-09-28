@@ -157,12 +157,6 @@
   --mh-danger-border: var(--mh-danger);
   --mh-ink-disabled-soft: var(--mh-text-faint);
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
-  --mh-ink-card-copy: var(--mh-text);
-  --mh-ink-report-copy: var(--mh-text);
-  --mh-ink-metric-copy: var(--mh-text);
-  --mh-ink-thumbnail-muted: var(--mh-text-faint);
-  --mh-ink-section-deep: var(--mh-text-strong);
-  --mh-surface-dialog-tint: var(--mh-surface-subtle);
   --mh-ink-control-slate: var(--mh-text);
   --mh-line-subtle-cool: var(--mh-line);
   --mh-line-sidebar-cool: var(--mh-line-subtle);
@@ -267,7 +261,6 @@
   --mh-ink-strong: var(--mh-text-strong);
   --mh-ink-field: var(--mh-text-strong);
   --mh-icon-slate: var(--mh-text-muted);
-  --mh-focus-gold: var(--mh-focus-ring);
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: var(--mh-line-inverse);
   --mh-surface-dark: var(--mh-surface-inverse);
@@ -311,7 +304,6 @@
   --mh-danger-ring: color-mix(in srgb, var(--mh-danger) 12%, transparent);
   --mh-gold-rule: var(--mh-accent);
   --mh-gold-faint: color-mix(in srgb, var(--mh-accent) 7%, transparent);
-  --mh-gold-ring: var(--mh-focus-ring);
   --mh-chip-line: var(--mh-accent-soft);
   --mh-chip-bg: var(--mh-accent-wash);
   --mh-chip-ink: var(--mh-accent-ink);
@@ -476,7 +468,6 @@
   --mh-ink-heading-warm: var(--mh-text-strong);
   --mh-bt-copy: var(--mh-text);
   --mh-bt-label: var(--mh-text-faint);
-  --mh-bt-tag-bg: var(--mh-surface-muted);
   --mh-bt-state-bg: var(--mh-accent-wash);
   --mh-bt-state-ink: var(--mh-accent-ink);
   --mh-bt-state-off-bg: var(--mh-surface-muted);
@@ -488,7 +479,6 @@
   --mh-line-control-focus-warm: var(--mh-accent);
   --mh-ink-icon-warm-muted: var(--mh-text-muted);
   --mh-shadow-search-warm: var(--mh-shadow-raised);
-  --mh-bt-countline: var(--mh-text-muted);
   --mh-bt-empty: var(--mh-text-muted);
   --mh-gold-action-start: var(--mh-accent-soft);
   --mh-gold-action-end: var(--mh-accent);
@@ -526,56 +516,12 @@
      ai-interpreter-overview.css / library.css). Effective values probed from
      the rendered type pages; the toolbar/search/filter chrome reuses the
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
-  --mh-ink-empty: var(--mh-text-faint);
-  --mh-ink-empty-report: var(--mh-text-muted);
-  --mh-line-empty: var(--mh-line);
   --mh-line-card-warm: var(--mh-line-subtle);
-  --mh-line-card-active: var(--mh-accent);
-  --mh-shadow-card-active: var(--mh-shadow-overlay);
-  --mh-shadow-card-focus: 0 0 0 2px var(--mh-focus-ring);
   --mh-line-card-hover-gold: var(--mh-accent);
-  --mh-shadow-card-hover-gold: var(--mh-shadow-overlay);
-  --mh-line-card-hover-warm: var(--mh-accent);
-  --mh-shadow-card-hover-warm: var(--mh-shadow-overlay);
-  --mh-line-domain-warm: color-mix(in srgb, var(--mh-accent) 28%, transparent);
   --mh-ink-action-disabled: var(--mh-text-faint);
-  --mh-surface-recipient: var(--mh-accent-wash);
-  --mh-ink-recipient: var(--mh-text-strong);
-  --mh-ink-meta-label: var(--mh-text-muted);
-  --mh-ink-state: var(--mh-text);
-  --mh-ink-description: var(--mh-text-muted);
-  --mh-line-thumbnail: var(--mh-line);
-  --mh-line-overview: var(--mh-line-subtle);
-  --mh-surface-edit: var(--mh-accent-wash);
-  --mh-ink-edit: var(--mh-accent-ink);
-  --mh-surface-edit-hover: color-mix(in srgb, var(--mh-accent-wash) 81%, var(--mh-accent-soft));
-  --mh-ink-edit-hover: var(--mh-accent-ink);
-  --mh-surface-scenario-hover: var(--mh-accent-soft);
-  --mh-ink-scenario-hover: var(--mh-accent-ink);
-  --mh-line-scenario-hover: color-mix(in srgb, var(--mh-accent) 50%, transparent);
   --mh-line-scenario-focus: var(--mh-accent);
   --mh-line-secondary-button: var(--mh-line);
   --mh-ink-secondary-button: var(--mh-text);
-  --mh-surface-primary-button: var(--mh-accent-soft);
-  --mh-line-primary-button: var(--mh-accent);
-  --mh-ink-primary-button: var(--mh-text-strong);
-  --mh-surface-primary-button-hover: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-line-primary-button-hover: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-ink-dialog-title: var(--mh-text);
-  --mh-ink-dialog-label: var(--mh-text-muted);
-  --mh-line-dialog-input: var(--mh-line-strong);
-  --mh-ink-dialog-input: var(--mh-text);
-  --mh-line-dialog-input-focus: var(--mh-accent);
-  --mh-line-dialog-header: var(--mh-line-subtle);
-  --mh-line-dialog-close: var(--mh-line);
-  --mh-surface-dialog: var(--mh-surface-subtle);
-  --mh-shadow-dialog: var(--mh-shadow-modal);
-  --mh-surface-dialog-button: var(--mh-accent);
-  --mh-line-dialog-button: var(--mh-accent);
-  --mh-surface-dialog-button-hover: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-line-dialog-button-hover: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-surface-dialog-button-disabled: var(--mh-accent-soft);
-  --mh-line-dialog-button-disabled: var(--mh-accent-soft);
   --mh-line-panel-subtle: var(--mh-line-subtle);
   --mh-surface-info-strong: color-mix(in srgb, var(--mh-info) 11%, var(--mh-surface));
   --mh-ink-info-strong: var(--mh-info);

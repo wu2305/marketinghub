@@ -1,0 +1,57 @@
+.mh-chip-list {
+display: flex;
+  align-items: flex-start;
+  gap: var(--mh-space-4);
+  min-width: 0;
+  font-family: var(--mh-font-sans);
+}
+
+.mh-chip-list__label {
+flex: 0 0 auto;
+  padding-top: var(--mh-space-1);
+  color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
+}
+
+.mh-chip-list ul {
+display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: var(--mh-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mh-chip-list li {
+padding: var(--mh-space-1) var(--mh-space-4);
+  white-space: nowrap;
+  border-radius: var(--mh-radius-pill);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text);
+  font-size: var(--mh-font-size-sm);
+}
+
+.mh-chip-list--accent li {
+background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+}
+
+.mh-chip-list--success li {
+background: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
+  color: var(--mh-success);
+  font-weight: var(--mh-font-weight-bold);
+}
+
+.mh-chip-list li.mh-chip-list__more {
+background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+  font-weight: var(--mh-font-weight-bold);
+}
+
+.mh-chip-list__empty {
+color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-sm);
+}

@@ -161,7 +161,7 @@ describe("useBusinessTermDemo", () => {
 
   it("shows three synonyms and counts the rest", () => {
     renderView({ records: [{ id: "s", title: "Many", description: "d", synonyms: ["a", "b", "c", "d", "e"], scope: [], kind: "Business Term", creator: "Current User", status: "Enable" }], drafts: [] });
-    const chips = [...cards()[0].querySelectorAll(".mh-btview__synonyms li")].map((li) => li.textContent);
+    const chips = [...cards()[0].querySelectorAll(".mh-chip-list li")].map((li) => li.textContent);
     expect(chips).toEqual(["a", "b", "c", "+2"]);
   });
 

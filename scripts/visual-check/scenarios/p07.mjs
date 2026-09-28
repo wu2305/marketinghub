@@ -100,8 +100,8 @@ export default [
         /* R7: the count is visible (the source hid it); D07: synonyms show as
            chips, three at most, without the measured "…" clamp. */
         { sel: ".mh-btview .mh-library-toolbar__count", text: "Showing 6 of 6 terms" },
-        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-btview__synonyms li", count: 3, text: "Gross Sales" },
-        { sel: ".mh-btview .mh-btview__more", count: 0, state: "detached" },
+        { sel: ".mh-btview .mh-library-item:has-text('GMV') .mh-chip-list li", count: 3, text: "Gross Sales" },
+        { sel: ".mh-btview .mh-chip-list__more", count: 0, state: "detached" },
       ],
     },
   },
@@ -404,7 +404,7 @@ export default [
       actions: [{ eval: responsiveStoryCheck([".mh-hero", ".mh-hero__aside", ".mh-sidebar", ".mh-interpreter__main", ".mh-btview .mh-library-toolbar", ".mh-btview .mh-library-toolbar a.mh-button", ".mh-btview .mh-library-item"]) }],
       expect: [
         { sel: ".mh-btview .mh-library-item", count: 6 },
-        { sel: ".mh-btview .mh-btview__synonyms li", count: 14 },
+        { sel: ".mh-btview .mh-library-item .mh-chip-list li", count: 14 },
         { sel: ".mh-sidebar__group .mh-sidebar-item", count: 8 },
         { sel: ".mh-btview .mh-library-toolbar__facet:nth-of-type(2) .mh-check-filter .mh-check-filter__summary", text: "All statuses" },
         { sel: ".mh-btview .mh-library-toolbar a.mh-button", text: "Add Business Term" },
@@ -412,19 +412,14 @@ export default [
     },
   },
   {
-    /* scenario-reports.js #scenarioReportOverview — the toolbar is normalized
-       to the unified look (300px search first via order:-1, two 180px boxed
-       selects, gold create pushed right) and the card grid to 3 columns. */
+    /* scenario-reports.js #scenarioReportOverview — the toolbar and source
+       cards are composed from the governed library pattern; both availability
+       and workflow axes remain visible. */
     id: "p07-interpreter-scenario",
     layout: [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".scenario-report-toolbar", story: ".mh-srview__tools", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".scenario-report-toolbar .overview-global-search", story: ".mh-srview__search", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: ".scenario-report-card", story: ".mh-srview__card", props: ["x", "y", "width"], tol: 8 },
-      { orig: ".scenario-report-card .bt-flow-status", story: ".mh-srview__card .mh-srview__flow", props: ["x", "y", "height"], tol: 8 },
-      { orig: ".scenario-report-pagination", story: ".mh-srview__pagination", props: ["x", "y"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
@@ -441,24 +436,19 @@ export default [
     story: {
       id: "pages--interpreter-scenario-reporting",
       expect: [
-        { sel: ".mh-srview__card", count: 3, text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__pills .mh-badge--knowledge.mh-badge--neutral", count: 2, text: "Disabled" },
-        { sel: ".mh-srview__card .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 9 },
-        { sel: ".mh-srview__countline", state: "hidden" },
-        { sel: ".mh-srview__pagination", text: "3 records" },
-        { sel: ".mh-srview__filter", count: 2 },
+        { sel: ".mh-srview .mh-library-item", count: 3, text: "Channel Performance Analysis" },
+        { sel: ".mh-srview .mh-library-item .mh-badge--neutral", count: 2, text: "Disabled" },
+        { sel: ".mh-srview .mh-item-actions__button", count: 9 },
+        { sel: ".mh-library-toolbar__count", text: "Showing 3 of 3 scenarios" },
+        { sel: ".mh-pagination--compact", text: "3 records" },
+        { sel: ".mh-library-toolbar__facet", count: 2 },
       ],
     },
   },
   {
-    /* The card click opens the shared #knowledgeDetail drawer: label + title +
-       availability/workflow pills, sectioned body, icon-action footer. The
-       drawer sits below the 56px header (unlike the fm overlay). */
+    /* The card title opens the shared #knowledgeDetail drawer: label + title
+       availability/workflow pills, sectioned body and icon-action footer. */
     id: "p07-scenario-report-drawer",
-    layout: [
-      { orig: "#knowledgeDetail", story: ".mh-srview__drawer", props: ["x", "y", "width"], tol: 8 },
-      { orig: "#knowledgeDetail .detail-drawer-head", story: ".mh-srview__drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
-    ],
     original: {
       url: "/assets/pages/knowledge.html?type=Scenario%20Reporting",
       actions: [{ waitMs: 800 }, { click: ".scenario-report-card[data-sr-id='scenario-channel-performance'] h3" }, { wait: "#knowledgeDetail.open" }],
@@ -474,15 +464,15 @@ export default [
     },
     story: {
       id: "pages--interpreter-scenario-reporting",
-      actions: [{ click: ".mh-srview__card[data-id='scenario-channel-performance'] h3" }, { wait: ".mh-srview__drawer" }],
+      actions: [{ click: ".mh-srview .mh-library-item__title button" }, { wait: ".mh-srview__drawer" }],
       expect: [
         { sel: ".mh-srview__drawer .mh-modal__eyebrow", text: "SCENARIO REPORTING" },
         { sel: ".mh-srview__drawer .mh-modal__title", text: "Channel Performance Analysis" },
-        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--detail", text: "Disabled" },
-        { sel: ".mh-srview__drawer .mh-srview__flow--head", text: "Building" },
-        { sel: ".mh-srview__drawer .mh-srview__detail-link", text: "Invest City Strategy Analysis" },
+        { sel: ".mh-srview__drawer .mh-modal__titleline .mh-badge--neutral", text: "Disabled" },
+        { sel: ".mh-srview__drawer .mh-badge--info", text: "Building" },
+        { sel: ".mh-srview__drawer .mh-srview__report", text: "Invest City Strategy Analysis" },
         { sel: ".mh-srview__drawer .mh-srview__note", text: "AI Interpreter is enabled automatically" },
-        { sel: ".mh-srview__drawer .mh-knowledge-actions--scenario .mh-knowledge-actions__button", count: 3 },
+        { sel: ".mh-srview__drawer .mh-item-actions__button", count: 3 },
       ],
     },
   },
@@ -769,10 +759,6 @@ export default [
       { orig: ".knowledge-sidebar", story: ".mh-sidebar", props: ["x", "y", "width"], tol: 8 },
       { orig: ".knowledge-command-center", story: ".mh-hero", props: ["x", "y", "width", "height"], tol: 8 },
       { orig: ".knowledge-main", story: ".mh-interpreter__main", props: ["x", "y", "width"], tol: 8 },
-      { orig: "#fmLibrary .fm-tools", story: ".mh-flview__tools", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: "#fmLibrary .fm-search-field", story: ".mh-flview__search", props: ["x", "width"], tol: 8 },
-      { orig: "#fmLibrary .fm-report-card", story: ".mh-flview__report-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: "#fmLibrary .fm-pagination", story: ".mh-flview .mh-pagination", props: ["x", "width"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Report%20Context",
@@ -787,10 +773,10 @@ export default [
     story: {
       id: "pages--interpreter-report-context",
       expect: [
-        { sel: ".mh-flview__report-card", count: 6, text: "Invest City Strategy Analysis" },
-        { sel: ".mh-flview__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
+        { sel: ".mh-flview .mh-library-item", count: 6, text: "Invest City Strategy Analysis" },
+        { sel: ".mh-flview .mh-library-toolbar__search input", attr: { name: "placeholder", value: "Search knowledge..." } },
         { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All projects" },
-        { sel: ".mh-flview__card[data-id='city-report-context'] .mh-badge--knowledge", text: "Enabled" },
+        { sel: ".mh-flview .mh-library-item:has-text('Invest City Strategy Analysis') .mh-library-item__head > .mh-badge", text: "Enabled" },
         { sel: ".mh-flview .mh-pagination", text: "6 records" },
         { sel: ".mh-asset", state: "detached" },
       ],
@@ -826,8 +812,8 @@ export default [
       ],
       expect: [
         { sel: ".mh-flview .mh-check-filter__summary", text: "D2C Insights" },
-        { sel: ".mh-flview__card", count: 3 },
-        { sel: ".mh-flview__card[data-id='abo-report-context']", state: "detached" },
+        { sel: ".mh-flview .mh-library-item", count: 3 },
+        { sel: ".mh-flview .mh-library-item:has-text('ABO Campaign Quality')", state: "detached" },
         { sel: ".mh-flview .mh-pagination", text: "3 records" },
       ],
     },
@@ -844,7 +830,6 @@ export default [
       { orig: ".fm-overlay:not([hidden]) .fm-drawer", story: ".mh-modal--drawer .mh-modal__dialog", props: ["y", "height"], tol: 8 },
       { orig: ".fm-overlay:not([hidden]) .fm-drawer-head", story: ".mh-modal--drawer .mh-modal__header", props: ["y", "height"], tol: 8 },
       { orig: "#fmDrawerTitle", story: ".mh-modal--drawer .mh-modal__title", props: ["x", "y", "height"], tol: 8 },
-      { orig: ".fm-overlay:not([hidden]) .fm-rc-thumbnail", story: ".mh-flview__rc-thumb", props: ["x", "y", "width"], tol: 8 },
       { orig: ".fm-overlay:not([hidden]) .fm-drawer-foot", story: ".mh-modal--drawer .mh-modal__foot", props: ["height"], tol: 8 },
     ],
     original: {
@@ -861,14 +846,14 @@ export default [
     },
     story: {
       id: "pages--interpreter-report-context",
-      actions: [{ click: ".mh-flview__report-card[data-id='city-report-context']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      actions: [{ click: ".mh-flview .mh-library-item:has-text('Invest City Strategy Analysis') .mh-library-item__title button" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Report Context" },
         { sel: ".mh-modal--drawer .mh-modal__title", text: "Invest City Strategy Analysis" },
         { sel: ".mh-modal--drawer .mh-badge--detail", text: "Enabled" },
-        { sel: ".mh-modal--drawer .mh-flview__domain", text: "D2C Insights" },
+        { sel: ".mh-modal--drawer .mh-flview__rc-meta .mh-chip-list li", text: "D2C Insights" },
         { sel: ".mh-modal--drawer .mh-flview__scenario-link", count: 2, text: "Channel Performance Analysis" },
-        { sel: ".mh-flview__open-dashboard", text: "Open Dashboard" },
+        { sel: ".mh-modal--drawer .mh-modal__foot a.mh-button", text: "Open Dashboard" },
       ],
     },
   },
@@ -899,17 +884,17 @@ export default [
     story: {
       id: "pages--interpreter-report-context",
       actions: [
-        { click: ".mh-flview__report-card[data-id='city-report-context']" },
+        { click: ".mh-flview .mh-library-item:has-text('Invest City Strategy Analysis') .mh-library-item__title button" },
         { wait: ".mh-modal--drawer .mh-modal__dialog" },
         { click: ".mh-flview__rc-edit" },
         { wait: ".mh-flview__edit textarea" },
         { fill: [".mh-flview__edit textarea", "Updated description."] },
         { waitMs: 200 },
-        { click: ".mh-flview__edit-btn--primary" },
+        { click: ".mh-flview__edit-foot .mh-button--gold" },
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-flview__report-card[data-id='city-report-context'] p", text: "Updated description." },
+        { sel: ".mh-flview .mh-library-item:has-text('Invest City Strategy Analysis') .mh-library-item__description", text: "Updated description." },
         { sel: ".mh-modal--drawer .mh-flview__rc-overview p", text: "Updated description." },
       ],
     },
@@ -921,8 +906,6 @@ export default [
        Rules) with an empty footer strip. */
     id: "p07-field-library-metric-dictionary",
     layout: [
-      { orig: "#fmLibrary .fm-metric-card", story: ".mh-flview__metric-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: "#fmLibrary .fm-metric-meta", story: ".mh-flview__metric-meta", props: ["x", "y"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Metric%20Dictionary",
@@ -938,14 +921,14 @@ export default [
     },
     story: {
       id: "pages--interpreter-metric-dictionary",
-      actions: [{ click: ".mh-flview__metric-card[data-id='metric-dictionary-member-conversion']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      actions: [{ click: ".mh-flview .mh-library-item:has-text('Member conversion') .mh-library-item__title button" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
-        { sel: ".mh-flview__metric-card", count: 3, text: "Member conversion" },
+        { sel: ".mh-flview .mh-library-item", count: 3, text: "Member conversion" },
         { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All models" },
-        { sel: ".mh-flview__synonym--more", count: 3 },
+        { sel: ".mh-flview .mh-chip-list__more", count: 3 },
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Metric Dictionary" },
         { sel: ".mh-modal--drawer .mh-flview__section:has(h3:text-is('Calculation Rules')) .mh-flview__prewrap", text: "Qualified member transactions" },
-        { sel: ".mh-modal--drawer .mh-modal__foot .mh-knowledge-actions--field-library .mh-knowledge-actions__button", count: 0, state: "detached" },
+        { sel: ".mh-modal--drawer .mh-modal__foot .mh-item-actions__button", count: 0, state: "detached" },
       ],
     },
   },
@@ -956,10 +939,6 @@ export default [
        footer. */
     id: "p07-field-library-analytical-model",
     layout: [
-      { orig: "#fmLibrary .fm-tools", story: ".mh-flview__tools", props: ["x", "y", "width"], tol: 8 },
-      { orig: "#fmLibrary .knowledge-add-button", story: ".mh-flview__create", props: ["x", "y"], tol: 10 },
-      { orig: "#fmLibrary .fm-analysis-card", story: ".mh-flview__analysis-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: "#fmLibrary .fm-analysis-card-footer", story: ".mh-flview__analysis-footer", props: ["x", "y"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Analytical%20Model",
@@ -975,12 +954,14 @@ export default [
     story: {
       id: "pages--interpreter-analytical-model",
       expect: [
-        { sel: ".mh-flview__analysis-card", count: 1, text: "Opportunity scan playbook" },
-        { sel: ".mh-flview__create", text: "Add Analytical Model" },
-        { sel: ".mh-flview .mh-check-filter", count: 3 },
-        { sel: ".mh-flview__analysis-card [aria-label='Edit']", attr: { name: "disabled", value: "" } },
-        { sel: ".mh-flview__analysis-card [aria-label='Delete']", attr: { name: "disabled", value: "" } },
-        { sel: ".mh-flview__analysis-card [aria-label='Disable']:not([disabled])" },
+        /* R3: the seeded model is a draft, so it is offline: edit/delete allowed, disable explains. */
+        { sel: ".mh-flview .mh-library-item .mh-library-item__draft", text: "Draft" },
+        { sel: ".mh-flview .mh-library-item .mh-library-item__head > .mh-badge", text: "Disabled" },
+        { sel: ".mh-flview .mh-library-item [aria-label='Edit Opportunity scan playbook']:not([aria-disabled])" },
+        { sel: ".mh-flview .mh-library-item [aria-label='Disable Opportunity scan playbook'][aria-disabled='true']", attr: { name: "title", value: "This knowledge is already disabled." } },
+        { sel: ".mh-flview .mh-library-item", count: 1, text: "Opportunity scan playbook" },
+        { sel: ".mh-flview .mh-library-toolbar a.mh-button", text: "Add Analytical Model" },
+        { sel: ".mh-flview .mh-library-toolbar__facet", count: 3 },
       ],
     },
   },
@@ -1007,16 +988,13 @@ export default [
     story: {
       id: "pages--interpreter-analytical-model",
       actions: [
-        { click: ".mh-flview__analysis-card [aria-label='Disable']" },
-        { wait: ".mh-confirm--confirm" },
-        { click: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
-        { waitMs: 300 },
+        /* Blocked actions are aria-disabled but operable (B7); Playwright refuses to click them, so dispatch the click. */
+        { eval: "document.querySelector(\".mh-flview .mh-library-item [aria-label='Disable Opportunity scan playbook']\").click()" },
+        { wait: ".mh-confirm--info" },
       ],
       expect: [
-        { sel: ".mh-flview__analysis-card .mh-badge--knowledge", text: "Disabled" },
-        { sel: ".mh-flview__analysis-card [aria-label='Edit']:not([disabled])" },
-        { sel: ".mh-flview__analysis-card [aria-label='Delete']:not([disabled])" },
-        { sel: ".mh-flview__analysis-card [aria-label='Disable']", attr: { name: "disabled", value: "" } },
+        { sel: ".mh-confirm--info .mh-modal__title", text: "Knowledge already disabled" },
+        { sel: ".mh-flview .mh-library-item .mh-library-item__head > .mh-badge", text: "Disabled" },
       ],
     },
   },
@@ -1044,17 +1022,13 @@ export default [
     story: {
       id: "pages--interpreter-analytical-model",
       actions: [
-        { click: ".mh-flview__analysis-card [aria-label='Disable']" },
-        { wait: ".mh-confirm--confirm" },
-        { click: ".mh-confirm--confirm button:has-text('Confirm Offline')" },
-        { waitMs: 300 },
-        { click: ".mh-flview__analysis-card [aria-label='Delete']" },
+        { click: ".mh-flview .mh-library-item [aria-label='Delete Opportunity scan playbook']" },
         { wait: ".mh-confirm--info" },
       ],
       expect: [
         { sel: ".mh-confirm--info .mh-modal__title", text: "Deletion blocked" },
         { sel: ".mh-confirm--info", text: "City Strategy Dashboard" },
-        { sel: ".mh-flview__analysis-card", count: 1 },
+        { sel: ".mh-flview .mh-library-item", count: 1 },
       ],
     },
   },
@@ -1065,8 +1039,6 @@ export default [
        footer entirely. */
     id: "p07-field-library-email-reports",
     layout: [
-      { orig: "#fmLibrary .fm-email-card", story: ".mh-flview__email-card", props: ["x", "y", "width", "height"], tol: 8 },
-      { orig: "#fmLibrary .fm-email-recipient-tags", story: ".mh-flview__email-recipient-tags", props: ["x", "y"], tol: 8 },
     ],
     original: {
       url: "/assets/pages/knowledge.html?type=Email%20Reports",
@@ -1082,10 +1054,10 @@ export default [
     },
     story: {
       id: "pages--interpreter-email-reports",
-      actions: [{ click: ".mh-flview__email-card[data-id='email-report-campaign-alert']" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
+      actions: [{ click: ".mh-flview .mh-library-item:has-text('Campaign Performance Alert') .mh-library-item__title button" }, { wait: ".mh-modal--drawer .mh-modal__dialog" }],
       expect: [
-        { sel: ".mh-flview__email-card", count: 3, text: "Weekly Marketing Performance" },
-        { sel: ".mh-flview__email-card.is-disabled", text: "Monthly Customer Growth Review" },
+        { sel: ".mh-flview .mh-library-item", count: 3, text: "Weekly Marketing Performance" },
+        { sel: ".mh-flview .mh-library-item:has(.mh-badge--neutral)", text: "Monthly Customer Growth Review" },
         { sel: ".mh-flview .mh-check-filter .mh-check-filter__summary", text: "All statuses" },
         { sel: ".mh-modal--drawer .mh-modal__eyebrow", text: "Email Reports" },
         { sel: ".mh-modal--drawer", text: "Noah Wang" },
@@ -1120,11 +1092,11 @@ export default [
         { waitMs: 200 },
         { click: ".mh-flview .mh-pagination__next" },
         { waitMs: 200 },
-        { fill: [".mh-flview__search input[type='search']", "4P"] },
+        { fill: [".mh-flview .mh-library-toolbar__search input", "4P"] },
         { waitMs: 300 },
       ],
       expect: [
-        { sel: ".mh-flview__report-card", count: 1 },
+        { sel: ".mh-flview .mh-library-item", count: 1 },
         { sel: ".mh-flview .mh-pagination", text: "1 / 1" },
       ],
     },

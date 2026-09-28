@@ -64,11 +64,13 @@ export function LibraryToolbar({ search, searchRef, facets = [], count, create, 
             </div>
           ),
         )}
-        <p className="mh-library-toolbar__count" aria-live="polite">{count}</p>
         {create ? (
-          <Button variant="gold" icon="plus" href={create.href} onClick={() => onCreate?.({ href: create.href })}>{create.label}</Button>
+          <span className="mh-library-toolbar__create">
+            <Button variant="gold" icon="plus" href={create.href} onClick={() => onCreate?.({ href: create.href })}>{create.label}</Button>
+          </span>
         ) : null}
       </div>
+      <p className="mh-library-toolbar__count" aria-live="polite">{count}</p>
     </div>
   );
 }

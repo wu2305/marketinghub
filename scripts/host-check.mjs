@@ -726,6 +726,15 @@ async function newPage() {
   if (bEntries) notes.push(`copilot B gained ${bEntries} chat entries from A's ask`);
   if (bThread.includes("what drove this?")) notes.push("copilot B received A's question");
 
+  // Both copilots own overlay focus while open. Release them before clicking
+  // the libraries below: focus redirection can scroll between pointerdown/up.
+  await page.screenshot({ path: path.join(OUT, "compose-copilots.png"), fullPage: true });
+  await copA.locator('button[aria-label="Close AI workspace"]').click();
+  if (await copA.getAttribute("aria-hidden") !== "true") notes.push("copilot A did not close through the shared demo state");
+  if (await copB.getAttribute("aria-hidden") !== "false") notes.push("copilot B closed when A closed");
+  await copB.locator('button[aria-label="Close AI workspace"]').click();
+  if (await copB.getAttribute("aria-hidden") !== "true") notes.push("copilot B did not close before library interaction");
+
   /* BusinessTermView ×2 via useBusinessTermDemo: disable a term in A, B's
      cards/pills stay put; search in B doesn't touch A; B renders only ALT
      content. */
@@ -753,9 +762,6 @@ async function newPage() {
   if ((await termsA.locator(".mh-library-item").count()) !== 6) notes.push("terms A cards changed by B's search");
 
   await page.screenshot({ path: path.join(OUT, "compose.png"), fullPage: true });
-  await copA.locator('button[aria-label="Close AI workspace"]').click();
-  if (await copA.getAttribute("aria-hidden") !== "true") notes.push("copilot A did not close through the shared demo state");
-  if (await copB.getAttribute("aria-hidden") !== "false") notes.push("copilot B closed when A closed");
   notes.push(...errors);
   record("dual", notes.length === 0, notes);
   await page.close();

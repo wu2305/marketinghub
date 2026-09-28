@@ -80,3 +80,50 @@ Source: `assets/js/knowledge/business-term-library.js`; React before: `features/
 | BT-20 | React prop `strings.tooltips.permission(action)` and `dialogs.permissionDenied(action)` functions | content.js | Normalize (D05) | one string per reason (`tooltips.permission`, `"disable-first"`, `"already-disabled"`) | — |
 | BT-21 | React `SynonymClamp` component, `ResizeObserver` shim in tests | view `:20-66` | Drop (D07) | removed | — |
 | BT-22 | geometry pairs (`layout:`) comparing BT internals with the original | `p07.mjs` | Drop | not a design-intent check; shell pairs kept | 16 pairs removed (list, drawer and dialog internals) |
+
+### Field Library (Report Context, Metric Dictionary, Analytical Model, Email Reports) — WP7b + WP7c
+
+Source: `assets/js/knowledge/field-library.js`, `knowledge-fields.js`. One PR covers 7b and 7c because all four types share one view file (`features/interpreter/FieldLibraryView`).
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| FL-01 | every type renders cards; a table is built but always hidden | `field-library.js:234-262,320-323` | Drop (dead code) | `LibraryList` cards for all four types | pattern/guide layout corrected |
+| FL-02 | per-type facets: RC Project; MD Data Model + Type; AM Status + Data Model + Creator; ER Status + Data Model | `:124-138,320` | Intent | `LibraryToolbar` multi facets, same sets | scenario selectors updated |
+| FL-03 | search: substring over the whole record | `:139-150` | Intent | same (hook unchanged) | — |
+| FL-04 | count line rendered but hidden (D08) | `:320` `fm-overview-countline` | Normalize (R7) | visible count line between toolbar and list, the place the source reserved | — |
+| FL-05 | card fields per type (RC title/status/description/Project; MD definition/Unit/Type/Data model/synonyms; AM description/Data Model/Referenced Metrics/Creator/actions; ER Send time/Recipients/Data Model) | `:110-216` | Intent + Normalize | `LibraryItem` (title, status, description, meta, `ChipList`) | — |
+| FL-06 | MD synonyms: first alias if ≤24 chars, then a "…" marker; AM referenced metrics: first + "…" (D07) | `:204-216,190-199` | Normalize | `ChipList`: three values + "+N" with the rest in its accessible name | `…` assertion → `.mh-chip-list__more` |
+| FL-07 | ER cards show no availability; disabled ones only carry `is-disabled` | `:172-181` | Normalize (pattern §5) | Enabled/Disabled `StatusBadge` on ER cards | scenario asserts the neutral badge |
+| FL-08 | AM stored as Draft + Enable is shown enabled; edit/delete blocked "disable first" | `field-library.js:94-107`, `knowledge-fields.js` normalize | Fix (R3) | drafts are offline: Disabled status, Draft marker, edit/delete allowed, disable explains | `p07-field-library-analytical-model`, `-am-disable`, `-am-delete-blocked` story sides; stories `AnalyticalModelDisabled`, `…DisableConfirm` use a published copy |
+| FL-09 | AM blocked buttons natively `disabled`; the "Disable knowledge first" dialog is unreachable (D04) | `:106,657-668` | Normalize (A3) | `ItemActions`: operable, explains; going offline continues the edit/delete | tests |
+| FL-10 | AM delete of a referenced model blocked with its references listed | `:702-710` | Intent | info dialog "Deletion blocked" | `-am-delete-blocked` kept |
+| FL-11 | success toast called but undefined (D03) | `:618` | Fix | Toast after disable/delete | tests |
+| FL-12 | permission message | `:104` | Intent (D05) | "Knowledge created by others cannot be operated." | — |
+| FL-13 | RC description edit from the drawer, confirm enabled once changed, history kept | `:409,676-679,60-75` | Intent (ungated, pattern B6) | same; buttons are `Button` | `.mh-flview__edit-btn--primary` → `.mh-button--gold` |
+| FL-14 | RC drawer footer: Close + Open Dashboard (new tab) | `:420-428` | Intent | `Button` secondary + `Button href` | selector updated |
+| FL-15 | MD drawer footer rendered empty; ER footer hidden | `field-library.js` open() | Drop | no footer for MD and ER | — |
+| FL-16 | Open/Close labels for RC AI status | `:55` | Kept in the drawer body only (they describe two switches, AI interpretation and AI summary); cards use Enabled/Disabled (D06) | — | — |
+| FL-17 | card geometry pairs in scenarios | `p07.mjs` | Drop | view-internal pairs removed; shell pairs kept | 13 pairs removed |
+| FL-18 | 54 view-named tokens (`--mh-ink-dialog-*`, `--mh-*-card-*` …) | `tokens.css` | Remove (unused after the rewrite) | deleted | — |
+
+### Scenario Reports — WP7d
+
+Source: `assets/js/knowledge/scenario-reports.js`; React before: `features/interpreter/ScenarioReportsView`, `demo/scenario-demo.js`.
+
+| # | behaviour | evidence (file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| SR-01 | normalize report, creator, workflow, availability, guidance and attachments from each scenario record | `scenario-reports.js:84-123` | Intent | `normalizeScenarioRecord` keeps the source fields and derives stable report links and `enabled`/`disabled` availability | normalization test retained |
+| SR-02 | search over title, description, report, creator, workflow, guidance and attachments; filters reset the page | `scenario-reports.js:397-429,982-997` | Intent | `useScenarioDemo` applies the same case-insensitive search and Status/Process filters through `LibraryToolbar` | scenario tests cover search/status; visual selectors updated |
+| SR-03 | scenario-report cards carry title, description, report, creator, process, availability and actions | `scenario-reports.js:431-500` | Intent + Normalize | `LibraryList` cards preserve both axes and all source fields; view CSS keeps only report-link and drawer rules | `p07-interpreter-scenario` checks library cards and count |
+| SR-04 | drafts are hidden from other creators | `scenario-reports.js:405-407` | Intent (R3) | drafts are normalized offline and filtered unless `creator === currentUser` | draft visibility test retained |
+| SR-05 | Status filters Enabled/Disabled and Process filters Draft/Queued/Building/Published | `scenario-reports.js:419-449,982-990` | Normalize (D06, D16) | one `enabled`/`disabled` vocabulary and workflow options from `WORKFLOW_STATES` | scenario controls and visual assertions updated |
+| SR-06 | result count is rendered in the toolbar and pagination uses 5/10/20 rows | `scenario-reports.js:458-499` | Normalize (D08) | visible `LibraryToolbar` count plus compact `Pagination` | `p07-interpreter-scenario` asserts the visible count |
+| SR-07 | edit/delete/disable are gated by creator and availability; blocked controls carry permission or state explanations | `scenario-reports.js:191-210,1005-1031` | Normalize (D04, D05, A3) | `governedActions` + `ItemActions`; blocked actions remain clickable with `aria-disabled` and open guidance | 12 scenario tests cover permission and disable-first |
+| SR-08 | edit navigates to the edit form; delete and disable confirm before mutating records | `scenario-reports.js:1033-1080` | Intent | demo hook owns deterministic navigation, confirmation, deletion/offline mutation and drawer updates | tests retained; table action selectors updated |
+| SR-09 | successful delete/offline actions call a toast that the source leaves undefined | `scenario-reports.js:212-215,1053-1079` | Fix (D03) | `Toast` displays "Deleted successfully" or "Disabled successfully" | scenario tests assert both messages |
+| SR-10 | opening a scenario shows availability/workflow in the header, related report, description, guidance, files, note and creator/date metadata | `scenario-reports.js:263-305,307-378` | Intent (B13) | `Modal` drawer retains both axes and the source detail sections; `ItemActions` is reused in the footer | `p07-scenario-report-drawer` selectors updated |
+| SR-11 | card/action click handling keeps links and action buttons from opening the detail drawer | `scenario-reports.js:998-1017,1084-1089` | Normalize (B5) | `DataTable` opens only the title/row surface; report links and `ItemActions` stop propagation | drawer test opens the title button |
+| SR-12 | `KnowledgeActions` variants and the old knowledge action/dialog adapters become unused after migration | `src/design/features/interpreter/KnowledgeActions/index.jsx:5-38`; `src/design/demo/knowledge-dialog.js:9-46` | Drop-stub (D04) | deleted `KnowledgeActions`, `knowledge-actions`, `knowledge-actions.test`, and `knowledge-dialog`; `ItemActions` and `lib/governance.js` are the sole implementation | removed story `features-interpreter-knowledgeactions--default` |
+| SR-13 | view-internal drawer geometry pair depended on the original 56px shell offset and custom header height | `scripts/visual-check/scenarios/p07.mjs` (previous `p07-scenario-report-drawer` layout pairs) | Drop | retain content/state assertions; use the shared `Modal` drawer lifecycle without an accidental page-shell offset | removed two internal geometry pairs; drawer scenario remains |
+| SR-14 | current React interface carries content, filtered records, pagination, drawer/dialog/toast state, and named callbacks | `ScenarioReportsView/index.jsx:23-49,51-79` | Normalize | keep the controlled pattern interface; callbacks use named event objects and the hook owns state/mutations | story Controls document the interface; scenario tests exercise the callbacks |
+| SR-15 | page-level stories cover default, drawer open, owned disable confirmation, owned delete confirmation and filtered empty states | `ScenarioReportsView.stories.jsx:62-113` | Intent | retain one story per reachable Scenario Reports state; action stories seed deterministic owned records | `Default`, `DetailOpen`, `OwnRecordDisableConfirm`, `OwnRecordDeleteConfirm`, `FilteredEmpty` retained |

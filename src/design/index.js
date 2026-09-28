@@ -71,6 +71,10 @@ export {
   DataTable,
 } from "./components/DataTable/index.jsx";
 export {
+  ChipList,
+  chipListTones,
+} from "./components/ChipList/index.jsx";
+export {
   ItemActions,
 } from "./components/ItemActions/index.jsx";
 export {

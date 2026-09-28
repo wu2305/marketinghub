@@ -180,3 +180,9 @@ Pilot adjustment (WP7a review, 2026-09-27): actions moved from the card header t
 meta, as in every original card (`business-term-library.js:143-148`, `field-library.js:118-122`), so long
 titles keep the full width; the toolbar search uses the `plain` (gold pill) `SearchField`, matching the
 pill facets and the original `.overview-global-search`.
+
+Pilot adjustment (WP7b review, 2026-09-27): view-specific chip rows (synonyms, referenced metrics,
+recipients, data models) share one part, `ChipList` (label + chips, first three shown, the rest counted in
+"+N"); the toolbar search is capped at 320 px (original 300 px), and the count moves to its own line between
+the find controls and the list — where the original rendered its hidden count line — so three facets and the
+create link fit one row at 1440 px.

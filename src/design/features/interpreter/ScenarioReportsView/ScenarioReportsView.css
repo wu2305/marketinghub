@@ -1,474 +1,81 @@
-/* Scenario Reports view — effective cascade of scenario-reports.js's injected
-   stylesheet + unified-type-toolbar.css + ai-interpreter-overview.css. */
-
+/* Scenario Reporting keeps only the report link and the drawer sections
+   (patterns/library.md §5); list, toolbar, badges and chips are pattern parts. */
 .mh-srview {
-  font-family: var(--mh-font);
-  color: var(--mh-ink);
-}
-
-/* ── toolbar — unified-type-toolbar.css normalization (same look as the fm
-   tools row): search pill first, two 180px select boxes, gold create pushed
-   to the right edge via margin-left:auto. */
-
-.mh-srview__tools {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 10px;
-  min-height: 71px;
-  padding: 13px 0 14px;
-}
-
-.mh-srview__search {
-  order: -1;
-  flex: 0 0 300px;
-  width: 300px;
-}
-
-.mh-srview__filter {
-  position: relative;
-  display: flex;
-  flex: 0 0 180px;
-  width: 180px;
-  height: 44px;
-  align-items: center;
-  gap: 9px;
-  padding: 0 13px;
-  border: 1px solid var(--mh-check-filter-line);
-  border-radius: 12px;
-  background: var(--mh-surface);
-}
-
-.mh-srview__filter::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  width: 7px;
-  height: 7px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  pointer-events: none;
-  transform: translateY(-70%) rotate(45deg);
-}
-
-.mh-srview__filter > span {
-  flex: 0 0 auto;
-  color: var(--mh-check-filter-label);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.mh-srview__filter select {
-  flex: 1 1 0;
+  display: grid;
+  gap: var(--mh-space-6);
   min-width: 0;
-  height: 42px;
-  padding: 0 18px 0 0;
-  border: 0;
-  appearance: none;
-  background: transparent;
-  color: var(--mh-check-filter-ink);
-  font-size: 11px;
-  font-weight: 600;
-  outline: 0;
-  cursor: pointer;
+  font-family: var(--mh-font-sans);
 }
 
-.mh-srview__create {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 36px;
-  margin-left: auto;
-  padding: 0 16px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--mh-gold-action-start), var(--mh-gold-action-end));
-  box-shadow: var(--mh-bt-create-shadow);
-  color: var(--mh-surface);
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: none;
+.mh-srview__report {
+  color: var(--mh-accent-ink);
+  font-weight: var(--mh-font-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.mh-srview__create:hover {
-  background: linear-gradient(135deg, var(--mh-gold-action-hover-start), var(--mh-gold-action-hover-end));
-}
-
-.mh-srview__create:focus-visible {
-  outline: 2px solid var(--mh-principle-focus-ring);
+.mh-srview__report:focus-visible {
+  outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
-/* hidden in the original on type pages (fm-overview-countline is display:none) */
-.mh-srview__countline {
-  display: none;
-}
-
-/* ── card grid — the overview cascade upgrades the injected 2-col layout to
-   the shared 3-column card grid. */
-
-.mh-srview__list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.mh-srview__card {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 132px;
-  column-gap: 18px;
-  padding: 20px;
-  border: 1px solid var(--mh-principle-line);
-  border-radius: 14px;
-  background: var(--mh-surface);
-  box-shadow: 0 4px 14px rgba(25, 31, 37, 0.08);
-  cursor: pointer;
-  transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
-}
-
-.mh-srview__card:hover,
-.mh-srview__card:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--mh-line-card-hover-gold);
-  box-shadow:
-    0 14px 28px rgba(31, 41, 55, 0.08),
-    0 0 0 3px rgba(217, 170, 99, 0.12);
-  outline: 0;
-}
-
-.mh-srview__card-main {
-  min-width: 0;
-}
-
-.mh-srview__card h3 {
-  margin: 0;
-  max-width: calc(100% - 116px);
-  overflow: hidden;
-  color: var(--mh-ink-heading-warm);
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-srview__card p {
-  display: -webkit-box;
-  margin: 14px 0 0;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  color: var(--mh-bt-copy);
-  font-size: 12px;
-  line-height: 1.45;
-  text-overflow: ellipsis;
-}
-
-.mh-srview__meta {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-top: 16px;
-  color: var(--mh-ink-flow-muted);
-  font-size: 12px;
-  line-height: 1.3;
-}
-
-.mh-srview__meta > span {
-  color: var(--mh-bt-label);
-  font-weight: 600;
-}
-
-.mh-srview__meta > strong,
-.mh-srview__meta > a {
-  min-width: 0;
-  overflow: hidden;
-  color: var(--mh-bt-copy);
-  font-weight: 400;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.mh-srview__meta .mh-srview__report-link {
-  color: var(--mh-bt-copy);
-  font-weight: 400;
-  text-decoration: underline;
-}
-
-.mh-srview__flow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--mh-surface-flow-neutral);
-  color: var(--mh-ink-flow-muted);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.25;
-  white-space: nowrap;
-}
-
-.mh-srview__flow[data-flow-status="Published"] {
-  background: var(--mh-surface-success-soft);
-  color: var(--mh-ink-success-bright);
-}
-
-.mh-srview__flow[data-flow-status="Building"] {
-  background: var(--mh-surface-warning-soft);
-  color: var(--mh-ink-warning-brown);
-}
-
-.mh-srview__flow[data-flow-status="Queued"] {
-  background: var(--mh-surface-flow-neutral);
-  color: var(--mh-ink-flow-secondary);
-}
-
-.mh-srview__flow[data-flow-status="Draft"] {
-  background: var(--mh-surface-draft);
-  color: var(--mh-ink-draft);
-}
-
-.mh-srview__pills {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-  max-width: 132px;
-}
-
-.mh-srview__card-actions {
-  position: absolute;
-  right: 16px;
-  bottom: 14px;
-}
-
-.mh-srview__empty {
-  padding: 44px 0;
-  color: var(--mh-ink-copy-slate);
-  font-size: 13px;
-  text-align: center;
-}
-
-.mh-srview__pagination {
-  padding: 16px 0 0;
-}
-
-/* ── shared knowledge-detail drawer (knowledge.html #knowledgeDetail,
-   workspace.css) — slides in under the 56px page header, sticky 64px head
-   with label + title + two pills, sectioned body, icon-action footer. */
-
-.mh-modal:has(> .mh-modal__dialog.mh-srview__drawer) .mh-modal__scrim {
-  top: 56px;
-  backdrop-filter: none;
-}
-
-.mh-modal--drawer .mh-modal__dialog.mh-srview__drawer {
-  align-self: flex-start;
-  height: calc(100% - 56px);
-  margin-top: 56px;
-}
-
-.mh-srview__drawer .mh-modal__header {
-  min-height: 64px;
-  align-items: center;
-  padding: 0 24px;
-}
-
-.mh-srview__drawer .mh-modal__eyebrow {
-  margin-top: 0;
-  color: var(--mh-faint);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-
-.mh-srview__drawer .mh-modal__titleline {
-  gap: 8px;
-  margin-top: 0;
-}
-
-.mh-srview__drawer .mh-modal__title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--mh-ink-strong);
-}
-
-.mh-srview__drawer .mh-modal__close {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  font-size: 19px;
-  line-height: 1;
-}
-
-.mh-srview__flow--head {
-  min-height: 22px;
-  padding: 0 9px;
-  font-size: 11px;
-  font-weight: 700;
-  background: var(--mh-bt-chip-bg);
-  color: var(--mh-ink-status-neutral);
-}
-
-.mh-srview__flow--head[data-flow-status="Published"] {
-  background: var(--mh-surface-success-soft);
-  color: var(--mh-ink-success-bright);
-}
-
-.mh-srview__flow--head[data-flow-status="Queued"] {
-  background: var(--mh-surface-status-warm);
-  color: var(--mh-ink-status-warm);
+.mh-srview__drawer {
+  font-family: var(--mh-font-sans);
 }
 
 .mh-srview__detail {
   display: grid;
-  gap: 18px;
-}
-
-.mh-srview__section {
-  display: grid;
-  gap: 8px;
-}
-
-.mh-srview__section h3 {
+  gap: var(--mh-space-3);
   margin: 0;
-  color: var(--mh-bt-section-title);
-  font-size: 13px;
-  font-weight: 800;
-  line-height: 1.2;
 }
 
-.mh-srview__section p {
+.mh-srview__detail dt {
+  margin-top: var(--mh-space-4);
+  color: var(--mh-text-faint);
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mh-srview__detail dt:first-child {
+  margin-top: 0;
+}
+
+.mh-srview__detail dd {
   margin: 0;
-  color: var(--mh-ink-secondary-muted);
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
+  color: var(--mh-text);
+  font-size: var(--mh-font-size-md);
+  line-height: 1.5;
 }
 
 .mh-srview__prewrap {
-  white-space: pre-wrap;
+  white-space: pre-line;
 }
 
-.mh-srview__detail-link {
-  color: var(--mh-ink-link-strong);
-  font-size: 14px;
-  text-decoration: underline;
+.mh-srview__detail .mh-srview__note {
+  margin-top: var(--mh-space-4);
+  padding: var(--mh-space-4);
+  border: 1px solid color-mix(in srgb, var(--mh-info) 20%, var(--mh-surface));
+  border-radius: var(--mh-radius-md);
+  background: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
+  color: var(--mh-info);
+  font-size: var(--mh-font-size-sm);
 }
 
-.mh-srview__detail-link:hover {
-  color: var(--mh-ink-link-hover);
-}
-
-.mh-srview__tags {
+.mh-srview__detail .mh-srview__meta-footer {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-}
-
-.mh-srview__tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 7px;
-  border-radius: 999px;
-  background: var(--mh-bt-scope-bg);
-  color: var(--mh-bt-scope-ink);
-  font-size: 10px;
-}
-
-.mh-srview__note {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin: 10px 0 0;
-  color: var(--mh-ink-flow-secondary);
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-.mh-srview__note-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  margin-top: 1px;
-  border: 1px solid var(--mh-line-attachment);
-  border-radius: 999px;
-  color: var(--mh-ink-attachment-muted);
-  font-size: 9px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.mh-srview__meta-footer {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 18px;
-  margin: 4px 0 0;
-  padding-top: 4px;
-}
-
-.mh-srview__meta-footer > div {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.mh-srview__meta-footer dt,
-.mh-srview__meta-footer dd {
-  margin: 0;
-  color: var(--mh-faint);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.45;
-}
-
-.mh-srview__meta-footer dt::after {
-  content: ":";
-}
-
-.mh-srview__drawer .mh-modal__foot {
-  justify-content: flex-end;
-  padding: 16px 20px;
-}
-
-@media (max-width: 1100px) {
-  .mh-srview__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 860px) {
-  .mh-srview__tools {
-    flex-wrap: wrap;
-  }
-
-  .mh-srview__search {
-    flex: 1 1 100%;
-    width: 100%;
-    order: -2;
-  }
-
-  .mh-srview__create {
-    margin-left: 0;
-  }
+  gap: var(--mh-space-3) var(--mh-space-7);
+  margin-top: var(--mh-space-5);
+  padding-top: var(--mh-space-5);
+  border-top: 1px solid var(--mh-line-subtle);
+  color: var(--mh-text-muted);
+  font-size: var(--mh-font-size-sm);
 }
 
 @media (max-width: 760px) {
-  .mh-srview__list {
-    grid-template-columns: minmax(0, 1fr);
+  .mh-srview {
+    gap: var(--mh-space-5);
   }
 }
