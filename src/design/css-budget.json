@@ -162,10 +162,8 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/review-center/ReviewQueue",
     "features/feedback-quality/FeedbackList",
     "features/scenario-library/SkillLibrary",
-    "pages/ReviewCenterPage",
     "pages/FeedbackQualityPage"
   ],
   "maxRawFoundationValues": {

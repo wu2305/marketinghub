@@ -210,7 +210,6 @@
       "src/design/features/interpreter/PrinciplesView/index.jsx",
       "src/design/features/interpreter/TypeCard/index.jsx",
       "src/design/features/interpreter/TypeGrid/index.jsx",
-      "src/design/features/review-center/ReviewQueue/index.jsx",
       "src/design/features/scenario-detail/ScenarioDetailWorkspace/index.jsx",
       "src/design/features/self-service/ActionCard/index.jsx",
       "src/design/features/self-service/UploadHistory/index.jsx",
