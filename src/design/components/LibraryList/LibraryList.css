@@ -1,0 +1,26 @@
+.mh-library-list--cards {
+display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--mh-space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mh-library-list--cards > li {
+display: grid;
+  min-width: 0;
+}
+
+.mh-library-list--table {
+overflow: hidden;
+  border: 1px solid var(--mh-line);
+  border-radius: var(--mh-radius-md);
+  background: var(--mh-surface);
+}
+
+@media (max-width: 760px) {
+  .mh-library-list--cards {
+    grid-template-columns: 1fr;
+  }
+}

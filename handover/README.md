@@ -65,7 +65,7 @@ npm test               # vitest 行为测试
 | M7 | 知识可用状态与P08只读关联标签收敛 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | `StatusBadge` 知识卡固定占位/详情自然宽按用途组合，P10标题状态复用独立size/tone；六个语义tone真实适用于三种形态，已知状态精确映射、未知状态中性；P07 Scenario、Data Model、Field Library与P08 RC编辑摘要均接入，证据 `/tmp/mh-feedback-recheck-badges/`、`/tmp/mh-badge-status-review.md`，详见§5 |
 | M7 | P2 公开枚举声明精度 | 已集成（integrate/drain 85a5066，全套机器门禁通过）；独立对抗审核与人工视觉待办 | 45 个公共枚举保持原值，JSDoc 生成只读字面量取值；TextInput/Select 的 size 声明不再引用不存在的 `SIZES`；证据见 §5 |
 | DI | 设计意图提取 Phase 1：基础层、领域模型、奥卡姆基线（仅文档） | Phase 1 完成（用户已批准 D1–D5、A1–A5）；Phase 2 未开始 | 分支 `design-intent/phase1`；`handover/design-intent/{foundations,domain-model,occam-baseline}.md`；AGENTS §1/§3.3/§3.5/§4/§5 按 2026-09-27 用户决定改写 |
-| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4 已合入；WP2a 审核修复候选，待完整验收与用户合并 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
+| DI | 设计意图 Phase 2：基础层 token 落地与通用库模式迁移（WP1–WP8） | 进行中：WP1、WP4 已合入；WP2–WP6 待合入 | `handover/design-intent/phase2-guide.md`（工作包、规范、门禁、清单、汇报模板、启动提示）；`patterns/library.md` 模式规格；`dispositions.md` 已定种子 D01–D17 |
 
 验收要求以 AGENTS.md 第 5 节为准。优先完成 M0 与 M1 最小闭环，再沿页面实际需求提取，不能陷入无休止的基础重构。每个里程碑拆为可独立验收的条目，完成一条继续下一条；不要以一个样板或单页作为整个任务终点。
 
@@ -487,10 +487,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
-| 2026-09-28 | PR #38审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr38-fix-*`。 | Codex（GPT-6） |
-| 2026-09-28 | PR #38审核修复：DataTable窄屏空态退出标签/内容双列grid，空内容槽使用完整单元格宽度；普通数据行保持标签布局。无新增故事或接口。证据 `/tmp/mh-pr38-fix-*`；人工视觉待审。 | Codex（GPT-6） |
+| 2026-09-28 | PR #39审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色；同步#38窄屏空态完整宽度修复。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr39-fix-*`。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP3a 更正：`--mh-font-size-3xl` 28→24px（22–34px 簇以 22/24px 为主；28px 使原 22–23px 的弹窗/抽屉标题变大 5–6px，被 Report Context 抽屉场景发现）。foundations §2.2、§3.2 与附录更正同步。 | Claude |
+| 2026-09-27 | Phase 2 WP6：新增通用库模式组件（均在 `components/`，Organisms/Library 故事）：`LibraryToolbar`（搜索、多选/单选分面、常显计数、创建链接、可选标签页，统一 `onChange({field,value,checked?})`）、`LibraryList`（`cards`/`table` 两种布局与空态，视图不再直接渲染网格或 DataTable）、`LibraryItem`（标题即打开按钮、草稿标记、两行描述、元信息、状态、动作、唯一内容插槽）、`ItemActions`（渲染 `governedActions()` 结果；受阻动作 `aria-disabled` 可聚焦可点击并上报原因，取代 KnowledgeActions 的三种变体行为）、`LibraryEmpty`（无结果可清除筛选 / 暂无内容）。`index.js` 导出上述组件与 `lib/governance.js`。21 个新故事、5 组测试；尚无页面使用（WP7 迁移）。 | Claude |
 | 2026-09-27 | Phase 2 WP5：`Button` 新增 `href`（渲染同样式 `<a href>`，禁用时去掉 href、`aria-disabled` 且不触发回调；新故事 As link）。`DataTable` 新增 `onOpen`（首列变为按钮，行内其他控件外的点击也打开；Enter/Space 由按钮原生处理）、`emptyState`（跨列空态行）与 760px 以下逐行堆叠、以表头作标签的窄屏布局；新故事 Openable rows、Empty；Campaign 用法未变。新增 4 条测试。 | Claude |
 | 2026-09-27 | Phase 2 WP3d：`pages/` 与 `lib/` 18 个 CSS：110 处字号、45 处字重、50 处圆角、6 处阴影、8 处颜色改为 token。除 `pendingMigration`（WP7 逐个移除）外，`src/design` 组件 CSS 的原始字号、字重、圆角、阴影、颜色字面量全部为 0，棘轮设为 0。 | Claude |
 | 2026-09-27 | Phase 2 WP3c：其余 `features/*`（cockpit、campaign、home、self-service、scenario-*、knowledge-*、metric-dictionary、personal-memory 等 24 个 CSS）：299 处字号、153 处字重、175 处圆角、4 处阴影、1 处颜色改为 token（含一处注释内规则手工改），目录内原始值清零。棘轮更新为 {"fontSize": 22, "fontWeight": 5, "radius": 11, "shadow": 5, "color": 10}。 | Claude |

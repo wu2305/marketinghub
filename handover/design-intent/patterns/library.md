@@ -38,9 +38,10 @@ product are this one idea:
 └──────────────────────────────────────────────────────────────────────────────┘
 ┌ LibraryList (cards | table) ────────────────────────────────────────────────┐
 │ LibraryItem × n                                                              │
-│   title  [Draft]                         [StatusBadge]  [ItemActions ⋯]     │
+│   title  [Draft]                                          [StatusBadge]     │
 │   description (2-line clamp)                                                 │
-│   meta: label value · label value · chips (+N)                               │
+│   view-specific content (e.g. Synonyms [chip] [chip] [+N])                   │
+│   meta: label value · label value                          [ItemActions]    │
 └──────────────────────────────────────────────────────────────────────────────┘
   LibraryEmpty      (no results / nothing yet)
   Pagination        (when total > pageSize)
@@ -172,3 +173,8 @@ the pattern parts. Data Model uses only `LibraryItem` for its domain cards; its 
 
 "Recognisably the original" check per view: same regions in the same order, same copy, same kinds of chips
 and badges, gold accent where the original uses gold. Exact spacing, greys and font sizes may differ.
+
+Pilot adjustment (WP7a review, 2026-09-27): actions moved from the card header to the footer beside the
+meta, as in every original card (`business-term-library.js:143-148`, `field-library.js:118-122`), so long
+titles keep the full width; the toolbar search uses the `plain` (gold pill) `SearchField`, matching the
+pill facets and the original `.overview-global-search`.

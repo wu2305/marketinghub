@@ -1,0 +1,74 @@
+import "../../tokens.css";
+import { Button } from "../Button/index.jsx";
+import { CheckboxFilter } from "../CheckboxFilter/index.jsx";
+import { SearchField } from "../SearchField/index.jsx";
+import { Select } from "../Select/index.jsx";
+import { Tabs } from "../Tabs/index.jsx";
+import "./LibraryToolbar.css";
+
+/** @type {readonly ["multi", "single"]} */
+export const libraryFacetKinds = ["multi", "single"];
+
+/**
+ * Find controls of a governed library (patterns/library.md §2, B1–B4): search,
+ * facets, the always-visible result count, the optional create action and
+ * optional tabs. Every control reports through one `onChange`.
+ * @param {object} props
+ * @param {{ label: string, placeholder?: string, value?: string }} props.search
+ * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input (keyboard shortcuts)
+ * @param {Array<{ id: string, label: string, kind?: "multi"|"single", options: Array<{ id: string, label: string }>, selected?: string[]|string, allLabel?: string, selectedLabel?: string }>} [props.facets=[]]
+ * @param {string} props.count result count text, e.g. "Showing 8 of 24 terms"
+ * @param {{ label: string, href: string }} [props.create] creation navigates, so it renders as a link
+ * @param {{ label: string, value: string, items: Array<{ id: string, label: string }> }} [props.tabs]
+ * @param {(event: { field: string, value: string, checked?: boolean }) => void} [props.onChange] `field` is "search", "tab" or a facet id; multi facets add `checked`
+ * @param {(event: { href: string }) => void} [props.onCreate]
+ */
+export function LibraryToolbar({ search, searchRef, facets = [], count, create, tabs, onChange, onCreate }) {
+  return (
+    <div className="mh-library-toolbar">
+      {tabs ? (
+        <Tabs label={tabs.label} items={tabs.items} value={tabs.value} onChange={({ id }) => onChange?.({ field: "tab", value: id })} />
+      ) : null}
+      <div className="mh-library-toolbar__row">
+        <div className="mh-library-toolbar__search">
+          <SearchField
+            label={search.label}
+            placeholder={search.placeholder ?? search.label}
+            value={search.value ?? ""}
+            variant="plain"
+            inputRef={searchRef}
+            onChange={({ value }) => onChange?.({ field: "search", value })}
+          />
+        </div>
+        {facets.map((facet) =>
+          facet.kind === "single" ? (
+            <label key={facet.id} className="mh-library-toolbar__facet">
+              <span>{facet.label}</span>
+              <Select
+                label={facet.label}
+                value={facet.selected ?? ""}
+                options={[{ value: "", label: facet.allLabel ?? "All" }, ...facet.options.map((option) => ({ value: option.id, label: option.label }))]}
+                onChange={({ value }) => onChange?.({ field: facet.id, value })}
+              />
+            </label>
+          ) : (
+            <div key={facet.id} className="mh-library-toolbar__facet">
+              <CheckboxFilter
+                label={facet.label}
+                allLabel={facet.allLabel}
+                selectedLabel={facet.selectedLabel}
+                options={facet.options}
+                selected={facet.selected ?? []}
+                onToggle={({ id, checked }) => onChange?.({ field: facet.id, value: id, checked })}
+              />
+            </div>
+          ),
+        )}
+        <p className="mh-library-toolbar__count" aria-live="polite">{count}</p>
+        {create ? (
+          <Button variant="gold" icon="plus" href={create.href} onClick={() => onCreate?.({ href: create.href })}>{create.label}</Button>
+        ) : null}
+      </div>
+    </div>
+  );
+}

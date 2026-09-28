@@ -71,6 +71,31 @@ export {
   DataTable,
 } from "./components/DataTable/index.jsx";
 export {
+  ItemActions,
+} from "./components/ItemActions/index.jsx";
+export {
+  LibraryEmpty,
+  libraryEmptyKinds,
+} from "./components/LibraryEmpty/index.jsx";
+export {
+  LibraryItem,
+} from "./components/LibraryItem/index.jsx";
+export {
+  LibraryList,
+  libraryLayouts,
+} from "./components/LibraryList/index.jsx";
+export {
+  LibraryToolbar,
+  libraryFacetKinds,
+} from "./components/LibraryToolbar/index.jsx";
+export {
+  availabilityOf,
+  governedActions,
+  governanceMessages,
+  governedActionNames,
+  governanceReasons,
+} from "./lib/governance.js";
+export {
   FileDropzone,
 } from "./components/FileDropzone/index.jsx";
 export {
