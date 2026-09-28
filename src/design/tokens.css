@@ -349,7 +349,6 @@
   --mh-reports-thumb-bg: var(--mh-surface-muted);
   --mh-surface-panel-muted: var(--mh-surface-subtle);
   --mh-reports-media-bg: var(--mh-surface-muted);
-  --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
   /* Live report view (reports-core dark accents over the catalog light skin) */
   --mh-live-toolbar-bg: var(--mh-surface-page);
   --mh-line-neutral-soft: var(--mh-line);
@@ -476,7 +475,6 @@
   --mh-ink-heading-warm: var(--mh-text-strong);
   --mh-bt-copy: var(--mh-text);
   --mh-bt-label: var(--mh-text-faint);
-  --mh-bt-tag-bg: var(--mh-surface-muted);
   --mh-bt-state-bg: #f7f1e5;
   --mh-bt-state-ink: #b4872d;
   --mh-bt-state-off-bg: var(--mh-surface-muted);
@@ -489,8 +487,6 @@
   --mh-ink-icon-warm-muted: var(--mh-text-muted);
   --mh-shadow-search-warm: var(--mh-shadow-raised);
   --mh-bt-empty: var(--mh-text-muted);
-  --mh-bt-draft-bg: #f6ede0;
-  --mh-bt-draft-ink: #a76412;
   --mh-gold-action-start: #e3ba6d;
   --mh-gold-action-end: #cb8f2b;
   --mh-gold-action-hover-start: #ecc673;
