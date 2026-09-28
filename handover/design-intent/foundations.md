@@ -117,7 +117,7 @@ Three kinds of drift worth naming, because they explain what gets merged:
 | `lg` 14 px | 14 px, 0.85–0.9 rem | 3 | 184 |
 | `xl` 16 px | 15–17 px, 0.92–1.02 rem | 7 | 135 |
 | `2xl` 20 px | 18–21 px, 1.1–1.18 rem | 6 | 79 |
-| `3xl` 28 px | 22–34 px, 1.58–1.8 rem | 15 | 95 |
+| `3xl` 24 px | 22–34 px, 1.58–1.8 rem | 15 | 95 |
 | `display` 56 px | 37–72 px, 2.6–2.8 rem, two `clamp()` | 12 | 29 |
 
 **Font weight is already three values in the browser.** Only three DIN files exist: Light 300, Regular 400,
@@ -170,7 +170,7 @@ glance, because every anchor is the original's own dominant value.
 
 - Families (3): `--mh-font-sans` DIN 2014 · `--mh-font-display` BentonModDisplay · `--mh-font-mono`.
 - Weights (3): `--mh-font-weight-light` 300 · `--mh-font-weight-regular` 400 · `--mh-font-weight-bold` 700.
-- Sizes (8): `--mh-font-size-xs` 11 · `sm` 12 · `md` 13 · `lg` 14 · `xl` 16 · `2xl` 20 · `3xl` 28 ·
+- Sizes (8): `--mh-font-size-xs` 11 · `sm` 12 · `md` 13 · `lg` 14 · `xl` 16 · `2xl` 20 · `3xl` 24 ·
   `display` `clamp(40px, 5vw, 56px)`. (Sizes use `font-size`, not `text`, so they never collide with the
   `--mh-text-*` colour family.) Line height follows size role: 1.2 headings, 1.5 body, 1 for
   single-line chips (the three most-used original line heights).
@@ -916,3 +916,4 @@ Actions: **keep** (already the role token) · **rename** · **merge** (replace r
 - corrected in WP2d: `--mh-danger-ring` `--mh-focus-ring` → `color-mix(in srgb, var(--mh-danger) 12%, transparent)` because it marks invalid fields (`[aria-invalid="true"]` in the Skill and Scenario Edit forms), not focus.
 - corrected in WP2d: `--mh-reports-card-shadow`, `--mh-reports-row-shadow`, `--mh-live-shadow`, `--mh-composer-shadow`, `--mh-principle-shadow`, `--mh-shadow-search-warm` `--mh-shadow-overlay` → `--mh-shadow-raised` because they are resting shadows of cards, rows and inputs (their hover variants stay overlay); the blur-based classifier over-lifted them.
 - WP2d: `--mh-reports-filter` (image filter, not a foundation) moved into its two consumers, `features/cockpit/{ProjectDirectory,ProjectCard}`.
+- corrected in WP3a: `--mh-font-size-3xl` 28 → 24 px. The 22–34 px cluster is dominated by 22 px (24 uses) and 24 px (10); 28 px made every dialog and drawer title (22–23 px in the original) grow by 5–6 px, which the Report Context drawer scenario caught. 24 px is the cluster's centre and keeps page headings and dialog titles within 2–8 px of the original.

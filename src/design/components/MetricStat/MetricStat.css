@@ -8,17 +8,17 @@ display: grid;
 min-height: 84px;
   align-content: center;
   padding: 14px 18px;
-  border: 1px solid rgba(242, 209, 133, 0.2);
-  border-radius: 8px;
-  background: rgba(89, 59, 43, 0.5);
+  border: 1px solid color-mix(in srgb, var(--mh-accent-soft) 20%, transparent);
+  border-radius: var(--mh-radius-md);
+  background: color-mix(in srgb, var(--mh-accent-ink) 50%, transparent);
   color: var(--mh-ink-inverse);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--mh-shadow-raised);
   backdrop-filter: blur(15px);
 }
 
 .mh-metric--glass .mh-metric__label,
 .mh-metric--glass .mh-metric__caption {
-color: rgba(255, 255, 255, 0.72);
+color: color-mix(in srgb, var(--mh-text-inverse) 72%, transparent);
 }
 
 .mh-metric--glass .mh-metric__label {
@@ -27,7 +27,7 @@ color: rgba(255, 255, 255, 0.72);
 
 .mh-metric--glass .mh-metric__value {
 color: var(--mh-ink-inverse);
-  font-size: 32px;
+  font-size: var(--mh-font-size-3xl);
 }
 
 .mh-metric--compact {
@@ -36,7 +36,7 @@ min-height: 76px;
 }
 
 .mh-metric--compact .mh-metric__value {
-font-size: 28px;
+font-size: var(--mh-font-size-3xl);
 }
 
 .mh-metric--card {
@@ -46,7 +46,7 @@ position: relative;
   overflow: hidden;
   padding: 15px 16px;
   border: 1px solid var(--mh-line);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
 }
 
@@ -83,8 +83,8 @@ position: absolute;
 .mh-metric__label {
 color: var(--mh-muted);
   font-family: var(--mh-font);
-  font-size: 10px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
   line-height: 1.15;
 }
@@ -92,15 +92,15 @@ color: var(--mh-muted);
 .mh-metric__value {
 color: var(--mh-ink);
   font-family: var(--mh-font);
-  font-size: 28px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-3xl);
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1;
 }
 
 .mh-metric__caption {
 color: var(--mh-muted);
   font-family: var(--mh-font);
-  font-size: 11px;
-  font-weight: 400;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-regular);
   line-height: 1.35;
 }

@@ -10,7 +10,7 @@ display: grid;
   gap: 11px;
   color: var(--mh-copy);
   font-family: var(--mh-font);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-progress__row strong {
@@ -21,7 +21,7 @@ color: var(--mh-ink);
 .mh-progress__track {
 height: 6px;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-line-panel-subtle);
 }
 

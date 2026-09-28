@@ -5,7 +5,7 @@
   z-index: 40;
   height: var(--mh-header);
   border-bottom: 1px solid var(--mh-line);
-  background: rgba(255, 255, 255, 0.96);
+  background: color-mix(in srgb, var(--mh-text-inverse) 96%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -56,8 +56,8 @@ display: block;
   color: var(--mh-ink-navigation);
   text-decoration: none;
   font-family: var(--mh-font);
-  font-size: 12.5px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
   white-space: nowrap;
   cursor: pointer;
 }

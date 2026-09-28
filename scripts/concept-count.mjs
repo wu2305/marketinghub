@@ -30,8 +30,9 @@ for (const file of componentCss) {
     if (v.startsWith("var(") || ["inherit", "0", "none", "initial", "unset"].includes(v)) continue;
     if (prop === "font-size") raw["font-size"].add(v);
     if (prop === "font-weight") raw["font-weight"].add(v);
-    if (prop.endsWith("radius") && !["50%", "999px"].includes(v)) raw["border-radius"].add(v);
-    if (prop === "box-shadow") raw["box-shadow"].add(v);
+    // composite values count only while they still hold a literal (see css-budget.test.js)
+    if (prop.endsWith("radius") && !["50%", "999px"].includes(v) && /(^|[\s(])[1-9][\d.]*(px|%|rem|em)/.test(v.replace(/var\([^)]*\)/g, ""))) raw["border-radius"].add(v);
+    if (prop === "box-shadow" && /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/i.test(v)) raw["box-shadow"].add(v);
     for (const c of v.match(/#[0-9a-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/gi) || []) raw["color literal"].add(c.toLowerCase().replace(/\s/g, ""));
   }
 }

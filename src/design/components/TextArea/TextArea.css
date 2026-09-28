@@ -4,7 +4,7 @@ font-family: var(--mh-font);
 }
 
 .mh-textarea:focus-visible {
-outline: 2px solid rgba(63, 115, 166, 0.55);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
@@ -14,7 +14,7 @@ width: 100%;
   border-radius: var(--mh-radius-control);
   background: var(--mh-surface);
   color: var(--mh-ink);
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-textarea {
@@ -38,7 +38,7 @@ cursor: not-allowed;
 
 .mh-textarea.is-invalid {
 border-color: var(--mh-red);
-  box-shadow: 0 0 0 3px rgba(155, 18, 48, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mh-danger) 12%, transparent);
 }
 
 .mh-assistant__box .mh-textarea {
@@ -49,5 +49,5 @@ min-height: 44px;
   border-radius: 0;
   box-shadow: none;
   resize: none;
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
 }

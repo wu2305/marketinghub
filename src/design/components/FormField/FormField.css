@@ -3,8 +3,8 @@ display: grid;
   gap: 6px;
   color: var(--mh-ink);
   font-family: var(--mh-font);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-field__required {
@@ -13,8 +13,8 @@ color: var(--mh-red);
 
 .mh-field__hint {
 color: var(--mh-muted);
-  font-size: 11px;
-  font-weight: 400;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-field.is-invalid .mh-field__hint {

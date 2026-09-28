@@ -18,7 +18,7 @@ display: grid;
   gap: 5px;
   color: var(--mh-muted);
   font-family: var(--mh-font);
-  font-size: 10px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-columns__item i {
@@ -26,7 +26,7 @@ width: min(48px, 72%);
   height: var(--mh-column);
   min-height: 2px;
   align-self: end;
-  border-radius: 3px 3px 0 0;
+  border-radius: var(--mh-radius-sm) var(--mh-radius-sm) 0 0;
   background: var(--mh-blue);
 }
 
@@ -39,7 +39,7 @@ background: var(--mh-danger-muted);
 }
 
 .mh-columns__item span {
-font-size: 9px;
+font-size: var(--mh-font-size-xs);
   line-height: 1.2;
   text-align: center;
 }

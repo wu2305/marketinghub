@@ -11,7 +11,7 @@ display: inline-flex;
   border: 1px solid transparent;
   border-radius: var(--mh-radius-control);
   cursor: pointer;
-  font-weight: 700;
+  font-weight: var(--mh-font-weight-bold);
   line-height: 1;
   white-space: nowrap;
   transition:
@@ -22,28 +22,28 @@ display: inline-flex;
 }
 
 .mh-button:focus-visible {
-outline: 2px solid rgba(63, 115, 166, 0.55);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
 .mh-button--sm {
 height: 32px;
   padding: 0 12px;
-  border-radius: 6px;
-  font-size: 11px;
+  border-radius: var(--mh-radius-md);
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-button--md {
 height: 38px;
   padding: 0 15px;
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
 }
 
 .mh-button--lg {
 height: 40px;
   padding: 0 18px;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: var(--mh-radius-md);
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-button--primary {
@@ -62,7 +62,7 @@ border-color: var(--mh-surface-action-slate);
 border-color: var(--mh-line-gold-active);
   background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
   color: var(--mh-ink-strong);
-  box-shadow: 0 6px 16px rgba(166, 111, 39, 0.16);
+  box-shadow: var(--mh-shadow-raised);
 }
 
 .mh-button--gold:hover,
@@ -118,7 +118,7 @@ width: 140px;
 
 .mh-assistant__tools .mh-button {
 min-width: 62px;
-  border-radius: 5px;
+  border-radius: var(--mh-radius-sm);
 }
 
 .mh-assistant__tools .mh-button:disabled {

@@ -14,8 +14,8 @@ display: inline-flex;
   background: transparent;
   color: var(--mh-icon-slate);
   font-family: var(--mh-font);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-md);
+  font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
   cursor: pointer;
 }

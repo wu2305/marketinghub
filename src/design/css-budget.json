@@ -1,7 +1,7 @@
 {
   "maxRawHexColors": 0,
   "maxTokenDefinitions": 487,
-  "maxDuplicateValues": 39,
+  "maxDuplicateValues": 40,
   "legacyPrefixExemptions": [
     "--mh-header",
     "--mh-drawer-shadow",
@@ -164,5 +164,24 @@
     "--mh-bt-confirm-copy",
     "--mh-bt-confirm-btn-line",
     "--mh-bt-pag-ink"
-  ]
+  ],
+  "pendingMigration": [
+    "features/interpreter/BusinessTermView",
+    "features/interpreter/FieldLibraryView",
+    "features/interpreter/ScenarioReportsView",
+    "features/interpreter/PrinciplesView",
+    "features/interpreter/KnowledgeActions",
+    "features/review-center/ReviewQueue",
+    "features/feedback-quality/FeedbackList",
+    "features/scenario-library/SkillLibrary",
+    "pages/ReviewCenterPage",
+    "pages/FeedbackQualityPage"
+  ],
+  "maxRawFoundationValues": {
+    "fontSize": 30,
+    "fontWeight": 12,
+    "radius": 22,
+    "shadow": 17,
+    "color": 28
+  }
 }

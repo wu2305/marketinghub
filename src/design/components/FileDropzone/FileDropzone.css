@@ -6,7 +6,7 @@ display: flex;
   gap: 8px;
   padding: 36px 24px;
   border: 1px dashed var(--mh-control-line);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-bg-soft);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
@@ -33,12 +33,12 @@ width: 36px;
 .mh-dropzone__title {
 margin: 0;
   color: var(--mh-ink);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-lg);
+  font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-dropzone__hint {
 margin: 0;
   color: var(--mh-faint);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
 }

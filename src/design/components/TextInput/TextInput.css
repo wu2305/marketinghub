@@ -4,7 +4,7 @@ font-family: var(--mh-font);
 }
 
 .mh-input:focus-visible {
-outline: 2px solid rgba(63, 115, 166, 0.55);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
@@ -14,7 +14,7 @@ width: 100%;
   border-radius: var(--mh-radius-control);
   background: var(--mh-surface);
   color: var(--mh-ink);
-  font-size: 13px;
+  font-size: var(--mh-font-size-md);
 }
 
 .mh-input {
@@ -24,14 +24,14 @@ height: 40px;
 
 .mh-input--sm {
 height: 32px;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: var(--mh-radius-md);
+  font-size: var(--mh-font-size-sm);
 }
 
 .mh-input--lg {
 height: 42px;
   padding: 0 14px;
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
 }
 
 .mh-input:focus {
@@ -48,7 +48,7 @@ cursor: not-allowed;
 
 .mh-input.is-invalid {
 border-color: var(--mh-red);
-  box-shadow: 0 0 0 3px rgba(155, 18, 48, 0.12);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--mh-danger) 12%, transparent);
 }
 
 .mh-search .mh-input {
@@ -71,7 +71,7 @@ height: 100%;
   border: 0;
   background: transparent;
   box-shadow: none;
-  font-size: 14px;
+  font-size: var(--mh-font-size-lg);
 }
 
 .mh-search--plain .mh-input {
@@ -80,7 +80,7 @@ color: var(--mh-principle-search-ink);
 
 .mh-search--plain .mh-input::placeholder {
 color: var(--mh-principle-search-placeholder);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
 }
 
 .mh-btview__search .mh-input {
@@ -91,7 +91,7 @@ flex: 1;
   border: 0;
   background: transparent;
   box-shadow: none;
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   color: var(--mh-principle-search-ink);
 }
 

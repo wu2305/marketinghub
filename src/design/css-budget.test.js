@@ -379,6 +379,32 @@ function rawHexCount() {
   return total;
 }
 
+// Phase 2 WP3 ratchet: distinct raw foundation values outside tokens.css, same
+// definitions as scripts/concept-count.mjs. Files a WP7 package will replace are
+// listed in css-budget.json `pendingMigration` and skipped until migrated.
+function rawFoundationValues() {
+  const pending = (budget.pendingMigration || []).map((prefix) => path.join(ROOT, prefix));
+  const sets = { fontSize: new Set(), fontWeight: new Set(), radius: new Set(), shadow: new Set(), color: new Set() };
+  for (const file of cssFiles(ROOT)) {
+    if (pending.some((prefix) => file.startsWith(prefix))) continue;
+    const css = withoutComments(fs.readFileSync(file, "utf8"));
+    for (const [, prop, raw] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]+);/g)) {
+      const value = raw.replace(/!important/, "").trim();
+      if (value.startsWith("var(") || ["inherit", "0", "none", "initial", "unset"].includes(value)) continue;
+      if (prop === "font-size") sets.fontSize.add(value);
+      if (prop === "font-weight") sets.fontWeight.add(value);
+      // Composite values count only when they still hold a literal: a shadow built
+      // from color-mix()/var() or a per-corner radius of var()s is tokenised.
+      if (prop.endsWith("radius") && !["50%", "999px"].includes(value) && /(^|[\s(])[1-9][\d.]*(px|%|rem|em)/.test(value.replace(/var\([^)]*\)/g, ""))) sets.radius.add(value);
+      if (prop === "box-shadow" && /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/i.test(value)) sets.shadow.add(value);
+      for (const color of value.match(/#[0-9a-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/gi) || []) {
+        sets.color.add(color.toLowerCase().replace(/\s/g, ""));
+      }
+    }
+  }
+  return Object.fromEntries(Object.entries(sets).map(([key, set]) => [key, set.size]));
+}
+
 function tokens(source = fs.readFileSync(TOKENS, "utf8")) {
   const css = withoutComments(source);
   const definitions = [];
@@ -473,6 +499,16 @@ describe("src/design CSS budget (WP1)", () => {
 
   it("does not add raw hex colors outside tokens.css", () => {
     expect(rawHexCount()).toBeLessThanOrEqual(budget.maxRawHexColors);
+  });
+
+  it("ratchets raw font-size, weight, radius, shadow and colour values toward zero", () => {
+    const counts = rawFoundationValues();
+    for (const [key, limit] of Object.entries(budget.maxRawFoundationValues)) {
+      expect(counts[key], `raw ${key} values`).toBeLessThanOrEqual(limit);
+    }
+    for (const prefix of budget.pendingMigration) {
+      expect(fs.existsSync(path.join(ROOT, prefix)), `pendingMigration path ${prefix}`).toBe(true);
+    }
   });
 
   it("does not add token definitions or duplicate-valued token groups", () => {

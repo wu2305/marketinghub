@@ -1,11 +1,11 @@
 .mh-suggestion {
 border: 1px solid var(--mh-line);
-  border-radius: 999px;
+  border-radius: var(--mh-radius-pill);
   background: transparent;
   color: var(--mh-copy);
   font-family: var(--mh-font);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
 }
 
@@ -26,6 +26,6 @@ color: var(--mh-copy-ai);
 @media (max-width: 760px) {
   .mh-assistant:not(.mh-assistant--home) .mh-suggestion {
   padding: 7px 12px;
-      font-size: 10px;
+      font-size: var(--mh-font-size-xs);
   }
 }

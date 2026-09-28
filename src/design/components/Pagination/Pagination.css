@@ -11,7 +11,7 @@ display: flex;
   border-top: 1px solid var(--mh-line-neutral-soft);
   background: var(--mh-surface);
   color: var(--mh-ink-muted-neutral);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-pagination__total {
@@ -28,10 +28,10 @@ display: flex;
 height: 30px;
   padding: 0 24px 0 8px;
   border: 1px solid var(--mh-pagination-select-line);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-pagination-select-ink);
-  font-size: 11px;
+  font-size: var(--mh-font-size-xs);
 }
 
 .mh-pagination__pages {
@@ -44,11 +44,11 @@ min-width: 30px;
   height: 30px;
   padding: 0 7px;
   border: 1px solid var(--mh-line-neutral-soft);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-ink-secondary-dark);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: var(--mh-font-size-xs);
+  font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
   transition:
     border-color 160ms ease,
@@ -89,7 +89,7 @@ min-height: 0;
   padding: 16px 0 0;
   border-top: 0;
   background: transparent;
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   color: var(--mh-bt-pag-ink);
 }
 
@@ -107,18 +107,18 @@ display: flex;
 height: 28px;
   padding: 6px;
   border-color: var(--mh-pagination-select-line);
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
 }
 
 .mh-pagination--compact .mh-pagination__prev,
 .mh-pagination--compact .mh-pagination__next {
 padding: 7px 10px;
   border: 1px solid var(--mh-line-neutral-soft);
-  border-radius: 6px;
+  border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   color: var(--mh-ink-secondary-dark);
   font: inherit;
-  font-size: 12px;
+  font-size: var(--mh-font-size-sm);
   cursor: pointer;
 }
 
