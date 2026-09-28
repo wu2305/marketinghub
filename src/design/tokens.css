@@ -271,7 +271,7 @@
   /* global AI launcher (assistant-launcher.css) */
   --mh-launcher-line: #303840;
   --mh-surface-dark: var(--mh-surface-inverse);
-  --mh-ink-dark-control: var(--mh-surface-inverse);
+  --mh-ink-dark-control: var(--mh-text-strong);
   --mh-launcher-bg-hover: #171c21;
   --mh-launcher-aura: rgba(218, 168, 96, 0.2);
   --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
