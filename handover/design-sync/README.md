@@ -77,10 +77,16 @@ evidence of intent.
 ## 5. Gate
 
 On the final commit, run the full gate from `handover/design-intent/phase2-guide.md` §3 (lint, test,
-build-storybook, host build + check, full visual-check, `--negative`, build:lib, font probe). Put the
-outputs in `/tmp`, and put the summary and paths in the PR body. A visual-check failure is either fixed or
+build-storybook, host build + check, visual-check, `--negative`, build:lib, font probe). Put outputs in
+`/tmp`, and put the summary and paths in the PR body. A visual-check failure is either fixed or
 explained in the change note §D. The designer gives the visual verdict (`visual-check --review`),
 because that's a design judgement.
+
+Use the **unfiltered** visual-check and font probe for a sync, not `--affected`. `scripts/affected.mjs`
+selects scenarios from `src/design` imports and changed scenario files only, so a change to
+`index.html` or `assets/**` alone selects nothing. Once it maps bundle files to the pages that load
+them, `--affected` is fine here too. Where CI uploads the `gate-evidence` artifact, link that run so the
+designer can open the screenshots without running anything locally.
 
 ## 6. PR
 
