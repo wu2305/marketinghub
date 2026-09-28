@@ -136,8 +136,8 @@
   --mh-surface-action-slate: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
   --mh-surface-action-blue: var(--mh-surface-inverse);
   --mh-surface-dark-cool: var(--mh-surface-inverse);
-  --mh-indicator-selection-warm: var(--mh-accent);
-  --mh-danger-muted: var(--mh-danger);
+  --mh-indicator-selection-warm: #b08d57;
+  --mh-danger-muted: #a23b4f;
   --mh-font: var(--mh-font-sans);
   --mh-display: var(--mh-font-display);
   --mh-radius-control: var(--mh-radius-sm);
@@ -149,14 +149,20 @@
   --mh-faint: var(--mh-text-faint);
   --mh-line-control-soft: var(--mh-line);
   --mh-line-control-hover: var(--mh-line-strong);
-  --mh-gold: var(--mh-accent);
-  --mh-gold-deep: var(--mh-accent-ink);
+  --mh-gold: #e6bc73;
+  --mh-gold-deep: #a66f27;
   --mh-gold-text: var(--mh-accent-ink);
   --mh-green: var(--mh-success);
   --mh-red: var(--mh-danger);
   --mh-danger-border: var(--mh-danger);
   --mh-ink-disabled-soft: var(--mh-text-faint);
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
+  --mh-ink-card-copy: var(--mh-text);
+  --mh-ink-report-copy: var(--mh-text);
+  --mh-ink-metric-copy: var(--mh-text);
+  --mh-ink-thumbnail-muted: var(--mh-text-faint);
+  --mh-ink-section-deep: var(--mh-text-strong);
+  --mh-surface-dialog-tint: var(--mh-surface-subtle);
   --mh-ink-control-slate: var(--mh-text);
   --mh-line-subtle-cool: var(--mh-line);
   --mh-line-sidebar-cool: var(--mh-line-subtle);
@@ -165,9 +171,9 @@
   --mh-ink-primary-deep: var(--mh-text-strong);
   --mh-line-panel-soft: var(--mh-line-subtle);
   --mh-line-input-cool: var(--mh-line);
-  --mh-line-gold-active: var(--mh-accent);
-  --mh-surface-gold-wash: var(--mh-accent-wash);
-  --mh-line-gold-soft: var(--mh-accent-soft);
+  --mh-line-gold-active: #d9ad67;
+  --mh-surface-gold-wash: #fffaf2;
+  --mh-line-gold-soft: #ecd7bd;
   --mh-indicator-muted: var(--mh-text-faint);
   --mh-indicator-active: var(--mh-accent);
   --mh-ink-label-steel: var(--mh-text-muted);
@@ -184,13 +190,13 @@
   --mh-fill-graph-muted: var(--mh-text-faint);
   --mh-line-graph-panel: var(--mh-line);
   --mh-surface-info-soft: var(--mh-surface-page);
-  --mh-line-gold-detail: var(--mh-accent-soft);
-  --mh-surface-gold-detail: var(--mh-accent-wash);
+  --mh-line-gold-detail: #e5d4b6;
+  --mh-surface-gold-detail: #fff9ef;
   --mh-ink-secondary-slate: var(--mh-text-muted);
-  --mh-surface-info: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
-  --mh-ink-info: var(--mh-info);
-  --mh-surface-warning: var(--mh-accent-wash);
-  --mh-ink-warning: var(--mh-accent-ink);
+  --mh-surface-info: #eef6ff;
+  --mh-ink-info: #296a9b;
+  --mh-surface-warning: #fff5e4;
+  --mh-ink-warning: #9b6218;
   --mh-line-table-soft: var(--mh-line-subtle);
   --mh-ink-table-muted: var(--mh-text-muted);
   --mh-ink-row-muted: var(--mh-text-muted);
@@ -201,19 +207,19 @@
   --mh-ink-heading-charcoal: var(--mh-text);
   --mh-ink-flow-muted: var(--mh-text-muted);
   --mh-surface-flow-neutral: var(--mh-surface-muted);
-  --mh-surface-success-soft: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
-  --mh-ink-success-bright: var(--mh-success);
-  --mh-surface-warning-soft: color-mix(in srgb, var(--mh-warning) 10%, var(--mh-surface));
-  --mh-ink-warning-brown: var(--mh-warning);
+  --mh-surface-success-soft: #e7f6ed;
+  --mh-ink-success-bright: #0f9f5d;
+  --mh-surface-warning-soft: #fff2d8;
+  --mh-ink-warning-brown: #9f6b24;
   --mh-ink-flow-secondary: var(--mh-text-muted);
   --mh-surface-draft: color-mix(in srgb, var(--mh-data-violet) 7%, var(--mh-surface));
   --mh-ink-draft: var(--mh-data-violet);
   --mh-surface-status-neutral: var(--mh-surface-muted);
   --mh-ink-status-neutral: var(--mh-text-muted);
-  --mh-surface-status-warm: var(--mh-accent-wash);
-  --mh-ink-status-warm: var(--mh-accent-ink);
-  --mh-ink-link-strong: var(--mh-info);
-  --mh-ink-link-hover: color-mix(in srgb, var(--mh-info) 47%, var(--mh-text-strong));
+  --mh-surface-status-warm: #f6efe4;
+  --mh-ink-status-warm: #a16616;
+  --mh-ink-link-strong: #184a8c;
+  --mh-ink-link-hover: #12386b;
   --mh-line-attachment: var(--mh-line-strong);
   --mh-ink-attachment-muted: var(--mh-text-faint);
   --mh-blue: var(--mh-info);
@@ -229,7 +235,7 @@
   --mh-amber: var(--mh-accent-ink);
   --mh-header: var(--mh-layout-header-height);
   --mh-kicker: var(--mh-text-faint);
-  --mh-drawer-shadow: var(--mh-shadow-modal);
+  --mh-drawer-shadow: -18px 0 50px rgba(31, 42, 50, 0.16);
   --mh-disabled-bg: var(--mh-surface-muted);
   --mh-disabled-line: var(--mh-line-strong);
   --mh-disabled-ink: var(--mh-text-faint);
@@ -248,12 +254,12 @@
   --mh-focus-strong: var(--mh-focus-ring);
   --mh-line-hover: var(--mh-line-strong);
   --mh-scrim-deep: var(--mh-scrim);
-  --mh-modal-shadow-soft: var(--mh-shadow-modal);
+  --mh-modal-shadow-soft: 0 24px 60px rgba(0, 0, 0, 0.25);
   --mh-line-faint: var(--mh-line-subtle);
   --mh-line-warm: var(--mh-line-subtle);
   --mh-line-warm-strong: var(--mh-line-subtle);
   --mh-row-hover: var(--mh-surface-subtle);
-  --mh-hover-warm: var(--mh-accent-wash);
+  --mh-hover-warm: #fffbeb;
   --mh-subtle: var(--mh-text);
   --mh-slate: var(--mh-text-muted);
   --mh-empty: var(--mh-text-faint);
@@ -266,10 +272,10 @@
   --mh-surface-dark: var(--mh-surface-inverse);
   --mh-ink-dark-control: var(--mh-text-strong);
   --mh-launcher-bg-hover: var(--mh-surface-inverse);
-  --mh-launcher-aura: color-mix(in srgb, var(--mh-accent) 20%, transparent);
-  --mh-launcher-shadow: var(--mh-shadow-overlay);
-  --mh-launcher-shadow-hover: var(--mh-shadow-overlay);
-  --mh-launcher-focus: var(--mh-focus-ring);
+  --mh-launcher-aura: rgba(218, 168, 96, 0.2);
+  --mh-launcher-shadow: 0 10px 26px rgba(31, 41, 55, 0.2);
+  --mh-launcher-shadow-hover: 0 12px 30px rgba(31, 41, 55, 0.24), 0 0 18px rgba(218, 168, 96, 0.18);
+  --mh-launcher-focus: rgba(63, 115, 166, 0.52);
   --mh-ink-action-strong: var(--mh-text-strong);
   /* assistant surface scale (assistant-panel.css --ai-*) */
   --mh-ink-ai: var(--mh-text-strong);
@@ -281,8 +287,8 @@
   --mh-surface-ai: var(--mh-surface-subtle);
   /* media tracking page palette */
   --mh-page-bg: var(--mh-surface-subtle);
-  --mh-ink-accent-warm: var(--mh-accent-ink);
-  --mh-required: var(--mh-danger);
+  --mh-ink-accent-warm: #8a5a00;
+  --mh-required: #c0392b;
   --mh-muted-strong: var(--mh-text-muted);
   --mh-subtle-ai: var(--mh-text);
   --mh-line-soft: var(--mh-line);
@@ -296,24 +302,25 @@
   --mh-ai-chip-neg: var(--mh-danger);
   --mh-ai-chip-neg-bg: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
-  --mh-composer-shadow: var(--mh-shadow-raised);
-  --mh-composer-focus: 0 0 0 2px var(--mh-focus-ring);
+  --mh-composer-shadow: 0 5px 16px rgba(31, 41, 55, 0.06);
+  --mh-composer-focus: 0 0 0 3px rgba(218, 168, 96, 0.18);
   --mh-bg-faint: var(--mh-surface-subtle);
   --mh-field-line: var(--mh-line-strong);
   /* skill menu / model-flow dialog */
-  --mh-danger-ring: color-mix(in srgb, var(--mh-danger) 12%, transparent);
-  --mh-gold-rule: var(--mh-accent);
-  --mh-gold-faint: color-mix(in srgb, var(--mh-accent) 7%, transparent);
-  --mh-chip-line: var(--mh-accent-soft);
-  --mh-chip-bg: var(--mh-accent-wash);
-  --mh-chip-ink: var(--mh-accent-ink);
-  --mh-chip-icon: var(--mh-accent-ink);
-  --mh-chip-hover: color-mix(in srgb, var(--mh-accent) 12%, transparent);
+  --mh-danger-ring: rgba(216, 34, 42, 0.1);
+  --mh-gold-rule: #b28c2d;
+  --mh-gold-faint: rgba(178, 140, 45, 0.07);
+  --mh-gold-ring: rgba(178, 140, 45, 0.14);
+  --mh-chip-line: #e1c48f;
+  --mh-chip-bg: #fff8eb;
+  --mh-chip-ink: #3b2b14;
+  --mh-chip-icon: #6f5a35;
+  --mh-chip-hover: rgba(93, 68, 30, 0.12);
   --mh-tooltip: var(--mh-surface-inverse);
   --mh-placeholder: var(--mh-text-faint);
   --mh-search-placeholder: var(--mh-text-faint);
   --mh-scrim-mid: var(--mh-scrim);
-  --mh-flow-shadow: var(--mh-shadow-modal);
+  --mh-flow-shadow: 0 30px 78px rgba(24, 33, 42, 0.24);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
   --mh-surface-neutral-cool: var(--mh-surface-page);
@@ -335,13 +342,14 @@
   --mh-reports-badge-ink: var(--mh-accent-ink);
   --mh-reports-pill-bg: var(--mh-accent-wash);
 
-  --mh-surface-gold-hover-soft: var(--mh-accent-wash);
-  --mh-reports-pill-hover-ink: var(--mh-accent-ink);
-  --mh-reports-title-hover: var(--mh-accent-ink);
+  --mh-surface-gold-hover-soft: #faeed4;
+  --mh-reports-pill-hover-ink: #6f4900;
+  --mh-reports-title-hover: #916732;
   --mh-reports-scrim: var(--mh-scrim);
   --mh-reports-thumb-bg: var(--mh-surface-muted);
   --mh-surface-panel-muted: var(--mh-surface-subtle);
   --mh-reports-media-bg: var(--mh-surface-muted);
+  --mh-reports-filter: saturate(0.86) contrast(0.96) brightness(1.04);
   /* Live report view (reports-core dark accents over the catalog light skin) */
   --mh-live-toolbar-bg: var(--mh-surface-page);
   --mh-line-neutral-soft: var(--mh-line);
@@ -350,7 +358,7 @@
 
   --mh-line-control-strong: var(--mh-line-strong);
   --mh-live-bar: var(--mh-line-strong);
-  --mh-live-bar-alt: var(--mh-success);
+  --mh-live-bar-alt: #79a991;
   --mh-ink-faint-warm: var(--mh-text-muted);
   --mh-live-shadow: var(--mh-shadow-raised);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
@@ -366,13 +374,13 @@
   --mh-ink-muted-neutral: var(--mh-text-muted);
   --mh-sc-row-hover: var(--mh-surface-page);
   --mh-sc-head-line: var(--mh-line-subtle);
-  --mh-ink-info-accent: var(--mh-info);
-  --mh-indicator-positive-chart: var(--mh-success);
-  --mh-indicator-negative-chart: var(--mh-danger);
+  --mh-ink-info-accent: #185fa5;
+  --mh-indicator-positive-chart: #00a06b;
+  --mh-indicator-negative-chart: #e34d59;
   --mh-sc-gridline: var(--mh-line-subtle);
-  --mh-sc-panel-shadow: var(--mh-shadow-raised);
-  --mh-sc-tip-shadow: var(--mh-shadow-raised);
-  --mh-sc-canvas-shadow: var(--mh-shadow-raised);
+  --mh-sc-panel-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --mh-sc-tip-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --mh-sc-canvas-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
@@ -381,10 +389,10 @@
   --mh-ink-secondary-dark: var(--mh-text);
 
   --mh-copilot-tool-bg: var(--mh-surface-page);
-  --mh-copilot-shadow-expanded: var(--mh-shadow-modal);
-  --mh-copilot-gold-wash: color-mix(in srgb, var(--mh-accent) 14%, transparent);
-  --mh-copilot-metric-pos: var(--mh-success);
-  --mh-copilot-metric-neg: var(--mh-danger);
+  --mh-copilot-shadow-expanded: 0 30px 90px rgba(24, 33, 42, 0.28);
+  --mh-copilot-gold-wash: rgba(218, 168, 96, 0.14);
+  --mh-copilot-metric-pos: #16a34a;
+  --mh-copilot-metric-neg: #dc2626;
   --mh-copilot-box-line: var(--mh-line);
   --mh-ink-black: var(--mh-text-strong);
   --mh-line-secondary-cool: var(--mh-line);
@@ -394,10 +402,10 @@
 
   --mh-surface-chip-cool: var(--mh-surface-page);
   --mh-copilot-action-bg: var(--mh-surface-muted);
-  --mh-copilot-fb-hover-line: color-mix(in srgb, var(--mh-accent) 68%, transparent);
-  --mh-copilot-fb-hover-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-copilot-fb-pressed-line: color-mix(in srgb, var(--mh-accent) 80%, transparent);
-  --mh-copilot-fb-pressed-bg: var(--mh-accent);
+  --mh-copilot-fb-hover-line: rgba(184, 138, 61, 0.68);
+  --mh-copilot-fb-hover-bg: rgba(231, 187, 106, 0.16);
+  --mh-copilot-fb-pressed-line: rgba(184, 138, 61, 0.8);
+  --mh-copilot-fb-pressed-bg: #e7bb6b;
   --mh-copilot-placeholder: var(--mh-text-faint);
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
@@ -414,10 +422,10 @@
   --mh-hr-axis: var(--mh-text-faint);
   --mh-hr-th-line: var(--mh-line-subtle);
   --mh-hr-td-line: var(--mh-line-subtle);
-  --mh-hr-dot-warn: var(--mh-warning);
-  --mh-ink-positive-dark: var(--mh-success);
-  --mh-ink-negative-bright: var(--mh-danger);
-  --mh-line-highlight-chart: var(--mh-accent);
+  --mh-hr-dot-warn: #e6a23c;
+  --mh-ink-positive-dark: #0a7a54;
+  --mh-ink-negative-bright: #d43d4a;
+  --mh-line-highlight-chart: #c9a44a;
   --mh-surface-highlight-warm: var(--mh-surface);
   --mh-hr-insight-ink: var(--mh-text);
 
@@ -427,9 +435,9 @@
   --mh-ra-badge-down-bg: color-mix(in srgb, var(--mh-danger) 12%, transparent);
 
   --mh-ra-stat-line: var(--mh-line-subtle);
-  --mh-ra-icon-retail-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-ra-icon-retail: var(--mh-accent-ink);
-  --mh-ra-icon-outlet-bg: color-mix(in srgb, var(--mh-info) 12%, transparent);
+  --mh-ra-icon-retail-bg: rgba(201, 164, 74, 0.16);
+  --mh-ra-icon-retail: #8a6d1f;
+  --mh-ra-icon-outlet-bg: rgba(24, 95, 165, 0.12);
 
   --mh-ra-insight-bg: var(--mh-surface);
   --mh-ra-insight-ink: var(--mh-text);
@@ -441,26 +449,26 @@
   --mh-check-filter-label: var(--mh-text-faint);
   --mh-check-filter-ink: var(--mh-text);
   --mh-check-filter-option: var(--mh-text);
-  --mh-check-filter-checked-bg: var(--mh-accent-wash);
-  --mh-check-filter-checked-ink: var(--mh-accent-ink);
-  --mh-check-filter-shadow: var(--mh-shadow-overlay);
+  --mh-check-filter-checked-bg: #f7f2e8;
+  --mh-check-filter-checked-ink: #84611f;
+  --mh-check-filter-shadow: 0 8px 24px rgba(25, 34, 48, 0.1);
   --mh-principle-line: var(--mh-line);
-  --mh-principle-shadow: var(--mh-shadow-raised);
-  --mh-principle-number-bg: var(--mh-accent-wash);
-  --mh-principle-number-ink: var(--mh-accent-ink);
+  --mh-principle-shadow: 0 4px 14px rgba(25, 31, 37, 0.08);
+  --mh-principle-number-bg: #f4ede0;
+  --mh-principle-number-ink: #9a661a;
   --mh-principle-badge-bg: var(--mh-surface-muted);
   --mh-principle-badge-ink: var(--mh-text-muted);
   --mh-principle-title: var(--mh-text-strong);
   --mh-principle-copy: var(--mh-text);
-  --mh-principle-toggle: var(--mh-accent-ink);
-  --mh-principle-toggle-hover: color-mix(in srgb, var(--mh-accent-ink) 67%, var(--mh-text-strong));
-  --mh-principle-focus-ring: var(--mh-focus-ring);
+  --mh-principle-toggle: #956318;
+  --mh-principle-toggle-hover: #71480d;
+  --mh-principle-focus-ring: rgba(185, 130, 52, 0.35);
   --mh-principle-empty-line: var(--mh-line);
   --mh-principle-empty-ink: var(--mh-text-muted);
   --mh-principle-search-ink: var(--mh-text-strong);
   --mh-principle-search-placeholder: var(--mh-text-muted);
 
-  --mh-pagination-hover-bg: var(--mh-accent-wash);
+  --mh-pagination-hover-bg: #fff9f2;
   --mh-pagination-select-line: var(--mh-line);
   --mh-pagination-select-ink: var(--mh-text);
   /* Business Term dedicated view (business-term.css / business-term-reference.css /
@@ -468,8 +476,9 @@
   --mh-ink-heading-warm: var(--mh-text-strong);
   --mh-bt-copy: var(--mh-text);
   --mh-bt-label: var(--mh-text-faint);
-  --mh-bt-state-bg: var(--mh-accent-wash);
-  --mh-bt-state-ink: var(--mh-accent-ink);
+  --mh-bt-tag-bg: var(--mh-surface-muted);
+  --mh-bt-state-bg: #f7f1e5;
+  --mh-bt-state-ink: #b4872d;
   --mh-bt-state-off-bg: var(--mh-surface-muted);
   --mh-bt-state-off-ink: var(--mh-text-muted);
   --mh-bt-action: var(--mh-accent);
@@ -480,20 +489,22 @@
   --mh-ink-icon-warm-muted: var(--mh-text-muted);
   --mh-shadow-search-warm: var(--mh-shadow-raised);
   --mh-bt-empty: var(--mh-text-muted);
-  --mh-gold-action-start: var(--mh-accent-soft);
-  --mh-gold-action-end: var(--mh-accent);
-  --mh-gold-action-hover-start: var(--mh-accent);
-  --mh-gold-action-hover-end: color-mix(in srgb, var(--mh-accent) 80%, var(--mh-accent-ink));
-  --mh-bt-create-shadow: var(--mh-shadow-raised);
+  --mh-bt-draft-bg: #f6ede0;
+  --mh-bt-draft-ink: #a76412;
+  --mh-gold-action-start: #e3ba6d;
+  --mh-gold-action-end: #cb8f2b;
+  --mh-gold-action-hover-start: #ecc673;
+  --mh-gold-action-hover-end: #d59a33;
+  --mh-bt-create-shadow: 0 3px 9px rgba(174, 105, 16, 0.14);
   --mh-bt-drawer-bg: var(--mh-surface-page);
   --mh-bt-drawer-line: var(--mh-line);
-  --mh-bt-drawer-eyebrow: var(--mh-accent-ink);
+  --mh-bt-drawer-eyebrow: #a57531;
   --mh-bt-drawer-title: var(--mh-text-strong);
-  --mh-bt-drawer-shadow: var(--mh-shadow-overlay);
+  --mh-bt-drawer-shadow: -8px 0 32px rgba(23, 32, 42, 0.15);
   --mh-bt-drawer-scrim: var(--mh-scrim);
-  --mh-bt-status-on-bg: var(--mh-accent-wash);
-  --mh-bt-status-on-ink: var(--mh-accent-ink);
-  --mh-bt-status-on-dot: var(--mh-accent);
+  --mh-bt-status-on-bg: #fff4df;
+  --mh-bt-status-on-ink: #8c5622;
+  --mh-bt-status-on-dot: #c17d22;
   --mh-surface-control-muted: var(--mh-surface-muted);
   --mh-bt-status-off-ink: var(--mh-text-faint);
   --mh-bt-status-off-dot: var(--mh-text-faint);
@@ -501,12 +512,12 @@
 
   --mh-bt-chip-bg: var(--mh-surface-muted);
   --mh-bt-chip-ink: var(--mh-text-muted);
-  --mh-bt-scope-bg: color-mix(in srgb, var(--mh-success) 8%, var(--mh-surface));
-  --mh-bt-scope-ink: var(--mh-success);
+  --mh-bt-scope-bg: #edf5f1;
+  --mh-bt-scope-ink: #28785f;
   --mh-bt-dialog-line: var(--mh-line);
   --mh-bt-dialog-ink: var(--mh-text);
   --mh-bt-dialog-scrim: var(--mh-scrim);
-  --mh-surface-warning-icon: var(--mh-accent-wash);
+  --mh-surface-warning-icon: #fef3c7;
   --mh-ink-warning-icon: var(--mh-warning);
   --mh-bt-confirm-copy: var(--mh-text-muted);
   --mh-bt-confirm-btn-line: var(--mh-line);
@@ -516,19 +527,68 @@
      ai-interpreter-overview.css / library.css). Effective values probed from
      the rendered type pages; the toolbar/search/filter chrome reuses the
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
+  --mh-ink-empty: var(--mh-text-faint);
+  --mh-ink-empty-report: var(--mh-text-muted);
+  --mh-line-empty: var(--mh-line);
   --mh-line-card-warm: var(--mh-line-subtle);
-  --mh-line-card-hover-gold: var(--mh-accent);
+  --mh-line-card-active: #d69b3d;
+  --mh-shadow-card-active: 0 14px 32px rgba(31, 41, 55, 0.08);
+  --mh-shadow-card-focus: 0 0 0 3px rgba(214, 155, 61, 0.18);
+  --mh-line-card-hover-gold: #d9aa63;
+  --mh-shadow-card-hover-gold: 0 14px 28px rgba(31, 41, 55, 0.08), 0 0 0 3px rgba(217, 170, 99, 0.12);
+  --mh-line-card-hover-warm: #d8a24f;
+  --mh-shadow-card-hover-warm: 0 10px 26px rgba(31, 41, 55, 0.08);
+  --mh-line-domain-warm: rgba(183, 122, 39, 0.28);
   --mh-ink-action-disabled: var(--mh-text-faint);
-  --mh-line-scenario-focus: var(--mh-accent);
+  --mh-surface-recipient: #f4f1eb;
+  --mh-ink-recipient: var(--mh-text-strong);
+  --mh-ink-meta-label: var(--mh-text-muted);
+  --mh-ink-state: var(--mh-text);
+  --mh-ink-description: var(--mh-text-muted);
+  --mh-line-thumbnail: var(--mh-line);
+  --mh-line-overview: var(--mh-line-subtle);
+  --mh-surface-edit: #fff8ec;
+  --mh-ink-edit: #d09135;
+  --mh-surface-edit-hover: #f9ead1;
+  --mh-ink-edit-hover: #a96c16;
+  --mh-surface-scenario-hover: #f7dfb4;
+  --mh-ink-scenario-hover: #6f3f12;
+  --mh-line-scenario-hover: rgba(183, 122, 39, 0.5);
+  --mh-line-scenario-focus: #b67a27;
   --mh-line-secondary-button: var(--mh-line);
   --mh-ink-secondary-button: var(--mh-text);
+  --mh-surface-primary-button: #f4c766;
+  --mh-line-primary-button: #d6a447;
+  --mh-ink-primary-button: var(--mh-text-strong);
+  --mh-surface-primary-button-hover: #ecc05c;
+  --mh-line-primary-button-hover: #bd8624;
+  --mh-ink-dialog-title: var(--mh-text);
+  --mh-ink-dialog-label: var(--mh-text-muted);
+  --mh-line-dialog-input: var(--mh-line-strong);
+  --mh-ink-dialog-input: var(--mh-text);
+  --mh-line-dialog-input-focus: #c99a4a;
+  --mh-line-dialog-header: var(--mh-line-subtle);
+  --mh-line-dialog-close: var(--mh-line);
+  --mh-surface-dialog: var(--mh-surface-subtle);
+  --mh-shadow-dialog: 0 24px 70px rgba(23, 34, 50, 0.22);
+  --mh-surface-dialog-button: #d3ad78;
+  --mh-line-dialog-button: #c79652;
+  --mh-surface-dialog-button-hover: #bf8f50;
+  --mh-line-dialog-button-hover: #b7813f;
+  --mh-surface-dialog-button-disabled: #dbc19b;
+  --mh-line-dialog-button-disabled: #e1c9a7;
   --mh-line-panel-subtle: var(--mh-line-subtle);
-  --mh-surface-info-strong: color-mix(in srgb, var(--mh-info) 11%, var(--mh-surface));
-  --mh-ink-info-strong: var(--mh-info);
-  --mh-surface-review: var(--mh-accent-wash);
-  --mh-surface-rose-soft: color-mix(in srgb, var(--mh-data-rose) 11%, var(--mh-surface));
-  --mh-surface-violet-soft: color-mix(in srgb, var(--mh-data-violet) 12%, var(--mh-surface));
+  --mh-surface-info-strong: #e3f2fd;
+  --mh-ink-info-strong: #1565c0;
+  --mh-surface-review: #fff3e0;
+  --mh-ink-review: #e65100;
+  --mh-surface-rose-soft: #fce4ec;
+  --mh-ink-rose: var(--mh-data-rose);
+  --mh-surface-violet-soft: #f3e5f5;
+  --mh-ink-violet: #7b1fa2;
+  --mh-indicator-like: #f59e0b;
   --mh-surface-status-gray: var(--mh-surface-page);
+  --mh-ink-status-gray: #616161;
   --mh-ink-control-deep: var(--mh-text);
   --mh-ink-row-title: var(--mh-text-strong);
   --mh-ink-row-primary: var(--mh-text-strong);

@@ -113,7 +113,7 @@ const scenarios = [
       actions: [
         { wait: ".mh-assistant--drawer" },
         {
-          eval: "(() => { const b = document.querySelector('.mh-assistant__send .mh-button'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); const tok = (name) => { const probe = document.createElement('i'); probe.style.color = 'var(' + name + ')'; document.body.append(probe); const value = getComputedStyle(probe).color; probe.remove(); return value; }; if (cs.backgroundColor !== tok('--mh-disabled-bg')) throw new Error('ASK bg ' + cs.backgroundColor); if (cs.color !== tok('--mh-disabled-ink')) throw new Error('ASK ink ' + cs.color); })()",
+          eval: "(() => { const b = document.querySelector('.mh-assistant__send .mh-button'); const cs = getComputedStyle(b); if (!b.disabled) throw new Error('ASK not disabled'); if (cs.backgroundColor !== 'rgb(240, 242, 244)') throw new Error('ASK bg must use foundation surface-muted: ' + cs.backgroundColor); if (cs.color !== 'rgb(139, 148, 157)') throw new Error('ASK ink must use foundation text-faint: ' + cs.color); })()",
         },
       ],
       expect: [
