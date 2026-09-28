@@ -100,7 +100,8 @@ border-color: var(--mh-danger-muted);
   color: var(--mh-danger-muted);
 }
 
-.mh-button:disabled {
+.mh-button:disabled,
+a.mh-button[aria-disabled="true"] {
 cursor: not-allowed;
   filter: none;
   opacity: 0.48;
@@ -126,4 +127,8 @@ border-color: var(--mh-disabled-line);
   background: var(--mh-disabled-bg);
   color: var(--mh-disabled-ink);
   opacity: 1;
+}
+
+a.mh-button {
+text-decoration: none;
 }

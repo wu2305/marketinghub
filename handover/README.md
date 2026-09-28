@@ -487,9 +487,11 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
-| 2026-09-28 | PR #37审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr37-fix-*`。 | Codex（GPT-6） |
+| 2026-09-28 | PR #38审核修复传播：同步上游#32三项hover修复，防止堆叠分支保留旧映射；同值组预算同步为40：已登记的3xl=24px与spacing=24px属于不同用途，修正原WP3a遗漏的计数；不改检查逻辑、不增加角色。同时保留#42已合并的ink-dark-control文字角色与#43修正的86%主按钮hover。用户授权直接修订既有分支，原始Demo/公开接口不变。验证证据 `/tmp/mh-pr38-fix-*`。 | Codex（GPT-6） |
+| 2026-09-28 | PR #38审核修复：DataTable窄屏空态退出标签/内容双列grid，空内容槽使用完整单元格宽度；普通数据行保持标签布局。无新增故事或接口。证据 `/tmp/mh-pr38-fix-*`；人工视觉待审。 | Codex（GPT-6） |
 | 2026-09-27 | Phase 2 WP4：新增 `lib/governance.js`（`availabilityOf` 统一 7 种可用性写法、草稿恒为停用；`governedActions` 按创建者→可用性给出 permission / disable-first / already-disabled 原因；`governanceMessages` 默认文案）及 36 条测试（18 行真值表、12 种写法、文案完整性）。`demo/knowledge-actions.js` 暂不改：旧规则中“草稿但状态 Enable”既不能编辑也不能停用（源码死路，R3 以草稿即停用解决），委托会提前改变视图行为；由 WP7 各包切换，7d 删除旧模块。指南 WP4 段同步改写。 | Claude |
 | 2026-09-27 | Phase 2 WP3a 更正：`--mh-font-size-3xl` 28→24px（22–34px 簇以 22/24px 为主；28px 使原 22–23px 的弹窗/抽屉标题变大 5–6px，被 Report Context 抽屉场景发现）。foundations §2.2、§3.2 与附录更正同步。 | Claude |
+| 2026-09-27 | Phase 2 WP5：`Button` 新增 `href`（渲染同样式 `<a href>`，禁用时去掉 href、`aria-disabled` 且不触发回调；新故事 As link）。`DataTable` 新增 `onOpen`（首列变为按钮，行内其他控件外的点击也打开；Enter/Space 由按钮原生处理）、`emptyState`（跨列空态行）与 760px 以下逐行堆叠、以表头作标签的窄屏布局；新故事 Openable rows、Empty；Campaign 用法未变。新增 4 条测试。 | Claude |
 | 2026-09-27 | Phase 2 WP3d：`pages/` 与 `lib/` 18 个 CSS：110 处字号、45 处字重、50 处圆角、6 处阴影、8 处颜色改为 token。除 `pendingMigration`（WP7 逐个移除）外，`src/design` 组件 CSS 的原始字号、字重、圆角、阴影、颜色字面量全部为 0，棘轮设为 0。 | Claude |
 | 2026-09-27 | Phase 2 WP3c：其余 `features/*`（cockpit、campaign、home、self-service、scenario-*、knowledge-*、metric-dictionary、personal-memory 等 24 个 CSS）：299 处字号、153 处字重、175 处圆角、4 处阴影、1 处颜色改为 token（含一处注释内规则手工改），目录内原始值清零。棘轮更新为 {"fontSize": 22, "fontWeight": 5, "radius": 11, "shadow": 5, "color": 10}。 | Claude |
 | 2026-09-27 | Phase 2 WP3b：`features/interpreter/` 中不属于待迁移清单的 6 个 CSS（TypeCard、TypeGrid、KnowledgeSidebar、DataModelView、BusinessTermForm 等）：41 处字号、30 处字重、28 处圆角、10 处阴影、4 处颜色改为 token，目录内原始值清零。棘轮更新为 {"fontSize": 30, "fontWeight": 12, "radius": 22, "shadow": 8, "color": 15}。 | Claude |
