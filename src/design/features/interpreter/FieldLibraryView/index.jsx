@@ -13,6 +13,7 @@ import { Toast } from "../../../components/Toast/index.jsx";
 import { cx } from "../../../cx.js";
 import { Icon, knowledgeActionIconPaths } from "../../../icons.jsx";
 import "./FieldLibraryView.css";
+import { availabilityOf } from "../../../lib/governance.js";
 
 
 /** @type {readonly ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"]} */
@@ -40,7 +41,7 @@ function toItem(type, record, strings) {
       id: record.id,
       title: record.metric_name,
       description: record.business_definition || "—",
-      status: availabilityStatus(record.status !== "Disable", states),
+      status: availabilityStatus(availabilityOf(record) === "enabled", states),
       meta: [
         { label: labels.unit || "Unit", value: record.unit || "—" },
         { label: labels.type || "Type", value: record.metric_type || "Base" },
@@ -57,7 +58,7 @@ function toItem(type, record, strings) {
       draft: record.stage === "Draft",
       draftLabel: labels.draft || "Draft",
       description: record.applicable_scenarios || record.trigger_when || record.summary || "—",
-      status: availabilityStatus(record.status !== "Disable", states),
+      status: availabilityStatus(availabilityOf(record) === "enabled", states),
       meta: [
         { label: labels.dataModelTitle || "Data Model", value: domains.join(", ") },
         { label: labels.creator || "Creator", value: record.created_by || "—" },
@@ -70,7 +71,7 @@ function toItem(type, record, strings) {
   return {
     id: record.id,
     title: record.title || record.email_subject,
-    status: availabilityStatus(record.status !== "Disable", states),
+    status: availabilityStatus(availabilityOf(record) === "enabled", states),
     meta: [
       { label: labels.sendTime || "Send time", value: sendTime },
       { label: labels.dataModelTitle || "Data Model", value: record.data_model || "All models" },

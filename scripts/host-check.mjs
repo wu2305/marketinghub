@@ -109,6 +109,8 @@ function watchPage(page) {
 
 const browser = await chromium.launch();
 
+// Each check below runs in its own try block: a timeout in one records a
+// "crashed:" failure and the remaining checks still run and report.
 async function newPage() {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1400 } });
   const errors = watchPage(page);
@@ -116,7 +118,7 @@ async function newPage() {
 }
 
 /* ---- home: clean load, fonts, images ---- */
-{
+try {
   const { page, errors } = await newPage();
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
   await page.waitForSelector(".mh-page--home, .mh-header", { timeout: 10000 });
@@ -148,10 +150,12 @@ async function newPage() {
   notes.push(...errors);
   record("home", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: home", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- nav loop: catalog → directory → live → back → back → popstate ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}cockpit`, { waitUntil: "networkidle" });
@@ -214,10 +218,12 @@ async function newPage() {
   notes.push(...errors);
   record("nav-loop", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: nav loop", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- coverage: unrebuilt route shows the notice, stays under the base ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
@@ -237,10 +243,12 @@ async function newPage() {
   notes.push(...errors);
   record("coverage", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: coverage", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- campaign-flow: all sections, retained task draft, assistant answer ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
@@ -273,10 +281,12 @@ async function newPage() {
   notes.push(...errors);
   record("campaign-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: campaign-flow", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- R6 semantic routes: Home capability params and Interpreter overview ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
@@ -303,10 +313,12 @@ async function newPage() {
   notes.push(...errors);
   record("semantic-navigation", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: R6 semantic routes", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- home-flow: assistant history fill → enabled ASK → submit → session ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}`, { waitUntil: "networkidle" });
@@ -360,10 +372,12 @@ async function newPage() {
   notes.push(...errors);
   record("home-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: home-flow", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Self-Service: query route, shared demo hook, answer and model flow ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}self-service?tab=upload`, { waitUntil: "networkidle" });
@@ -384,10 +398,12 @@ async function newPage() {
   notes.push(...errors);
   record("self-service-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Self-Service", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P04: the same import/submit hook in the standalone routed host ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}self-service?tab=upload`, { waitUntil: "networkidle" });
@@ -420,10 +436,12 @@ async function newPage() {
   notes.push(...errors);
   record("p04-data-upload-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P04", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Interpreter: existing routed type view plus knowledge assistant ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}interpreter?type=Business%20Term`, { waitUntil: "networkidle" });
@@ -450,10 +468,12 @@ async function newPage() {
   notes.push(...errors);
   record("interpreter-assistant-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Interpreter", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Personal Memory: category, edit, create, delete and lite assistant ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}personal-memory`, { waitUntil: "networkidle" });
@@ -490,10 +510,12 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "personal-memory.png") });
   record("personal-memory-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Personal Memory", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P15 Skill Library: same private flow as Storybook, routed under host ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}scenario-library`, { waitUntil: "networkidle" });
@@ -526,11 +548,13 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "scenario-library.png") });
   record("scenario-library-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P15 Skill Library", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Review Center queue, decisions, assistant and navigation ---- */
 /* ---- Skill Edit: seeded scope, report link, preview, validation, submit ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}scenario-edit?id=scenario-campaign-review`, { waitUntil: "networkidle" });
@@ -560,10 +584,12 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "scenario-edit.png") });
   record("scenario-edit-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Skill Edit", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Review Center queue, decisions, assistant and navigation ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}review-center`, { waitUntil: "networkidle" });
@@ -600,10 +626,12 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "review-center.png") });
   record("review-center-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Review Center queue, decisions, assistant and navigation", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- Feedback & Quality: source filters/detail plus restored assistant ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}feedback-quality`, { waitUntil: "networkidle" });
@@ -630,10 +658,12 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "feedback-quality.png") });
   record("feedback-quality-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: Feedback & Quality", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- sentinel: host elements identical with and without the design system ---- */
-{
+try {
   const props = ["fontFamily", "boxSizing", "padding", "border", "backgroundColor", "color", "textDecorationLine"];
   const snapshot = (sel) => `(() => { const el = document.querySelector("${sel}"); if (!el) return null; const cs = getComputedStyle(el); return ${JSON.stringify(props)}.map((k) => cs[k]).join("|"); })()`;
   const notes = [];
@@ -679,10 +709,12 @@ async function newPage() {
   }
   await slots.close();
   record("sentinel", notes.length === 0, notes);
+} catch (error) {
+  record("crashed: sentinel", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- dual instances ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
@@ -770,10 +802,12 @@ async function newPage() {
   notes.push(...errors);
   record("dual", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: dual instances", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P08 route: controlled form, validation, editing, navigation ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-create`, { waitUntil: "networkidle" });
@@ -796,11 +830,13 @@ async function newPage() {
   notes.push(...errors);
   record("knowledge-create", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P08 route", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* The original Data Model Enter handler double-saves on blur and throws. React
    keeps a single new chip; Escape cancels without a second tag or page error. */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-create?type=Data%20Model`, { waitUntil: "networkidle" });
@@ -818,10 +854,12 @@ async function newPage() {
   notes.push(...errors);
   record("knowledge-create-synonym-keys", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: block 18", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* P09 copy link has no type parameter; the host must resolve the record. */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-create?copy=investment-principles`, { waitUntil: "networkidle" });
@@ -830,11 +868,13 @@ async function newPage() {
   notes.push(...errors);
   record("knowledge-create-copy", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P09 copy link has no type parameter; the host must resolve t", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* The host router retains one App instance. Query-only P09 edit/copy links
    must remount the form seed so a previous record never leaks into the next. */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-create?copy=investment-principles`, { waitUntil: "networkidle" });
@@ -847,11 +887,13 @@ async function newPage() {
   notes.push(...errors);
   record("knowledge-create-query-seed", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: block 20", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* Scenario attachment state must come from an actual file input action,
    rather than only a prefilled story value. */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-create?type=Scenario%20Reporting`, { waitUntil: "networkidle" });
@@ -862,10 +904,12 @@ async function newPage() {
   notes.push(...errors);
   record("knowledge-create-attachment", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: block 21", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- raw demo href still resolves to the rebuilt P07 route under the base ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}compose`, { waitUntil: "networkidle" });
@@ -889,10 +933,12 @@ async function newPage() {
   notes.push(...errors);
   record("copilot-context-link", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: raw demo href still resolves to the rebuilt P07 route under ", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P11: standalone Data Model, normalized URL and live browser ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}data-model?foo=kept&type=Other`, { waitUntil: "networkidle" });
@@ -920,10 +966,12 @@ async function newPage() {
   notes.push(...errors);
   record("p11-data-model", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P11", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P10 standalone route: hook, form process and host URLs ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}metric-dictionary`, { waitUntil: "networkidle" });
@@ -941,10 +989,12 @@ async function newPage() {
   notes.push(...errors);
   record("metric-dictionary", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P10 standalone route", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P09: direct detail URL, source actions, and in-host record switch ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}knowledge-view?id=business-term-gmv`, { waitUntil: "networkidle" });
@@ -972,10 +1022,12 @@ async function newPage() {
   notes.push(...errors);
   record("p09-knowledge-view", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P09", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P09: notice dismissal stays local; its body Back link reaches Interpreter ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   for (const [id, trigger] of [["scenario-channel-performance", ".mh-kdetail__scenario-actions button"], ["channel-data-model", ".mh-kdetail__model-export"]]) {
@@ -997,10 +1049,12 @@ async function newPage() {
   notes.push(...errors);
   record("p09-notice-back", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P09", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P09: four source redirects resolve to P07's actual detail drawer ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   const destinations = [
@@ -1044,10 +1098,12 @@ async function newPage() {
   notes.push(...errors);
   record("p09-detail-redirects", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P09", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P09: source edit anchors navigate to the actual P08 form route ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   for (const [id, type] of [["business-term-gmv", "Business Term"], ["scenario-channel-performance", "Scenario Reporting"]]) {
@@ -1063,10 +1119,12 @@ async function newPage() {
   notes.push(...errors);
   record("p09-edit-to-p08", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P09", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P16: skill identity, all six panels, preview and edit query survive the host ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}scenario-detail`, { waitUntil: "networkidle" });
@@ -1093,10 +1151,12 @@ async function newPage() {
   await page.screenshot({ path: path.join(OUT, "scenario-detail.png") });
   record("scenario-detail-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P16", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* ---- P05: the private Media Tracking hook drives the host as well as stories ---- */
-{
+try {
   const { page, errors } = await newPage();
   const notes = [];
   await page.goto(`${origin}${BASE}media-tracking-detail`, { waitUntil: "networkidle" });
@@ -1127,6 +1187,8 @@ async function newPage() {
   notes.push(...errors);
   record("p05-media-tracking-flow", notes.length === 0, notes);
   await page.close();
+} catch (error) {
+  record("crashed: P05", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 await browser.close();

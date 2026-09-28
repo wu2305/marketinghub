@@ -6,9 +6,13 @@
 //   → every story whose stories file (index.json importPath) is in that set.
 //
 // A change outside src/design that the whole gate depends on (Storybook config,
-// dependencies, the check scripts) returns `null`, which callers treat as "run
-// everything". A change to tokens.css selects everything by itself, because
-// every component imports it.
+// dependencies, the check scripts, the original demo) returns `null`, which
+// callers treat as "run everything". A change to tokens.css selects everything
+// by itself, because every component imports it. CSS `url()` references (fonts,
+// images) count as imports.
+//
+// A changed source file under src/design that reaches no story is reported by
+// `unreachedSources`; callers fail on it rather than pass an empty selection.
 //
 // CLI (prints the selection):  node scripts/affected.mjs [baseRef]
 import { execFileSync } from "node:child_process";
@@ -18,9 +22,12 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = "src/design";
-const GLOBAL = [/^\.storybook\//, /^package(-lock)?\.json$/, /^vite[^/]*\.config\./, /^scripts\/(visual-check(\.config)?\.mjs|visual-check\/common\.mjs|fingerprint\.mjs|build-storybook\.mjs|font-probe\.mjs|affected\.mjs)$/];
+const GLOBAL = [/^\.storybook\//, /^assets\//, /^index\.html$/, /^package(-lock)?\.json$/, /^vite[^/]*\.config\./, /^scripts\/(visual-check(\.config)?\.mjs|visual-check\/common\.mjs|fingerprint\.mjs|build-storybook\.mjs|font-probe\.mjs|affected\.mjs)$/];
 const EXTENSIONS = ["", ".js", ".jsx", ".mjs", ".css", "/index.js", "/index.jsx"];
 const IMPORT = /(?:\bfrom|\bimport)\s*["']([^"']+)["']/g;
+const CSS_URL = /url\(\s*["']?([^"')]+)["']?\s*\)/g;
+// Changes under src/design that legitimately reach no story.
+const NO_STORY = /(\.test\.jsx?|\.md|\.json)$|\/__fixtures__\/|^src\/design\/index\.js$/;
 
 const git = (...args) => execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).split("\n").filter(Boolean);
 
@@ -61,7 +68,9 @@ function resolveImport(from, spec) {
 function importers() {
   const map = new Map();
   for (const file of walk(SRC)) {
-    for (const [, spec] of readFileSync(path.join(ROOT, file), "utf8").matchAll(IMPORT)) {
+    const source = readFileSync(path.join(ROOT, file), "utf8");
+    const specs = [...source.matchAll(IMPORT), ...(file.endsWith(".css") ? source.matchAll(CSS_URL) : [])];
+    for (const [, spec] of specs) {
       const target = resolveImport(file, spec);
       if (!target) continue;
       if (!map.has(target)) map.set(target, new Set());
@@ -97,6 +106,17 @@ export function affectedStoryIds(index, changed) {
     .map((entry) => entry.id));
 }
 
+/**
+ * Changed source files under src/design from which no story is reachable: a
+ * change the gate cannot see. Tests, docs, JSON budgets and the public entry
+ * are excluded (they are covered by npm test and the host check).
+ */
+export function unreachedSources(index, changed) {
+  const stories = new Set(Object.values(index.entries).filter((entry) => entry.type === "story").map((entry) => entry.importPath.replace(/^\.\//, "")));
+  return changed.filter((file) => file.startsWith(`${SRC}/`) && !NO_STORY.test(file) && existsSync(path.join(ROOT, file))
+    && ![...affectedFiles([file])].some((reached) => stories.has(reached)));
+}
+
 /** Scenario files (scripts/visual-check/scenarios/pNN.mjs) changed directly: their pages run in full. */
 export function changedScenarioPages(changed) {
   return new Set(changed.map((file) => file.match(/^scripts\/visual-check\/scenarios\/(p\d+)\.mjs$/)?.[1]).filter(Boolean));
@@ -110,4 +130,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   console.log(`base ${base}: ${changed.length} changed files`);
   if (!ids) console.log("global change: run everything");
   else console.log(`${ids.size} affected stories\n${[...ids].sort().join("\n")}`);
+  const unreached = unreachedSources(index, changed);
+  if (unreached.length) console.log(`reach no story: ${unreached.join(", ")}`);
 }
