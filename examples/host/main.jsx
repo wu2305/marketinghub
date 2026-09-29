@@ -306,6 +306,8 @@ function InterpreterRoute({ params }) {
     scenarioReports: INTERPRETER.scenarioReports,
     hrefFor: hostHrefFor,
     targetForHref,
+    notice: params.get("notice"),
+    notices: INTERPRETER.notices,
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
     demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, answerFor: buildInterpreterAnswer },
     onNavigate: navigateTarget,
@@ -473,8 +475,8 @@ function PersonalMemoryRoute() {
   return <PersonalMemoryPage {...props} logo={hostLogo} navigation={hostNav()} hrefFor={hostHrefFor} />;
 }
 
-function ScenarioLibraryRoute() {
-  const page = useSkillLibraryDemo({ content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, hrefFor: hostHrefFor, onNavigate: navigateTarget });
+function ScenarioLibraryRoute({ params }) {
+  const page = useSkillLibraryDemo({ content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, notice: params.get("notice"), hrefFor: hostHrefFor, onNavigate: navigateTarget });
   return <ScenarioLibraryPage {...page} logo={hostLogo} navigation={hostNav()} />;
 }
 
@@ -599,7 +601,7 @@ function App() {
   if (route.name === "review-center") return <ReviewCenterRoute />;
   if (route.name === "feedback-quality") return <FeedbackQualityRoute />;
   if (route.name === "personal-memory") return <PersonalMemoryRoute />;
-  if (route.name === "scenario-library") return <ScenarioLibraryRoute />;
+  if (route.name === "scenario-library") return <ScenarioLibraryRoute params={route.params} />;
   if (route.name === "scenario-detail") return <ScenarioDetailRoute params={route.params} />;
   if (route.name === "scenario-edit") return <ScenarioEditRoute key={route.params.toString()} params={route.params} />;
   /* P04–P06 routes are supplied by their separate closeout packages before

@@ -62,6 +62,7 @@ export const Interpreter = {
     onOpenTable: { action: "onOpenTable" },
     onCloseTable: { action: "onCloseTable" },
     onDrawerTab: { action: "onDrawerTab" },
+    notice: enumProp(["", "submitted"], "", "Arrival notice key (the host's ?notice=); `submitted` shows the Submitted-for-review toast."),
     assistant: { control: "object", description: "Knowledge workspace assistant content, state and named callbacks; useInterpreterDemo owns the local flow." },
   },
   render: function InterpreterStory(args) {
@@ -105,6 +106,8 @@ export const Interpreter = {
       onCloseTable: args.onCloseTable,
       onDrawerTab: args.onDrawerTab,
       assistant: args.assistant,
+      notice: args.notice,
+      notices: INTERPRETER.notices,
       demo: { modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, answerFor: buildInterpreterAnswer },
     });
     return <AiInterpreterPage {...args} activeType={activeType} {...demo} onSelectType={onSelectType} />;
@@ -128,6 +131,12 @@ export const InterpreterAssistantAnswer = {
       answers: [buildInterpreterAnswer("What is the governed definition of 'Attributed ROI' and which reports use it?")],
     },
   },
+};
+
+export const InterpreterSubmittedNotice = {
+  ...Interpreter,
+  name: "AI Interpreter submitted notice",
+  args: { ...Interpreter.args, activeType: "Business Term", notice: "submitted" },
 };
 
 const playClicks = (...selectors) => async ({ canvasElement }) => {

@@ -520,3 +520,13 @@ describe("AI Interpreter assistant demo", () => {
     expect(callback).toHaveBeenCalledWith(expect.objectContaining({ typeId: "Principles", values: expect.objectContaining({ name: "Scoped model" }) }));
   });
 });
+
+describe("Interpreter arrival notice (KS-05)", () => {
+  it("announces a submitted form with a toast and stays silent without a notice", () => {
+    const { unmount } = render(<Page activeType="Business Term" notice="submitted" notices={INTERPRETER.notices} />);
+    expect(screen.getByText("Submitted for review")).toBeTruthy();
+    unmount();
+    render(<Page activeType="Business Term" notices={INTERPRETER.notices} />);
+    expect(screen.queryByText("Submitted for review")).toBeNull();
+  });
+});

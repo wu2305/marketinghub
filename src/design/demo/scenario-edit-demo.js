@@ -46,11 +46,11 @@ export function useScenarioEditDemo(props) {
     setErrors(nextErrors);
     const firstInvalid = REQUIRED.find((field) => nextErrors[field]);
     if (firstInvalid) { props.onValidation?.({ firstInvalid, errors: nextErrors }); return; }
-    const payload = { id: record?.id || null, values: { ...submittedValues } };
-    props.onSubmit?.(payload);
-    window.alert(props.content.labels.submitted);
-    const href = props.hrefFor?.("scenario-library", {}) || "scenario-library.html";
-    props.onNavigate?.({ id: "scenario-library", params: {}, href, label: props.content.labels.submitted });
+    /* Submit sends the scenario to review (A1); the library announces it on arrival (KS-08). */
+    props.onSubmit?.({ id: record?.id || null, status: "Under Review", values: { ...submittedValues } });
+    const params = { notice: "submitted" };
+    const href = props.hrefFor?.("scenario-library", params) || "scenario-library.html";
+    props.onNavigate?.({ id: "scenario-library", params, href, label: props.content.labels.submit });
   };
   const workspace = useWorkspaceAssistantDemo({
     variant: "lite", initial,

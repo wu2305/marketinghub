@@ -6,6 +6,7 @@ import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { Toast } from "../../components/Toast/index.jsx";
 import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
 import { DataModelView } from "../../features/interpreter/DataModelView/index.jsx";
@@ -43,6 +44,7 @@ const typeViews = {
  * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host
  * @param {object} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace
  * @param {object} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
+ * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
  * @param {(target: { id:string, params:object, href:string, typeId:string }) => void} [props.onNavigate]
@@ -61,6 +63,7 @@ export function AiInterpreterPage({
   overlay = null,
   assistant = {},
   skillFlow,
+  toast = "",
   activeType = "overview",
   copy,
   onNavigate,
@@ -154,6 +157,7 @@ export function AiInterpreterPage({
       <AssistantLauncher ref={assistantLauncherRef} label={copy.assistantLabel} hidden={assistant.open} onOpen={assistant.onOpen} />
       <AssistantPanel {...assistant} returnFocusRef={assistantLauncherRef} placement="drawer" variant="campaign" />
       {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <Toast open={Boolean(toast)} message={toast} />
     </Shell>
   );
 }

@@ -556,7 +556,12 @@ try {
   if ((await page.locator(".mh-skill-page tbody tr").count()) !== 9 || !((await page.locator(".mh-skill-page tbody tr").first().innerText()) || "").includes("Host skill")) notes.push("Save Draft did not add the draft row");
   await page.locator(".mh-library-toolbar__create button").click();
   if ((await page.locator(".mh-skill-form__field input").first().inputValue()) !== "") notes.push("Fresh create retained old draft values");
-  await page.locator(".mh-skill-form__footer button").first().click();
+  await page.locator(".mh-skill-form__field input").first().fill("Submitted skill");
+  page.once("dialog", (dialog) => { notes.push("Inline Submit raised a browser alert"); void dialog.accept(); });
+  await page.locator(".mh-skill-form__submit").click();
+  if (!((await page.locator(".mh-toast").textContent()) || "").includes("Submitted for review")) notes.push("Inline Submit showed no toast");
+  const submittedRow = ((await page.locator(".mh-skill-page tbody tr").first().innerText()) || "");
+  if ((await page.locator(".mh-skill-page tbody tr").count()) !== 10 || !submittedRow.includes("Submitted skill") || !submittedRow.includes("Under Review")) notes.push("Inline Submit did not add an Under Review row");
   await page.locator('.mh-governance-nav a[href$="/review-center"]').click();
   if (!page.url().includes("/mh-host/review-center")) notes.push("Skill governance sidebar missed Review Center route");
   if ((await page.evaluate(() => window.__mhHostBoot)) !== boot) notes.push("Skill route navigation reloaded host");
@@ -592,11 +597,12 @@ try {
   if ((await page.locator('.mh-scenario-edit-form__field [aria-invalid="true"]').count()) !== 1) notes.push("purpose validation did not appear");
   if (!(await page.locator('.mh-scenario-edit-form__field textarea').evaluate((field) => field === document.activeElement))) notes.push("first invalid field did not receive focus");
   await page.locator('.mh-scenario-edit-form__field textarea').fill("Reviewed campaign results.");
-  let alertMessage = null;
-  page.once("dialog", (dialog) => { alertMessage = dialog.message(); void dialog.accept(); });
+  page.once("dialog", (dialog) => { notes.push("Submit raised a browser alert"); void dialog.accept(); });
   await page.getByRole("button", { name: "Submit for Review" }).click();
-  if (alertMessage !== "Scenario submitted for review successfully!") notes.push("source success alert was not shown");
   if (!page.url().includes("scenario-library")) notes.push("valid submit did not navigate to Skill Library");
+  if (!page.url().includes("notice=submitted")) notes.push("valid submit did not carry the submitted notice");
+  await page.locator(".mh-toast").waitFor({ timeout: 2000 }).catch(() => {});
+  if (!((await page.locator(".mh-toast").textContent().catch(() => "")) || "").includes("Submitted for review")) notes.push("Skill Library showed no Submitted for review toast after Submit");
   await page.goBack({ waitUntil: "domcontentloaded" });
   await page.locator('.mh-scenario-edit-form__actions a').click();
   if (!page.url().includes("scenario-library")) notes.push("Cancel did not navigate to Skill Library");
@@ -853,6 +859,26 @@ try {
   await page.close();
 } catch (error) {
   record("crashed: P08 route", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
+}
+
+/* ---- P08 Submit: Under Review, then the Interpreter announces it ---- */
+try {
+  const { page, errors } = await newPage();
+  const notes = [];
+  await page.goto(`${origin}${BASE}knowledge-create`, { waitUntil: "networkidle" });
+  await page.locator('.mh-kcreate[data-kc-type="Business Term"]').waitFor();
+  await page.locator('input[name="title"]').fill("Submitted term");
+  await page.locator('textarea[name="description"]').fill("A deterministic local description.");
+  await page.locator('.mh-btform button:has-text("Submit")').click();
+  await page.locator('.mh-interpreter__main[data-active-type="Business Term"]').waitFor();
+  if (!page.url().includes("notice=submitted")) notes.push("BT Submit did not carry the submitted notice");
+  /* type views own a toast of their own, so pick the visible one */
+  if (!((await page.locator(".mh-toast:not([hidden])").textContent().catch(() => "")) || "").includes("Submitted for review")) notes.push("Interpreter showed no Submitted for review toast after Submit");
+  notes.push(...errors);
+  record("knowledge-create-submit", notes.length === 0, notes);
+  await page.close();
+} catch (error) {
+  record("crashed: P08 Submit", false, [String(error?.message || error).split("\n")[0].slice(0, 200)]);
 }
 
 /* The original Data Model Enter handler double-saves on blur and throws. React

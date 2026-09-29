@@ -28,7 +28,7 @@ export const ScenarioLibrary = {
     onAutoFill: callbackProp("onAutoFill", "({field:string}) => void; the demo fills the field with deterministic text", { field: "logic" }),
     onRunPreview: callbackProp("onRunPreview", "({question:string,output:string}) => void", { question: "Explain the largest channel movement", output: "" }),
     onSaveDraft: callbackProp("onSaveDraft", "({id:string,status:'Draft',values:object}) => void; the demo saves a Draft row and shows a Draft saved toast", { id: "skill-draft-1", status: "Draft", values: { name: "New scenario" } }),
-    onSubmit: callbackProp("onSubmit", "({values:object}) => void", { values: { name: "" } }),
+    onSubmit: callbackProp("onSubmit", "({id:string,status:'Under Review',values:object}) => void; the demo saves the skill as Under Review and shows a Submitted for review toast", { id: "skill-draft-1", status: "Under Review", values: { name: "" } }),
     onCancel: callbackProp("onCancel", "({reason:string}) => void", { reason: "cancel" }),
     onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }),
   },
@@ -62,7 +62,7 @@ export const ScenarioLibraryCreate = state("Skill Library · Fresh create", { mo
 export const ScenarioLibraryEdit = state("Skill Library · Inline edit", { mode: "edit", initial: { selectedId: "scenario-channel-performance" } });
 export const ScenarioLibraryCreateAfterEdit = state("Skill Library · New form clears prior edit");
 ScenarioLibraryCreateAfterEdit.play = click('.mh-skill-page tbody tr:first-child', '.mh-skill-detail__actions button:first-child', '.mh-skill-form__footer button:first-child', '.mh-library-toolbar__create button');
-export const ScenarioLibraryBlankSubmit = state("Skill Library · Blank Submit returns to list", { mode: "create" });
+export const ScenarioLibraryBlankSubmit = state("Skill Library · Blank Submit sends to review", { mode: "create" });
 ScenarioLibraryBlankSubmit.play = click('.mh-skill-form__submit');
 export const ScenarioLibraryAssistant = state("Skill Library · Assistant open", { initial: { assistantOpen: true } });
 export const ScenarioLibraryAssistantAnswer = state("Skill Library · Assistant answer", { initial: { assistantOpen: true, assistantAnswers: [SKILL_LIBRARY_SHELL.answerFor("Definition of Attributed ROI")] } });
