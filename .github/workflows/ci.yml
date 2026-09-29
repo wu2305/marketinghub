@@ -4,7 +4,8 @@ name: ci
 #   verify  light gate, runs on PRs to main and on pushes to main.
 #   visual  heavy browser gate (host-check, visual-check, --negative, font probe);
 #           runs in full on a v* tag push, and by hand (Actions > ci > Run
-#           workflow, pick the branch) limited to what changed against main.
+#           workflow, pick the branch): a branch is limited to what changed
+#           against main, main itself runs in full (it has nothing to diff).
 # Branch pushes do not run CI on their own: the PR run covers them.
 
 on:
@@ -50,8 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     env:
-      # Tags check everything; manual runs only what differs from main.
-      AFFECTED: ${{ github.ref_type == 'tag' && '' || '--affected origin/main' }}
+      # Tags and main check everything (main against origin/main selects nothing
+      # and would pass with zero scenarios); other branches only what differs from main.
+      AFFECTED: ${{ (github.ref_type == 'tag' || github.ref_name == 'main') && '' || '--affected origin/main' }}
     steps:
       - uses: actions/checkout@v4
         with:

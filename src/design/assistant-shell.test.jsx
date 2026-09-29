@@ -1,6 +1,8 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { composeStories } from "@storybook/react";
+import * as dockStories from "./components/AssistantDock/AssistantDock.stories.jsx";
 import { AssistantDock, AssistantPanel, ReportCopilot, assistantAnswerVariants, assistantVariants } from "./index.js";
 
 window.HTMLElement.prototype.scrollTo ??= () => {};
@@ -114,4 +116,20 @@ describe("AssistantDock", () => {
     rerender(<AssistantDock assistant={{ open: true }} skillFlow={{ ...flow, step: undefined }} />);
     expect(screen.getAllByRole("dialog").length).toBe(1);
   });
+});
+
+describe("AssistantDock stories", () => {
+  const { Closed, CustomLauncherLabel } = composeStories(dockStories);
+
+  it.each([["Closed", Closed], ["CustomLauncherLabel", CustomLauncherLabel]])(
+    "%s opens the panel from the launcher even when the Actions panel supplies onLauncherOpen",
+    (_name, Story) => {
+      const onLauncherOpen = vi.fn();
+      const { container } = render(<Story onLauncherOpen={onLauncherOpen} />);
+      expect(container.querySelector(".mh-assistant")).toBeNull();
+      fireEvent.click(screen.getByLabelText("Open AI assistant"));
+      expect(onLauncherOpen).toHaveBeenCalledWith({ reason: "open" });
+      expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
+    },
+  );
 });
