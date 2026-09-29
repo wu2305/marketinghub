@@ -29,6 +29,13 @@ You don't need to write code. Your AI agent does the code, and you make the desi
 7. Wu reviews the code and merges. Engineering problems (a build that won't pass, a tool that's
    missing) go to Wu, not you. The agent leaves Wu a note on the pull request.
 
+## Looking at Storybook in your browser
+
+Storybook is published online (Cloudflare Pages, behind a login), so you can review the result without running
+anything. Wu sends you the link once and adds your email to the allow list. Sign in with a one-time code
+sent to that email. `main` always shows the latest merged version, and every pull request gets its own
+preview link (in the PR's checks, or ask Wu), so you can check your sync before it is merged.
+
 ## Things to know
 
 - Storybook doesn't copy your demo pixel for pixel. It uses one shared set of colours, fonts and
