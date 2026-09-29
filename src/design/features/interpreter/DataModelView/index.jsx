@@ -145,6 +145,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * drawer), and the pannable/zoomable relationship graph whose nodes open the
  * centered table detail dialog.
  * @param {Record<string, any>} props — prepared by `useDataModelDemo`
+ * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the domain search input ("/" shortcut)
  */
 export function DataModelView({
   strings,
@@ -169,7 +170,7 @@ export function DataModelView({
   reportContextId,
   onOpenReportContext,
   fieldFormat,
-  ...rest
+  searchRef,
 }) {
   const canvasRef = React.useRef(null);
   const dragRef = React.useRef(null);
@@ -203,7 +204,7 @@ export function DataModelView({
 
   const isEnabled = domain?.status === "enable";
   return (
-    <section className="mh-dmview" {...rest}>
+    <section className="mh-dmview">
       <div className="mh-dmview__shell">
         <aside className="mh-dmview__sidebar">
           <div className="mh-dmview__search">
@@ -211,6 +212,7 @@ export function DataModelView({
               label={strings.searchLabel}
               placeholder={strings.searchPlaceholder}
               value={query || ""}
+              inputRef={searchRef}
               onChange={({ value }) => onQueryChange?.(value)}
             />
           </div>

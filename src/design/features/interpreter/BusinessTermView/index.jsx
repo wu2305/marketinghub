@@ -9,6 +9,7 @@ import { Pagination } from "../../../components/Pagination/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { Toast } from "../../../components/Toast/index.jsx";
 import "./BusinessTermView.css";
+import { availabilityOf } from "../../../lib/governance.js";
 
 /** Data-model pill text — business-term-library.js:104-105 domainTags(). */
 function scopeLabel(record) {
@@ -100,7 +101,7 @@ export function BusinessTermView({
     actions: actionLabels,
     tooltips,
   } = strings;
-  const availability = (record) => (record.stage === "Draft" || record.status === "Disable" ? "Disable" : "Enable");
+  const availability = (record) => (availabilityOf(record) === "enabled" ? "Enable" : "Disable");
   const statusOf = (record) => {
     const key = availability(record);
     return { status: key === "Enable" ? "enabled" : "disabled", label: statusLabels[key] };
