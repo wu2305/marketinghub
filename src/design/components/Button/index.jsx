@@ -21,6 +21,7 @@ const BUTTON_TYPES = ["button", "submit"];
  * @param {typeof BUTTON_TYPES[number]} [props.type="button"]
  * @param {typeof import("../../icons.jsx").iconNames[number]} [props.icon] icon name from icons.jsx
  * @param {React.ReactNode} props.children
+ * @param {boolean} [props.expanded] disclosure state; renders `aria-expanded` (for buttons that show or hide a region)
  * @param {string} [props.label] aria-label override when the visible text isn't the right accessible name
  * @param {string} [props.href] navigation target; renders `<a href>`. With `disabled` the link has no href and is `aria-disabled`
  * @param {(event: { label: string }) => void} [props.onClick] `label` is the label prop, or the trimmed visible text
@@ -33,6 +34,7 @@ export function Button({
   icon,
   children,
   label,
+  expanded,
   href,
   onClick,
 }) {
@@ -50,6 +52,7 @@ export function Button({
         href={disabled ? undefined : href}
         aria-disabled={disabled || undefined}
         aria-label={label}
+        aria-expanded={expanded}
         onClick={(event) => {
           if (!disabled) onClick?.({ label: label ?? event.currentTarget.textContent.trim() });
         }}
@@ -64,6 +67,7 @@ export function Button({
       type={type}
       disabled={disabled}
       aria-label={label}
+      aria-expanded={expanded}
       onClick={(event) => onClick?.({ label: label ?? event.currentTarget.textContent.trim() })}
     >
       {content}

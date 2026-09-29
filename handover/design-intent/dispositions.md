@@ -301,6 +301,18 @@ Source: no original behaviour changes; the rows record what the shared `Assistan
 | AW-04 | lite and home pages dropped the panel's `onFeedback`, `onAttach` and `onMaximize` inconsistently | the destructure lists in the 13 pages before | Normalize | the panel receives the whole `assistant` object, so every page forwards every callback the host gives | none |
 | AW-05 | Cockpit painted launcher, Report Copilot, panel and flow dialog in that DOM order | `MarketingCockpitPage` before | Normalize | launcher, panel, flow dialog, then Report Copilot; stacking is decided by the overlay layer stack, not DOM order | none |
 
+### ScenarioPreview folded into ExamplePreview — Phase 3
+
+Source: `assets/pages/scenario-detail.html` (`#previewToggle`, `#previewContent`), `assets/pages/scenario-library.html` (detail drawer "Preview Example Output"), `assets/pages/scenario-edit.html` (Run Preview). React before: `components/ScenarioPreview` (read-only Show / Hide disclosure, used by the Skill detail drawer and the Scenario Detail page) and `components/ExamplePreview` (Run Preview block of the two forms), two implementations of one heading + example question + output block. After: `ExamplePreview` with `variant` `run` | `view`; `ScenarioPreview` is deleted.
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| EP-01 | detail surfaces: Show Preview / Hide Preview toggles a read-only question and output | `scenario-detail.html` `#previewToggle`; `scenario-library.html` detail drawer | Intent | `ExamplePreview variant="view"`: the action is a `Button` with `aria-expanded`; `output` is null while collapsed | `p15-preview`, `p16-preview*` selectors moved from `.mh-scenario-preview*` to `.mh-example-preview*` |
+| EP-02 | the toggle was a hand-written `<button>` with its own border, 12px font and eye icons | — | Normalize | the shared secondary small `Button` with the same eye / eye-off icons | none |
+| EP-03 | read-only output box: nested wrapper plus a 13px `<pre>`; form output: bordered `<pre>` at body size | — | Normalize (one output block) | the bordered `<pre>` from the form block in both variants | none |
+| EP-04 | `ScenarioPreview` was public and had a story (`organisms-scenario-preview--default`) | — | Drop (merged) | `ScenarioPreview` export removed; `ExamplePreview` and `examplePreviewVariants` exported; the state is the new story `molecules-examplepreview--view` and stays visible in the Skill Library detail and Scenario Detail page stories | story id map: `organisms-scenario-preview--default` → `molecules-examplepreview--view` |
+| EP-05 | the form block's top border and margin lived inside `ExamplePreview` | — | Normalize (spacing belongs to the container) | `SkillForm` wraps it (`mh-skill-form__preview`); detail surfaces keep their own separators | none |
+
 ### Submit → Under Review — WP7k
 
 Source: `assets/js/knowledge/analytical-model-form.js`, `business-term-form.js`, `scenario-report-form.js`, `editor-runtime.js`, `assets/js/governance/skills.js`, `skill-editor.js`. React before: `demo/knowledge-create-demo.js` (`persist`), `demo/skill-library-demo.js` and `demo/scenario-edit-demo.js` (Submit), `components/ModelFlowDialog` copy, `demo/interpreter-demo.js`. Not a library view: no layout changes; only what Submit does and says. Seeds: D15, A1 ("Submit → Under Review; Review Center publishes"), R4 (Submit keeps the form's availability), B16.

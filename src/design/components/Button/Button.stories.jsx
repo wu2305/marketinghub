@@ -25,6 +25,7 @@ export default {
     type: enumProp(buttonTypes, "button", 'Native type — pass "submit" inside a form.', "inline-radio"),
     disabled: prop("boolean", { defaultValue: false, description: "Disables the button." }),
     icon: enumProp(iconNames, undefined, "Optional icon rendered before the label."),
+    expanded: prop("boolean", { description: "Disclosure state; renders aria-expanded. Leave unset for ordinary actions.", control: "boolean" }),
     label: prop("string", { description: "aria-label override when the visible text isn't the right accessible name." }),
     children: prop("React.ReactNode", { description: "Visible button label.", control: "text" }),
     href: prop("string", { description: "Navigation target. Renders `<a href>` with the same look; with `disabled` the link has no href and is `aria-disabled`.", control: "text" }),

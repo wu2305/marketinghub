@@ -5,7 +5,7 @@ import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { ScenarioGovernance } from "../../../components/ScenarioGovernance/index.jsx";
 import { ScenarioStructure } from "../../../components/ScenarioStructure/index.jsx";
-import { ScenarioPreview } from "../../../components/ScenarioPreview/index.jsx";
+import { ExamplePreview } from "../../../components/ExamplePreview/index.jsx";
 import "./SkillDetail.css";
 
 /** Workflow status → StatusBadge tone, shared by the list and the drawer. */
@@ -29,7 +29,7 @@ export function SkillDetail({ skill, labels, previewOpen = false, onCancel, onCh
       <header className="mh-skill-detail__intro"><div className="mh-skill-detail__tags"><StatusBadge status={skill.status} tone={skillStatusTones[skill.status]} /><span className="mh-skill-detail__tag mh-skill-detail__tag--scope">{skill.scope}</span><span className="mh-skill-detail__tag">{skill.version}</span></div><h2>{skill.name}</h2><p>{skill.purpose}</p></header>
       <section className="mh-skill-detail__governance"><h3>{labels.governance}</h3><ScenarioGovernance record={skill} fields={labels.governanceFields} userFallback={labels.userFallback} /></section>
       <section className="mh-skill-detail__structure"><h3>{labels.structure}</h3><ScenarioStructure record={skill} fields={labels.structureFields} /></section>
-      <section className="mh-skill-detail__preview"><ScenarioPreview title={labels.preview} showLabel={labels.showPreview} hideLabel={labels.hidePreview} questionLabel={labels.question} question={skill.previewQuestion} output={skill.previewOutput} open={previewOpen} onChange={({ open }) => onChange?.({ value: open })} /></section>
+      <section className="mh-skill-detail__preview"><ExamplePreview variant="view" title={labels.preview} actionLabel={previewOpen ? labels.hidePreview : labels.showPreview} questionLabel={labels.question} question={skill.previewQuestion} output={previewOpen ? skill.previewOutput : null} onToggle={({ open }) => onChange?.({ value: open })} /></section>
       <p className="mh-skill-detail__usage"><Icon name="file" />{usage}</p>
     </div> : null}
   </Modal>;

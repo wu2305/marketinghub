@@ -530,7 +530,7 @@ try {
   await page.locator(".mh-skill-page tbody tr").first().click();
   if (!(await page.locator(".mh-skill-detail .mh-scenario-structure__item").count() === 5)) notes.push("Skill detail missed five structure blocks");
   await page.getByRole("button", { name: "Show Preview" }).click();
-  if (!(await page.locator(".mh-skill-detail .mh-scenario-preview__body").count())) notes.push("Skill preview did not open");
+  if (!(await page.locator(".mh-skill-detail .mh-example-preview__body").count())) notes.push("Skill preview did not open");
   await page.keyboard.press("Escape");
   if (await page.locator(".mh-skill-detail").count()) notes.push("Skill detail survived Escape");
   await page.locator(".mh-skill-page tbody tr").first().click();
@@ -1183,7 +1183,7 @@ try {
   }
   await page.locator('.mh-scenario-detail__tabs button:has-text("Knowledge Content")').click();
   await page.locator('.mh-scenario-detail__preview button').click();
-  if (await page.locator(".mh-scenario-detail__preview .mh-scenario-preview__output pre").count() !== 1) notes.push("preview did not open");
+  if (await page.locator(".mh-scenario-detail__preview .mh-example-preview__body pre").count() !== 1) notes.push("preview did not open");
   await page.goto(`${origin}${BASE}scenario-detail?id=scenario-campaign-review`, { waitUntil: "networkidle" });
   const boot = await page.evaluate(() => window.__mhHostBoot);
   if ((await page.locator(".mh-scenario-detail__info-head h2").innerText()) !== "Campaign Review Reporting") notes.push("known id did not select campaign record");

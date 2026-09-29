@@ -27,6 +27,7 @@
 .mh-skill-form__card-icon--violet{background:color-mix(in srgb, var(--mh-data-violet) 12%, var(--mh-surface));color:var(--mh-data-violet)}
 .mh-skill-form__card-body{flex:1;min-width:0}
 .mh-skill-form__card-title{display:block;margin-bottom:6px;font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold);letter-spacing:.02em;text-transform:uppercase}
+.mh-skill-form__preview{margin-top:24px;padding-top:20px;border-top:1px solid var(--mh-line-subtle)}
 .mh-skill-form__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px;padding-top:20px;border-top:1px solid var(--mh-line-subtle)}
 .mh-skill-form__saved{display:inline-flex;align-items:center;gap:6px;color:var(--mh-text-faint);font-size:var(--mh-font-size-xs)}
 .mh-skill-form__actions{display:flex;gap:10px}
