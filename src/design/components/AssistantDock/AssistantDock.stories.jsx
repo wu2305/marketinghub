@@ -26,15 +26,21 @@ export default {
     onLauncherOpen: { action: "onLauncherOpen" },
   },
   args: { variant: "campaign", placement: "drawer" },
-  render: function DockStory({ assistant, ...args }) {
+  render: function DockStory({ assistant, onLauncherOpen, ...args }) {
     const { assistant: state, skillFlow } = useWorkspaceAssistantDemo({
       variant: args.variant,
       assistant,
       demo: { answerFor: buildCampaignAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
     });
+    // The Actions panel injects an `onLauncherOpen` spy; passed straight through it
+    // would replace the demo's `onOpen` and the launcher could never open the panel.
+    const openAndLog = (event) => {
+      onLauncherOpen?.(event);
+      state.onOpen?.(event);
+    };
     return (
       <div style={{ minHeight: 480 }}>
-        <AssistantDock {...args} assistant={state} skillFlow={skillFlow} />
+        <AssistantDock {...args} assistant={state} skillFlow={skillFlow} onLauncherOpen={openAndLog} />
       </div>
     );
   },
