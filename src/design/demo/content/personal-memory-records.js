@@ -17,8 +17,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Flexible Analysis",
     "updated": "2 hours ago",
-    "used": "Yesterday",
-    "avatarColor": "purple"
+    "used": "Yesterday"
   },
   {
     "id": "mem-analysis-2",
@@ -37,8 +36,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Campaign Execution",
     "updated": "Yesterday",
-    "used": "Today",
-    "avatarColor": "purple"
+    "used": "Today"
   },
   {
     "id": "mem-analysis-3",
@@ -57,8 +55,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Flexible Analysis",
     "updated": "3 days ago",
-    "used": "Yesterday",
-    "avatarColor": "purple"
+    "used": "Yesterday"
   },
   {
     "id": "mem-analysis-4",
@@ -77,8 +74,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Performance Tracking",
     "updated": "5 days ago",
-    "used": "3 days ago",
-    "avatarColor": "purple"
+    "used": "3 days ago"
   },
   {
     "id": "mem-analysis-5",
@@ -97,8 +93,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Flexible Analysis",
     "updated": "1 week ago",
-    "used": "5 days ago",
-    "avatarColor": "purple"
+    "used": "5 days ago"
   },
   {
     "id": "mem-analysis-6",
@@ -117,8 +112,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Knowledge Base",
     "updated": "1 week ago",
-    "used": "Yesterday",
-    "avatarColor": "purple"
+    "used": "Yesterday"
   },
   {
     "id": "mem-meeting-1",
@@ -137,8 +131,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Calendar",
     "updated": "5 days ago",
-    "used": "3 days ago",
-    "avatarColor": "gold"
+    "used": "3 days ago"
   },
   {
     "id": "mem-meeting-2",
@@ -157,8 +150,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Calendar",
     "updated": "1 week ago",
-    "used": "5 days ago",
-    "avatarColor": "gold"
+    "used": "5 days ago"
   },
   {
     "id": "mem-meeting-3",
@@ -177,8 +169,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Calendar",
     "updated": "2 weeks ago",
-    "used": "1 week ago",
-    "avatarColor": "gold"
+    "used": "1 week ago"
   },
   {
     "id": "mem-meeting-4",
@@ -197,8 +188,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Calendar",
     "updated": "2 weeks ago",
-    "used": "1 week ago",
-    "avatarColor": "gold"
+    "used": "1 week ago"
   },
   {
     "id": "mem-findings-1",
@@ -217,8 +207,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Flexible Analysis",
     "updated": "Yesterday",
-    "used": "Today",
-    "avatarColor": "pink"
+    "used": "Today"
   },
   {
     "id": "mem-findings-2",
@@ -237,8 +226,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Performance Tracking",
     "updated": "3 days ago",
-    "used": "Yesterday",
-    "avatarColor": "pink"
+    "used": "Yesterday"
   },
   {
     "id": "mem-findings-3",
@@ -257,8 +245,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Flexible Analysis",
     "updated": "4 days ago",
-    "used": "2 days ago",
-    "avatarColor": "pink"
+    "used": "2 days ago"
   },
   {
     "id": "mem-findings-4",
@@ -277,8 +264,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Performance Tracking",
     "updated": "1 week ago",
-    "used": "4 days ago",
-    "avatarColor": "pink"
+    "used": "4 days ago"
   },
   {
     "id": "mem-findings-5",
@@ -297,8 +283,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Campaign Execution",
     "updated": "2 weeks ago",
-    "used": "1 week ago",
-    "avatarColor": "pink"
+    "used": "1 week ago"
   },
   {
     "id": "mem-reference-1",
@@ -317,8 +302,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Knowledge Base",
     "updated": "1 month ago",
-    "used": "Yesterday",
-    "avatarColor": "teal"
+    "used": "Yesterday"
   },
   {
     "id": "mem-reference-2",
@@ -337,8 +321,7 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Knowledge Base",
     "updated": "2 months ago",
-    "used": "3 days ago",
-    "avatarColor": "teal"
+    "used": "3 days ago"
   },
   {
     "id": "mem-reference-3",
@@ -357,7 +340,6 @@ export const PERSONAL_MEMORY_RECORDS = [
     ],
     "source": "Knowledge Base",
     "updated": "2 months ago",
-    "used": "1 week ago",
-    "avatarColor": "teal"
+    "used": "1 week ago"
   }
 ];
