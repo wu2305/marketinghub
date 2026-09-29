@@ -1,7 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { AssistantPanel, ReportCopilot, assistantAnswerVariants, assistantVariants } from "./index.js";
+import { AssistantDock, AssistantPanel, ReportCopilot, assistantAnswerVariants, assistantVariants } from "./index.js";
 
 window.HTMLElement.prototype.scrollTo ??= () => {};
 
@@ -76,5 +76,42 @@ describe("assistant variants and shared shell", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     fireEvent.click(screen.getByText("Open panel"));
     expect(document.querySelector(".mh-assistant__history-pop")).toBeNull();
+  });
+});
+
+describe("AssistantDock", () => {
+  it("shows only the launcher until opened, then the panel with the chosen variant", () => {
+    const onOpen = vi.fn();
+    const { rerender, container } = render(<AssistantDock assistant={{ launcherLabel: "Ask me", onOpen }} variant="lite" />);
+    const launcher = screen.getByLabelText("Open AI assistant");
+    expect(launcher.textContent).toContain("Ask me");
+    expect(container.querySelector(".mh-assistant")).toBeNull();
+    fireEvent.click(launcher);
+    expect(onOpen).toHaveBeenCalledWith({ reason: "open" });
+    rerender(<AssistantDock assistant={{ open: true, launcherLabel: "Ask me", onOpen }} variant="lite" />);
+    expect(screen.getByLabelText("Open AI assistant").hidden).toBe(true);
+    expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
+    expect(within(container).getByLabelText("Maximize")).toBeTruthy();
+  });
+
+  it("lets a page reroute the launcher, hide it for another overlay, and read its ref", () => {
+    const onOpen = vi.fn();
+    const onLauncherOpen = vi.fn();
+    const ref = React.createRef();
+    const { rerender } = render(<AssistantDock ref={ref} assistant={{ onOpen }} onLauncherOpen={onLauncherOpen} />);
+    expect(ref.current).toBe(screen.getByLabelText("Open AI assistant"));
+    fireEvent.click(ref.current);
+    expect(onLauncherOpen).toHaveBeenCalledWith({ reason: "open" });
+    expect(onOpen).not.toHaveBeenCalled();
+    rerender(<AssistantDock ref={ref} assistant={{ onOpen }} launcherHidden />);
+    expect(ref.current.hidden).toBe(true);
+  });
+
+  it("renders the model-flow dialog only while its step is set", () => {
+    const flow = { step: "manual", threads: [], sections: [], draft: {} };
+    const { rerender } = render(<AssistantDock assistant={{ open: true }} skillFlow={flow} />);
+    expect(screen.getAllByRole("dialog").length).toBe(2);
+    rerender(<AssistantDock assistant={{ open: true }} skillFlow={{ ...flow, step: undefined }} />);
+    expect(screen.getAllByRole("dialog").length).toBe(1);
   });
 });

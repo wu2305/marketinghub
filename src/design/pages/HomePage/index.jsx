@@ -1,11 +1,9 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { SectionHeading } from "../../components/SectionHeading/index.jsx";
 import { WorkspaceCard } from "../../features/home/WorkspaceCard/index.jsx";
 import { Shell } from "../../pages/Shell/index.jsx";
@@ -23,22 +21,8 @@ import "./HomePage.css";
  * @param {Array<object>} [props.cards=[]] WorkspaceCard props
  * @param {(id:string,params?:object)=>string} props.hrefFor semantic link resolver supplied by story or host
  * @param {object} [props.assistant={}] AssistantPanel props
- * @param {boolean} [props.assistantOpen=false]
- * @param {string} [props.prompt=""]
- * @param {string} props.scope Initial assistant scope selected from the supplied `assistant.scopes`.
  * @param {(target: { id: string, params: object, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
- * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
- * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
- * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string }) => void} [props.onSubmit]
- * @param {(event: { prompt: string }) => void} [props.onSuggestion]
- * @param {(event: { scope: string }) => void} [props.onScopeChange]
- * @param {() => void} [props.onNewSession]
- * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
- * @param {(event: { open: boolean }) => void} [props.onHistory]
- * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
- * @param {(event: { query: string, feedback: string|null }) => void} [props.onFeedback]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  */
 export function HomePage({
@@ -50,25 +34,10 @@ export function HomePage({
   cards = [],
   hrefFor,
   assistant = {},
-  assistantOpen = false,
   skillFlow,
-  prompt = "",
-  scope,
   onNavigate,
   onOpen,
-  onOpenAssistant,
-  onCloseAssistant,
-  onPromptChange,
-  onSubmit,
-  onSuggestion,
-  onScopeChange,
-  onNewSession,
-  onMaximize,
-  onHistory,
-  onHistorySelect,
-  onFeedback,
 }) {
-  const assistantLauncherRef = React.useRef(null);
   const navigationItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return (
     <Shell tone="home">
@@ -99,29 +68,7 @@ export function HomePage({
           ))}
         </div>
       </div>
-      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
-      <AssistantPanel
-        open={assistantOpen}
-        returnFocusRef={assistantLauncherRef}
-        placement="drawer"
-        tone="home"
-        {...assistant}
-        variant="home"
-        suggestions={assistant.homeSuggestions || assistant.suggestions}
-        scope={scope}
-        prompt={prompt}
-        onClose={onCloseAssistant}
-        onPromptChange={onPromptChange}
-        onSubmit={onSubmit}
-        onSuggestion={onSuggestion}
-        onScopeChange={onScopeChange}
-        onNewSession={onNewSession}
-        onMaximize={onMaximize}
-        onHistory={onHistory}
-        onHistorySelect={onHistorySelect}
-        onFeedback={onFeedback}
-      />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={{ ...assistant, suggestions: assistant.homeSuggestions || assistant.suggestions }} skillFlow={skillFlow} variant="home" tone="home" />
     </Shell>
   );
 }

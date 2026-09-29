@@ -3,9 +3,7 @@ import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { LibraryList } from "../../components/LibraryList/index.jsx";
@@ -49,8 +47,6 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
   const { items = [], counts = {}, onOpen } = list;
   const tabItems = [{ id: "all", label: `${labels.tab} ${counts.total ?? 0}` }, { id: "thumbs-up", label: `${labels.up} ${counts.up ?? 0}` }, { id: "thumbs-down", label: `${labels.down} ${counts.down ?? 0}` }].filter((tab) => visibleTabs.includes(tab.id));
   const { selected, onClose } = detail;
-  const launcherRef = React.useRef(null);
-  const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
   const typeBadge = (value) => <StatusBadge status={value} tone={value === "thumbs-up" ? "success" : "danger"}><span className="mh-feedback-page__type"><Icon name={value === "thumbs-up" ? "thumb-up" : "thumb-down"} />{value === "thumbs-up" ? labels.up : labels.down}</span></StatusBadge>;
   const rows = items.map((item) => ({
     id: item.id,
@@ -97,8 +93,6 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
     <Modal open={Boolean(selected)} variant="drawer" className="mh-feedback-page__detail" eyebrow={labels.detailEyebrow} title={labels.detailTitle} closeLabel={labels.closeDetail} onClose={onClose}>
       {selected && <><div className="mh-feedback-page__detail-head"><div>{typeBadge(selected.type)}<small>{selected.time}</small></div><h2>{selected.question}</h2></div><section className="mh-feedback-page__detail-section"><h3>{labels.answer}</h3><div className="mh-feedback-page__detail-answer">{selected.answer}</div></section>{selected.reason ? <section className="mh-feedback-page__detail-section"><h3>{labels.downReason}</h3><div className="mh-feedback-page__detail-reason">{selected.reason}</div></section> : null}<dl className="mh-feedback-page__detail-meta"><div><dt>{labels.feedbackBy}</dt><dd>{selected.feedbackBy}</dd></div><div><dt>{labels.operationTime}</dt><dd>{selected.time}</dd></div></dl></>}
     </Modal>
-    <AssistantLauncher ref={launcherRef} hidden={aiOpen} label={aiCopy.launcherLabel} onOpen={onAssistantOpen} />
-    <AssistantPanel open={aiOpen} returnFocusRef={launcherRef} placement="drawer" variant="home" {...aiCopy} prompt={aiPrompt} answers={answers} selectedSkill={selectedSkill} onClose={onAssistantClose} onPromptChange={onPromptChange} onSubmit={onSubmit} onSuggestion={onSuggestion} onHistorySelect={onHistorySelect} onNewSession={onNewSession} onSelectSkill={onSelectSkill} onClearSkill={onClearSkill} onSkillAction={onSkillAction} onAttach={onAttach} onMaximize={onMaximize} onHistory={onHistory} />
-    {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+    <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="home" />
   </div>;
 }

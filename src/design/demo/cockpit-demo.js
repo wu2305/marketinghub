@@ -105,8 +105,26 @@ export function useCockpitDemo(props) {
     hrefFor: props.hrefFor || demoHrefFor,
     assistant: {
       ...props.assistant,
+      open,
+      prompt,
       answers,
       selectedSkill: skill,
+      onOpen: (event) => {
+        setOpen(true);
+        props.onOpenAssistant?.(event);
+      },
+      onClose: (event) => {
+        setOpen(false);
+        props.onCloseAssistant?.(event);
+      },
+      onPromptChange: (event) => {
+        setPrompt(event.value);
+        props.onPromptChange?.(event);
+      },
+      onSubmit: (event) => {
+        submitAnswer(event.prompt);
+        props.onSubmit?.(event);
+      },
       onSuggestion: (event) => {
         submitAnswer(event.prompt);
         props.onSuggestion?.(event);
@@ -142,8 +160,6 @@ export function useCockpitDemo(props) {
         });
       },
     },
-    assistantOpen: open,
-    prompt,
     skillFlow: flow
       ? {
           step: flow.step,
@@ -265,22 +281,6 @@ export function useCockpitDemo(props) {
     cityInvest: props.cityInvest
       ? { ...props.cityInvest, onFiltersChange: props.onFiltersChange || props.cityInvest.onFiltersChange }
       : props.cityInvest,
-    onOpenAssistant: (event) => {
-      setOpen(true);
-      props.onOpenAssistant?.(event);
-    },
-    onCloseAssistant: (event) => {
-      setOpen(false);
-      props.onCloseAssistant?.(event);
-    },
-    onPromptChange: (event) => {
-      setPrompt(event.value);
-      props.onPromptChange?.(event);
-    },
-    onSubmit: (event) => {
-      submitAnswer(event.prompt);
-      props.onSubmit?.(event);
-    },
     onNavigate: (target) => {
       if (target.id === "cockpit-all" || (target.id === "cockpit" && !target.params?.project && !target.params?.dashboard)) setProject("all");
       props.onNavigate?.(target);

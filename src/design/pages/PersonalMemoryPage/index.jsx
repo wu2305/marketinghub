@@ -3,9 +3,7 @@ import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
 import { LibraryList } from "../../components/LibraryList/index.jsx";
@@ -36,12 +34,10 @@ export const memoryCategories = ["all", "analysis", "meeting", "findings", "refe
  */
 export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}, create = {}, deletion = {}, toast = "", assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { labels, hero, categories, sidebar } = content;
-  const launcherRef = React.useRef(null);
   const createButtonRef = React.useRef(null);
   const titleRef = React.useRef(null);
   const descriptionRef = React.useRef(null);
   React.useEffect(() => { if (create.open && create.errors?.title) titleRef.current?.focus(); else if (create.open && create.errors?.description) descriptionRef.current?.focus(); }, [create.open, create.errors?.title, create.errors?.description]);
-  const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
   const items = (memory.items || []).map((item) => ({
     id: item.id,
     title: item.title,
@@ -63,9 +59,7 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
         </MemoryWorkspace>
       </main>
     </div>
-    <AssistantLauncher ref={launcherRef} hidden={aiOpen} label={aiCopy.launcherLabel} onOpen={onAssistantOpen} />
-    <AssistantPanel open={aiOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...aiCopy} prompt={aiPrompt} answers={answers} selectedSkill={selectedSkill} onClose={onAssistantClose} onPromptChange={onPromptChange} onSubmit={onSubmit} onSuggestion={onSuggestion} onHistorySelect={onHistorySelect} onNewSession={onNewSession} onSelectSkill={onSelectSkill} onClearSkill={onClearSkill} onSkillAction={onSkillAction} onAttach={onAttach} onMaximize={onMaximize} onHistory={onHistory} />
-    {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+    <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     <Modal open={Boolean(create.open)} variant="drawer" className="mh-memory-page__create" eyebrow={labels.createEyebrow} title={labels.createTitle} closeLabel={labels.closeCreate} initialFocus={titleRef} onClose={create.onClose} footer={<div className="mh-memory-page__create-actions"><button type="button" onClick={() => create.onClose?.({ reason: "cancel" })}>{labels.cancel}</button><button type="button" onClick={() => create.onSave?.()}>{labels.saveMemory}</button></div>}>
       <div className="mh-memory-page__form"><label><span><span className="mh-memory-page__required">* </span>{labels.title}</span><input ref={titleRef} type="text" value={create.draft?.title || ""} placeholder={labels.titlePlaceholder} aria-invalid={Boolean(create.errors?.title)} onChange={(event) => create.onChange?.({ field: "title", value: event.target.value })} />{create.errors?.title && <small>{labels.cannotBeEmpty}</small>}</label><label>{labels.category}<select value={create.draft?.category || "analysis"} onChange={(event) => create.onChange?.({ field: "category", value: event.target.value })}>{categories.filter((option) => option.value !== "all").map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label><label><span><span className="mh-memory-page__required">* </span>{labels.description}</span><span className="mh-memory-page__textarea"><textarea ref={descriptionRef} value={create.draft?.description || ""} placeholder={labels.descriptionPlaceholder} aria-invalid={Boolean(create.errors?.description)} onChange={(event) => create.onChange?.({ field: "description", value: event.target.value })} /><button type="button" onClick={() => create.onAutoFill?.({ field: "description" })}>{labels.autoFill}</button></span>{create.errors?.description && <small>{labels.cannotBeEmpty}</small>}</label></div>
     </Modal>

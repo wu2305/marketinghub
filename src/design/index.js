@@ -143,6 +143,9 @@ export {
   AssistantLauncher,
 } from "./components/AssistantLauncher/index.jsx";
 export {
+  AssistantDock,
+} from "./components/AssistantDock/index.jsx";
+export {
   AssistantPanel,
   assistantPlacements,
   assistantVariants,

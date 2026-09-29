@@ -35,7 +35,6 @@ export const Home = {
     onCloseAssistant: { action: "onCloseAssistant" },
     onSubmit: { action: "onSubmit" },
     onSuggestion: { action: "onSuggestion" },
-    onScopeChange: { action: "onScopeChange" },
     onPromptChange: { action: "onPromptChange" },
     onNewSession: { action: "onNewSession" },
     onMaximize: { action: "onMaximize" },
