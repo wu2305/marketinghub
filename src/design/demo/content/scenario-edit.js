@@ -1,3 +1,4 @@
+import { SKILL_AUTOFILL_TEXT } from "./skill-autofill.js";
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
 import { demoImage } from "../images.js";
 
@@ -59,7 +60,7 @@ export const SCENARIO_EDIT = {
     autoFill: "AI Auto-fill", materials: "Reference Materials", upload: "Upload supporting files to guide the analysis", uploadHint: "Use screenshots and reference docs to show what kind of analysis is wanted.",
     preview: "Preview Example Output", runPreview: "Run Preview", question: "Example Question", questionPlaceholder: "Enter an example question to preview...",
     previewEmpty: "Please enter an example question first.",
-    cancel: "Cancel", saveDraft: "Save Draft", submit: "Submit for Review", required: "Cannot be empty", submitted: "Scenario submitted for review successfully!",
+    cancel: "Cancel", saveDraft: "Save Draft", submit: "Submit for Review", required: "Cannot be empty", submitted: "Scenario submitted for review successfully!", draftSaved: "Draft saved", autoFillText: { logic: SKILL_AUTOFILL_TEXT.logic, output: SKILL_AUTOFILL_TEXT.output },
   },
 };
 

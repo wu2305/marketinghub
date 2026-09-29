@@ -7,10 +7,10 @@
 .mh-scenario-edit-form__field{margin-bottom:20px}
 .mh-scenario-edit-form__field label{display:block;margin-bottom:6px;color:var(--mh-text);font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold)}
 .mh-scenario-edit-form__field label>span{margin-right:3px;color:var(--mh-danger)}
-.mh-scenario-edit-form__field :is(input,textarea,select),.mh-scenario-edit-form__card-body :is(textarea,select),.mh-scenario-edit-form__preview-body textarea{width:100%;padding:10px 12px;border:1px solid var(--mh-line);border-radius:var(--mh-radius-md);background:var(--mh-surface);color:var(--mh-text-strong);font:inherit;font-size:var(--mh-font-size-md);line-height:1.6}
+.mh-scenario-edit-form__field :is(input,textarea,select),.mh-scenario-edit-form__card-body :is(textarea,select){width:100%;padding:10px 12px;border:1px solid var(--mh-line);border-radius:var(--mh-radius-md);background:var(--mh-surface);color:var(--mh-text-strong);font:inherit;font-size:var(--mh-font-size-md);line-height:1.6}
 .mh-scenario-edit-form :is(textarea){resize:vertical}
 .mh-scenario-edit-form__field textarea{min-height:80px}
-.mh-scenario-edit-form__field :is(input,textarea,select):focus,.mh-scenario-edit-form__card-body :is(textarea,select):focus,.mh-scenario-edit-form__preview-body textarea:focus{border-color:var(--mh-accent);box-shadow:0 0 0 2px var(--mh-focus-ring)}
+.mh-scenario-edit-form__field :is(input,textarea,select):focus,.mh-scenario-edit-form__card-body :is(textarea,select):focus:focus{border-color:var(--mh-accent);box-shadow:0 0 0 2px var(--mh-focus-ring)}
 .mh-scenario-edit-form [aria-invalid="true"]{border-color:var(--mh-danger)!important;box-shadow:0 0 0 3px var(--mh-danger-wash)}
 .mh-scenario-edit-form__field small[role="alert"],.mh-scenario-edit-form__card-body small[role="alert"]{display:block;margin-top:4px;color:var(--mh-danger);font-size:var(--mh-font-size-xs)}
 .mh-scenario-edit-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -40,15 +40,6 @@
 .mh-scenario-edit-form__upload small{color:var(--mh-text-muted);font-size:var(--mh-font-size-sm);line-height:1.4}
 .mh-scenario-edit-form__attachments{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .mh-scenario-edit-form__attachments span{display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:var(--mh-radius-pill);background:var(--mh-surface-muted);color:var(--mh-text);font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold)}
-.mh-scenario-edit-form__preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
-.mh-scenario-edit-form__preview-head h3{margin:0}
-.mh-scenario-edit-form__preview-head button{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid var(--mh-line);border-radius:var(--mh-radius-md);background:var(--mh-surface);color:var(--mh-text);cursor:pointer;font:inherit;font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold)}
-.mh-scenario-edit-form__preview-head button:hover{border-color:var(--mh-accent);background:var(--mh-accent-wash)}
-.mh-scenario-edit-form__preview-head svg{width:14px;height:14px}
-.mh-scenario-edit-form__preview-body{display:grid;gap:16px}
-.mh-scenario-edit-form__preview-body label{color:var(--mh-text);font-size:var(--mh-font-size-sm);font-weight:var(--mh-font-weight-bold)}
-.mh-scenario-edit-form__preview-body textarea{min-height:60px;margin-top:-10px}
-.mh-scenario-edit-form__preview-body pre{overflow-x:auto;margin:0;padding:16px;border:1px solid var(--mh-line-subtle);border-radius:var(--mh-radius-md);background:var(--mh-surface-subtle);color:var(--mh-text-strong);font:inherit;font-size:var(--mh-font-size-md);line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
 .mh-scenario-edit-form__footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:28px;padding-top:20px;border-top:1px solid var(--mh-line-subtle)}
 .mh-scenario-edit-form__saved{display:inline-flex;align-items:center;gap:6px;color:var(--mh-text-faint);font-size:var(--mh-font-size-xs)}
 .mh-scenario-edit-form__actions{display:flex;gap:10px}

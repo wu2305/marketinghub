@@ -1,6 +1,7 @@
 import "../../../tokens.css";
 import React from "react";
 import { Icon } from "../../../icons.jsx";
+import { ExamplePreview } from "../../../components/ExamplePreview/index.jsx";
 import "./SkillInlineForm.css";
 
 /** @type {readonly ["", "Global", "Campaign", "Customer", "Audience", "Market"]} */
@@ -12,22 +13,25 @@ const structureIconPaths = { triggerWhen: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0
  * Native required markers remain visual; novalidate preserves source blank-submit behavior.
  * @param {object} props
  * @param {object} props.labels Source-backed form and field copy.
- * @param {object} props.values Controlled name, purpose, scope, owner and five structure fields.
+ * @param {object} props.values Controlled name, purpose, scope, owner, five structure fields and the example question.
+ * @param {string|null} [props.preview=null] Null hides the example question and output; a string shows them.
  * @param {(event:{key:string,value:string})=>void} [props.onChange]
  * @param {(event:{values:object})=>void} [props.onSubmit]
  * @param {(event:{reason:"cancel"})=>void} [props.onCancel]
- * @param {(event:{action:"auto-fill"|"run-preview"|"save-draft",field?:string})=>void} [props.onClick] Source-visible no-op controls.
+ * @param {(event:{field:"triggerWhen"|"input"|"logic"|"output"|"boundary"})=>void} [props.onAutoFill] AI Auto-fill pressed; the demo container fills that field.
+ * @param {(event:{question:string})=>void} [props.onRunPreview] Run Preview pressed with the current question.
+ * @param {(event:{values:object})=>void} [props.onSaveDraft] Save Draft pressed; the demo container saves and acknowledges it.
  */
-export function SkillInlineForm({ labels, values = {}, onChange, onSubmit, onCancel, onClick }) {
+export function SkillInlineForm({ labels, values = {}, preview = null, onChange, onSubmit, onCancel, onAutoFill, onRunPreview, onSaveDraft }) {
   const id = React.useId();
   const change = (key) => (event) => onChange?.({ key, value: event.target.value });
   const field = (key, label, input, placeholder) => <div className="mh-skill-form__field"><label htmlFor={`${id}-${key}`}><span aria-hidden="true">*</span>{label}</label>{input === "textarea" ? <textarea id={`${id}-${key}`} rows="3" required value={values[key] || ""} placeholder={placeholder} onChange={change(key)} /> : input === "select" ? <select id={`${id}-${key}`} required value={values[key] || ""} onChange={change(key)}><option value="">{labels.selectScope}</option>{values[key] && !labels.scopeOptions.includes(values[key]) ? <option value={values[key]}>{values[key]}</option> : null}{labels.scopeOptions.map((scope) => <option key={scope} value={scope}>{scope}</option>)}</select> : <input id={`${id}-${key}`} required type="text" value={values[key] || ""} placeholder={placeholder} onChange={change(key)} />}</div>;
   return <form className="mh-skill-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values }); }}>
     <header className="mh-skill-form__head"><h2>{labels.formTitle}</h2><span><Icon path="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 6v6l4 2" />{labels.autosaved}</span></header>
     <div className="mh-skill-form__body"><div className="mh-skill-form__field-row">{field("name", labels.name, "input", labels.namePlaceholder)}</div>{field("purpose", labels.purpose, "textarea", labels.purposePlaceholder)}<div className="mh-skill-form__field-row">{field("scope", labels.scope, "select")}{field("owner", labels.owner, "input", labels.ownerPlaceholder)}</div>
-      <section className="mh-skill-form__structure"><h3>{labels.structure}</h3><div>{labels.structureFields.map((item) => <div className="mh-skill-form__structure-item" key={item.key}><span className={`mh-skill-form__structure-icon mh-skill-form__structure-icon--${item.key}`}><Icon path={structureIconPaths[item.key]} /></span><div><label htmlFor={`${id}-${item.key}`}>{item.label}</label><div className="mh-skill-form__textarea-wrap"><textarea id={`${id}-${item.key}`} rows="2" value={values[item.key] || ""} placeholder={item.placeholder} onChange={change(item.key)} /><button type="button" onClick={() => onClick?.({ action: "auto-fill", field: item.key })}>{labels.autoFill}</button></div></div></div>)}</div></section>
-      <section className="mh-skill-form__preview"><h3>{labels.preview}</h3><button type="button" onClick={() => onClick?.({ action: "run-preview" })}><Icon path="M14.752 11.168 11.555 9.036A1 1 0 0 0 10 9.87v4.263a1 1 0 0 0 1.555.832l3.197-2.132a1 1 0 0 0 0-1.664ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />{labels.runPreview}</button></section>
-      <footer className="mh-skill-form__footer"><span><Icon path="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 6v6l4 2" />{labels.autosaved}</span><div><button type="button" onClick={() => onCancel?.({ reason: "cancel" })}><Icon name="arrow-left" />{labels.cancel}</button><button type="button" onClick={() => onClick?.({ action: "save-draft" })}><Icon name="file" />{labels.saveDraft}</button><button type="submit" className="mh-skill-form__submit">{labels.submit}<Icon name="arrow-left" /></button></div></footer>
+      <section className="mh-skill-form__structure"><h3>{labels.structure}</h3><div>{labels.structureFields.map((item) => <div className="mh-skill-form__structure-item" key={item.key}><span className={`mh-skill-form__structure-icon mh-skill-form__structure-icon--${item.key}`}><Icon path={structureIconPaths[item.key]} /></span><div><label htmlFor={`${id}-${item.key}`}>{item.label}</label><div className="mh-skill-form__textarea-wrap"><textarea id={`${id}-${item.key}`} rows="2" value={values[item.key] || ""} placeholder={item.placeholder} onChange={change(item.key)} /><button type="button" onClick={() => onAutoFill?.({ field: item.key })}>{labels.autoFill}</button></div></div></div>)}</div></section>
+      <ExamplePreview title={labels.preview} runLabel={labels.runPreview} questionLabel={labels.exampleQuestion} questionPlaceholder={labels.questionPlaceholder} question={values.question || ""} output={preview} onRun={onRunPreview} onQuestionChange={({ value }) => onChange?.({ key: "question", value })} />
+      <footer className="mh-skill-form__footer"><span><Icon path="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 6v6l4 2" />{labels.autosaved}</span><div><button type="button" onClick={() => onCancel?.({ reason: "cancel" })}><Icon name="arrow-left" />{labels.cancel}</button><button type="button" onClick={() => onSaveDraft?.({ values })}><Icon name="file" />{labels.saveDraft}</button><button type="submit" className="mh-skill-form__submit">{labels.submit}<Icon name="arrow-left" /></button></div></footer>
     </div>
   </form>;
 }

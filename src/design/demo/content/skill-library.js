@@ -1,6 +1,13 @@
 import { demoImage } from "../images.js";
 import { LOGO, NAV, LITE_ASSISTANT, MODEL_FLOW, buildLiteAssistantAnswer, buildModelDraft } from "../../content.js";
+import { SKILL_AUTOFILL_TEXT } from "./skill-autofill.js";
 import { SKILL_RECORDS } from "./skill-records.js";
+
+/** Fields a scenario saved from the inline form starts with (the form itself collects name, purpose, scope, owner and the five structure fields). */
+const DRAFT_DEFAULTS = {
+  category: "", callCount: 0, callPeriod: "30 days", likeRate: 0, ownerAvatar: "", user: "", version: "v0.1", tags: [], updated: "Just now",
+  knowledgeId: "-", source: "Team Created", reviewStatus: "Draft", accuracyScore: 0, usedInReports: 0, usedInScenarios: 0, previewOutput: "",
+};
 
 /** Private P15 fixture. Hero summary intentionally retains the source's six/1,353/89% copy. */
 export const SKILL_LIBRARY = {
@@ -26,8 +33,10 @@ export const SKILL_LIBRARY = {
     structure: "Scenario Structure", structureFields: [ { key: "triggerWhen", label: "Trigger When", icon: "clock", placeholder: "When should this scenario be triggered?" }, { key: "input", label: "Input", icon: "grid-four", placeholder: "What inputs does this scenario require?" }, { key: "logic", label: "Analysis Logic", icon: "lightbulb", placeholder: "Describe the analysis logic flow..." }, { key: "output", label: "Output", icon: "arrow-right", placeholder: "What output does this scenario produce?" }, { key: "boundary", label: "Boundary", icon: "alert-triangle", placeholder: "What are the boundary conditions?" } ],
     preview: "Preview Example Output", showPreview: "Show Preview", hidePreview: "Hide Preview", exampleQuestion: "Example Question", usagePrefix: "Used in", reports: "Reports", scenarios: "Scenarios", edit: "Edit Scenario", delete: "Delete",
     deleteDialog: { title: "Confirm Operation", message: "Please confirm whether to delete this knowledge. Deletion cannot be undone.", confirmLabel: "Confirm Delete", cancelLabel: "Cancel" }, deletedToast: "Deleted successfully",
-    formTitle: "Scenario Configuration", autosaved: "Auto-saved · Just now", name: "Scenario Name", namePlaceholder: "Enter scenario name...", purpose: "Purpose", purposePlaceholder: "Describe the scenario purpose...", scope: "Scope", owner: "Owner", ownerPlaceholder: "Enter owner...", selectScope: "Select scope", scopeOptions: ["Global", "Campaign", "Customer", "Audience", "Market"], autoFill: "AI Auto-fill", runPreview: "Run Preview", cancel: "Cancel", saveDraft: "Save Draft", submit: "Submit for Review", submitted: "Scenario submitted for review!",
+    formTitle: "Scenario Configuration", autosaved: "Auto-saved · Just now", name: "Scenario Name", namePlaceholder: "Enter scenario name...", purpose: "Purpose", purposePlaceholder: "Describe the scenario purpose...", scope: "Scope", owner: "Owner", ownerPlaceholder: "Enter owner...", selectScope: "Select scope", scopeOptions: ["Global", "Campaign", "Customer", "Audience", "Market"], autoFill: "AI Auto-fill", runPreview: "Run Preview", cancel: "Cancel", saveDraft: "Save Draft", submit: "Submit for Review", submitted: "Scenario submitted for review!", draftSaved: "Draft saved", untitled: "Untitled scenario", autoFillText: SKILL_AUTOFILL_TEXT,
+    questionPlaceholder: "Enter an example question to preview...", previewEmpty: "Please enter an example question first.",
   },
+  draftDefaults: DRAFT_DEFAULTS,
   records: SKILL_RECORDS,
 };
 

@@ -546,7 +546,14 @@ try {
   await page.locator(".mh-library-toolbar__create button").click();
   if (!(await page.locator(".mh-skill-form__structure-item").count() === 5)) notes.push("Inline create missed five structure fields");
   await page.locator(".mh-skill-form__field input").first().fill("Host skill");
+  await page.locator(".mh-skill-form__textarea-wrap button").nth(2).click();
+  if (!(await page.locator(".mh-skill-form__structure-item textarea").nth(2).inputValue())) notes.push("Inline AI Auto-fill did not fill its field");
+  await page.locator(".mh-example-preview__head button").click();
+  if (!(await page.locator(".mh-example-preview__body pre").innerText()).includes("Please enter an example question first.")) notes.push("Inline Run Preview did not answer the blank question");
+  await page.getByRole("button", { name: "Save Draft" }).click();
+  if (!((await page.locator(".mh-toast").textContent()) || "").includes("Draft saved")) notes.push("Inline Save Draft showed no toast");
   await page.locator(".mh-skill-form__footer button").first().click();
+  if ((await page.locator(".mh-skill-page tbody tr").count()) !== 9 || !((await page.locator(".mh-skill-page tbody tr").first().innerText()) || "").includes("Host skill")) notes.push("Save Draft did not add the draft row");
   await page.locator(".mh-library-toolbar__create button").click();
   if ((await page.locator(".mh-skill-form__field input").first().inputValue()) !== "") notes.push("Fresh create retained old draft values");
   await page.locator(".mh-skill-form__footer button").first().click();
@@ -574,7 +581,12 @@ try {
   const reportHref = await page.locator('.mh-scenario-edit-form__card-body a').getAttribute("href");
   if (!reportHref?.includes("cockpit?project=ottolv&dashboard=1")) notes.push(`selected report link did not update: ${reportHref}`);
   await page.getByRole("button", { name: "Run Preview" }).click();
-  if (!(await page.locator('.mh-scenario-edit-form__preview-body pre').innerText()).includes("Summarize delivery")) notes.push("preview did not use seeded logic");
+  if (!(await page.locator('.mh-example-preview__body pre').innerText()).includes("Summarize delivery")) notes.push("preview did not use seeded logic");
+  await page.locator(".mh-scenario-edit-form__fill button").nth(1).click();
+  if (!(await page.locator(".mh-scenario-edit-form__fill textarea").nth(1).inputValue()).includes("Summary of the movement")) notes.push("AI Auto-fill did not fill Output");
+  await page.getByRole("button", { name: "Save Draft" }).click();
+  if (!((await page.locator(".mh-toast").textContent()) || "").includes("Draft saved")) notes.push("Save Draft showed no toast");
+  if (page.url().includes("scenario-library")) notes.push("Save Draft left the editor");
   await page.locator('.mh-scenario-edit-form__field textarea').fill("");
   await page.getByRole("button", { name: "Submit for Review" }).click();
   if ((await page.locator('.mh-scenario-edit-form__field [aria-invalid="true"]').count()) !== 1) notes.push("purpose validation did not appear");
