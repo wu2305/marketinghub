@@ -1,6 +1,6 @@
 # Foundations — the visual language behind the original
 
-Status: **Phase 1 proposal, awaiting user review** (2026-09-27). Nothing in `src/design` has changed yet.
+Status: **adopted** (user decisions, 2026-09-27, §5) and implemented in `src/design/tokens.css`: 63 role tokens plus four status washes, 67 definitions in total (2026-09-29). §1–§2 and Appendix A describe the original bundle and the Phase 1 starting point; §3 is the rule new CSS follows.
 
 Rule this document serves (user decision, 2026-09-27): the original bundle is *evidence of intent*, not a
 spec. The React UI must be recognisably the same product ("likely"), not a pixel copy. Accidental
@@ -148,7 +148,7 @@ Breakpoints: the original uses 24 different `max-width` values; `src/design` use
 almost all of them: **~1180** (1080–1280: wide layouts drop a column), **~900** (820–980: sidebars stack),
 **~760** (560–800: single column / phone).
 
-## 3. Proposed foundation (~65 tokens instead of 445)
+## 3. The foundation (63 role tokens + 4 status washes, from 445)
 
 Anchor rule: take the value the original *declared* in its theme (`base/workspace.css:34–47`); where it
 declared none, take the most-used literal in the cluster. The result should look like the original at a
@@ -162,7 +162,8 @@ glance, because every anchor is the original's own dominant value.
 | surface (6) | `--mh-surface-page` · `--mh-surface` · `--mh-surface-subtle` · `--mh-surface-muted` · `--mh-surface-inverse` · `--mh-scrim` | `#f4f6f8` · `#ffffff` · `#f7f9fa` · `#f0f2f4` · `#20262c` · `rgba(31,41,55,.3)` | canvas · cards/panels · table heads, hover rows, soft panels · neutral chips, disabled fills · hero/launcher/tooltip · behind overlays |
 | line (4) | `--mh-line-subtle` · `--mh-line` · `--mh-line-strong` · `--mh-line-inverse` | `#e8ecef` · `#dce1e6` · `#c8d0d8` · `rgba(255,255,255,.12)` | dividers inside a surface · card and control borders · hover/emphasis borders · lines on dark |
 | accent (5) | `--mh-accent-soft` · `--mh-accent` · `--mh-accent-ink` · `--mh-accent-wash` · `--mh-accent-fill` | `#f2d185` · `#daa860` · `#986525` · `#fff8df` · `linear-gradient(135deg, #f2d185, #daa860)` | light gold · active borders, selected markers · gold text/links/toggles (5.0:1 on white) · selected/highlighted backgrounds · primary action fill |
-| status (4) | `--mh-success` · `--mh-warning` · `--mh-danger` · `--mh-info` | `#34765b` · `#b45309` · `#9b1230` · `#3f73a6` | status ink/icon/border. Washes and tinted borders are **derived**, not tokens: `color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface))` |
+| status (4) | `--mh-success` · `--mh-warning` · `--mh-danger` · `--mh-info` | `#34765b` · `#b45309` · `#9b1230` · `#3f73a6` | status ink/icon/border |
+| status wash (4, outside the 63) | `--mh-info-wash` · `--mh-success-wash` · `--mh-warning-wash` · `--mh-danger-wash` | `color-mix(in srgb, <status> 8%, var(--mh-surface))` for info and danger, 10 % for success and warning | tinted background of a status badge, banner or row. One wash per status hue; other tints and tinted borders are still derived at the use site with `color-mix()` |
 | data (3) | `--mh-data-teal` · `--mh-data-violet` · `--mh-data-rose` | `#2d7972` · `#6941c6` · `#c2185b` | categorical identity (feedback/memory categories, chart series) beyond the four status hues |
 | focus (1) | `--mh-focus-ring` | `rgba(63,115,166,.55)` as `2px solid`, offset 2 px | the original's global `:focus-visible` (`base/workspace.css:276–279`) |
 
@@ -175,7 +176,7 @@ glance, because every anchor is the original's own dominant value.
   `--mh-text-*` colour family.) Line height follows size role: 1.2 headings, 1.5 body, 1 for
   single-line chips (the three most-used original line heights).
 
-### 3.3 Shape, depth, space, layout (22)
+### 3.3 Shape, depth, space, layout (20)
 
 - Radius (4): `--mh-radius-sm` 4 · `md` 8 · `lg` 14 · `pill` 999 (full names `--mh-radius-md` etc.).
 - Shadow (3): `--mh-shadow-raised` `0 2px 8px rgba(31,41,55,.06)` · `--mh-shadow-overlay`
@@ -189,9 +190,12 @@ glance, because every anchor is the original's own dominant value.
   (`header` is a reserved component prefix in `css-budget.test.js`, hence `layout`).
 - Breakpoints (3, documented constants — CSS cannot read custom properties in `@media`): 1180 · 900 · 760.
 
-Total: 29 + 14 + 22 = **65**.
+Total: 29 + 14 + 20 = **63** role tokens, plus the four status washes = **67** definitions (`css-budget.json` `maxTokenDefinitions`). The 63 are the count of `--mh-*` roles in §3.1–§3.3; an earlier draft of this section said 22 and 65 for shape and total, which was an arithmetic slip.
 
-## 4. From 445 tokens to 65
+## 4. From 445 tokens to 67 (Phase 1 plan and result)
+
+The table is the Phase 1 plan (counts as of 2026-09-27). Result on `main`, 2026-09-29: `tokens.css` holds 67 definitions; the legacy component- and page-named exemptions (`legacyPrefixExemptions`) are gone, `maxDuplicateValues` is 8, and component, feature and page CSS carry no raw hex colours or raw foundation values (`css-budget.json` ratchets at 0). The four washes in §3.1 stand in for the `derive` row; the tokens that served one component were inlined into it (`handover/README.md` §5, token reduction B0–B3).
+
 
 | action | tokens | meaning |
 |---|---:|---|
@@ -200,16 +204,16 @@ Total: 29 + 14 + 22 = **65**.
 | remove | 11 | 10 unused + 1 image filter that belongs to its one component |
 | keep / rename | 14 | fonts, header height, z-scale, control radius |
 
-Per-token detail: Appendix A. Of the current 445, 160 have exactly one owner directory, and 162 sit on the
+Per-token detail: Appendix A. Phase 1 baseline: of the 445 then defined, 160 had exactly one owner directory, and 162 sat on the
 CSS budget's legacy-name exemption list (`css-budget.json` `legacyPrefixExemptions`: named after a
 component or page — `--mh-bt-*`, `--mh-reports-*`, `--mh-copilot-*`, `--mh-principle-*`, `--mh-sc-*` …).
 Many of the rest carry the location in the suffix instead (`--mh-ink-report-copy`,
 `--mh-line-sidebar-cool`, `--mh-surface-scenario-hover`). The token file records *where* a colour was seen,
 not *what it is for*.
 
-Outside the token file, component CSS still carries 72 raw `rgba()` literals (56 distinct), 34 font sizes,
-29 radii, 67 shadows and 13 weights. The hex budget (`css-budget.json`) does not count these; the Phase 2
-budget should.
+Phase 1 baseline outside the token file: component CSS carried 72 raw `rgba()` literals (56 distinct), 34 font
+sizes, 29 radii, 67 shadows and 13 weights, none of which the hex budget counted. The Phase 2 budget
+(`css-budget.json` `maxRawFoundationValues`) now counts them and stands at 0.
 
 ## 5. Decisions (user-approved 2026-09-27)
 
@@ -234,6 +238,8 @@ All five recommendations were approved by the user on 2026-09-27; the "recommend
 
 
 ## Appendix A — every current token → proposed role
+
+Historical: this map lists the 445 tokens that existed at the end of Phase 1. All of them are now merged into a role, derived, or removed; `tokens.css` holds the 67 definitions of §3.
 
 Generated by a first-pass classifier: the role comes from the CSS property each token is used on (`color` → text, `background` → surface, `border`/`outline` → line); within the role the nearest proposed value in CIELAB wins; chromatic values go to a hue family first. It is a starting map for review, not a verdict — Phase 2 migrations re-check each row they touch. `refs` counts `var()` references outside tokens.css (token-to-token references included); `owners` counts distinct component/feature/page directories that use it.
 
