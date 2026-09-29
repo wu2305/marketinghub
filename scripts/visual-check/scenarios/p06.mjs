@@ -532,7 +532,7 @@ export default [
         { click: ".mh-assistant__feedback button[data-kind='helpful']" },
         { waitMs: 300 },
         {
-          eval: "(() => { const b = document.querySelector('.mh-assistant__feedback button[data-kind=\\\"helpful\\\"]'); if (b.getAttribute('aria-pressed') !== 'true') throw new Error('feedback not pressed'); const probe = document.createElement('i'); probe.style.color = 'var(--mh-ai-chip-pos)'; document.body.append(probe); const expected = getComputedStyle(probe).color; probe.remove(); if (getComputedStyle(b).color !== expected) throw new Error('feedback color ' + getComputedStyle(b).color); })()",
+          eval: "(() => { const b = document.querySelector('.mh-assistant__feedback button[data-kind=\\\"helpful\\\"]'); if (b.getAttribute('aria-pressed') !== 'true') throw new Error('feedback not pressed'); const probe = document.createElement('i'); probe.style.color = 'var(--mh-success)'; document.body.append(probe); const expected = getComputedStyle(probe).color; probe.remove(); if (getComputedStyle(b).color !== expected) throw new Error('feedback color ' + getComputedStyle(b).color); })()",
         },
         { click: ".mh-assistant__feedback button[data-kind='helpful']" },
         { waitMs: 300 },
