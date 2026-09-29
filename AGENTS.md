@@ -49,7 +49,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 
 ### 2.4 当前仍成立的结构性事实
 
-本节只列约束后续工作方式的现存事实（截至 2026-09-29，68e4800）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
+本节只列约束后续工作方式的现存事实（截至 2026-09-29，1ececf4）。事实改变时直接改写或删除对应条目，不追加审核流水；审核过程、证据路径与历史结论记在 `handover/README.md`（历史见其 §2.5）。整改清单与执行提示见 `handover/structural-review.md`（结构）与 `handover/design-system-cleanup.md`（视觉与 token）。
 
 - **方向**：语义组件 + props、`demo/` 演示层、独立宿主验证的架构可以继续；当前尚不是完整组件库，也未达全量覆盖。
 - **覆盖**：17 个原始页面对应 17 个页面组件；P08–P11表单、详情和独立工具已实现并接通主要跨页导航；P12–P14治理三页已实现，P15–P17 Skill Library/Detail/Edit已实现，独立状态档案与人工视觉仍在M7收敛。P07 八类全部有专用视图并经 `typeViews` 注册分派（Report Context/Metric Dictionary/Analytical Model/Email Reports 共用 FieldLibraryView）；overview 与 Principles 通过人工审图，其余人工 pending；P08独立创建/编辑已建，跨页组合与人工像素收敛仍待完成。
@@ -58,7 +58,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **组件边界**：AssistantPanel 与 ReportCopilot 共用私有 AssistantShell 的头部、历史与覆盖层行为，各自保留真实不同的外层布局、答案与输入组合；页面持有助手变体预设。页面组件 props 平铺（最多 49 个）仍待后续流程收敛。
 - **文案**：AiInterpreterPage 页壳文案已由 props 注入；部分存量有机体仍含写死可见文案，随页面改动继续补齐。
 - **样式**：`tokens.css` 只含 `handover/design-intent/foundations.md` §3 的角色 token 加四个状态色调（`--mh-{info,success,warning,danger}-wash`），共 67 个定义（63 个角色 + 4 个色调）；不再有以组件或页面命名的 token，`css-budget.json` 的 `legacyPrefixExemptions` 为空。组件、功能与页面 CSS 的裸十六进制色值及裸字号、字重、圆角、阴影、颜色字面量均为 0，由 `css-budget.json` 的棘轮强制（`maxRawHexColors`、`maxRawFoundationValues`、`maxTokenDefinitions`、`maxDuplicateValues`）；阈值只降不升，数值以该文件为准。独立组件根已显式采用设计字体，公式与代码保留等宽字体。
-- **库列表模式**：知识库、评审与反馈列表共用一套“受治理库”模式——`LibraryToolbar`、`LibraryList`（cards / table / list）、`LibraryItem`、`LibraryEmpty` 与 `ItemActions`，配 `SearchField`、`CheckboxFilter`、`Select`、`Pagination`、`DataTable`，受阻动作/确认/Toast 规则集中在 `lib/governance.js`，规格见 `handover/design-intent/patterns/library.md`。新增或迁移的库视图直接组合这些组件，不再另写视图专用的列表、筛选或动作条（`KnowledgeActions` 已删除）。尚未迁移的视图列在 `css-budget.json` 的 `pendingMigration`，其 CSS 暂不受预算检查。
+- **库列表模式**：知识库（含 Data Model 域列表）、评审、反馈、个人记忆与 Skill 列表共用一套“受治理库”模式——`LibraryToolbar`、`LibraryList`（cards / table / list）、`LibraryItem`、`LibraryEmpty` 与 `ItemActions`，配 `SearchField`、`CheckboxFilter`、`Select`、`Pagination`、`DataTable`，受阻动作/确认/Toast 规则集中在 `lib/governance.js`，规格见 `handover/design-intent/patterns/library.md`。新增或迁移的库视图直接组合这些组件，不再另写视图专用的列表、筛选或动作条（`KnowledgeActions` 已删除）。`css-budget.json` 的 `pendingMigration` 为空；别把新文件加进去来绕过预算。
 - **资源与交付**：字体和图片依赖参照物 `assets/`；已有最小 CI，但尚无正式库构建；`.design-sync/build-dist.mjs` 只是 claude.ai/design 同步用的临时构建。
 - **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 
