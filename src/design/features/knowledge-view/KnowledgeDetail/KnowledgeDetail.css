@@ -73,7 +73,6 @@
 .mh-kdetail__model-work { display: grid; grid-template-columns: 330px minmax(0,1fr); gap: 28px; }
 .mh-kdetail__model-side, .mh-kdetail__model-config { min-width: 0; overflow: hidden; border: 1px solid var(--mh-line); border-radius: var(--mh-radius-lg); background: var(--mh-surface); }
 .mh-kdetail__model-side { display: flex; flex-direction: column; min-height: 600px; padding: 20px 14px 0; }
-.mh-kdetail__model-side > input { width: 100%; padding: 15px; border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); }
 .mh-kdetail__model-switch { display: flex; gap: 6px; margin: 18px 0 14px; }
 .mh-kdetail__model-switch button { flex: 1; padding: 13px; border: 0; border-radius: var(--mh-radius-md); background: var(--mh-surface); color: var(--mh-text-muted); font-weight: var(--mh-font-weight-bold); cursor: pointer; }
 .mh-kdetail__model-switch button.is-active { background: var(--mh-text-strong); color: var(--mh-surface); }

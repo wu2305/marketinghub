@@ -313,6 +313,16 @@ Source: `assets/pages/scenario-detail.html` (`#previewToggle`, `#previewContent`
 | EP-04 | `ScenarioPreview` was public and had a story (`organisms-scenario-preview--default`) | — | Drop (merged) | `ScenarioPreview` export removed; `ExamplePreview` and `examplePreviewVariants` exported; the state is the new story `molecules-examplepreview--view` and stays visible in the Skill Library detail and Scenario Detail page stories | story id map: `organisms-scenario-preview--default` → `molecules-examplepreview--view` |
 | EP-05 | the form block's top border and margin lived inside `ExamplePreview` | — | Normalize (spacing belongs to the container) | `SkillForm` wraps it (`mh-skill-form__preview`); detail surfaces keep their own separators | none |
 
+### Search fields — Phase 3 WP1
+
+Source: `assets/pages/metric-dictionary.html:109-120` (sidebar search), `assets/js/knowledge/editor-runtime.js:383,457` (Data Model side search). React before: two raw `<input type="search">` with their own borders in `MetricDictionaryPage` and `KnowledgeDetail` (Data Model). After: both use `components/SearchField`.
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| SRF-01 | Data Model detail table search: substring over table name and meta, live | `editor-runtime.js:457` | Intent | unchanged filter in `KnowledgeDetail`; the field is now `SearchField` (leading icon, shared input height and focus ring) and `onChange({ name: "query", value })` is unchanged | none; `p09-model-search-hit` selector `.mh-kdetail__model-side input` still matches |
+| SRF-02 | Metric Dictionary sidebar search: an `<input>` with no handler; the list never filters on it | `metric-dictionary.html:120` (no script binds it) | Stub kept as before (not a new decision) | `SearchField` uncontrolled and inert exactly as before; whether it should filter is left to the designer, no behaviour added | none |
+| SRF-03 | search boxes drew their own border, 15 px padding and a text-glyph magnifier | `MetricDictionaryPage.css`, `KnowledgeDetail.css` before | Normalize (N4) | the shared icon and input; the wrappers keep only their padding and divider | none |
+
 ### Submit → Under Review — WP7k
 
 Source: `assets/js/knowledge/analytical-model-form.js`, `business-term-form.js`, `scenario-report-form.js`, `editor-runtime.js`, `assets/js/governance/skills.js`, `skill-editor.js`. React before: `demo/knowledge-create-demo.js` (`persist`), `demo/skill-library-demo.js` and `demo/scenario-edit-demo.js` (Submit), `components/ModelFlowDialog` copy, `demo/interpreter-demo.js`. Not a library view: no layout changes; only what Submit does and says. Seeds: D15, A1 ("Submit → Under Review; Review Center publishes"), R4 (Submit keeps the form's availability), B16.
