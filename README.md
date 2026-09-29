@@ -49,8 +49,7 @@ and library builds on pull requests to `main`, pushes to `main` and `v*` tags. I
 docs-only changes and cancels superseded runs. The heavy browser gate
 (host-check, visual check, `--negative`, font probe) runs in full when a `v*`
 tag is pushed, and can be started by hand (Actions > ci > Run workflow, choose
-the branch): on a feature branch it is limited to what changed against `main`,
-on `main` it runs in full.
+the branch), where it is limited to what changed against `main`.
 
 ## The static demo (reference)
 
