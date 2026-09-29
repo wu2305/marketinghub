@@ -39,4 +39,10 @@ describe("Feedback & Quality source filters", () => {
     expect(first.result.current.list.items[0].question).toBe("Alternate host question");
     first.unmount(); second.unmount();
   });
+
+  it("passes the visible-tab selection through to the page filters", () => {
+    const hook = renderHook(() => useFeedbackQualityDemo({ records, now, tabs: ["all", "thumbs-down"] }));
+    expect(hook.result.current.filters.tabs).toEqual(["all", "thumbs-down"]);
+    hook.unmount();
+  });
 });

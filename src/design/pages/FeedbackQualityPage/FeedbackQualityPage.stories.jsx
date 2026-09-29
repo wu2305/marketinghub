@@ -2,7 +2,7 @@ import React from "react";
 import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../demo/content/feedback-quality.js";
 import { useFeedbackQualityDemo } from "../../demo/feedback-quality-demo.js";
 import { callbackProp, enumProp } from "../../lib/story-helpers.js";
-import { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes } from "./index.jsx";
+import { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes, feedbackTabs } from "./index.jsx";
 
 const NOW = Date.UTC(2026, 8, 26, 12);
 const records = makeFeedbackRecords(NOW - 1000);
@@ -23,6 +23,7 @@ export const FeedbackQuality = {
     initial: { control: "object", description: "Initial selected detail and assistant state." },
     type: enumProp(feedbackFilterTypes, "all", "Visible feedback type select and All Feedback tab state."),
     time: enumProp(feedbackFilterTimes, "all", "Source time filter."),
+    tabs: { control: "check", options: feedbackTabs, description: "Visible tabs; each one can be turned off separately." },
     search: { control: "text" },
     onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "thumbs-up" }),
     onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "week" }),
