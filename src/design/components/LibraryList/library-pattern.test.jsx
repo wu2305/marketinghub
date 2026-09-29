@@ -100,4 +100,12 @@ describe("LibraryToolbar", () => {
     expect(screen.getByText("6 items")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Add term" }).getAttribute("href")).toBe("#create");
   });
+
+  it("renders creation without an href as an in-page action", () => {
+    const onCreate = vi.fn();
+    render(<LibraryToolbar search={{ label: "Search", value: "" }} count="0 items" create={{ label: "Add skill" }} onCreate={onCreate} />);
+    expect(screen.queryByRole("link", { name: "Add skill" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Add skill" }));
+    expect(onCreate).toHaveBeenCalledWith({ href: undefined });
+  });
 });

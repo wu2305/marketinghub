@@ -2,8 +2,7 @@ import React from "react";
 import { SKILL_LIBRARY, SKILL_LIBRARY_SHELL } from "../../demo/content/skill-library.js";
 import { useSkillLibraryDemo } from "../../demo/skill-library-demo.js";
 import { callbackProp, enumProp } from "../../lib/story-helpers.js";
-import { skillStatuses } from "../../features/scenario-library/SkillLibrary/index.jsx";
-import { ScenarioLibraryPage, skillLibraryModes } from "./index.jsx";
+import { ScenarioLibraryPage, skillLibraryModes, skillStatuses } from "./index.jsx";
 
 const hrefFor = (id, params = {}) => {
   const path = ({ interpreter: "/assets/pages/knowledge.html", "review-center": "/assets/pages/review-center.html", "scenario-library": "/assets/pages/scenario-library.html", "feedback-quality": "/assets/pages/feedback-quality.html" })[id];
@@ -25,7 +24,6 @@ export const ScenarioLibrary = {
     onChange: callbackProp("onChange", "({key:string,value:string|boolean}) => void", { key: "search", value: "Emily Wang" }),
     onSelect: callbackProp("onSelect", "({value:string}) => void", { value: "Draft" }),
     onOpen: callbackProp("onOpen", "({id:string,action?:'edit'}) => void", { id: "city-comparison" }),
-    onAdvance: callbackProp("onAdvance", "({id:string}) => void", { id: "funnel-optimization" }),
     onClick: callbackProp("onClick", "({action:string,id?:string,field?:string}) => void", { action: "auto-fill", field: "logic" }),
     onSubmit: callbackProp("onSubmit", "({values:object}) => void", { values: { name: "" } }),
     onCancel: callbackProp("onCancel", "({reason:string}) => void", { reason: "cancel" }),
@@ -52,22 +50,15 @@ const click = (...selectors) => async ({ canvasElement }) => {
 };
 
 export const ScenarioLibraryOwnerSearch = state("Skill Library · Owner search", { search: "Emily Wang" });
-export const ScenarioLibraryDraft = state("Skill Library · Draft filter", { status: "Draft" });
-export const ScenarioLibraryReview = state("Skill Library · Under Review filter", { status: "Under Review" });
-export const ScenarioLibraryDevelopment = state("Skill Library · In Development filter", { status: "In Development" });
-export const ScenarioLibraryPublished = state("Skill Library · Published filter", { status: "Published" });
 export const ScenarioLibraryEmpty = state("Skill Library · No matching scenarios", { search: "no matching scenario" });
 export const ScenarioLibraryDetail = state("Skill Library · Detail", { initial: { selectedId: "scenario-channel-performance" } });
 export const ScenarioLibraryDraftDetail = state("Skill Library · Draft detail", { initial: { selectedId: "competitive-analysis" } });
 export const ScenarioLibraryPreview = state("Skill Library · Example preview", { initial: { selectedId: "scenario-channel-performance", previewOpen: true } });
+export const ScenarioLibraryDeleteConfirm = state("Skill Library · Delete confirmation", { initial: { selectedId: "scenario-channel-performance", deletingId: "scenario-channel-performance" } });
 export const ScenarioLibraryCreate = state("Skill Library · Fresh create", { mode: "create" });
 export const ScenarioLibraryEdit = state("Skill Library · Inline edit", { mode: "edit", initial: { selectedId: "scenario-channel-performance" } });
-export const ScenarioLibraryStatusReviewAdvanced = state("Skill Library · Review advances without opening detail", { status: "Under Review" });
-ScenarioLibraryStatusReviewAdvanced.play = click('.mh-skill-library__row[data-skill-id="funnel-optimization"] .mh-skill-library__status');
-export const ScenarioLibraryStatusDevelopmentAdvanced = state("Skill Library · Development advances to Published", { status: "In Development" });
-ScenarioLibraryStatusDevelopmentAdvanced.play = click('.mh-skill-library__row[data-skill-id="city-comparison"] .mh-skill-library__status');
 export const ScenarioLibraryCreateAfterEdit = state("Skill Library · New form clears prior edit");
-ScenarioLibraryCreateAfterEdit.play = click('.mh-skill-library__row[data-skill-id="scenario-channel-performance"]', '.mh-skill-detail__actions button:first-child', '.mh-skill-form__footer button:first-child', '.mh-skill-library__create');
+ScenarioLibraryCreateAfterEdit.play = click('.mh-skill-page tbody tr:first-child', '.mh-skill-detail__actions button:first-child', '.mh-skill-form__footer button:first-child', '.mh-library-toolbar__create button');
 export const ScenarioLibraryBlankSubmit = state("Skill Library · Blank Submit returns to list", { mode: "create" });
 ScenarioLibraryBlankSubmit.play = click('.mh-skill-form__submit');
 export const ScenarioLibraryAssistant = state("Skill Library · Assistant open", { initial: { assistantOpen: true } });

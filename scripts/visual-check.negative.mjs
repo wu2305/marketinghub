@@ -25,8 +25,8 @@ export default [
   {
     id: "neg-p15-wrong-filter",
     base: "p15-draft",
-    story: { id: "pages--scenario-library-published" },
-    reason: "Published's four rows cannot satisfy the Draft single-row assertions",
+    story: { id: "pages--scenario-library", actions: [{ select: ['.mh-library-toolbar__facet:has-text("Status") select', "Published"] }] },
+    reason: "selecting Published (four rows) cannot satisfy the Draft single-row assertions",
   },
   {
     id: "neg-p15-missing-preview",

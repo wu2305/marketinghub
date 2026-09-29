@@ -21,10 +21,10 @@ export default {
     search: prop("{ label, placeholder?, value? }", { description: "Search field." }),
     facets: prop("Array<{ id, label, kind?, options, selected?, allLabel? }>", { description: "multi → CheckboxFilter, single → Select." }),
     count: prop("string", { description: "Result count text (B3)." }),
-    create: prop("{ label, href }", { description: "Optional create link." }),
+    create: prop("{ label, href? }", { description: "Optional create action: a link when `href` is set (creation navigates), a button otherwise (creation happens in the page)." }),
     tabs: prop("{ label, value, items }", { description: "Optional tabs above the row." }),
     onChange: callbackProp("onChange", "(event: { field, value, checked? }) => void", { field: "search", value: "gmv" }, "Search, facet or tab change."),
-    onCreate: callbackProp("onCreate", "(event: { href }) => void", { href: "#knowledge-create" }, "Create link activated."),
+    onCreate: callbackProp("onCreate", "(event: { href? }) => void", { href: "#knowledge-create" }, "Create link or button activated."),
   },
 };
 
@@ -32,6 +32,7 @@ export const Default = {};
 export const Searched = { args: { search: { label: "Search business terms", value: "gmv" }, count: "Showing 1 of 4 terms" } };
 export const FacetSelected = { name: "Facet selected", args: { facets: [{ ...facets[0], selected: ["Disable"] }, facets[1]], count: "Showing 1 of 4 terms" } };
 export const MultipleFacets = { name: "Multiple facets", args: { facets: [{ ...facets[0], selected: ["Enable", "Draft"] }, { ...facets[1], selected: ["Sales"] }], count: "Showing 1 of 4 terms" } };
+export const CreateInPage = { name: "Create in page", args: { create: { label: "Create New Scenario" } } };
 export const WithTabsAndSelect = {
   name: "Tabs and single-choice facet",
   args: {

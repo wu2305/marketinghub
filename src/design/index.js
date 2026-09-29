@@ -264,7 +264,6 @@ export { ScenarioStructure } from "./components/ScenarioStructure/index.jsx";
 export { ScenarioPreview } from "./components/ScenarioPreview/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./pages/MetricDictionaryPage/index.jsx";
-export { ScenarioLibraryPage, skillLibraryModes } from "./pages/ScenarioLibraryPage/index.jsx";
-export { SkillLibrary, skillStatuses } from "./features/scenario-library/SkillLibrary/index.jsx";
+export { ScenarioLibraryPage, skillLibraryModes, skillStatuses } from "./pages/ScenarioLibraryPage/index.jsx";
 export { SkillDetail } from "./features/scenario-library/SkillDetail/index.jsx";
 export { SkillInlineForm, skillScopes } from "./features/scenario-library/SkillInlineForm/index.jsx";

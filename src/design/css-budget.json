@@ -3,9 +3,7 @@
   "maxTokenDefinitions": 67,
   "maxDuplicateValues": 8,
   "legacyPrefixExemptions": [],
-  "pendingMigration": [
-    "features/scenario-library/SkillLibrary"
-  ],
+  "pendingMigration": [],
   "maxRawFoundationValues": {
     "fontSize": 0,
     "fontWeight": 0,
