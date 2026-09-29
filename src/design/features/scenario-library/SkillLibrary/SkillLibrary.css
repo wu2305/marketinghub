@@ -27,8 +27,8 @@
 .mh-skill-library__likes{display:flex;align-items:center;gap:5px}.mh-skill-library__likes svg{width:13px;height:13px;color:var(--mh-accent)}
 .mh-skill-library__status{display:inline-flex;align-items:center;min-height:23px;padding:3px 10px;border:0;border-radius:999px;font-size:11px;font-weight:600}
 button.mh-skill-library__status{cursor:pointer}
-.mh-skill-library__status[data-status="Published"]{background:var(--mh-ai-chip-pos-bg);color:var(--mh-success)}
-.mh-skill-library__status[data-status="In Development"]{background:var(--mh-surface-info-strong);color:var(--mh-info)}
+.mh-skill-library__status[data-status="Published"]{background:var(--mh-success-wash);color:var(--mh-success)}
+.mh-skill-library__status[data-status="In Development"]{background:var(--mh-info-wash);color:var(--mh-info)}
 .mh-skill-library__status[data-status="Under Review"]{background:var(--mh-accent-wash);color:var(--mh-warning)}
 .mh-skill-library__status[data-status="Draft"]{background:var(--mh-surface-page);color:var(--mh-text-muted)}
 .mh-skill-library__action button{display:grid;width:28px;height:28px;place-items:center;border:0;border-radius:5px;background:transparent;color:var(--mh-text-faint);cursor:pointer}.mh-skill-library__action svg{width:16px;height:16px}

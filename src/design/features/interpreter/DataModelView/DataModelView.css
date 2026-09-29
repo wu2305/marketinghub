@@ -373,7 +373,7 @@
   align-items: center;
   padding: 3px 8px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-info);
+  background: var(--mh-info-wash);
   color: var(--mh-info);
   font-size: var(--mh-font-size-xs);
   font-style: normal;
@@ -557,7 +557,7 @@
 }
 
 .mh-dmview__table-type.is-dimension {
-  background: var(--mh-surface-info);
+  background: var(--mh-info-wash);
   color: var(--mh-info);
 }
 

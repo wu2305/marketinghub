@@ -12,11 +12,11 @@
 .mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { border: 1px solid var(--mh-line); background: var(--mh-surface); color: var(--mh-text); cursor: pointer; }
 .mh-metric-page__action--primary { border-color: var(--mh-text-strong); background: var(--mh-text-strong); color: var(--mh-surface); }
 .mh-metric-page__banner { display: flex; align-items: center; gap: 14px; padding: 16px 20px; margin-bottom: 20px; border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); }
-.mh-metric-page__banner-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: var(--mh-radius-md); color: var(--mh-accent); background: var(--mh-surface-warning-soft); font-size: var(--mh-font-size-3xl); }
+.mh-metric-page__banner-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: var(--mh-radius-md); color: var(--mh-accent); background: var(--mh-warning-wash); font-size: var(--mh-font-size-3xl); }
 .mh-metric-page__banner-copy { flex: 1; }
 .mh-metric-page__banner-copy div { display: flex; align-items: center; gap: 8px; }
 .mh-metric-page__banner-copy strong { font-size: var(--mh-font-size-lg); }
-.mh-metric-page__banner-copy span { padding: 3px 6px; background: var(--mh-surface-warning-soft); border-radius: var(--mh-radius-sm); color: var(--mh-accent); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-bold); }
+.mh-metric-page__banner-copy span { padding: 3px 6px; background: var(--mh-warning-wash); border-radius: var(--mh-radius-sm); color: var(--mh-accent); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-bold); }
 .mh-metric-page__banner-copy p { margin: 4px 0 0; font-size: var(--mh-font-size-md); line-height: 1.5; color: var(--mh-text-muted); }
 .mh-metric-page__layout { display: grid; grid-template-columns: 280px minmax(0,1fr); align-items: start; gap: 20px; }
 .mh-metric-page__sidebar, .mh-metric-page__detail { border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); background: var(--mh-surface); overflow: hidden; }
@@ -27,7 +27,7 @@
 .mh-metric-page__category-tabs button.is-active { color: var(--mh-text-strong); font-weight: var(--mh-font-weight-bold); box-shadow: inset 0 -2px var(--mh-accent); }
 .mh-metric-page__list { min-height: 300px; max-height: 440px; overflow-y: auto; }
 .mh-metric-page__list button { display: grid; width: 100%; gap: 4px; text-align: left; padding: 12px 14px; border: 0; border-bottom: 1px solid var(--mh-surface-muted); background: var(--mh-surface); cursor: pointer; }
-.mh-metric-page__list button.is-active { background: var(--mh-surface-warning-soft); box-shadow: inset 3px 0 var(--mh-accent); }
+.mh-metric-page__list button.is-active { background: var(--mh-warning-wash); box-shadow: inset 3px 0 var(--mh-accent); }
 .mh-metric-page__list strong { font-size: var(--mh-font-size-md); color: var(--mh-text-strong); }
 .mh-metric-page__list small { color: var(--mh-text-faint); font-size: var(--mh-font-size-xs); }
 .mh-metric-page__empty { padding: 40px 20px; text-align: center; color: var(--mh-text-faint); font-size: var(--mh-font-size-md); }
@@ -52,7 +52,7 @@
 .mh-metric-page__field textarea { min-height: 60px; resize: vertical; line-height: 1.5; }
 .mh-metric-page__label { display: block; margin-bottom: 6px; color: var(--mh-text-muted); font-size: var(--mh-font-size-sm); font-weight: var(--mh-font-weight-bold); }
 .mh-metric-page__synonyms { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
-.mh-metric-page__synonyms span { padding: 6px 10px; border-radius: var(--mh-radius-md); color: var(--mh-info); background: var(--mh-surface-info); font-size: var(--mh-font-size-sm); }
+.mh-metric-page__synonyms span { padding: 6px 10px; border-radius: var(--mh-radius-md); color: var(--mh-info); background: var(--mh-info-wash); font-size: var(--mh-font-size-sm); }
 .mh-metric-page__synonyms button { height: 28px; width: 28px; border: 1px dashed var(--mh-line); border-radius: var(--mh-radius-md); background: transparent; color: var(--mh-text-faint); cursor: pointer; }
 .mh-metric-page__hint { margin: 6px 0 0; color: var(--mh-text-faint); font-size: var(--mh-font-size-xs); }
 .mh-metric-page__toggle { display: flex; align-items: center; justify-content: space-between; }
