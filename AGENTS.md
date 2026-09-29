@@ -132,7 +132,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 复制某类视图的模式之前，先验收它所依赖的外壳。不同内容注入和同页多实例检查穿插在各条目中进行，以便及早暴露固定 Demo 数据或全局状态耦合。
 - 配对脚本断言通过与人工视觉通过分别登记；可达状态丢失是未完成项，不得以“组件生命周期”为由永久豁免。
 - 接续点只记录当前状态；旧分支与旧验收数字留在历史日志。
-- 任务来源：设计意图 Phase 2（通用库模式、基础层 token）按 `handover/design-intent/phase2-guide.md` 执行，冲突时以该指南为准；全量推进用 `handover/execution-prompt.md`；结构整改用 `handover/structural-review.md`，按其波次执行；视觉与 token 清理用 `handover/design-system-cleanup.md`。`handover/structural-repair-prompt.md`（纠偏批 A–E）已完成，仅作历史。新页面沿用同一边界。
+- 任务来源：设计意图 Phase 2（通用库模式、基础层 token，已完成）按 `handover/design-intent/phase2-guide.md` 执行，冲突时以该指南为准；Phase 3（去重与收尾：共享组件、助手接线、响应式断点、`demo/` 精简）按 `handover/design-intent/phase3-guide.md`，它沿用 Phase 2 指南的规则、门禁与报告模板；全量推进用 `handover/execution-prompt.md`；结构整改用 `handover/structural-review.md`，按其波次执行；视觉与 token 清理用 `handover/design-system-cleanup.md`。`handover/structural-repair-prompt.md`（纠偏批 A–E）已完成，仅作历史。新页面沿用同一边界。
 
 - **M0 全量盘点与参照基线**：核对 17 个 HTML 及 URL 参数、hash、脚本加载和覆盖关系；列出所有页内视图/状态/动作、组件候选与来源冲突。每个入口有台账，未知细节显式待查；完成首轮后即开始实现，后续随发现补充，不无限审查。
 - **M1 最小工程底座与公共基础**：可重复构建/交互验证/视觉对照、公共导出、props 声明与 autodocs、token/样式隔离、资源与导航约定、可操作的故事。先建立后续实施所需的最小闭环，其余基础组件随真实页面需求提取；不等待一个预想中的完整框架才开始页面工作。
