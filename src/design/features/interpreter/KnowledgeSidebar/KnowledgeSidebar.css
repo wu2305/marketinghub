@@ -1,14 +1,14 @@
 .mh-sidebar {
 min-height: 656px;
   padding: 24px 18px 40px;
-  border-right: 1px solid var(--mh-line-warm-strong);
+  border-right: 1px solid var(--mh-line-subtle);
   background: var(--mh-surface);
 }
 
 .mh-sidebar__brand {
 margin: 12px 16px 30px;
-  color: var(--mh-ink-neutral-light);
-  font-family: var(--mh-font);
+  color: var(--mh-text-faint);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-regular);
   letter-spacing: 0.18em;
@@ -23,8 +23,8 @@ margin: 8px 0 2px;
 
 .mh-sidebar__title {
 padding: 0 0 8px;
-  color: var(--mh-kicker);
-  font-family: var(--mh-font);
+  color: var(--mh-text-faint);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-regular);
   letter-spacing: 0.12em;

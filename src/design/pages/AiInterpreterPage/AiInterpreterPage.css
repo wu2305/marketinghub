@@ -1,6 +1,6 @@
 .mh-empty--unknown {
 border-style: dashed;
-  background: var(--mh-row-hover);
+  background: var(--mh-surface-subtle);
 }
 
 .mh-interpreter {
@@ -9,7 +9,7 @@ display: grid;
   margin: 0 auto;
   grid-template-columns: 240px minmax(0, 1fr);
   align-items: stretch;
-  background: var(--mh-page-bg);
+  background: var(--mh-surface-subtle);
 }
 
 /* Original overview `.knowledge-main`: padding 28px 0 42px 34px — no right
@@ -23,14 +23,14 @@ min-width: 0;
 /* Type pages flush the library toolbar to the hero edge
    (.knowledge-main.business-type-page → padding 0 44px 42px). The original's
    later ai-interpreter-overview.css `!important` overrides resolve the canvas
-   to var(--mh-page-bg) on every interpreter state. */
+   to var(--mh-surface-subtle) on every interpreter state. */
 
 .mh-interpreter__main--type {
 /* column 1 is reserved for the (now fixed) sidebar rail, same as the
      original's `.knowledge-main.business-type-page { grid-column: 2 }`. */
   grid-column: 2;
   padding: 0 44px 42px;
-  background: var(--mh-page-bg);
+  background: var(--mh-surface-subtle);
 }
 
 /* ai-interpreter-overview.css gives the Data Model main an extra 20px top
@@ -101,7 +101,7 @@ max-width: 384px;
 .mh-page--interpreter-type .mh-sidebar {
 position: fixed;
   z-index: 2;
-  top: var(--mh-header);
+  top: var(--mh-layout-header-height);
   bottom: 0;
   left: max(44px, calc((100vw - 1500px) / 2));
   width: 240px;
@@ -110,7 +110,7 @@ position: fixed;
   padding: 24px 12px 40px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  border-right-color: var(--mh-line-warm);
+  border-right-color: var(--mh-line-subtle);
   background: var(--mh-surface);
 }
 
@@ -309,7 +309,7 @@ margin: 2px 0 18px;
 }
 
 .mh-interpreter__main .mh-heading h2 {
-font-family: var(--mh-font);
+font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-3xl);
   font-style: normal;
   font-weight: var(--mh-font-weight-bold);
@@ -317,7 +317,7 @@ font-family: var(--mh-font);
 
 .mh-interpreter__main .mh-heading__kicker {
 margin-bottom: 6px;
-  color: var(--mh-gold-deep);
+  color: var(--mh-accent-ink);
   letter-spacing: 0.08em;
 }
 

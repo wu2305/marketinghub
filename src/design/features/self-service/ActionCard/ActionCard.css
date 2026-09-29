@@ -8,7 +8,7 @@ display: flex;
   border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
-    linear-gradient(180deg, var(--mh-surface-warning) 0%, var(--mh-gold-light) 100%) border-box;
+    linear-gradient(180deg, var(--mh-accent-wash) 0%, var(--mh-accent-soft) 100%) border-box;
   box-shadow: var(--mh-shadow-raised);
   transition: box-shadow 0.18s ease;
 }
@@ -19,8 +19,8 @@ box-shadow: var(--mh-shadow-overlay);
 
 .mh-action-card h3 {
 margin: 0;
-  color: var(--mh-ink-field);
-  font-family: var(--mh-display);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-display);
   font-size: var(--mh-font-size-3xl);
   font-style: italic;
   font-weight: var(--mh-font-weight-bold);
@@ -30,8 +30,8 @@ margin: 0;
 .mh-action-card p {
 max-width: 528px;
   margin: 0;
-  color: var(--mh-copy);
-  font-family: var(--mh-font);
+  color: var(--mh-text);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-md);
   line-height: 1.55;
 }
@@ -54,7 +54,7 @@ display: inline-flex;
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--mh-muted);
+  color: var(--mh-text-muted);
   cursor: pointer;
   vertical-align: middle;
   transition: color 0.18s ease;
@@ -67,7 +67,7 @@ width: 16px;
 
 .mh-action-card__history:hover,
 .mh-action-card__history:focus-visible {
-color: var(--mh-ink);
+color: var(--mh-text-strong);
   outline: 0;
 }
 

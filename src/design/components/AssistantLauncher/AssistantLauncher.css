@@ -16,13 +16,13 @@ position: fixed;
   gap: 9px;
   padding: 6px 14px 6px 6px;
   overflow: visible;
-  border: 1px solid var(--mh-launcher-line);
+  border: 1px solid var(--mh-line-inverse);
   border-radius: var(--mh-radius-pill);
   appearance: none;
-  background: var(--mh-surface-dark);
+  background: var(--mh-surface-inverse);
   color: var(--mh-surface);
-  box-shadow: var(--mh-launcher-shadow);
-  font-family: var(--mh-font);
+  box-shadow: var(--mh-shadow-overlay);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
@@ -39,7 +39,7 @@ position: absolute;
   z-index: -1;
   inset: -7px;
   border-radius: inherit;
-  background: var(--mh-launcher-aura);
+  background: color-mix(in srgb, var(--mh-accent) 20%, transparent);
   content: "";
   opacity: 0.38;
   pointer-events: none;
@@ -49,14 +49,14 @@ position: absolute;
 
 .mh-launcher:hover,
 .mh-launcher:focus-visible {
-border-color: var(--mh-gold-medium);
+border-color: var(--mh-accent);
   outline: 0;
-  background: var(--mh-launcher-bg-hover);
-  box-shadow: var(--mh-launcher-shadow-hover);
+  background: var(--mh-surface-inverse);
+  box-shadow: var(--mh-shadow-overlay);
 }
 
 .mh-launcher:focus-visible {
-outline: 2px solid var(--mh-launcher-focus);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 3px;
 }
 
@@ -92,8 +92,8 @@ display: grid;
   height: 28px;
   place-items: center;
   border-radius: var(--mh-radius-pill);
-  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
-  color: var(--mh-ink-action-strong);
+  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
 }

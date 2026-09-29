@@ -1,16 +1,16 @@
 .mh-toast {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 position: fixed;
   right: 28px;
   bottom: 78px;
   z-index: 120;
   min-width: 250px;
   padding: 12px 14px;
-  border: 1px solid var(--mh-surface-dark);
+  border: 1px solid var(--mh-surface-inverse);
   border-radius: var(--mh-radius-sm);
-  background: var(--mh-surface-dark);
+  background: var(--mh-surface-inverse);
   color: var(--mh-surface);
-  box-shadow: var(--mh-toast-shadow);
+  box-shadow: var(--mh-shadow-overlay);
   font-size: var(--mh-font-size-xs);
   animation: mh-toast-in 160ms ease both;
 }

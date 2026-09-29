@@ -3,8 +3,8 @@
    folded in. Effective values probed from the rendered page. */
 
 .mh-dmview {
-  font-family: var(--mh-font);
-  color: var(--mh-ink);
+  font-family: var(--mh-font-sans);
+  color: var(--mh-text-strong);
 }
 
 .mh-dmview__shell {
@@ -12,7 +12,7 @@
   grid-template-columns: minmax(230px, 280px) minmax(0, 1fr);
   min-height: 690px;
   overflow: hidden;
-  border: 1px solid var(--mh-line-subtle-cool);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
 }
@@ -23,8 +23,8 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  border-right: 1px solid var(--mh-line-sidebar-cool);
-  background: var(--mh-surface-panel-muted);
+  border-right: 1px solid var(--mh-line-subtle);
+  background: var(--mh-surface-subtle);
 }
 
 .mh-dmview__search {
@@ -63,7 +63,7 @@
   gap: 30px;
   min-height: 64px;
   padding: 0 28px;
-  border-bottom: 1px solid var(--mh-line-panel-soft);
+  border-bottom: 1px solid var(--mh-line-subtle);
 }
 
 .mh-dmview__tab {
@@ -73,7 +73,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--mh-ink-icon-muted);
+  color: var(--mh-text-muted);
   font: inherit;
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
@@ -81,7 +81,7 @@
 }
 
 .mh-dmview__tab.is-active {
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
 }
 
 .mh-dmview__tab.is-active::after {
@@ -92,7 +92,7 @@
   left: 0;
   height: 3px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-ink-primary-deep);
+  background: var(--mh-text-strong);
 }
 
 .mh-dmview__tab-count {
@@ -100,8 +100,8 @@
   align-items: center;
   padding: 0 6px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-neutral-soft);
-  color: var(--mh-ink-control-muted);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -116,7 +116,7 @@
 
 .mh-dmview__basic {
   padding: 26px 30px 32px;
-  border: 1px solid var(--mh-line-subtle-cool);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
 }
@@ -140,7 +140,7 @@
 }
 
 .mh-dmview__basic-name strong {
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xl);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.35;
@@ -149,7 +149,7 @@
 .mh-dmview__basic-summary {
   max-width: 860px;
   margin: 12px 0 0;
-  color: var(--mh-ink-table-caption);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-md);
   line-height: 1.55;
 }
@@ -157,7 +157,7 @@
 .mh-dmview__basic-label {
   display: block;
   margin-bottom: 12px;
-  color: var(--mh-ink-neutral-mid);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-regular);
   line-height: 1.2;
@@ -166,7 +166,7 @@
 .mh-dmview__basic-label em {
   font-style: normal;
   font-weight: var(--mh-font-weight-regular);
-  color: var(--mh-ink-neutral-light);
+  color: var(--mh-text-faint);
 }
 
 .mh-dmview__tags {
@@ -182,13 +182,13 @@
   min-height: 28px;
   padding: 5px 12px;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-line-faintest);
-  color: var(--mh-ink-neutral-copy);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
 }
 
 .mh-dmview__none {
-  color: var(--mh-faint);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-sm);
 }
 
@@ -220,8 +220,8 @@
   height: 34px;
   place-items: center;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-surface-neutral-soft);
-  color: var(--mh-gold-medium);
+  background: var(--mh-surface-muted);
+  color: var(--mh-accent);
 }
 
 .mh-dmview__report-icon svg {
@@ -236,7 +236,7 @@
 
 .mh-dmview__report-copy strong {
   overflow: hidden;
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   text-overflow: ellipsis;
@@ -244,19 +244,19 @@
 }
 
 .mh-dmview__report > b {
-  color: var(--mh-ink-placeholder-cool);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-3xl);
   font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-dmview__report:hover .mh-dmview__report-copy strong {
-  color: var(--mh-indicator-active);
+  color: var(--mh-accent);
 }
 
 /* ── Relationship graph ── */
 
 .mh-dmview__graph-card {
-  border: 1px solid var(--mh-line-subtle-cool);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-lg);
   overflow: hidden;
 }
@@ -266,7 +266,7 @@
   height: min(920px, calc(100vh - 235px));
   min-height: 540px;
   overflow: hidden;
-  background-image: radial-gradient(var(--mh-reports-media-bg) 1px, transparent 1px);
+  background-image: radial-gradient(var(--mh-surface-muted) 1px, transparent 1px);
   background-size: 16px 16px;
   cursor: grab;
   touch-action: none;
@@ -296,13 +296,13 @@
 
 .mh-dmview__link {
   fill: none;
-  stroke: var(--mh-stroke-graph-muted);
+  stroke: var(--mh-text-faint);
   stroke-width: 1.7;
   stroke-dasharray: 7 6;
 }
 
 .mh-dmview__links marker path {
-  fill: var(--mh-fill-graph-muted);
+  fill: var(--mh-text-faint);
 }
 
 .mh-dmview__node {
@@ -312,21 +312,21 @@
   width: 250px;
   min-height: 180px;
   padding: 0;
-  border: 1px solid var(--mh-line-graph-panel);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-lg);
-  background: var(--mh-surface-info-soft);
+  background: var(--mh-surface-page);
   box-shadow: var(--mh-shadow-raised);
   text-align: left;
   cursor: pointer;
 }
 
 .mh-dmview__node.is-fact {
-  border-color: var(--mh-line-gold-detail);
-  background: var(--mh-surface-gold-detail);
+  border-color: var(--mh-accent-soft);
+  background: var(--mh-accent-wash);
 }
 
 .mh-dmview__node:hover {
-  border-color: var(--mh-bt-action);
+  border-color: var(--mh-accent);
   box-shadow: var(--mh-shadow-overlay);
   transform: translateY(-1px);
 }
@@ -340,7 +340,7 @@
 
 .mh-dmview__node > header strong {
   display: block;
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.25;
@@ -350,7 +350,7 @@
 .mh-dmview__node > header small {
   display: block;
   margin-top: 3px;
-  color: var(--mh-ink-secondary-slate);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.25;
@@ -373,8 +373,8 @@
   align-items: center;
   padding: 3px 8px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-info);
-  color: var(--mh-ink-info);
+  background: var(--mh-info-wash);
+  color: var(--mh-info);
   font-size: var(--mh-font-size-xs);
   font-style: normal;
   font-weight: var(--mh-font-weight-bold);
@@ -382,8 +382,8 @@
 }
 
 .mh-dmview__node.is-fact > header em {
-  background: var(--mh-surface-warning);
-  color: var(--mh-ink-warning);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
 }
 
 .mh-dmview__node-fields {
@@ -419,17 +419,17 @@
 }
 
 .mh-dmview__node-fields code {
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-dmview__node-fields span {
-  color: var(--mh-ink-table-caption);
+  color: var(--mh-text-muted);
 }
 
 .mh-dmview__node-fields small {
-  color: var(--mh-bt-empty);
+  color: var(--mh-text-muted);
   text-align: right;
 }
 
@@ -448,7 +448,7 @@
   z-index: 8;
   display: grid;
   overflow: hidden;
-  border: 1px solid var(--mh-line-subtle-cool);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-shadow-raised);
@@ -460,9 +460,9 @@
   height: 34px;
   place-items: center;
   border: 0;
-  border-bottom: 1px solid var(--mh-line-panel-soft);
+  border-bottom: 1px solid var(--mh-line-subtle);
   background: var(--mh-surface);
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-2xl);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
@@ -502,7 +502,7 @@
   width: min(1120px, calc(100vw - 72px));
   max-height: min(760px, calc(100vh - 72px));
   overflow: hidden;
-  border: 1px solid var(--mh-line-subtle-cool);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
   box-shadow: var(--mh-shadow-modal);
@@ -515,7 +515,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 20px 24px 18px;
-  border-bottom: 1px solid var(--mh-line-table-soft);
+  border-bottom: 1px solid var(--mh-line-subtle);
 }
 
 .mh-dmview__dialog-copy {
@@ -534,7 +534,7 @@
   flex: 0 1 auto;
   min-width: 0;
   overflow-wrap: anywhere;
-  color: var(--mh-ink-primary-deep);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-2xl);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
@@ -552,20 +552,20 @@
 }
 
 .mh-dmview__table-type.is-fact {
-  background: var(--mh-surface-warning);
-  color: var(--mh-ink-warning);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
 }
 
 .mh-dmview__table-type.is-dimension {
-  background: var(--mh-surface-info);
-  color: var(--mh-ink-info);
+  background: var(--mh-info-wash);
+  color: var(--mh-info);
 }
 
 .mh-dmview__dialog-head small {
   display: block;
   max-width: 920px;
   margin-top: 12px;
-  color: var(--mh-ink-table-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.45;
@@ -581,14 +581,14 @@
   border: 0;
   border-radius: var(--mh-radius-md);
   background: transparent;
-  color: var(--mh-ink-row-muted);
+  color: var(--mh-text-muted);
   cursor: pointer;
 }
 
 .mh-dmview__icon-btn:hover,
 .mh-dmview__icon-btn:focus-visible {
-  background: var(--mh-bg);
-  color: var(--mh-ink-dark-control);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-strong);
 }
 
 .mh-dmview__icon-btn svg {
@@ -602,7 +602,7 @@
   margin: 14px 24px;
   padding: 4px;
   border-radius: var(--mh-radius-sm);
-  background: var(--mh-surface-warm-soft);
+  background: var(--mh-accent-wash);
 }
 
 .mh-dmview__dialog-tab {
@@ -611,7 +611,7 @@
   border: 0;
   border-radius: var(--mh-radius-sm);
   background: transparent;
-  color: var(--mh-copy-ai);
+  color: var(--mh-text);
   font: inherit;
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
@@ -620,7 +620,7 @@
 
 .mh-dmview__dialog-tab.is-active {
   background: var(--mh-surface);
-  color: var(--mh-ink-darkest);
+  color: var(--mh-text-strong);
   box-shadow: var(--mh-shadow-raised);
 }
 
@@ -645,8 +645,8 @@
 .mh-dmview__table th,
 .mh-dmview__table td {
   padding: 10px 12px;
-  border-bottom: 1px solid var(--mh-line-table-soft);
-  color: var(--mh-ink-heading-slate);
+  border-bottom: 1px solid var(--mh-line-subtle);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   line-height: 1.35;
   text-align: left;
@@ -654,17 +654,17 @@
 }
 
 .mh-dmview__table th {
-  border-bottom: 2px solid var(--mh-line-active-warm);
-  background: var(--mh-surface-warm-soft);
-  color: var(--mh-ink-row-muted);
+  border-bottom: 2px solid var(--mh-accent);
+  background: var(--mh-accent-wash);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-dmview__field-code {
   display: block;
-  color: var(--mh-ink-primary-deep);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -680,8 +680,8 @@
   min-height: 22px;
   padding: 3px 8px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-line-faintest);
-  color: var(--mh-ink-heading-charcoal);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -706,7 +706,7 @@
 
   .mh-dmview__sidebar {
     border-right: 0;
-    border-bottom: 1px solid var(--mh-line-sidebar-cool);
+    border-bottom: 1px solid var(--mh-line-subtle);
   }
 
   .mh-dmview__domains {

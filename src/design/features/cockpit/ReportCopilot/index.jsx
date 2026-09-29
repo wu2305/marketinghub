@@ -104,7 +104,7 @@ function HrInsight({ label, segments }) {
   );
 }
 
-const HR_SERIES_TONES = { ink: "var(--mh-sc-ink)", pos: "var(--mh-indicator-positive-chart)", neg: "var(--mh-indicator-negative-chart)" };
+const HR_SERIES_TONES = { ink: "var(--mh-text-strong)", pos: "var(--mh-success)", neg: "var(--mh-danger)" };
 
 function HrTrendChart({ chart }) {
   const { periods, min, max, ticks, series } = chart;
@@ -125,17 +125,17 @@ function HrTrendChart({ chart }) {
             y1={Y(tick)}
             x2={W - padR}
             y2={Y(tick)}
-            stroke={tick === 0 ? "var(--mh-hr-grid-zero)" : "var(--mh-sc-gridline)"}
+            stroke={tick === 0 ? "var(--mh-text-faint)" : "var(--mh-line-subtle)"}
             strokeWidth="1"
             strokeDasharray={tick === 0 ? "4 3" : undefined}
           />
-          <text x={padL - 6} y={Y(tick) + 3} textAnchor="end" fontSize="9" fill="var(--mh-hr-axis)">
+          <text x={padL - 6} y={Y(tick) + 3} textAnchor="end" fontSize="9" fill="var(--mh-text-faint)">
             {tick > 0 ? `+${tick}` : tick}%
           </text>
         </g>
       ))}
       {periods.map((period, i) => (
-        <text key={period} x={X(i)} y={H - 10} textAnchor="middle" fontSize="8.5" fill="var(--mh-hr-axis)">
+        <text key={period} x={X(i)} y={H - 10} textAnchor="middle" fontSize="8.5" fill="var(--mh-text-faint)">
           {period}
         </text>
       ))}

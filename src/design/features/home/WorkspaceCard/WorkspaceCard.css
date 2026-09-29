@@ -11,7 +11,7 @@ position: relative;
 height: 180px;
   overflow: hidden;
   border-radius: var(--mh-radius-md) var(--mh-radius-md) 0 0;
-  background: var(--mh-surface-dark-strong);
+  background: var(--mh-surface-inverse);
 }
 
 .mh-workspace-card__image img {
@@ -31,13 +31,13 @@ display: flex;
   border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
-    linear-gradient(180deg, var(--mh-surface-warning) 0%, var(--mh-gold-light) 100%) border-box;
+    linear-gradient(180deg, var(--mh-accent-wash) 0%, var(--mh-accent-soft) 100%) border-box;
 }
 
 .mh-workspace-card h3 {
 margin: 4px 0 8px;
-  color: var(--mh-ink-field);
-  font-family: var(--mh-display);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-display);
   font-size: var(--mh-font-size-3xl);
   font-style: italic;
   font-weight: var(--mh-font-weight-bold);
@@ -46,8 +46,8 @@ margin: 4px 0 8px;
 
 .mh-workspace-card p {
 margin: 10px 0 0;
-  color: var(--mh-ink-secondary-muted);
-  font-family: var(--mh-font);
+  color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   line-height: 1.45;
 }
@@ -65,9 +65,9 @@ position: relative;
   padding: 4px 10px;
   border: 0;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-gold-pale);
-  color: var(--mh-gold-text);
-  font-family: var(--mh-font);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;

@@ -5,7 +5,7 @@ width: min(800px, calc(100% - 64px));
   flex-direction: column;
   padding: 0;
   overflow: hidden;
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 }
 
 .mh-upload-history__body {
@@ -18,7 +18,7 @@ flex: 1;
 width: 100%;
   border-collapse: collapse;
   font-size: var(--mh-font-size-md);
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
 }
 
 .mh-upload-history__table thead th {
@@ -27,8 +27,8 @@ position: sticky;
   z-index: 1;
   padding: 10px 14px;
   border-bottom: 0;
-  background: var(--mh-bg-soft);
-  color: var(--mh-slate);
+  background: var(--mh-surface-subtle);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 1.2px;
@@ -38,7 +38,7 @@ position: sticky;
 
 .mh-upload-history__table tbody td {
 padding: 12px 14px;
-  border-bottom: 1px solid var(--mh-line-faint);
+  border-bottom: 1px solid var(--mh-line-subtle);
   vertical-align: middle;
 }
 
@@ -47,27 +47,27 @@ border-bottom: 0;
 }
 
 .mh-upload-history__table tbody tr:hover {
-background: var(--mh-row-hover);
+background: var(--mh-surface-subtle);
 }
 
 .mh-upload-history__file {
 display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-upload-history__file svg {
 width: 16px;
   height: 16px;
-  color: var(--mh-slate);
+  color: var(--mh-text-muted);
   flex-shrink: 0;
 }
 
 .mh-upload-history__uploader,
 .mh-upload-history__time {
-color: var(--mh-subtle);
+color: var(--mh-text);
 }
 
 .mh-upload-history__empty {
@@ -75,7 +75,7 @@ flex: 1;
   display: grid;
   place-items: center;
   padding: 36px 18px;
-  color: var(--mh-empty);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-lg);
 }
 
@@ -90,10 +90,10 @@ display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border: 1px solid var(--mh-control-line);
+  border: 1px solid var(--mh-line-strong);
   border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
@@ -106,8 +106,8 @@ width: 12px;
 
 .mh-upload-history__btn:hover,
 .mh-upload-history__btn:focus-visible {
-background: var(--mh-hover-warm);
-  border-color: var(--mh-gold-medium);
-  color: var(--mh-ink);
+background: var(--mh-accent-wash);
+  border-color: var(--mh-accent);
+  color: var(--mh-text-strong);
   outline: 0;
 }

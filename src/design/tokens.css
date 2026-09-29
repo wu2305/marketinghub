@@ -97,6 +97,10 @@
   --mh-data-teal: #2d7972;
   --mh-data-violet: #6941c6;
   --mh-data-rose: #c2185b;
+  --mh-info-wash: color-mix(in srgb, var(--mh-info) 8%, var(--mh-surface));
+  --mh-success-wash: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
+  --mh-warning-wash: color-mix(in srgb, var(--mh-warning) 10%, var(--mh-surface));
+  --mh-danger-wash: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   --mh-focus-ring: rgba(63, 115, 166, 0.55);
   --mh-font-sans: "DIN 2014", Arial, sans-serif;
   --mh-font-display: "BentonModDisplay", Georgia, serif;
@@ -131,377 +135,48 @@
   --mh-layout-header-height: 56px;
 
   /* Shared foreground, action, and status colors extracted from component CSS. */
-  --mh-ink-inverse: var(--mh-text-inverse);
-  --mh-surface-dark-strong: var(--mh-surface-inverse);
-  --mh-surface-action-slate: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
-  --mh-surface-action-blue: var(--mh-surface-inverse);
-  --mh-surface-dark-cool: var(--mh-surface-inverse);
-  --mh-indicator-selection-warm: var(--mh-accent);
-  --mh-danger-muted: var(--mh-danger);
-  --mh-font: var(--mh-font-sans);
-  --mh-display: var(--mh-font-display);
-  --mh-radius-control: var(--mh-radius-sm);
-  --mh-bg: var(--mh-surface-page);
-  --mh-bg-soft: var(--mh-surface-subtle);
-  --mh-ink: var(--mh-text-strong);
-  --mh-copy: var(--mh-text);
-  --mh-muted: var(--mh-text-muted);
-  --mh-faint: var(--mh-text-faint);
-  --mh-line-control-soft: var(--mh-line);
-  --mh-line-control-hover: var(--mh-line-strong);
-  --mh-gold: var(--mh-accent);
-  --mh-gold-deep: var(--mh-accent-ink);
-  --mh-gold-text: var(--mh-accent-ink);
-  --mh-green: var(--mh-success);
-  --mh-red: var(--mh-danger);
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
-  --mh-ink-control-slate: var(--mh-text);
-  --mh-line-subtle-cool: var(--mh-line);
-  --mh-line-sidebar-cool: var(--mh-line-subtle);
-  --mh-surface-neutral-soft: var(--mh-surface-muted);
-  --mh-ink-primary-deep: var(--mh-text-strong);
-  --mh-line-panel-soft: var(--mh-line-subtle);
-  --mh-line-gold-active: var(--mh-accent);
-  --mh-surface-gold-wash: var(--mh-accent-wash);
-  --mh-indicator-active: var(--mh-accent);
-  --mh-ink-label-steel: var(--mh-text-muted);
-  --mh-ink-copy-dark: var(--mh-text);
-  --mh-ink-icon-muted: var(--mh-text-muted);
-  --mh-ink-control-muted: var(--mh-text-faint);
-  --mh-ink-table-caption: var(--mh-text-muted);
-  --mh-ink-neutral-mid: var(--mh-text-faint);
-  --mh-ink-neutral-light: var(--mh-text-faint);
-  --mh-ink-neutral-copy: var(--mh-text-muted);
-  --mh-ink-placeholder-cool: var(--mh-text-faint);
-  --mh-stroke-graph-muted: var(--mh-text-faint);
-  --mh-fill-graph-muted: var(--mh-text-faint);
-  --mh-line-graph-panel: var(--mh-line);
-  --mh-surface-info-soft: var(--mh-surface-page);
-  --mh-line-gold-detail: var(--mh-accent-soft);
-  --mh-surface-gold-detail: var(--mh-accent-wash);
-  --mh-ink-secondary-slate: var(--mh-text-muted);
-  --mh-surface-info: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
-  --mh-ink-info: var(--mh-info);
-  --mh-surface-warning: var(--mh-accent-wash);
-  --mh-ink-warning: var(--mh-accent-ink);
-  --mh-line-table-soft: var(--mh-line-subtle);
-  --mh-ink-table-muted: var(--mh-text-muted);
-  --mh-ink-row-muted: var(--mh-text-muted);
-  --mh-surface-warm-soft: var(--mh-accent-wash);
-  --mh-ink-darkest: var(--mh-text-strong);
-  --mh-ink-heading-slate: var(--mh-text);
-  --mh-line-active-warm: var(--mh-accent);
-  --mh-ink-heading-charcoal: var(--mh-text);
-  --mh-surface-flow-neutral: var(--mh-surface-muted);
-  --mh-surface-success-soft: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
-  --mh-surface-warning-soft: color-mix(in srgb, var(--mh-warning) 10%, var(--mh-surface));
-  --mh-ink-warning-brown: var(--mh-warning);
-  --mh-surface-status-warm: var(--mh-accent-wash);
-  --mh-ink-link-strong: var(--mh-info);
-  --mh-blue: var(--mh-info);
   /* P14 exact source category indicators, info banner, and required errors. */
-  --mh-indicator-purple: var(--mh-data-violet);
-  --mh-indicator-amber: var(--mh-accent);
-  --mh-indicator-rose: var(--mh-data-rose);
-  --mh-indicator-teal: var(--mh-data-teal);
-  --mh-surface-info-pale: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
-  --mh-line-info-pale: color-mix(in srgb, var(--mh-info) 15%, var(--mh-surface));
-  --mh-icon-info-bright: var(--mh-info);
-  --mh-danger-bright: var(--mh-danger);
-  --mh-amber: var(--mh-accent-ink);
-  --mh-header: var(--mh-layout-header-height);
-  --mh-kicker: var(--mh-text-faint);
-  --mh-drawer-shadow: var(--mh-shadow-modal);
-  --mh-disabled-bg: var(--mh-surface-muted);
-  --mh-disabled-line: var(--mh-line-strong);
-  --mh-disabled-ink: var(--mh-text-faint);
-  --mh-index-line: var(--mh-accent);
-  --mh-index-ink: var(--mh-accent-ink);
-  --mh-gold-light: var(--mh-accent-soft);
-  --mh-gold-medium: var(--mh-accent);
-  --mh-popover-shadow: var(--mh-shadow-overlay);
-  --mh-modal-shadow: var(--mh-shadow-modal);
-  --mh-toast-shadow: var(--mh-shadow-overlay);
-  --mh-surface-warning-pale: var(--mh-accent-wash);
-  --mh-warn-line: var(--mh-accent-soft);
-  --mh-warn-note: var(--mh-accent-ink);
-  --mh-focus-blue: var(--mh-focus-ring);
   /* workspace.css global :focus-visible ring */
-  --mh-focus-strong: var(--mh-focus-ring);
-  --mh-line-hover: var(--mh-line-strong);
-  --mh-scrim-deep: var(--mh-scrim);
-  --mh-modal-shadow-soft: var(--mh-shadow-modal);
-  --mh-line-faint: var(--mh-line-subtle);
-  --mh-line-warm: var(--mh-line-subtle);
-  --mh-line-warm-strong: var(--mh-line-subtle);
-  --mh-row-hover: var(--mh-surface-subtle);
-  --mh-hover-warm: var(--mh-accent-wash);
-  --mh-subtle: var(--mh-text);
-  --mh-slate: var(--mh-text-muted);
-  --mh-empty: var(--mh-text-faint);
-  --mh-control-line: var(--mh-line-strong);
-  --mh-ink-strong: var(--mh-text-strong);
-  --mh-ink-field: var(--mh-text-strong);
-  --mh-icon-slate: var(--mh-text-muted);
   /* global AI launcher (assistant-launcher.css) */
-  --mh-launcher-line: var(--mh-line-inverse);
-  --mh-surface-dark: var(--mh-surface-inverse);
-  --mh-ink-dark-control: var(--mh-text-strong);
-  --mh-launcher-bg-hover: var(--mh-surface-inverse);
-  --mh-launcher-aura: color-mix(in srgb, var(--mh-accent) 20%, transparent);
-  --mh-launcher-shadow: var(--mh-shadow-overlay);
-  --mh-launcher-shadow-hover: var(--mh-shadow-overlay);
-  --mh-launcher-focus: var(--mh-focus-ring);
-  --mh-ink-action-strong: var(--mh-text-strong);
   /* assistant surface scale (assistant-panel.css --ai-*) */
-  --mh-ink-ai: var(--mh-text-strong);
-  --mh-copy-ai: var(--mh-text);
-  --mh-muted-ai: var(--mh-text-muted);
-  --mh-line-strong-ai: var(--mh-line-strong);
-  --mh-fill-hover: var(--mh-surface-muted);
-  --mh-fill-soft: var(--mh-surface-page);
-  --mh-surface-ai: var(--mh-surface-subtle);
   /* media tracking page palette */
-  --mh-page-bg: var(--mh-surface-subtle);
-  --mh-ink-accent-warm: var(--mh-accent-ink);
-  --mh-required: var(--mh-danger);
-  --mh-muted-strong: var(--mh-text-muted);
-  --mh-subtle-ai: var(--mh-text);
-  --mh-line-soft: var(--mh-line);
-  --mh-line-tab: var(--mh-line-subtle);
-  --mh-line-faintest: var(--mh-surface-muted);
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
-  --mh-ai-feedback-line: var(--mh-surface-muted);
-  --mh-ink-secondary-muted: var(--mh-text-muted);
-  --mh-ai-chip-pos: var(--mh-success);
-  --mh-ai-chip-pos-bg: color-mix(in srgb, var(--mh-success) 11%, var(--mh-surface));
-  --mh-ai-chip-neg: var(--mh-danger);
-  --mh-ai-chip-neg-bg: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
-  --mh-composer-shadow: var(--mh-shadow-raised);
-  --mh-composer-focus: 0 0 0 2px var(--mh-focus-ring);
-  --mh-bg-faint: var(--mh-surface-subtle);
-  --mh-field-line: var(--mh-line-strong);
   /* skill menu / model-flow dialog */
-  --mh-danger-ring: color-mix(in srgb, var(--mh-danger) 12%, transparent);
-  --mh-gold-rule: var(--mh-accent);
-  --mh-gold-faint: color-mix(in srgb, var(--mh-accent) 7%, transparent);
-  --mh-chip-line: var(--mh-accent-soft);
-  --mh-chip-bg: var(--mh-accent-wash);
-  --mh-chip-ink: var(--mh-accent-ink);
-  --mh-chip-icon: var(--mh-accent-ink);
-  --mh-chip-hover: color-mix(in srgb, var(--mh-accent) 12%, transparent);
-  --mh-tooltip: var(--mh-surface-inverse);
-  --mh-placeholder: var(--mh-text-faint);
-  --mh-search-placeholder: var(--mh-text-faint);
-  --mh-scrim-mid: var(--mh-scrim);
-  --mh-flow-shadow: var(--mh-shadow-modal);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
-  --mh-surface-neutral-cool: var(--mh-surface-page);
 
-  --mh-reports-ink: var(--mh-text-strong);
-  --mh-reports-copy: var(--mh-text);
-  --mh-reports-muted: var(--mh-text-muted);
-  --mh-reports-blue: var(--mh-info);
-  --mh-reports-blue-soft: color-mix(in srgb, var(--mh-info) 8%, var(--mh-surface));
-  --mh-reports-green: var(--mh-success);
-  --mh-reports-shadow: var(--mh-shadow-modal);
-  --mh-reports-card-shadow: var(--mh-shadow-raised);
-  --mh-reports-card-shadow-hover: var(--mh-shadow-overlay);
-  --mh-reports-row-shadow: var(--mh-shadow-raised);
-  --mh-reports-row-shadow-hover: var(--mh-shadow-overlay);
-  --mh-reports-card-edge: var(--mh-accent-fill);
-  --mh-reports-gold-btn: var(--mh-accent-fill);
-  --mh-reports-badge-bg: var(--mh-accent-wash);
-  --mh-reports-badge-ink: var(--mh-accent-ink);
-  --mh-reports-pill-bg: var(--mh-accent-wash);
 
-  --mh-surface-gold-hover-soft: var(--mh-accent-wash);
-  --mh-reports-pill-hover-ink: var(--mh-accent-ink);
-  --mh-reports-title-hover: var(--mh-accent-ink);
-  --mh-reports-scrim: var(--mh-scrim);
-  --mh-reports-thumb-bg: var(--mh-surface-muted);
-  --mh-surface-panel-muted: var(--mh-surface-subtle);
-  --mh-reports-media-bg: var(--mh-surface-muted);
   /* Live report view (reports-core dark accents over the catalog light skin) */
-  --mh-live-toolbar-bg: var(--mh-surface-page);
-  --mh-line-neutral-soft: var(--mh-line);
-  --mh-live-inkline: var(--mh-surface-inverse);
-  --mh-surface-chart-neutral: var(--mh-surface-subtle);
 
-  --mh-line-control-strong: var(--mh-line-strong);
-  --mh-live-bar: var(--mh-line-strong);
-  --mh-live-bar-alt: var(--mh-success);
-  --mh-ink-faint-warm: var(--mh-text-muted);
-  --mh-live-shadow: var(--mh-shadow-raised);
   /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
-  --mh-sc-bg: var(--mh-surface-muted);
-  --mh-sc-ink: var(--mh-text-strong);
-  --mh-sc-label: var(--mh-text-muted);
-  --mh-ink-faint-neutral: var(--mh-text-faint);
-  --mh-sc-note: var(--mh-text-faint);
-  --mh-line-neutral-faint: var(--mh-line-subtle);
-  --mh-sc-line-strong: var(--mh-line);
-  --mh-sc-static-bg: var(--mh-surface-muted);
-  --mh-sc-static-line: var(--mh-line);
-  --mh-ink-muted-neutral: var(--mh-text-muted);
-  --mh-sc-row-hover: var(--mh-surface-page);
-  --mh-sc-head-line: var(--mh-line-subtle);
-  --mh-ink-info-accent: var(--mh-info);
-  --mh-indicator-positive-chart: var(--mh-success);
-  --mh-indicator-negative-chart: var(--mh-danger);
-  --mh-sc-gridline: var(--mh-line-subtle);
-  --mh-sc-panel-shadow: var(--mh-shadow-raised);
-  --mh-sc-tip-shadow: var(--mh-shadow-raised);
-  --mh-sc-canvas-shadow: var(--mh-shadow-raised);
 
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
-  --mh-ink-black-soft: var(--mh-text-strong);
-  --mh-surface-control-black-soft: var(--mh-surface-inverse);
-  --mh-ink-secondary-dark: var(--mh-text);
 
-  --mh-copilot-tool-bg: var(--mh-surface-page);
-  --mh-copilot-shadow-expanded: var(--mh-shadow-modal);
-  --mh-copilot-gold-wash: color-mix(in srgb, var(--mh-accent) 14%, transparent);
-  --mh-copilot-metric-pos: var(--mh-success);
-  --mh-copilot-metric-neg: var(--mh-danger);
-  --mh-copilot-box-line: var(--mh-line);
-  --mh-ink-black: var(--mh-text-strong);
-  --mh-line-secondary-cool: var(--mh-line);
-  --mh-copilot-card-faint: var(--mh-text-muted);
-  --mh-copilot-card-ink: var(--mh-text-strong);
-  --mh-ink-secondary-cool: var(--mh-text);
 
-  --mh-surface-chip-cool: var(--mh-surface-page);
-  --mh-copilot-action-bg: var(--mh-surface-muted);
-  --mh-copilot-fb-hover-line: color-mix(in srgb, var(--mh-accent) 68%, transparent);
-  --mh-copilot-fb-hover-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-copilot-fb-pressed-line: color-mix(in srgb, var(--mh-accent) 80%, transparent);
-  --mh-copilot-fb-pressed-bg: var(--mh-accent);
-  --mh-copilot-placeholder: var(--mh-text-faint);
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
-  --mh-ink-primary-neutral: var(--mh-text-strong);
-  --mh-hr-muted: var(--mh-text-faint);
-  --mh-hr-mid: var(--mh-text-muted);
-  --mh-hr-index: var(--mh-text-faint);
 
-  --mh-line-warm-soft: var(--mh-line-subtle);
-  --mh-hr-surface: var(--mh-surface-subtle);
-  --mh-hr-card-line: var(--mh-line-subtle);
 
-  --mh-hr-grid-zero: var(--mh-text-faint);
-  --mh-hr-axis: var(--mh-text-faint);
-  --mh-hr-th-line: var(--mh-line-subtle);
-  --mh-hr-td-line: var(--mh-line-subtle);
-  --mh-hr-dot-warn: var(--mh-warning);
-  --mh-ink-positive-dark: var(--mh-success);
-  --mh-ink-negative-bright: var(--mh-danger);
-  --mh-line-highlight-chart: var(--mh-accent);
-  --mh-surface-highlight-warm: var(--mh-surface);
-  --mh-hr-insight-ink: var(--mh-text);
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
 
-  --mh-ra-badge-up-bg: color-mix(in srgb, var(--mh-success) 10%, transparent);
-  --mh-ra-badge-down-bg: color-mix(in srgb, var(--mh-danger) 12%, transparent);
 
-  --mh-ra-stat-line: var(--mh-line-subtle);
-  --mh-ra-icon-retail-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-ra-icon-retail: var(--mh-accent-ink);
-  --mh-ra-icon-outlet-bg: color-mix(in srgb, var(--mh-info) 12%, transparent);
 
-  --mh-ra-insight-bg: var(--mh-surface);
-  --mh-ra-insight-ink: var(--mh-text);
-  --mh-ra-option-icon-bg: color-mix(in srgb, var(--mh-info) 10%, transparent);
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
-  --mh-check-filter-line: var(--mh-line);
-  --mh-check-filter-label: var(--mh-text-faint);
-  --mh-check-filter-ink: var(--mh-text);
-  --mh-check-filter-option: var(--mh-text);
-  --mh-check-filter-checked-bg: var(--mh-accent-wash);
-  --mh-check-filter-checked-ink: var(--mh-accent-ink);
-  --mh-check-filter-shadow: var(--mh-shadow-overlay);
-  --mh-principle-focus-ring: var(--mh-focus-ring);
-  --mh-principle-search-ink: var(--mh-text-strong);
-  --mh-principle-search-placeholder: var(--mh-text-muted);
 
-  --mh-pagination-hover-bg: var(--mh-accent-wash);
-  --mh-pagination-select-line: var(--mh-line);
-  --mh-pagination-select-ink: var(--mh-text);
   /* Business Term dedicated view (business-term.css / business-term-reference.css /
      ai-interpreter-overview.css / unified-type-toolbar.css / field-components.css) */
-  --mh-ink-heading-warm: var(--mh-text-strong);
-  --mh-bt-state-bg: var(--mh-accent-wash);
-  --mh-bt-state-ink: var(--mh-accent-ink);
-  --mh-bt-state-off-bg: var(--mh-surface-muted);
-  --mh-bt-state-off-ink: var(--mh-text-muted);
-  --mh-bt-action: var(--mh-accent);
-  --mh-bt-action-hover-bg: var(--mh-accent-wash);
-  --mh-line-control-warm: var(--mh-accent);
-  --mh-line-control-focus-warm: var(--mh-accent);
-  --mh-ink-icon-warm-muted: var(--mh-text-muted);
-  --mh-shadow-search-warm: var(--mh-shadow-raised);
-  --mh-bt-empty: var(--mh-text-muted);
-  --mh-bt-drawer-bg: var(--mh-surface-page);
-  --mh-bt-drawer-line: var(--mh-line);
-  --mh-bt-drawer-eyebrow: var(--mh-accent-ink);
-  --mh-bt-drawer-title: var(--mh-text-strong);
-  --mh-bt-drawer-shadow: var(--mh-shadow-overlay);
-  --mh-bt-drawer-scrim: var(--mh-scrim);
-  --mh-bt-status-on-bg: var(--mh-accent-wash);
-  --mh-bt-status-on-ink: var(--mh-accent-ink);
-  --mh-bt-status-on-dot: var(--mh-accent);
-  --mh-surface-control-muted: var(--mh-surface-muted);
-  --mh-bt-status-off-ink: var(--mh-text-faint);
-  --mh-bt-status-off-dot: var(--mh-text-faint);
 
-  --mh-bt-chip-bg: var(--mh-surface-muted);
-  --mh-bt-chip-ink: var(--mh-text-muted);
-  --mh-bt-dialog-line: var(--mh-line);
-  --mh-bt-dialog-ink: var(--mh-text);
-  --mh-bt-dialog-scrim: var(--mh-scrim);
-  --mh-surface-warning-icon: var(--mh-accent-wash);
-  --mh-ink-warning-icon: var(--mh-warning);
-  --mh-bt-confirm-btn-line: var(--mh-line);
-  --mh-bt-pag-ink: var(--mh-text-muted);
   /* Field-mapping library shared view — Report Context, Metric Dictionary,
      Analytical Model, Email Reports (field-library.js / field-components.css /
      ai-interpreter-overview.css / library.css). Effective values probed from
      the rendered type pages; the toolbar/search/filter chrome reuses the
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
-  --mh-line-card-warm: var(--mh-line-subtle);
-  --mh-line-scenario-focus: var(--mh-accent);
-  --mh-line-secondary-button: var(--mh-line);
-  --mh-ink-secondary-button: var(--mh-text);
-  --mh-line-panel-subtle: var(--mh-line-subtle);
-  --mh-surface-info-strong: color-mix(in srgb, var(--mh-info) 11%, var(--mh-surface));
-  --mh-ink-info-strong: var(--mh-info);
-  --mh-surface-review: var(--mh-accent-wash);
-  --mh-ink-review: var(--mh-warning);
-  --mh-surface-rose-soft: color-mix(in srgb, var(--mh-data-rose) 11%, var(--mh-surface));
-  --mh-ink-rose: var(--mh-data-rose);
-  --mh-surface-violet-soft: color-mix(in srgb, var(--mh-data-violet) 12%, var(--mh-surface));
-  --mh-ink-violet: var(--mh-data-violet);
-  --mh-indicator-like: var(--mh-accent);
-  --mh-surface-status-gray: var(--mh-surface-page);
-  --mh-ink-status-gray: var(--mh-text-muted);
-  --mh-ink-control-deep: var(--mh-text);
-  --mh-ink-row-title: var(--mh-text-strong);
-  --mh-ink-row-primary: var(--mh-text-strong);
-  --mh-ink-empty-strong: var(--mh-text-strong);
-  --mh-ink-empty-muted: var(--mh-text-muted);
-  --mh-surface-gold-pale: var(--mh-accent-wash);
-  --mh-ink-filter-label: var(--mh-text-muted);
-  --mh-ink-navigation: var(--mh-text-muted);
-  --mh-surface-danger-hover: color-mix(in srgb, var(--mh-danger) 5%, var(--mh-surface));
-  --mh-shadow-chip-soft: var(--mh-shadow-raised);
-  --mh-ink-required: var(--mh-danger);
-  --mh-shadow-focus-warm-soft: 0 0 0 2px var(--mh-focus-ring);
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;

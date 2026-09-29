@@ -6,15 +6,15 @@ width: 100%;
 .mh-table {
 width: 100%;
   border-collapse: collapse;
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 }
 
 .mh-table th,
 .mh-table td {
 height: 50px;
   padding: 0 12px;
-  border-bottom: 1px solid var(--mh-line-panel-subtle);
-  color: var(--mh-copy);
+  border-bottom: 1px solid var(--mh-line-subtle);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   text-align: left;
   white-space: nowrap;
@@ -22,25 +22,25 @@ height: 50px;
 
 .mh-table th {
 height: 38px;
-  background: var(--mh-bg);
-  color: var(--mh-ink-secondary-slate);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-table tbody tr:nth-child(even) {
-background: var(--mh-surface-panel-muted);
+background: var(--mh-surface-subtle);
 }
 
 .mh-table tbody tr:hover {
-background: var(--mh-hover-warm);
+background: var(--mh-accent-wash);
 }
 
 .mh-table__note {
 margin: 10px 0 0;
-  color: var(--mh-muted);
-  font-family: var(--mh-font);
+  color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
 }
 

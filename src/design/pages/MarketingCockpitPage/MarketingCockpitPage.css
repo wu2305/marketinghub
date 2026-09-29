@@ -8,16 +8,16 @@ display: grid;
   border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
-  color: var(--mh-reports-muted);
+  color: var(--mh-text-muted);
 }
 
 .mh-empty-state strong {
-color: var(--mh-reports-ink);
+color: var(--mh-text-strong);
 }
 
 .mh-page--cockpit {
-background: var(--mh-surface-neutral-cool);
-  --mh-live-toolbar-top: calc(var(--mh-header) + 16px);
+background: var(--mh-surface-page);
+  --mh-live-toolbar-top: calc(var(--mh-layout-header-height) + 16px);
 }
 
 .mh-page__search {

@@ -8,7 +8,7 @@ display: inline-flex;
   border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   cursor: pointer;
 }
 
@@ -27,8 +27,8 @@ width: 28px;
 
 .mh-assistant__skill:hover,
 .mh-assistant__skill:focus-visible {
-border-color: var(--mh-gold-medium);
-  background: var(--mh-hover-warm);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
   outline: 0;
 }
 
@@ -48,7 +48,7 @@ position: absolute;
   align-items: flex-end;
   max-width: calc(100vw - 44px);
   gap: 8px;
-  color: var(--mh-ink-ai);
+  color: var(--mh-text-strong);
 }
 
 .mh-skill__categories,
@@ -90,8 +90,8 @@ display: flex;
   border: 0;
   border-radius: var(--mh-radius-md);
   background: transparent;
-  color: var(--mh-ink-ai);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.25;
@@ -113,7 +113,7 @@ display: flex;
   height: 16px;
   align-items: center;
   justify-content: center;
-  color: var(--mh-muted-ai);
+  color: var(--mh-text-muted);
 }
 
 .mh-skill__category-icon svg {
@@ -126,7 +126,7 @@ margin-top: 4px;
 }
 
 .mh-skill__category > span:last-child {
-color: var(--mh-muted-ai);
+color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xl);
   line-height: 1;
 }
@@ -134,7 +134,7 @@ color: var(--mh-muted-ai);
 .mh-skill__category:hover,
 .mh-skill__category:focus-visible,
 .mh-skill__category.is-active {
-background: var(--mh-fill-hover);
+background: var(--mh-surface-muted);
   outline: 0;
 }
 
@@ -145,8 +145,8 @@ display: flex;
   height: 38px;
   padding: 0 10px;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-fill-soft);
-  color: var(--mh-muted-ai);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-muted);
 }
 
 .mh-skill__search svg {
@@ -160,14 +160,14 @@ min-width: 0;
   width: 100%;
   border: 0;
   background: transparent;
-  color: var(--mh-ink-ai);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   outline: 0;
 }
 
 .mh-skill__search input::placeholder {
-color: var(--mh-search-placeholder);
+color: var(--mh-text-faint);
 }
 
 .mh-skill__list {
@@ -186,8 +186,8 @@ display: grid;
   border: 1px solid transparent;
   border-radius: var(--mh-radius-md);
   background: transparent;
-  color: var(--mh-ink-ai);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   text-align: left;
   cursor: pointer;
 }
@@ -195,7 +195,7 @@ display: grid;
 .mh-skill__option:hover,
 .mh-skill__option:focus-visible,
 .mh-skill__option.is-selected {
-background: var(--mh-fill-soft);
+background: var(--mh-surface-page);
   outline: 0;
 }
 
@@ -223,7 +223,7 @@ display: grid;
   place-items: center;
   position: relative;
   border-radius: var(--mh-radius-pill);
-  color: var(--mh-ink-ai);
+  color: var(--mh-text-strong);
   opacity: 0;
   transition: opacity 120ms ease;
 }
@@ -241,7 +241,7 @@ content: "置顶";
   display: none;
   padding: 5px 8px;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-tooltip);
+  background: var(--mh-surface-inverse);
   color: var(--mh-surface);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
@@ -261,7 +261,7 @@ opacity: 1;
 
 .mh-skill__option small {
 overflow: hidden;
-  color: var(--mh-muted-ai);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -270,7 +270,7 @@ overflow: hidden;
 
 .mh-skill__empty {
 padding: 18px 8px;
-  color: var(--mh-muted-ai);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   text-align: center;
 }
@@ -293,8 +293,8 @@ display: flex;
   border: 0;
   border-radius: var(--mh-radius-md);
   background: transparent;
-  color: var(--mh-ink-ai);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-align: left;
@@ -302,7 +302,7 @@ display: flex;
 }
 
 .mh-skill__action > span:last-child {
-color: var(--mh-ink-ai);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-lg);
   line-height: 1;
 }
@@ -318,7 +318,7 @@ display: inline-flex;
 flex: 0 0 13px;
   width: 13px;
   height: 13px;
-  color: var(--mh-gold-deep);
+  color: var(--mh-accent-ink);
 }
 
 .mh-skill__action-label span {
@@ -329,7 +329,7 @@ overflow: hidden;
 
 .mh-skill__action:hover,
 .mh-skill__action:focus-visible {
-background: var(--mh-fill-soft);
+background: var(--mh-surface-page);
   outline: 0;
 }
 
@@ -338,14 +338,14 @@ background: var(--mh-fill-soft);
 .mh-copilot__command-actions .mh-assistant__skill {
 width: 32px;
   height: 32px;
-  border-color: var(--mh-line-control-soft);
-  color: var(--mh-ink-black-soft);
+  border-color: var(--mh-line);
+  color: var(--mh-text-strong);
 }
 
 .mh-copilot__command-actions .mh-assistant__skill:hover,
 .mh-copilot__command-actions .mh-assistant__skill:focus-visible {
-border-color: var(--mh-line-control-hover);
-  background: var(--mh-surface-control-muted);
+border-color: var(--mh-line-strong);
+  background: var(--mh-surface-muted);
 }
 
 .mh-copilot__command-actions .mh-assistant__skill svg {

@@ -6,7 +6,7 @@ display: grid;
   gap: 12px;
   padding: 13px 0;
   border-bottom: 1px solid var(--mh-line);
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 }
 
 .mh-task:last-child {
@@ -14,12 +14,12 @@ border-bottom: 0;
 }
 
 .mh-task strong {
-color: var(--mh-ink);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xs);
 }
 
 .mh-task p {
 margin: 4px 0 0;
-  color: var(--mh-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
 }

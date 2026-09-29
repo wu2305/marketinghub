@@ -2,8 +2,8 @@
 border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-pill);
   background: transparent;
-  color: var(--mh-copy);
-  font-family: var(--mh-font);
+  color: var(--mh-text);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
@@ -14,13 +14,13 @@ padding: 8px 14px;
 }
 
 .mh-suggestion:hover {
-border-color: var(--mh-gold-medium);
-  background: var(--mh-surface-gold-hover-soft);
-  color: var(--mh-ink-strong);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
+  color: var(--mh-text-strong);
 }
 
 .mh-assistant--drawer .mh-assistant__suggestions .mh-suggestion {
-color: var(--mh-copy-ai);
+color: var(--mh-text);
 }
 
 @media (max-width: 760px) {

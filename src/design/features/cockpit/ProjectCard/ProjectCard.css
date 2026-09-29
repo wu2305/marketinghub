@@ -8,8 +8,8 @@ display: flex;
   border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
-    var(--mh-reports-card-edge) border-box;
-  box-shadow: var(--mh-reports-card-shadow);
+    var(--mh-accent-fill) border-box;
+  box-shadow: var(--mh-shadow-raised);
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease,
@@ -18,7 +18,7 @@ display: flex;
 
 .mh-project-card:hover {
 transform: translateY(-2px);
-  box-shadow: var(--mh-reports-card-shadow-hover);
+  box-shadow: var(--mh-shadow-overlay);
 }
 
 .mh-project-card__image {
@@ -27,7 +27,7 @@ position: relative;
   height: 132px;
   overflow: hidden;
   border-bottom: 1px solid var(--mh-line);
-  background: var(--mh-reports-media-bg);
+  background: var(--mh-surface-muted);
 }
 
 .mh-project-card__image::after {
@@ -67,8 +67,8 @@ display: flex;
 
 .mh-project-card__topline > span:first-child {
 overflow: hidden;
-  color: var(--mh-reports-blue);
-  font-family: var(--mh-font);
+  color: var(--mh-info);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-overflow: ellipsis;
@@ -78,8 +78,8 @@ overflow: hidden;
 
 .mh-project-card h3 {
 margin: 13px 0 0;
-  color: var(--mh-reports-ink);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-2xl);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
@@ -92,7 +92,7 @@ color: inherit;
 
 .mh-project-card h3 a:hover,
 .mh-project-card h3 a:focus-visible {
-color: var(--mh-reports-title-hover);
+color: var(--mh-accent-ink);
 }
 
 .mh-project-card p {
@@ -100,8 +100,8 @@ display: -webkit-box;
   overflow: hidden;
   min-height: 61px;
   margin: 9px 0 0;
-  color: var(--mh-reports-copy);
-  font-family: var(--mh-font);
+  color: var(--mh-text);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   line-height: 1.55;
   -webkit-box-orient: vertical;
@@ -120,8 +120,8 @@ display: grid;
 
 .mh-project-card__footer > span {
 overflow: hidden;
-  color: var(--mh-reports-muted);
-  font-family: var(--mh-font);
+  color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -135,9 +135,9 @@ display: inline-flex;
   padding: 0 14px;
   border: none;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-reports-gold-btn);
-  color: var(--mh-ink-strong);
-  font-family: var(--mh-font);
+  background: var(--mh-accent-fill);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-decoration: none;

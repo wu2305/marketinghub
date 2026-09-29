@@ -1,24 +1,24 @@
 .mh-field {
 display: grid;
   gap: 6px;
-  color: var(--mh-ink);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-field__required {
-color: var(--mh-red);
+color: var(--mh-danger);
 }
 
 .mh-field__hint {
-color: var(--mh-muted);
+color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-field.is-invalid .mh-field__hint {
-color: var(--mh-red);
+color: var(--mh-danger);
 }
 
 .mh-form__grid .mh-field:nth-child(n + 3) {

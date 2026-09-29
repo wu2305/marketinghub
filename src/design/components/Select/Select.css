@@ -1,5 +1,5 @@
 .mh-select {
-font-family: var(--mh-font);
+font-family: var(--mh-font-sans);
   letter-spacing: 0;
 }
 
@@ -11,9 +11,9 @@ outline: 2px solid var(--mh-focus-ring);
 .mh-select {
 width: 100%;
   border: 1px solid var(--mh-line-strong);
-  border-radius: var(--mh-radius-control);
+  border-radius: var(--mh-radius-sm);
   background: var(--mh-surface);
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
 }
 
@@ -29,18 +29,18 @@ height: 32px;
 }
 
 .mh-select:focus {
-border-color: var(--mh-gold-medium);
-  box-shadow: var(--mh-shadow-focus-warm-soft);
+border-color: var(--mh-accent);
+  box-shadow: 0 0 0 2px var(--mh-focus-ring);
   outline: 0;
 }
 
 .mh-select:disabled {
 cursor: not-allowed;
-  background: var(--mh-surface-neutral-cool);
-  color: var(--mh-faint);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-faint);
 }
 
 .mh-select.is-invalid {
-border-color: var(--mh-red);
+border-color: var(--mh-danger);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mh-danger) 12%, transparent);
 }
