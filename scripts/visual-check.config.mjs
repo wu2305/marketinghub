@@ -25,6 +25,7 @@ import p14 from "./visual-check/scenarios/p14.mjs";
 import p15 from "./visual-check/scenarios/p15.mjs";
 import p16 from "./visual-check/scenarios/p16.mjs";
 import p17 from "./visual-check/scenarios/p17.mjs";
+import consumer from "./visual-check/scenarios/consumer.mjs";
 
 export default [
   ...p01,
@@ -44,4 +45,5 @@ export default [
   ...p15,
   ...p16,
   ...p17,
+  ...consumer,
 ];

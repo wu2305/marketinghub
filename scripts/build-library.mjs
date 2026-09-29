@@ -50,7 +50,11 @@ if (errors.length) {
 /* A TypeScript consumer compiled against the emitted declarations: emitting
  * them is not proof they accept real usage (a forwardRef without a typed
  * props object compiled to `RefAttributes<any>` and rejected every prop). */
-const consumer = ts.createProgram([path.join(root, "examples", "types", "consumer.tsx")], {
+const consumerFiles = [
+  path.join(root, "examples", "types", "consumer.tsx"),
+  path.join(root, "examples", "consumer", "BusinessTermApp.tsx"),
+];
+const consumer = ts.createProgram(consumerFiles, {
   strict: true,
   noEmit: true,
   skipLibCheck: true,
@@ -67,7 +71,7 @@ const consumer = ts.createProgram([path.join(root, "examples", "types", "consume
 });
 const consumerErrors = ts.getPreEmitDiagnostics(consumer).filter((item) => item.category === ts.DiagnosticCategory.Error);
 if (consumerErrors.length) {
-  console.error("examples/types/consumer.tsx does not type-check against dist/types:");
+  console.error("The TypeScript consumers in examples/ do not type-check against dist/types:");
   console.error(ts.formatDiagnostics(consumerErrors, {
     getCanonicalFileName: (file) => file,
     getCurrentDirectory: () => root,
@@ -75,4 +79,12 @@ if (consumerErrors.length) {
   }));
   process.exit(1);
 }
-console.log("dist/ ESM, CSS and declarations built; TypeScript consumer type-checks");
+/* The consumer-built pages must also run on the build, not only on the source
+ * entries `npm test` uses. */
+const consumerRun = spawnSync(process.execPath, [path.join(root, "node_modules", "vitest", "vitest.mjs"), "run", "examples/consumer"], {
+  cwd: root,
+  stdio: "inherit",
+  env: { ...process.env, MH_PACKAGE: "dist" },
+});
+if (consumerRun.status !== 0) process.exit(consumerRun.status ?? 1);
+console.log("dist/ ESM, CSS and declarations built; TypeScript consumers type-check; consumer pages pass on dist/");
