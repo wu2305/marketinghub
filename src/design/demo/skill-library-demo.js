@@ -82,7 +82,7 @@ export function useSkillLibraryDemo({ content = SKILL_LIBRARY, records = SKILL_L
     toast,
     form: {
       mode, values: form, preview,
-      onChange: ({ key, value }) => { setForm((current) => ({ ...current, [key]: value })); onChange?.({ key, value }); },
+      onChange: ({ field, value }) => { setForm((current) => ({ ...current, [field]: value })); onChange?.({ key: field, value }); },
       onSubmit: ({ values }) => { const id = persist("Under Review"); setMode("list"); showToast(content.labels.submittedToast); onSubmit?.({ id, status: "Under Review", values }); },
       onCancel: ({ reason }) => { setMode("list"); onCancel?.({ reason }); },
       onAutoFill: ({ field }) => { const text = content.labels.autoFillText?.[field]; if (text === undefined) return; setForm((current) => ({ ...current, [field]: text })); onAutoFill?.({ field }); },
