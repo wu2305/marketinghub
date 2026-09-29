@@ -3,7 +3,7 @@ import React from "react";
 import { Icon } from "../../../icons.jsx";
 import { ScenarioGovernance } from "../../../components/ScenarioGovernance/index.jsx";
 import { ScenarioStructure } from "../../../components/ScenarioStructure/index.jsx";
-import { ScenarioPreview } from "../../../components/ScenarioPreview/index.jsx";
+import { ExamplePreview } from "../../../components/ExamplePreview/index.jsx";
 import "./ScenarioDetailWorkspace.css";
 
 /** @type {readonly ["content", "related", "ai-check", "usage", "version", "activity"]} */
@@ -38,7 +38,7 @@ function ContentPanel({ record, labels, previewOpen, onTogglePreview, hrefFor, o
     <p className="mh-scenario-detail__description">{record.purpose}</p>
     <div className="mh-scenario-detail__structure"><ScenarioStructure record={record} fields={labels.structure} /></div>
     <section className="mh-scenario-detail__governance"><h3>{labels.governance}</h3><ScenarioGovernance record={record} fields={labels.governanceFields} layout="columns" userFallback={labels.userFallback} /></section>
-    <section className="mh-scenario-detail__preview"><ScenarioPreview title={labels.preview} showLabel={labels.showPreview} hideLabel={labels.hidePreview} questionLabel={labels.exampleQuestion} question={record.previewQuestion} output={record.previewOutput} open={previewOpen} onChange={onTogglePreview} /></section>
+    <section className="mh-scenario-detail__preview"><ExamplePreview variant="view" title={labels.preview} actionLabel={previewOpen ? labels.hidePreview : labels.showPreview} questionLabel={labels.exampleQuestion} question={record.previewQuestion} output={previewOpen ? record.previewOutput : null} onToggle={onTogglePreview} /></section>
     <a className="mh-scenario-detail__usage-link" href="#"><DetailGlyph name="report" />{labels.usageLink.replace("{reports}", record.usedInReports).replace("{scenarios}", record.usedInScenarios)}</a>
   </div>;
 }

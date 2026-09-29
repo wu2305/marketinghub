@@ -264,7 +264,7 @@ export { ScenarioEditPage } from "./pages/ScenarioEditPage/index.jsx";
 export { ScenarioEditForm } from "./features/scenario-edit/ScenarioEditForm/index.jsx";
 export { ScenarioGovernance, scenarioGovernanceLayouts } from "./components/ScenarioGovernance/index.jsx";
 export { ScenarioStructure } from "./components/ScenarioStructure/index.jsx";
-export { ScenarioPreview } from "./components/ScenarioPreview/index.jsx";
+export { ExamplePreview, examplePreviewVariants } from "./components/ExamplePreview/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./pages/MetricDictionaryPage/index.jsx";
 export { ScenarioLibraryPage, skillLibraryModes, skillStatuses } from "./pages/ScenarioLibraryPage/index.jsx";

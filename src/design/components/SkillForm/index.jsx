@@ -45,7 +45,7 @@ export function SkillForm({ labels, values = {}, scopes = [], errors = {}, previ
         {field("owner", <input {...common("owner")} type="text" placeholder={labels.ownerPlaceholder} />)}
       </div>
       <section className="mh-skill-form__structure"><h3>{labels.structure}</h3><div className="mh-skill-form__cards">{children}</div></section>
-      <ExamplePreview title={labels.preview} runLabel={labels.runPreview} questionLabel={labels.question} questionPlaceholder={labels.questionPlaceholder} question={values.question || ""} output={preview} onRun={onRunPreview} onQuestionChange={({ value }) => onChange?.({ field: "question", value })} />
+      <div className="mh-skill-form__preview"><ExamplePreview title={labels.preview} actionLabel={labels.runPreview} questionLabel={labels.question} questionPlaceholder={labels.questionPlaceholder} question={values.question || ""} output={preview} onRun={onRunPreview} onQuestionChange={({ value }) => onChange?.({ field: "question", value })} /></div>
       <footer className="mh-skill-form__footer"><span className="mh-skill-form__saved"><Icon name="clock" />{labels.saved}</span><div className="mh-skill-form__actions">
         {cancelHref === undefined
           ? <button type="button" onClick={() => onCancel?.({ reason: "cancel" })}><Icon name="arrow-left" />{labels.cancel}</button>
