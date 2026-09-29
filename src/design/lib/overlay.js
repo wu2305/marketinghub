@@ -27,6 +27,29 @@ function focusLayer(entry) {
   target.focus();
 }
 
+// The ancestors of each element that focus may return to, captured when the
+// layer opens. A confirm that deletes its opener (the item's Delete button)
+// removes it before the layer closes; focus then goes to the first focusable
+// element of the nearest ancestor still in the document (the list), not <body>.
+const lineage = new WeakMap();
+
+function remember(element) {
+  if (element?.parentElement && !lineage.has(element)) {
+    const chain = [];
+    for (let node = element.parentElement; node && node !== element.ownerDocument.body; node = node.parentElement) chain.push(node);
+    lineage.set(element, chain);
+  }
+  return element;
+}
+
+function returnTarget(previous) {
+  if (!previous || previous.isConnected) return previous;
+  for (const ancestor of lineage.get(previous) || []) {
+    if (ancestor.isConnected) return focusables(ancestor)[0] || null;
+  }
+  return null;
+}
+
 function top(state) {
   return state.stack.at(-1);
 }
@@ -138,7 +161,7 @@ export function useOverlayLayer({ open, onClose, layerRef, initialFocusRef, retu
       originalZ: surface.style.zIndex,
       originalScrimZ: scrim?.style.zIndex,
       naturalZ: Number.parseInt(doc.defaultView?.getComputedStyle(surface).zIndex, 10) || 0,
-      previous: returnFocusRef?.current ?? doc.activeElement,
+      previous: remember(returnFocusRef?.current ?? doc.activeElement),
       initialFocusRef, onCloseRef, trapFocus, batch: state.batch,
     };
     entryRef.current = { doc, entry };
@@ -160,7 +183,7 @@ export function useOverlayLayer({ open, onClose, layerRef, initialFocusRef, retu
     else {
       const upper = state.stack[insertAt];
       entry.previous = upper.previous;
-      upper.previous = initialFocusRef?.current ?? layer;
+      upper.previous = remember(initialFocusRef?.current ?? layer);
       state.stack.splice(insertAt, 0, entry);
     }
     syncPaintOrder(state);
@@ -184,7 +207,8 @@ export function useOverlayLayer({ open, onClose, layerRef, initialFocusRef, retu
       const next = top(state);
       const shouldRestore = layer.contains(active) || active === doc.body || active === doc.documentElement;
       if (!shouldRestore) return;
-      if (entry.previous?.isConnected && (!next || next.layer.contains(entry.previous))) entry.previous.focus();
+      const target = returnTarget(entry.previous);
+      if (target && (!next || next.layer.contains(target))) target.focus();
       else if (next) focusLayer(next);
     };
   }, [open, layerRef, initialFocusRef, returnFocusRef, trapFocus]);

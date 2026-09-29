@@ -58,9 +58,9 @@ code, not a layout. Tables are Review Center, Feedback & Quality and Skill Libra
 | facet (single) | `Select` | yes | for single-choice facets (type, time) |
 | count | part of `LibraryToolbar` | — | always visible: "{shown} of {total} {unit}" or "{n} items" (R7) |
 | create | `Button` variant primary | yes, **needs `href`** | only when the collection allows creation. Creation navigates, so `Button` gains an optional `href` that renders `<a href>` with the same styling (AGENTS §3.1: navigation is a link) |
-| list | **`LibraryList`** (new) | no | one component, `layout: "cards" \| "table"`. `cards` renders a `<ul>` grid of `LibraryItem` (1 column below 760 px); `table` renders `DataTable` with the caller's `columns`. Both render `LibraryEmpty` when there are no items and call `onOpen({ id })`. Views never render `DataTable` or the grid directly |
+| list | **`LibraryList`** (new) | no | one component, `layout: "cards" \| "list" \| "table"`. `cards` renders a `<ul>` grid of `LibraryItem` (1 column below 760 px); `list` renders the same items in one column (Principles, user decision 2026-09-28, dispositions PR-04); `table` renders `DataTable` with the caller's `columns`. Both render `LibraryEmpty` when there are no items and call `onOpen({ id })`. Views never render `DataTable` or the grid directly |
 | list, table | `DataTable` | yes, **needs extension** | today it only takes `columns`, `rows`, `caption` (1 consumer: Campaign). Add: `onOpen({id})` for row activation (click/Enter/Space on the row, B5), `emptyState` slot, and a 760 px breakpoint where each row stacks as a labelled card. Campaign keeps working unchanged |
-| item (card) | **`LibraryItem`** (new) | no | props: `title`, `draft`, `description`, `meta` (`[{ label, value }]`), `status` (StatusBadge props), `actions` (ItemActions props). `children` is the one slot for view-specific content marked **keep** in §5 (e.g. synonym chips). Whole card opens detail |
+| item (card) | **`LibraryItem`** (new) | no | props: `title`, `draft`, `selected` (the item the surrounding view shows; Data Model domains, WP7e DM-02), `description`, `meta` (`[{ label, value }]`), `status` (StatusBadge props), `actions` (ItemActions props). `children` is the one slot for view-specific content marked **keep** in §5 (e.g. synonym chips). Whole card opens detail |
 | status | `StatusBadge` | yes | availability uses tone success/neutral; workflow uses the badge's workflow tones |
 | actions | **`ItemActions`** (new, replaces `features/interpreter/KnowledgeActions`) | partly | icon buttons; gating comes from `lib/governance.js`, never computed in the view |
 | empty | **`LibraryEmpty`** (new) | no | two messages: "no matches" (with a clear-filters action) vs "nothing here yet" |
@@ -137,7 +137,7 @@ default, one filtered, one empty, one drawer open, one dialog, narrow. Everythin
 | detail drawer | page story (content is per view) |
 | narrow (390 px) | `LibraryList` both layouts |
 
-Unit tests (vitest): `lib/governance.js` truth table (creator × availability × draft × action = 24 rows),
+Unit tests (vitest): `lib/governance.js` truth table (creator × {enabled, disabled, draft} × action = 18 rows, guide WP4),
 filter/count function, and one render test per new component.
 
 ## 5. Per-view configuration: purposeful variation vs accident

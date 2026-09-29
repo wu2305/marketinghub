@@ -5,6 +5,7 @@
 // Only reads files. Counts are distinct values unless the label says "uses".
 import fs from "node:fs";
 import path from "node:path";
+import { rawFoundationValues } from "./css-metrics.mjs";
 
 const ROOT = path.resolve("src/design");
 const walk = (dir) =>
@@ -22,20 +23,10 @@ const rootBlock = tokensCss.slice(tokensCss.indexOf(":root {"));
 const tokenCount = [...rootBlock.matchAll(/(--mh-[a-z0-9-]+)\s*:/g)].length;
 const budget = JSON.parse(read(path.join(ROOT, "css-budget.json")));
 
-const componentCss = files.filter((f) => f.endsWith(".css") && !f.endsWith("tokens.css"));
-const raw = { "font-size": new Set(), "font-weight": new Set(), "border-radius": new Set(), "box-shadow": new Set(), "color literal": new Set() };
-for (const file of componentCss) {
-  for (const [, prop, value] of stripComments(read(file)).matchAll(/([a-z-]+)\s*:\s*([^;{}]+);/g)) {
-    const v = value.replace(/!important/, "").trim();
-    if (v.startsWith("var(") || ["inherit", "0", "none", "initial", "unset"].includes(v)) continue;
-    if (prop === "font-size") raw["font-size"].add(v);
-    if (prop === "font-weight") raw["font-weight"].add(v);
-    // composite values count only while they still hold a literal (see css-budget.test.js)
-    if (prop.endsWith("radius") && !["50%", "999px"].includes(v) && /(^|[\s(])[1-9][\d.]*(px|%|rem|em)/.test(v.replace(/var\([^)]*\)/g, ""))) raw["border-radius"].add(v);
-    if (prop === "box-shadow" && /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(/i.test(v)) raw["box-shadow"].add(v);
-    for (const c of v.match(/#[0-9a-f]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/gi) || []) raw["color literal"].add(c.toLowerCase().replace(/\s/g, ""));
-  }
-}
+const labels = { fontSize: "font-size", fontWeight: "font-weight", radius: "border-radius", shadow: "box-shadow", color: "color literal" };
+const pending = budget.pendingMigration || [];
+const gated = rawFoundationValues(ROOT, pending);
+const all = rawFoundationValues(ROOT);
 
 const uiJsx = files.filter((f) => /^(features|pages)\//.test(rel(f)) && f.endsWith("index.jsx"));
 const uses = (re) => uiJsx.reduce((n, f) => n + (read(f).match(re) || []).length, 0);
@@ -53,7 +44,8 @@ const allStories = files.filter((f) => f.endsWith(".stories.jsx")).reduce((n, f)
 const rows = [
   ["tokens", tokenCount],
   ["legacy-named tokens (css-budget exemptions)", budget.legacyPrefixExemptions.length],
-  ...Object.entries(raw).map(([k, set]) => [`raw ${k} values outside tokens.css`, set.size]),
+  // Same numbers the CSS budget test enforces; files still in pendingMigration add the rest.
+  ...Object.entries(labels).map(([k, label]) => [`raw ${label} values outside tokens.css${all[k] > gated[k] ? ` (+${all[k] - gated[k]} in pendingMigration)` : ""}`, gated[k]]),
   ["raw <button> uses in features/pages", uses(/<button\b/g)],
   ["raw <select> uses in features/pages", uses(/<select\b/g)],
   ["raw <input> uses in features/pages", uses(/<input\b/g)],

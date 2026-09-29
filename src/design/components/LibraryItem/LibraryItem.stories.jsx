@@ -1,6 +1,6 @@
 import { LibraryItem } from "./index.jsx";
 import { callbackProp, prop } from "../../lib/story-helpers.js";
-import { records, toItem } from "../../lib/library-story-data.js";
+import { records, toItem } from "../../demo/library-story-data.js";
 
 export default {
   title: "Organisms/Library/LibraryItem",

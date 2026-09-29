@@ -1,19 +1,33 @@
 // Lists Storybook stories whose text nodes fall back to a non-design-system
 // font (usually the browser default serif). Serve a built Storybook first:
 //   (cd storybook-static && python3 -m http.server 6007)
-//   node scripts/font-probe.mjs [http://127.0.0.1:6007]
+//   node scripts/font-probe.mjs [http://127.0.0.1:6007] [--affected [REF]]
+// --affected probes only the stories a change since REF (default the GitHub
+// main) can reach through imports (scripts/affected.mjs).
 // Prints one line per affected story; no output means every text node uses a
 // design-system (or declared CJK/system fallback) font.
 import { chromium } from "playwright";
+import { affectedStoryIds, changedFiles, defaultBase, unreachedSources } from "./affected.mjs";
 
-const base = process.argv[2] || "http://127.0.0.1:6007";
+const args = process.argv.slice(2);
+const at = args.indexOf("--affected");
+const affectedBase = at < 0 ? null : (args[at + 1] && !args[at + 1].startsWith("--") ? args[at + 1] : defaultBase());
+const base = args.find((arg, i) => arg.startsWith("http") && i !== at + 1) || "http://127.0.0.1:6007";
 const allowed = /DIN 2014|BentonMod|PingFang|YaHei|-apple-system|Arial/i;
 const index = await (await fetch(`${base}/index.json`)).json();
+const changed = affectedBase ? changedFiles(affectedBase) : [];
+const ids = affectedBase ? affectedStoryIds(index, changed) : null;
+const unreached = ids ? unreachedSources(index, changed) : [];
+if (unreached.length) {
+  console.error(`--affected: these changed sources reach no story: ${unreached.join(", ")}`);
+  process.exit(2);
+}
+if (affectedBase) console.error(`--affected ${affectedBase}: ${ids ? `${ids.size} stories` : "global change, all stories"}`);
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 for (const entry of Object.values(index.entries)) {
-  if (entry.type !== "story") continue;
+  if (entry.type !== "story" || (ids && !ids.has(entry.id))) continue;
   await page.goto(`${base}/iframe.html?viewMode=story&id=${entry.id}`);
   await page.waitForTimeout(700);
   const offenders = await page.evaluate((source) => {

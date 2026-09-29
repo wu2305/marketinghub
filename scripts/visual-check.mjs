@@ -24,13 +24,21 @@
  *
  * Usage:
  *   npm run build-storybook   # first, so storybook-static exists and is stamped
- *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--jobs N] [--verbose]
- *   node scripts/visual-check.mjs --negative [--out DIR] [--jobs N]
+ *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--affected [REF]] [--jobs N] [--verbose]
+ *   node scripts/visual-check.mjs --negative [--out DIR] [--affected [REF]] [--jobs N]
+ * --affected keeps only scenarios whose story a change since REF (default the
+ * GitHub main) can reach through imports, plus every scenario of a page whose
+ * scenario file changed; a global change (config, dependencies, these scripts)
+ * runs everything (scripts/affected.mjs).
+ * The original demo (index.html, assets/**) is frozen, so a passing original
+ * side is cached under node_modules/.cache/mh-visual-original, keyed by the
+ * original files, the scenario's original steps, viewport, this runner and the
+ * browser version. Failures are never cached. --fresh-original ignores the cache.
  *   node scripts/visual-check.mjs --review <out> <scenarioId> pass|fail "note"
  */
 import http from "node:http";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { availableParallelism } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -39,6 +47,7 @@ import { chromium } from "playwright";
 import scenarios, { BASELINE, CONSOLE_ALLOW } from "./visual-check.config.mjs";
 import negatives from "./visual-check.negative.mjs";
 import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
+import { affectedStoryIds, changedFiles, changedScenarioPages, defaultBase, unreachedSources } from "./affected.mjs";
 
 const STATIC = path.join(ROOT, "storybook-static");
 const STAMP = path.join(STATIC, "mh-build-stamp.json");
@@ -63,9 +72,13 @@ const flag = (name) => {
 const OUT = flag("out") || "/tmp/mh-visual";
 const ONLY = flag("only");
 const NEGATIVE = args.includes("--negative");
+const AFFECTED_AT = args.indexOf("--affected");
+const AFFECTED_BASE = AFFECTED_AT < 0 ? null : (args[AFFECTED_AT + 1] && !args[AFFECTED_AT + 1].startsWith("--") ? args[AFFECTED_AT + 1] : defaultBase());
 const VERBOSE = args.includes("--verbose");
 const JOBS = Math.max(1, Number(flag("jobs") || process.env.MH_VC_JOBS || Math.min(4, availableParallelism())));
 const REVIEW_AT = args.indexOf("--review");
+const FRESH_ORIGINAL = args.includes("--fresh-original");
+const ORIGINAL_CACHE = path.join(ROOT, "node_modules", ".cache", "mh-visual-original");
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 const pageOf = (id) => id.split("-")[0];
@@ -147,6 +160,37 @@ for (const e of Object.values(index.entries)) {
 const configHash = createHash("sha256")
   .update(CONFIG_FILES.map((f) => path.relative(ROOT, f) + "\0" + readFileSync(f, "utf8")).join("\0"))
   .digest("hex");
+
+// Everything an original-side result depends on except the scenario itself.
+const originalBase = createHash("sha256")
+  .update(sourceFingerprint(["index.html", "assets"]).hash)
+  .update(readFileSync(fileURLToPath(import.meta.url)))
+  .update(readFileSync(path.join(ROOT, "scripts", "visual-check", "common.mjs")))
+  .update(readJson(path.join(ROOT, "node_modules", "playwright-core", "package.json")).version)
+  .digest("hex");
+
+function originalKey(scenario, viewport, layoutSels) {
+  return createHash("sha256")
+    .update(originalBase)
+    .update(JSON.stringify({ original: scenario.original, viewport, layoutSels, console: (CONSOLE_ALLOW || []).filter((a) => a.side === "original" && (!a.scenario || a.scenario === scenario.id)) }))
+    .digest("hex");
+}
+
+function cachedOriginal(key, name) {
+  if (FRESH_ORIGINAL) return null;
+  const meta = path.join(ORIGINAL_CACHE, `${key}.json`);
+  const shot = path.join(ORIGINAL_CACHE, `${key}.png`);
+  if (!existsSync(meta) || !existsSync(shot)) return null;
+  copyFileSync(shot, path.join(OUT, `${name}.png`));
+  return { ...readJson(meta), shot: `${name}.png`, cached: true };
+}
+
+function storeOriginal(key, name, res) {
+  if (res.errors.length) return;
+  mkdirSync(ORIGINAL_CACHE, { recursive: true });
+  copyFileSync(path.join(OUT, `${name}.png`), path.join(ORIGINAL_CACHE, `${key}.png`));
+  writeFileSync(path.join(ORIGINAL_CACHE, `${key}.json`), JSON.stringify(res));
+}
 
 function serve(dir, port, label) {
   const handler = sirv(dir, { dev: true, etag: true });
@@ -323,6 +367,13 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
     const response = await page.goto(url, { waitUntil: "load", timeout: 30000 });
     if (!response || !response.ok()) err(`navigation failed: HTTP ${response?.status()}`);
     if (side === "story") await checkStoryHealth(page, res, "load");
+    // The original pages finish initialising on timers after load (types.js
+    // re-renders the active view 60 ms later and discards typed input), so
+    // actions wait for the network and those timers before the first step.
+    if (side === "original" && spec.actions?.length) {
+      await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => {});
+      await page.waitForTimeout(250);
+    }
 
     phase = "behavior";
     for (const step of spec.actions || []) {
@@ -379,7 +430,12 @@ async function runSide(browser, name, spec, url, viewport, side, scenarioId, lay
           if (!t.includes(exp.text)) err(`expect text "${exp.text}" not found in ${exp.sel}`);
         }
         if (exp.count !== undefined) {
-          const n = await page.locator(exp.sel).count();
+          // Poll like text: a filter or search may still be re-rendering the list.
+          let n = 0;
+          for (const deadline = Date.now() + 8000; ; await page.waitForTimeout(100)) {
+            n = await page.locator(exp.sel).count();
+            if (n === exp.count || Date.now() > deadline) break;
+          }
           if (n !== exp.count) err(`expect count ${exp.count} got ${n} for ${exp.sel}`);
         }
         if (exp.attr) {
@@ -512,6 +568,27 @@ if (NEGATIVE) {
 } else {
   list = ONLY ? scenarios.filter((s) => s.id.includes(ONLY)) : scenarios;
 }
+if (AFFECTED_BASE) {
+  const changed = changedFiles(AFFECTED_BASE);
+  const ids = affectedStoryIds(readJson(INDEX), changed);
+  const unreached = ids ? unreachedSources(readJson(INDEX), changed) : [];
+  if (unreached.length) {
+    console.error(`--affected: these changed sources reach no story, so no scenario can check them: ${unreached.join(", ")}`);
+    process.exit(2);
+  }
+  const pages = changedScenarioPages(changed);
+  const allNegatives = NEGATIVE && changed.includes("scripts/visual-check.negative.mjs");
+  const before = list.length;
+  if (ids && !allNegatives) {
+    const baseOf = (s) => (NEGATIVE ? negatives.find((n) => n.id === s.id).base : s.id);
+    list = list.filter((s) => ids.has(s.story?.id) || pages.has(pageOf(baseOf(s))) || (NEGATIVE && ids.has(scenarios.find((b) => b.id === baseOf(s))?.story?.id)));
+  }
+  console.log(`--affected ${AFFECTED_BASE}: ${changed.length} changed files → ${ids ? `${ids.size} stories, ` : "global change, "}${list.length}/${before} scenarios`);
+  if (list.length === 0) {
+    console.log(changed.length ? "no affected scenarios (changes are outside Storybook: docs, tests or the host, which npm test and host-check cover)" : "no changes");
+    process.exit(0);
+  }
+}
 if (list.length === 0) {
   console.error(`no scenario matches ${NEGATIVE ? "--negative" : `--only ${ONLY}`}`);
   process.exit(2);
@@ -558,8 +635,17 @@ async function runScenario(scenario) {
 
   const origLayoutSels = (scenario.layout || []).map((l) => l.orig);
   const storyLayoutSels = (scenario.layout || []).map((l) => l.story);
+  const origName = `${scenario.id}-original`;
+  const origKey = originalKey(scenario, viewport, origLayoutSels);
+  const runOriginal = async () => {
+    const hit = cachedOriginal(origKey, origName);
+    if (hit) return hit;
+    const res = await runSide(browser, origName, scenario.original, entry.original.url, viewport, "original", scenario.id, origLayoutSels);
+    storeOriginal(origKey, origName, res);
+    return res;
+  };
   const [orig, story] = await Promise.all([
-    runSide(browser, `${scenario.id}-original`, scenario.original, entry.original.url, viewport, "original", scenario.id, origLayoutSels),
+    runOriginal(),
     runSide(browser, `${scenario.id}-story`, scenario.story, entry.story.url, viewport, "story", scenario.id, storyLayoutSels),
   ]);
   entry.original = { ...entry.original, ...orig, storage: scenario.original.storage };
@@ -643,10 +729,15 @@ storyServer.close();
 
 const perPage = Object.entries(summary.perPage).map(([k, v]) => `${k}=${v}`).join(" ");
 if (NEGATIVE) {
-  const unexpected = entries.filter((e) => e.machine === "pass");
-  console.log(`\nnegative checks: ${entries.length - unexpected.length}/${entries.length} failed as expected`);
+  // A mutation is caught only when the story side fails while the original side
+  // passes; an original-side failure proves nothing about the mutation.
+  const unexpected = entries.filter((e) => e.story.errors.length === 0);
+  const inconclusive = entries.filter((e) => e.story.errors.length > 0 && e.original.errors.length > 0);
+  const caught = entries.length - unexpected.length - inconclusive.length;
+  console.log(`\nnegative checks: ${caught}/${entries.length} caught on the story side with a passing original`);
   for (const e of unexpected) console.log(`NEGATIVE CHECK PASSED UNEXPECTEDLY: ${e.id}`);
-  process.exit(unexpected.length ? 1 : 0);
+  for (const e of inconclusive) console.log(`NEGATIVE CHECK INCONCLUSIVE (original side failed): ${e.id}`);
+  process.exit(unexpected.length || inconclusive.length ? 1 : 0);
 }
 console.log(`\nstories: ${indexCounts.stories} docs: ${indexCounts.docs} | scenarios per page: ${perPage}`);
 console.log(

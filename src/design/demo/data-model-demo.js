@@ -226,7 +226,6 @@ export function useDataModelDemo(props = {}) {
     graph,
     graphNodes,
     graphLinks,
-    centralId: central?.id || null,
     graphSize: { width: GRAPH_WIDTH, height: GRAPH_HEIGHT },
     onGraphFit: fit,
     onGraphZoom: zoom,
