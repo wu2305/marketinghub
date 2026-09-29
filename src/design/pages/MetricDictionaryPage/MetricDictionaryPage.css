@@ -20,8 +20,7 @@
 .mh-metric-page__banner-copy p { margin: 4px 0 0; font-size: var(--mh-font-size-md); line-height: 1.5; color: var(--mh-text-muted); }
 .mh-metric-page__layout { display: grid; grid-template-columns: 280px minmax(0,1fr); align-items: start; gap: 20px; }
 .mh-metric-page__sidebar, .mh-metric-page__detail { border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); background: var(--mh-surface); overflow: hidden; }
-.mh-metric-page__search { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--mh-line); color: var(--mh-text-faint); }
-.mh-metric-page__search input { width: 100%; border: 0; outline: 0; font-size: var(--mh-font-size-md); }
+.mh-metric-page__search { padding: 12px 14px; border-bottom: 1px solid var(--mh-line); }
 .mh-metric-page__category-tabs { display: flex; border-bottom: 1px solid var(--mh-line); }
 .mh-metric-page__category-tabs button { flex: 1; border: 0; background: var(--mh-surface); color: var(--mh-text-muted); padding: 11px; font-size: var(--mh-font-size-md); cursor: pointer; }
 .mh-metric-page__category-tabs button.is-active { color: var(--mh-text-strong); font-weight: var(--mh-font-weight-bold); box-shadow: inset 0 -2px var(--mh-accent); }

@@ -1,5 +1,6 @@
 import React from "react";
 import { AssistantDock } from "../../components/AssistantDock/index.jsx";
+import { SearchField } from "../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";
@@ -80,7 +81,7 @@ export function MetricDictionaryPage({
         </section>
         <div className="mh-metric-page__layout">
           <aside className="mh-metric-page__sidebar">
-            <div className="mh-metric-page__search">⌕ <input type="search" placeholder={sidebar.searchPlaceholder} aria-label={sidebar.searchPlaceholder} /></div>
+            <div className="mh-metric-page__search"><SearchField label={sidebar.searchPlaceholder} placeholder={sidebar.searchPlaceholder} /></div>
             <div className="mh-metric-page__category-tabs">
               {metricCategories.map((item) => <button key={item} type="button" className={category === item ? "is-active" : ""} aria-pressed={category === item} onClick={() => onCategoryChange?.({ category: item })}>{sidebar[item.toLowerCase()]} · {counts[item]}</button>)}
             </div>
