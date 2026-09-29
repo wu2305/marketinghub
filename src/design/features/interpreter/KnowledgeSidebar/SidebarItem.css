@@ -8,8 +8,8 @@ position: relative;
   padding: 8px 12px;
   border: 0;
   background: transparent;
-  color: var(--mh-ink-empty-muted);
-  font-family: var(--mh-font);
+  color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-regular);
   text-align: left;
@@ -20,7 +20,7 @@ position: relative;
 .mh-sidebar-item:hover,
 .mh-sidebar-item.is-active {
 background: color-mix(in srgb, var(--mh-accent) 8%, transparent);
-  color: var(--mh-ink-heading-warm);
+  color: var(--mh-text-strong);
 }
 
 .mh-sidebar-item.is-active::before,
@@ -30,7 +30,7 @@ position: absolute;
   bottom: 0;
   left: 0;
   width: 3px;
-  background: var(--mh-indicator-selection-warm);
+  background: var(--mh-accent);
   content: "";
 }
 
@@ -49,7 +49,7 @@ min-width: 0;
 
 .mh-sidebar-item__badge {
 margin-left: auto;
-  color: var(--mh-ink-warning);
+  color: var(--mh-accent-ink);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
@@ -62,7 +62,7 @@ margin-left: auto;
 .mh-sidebar-item__count {
 display: none;
   margin-left: auto;
-  color: var(--mh-faint);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
 }

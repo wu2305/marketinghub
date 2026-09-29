@@ -8,13 +8,13 @@ display: grid;
   grid-template-columns: minmax(110px, 1fr) 34px minmax(120px, 1.35fr);
   align-items: center;
   gap: 11px;
-  color: var(--mh-copy);
-  font-family: var(--mh-font);
+  color: var(--mh-text);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
 }
 
 .mh-progress__row strong {
-color: var(--mh-ink);
+color: var(--mh-text-strong);
   text-align: right;
 }
 
@@ -22,14 +22,14 @@ color: var(--mh-ink);
 height: 6px;
   overflow: hidden;
   border-radius: var(--mh-radius-sm);
-  background: var(--mh-line-panel-subtle);
+  background: var(--mh-line-subtle);
 }
 
 .mh-progress__bar {
 display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--mh-amber);
+  background: var(--mh-accent-ink);
 }
 
 .mh-panel__body > .mh-progress {

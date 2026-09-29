@@ -1,7 +1,7 @@
 .mh-panel__kicker {
 margin: 0;
-  color: var(--mh-faint);
-  font-family: var(--mh-font);
+  color: var(--mh-text-faint);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
@@ -9,7 +9,7 @@ margin: 0;
 }
 
 .mh-panel {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 min-width: 0;
   padding: 18px;
   border: 1px solid var(--mh-line);
@@ -34,16 +34,16 @@ display: grid;
 
 .mh-panel__head h3 {
 margin: 0;
-  color: var(--mh-ink);
-  font-family: var(--mh-font);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xl);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
 }
 
 .mh-panel__head small {
-color: var(--mh-faint);
-  font-family: var(--mh-font);
+color: var(--mh-text-faint);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
 }
 

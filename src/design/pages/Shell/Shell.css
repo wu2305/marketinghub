@@ -1,8 +1,8 @@
 .mh-page {
 min-height: 100vh;
-  background: var(--mh-bg);
-  color: var(--mh-ink);
-  font-family: var(--mh-font);
+  background: var(--mh-surface-page);
+  color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-lg);
   line-height: 1.45;
 }
@@ -14,5 +14,5 @@ width: min(1500px, calc(100% - 88px));
 }
 
 .mh-page__offset {
-height: var(--mh-header);
+height: var(--mh-layout-header-height);
 }

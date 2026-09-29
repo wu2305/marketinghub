@@ -5,9 +5,9 @@
   min-height: 22px;
   padding: 3px 8px;
   border-radius: var(--mh-radius-sm);
-  background: var(--mh-surface-neutral-soft);
-  color: var(--mh-copy);
-  font-family: var(--mh-font);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
@@ -16,22 +16,22 @@
 
 .mh-badge--success {
   background: var(--mh-surface-success-soft);
-  color: var(--mh-green);
+  color: var(--mh-success);
 }
 
 .mh-badge--warning {
   background: var(--mh-surface-warning-soft);
-  color: var(--mh-ink-warning-brown);
+  color: var(--mh-warning);
 }
 
 .mh-badge--info {
   background: var(--mh-surface-info);
-  color: var(--mh-blue);
+  color: var(--mh-info);
 }
 
 .mh-badge--danger {
   background: var(--mh-surface-danger-hover);
-  color: var(--mh-danger-muted);
+  color: var(--mh-danger);
 }
 
 /* P07 field-mapping and Business Term availability capsule, 76×20 with dot. */
@@ -56,12 +56,12 @@
   background: currentColor;
 }
 :where(.mh-badge--knowledge.mh-badge--auto).mh-badge--success {
-  background: var(--mh-bt-state-bg);
-  color: var(--mh-bt-state-ink);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
 }
 :where(.mh-badge--knowledge.mh-badge--auto).mh-badge--neutral {
-  background: var(--mh-bt-state-off-bg);
-  color: var(--mh-bt-state-off-ink);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text-muted);
 }
 
 /* Detail/read-only metadata: same availability meaning, naturally sized. */
@@ -83,18 +83,18 @@
   background: currentColor;
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--success {
-  background: var(--mh-bt-status-on-bg);
-  color: var(--mh-bt-status-on-ink);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--success::before {
-  background: var(--mh-bt-status-on-dot);
+  background: var(--mh-accent);
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral {
-  background: var(--mh-surface-control-muted);
-  color: var(--mh-bt-status-off-ink);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text-faint);
 }
 :where(.mh-badge--detail.mh-badge--auto).mh-badge--neutral::before {
-  background: var(--mh-bt-status-off-dot);
+  background: var(--mh-text-faint);
 }
 
 .mh-badge--lg,

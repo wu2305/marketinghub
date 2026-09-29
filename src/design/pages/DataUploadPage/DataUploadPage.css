@@ -17,7 +17,7 @@ display: inline-flex;
   gap: 8px;
   padding: 6px 8px;
   border-radius: var(--mh-radius-sm);
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-lg);
   font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
@@ -31,16 +31,16 @@ width: 14px;
 
 .mh-upload__back:hover,
 .mh-upload__back:focus-visible {
-background: var(--mh-bg-soft);
+background: var(--mh-surface-subtle);
   outline: 0;
 }
 
 .mh-upload__toolbar .mh-button {
 height: auto;
   padding: 8px 14px;
-  border-color: var(--mh-control-line);
+  border-color: var(--mh-line-strong);
   border-radius: var(--mh-radius-sm);
-  color: var(--mh-ink-strong);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -48,13 +48,13 @@ height: auto;
 .mh-upload__toolbar .mh-button__icon {
 width: 14px;
   height: 14px;
-  color: var(--mh-icon-slate);
+  color: var(--mh-text-muted);
 }
 
 .mh-upload__toolbar .mh-button:hover,
 .mh-upload__toolbar .mh-button:focus-visible {
-border-color: var(--mh-gold-medium);
-  background: var(--mh-hover-warm);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
 }
 
 .mh-upload__form {
@@ -86,14 +86,14 @@ opacity: 1;
 }
 
 .mh-upload__grid .mh-field {
-color: var(--mh-ink-field);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-upload__grid .mh-input {
 height: 40px;
-  border-color: var(--mh-control-line);
+  border-color: var(--mh-line-strong);
   font-size: var(--mh-font-size-md);
   transition:
     border-color 0.15s ease,
@@ -102,7 +102,7 @@ height: 40px;
 
 .mh-upload__grid .mh-input:focus,
 .mh-upload__grid .mh-input:focus-visible {
-border-color: var(--mh-gold-medium);
+border-color: var(--mh-accent);
   box-shadow: none; outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
 
 .mh-upload__card {
@@ -130,7 +130,7 @@ width: min(560px, calc(100% - 64px));
 
 .mh-bulk-import .mh-modal__header {
 padding: 18px 24px;
-  border-bottom: 1px solid var(--mh-line-faint);
+  border-bottom: 1px solid var(--mh-line-subtle);
 }
 
 .mh-bulk-import__body {
@@ -145,7 +145,7 @@ display: inline-flex;
   gap: 8px;
   margin: 16px 0 22px;
   padding: 0;
-  color: var(--mh-gold-text);
+  color: var(--mh-accent-ink);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
@@ -169,7 +169,7 @@ border-top: 1px solid var(--mh-line);
 
 .mh-bulk-import__tips h4 {
 margin: 0 0 10px;
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.6px;
@@ -178,7 +178,7 @@ margin: 0 0 10px;
 .mh-bulk-import__tips ul {
 margin: 0;
   padding-left: 18px;
-  color: var(--mh-copy);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-sm);
   line-height: 1.7;
 }

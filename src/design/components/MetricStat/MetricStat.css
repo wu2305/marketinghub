@@ -11,7 +11,7 @@ min-height: 84px;
   border: 1px solid color-mix(in srgb, var(--mh-accent-soft) 20%, transparent);
   border-radius: var(--mh-radius-md);
   background: color-mix(in srgb, var(--mh-accent-ink) 50%, transparent);
-  color: var(--mh-ink-inverse);
+  color: var(--mh-text-inverse);
   box-shadow: var(--mh-shadow-raised);
   backdrop-filter: blur(15px);
 }
@@ -26,7 +26,7 @@ color: color-mix(in srgb, var(--mh-text-inverse) 72%, transparent);
 }
 
 .mh-metric--glass .mh-metric__value {
-color: var(--mh-ink-inverse);
+color: var(--mh-text-inverse);
   font-size: var(--mh-font-size-3xl);
 }
 
@@ -56,33 +56,33 @@ position: absolute;
   right: 14px;
   left: 14px;
   height: 3px;
-  background: var(--mh-accent, var(--mh-gold));
+  background: var(--mh-accent, var(--mh-accent));
   content: "";
 }
 
 .mh-metric--gold {
---mh-accent: var(--mh-gold);
+--mh-accent: var(--mh-accent);
 }
 
 .mh-metric--green {
---mh-accent: var(--mh-green);
+--mh-accent: var(--mh-success);
 }
 
 .mh-metric--amber {
---mh-accent: var(--mh-amber);
+--mh-accent: var(--mh-accent-ink);
 }
 
 .mh-metric--blue {
---mh-accent: var(--mh-blue);
+--mh-accent: var(--mh-info);
 }
 
 .mh-metric--red {
---mh-accent: var(--mh-danger-muted);
+--mh-accent: var(--mh-danger);
 }
 
 .mh-metric__label {
-color: var(--mh-muted);
-  font-family: var(--mh-font);
+color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
@@ -90,16 +90,16 @@ color: var(--mh-muted);
 }
 
 .mh-metric__value {
-color: var(--mh-ink);
-  font-family: var(--mh-font);
+color: var(--mh-text-strong);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-3xl);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
 }
 
 .mh-metric__caption {
-color: var(--mh-muted);
-  font-family: var(--mh-font);
+color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-regular);
   line-height: 1.35;

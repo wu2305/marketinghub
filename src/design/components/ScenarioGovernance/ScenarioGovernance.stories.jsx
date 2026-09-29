@@ -14,7 +14,7 @@ export default {
     layout: enumProp(scenarioGovernanceLayouts, "stacked", "Single-column drawer rows or two-column workspace grid.", "inline-radio"),
     userFallback: prop("string", { defaultValue: "", description: "Visible fallback when record.user is blank." }),
   },
-  render: (args) => <div style={{ maxWidth: args.layout === "columns" ? 1000 : 520, padding: 16, background: "var(--mh-bg-faint)" }}><ScenarioGovernance {...args} /></div>,
+  render: (args) => <div style={{ maxWidth: args.layout === "columns" ? 1000 : 520, padding: 16, background: "var(--mh-surface-subtle)" }}><ScenarioGovernance {...args} /></div>,
 };
 
 export const Default = {};

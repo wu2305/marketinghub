@@ -3,8 +3,8 @@ position: relative;
   display: flex;
   overflow: hidden;
   align-items: center;
-  color: var(--mh-ink-inverse);
-  background: var(--mh-surface-dark-cool);
+  color: var(--mh-text-inverse);
+  background: var(--mh-surface-inverse);
 }
 
 .mh-hero__media,
@@ -81,7 +81,7 @@ max-width: 560px;
 .mh-hero__copy .mh-hero__eyebrow {
 margin: 0;
   color: color-mix(in srgb, var(--mh-text-inverse) 70%, transparent);
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 12px;
@@ -91,8 +91,8 @@ margin: 0;
 
 .mh-hero__copy h1 {
 margin: 0;
-  color: var(--mh-ink-inverse);
-  font-family: var(--mh-display);
+  color: var(--mh-text-inverse);
+  font-family: var(--mh-font-display);
   font-size: var(--mh-font-size-display);
   font-style: italic;
   font-weight: var(--mh-font-weight-bold);
@@ -105,7 +105,7 @@ display: block;
   width: 64px;
   height: 8px;
   margin: 16px 0 0;
-  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
+  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
   clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
   content: "";
 }
@@ -114,7 +114,7 @@ display: block;
 max-width: 480px;
   margin: 14px 0 0;
   color: color-mix(in srgb, var(--mh-text-inverse) 85%, transparent);
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-xl);
   line-height: 1.5;
   text-shadow: 0 1px 10px color-mix(in srgb, var(--mh-text-strong) 35%, transparent);

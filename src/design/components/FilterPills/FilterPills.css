@@ -10,10 +10,10 @@ display: inline-flex;
   justify-content: center;
   padding: 3px 12px;
   border: 0;
-  border-radius: var(--mh-radius-control);
+  border-radius: var(--mh-radius-sm);
   background: transparent;
-  color: var(--mh-icon-slate);
-  font-family: var(--mh-font);
+  color: var(--mh-text-muted);
+  font-family: var(--mh-font-sans);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
@@ -22,10 +22,10 @@ display: inline-flex;
 
 .mh-pills__item:hover,
 .mh-pills__item:focus-visible {
-background: var(--mh-surface-neutral-soft);
+background: var(--mh-surface-muted);
 }
 
 .mh-pills__item.is-active {
-background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
-  color: var(--mh-ink-black);
+background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  color: var(--mh-text-strong);
 }

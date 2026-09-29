@@ -9,7 +9,7 @@
 }
 
 .mh-review-page > .mh-hero {
-  margin-top: calc(-1 * var(--mh-header));
+  margin-top: calc(-1 * var(--mh-layout-header-height));
 }
 
 .mh-review-page__stats {
@@ -215,7 +215,7 @@
     height: auto !important;
     min-height: 0 !important;
     margin-top: 0;
-    padding: calc(var(--mh-header) + 28px) 0 var(--mh-space-8);
+    padding: calc(var(--mh-layout-header-height) + 28px) 0 var(--mh-space-8);
   }
 
   .mh-review-page > .mh-hero .mh-hero__layout {

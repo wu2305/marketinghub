@@ -1,16 +1,16 @@
 /* Shared library pagination — `#businessPagination`. */
 
 .mh-pagination {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 display: flex;
   min-height: 54px;
   align-items: center;
   justify-content: flex-end;
   gap: 18px;
   padding: 10px 16px;
-  border-top: 1px solid var(--mh-line-neutral-soft);
+  border-top: 1px solid var(--mh-line);
   background: var(--mh-surface);
-  color: var(--mh-ink-muted-neutral);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -27,10 +27,10 @@ display: flex;
 .mh-pagination__size select {
 height: 30px;
   padding: 0 24px 0 8px;
-  border: 1px solid var(--mh-pagination-select-line);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  color: var(--mh-pagination-select-ink);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -43,10 +43,10 @@ display: flex;
 min-width: 30px;
   height: 30px;
   padding: 0 7px;
-  border: 1px solid var(--mh-line-neutral-soft);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  color: var(--mh-ink-secondary-dark);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
@@ -57,15 +57,15 @@ min-width: 30px;
 }
 
 .mh-pagination__pages button:hover:not(:disabled) {
-border-color: var(--mh-gold);
-  background: var(--mh-pagination-hover-bg);
-  color: var(--mh-ink-black-soft);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
+  color: var(--mh-text-strong);
 }
 
 .mh-pagination__pages button.is-active {
-border-color: var(--mh-surface-control-black-soft);
-  background: var(--mh-surface-control-black-soft);
-  color: var(--mh-ink-inverse);
+border-color: var(--mh-surface-inverse);
+  background: var(--mh-surface-inverse);
+  color: var(--mh-text-inverse);
 }
 
 .mh-pagination__pages button:disabled {
@@ -75,7 +75,7 @@ cursor: not-allowed;
 
 .mh-pagination__pages button:focus-visible,
 .mh-pagination__size select:focus-visible {
-outline: 2px solid var(--mh-principle-focus-ring);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }
 
@@ -90,7 +90,7 @@ min-height: 0;
   border-top: 0;
   background: transparent;
   font-size: var(--mh-font-size-sm);
-  color: var(--mh-bt-pag-ink);
+  color: var(--mh-text-muted);
 }
 
 .mh-pagination--compact .mh-pagination__total {
@@ -106,17 +106,17 @@ display: flex;
 .mh-pagination--compact .mh-pagination__size select {
 height: 28px;
   padding: 6px;
-  border-color: var(--mh-pagination-select-line);
+  border-color: var(--mh-line);
   font-size: var(--mh-font-size-sm);
 }
 
 .mh-pagination--compact .mh-pagination__prev,
 .mh-pagination--compact .mh-pagination__next {
 padding: 7px 10px;
-  border: 1px solid var(--mh-line-neutral-soft);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  color: var(--mh-ink-secondary-dark);
+  color: var(--mh-text);
   font: inherit;
   font-size: var(--mh-font-size-sm);
   cursor: pointer;
@@ -124,8 +124,8 @@ padding: 7px 10px;
 
 .mh-pagination--compact .mh-pagination__prev:hover:not(:disabled),
 .mh-pagination--compact .mh-pagination__next:hover:not(:disabled) {
-border-color: var(--mh-gold);
-  background: var(--mh-pagination-hover-bg);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
 }
 
 .mh-pagination--compact .mh-pagination__prev:disabled,
@@ -136,6 +136,6 @@ cursor: not-allowed;
 
 .mh-pagination--compact .mh-pagination__prev:focus-visible,
 .mh-pagination--compact .mh-pagination__next:focus-visible {
-outline: 2px solid var(--mh-principle-focus-ring);
+outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }

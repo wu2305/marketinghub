@@ -13,7 +13,7 @@ const ID_BY_TYPE = {
 
 function DetailStory(args) {
   const demo = useKnowledgeViewDemo({ content: KNOWLEDGE_VIEW, recordId: ID_BY_TYPE[args.type], group: args.group, tab: args.tab, overlay: args.action === "none" ? null : args.action, onNavigate: args.onNavigate, onAction: args.onAction, onOpen: args.onOpen, onChange: args.onChange, onSelect: args.onSelect, onCancel: args.onCancel });
-  return <div style={{ padding: 32, background: "var(--mh-page-bg)", minHeight: "100vh" }}><KnowledgeDetail {...demo} /></div>;
+  return <div style={{ padding: 32, background: "var(--mh-surface-subtle)", minHeight: "100vh" }}><KnowledgeDetail {...demo} /></div>;
 }
 
 export default {

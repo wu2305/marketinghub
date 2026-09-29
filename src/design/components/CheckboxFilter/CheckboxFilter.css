@@ -2,7 +2,7 @@
    `.fm-options` multi-select used by knowledge type libraries. */
 
 .mh-check-filter {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 position: relative;
   z-index: 30;
   display: flex;
@@ -12,15 +12,15 @@ position: relative;
   min-width: 220px;
   height: 44px;
   padding: 0 13px;
-  border: 1px solid var(--mh-check-filter-line);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
-  color: var(--mh-check-filter-ink);
+  color: var(--mh-text);
 }
 
 .mh-check-filter__label {
 flex: 0 0 auto;
-  color: var(--mh-check-filter-label);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-regular);
   line-height: 1.2;
@@ -41,7 +41,7 @@ display: flex;
   padding: 0 18px 0 0;
   border: 0;
   background: transparent;
-  color: var(--mh-check-filter-ink);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1.2;
@@ -81,10 +81,10 @@ position: absolute;
   max-height: 300px;
   overflow-y: auto;
   padding: 8px;
-  border: 1px solid var(--mh-check-filter-line);
+  border: 1px solid var(--mh-line);
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
-  box-shadow: var(--mh-check-filter-shadow);
+  box-shadow: var(--mh-shadow-overlay);
 }
 
 .mh-check-filter__option {
@@ -94,7 +94,7 @@ position: relative;
   align-items: center;
   gap: 8px;
   padding: 7px;
-  color: var(--mh-check-filter-option);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-sm);
   line-height: 1.2;
   white-space: nowrap;
@@ -119,8 +119,8 @@ position: absolute;
 }
 
 .mh-check-filter__option:has(input:checked) {
-background: var(--mh-check-filter-checked-bg);
-  color: var(--mh-check-filter-checked-ink);
+background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
 }
 
 /* `.business-multi-filter` — the shared multi-select disclosure field.

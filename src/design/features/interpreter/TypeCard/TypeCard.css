@@ -4,12 +4,12 @@ position: relative;
   flex-direction: column;
   width: 100%;
   min-height: 171px;
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
   padding: 18px 8px 20px 24px;
   overflow: hidden;
-  border: 1px solid var(--mh-line-card-warm);
+  border: 1px solid var(--mh-line-subtle);
   border-radius: var(--mh-radius-lg);
-  background: linear-gradient(135deg, var(--mh-surface) 0%, var(--mh-surface-highlight-warm) 100%);
+  background: linear-gradient(135deg, var(--mh-surface) 0%, var(--mh-surface) 100%);
   box-shadow: var(--mh-shadow-raised);
   text-align: left;
   cursor: pointer;
@@ -38,7 +38,7 @@ position: absolute;
 .mh-type-card__count {
 position: relative;
   z-index: 1;
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
   font-style: normal;
 }
 
@@ -54,7 +54,7 @@ position: relative;
 .mh-type-card strong {
   min-width: 0;
   overflow-wrap: anywhere;
-  color: var(--mh-ink-row-title);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-2xl);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -69,8 +69,8 @@ position: relative;
   align-items: center;
   padding: 0 13px;
   border-radius: var(--mh-radius-pill);
-  background: var(--mh-surface-warning);
-  color: var(--mh-ink-warning);
+  background: var(--mh-accent-wash);
+  color: var(--mh-accent-ink);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -80,7 +80,7 @@ position: relative;
   margin-bottom: 12px;
   width: 70%;
   overflow-wrap: anywhere;
-  color: var(--mh-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-lg);
   line-height: 1.45;
 }
@@ -89,7 +89,7 @@ position: relative;
   margin-top: auto;
   width: min(178px, 100%);
   padding-top: 11px;
-  color: var(--mh-ink-warning);
+  color: var(--mh-accent-ink);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -100,22 +100,22 @@ position: absolute;
   left: 0;
   width: 66%;
   height: 1px;
-  background: var(--mh-line-warm-soft);
+  background: var(--mh-line-subtle);
   content: "";
 }
 
 .mh-type-card.is-active {
-background: var(--mh-surface-gold-wash);
+background: var(--mh-accent-wash);
 }
 
 /* The original's `.v20-type-card.is-manageable` only gets a warmer top border
    a warmer top border at rest — same count pill and other sides as every card. */
 
 .mh-type-card.is-manageable {
-border-top-color: var(--mh-line-warm-strong);
+border-top-color: var(--mh-line-subtle);
 }
 
 .mh-type-card:focus-visible {
-  outline: 2px solid var(--mh-focus-strong);
+  outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
 }

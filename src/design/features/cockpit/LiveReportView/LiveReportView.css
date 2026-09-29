@@ -1,5 +1,5 @@
 .mh-live {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 }
 
 /* ------------------------------------------------------------------ */
@@ -19,9 +19,9 @@ position: sticky;
   min-height: 62px;
   margin: -10px -12px 20px;
   padding: 10px 12px;
-  border-bottom: 1px solid var(--mh-line-neutral-soft);
-  background: var(--mh-live-toolbar-bg);
-  box-shadow: var(--mh-live-shadow);
+  border-bottom: 1px solid var(--mh-line);
+  background: var(--mh-surface-page);
+  box-shadow: var(--mh-shadow-raised);
   backdrop-filter: blur(20px);
 }
 
@@ -35,20 +35,20 @@ display: inline-flex;
   border: 1px solid transparent;
   border-radius: var(--mh-radius-sm);
   background: transparent;
-  color: var(--mh-reports-copy);
+  color: var(--mh-text);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
   text-decoration: none;
 }
 
 .mh-live-back:hover {
-border-color: var(--mh-line-control-strong);
-  background: var(--mh-surface-chart-neutral);
-  color: var(--mh-ink-black-soft);
+border-color: var(--mh-line-strong);
+  background: var(--mh-surface-subtle);
+  color: var(--mh-text-strong);
 }
 
 .mh-live-back:focus-visible {
-outline: 2px solid var(--mh-reports-blue);
+outline: 2px solid var(--mh-info);
   outline-offset: 2px;
 }
 
@@ -58,12 +58,12 @@ display: flex;
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--mh-live-inkline);
+  border-bottom: 1px solid var(--mh-surface-inverse);
 }
 
 .mh-live-heading .mh-eyebrow {
 margin: 0;
-  color: var(--mh-reports-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0;
@@ -72,7 +72,7 @@ margin: 0;
 
 .mh-live-heading h1 {
 margin: 7px 0 0;
-  color: var(--mh-reports-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-display);
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;

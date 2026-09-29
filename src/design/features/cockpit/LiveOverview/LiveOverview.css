@@ -1,5 +1,5 @@
 .mh-live-dashboard {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 display: grid;
   gap: 12px;
 }
@@ -21,20 +21,20 @@ display: grid;
 }
 
 .mh-live-kpi span {
-color: var(--mh-reports-copy);
+color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
 }
 
 .mh-live-kpi strong {
-color: var(--mh-reports-ink);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-3xl);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-live-kpi small {
-color: var(--mh-reports-copy);
+color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -61,7 +61,7 @@ display: flex;
 }
 
 .mh-live-card__head span {
-color: var(--mh-reports-copy);
+color: var(--mh-text);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
@@ -69,7 +69,7 @@ color: var(--mh-reports-copy);
 
 .mh-live-card__head h2 {
 margin: 0;
-  color: var(--mh-reports-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-lg);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -81,10 +81,10 @@ position: relative;
   height: 250px;
   gap: 18px;
   padding: 12px 18px 26px 38px;
-  border-left: 1px solid var(--mh-line-neutral-soft);
-  border-bottom: 1px solid var(--mh-line-neutral-soft);
-  background: var(--mh-surface-chart-neutral);
-  color: var(--mh-ink-black-soft);
+  border-left: 1px solid var(--mh-line);
+  border-bottom: 1px solid var(--mh-line);
+  background: var(--mh-surface-subtle);
+  color: var(--mh-text-strong);
 }
 
 .mh-live-chart::before,
@@ -94,7 +94,7 @@ content: "";
   left: 0;
   right: 0;
   height: 1px;
-  background: var(--mh-live-inkline);
+  background: var(--mh-surface-inverse);
 }
 
 .mh-live-chart::before {
@@ -121,17 +121,17 @@ position: relative;
 display: block;
   width: 18px;
   border-radius: var(--mh-radius-sm) var(--mh-radius-sm) 0 0;
-  background: var(--mh-live-bar);
+  background: var(--mh-line-strong);
 }
 
 .mh-live-chart__group b {
-background: var(--mh-live-bar-alt);
+background: var(--mh-success);
 }
 
 .mh-live-chart__group span {
 position: absolute;
   bottom: -19px;
-  color: var(--mh-ink-faint-warm);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -148,7 +148,7 @@ display: grid;
 }
 
 .mh-live-rank > span:first-child {
-color: var(--mh-ink-faint-warm);
+color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -158,7 +158,7 @@ display: grid;
 }
 
 .mh-live-rank strong {
-color: var(--mh-reports-ink);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xs);
 }
 
@@ -166,11 +166,11 @@ color: var(--mh-reports-ink);
 display: block;
   height: 4px;
   border-radius: var(--mh-radius-sm);
-  background: var(--mh-live-bar-alt);
+  background: var(--mh-success);
 }
 
 .mh-live-rank b {
-color: var(--mh-reports-ink);
+color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xs);
 }
 

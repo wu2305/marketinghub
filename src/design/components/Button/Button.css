@@ -1,5 +1,5 @@
 .mh-button {
-font-family: var(--mh-font);
+font-family: var(--mh-font-sans);
   letter-spacing: 0;
 }
 
@@ -9,7 +9,7 @@ display: inline-flex;
   justify-content: center;
   gap: 8px;
   border: 1px solid transparent;
-  border-radius: var(--mh-radius-control);
+  border-radius: var(--mh-radius-sm);
   cursor: pointer;
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
@@ -47,9 +47,9 @@ height: 40px;
 }
 
 .mh-button--primary {
-border-color: var(--mh-surface-dark);
-  background: var(--mh-surface-dark);
-  color: var(--mh-ink-inverse);
+border-color: var(--mh-surface-inverse);
+  background: var(--mh-surface-inverse);
+  color: var(--mh-text-inverse);
 }
 
 .mh-button--primary:hover,
@@ -59,9 +59,9 @@ border-color: var(--mh-surface-action-slate);
 }
 
 .mh-button--gold {
-border-color: var(--mh-line-gold-active);
-  background: linear-gradient(135deg, var(--mh-gold-light) 0%, var(--mh-gold-medium) 100%);
-  color: var(--mh-ink-strong);
+border-color: var(--mh-accent);
+  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  color: var(--mh-text-strong);
   box-shadow: var(--mh-shadow-raised);
 }
 
@@ -73,31 +73,31 @@ filter: brightness(0.96);
 .mh-button--secondary {
 border-color: var(--mh-line-strong);
   background: var(--mh-surface);
-  color: var(--mh-copy);
+  color: var(--mh-text);
 }
 
 .mh-button--secondary:hover,
 .mh-button--secondary:focus-visible {
-border-color: var(--mh-line-control-hover);
-  background: var(--mh-bg-soft);
+border-color: var(--mh-line-strong);
+  background: var(--mh-surface-subtle);
 }
 
 .mh-button--quiet {
 border-color: transparent;
   background: transparent;
-  color: var(--mh-copy);
+  color: var(--mh-text);
 }
 
 .mh-button--quiet:hover,
 .mh-button--quiet:focus-visible {
-background: var(--mh-bg);
-  color: var(--mh-ink);
+background: var(--mh-surface-page);
+  color: var(--mh-text-strong);
 }
 
 .mh-button--danger {
-border-color: var(--mh-danger-muted);
+border-color: var(--mh-danger);
   background: var(--mh-surface);
-  color: var(--mh-danger-muted);
+  color: var(--mh-danger);
 }
 
 .mh-button:disabled,
@@ -123,9 +123,9 @@ min-width: 62px;
 }
 
 .mh-assistant__tools .mh-button:disabled {
-border-color: var(--mh-disabled-line);
-  background: var(--mh-disabled-bg);
-  color: var(--mh-disabled-ink);
+border-color: var(--mh-line-strong);
+  background: var(--mh-surface-muted);
+  color: var(--mh-text-faint);
   opacity: 1;
 }
 

@@ -1,44 +1,44 @@
 .mh-dropzone {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   padding: 36px 24px;
-  border: 1px dashed var(--mh-control-line);
+  border: 1px dashed var(--mh-line-strong);
   border-radius: var(--mh-radius-md);
-  background: var(--mh-bg-soft);
+  background: var(--mh-surface-subtle);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .mh-dropzone:hover,
 .mh-dropzone:focus-visible {
-border-color: var(--mh-gold-medium);
-  background: var(--mh-hover-warm);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
   outline: 0;
 }
 
 .mh-dropzone.is-dragover {
-border-color: var(--mh-gold);
-  background: var(--mh-hover-warm);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
 }
 
 .mh-dropzone__icon {
 width: 36px;
   height: 36px;
-  color: var(--mh-muted);
+  color: var(--mh-text-muted);
 }
 
 .mh-dropzone__title {
 margin: 0;
-  color: var(--mh-ink);
+  color: var(--mh-text-strong);
   font-size: var(--mh-font-size-lg);
   font-weight: var(--mh-font-weight-bold);
 }
 
 .mh-dropzone__hint {
 margin: 0;
-  color: var(--mh-faint);
+  color: var(--mh-text-faint);
   font-size: var(--mh-font-size-sm);
 }

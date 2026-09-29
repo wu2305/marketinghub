@@ -1,5 +1,5 @@
 .mh-search {
-  font-family: var(--mh-font);
+  font-family: var(--mh-font-sans);
 position: relative;
   display: block;
   width: 100%;
@@ -11,7 +11,7 @@ position: absolute;
   left: 12px;
   width: 16px;
   height: 16px;
-  color: var(--mh-faint);
+  color: var(--mh-text-faint);
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -25,7 +25,7 @@ right: 14px;
 .mh-search__mark {
 position: absolute;
   top: 10px;
-  color: var(--mh-muted);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-2xl);
   line-height: 1;
   pointer-events: none;
@@ -37,10 +37,10 @@ display: flex;
   gap: 14px;
   height: 44px;
   padding: 0 13px 0 18px;
-  border: 1px solid var(--mh-line-control-warm);
+  border: 1px solid var(--mh-accent);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
-  box-shadow: var(--mh-shadow-search-warm);
+  box-shadow: var(--mh-shadow-raised);
 }
 
 .mh-search--plain .mh-search__icon {
@@ -49,11 +49,11 @@ position: static;
   height: 20px;
   flex: 0 0 20px;
   transform: none;
-  color: var(--mh-ink-icon-warm-muted);
+  color: var(--mh-text-muted);
 }
 
 .mh-search--plain:focus-within {
-border-color: var(--mh-line-control-focus-warm);
+border-color: var(--mh-accent);
   box-shadow:
     var(--mh-shadow-raised); outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
 
@@ -63,20 +63,20 @@ display: flex;
   gap: 14px;
   height: 44px;
   padding: 0 13px 0 18px;
-  border: 1px solid var(--mh-line-control-warm);
+  border: 1px solid var(--mh-accent);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
-  box-shadow: var(--mh-shadow-search-warm);
+  box-shadow: var(--mh-shadow-raised);
   transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .mh-btview__search .mh-search:focus-within {
-border-color: var(--mh-line-control-focus-warm);
+border-color: var(--mh-accent);
   box-shadow: var(--mh-shadow-raised); outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
 
 .mh-btview__search .mh-search__icon {
 flex: 0 0 20px;
   width: 20px;
   height: 20px;
-  color: var(--mh-ink-icon-warm-muted);
+  color: var(--mh-text-muted);
 }
