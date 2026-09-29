@@ -24,8 +24,12 @@
  *
  * Usage:
  *   npm run build-storybook   # first, so storybook-static exists and is stamped
- *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--jobs N] [--verbose]
- *   node scripts/visual-check.mjs --negative [--out DIR] [--jobs N]
+ *   node scripts/visual-check.mjs [--out DIR] [--only SUBSTR] [--affected [REF]] [--jobs N] [--verbose]
+ *   node scripts/visual-check.mjs --negative [--out DIR] [--affected [REF]] [--jobs N]
+ * --affected keeps only scenarios whose story a change since REF (default the
+ * GitHub main) can reach through imports, plus every scenario of a page whose
+ * scenario file changed; a global change (config, dependencies, these scripts)
+ * runs everything (scripts/affected.mjs).
  *   node scripts/visual-check.mjs --review <out> <scenarioId> pass|fail "note"
  */
 import http from "node:http";
@@ -39,6 +43,7 @@ import { chromium } from "playwright";
 import scenarios, { BASELINE, CONSOLE_ALLOW } from "./visual-check.config.mjs";
 import negatives from "./visual-check.negative.mjs";
 import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
+import { affectedStoryIds, changedFiles, changedScenarioPages, defaultBase } from "./affected.mjs";
 
 const STATIC = path.join(ROOT, "storybook-static");
 const STAMP = path.join(STATIC, "mh-build-stamp.json");
@@ -63,6 +68,8 @@ const flag = (name) => {
 const OUT = flag("out") || "/tmp/mh-visual";
 const ONLY = flag("only");
 const NEGATIVE = args.includes("--negative");
+const AFFECTED_AT = args.indexOf("--affected");
+const AFFECTED_BASE = AFFECTED_AT < 0 ? null : (args[AFFECTED_AT + 1] && !args[AFFECTED_AT + 1].startsWith("--") ? args[AFFECTED_AT + 1] : defaultBase());
 const VERBOSE = args.includes("--verbose");
 const JOBS = Math.max(1, Number(flag("jobs") || process.env.MH_VC_JOBS || Math.min(4, availableParallelism())));
 const REVIEW_AT = args.indexOf("--review");
@@ -511,6 +518,22 @@ if (NEGATIVE) {
   });
 } else {
   list = ONLY ? scenarios.filter((s) => s.id.includes(ONLY)) : scenarios;
+}
+if (AFFECTED_BASE) {
+  const changed = changedFiles(AFFECTED_BASE);
+  const ids = affectedStoryIds(readJson(INDEX), changed);
+  const pages = changedScenarioPages(changed);
+  const allNegatives = NEGATIVE && changed.includes("scripts/visual-check.negative.mjs");
+  const before = list.length;
+  if (ids && !allNegatives) {
+    const baseOf = (s) => (NEGATIVE ? negatives.find((n) => n.id === s.id).base : s.id);
+    list = list.filter((s) => ids.has(s.story?.id) || pages.has(pageOf(baseOf(s))) || (NEGATIVE && ids.has(scenarios.find((b) => b.id === baseOf(s))?.story?.id)));
+  }
+  console.log(`--affected ${AFFECTED_BASE}: ${changed.length} changed files → ${ids ? `${ids.size} stories, ` : "global change, "}${list.length}/${before} scenarios`);
+  if (list.length === 0) {
+    console.log("no affected scenarios");
+    process.exit(0);
+  }
 }
 if (list.length === 0) {
   console.error(`no scenario matches ${NEGATIVE ? "--negative" : `--only ${ONLY}`}`);

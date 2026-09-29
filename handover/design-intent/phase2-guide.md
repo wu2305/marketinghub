@@ -350,14 +350,20 @@ npm run lint                                   # 0 errors, 0 warnings
 npm test                                       # every file passes
 npm run build-storybook                        # also writes the stamp visual-check needs
 npm run build:host && node scripts/host-check.mjs --out /tmp/mh-wp<id>-host
-node scripts/visual-check.mjs --out /tmp/mh-wp<id>-visual           # full run; --only pNN is for quick loops only
-node scripts/visual-check.mjs --negative --out /tmp/mh-wp<id>-neg  # every mutation must fail
+node scripts/visual-check.mjs --affected --out /tmp/mh-wp<id>-visual           # scenarios your change reaches
+node scripts/visual-check.mjs --affected --negative --out /tmp/mh-wp<id>-neg  # every selected mutation must fail
 npm run build:lib
 (cd storybook-static && python3 -m http.server 6107 >/dev/null 2>&1 & echo $! > /tmp/mh-wp<id>-probe.pid)
-node scripts/font-probe.mjs http://127.0.0.1:6107; kill "$(cat /tmp/mh-wp<id>-probe.pid)"
+node scripts/font-probe.mjs http://127.0.0.1:6107 --affected; kill "$(cat /tmp/mh-wp<id>-probe.pid)"
 node scripts/concept-count.mjs > /tmp/mh-wp<id>-count-after.txt
 ```
 
+- `--affected` (`scripts/affected.mjs`, user decision 2026-09-29): the checks run only the stories that a
+  file changed since `github/main` reaches through imports, plus every scenario of a page whose scenario
+  file changed. It falls back to the full run by itself when the change is global (`.storybook`,
+  `package.json`, the check scripts), and a `tokens.css` change selects nearly everything. Paste its
+  selection line (`N changed files → S stories, X/Y scenarios`) with the summary. WP8 runs the full,
+  unfiltered gate once.
 - Font probe: only the existing intentional monospace lines (formulas/code) may appear. Any other line
   fails the gate.
 - Story count: `storybook-static/index.json` may drop only by the story ids you list as removed (WP7

@@ -112,6 +112,12 @@ position: absolute;
   clip-path: inset(50%);
 }
 
+/* The checkbox is visually hidden, so its option shows the keyboard focus. */
+.mh-check-filter__option:has(input:focus-visible) {
+  outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
+}
+
 .mh-check-filter__option:has(input:checked) {
 background: var(--mh-check-filter-checked-bg);
   color: var(--mh-check-filter-checked-ink);
