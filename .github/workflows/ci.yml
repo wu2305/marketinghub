@@ -2,8 +2,9 @@ name: ci
 
 # Two jobs:
 #   verify  light gate, runs on PRs to main and on pushes to main.
-#   visual  heavy browser gate (host-check, --affected visual-check, --negative,
-#           font probe); manual only: Actions > ci > Run workflow, pick the branch.
+#   visual  heavy browser gate (host-check, visual-check, --negative, font probe);
+#           runs in full on a v* tag push, and by hand (Actions > ci > Run
+#           workflow, pick the branch) limited to what changed against main.
 # Branch pushes do not run CI on their own: the PR run covers them.
 
 on:
@@ -15,6 +16,7 @@ on:
       - "docs/**"
   push:
     branches: [main]
+    tags: ["v*"]
     paths-ignore:
       - "**.md"
       - "handover/**"
@@ -44,9 +46,12 @@ jobs:
       - run: npm run build:lib
 
   visual:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.ref_type == 'tag'
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
+    env:
+      # Tags check everything; manual runs only what differs from main.
+      AFFECTED: ${{ github.ref_type == 'tag' && '' || '--affected origin/main' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,13 +71,13 @@ jobs:
         with:
           path: node_modules/.cache/mh-visual-original
           key: visual-original-${{ hashFiles('index.html', 'assets/**', 'scripts/visual-check.mjs', 'scripts/visual-check/common.mjs', 'package-lock.json') }}
-      - run: node scripts/visual-check.mjs --affected origin/main --out ci-evidence/visual
-      - run: node scripts/visual-check.mjs --affected origin/main --negative --out ci-evidence/negative
+      - run: node scripts/visual-check.mjs $AFFECTED --out ci-evidence/visual
+      - run: node scripts/visual-check.mjs $AFFECTED --negative --out ci-evidence/negative
       - name: font probe
         run: |
           (cd storybook-static && python3 -m http.server 6107 >/dev/null 2>&1 &)
           sleep 1
-          node scripts/font-probe.mjs http://127.0.0.1:6107 --affected origin/main | tee ci-evidence/font-probe.txt
+          node scripts/font-probe.mjs http://127.0.0.1:6107 $AFFECTED | tee ci-evidence/font-probe.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:

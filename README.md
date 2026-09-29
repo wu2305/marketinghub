@@ -45,11 +45,11 @@ output under `/tmp`.
 ## CI
 
 `.github/workflows/ci.yml` runs `npm ci`, lint, tests, and the Storybook, host
-and library builds on pull requests to `main` and on pushes to `main`. It skips
+and library builds on pull requests to `main`, pushes to `main` and `v*` tags. It skips
 docs-only changes and cancels superseded runs. The heavy browser gate
-(host-check, `--affected` visual check, `--negative`, font probe) runs only when
-started by hand: Actions > ci > Run workflow, choose the branch. Run the same
-commands locally for anything else.
+(host-check, visual check, `--negative`, font probe) runs in full when a `v*`
+tag is pushed, and can be started by hand (Actions > ci > Run workflow, choose
+the branch), where it is limited to what changed against `main`.
 
 ## The static demo (reference)
 

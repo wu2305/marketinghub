@@ -59,7 +59,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - **文案**：AiInterpreterPage 页壳文案已由 props 注入；部分存量有机体仍含写死可见文案，随页面改动继续补齐。
 - **样式**：`tokens.css` 只含 `handover/design-intent/foundations.md` §3 的角色 token 加四个状态色调（`--mh-{info,success,warning,danger}-wash`），共 67 个定义（63 个角色 + 4 个色调）；不再有以组件或页面命名的 token，`css-budget.json` 的 `legacyPrefixExemptions` 为空。组件、功能与页面 CSS 的裸十六进制色值及裸字号、字重、圆角、阴影、颜色字面量均为 0，由 `css-budget.json` 的棘轮强制（`maxRawHexColors`、`maxRawFoundationValues`、`maxTokenDefinitions`、`maxDuplicateValues`）；阈值只降不升，数值以该文件为准。独立组件根已显式采用设计字体，公式与代码保留等宽字体。
 - **库列表模式**：知识库（含 Data Model 域列表）、评审、反馈、个人记忆与 Skill 列表共用一套“受治理库”模式——`LibraryToolbar`、`LibraryList`（cards / table / list）、`LibraryItem`、`LibraryEmpty` 与 `ItemActions`，配 `SearchField`、`CheckboxFilter`、`Select`、`Pagination`、`DataTable`，受阻动作/确认/Toast 规则集中在 `lib/governance.js`，规格见 `handover/design-intent/patterns/library.md`。新增或迁移的库视图直接组合这些组件，不再另写视图专用的列表、筛选或动作条（`KnowledgeActions` 已删除）。`css-budget.json` 的 `pendingMigration` 为空；别把新文件加进去来绕过预算。
-- **资源与交付**：字体与图片随包放在 `src/design/assets`（`tokens.css` 内 `@font-face` 引用）；`npm run build:lib` 产出 ESM、合并 CSS 与 d.ts（`.` 与 `./demo` 两个入口），CI 在 PR 与 main 上运行它；对受影响范围的 visual-check、`--negative` 与字体探针（上传 `gate-evidence`）只在手动触发 CI 时运行；`.design-sync` 复用同一构建同步 claude.ai/design。无真实发布或部署。
+- **资源与交付**：字体与图片随包放在 `src/design/assets`（`tokens.css` 内 `@font-face` 引用）；`npm run build:lib` 产出 ESM、合并 CSS 与 d.ts（`.` 与 `./demo` 两个入口），CI 在 PR 与 main 上运行它；对受影响范围的 visual-check、`--negative` 与字体探针（上传 `gate-evidence`）只在推送 `v*` 标签（全量）或手动触发 CI（限受影响范围）时运行；`.design-sync` 复用同一构建同步 claude.ai/design。无真实发布或部署。
 - **验证**：机器加载、行为断言、人工审图分别记录；多数场景人工审图仍为 pending；截图 hash 有渲染噪声，人工结论容易变为 stale（这是偏安全的方向）。
 
 ## 3. 组件与样式规则
