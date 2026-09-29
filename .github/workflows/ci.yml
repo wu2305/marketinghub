@@ -1,16 +1,37 @@
 name: ci
 
+# Two jobs:
+#   verify  light gate, runs on PRs to main and on pushes to main.
+#   visual  heavy browser gate (host-check, --affected visual-check, --negative,
+#           font probe); manual only: Actions > ci > Run workflow, pick the branch.
+# Branch pushes do not run CI on their own: the PR run covers them.
+
 on:
-  push:
   pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "handover/**"
+      - "docs/**"
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "handover/**"
+      - "docs/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # --affected needs the merge base with origin/main
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -21,6 +42,22 @@ jobs:
       - run: npm run build-storybook
       - run: npm run build:host
       - run: npm run build:lib
+
+  visual:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # --affected needs the merge base with origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build-storybook
+      - run: npm run build:host
       - run: npx playwright install --with-deps chromium
       - run: node scripts/host-check.mjs --out ci-evidence/host
       # The original demo is frozen, so passing original-side results are reused
