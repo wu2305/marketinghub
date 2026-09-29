@@ -39,7 +39,7 @@ position: absolute;
   z-index: -1;
   inset: -7px;
   border-radius: inherit;
-  background: var(--mh-launcher-aura);
+  background: color-mix(in srgb, var(--mh-accent) 20%, transparent);
   content: "";
   opacity: 0.38;
   pointer-events: none;

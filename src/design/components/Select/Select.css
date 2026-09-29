@@ -30,7 +30,7 @@ height: 32px;
 
 .mh-select:focus {
 border-color: var(--mh-accent);
-  box-shadow: var(--mh-shadow-focus-warm-soft);
+  box-shadow: 0 0 0 2px var(--mh-focus-ring);
   outline: 0;
 }
 

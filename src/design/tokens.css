@@ -97,6 +97,10 @@
   --mh-data-teal: #2d7972;
   --mh-data-violet: #6941c6;
   --mh-data-rose: #c2185b;
+  --mh-info-wash: color-mix(in srgb, var(--mh-info) 8%, var(--mh-surface));
+  --mh-success-wash: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
+  --mh-warning-wash: color-mix(in srgb, var(--mh-warning) 10%, var(--mh-surface));
+  --mh-danger-wash: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   --mh-focus-ring: rgba(63, 115, 166, 0.55);
   --mh-font-sans: "DIN 2014", Arial, sans-serif;
   --mh-font-display: "BentonModDisplay", Georgia, serif;
@@ -131,32 +135,18 @@
   --mh-layout-header-height: 56px;
 
   /* Shared foreground, action, and status colors extracted from component CSS. */
-  --mh-surface-action-slate: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
   /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
-  --mh-surface-info: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
-  --mh-surface-success-soft: color-mix(in srgb, var(--mh-success) 10%, var(--mh-surface));
-  --mh-surface-warning-soft: color-mix(in srgb, var(--mh-warning) 10%, var(--mh-surface));
   /* P14 exact source category indicators, info banner, and required errors. */
-  --mh-surface-info-pale: color-mix(in srgb, var(--mh-info) 7%, var(--mh-surface));
-  --mh-line-info-pale: color-mix(in srgb, var(--mh-info) 15%, var(--mh-surface));
   /* workspace.css global :focus-visible ring */
   /* global AI launcher (assistant-launcher.css) */
-  --mh-launcher-aura: color-mix(in srgb, var(--mh-accent) 20%, transparent);
   /* assistant surface scale (assistant-panel.css --ai-*) */
   /* media tracking page palette */
   /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
-  --mh-ai-chip-pos-bg: color-mix(in srgb, var(--mh-success) 11%, var(--mh-surface));
-  --mh-ai-chip-neg-bg: color-mix(in srgb, var(--mh-danger) 8%, var(--mh-surface));
   /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
-  --mh-composer-focus: 0 0 0 2px var(--mh-focus-ring);
   /* skill menu / model-flow dialog */
-  --mh-danger-ring: color-mix(in srgb, var(--mh-danger) 12%, transparent);
-  --mh-gold-faint: color-mix(in srgb, var(--mh-accent) 7%, transparent);
-  --mh-chip-hover: color-mix(in srgb, var(--mh-accent) 12%, transparent);
 
   /* reports catalog palette (assets/css/reports/catalog.css) */
 
-  --mh-reports-blue-soft: color-mix(in srgb, var(--mh-info) 8%, var(--mh-surface));
 
   /* Live report view (reports-core dark accents over the catalog light skin) */
 
@@ -165,11 +155,7 @@
   /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
 
 
-  --mh-copilot-gold-wash: color-mix(in srgb, var(--mh-accent) 14%, transparent);
 
-  --mh-copilot-fb-hover-line: color-mix(in srgb, var(--mh-accent) 68%, transparent);
-  --mh-copilot-fb-hover-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-copilot-fb-pressed-line: color-mix(in srgb, var(--mh-accent) 80%, transparent);
 
   /* Copilot holistic report (hr-*) — city-invest-analysis.css */
 
@@ -177,13 +163,8 @@
 
   /* Copilot rich answer (ra-*) — city-invest-analysis.css */
 
-  --mh-ra-badge-up-bg: color-mix(in srgb, var(--mh-success) 10%, transparent);
-  --mh-ra-badge-down-bg: color-mix(in srgb, var(--mh-danger) 12%, transparent);
 
-  --mh-ra-icon-retail-bg: color-mix(in srgb, var(--mh-accent) 16%, transparent);
-  --mh-ra-icon-outlet-bg: color-mix(in srgb, var(--mh-info) 12%, transparent);
 
-  --mh-ra-option-icon-bg: color-mix(in srgb, var(--mh-info) 10%, transparent);
 
   /* Knowledge type libraries — checkbox filter, principles cards, pagination
      (ai-interpreter-overview.css / principles-library.css / library.css) */
@@ -196,11 +177,6 @@
      ai-interpreter-overview.css / library.css). Effective values probed from
      the rendered type pages; the toolbar/search/filter chrome reuses the
      SearchField "plain" pill + boxed CheckboxFilter tokens. */
-  --mh-surface-info-strong: color-mix(in srgb, var(--mh-info) 11%, var(--mh-surface));
-  --mh-surface-rose-soft: color-mix(in srgb, var(--mh-data-rose) 11%, var(--mh-surface));
-  --mh-surface-violet-soft: color-mix(in srgb, var(--mh-data-violet) 12%, var(--mh-surface));
-  --mh-surface-danger-hover: color-mix(in srgb, var(--mh-danger) 5%, var(--mh-surface));
-  --mh-shadow-focus-warm-soft: 0 0 0 2px var(--mh-focus-ring);
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;

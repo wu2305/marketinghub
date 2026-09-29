@@ -132,7 +132,7 @@ margin: 6px 0 0;
 
 .mh-flow__msg.is-selected {
 border-left-color: var(--mh-accent);
-  background: var(--mh-gold-faint);
+  background: var(--mh-accent-wash);
 }
 
 .mh-flow__bubble {
@@ -288,7 +288,7 @@ color: var(--mh-text-faint);
 .mh-flow__field input.is-invalid,
 .mh-flow__field textarea.is-invalid {
 border-color: var(--mh-danger);
-  box-shadow: 0 0 0 2px var(--mh-danger-ring);
+  box-shadow: 0 0 0 2px var(--mh-danger-wash);
 }
 
 .mh-flow__field textarea {

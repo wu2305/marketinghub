@@ -536,7 +536,7 @@ display: grid;
 
 .mh-copilot__rec:hover {
 border-color: var(--mh-accent);
-  background: var(--mh-copilot-gold-wash);
+  background: var(--mh-accent-wash);
 }
 
 .mh-copilot__rec-index {
@@ -755,7 +755,7 @@ height: 30px;
 
 .mh-copilot__feedback button[aria-pressed="true"] {
 border-color: var(--mh-info);
-  background: var(--mh-reports-blue-soft);
+  background: var(--mh-info-wash);
   color: var(--mh-info);
 }
 
@@ -907,12 +907,12 @@ width: 14px;
 }
 
 .mh-copilot__fb:hover {
-border-color: var(--mh-copilot-fb-hover-line);
-  background: var(--mh-copilot-fb-hover-bg);
+border-color: var(--mh-accent);
+  background: var(--mh-accent-wash);
 }
 
 .mh-copilot__fb[aria-pressed="true"] {
-border-color: var(--mh-copilot-fb-pressed-line);
+border-color: var(--mh-accent);
   background: var(--mh-accent);
   color: var(--mh-text-strong);
 }
@@ -1199,12 +1199,12 @@ display: inline-flex;
 }
 
 .mh-ra-badge--pos {
-background: var(--mh-ra-badge-up-bg);
+background: var(--mh-success-wash);
   color: var(--mh-success);
 }
 
 .mh-ra-badge--neg {
-background: var(--mh-ra-badge-down-bg);
+background: var(--mh-danger-wash);
   color: var(--mh-danger);
 }
 
@@ -1263,12 +1263,12 @@ width: 14px;
 }
 
 .mh-ra-icon--retail {
-background: var(--mh-ra-icon-retail-bg);
+background: var(--mh-accent-wash);
   color: var(--mh-accent-ink);
 }
 
 .mh-ra-icon--outlet {
-background: var(--mh-ra-icon-outlet-bg);
+background: var(--mh-info-wash);
   color: var(--mh-info);
 }
 
@@ -1391,7 +1391,7 @@ display: flex;
   width: 24px;
   height: 24px;
   border-radius: var(--mh-radius-md);
-  background: var(--mh-ra-option-icon-bg);
+  background: var(--mh-info-wash);
   color: var(--mh-info);
   flex: none;
 }

@@ -196,7 +196,7 @@ display: grid;
 
 .mh-assistant__box:focus-within {
 border-color: var(--mh-accent-soft);
-  box-shadow: var(--mh-composer-focus);
+  box-shadow: 0 0 0 2px var(--mh-focus-ring);
 }
 
 .mh-assistant__tools {
@@ -541,13 +541,13 @@ border-color: var(--mh-line-strong);
 
 .mh-assistant__feedback button[data-kind="helpful"][aria-pressed="true"] {
 border-color: var(--mh-success);
-  background: var(--mh-ai-chip-pos-bg);
+  background: var(--mh-success-wash);
   color: var(--mh-success);
 }
 
 .mh-assistant__feedback button[data-kind="not-helpful"][aria-pressed="true"] {
 border-color: var(--mh-danger);
-  background: var(--mh-ai-chip-neg-bg);
+  background: var(--mh-danger-wash);
   color: var(--mh-danger);
 }
 
@@ -728,6 +728,6 @@ display: grid;
 
 .mh-assistant__chip button:hover,
 .mh-assistant__chip button:focus-visible {
-background: var(--mh-chip-hover);
+background: var(--mh-accent-wash);
   outline: 0;
 }

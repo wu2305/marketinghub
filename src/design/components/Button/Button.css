@@ -54,8 +54,8 @@ border-color: var(--mh-surface-inverse);
 
 .mh-button--primary:hover,
 .mh-button--primary:focus-visible {
-border-color: var(--mh-surface-action-slate);
-  background: var(--mh-surface-action-slate);
+border-color: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
+  background: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface));
 }
 
 .mh-button--gold {

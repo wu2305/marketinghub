@@ -1,24 +1,8 @@
 {
   "maxRawHexColors": 0,
-  "maxTokenDefinitions": 91,
-  "maxDuplicateValues": 40,
-  "legacyPrefixExemptions": [
-    "--mh-launcher-aura",
-    "--mh-ai-chip-pos-bg",
-    "--mh-ai-chip-neg-bg",
-    "--mh-composer-focus",
-    "--mh-chip-hover",
-    "--mh-reports-blue-soft",
-    "--mh-copilot-gold-wash",
-    "--mh-copilot-fb-hover-line",
-    "--mh-copilot-fb-hover-bg",
-    "--mh-copilot-fb-pressed-line",
-    "--mh-ra-badge-up-bg",
-    "--mh-ra-badge-down-bg",
-    "--mh-ra-icon-retail-bg",
-    "--mh-ra-icon-outlet-bg",
-    "--mh-ra-option-icon-bg"
-  ],
+  "maxTokenDefinitions": 67,
+  "maxDuplicateValues": 8,
+  "legacyPrefixExemptions": [],
   "pendingMigration": [
     "features/scenario-library/SkillLibrary"
   ],

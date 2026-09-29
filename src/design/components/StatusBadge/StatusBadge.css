@@ -15,22 +15,22 @@
 }
 
 .mh-badge--success {
-  background: var(--mh-surface-success-soft);
+  background: var(--mh-success-wash);
   color: var(--mh-success);
 }
 
 .mh-badge--warning {
-  background: var(--mh-surface-warning-soft);
+  background: var(--mh-warning-wash);
   color: var(--mh-warning);
 }
 
 .mh-badge--info {
-  background: var(--mh-surface-info);
+  background: var(--mh-info-wash);
   color: var(--mh-info);
 }
 
 .mh-badge--danger {
-  background: var(--mh-surface-danger-hover);
+  background: var(--mh-danger-wash);
   color: var(--mh-danger);
 }
 
