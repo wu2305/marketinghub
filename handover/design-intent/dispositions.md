@@ -280,6 +280,15 @@ Source: `assets/pages/scenario-library.html:286-495` (inline form), `assets/page
 | SFM-07 | `skillScopes` (public export with a leading empty string) | used only in one story description | Drop (no consumer) | removed; scope choices are `labels.scopeOptions` | story description |
 | SFM-08 | `labels.autosaved` / `labels.exampleQuestion` (inline) vs `labels.saved` / `labels.question` (editor) | — | Normalize | one key set (`saved`, `question`); `SkillDetail` reads `labels.question` | content only |
 
+### Personal Memory create drawer on AutoFillTextarea — Phase 3
+
+Source: `assets/pages/personal-memory.html` (`.create-memory-ai-fill`), `assets/js/governance/memory.js`. React before: a private bordered button over the description textarea in `PersonalMemoryPage`; after: the shared `components/AutoFillTextarea` the Skill forms already use.
+
+| # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| PMA-01 | the AI Auto-fill control over the description was a bordered white button here and a gold pill in the Skill forms | same control, two looks | Normalize (one concept) | gold pill from `AutoFillTextarea`; behaviour unchanged (`onAutoFill({ field: "description" })` fills deterministic text and clears that field's error) | selector `.mh-memory-page__textarea button` → `.mh-autofill button` in the story and `p14` scenario |
+| PMA-02 | description textarea invalid state: red border only | `PersonalMemoryPage.css` before | Normalize | same invalid look as the Skill forms (red border plus a light red ring); the error message and first-error focus are unchanged | none |
+
 ### Submit → Under Review — WP7k
 
 Source: `assets/js/knowledge/analytical-model-form.js`, `business-term-form.js`, `scenario-report-form.js`, `editor-runtime.js`, `assets/js/governance/skills.js`, `skill-editor.js`. React before: `demo/knowledge-create-demo.js` (`persist`), `demo/skill-library-demo.js` and `demo/scenario-edit-demo.js` (Submit), `components/ModelFlowDialog` copy, `demo/interpreter-demo.js`. Not a library view: no layout changes; only what Submit does and says. Seeds: D15, A1 ("Submit → Under Review; Review Center publishes"), R4 (Submit keeps the form's availability), B16.
