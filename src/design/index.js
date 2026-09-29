@@ -265,6 +265,7 @@ export { ScenarioEditForm } from "./features/scenario-edit/ScenarioEditForm/inde
 export { ScenarioGovernance, scenarioGovernanceLayouts } from "./components/ScenarioGovernance/index.jsx";
 export { ScenarioStructure } from "./components/ScenarioStructure/index.jsx";
 export { ExamplePreview, examplePreviewVariants } from "./components/ExamplePreview/index.jsx";
+export { AutoFillTextarea } from "./components/AutoFillTextarea/index.jsx";
 export { Icon, iconNames } from "./icons.jsx";
 export { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./pages/MetricDictionaryPage/index.jsx";
 export { ScenarioLibraryPage, skillLibraryModes, skillStatuses } from "./pages/ScenarioLibraryPage/index.jsx";

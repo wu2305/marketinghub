@@ -273,6 +273,15 @@ describe("src/design package export boundary (R5b)", () => {
     expect(protectedPublicExports()).toEqual([]);
   });
 
+  it("exports every shared component directory from the component entry", () => {
+    const exportedFrom = new Set([...publicExports(path.join(ROOT, "index.js")).values()].flatMap((origins) => [...origins].map((id) => id.split("#")[0])));
+    const missing = fs.readdirSync(path.join(ROOT, "components"), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && fs.existsSync(path.join(ROOT, "components", entry.name, "index.jsx")))
+      .map((entry) => `components/${entry.name}/index.jsx`)
+      .filter((file) => !exportedFrom.has(file));
+    expect(missing).toEqual([]);
+  });
+
   it("exposes the reusable demo flows through the separate demo entry", () => {
     const demo = publicExports(path.join(ROOT, "demo/index.js"));
     for (const name of ["demoContent", "useCockpitDemo", "useHomeDemo", "useInterpreterDemo", "cityInvestScenarioSource", "projectCatalogHref"]) {
