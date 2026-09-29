@@ -253,7 +253,7 @@ describe("P08 demo flow", () => {
     act(() => analysis.result.current.onSave());
     expect(analysisSave.mock.calls[0][0]).toMatchObject({ stage: "Draft", values: { status: false, enabled: false } });
     act(() => analysis.result.current.onSubmit());
-    expect(analysisSubmit.mock.calls[0][0]).toMatchObject({ stage: "Published", values: { status: true, enabled: true } });
+    expect(analysisSubmit.mock.calls[0][0]).toMatchObject({ stage: "Under Review", values: { status: true, enabled: true } });
     analysis.unmount();
 
     const scenarioSubmit = vi.fn();
@@ -265,8 +265,18 @@ describe("P08 demo flow", () => {
     const genericSubmit = vi.fn();
     const generic = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Principles", initial: { title: "Rule", description: "Detail" }, onSubmit: genericSubmit }));
     act(() => generic.result.current.onSubmit());
-    expect(genericSubmit.mock.calls[0][0]).not.toHaveProperty("stage");
+    expect(genericSubmit.mock.calls[0][0]).toMatchObject({ stage: "Under Review" });
     generic.unmount();
+  });
+
+  it("Submit sends Business Terms and Analytical Models to review and keeps the form's availability", () => {
+    const navigate = vi.fn();
+    const submit = vi.fn();
+    const term = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Business Term", initial: { title: "T", description: "D", scope: ["Marketing"], enabled: false, status: false }, onSubmit: submit, onNavigate: navigate }));
+    act(() => term.result.current.onSubmit());
+    expect(submit.mock.calls[0][0]).toMatchObject({ stage: "Under Review", values: { enabled: false, status: false } });
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Business Term", notice: "submitted" } }));
+    term.unmount();
   });
 
   it("prefills Analytical Model edit from source-linked record values and only source metrics", () => {

@@ -120,4 +120,35 @@ describe("useSkillLibraryDemo form stubs (D11, D13, D14)", () => {
     expect(hook.result.current.library.items).toHaveLength(11);
     hook.unmount();
   });
+
+  it("Submit saves the form as Under Review, returns to the list and toasts (KS-07)", () => {
+    const onSubmit = vi.fn();
+    const alert = vi.spyOn(window, "alert").mockImplementation(() => {});
+    const hook = renderHook(() => useSkillLibraryDemo({ initial: CREATE, onSubmit }));
+    act(() => hook.result.current.form.onChange({ key: "name", value: "Pacing check" }));
+    act(() => hook.result.current.form.onSubmit({ values: {} }));
+    expect(hook.result.current.form.mode).toBe("list");
+    expect(hook.result.current.library.items).toHaveLength(10);
+    expect(hook.result.current.library.items[0]).toMatchObject({ name: "Pacing check", status: "Under Review" });
+    expect(hook.result.current.toast).toBe("Submitted for review");
+    expect(onSubmit).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ status: "Under Review" }));
+    expect(alert).not.toHaveBeenCalled();
+    alert.mockRestore();
+    hook.unmount();
+  });
+
+  it("Submit after Save Draft updates the same row instead of adding another", () => {
+    const hook = renderHook(() => useSkillLibraryDemo({ initial: CREATE }));
+    act(() => hook.result.current.form.onSaveDraft());
+    act(() => hook.result.current.form.onSubmit({ values: {} }));
+    expect(hook.result.current.library.items).toHaveLength(10);
+    expect(hook.result.current.library.items[0].status).toBe("Under Review");
+    hook.unmount();
+  });
+
+  it("the submitted notice announces itself on arrival", () => {
+    const hook = renderHook(() => useSkillLibraryDemo({ notice: "submitted" }));
+    expect(hook.result.current.toast).toBe("Submitted for review");
+    hook.unmount();
+  });
 });

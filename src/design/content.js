@@ -388,6 +388,8 @@ export const SELF_SERVICE = {
 // the same identifiers the original demo uses in ?type= URLs and asset.type fields.
 // stats mirror typeMeta[].stats (the agreed counting source, see AGENTS.md 3.3).
 export const INTERPRETER = {
+  /* ?notice= keys the workspace announces on arrival (KS-05: a governed form's Submit). */
+  notices: { submitted: "Submitted for review" },
   /* knowledge.html loads knowledge.js + knowledge-fields.js before the shared
      skill menu. Both supply this id, so readAnalyticalModels dedupes to one
      model with the field-mapping trigger note (not the fallback three). */
@@ -1739,16 +1741,16 @@ export const MODEL_FLOW = {
   generatedTitle: "New Analytical Model",
   generatedSubtitle: "Generated from selected conversations and your generation rule.",
   generatedSubtitlePlain: "Generated from selected conversations.",
-  generatedNotice: "Submit will publish this knowledge immediately.",
+  generatedNotice: "Submit will send this knowledge for review.",
   manualTitle: "Create Analytical Model Manually",
-  manualSubtitle: "Draft the model fields and publish it to the knowledge base.",
+  manualSubtitle: "Draft the model fields and submit them for review.",
   cancelLabel: "Cancel",
   generateLabel: "Generate",
   backLabel: "← Back",
   saveLabel: "Save",
   submitLabel: "Submit",
   savedLabel: "Saved",
-  publishedLabel: "Published",
+  submittedLabel: "Submitted",
   threads: [
     {
       title: "Campaign ROI decline",

@@ -22,7 +22,7 @@ export const ScenarioEdit = {
     onChange: callbackProp("onChange", "({field:string,value:string}) => void", { field: "scope", value: "Global" }),
     onRunPreview: callbackProp("onRunPreview", "({question:string,output:string}) => void", { question: "Compare cities", output: "Generating preview..." }),
     onValidation: callbackProp("onValidation", "({firstInvalid:string,errors:object}) => void", { firstInvalid: "name", errors: { name: true } }),
-    onSubmit: callbackProp("onSubmit", "({id:string|null,values:object}) => void", { id: "scenario-campaign-review", values: SCENARIO_EDIT.defaults }),
+    onSubmit: callbackProp("onSubmit", "({id:string|null,status:'Under Review',values:object}) => void; the demo then navigates to the Skill Library with ?notice=submitted", { id: "scenario-campaign-review", values: SCENARIO_EDIT.defaults }),
     onAutoFill: callbackProp("onAutoFill", "({field:'logic'|'output'}) => void; the demo fills the field with deterministic text", { field: "logic" }),
     onSaveDraft: callbackProp("onSaveDraft", "({id:string|null,status:'Draft',values:object}) => void; the demo shows a Draft saved toast", { id: null, status: "Draft", values: SCENARIO_EDIT.defaults }),
     onSelectFiles: callbackProp("onSelectFiles", "({files:string[]}) => void", { files: ["brief.pdf"] }),

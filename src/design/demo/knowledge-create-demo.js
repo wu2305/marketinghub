@@ -44,9 +44,10 @@ const initialValues = {
 
 /**
  * Deterministic P08 flow: no assets/js, storage, server, or AI calls.
- * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`. `stage` is
- * present only when the original UI names a draft or dedicated workflow state;
- * generic submit and Report Context description review have no invented stage.
+ * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`. Save is
+ * `Draft`; Submit is `Under Review` (Review Center publishes, A1) except Scenario
+ * Reporting, whose own build pipeline starts at `Queued`; the Report Context
+ * description review is not a new item and has no stage.
  * @param {Record<string, any>} options
  */
 export function useKnowledgeCreateDemo({
@@ -84,14 +85,14 @@ export function useKnowledgeCreateDemo({
     const missing = shouldValidate ? validateKnowledgeCreate(type, values) : [];
     if (missing.length) { setInvalid(missing); return false; }
     const persistedValues = { ...values };
-    if (type === "Business Term") persistedValues.status = persistedValues.enabled = action === "submit";
-    if (type === "Analytical Model") persistedValues.status = persistedValues.enabled = action === "submit";
+    /* Save keeps knowledge offline; Submit keeps the form's availability (R4). Nothing is published here: Submit sends it to review (A1). */
+    if (action === "save" && ["Business Term", "Analytical Model"].includes(type)) persistedValues.status = persistedValues.enabled = false;
     if (type === "Scenario Reporting") persistedValues.status = persistedValues.enabled = false;
-    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : ["Business Term", "Analytical Model"].includes(type) ? "Published" : undefined;
+    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : reportEditAvailable ? undefined : "Under Review";
     const payload = { type, mode, id, values: persistedValues, ...(stage ? { stage } : {}) };
     (action === "save" ? onSave : onSubmit)?.(payload);
     if (["Business Term", "Analytical Model", "Scenario Reporting"].includes(type) || reportEditAvailable) {
-      navigate({ id: "interpreter", params: type === "Report Context" ? { type } : { type, notice: action === "save" ? "saved" : "published" } });
+      navigate({ id: "interpreter", params: type === "Report Context" ? { type } : { type, notice: action === "save" ? "saved" : "submitted" } });
     } else {
       setResult({ action, ...payload });
     }

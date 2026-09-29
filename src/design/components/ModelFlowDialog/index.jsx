@@ -20,16 +20,16 @@ const MODEL_FLOW_LABELS = {
   generatedTitle: "New Analytical Model",
   generatedSubtitle: "Generated from selected conversations and your generation rule.",
   generatedSubtitlePlain: "Generated from selected conversations.",
-  generatedNotice: "Submit will publish this knowledge immediately.",
+  generatedNotice: "Submit will send this knowledge for review.",
   manualTitle: "Create Analytical Model Manually",
-  manualSubtitle: "Draft the model fields and publish it to the knowledge base.",
+  manualSubtitle: "Draft the model fields and submit them for review.",
   cancelLabel: "Cancel",
   generateLabel: "Generate",
   backLabel: "← Back",
   saveLabel: "Save",
   submitLabel: "Submit",
   savedLabel: "Saved",
-  publishedLabel: "Published",
+  submittedLabel: "Submitted",
 };
 
 const MODEL_FLOW_SECTIONS = [
@@ -68,7 +68,7 @@ const MODEL_FLOW_SECTIONS = [
  * generation-rule textarea; Generate requires at least one ticked message.
  * `step="generated"` shows the drafted model form (Back returns to the history
  * step with ticks and rule preserved); `step="manual"` shows the same form
- * empty. Save/Submit validate required fields, then flash Saved/Published and
+ * empty. Save/Submit validate required fields, then flash Saved/Submitted and
  * close after ~450ms — matching the demo's deterministic simulation.
  * @param {object} props
  * @param {typeof modelFlowSteps[number]} [props.step] falsy renders nothing
@@ -317,7 +317,7 @@ export function ModelFlowDialog({
           ) : submitFirst ? (
             <>
               <button type="button" className="mh-flow__btn mh-flow__btn--primary" onClick={() => finish("submit")}>
-                {done === "submit" ? copy.publishedLabel : copy.submitLabel}
+                {done === "submit" ? copy.submittedLabel : copy.submitLabel}
               </button>
               <button type="button" className="mh-flow__btn mh-flow__btn--secondary" onClick={() => finish("save")}>
                 {done === "save" ? copy.savedLabel : copy.saveLabel}
@@ -329,7 +329,7 @@ export function ModelFlowDialog({
                 {done === "save" ? copy.savedLabel : copy.saveLabel}
               </button>
               <button type="button" className="mh-flow__btn mh-flow__btn--primary" onClick={() => finish("submit")}>
-                {done === "submit" ? copy.publishedLabel : copy.submitLabel}
+                {done === "submit" ? copy.submittedLabel : copy.submitLabel}
               </button>
             </>
           )}

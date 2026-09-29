@@ -27,4 +27,18 @@ describe("Scenario Edit demo stubs", () => {
     expect(onSaveDraft).toHaveBeenCalledExactlyOnceWith({ id: null, status: "Draft", values: expect.objectContaining({ name: "" }) });
     unmount();
   });
+
+  it("valid Submit reports Under Review and opens the Skill Library with the submitted notice, no alert (KS-08)", () => {
+    const onSubmit = vi.fn();
+    const onNavigate = vi.fn();
+    const alert = vi.spyOn(window, "alert").mockImplementation(() => {});
+    const hrefFor = (id, params) => `/${id}?${new URLSearchParams(params)}`;
+    const { result, unmount } = renderHook(() => useScenarioEditDemo(props({ onSubmit, onNavigate, hrefFor })));
+    act(() => result.current.form.onSubmit({ values: result.current.form.values }));
+    expect(alert).not.toHaveBeenCalled();
+    expect(onSubmit).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ status: "Under Review" }));
+    expect(onNavigate).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ id: "scenario-library", params: { notice: "submitted" }, href: "/scenario-library?notice=submitted" }));
+    alert.mockRestore();
+    unmount();
+  });
 });

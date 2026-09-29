@@ -15,6 +15,7 @@ import { useScenarioDemo } from "./scenario-demo.js";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 import { FieldLibraryDrawer } from "../features/interpreter/FieldLibraryView/index.jsx";
 import { demoHrefFor, demoTargetForHref } from "./navigation.js";
+import { useToast } from "./use-toast.js";
 
 const EMPTY_ARRAY = [];
 
@@ -68,8 +69,10 @@ export function paginateRows(rows, { page = 1, pageSize = 10 } = {}) {
  * Fixed hook order preserves each type's local state while inactive hooks
  * skip view derivation. Only the active view (and an open related-report
  * overlay) becomes page props. Host callbacks carry the active typeId.
- * @param {object} props type/record seeds, per-view content and host callbacks
- * @returns {{view: object|null, overlay: React.ReactNode, assistant: object, skillFlow?: object}} page view slots and assistant flow
+ * A `notice` key (the host's `?notice=` value) looked up in `notices` shows a
+ * three-second Toast on arrival, e.g. after a governed form's Submit.
+ * @param {object} props type/record seeds, per-view content, `notice` + `notices` and host callbacks
+ * @returns {{view: object|null, overlay: React.ReactNode, toast: string, assistant: object, skillFlow?: object}} page view slots, toast and assistant flow
  */
 export function useInterpreterDemo(props) {
   const hrefFor = props.hrefFor || demoHrefFor;
@@ -272,6 +275,11 @@ export function useInterpreterDemo(props) {
     : activeView === "field-library" ? fieldLibrary
     : activeView === "scenario-reports" ? scenarioReports
     : null;
+  const { toast, showToast } = useToast();
+  const noticeText = props.notice ? props.notices?.[props.notice] : undefined;
+  React.useEffect(() => {
+    if (noticeText) showToast(noticeText);
+  }, [noticeText, showToast]);
   const workspace = useWorkspaceAssistantDemo({
     assistant: props.assistant,
     demo: { ...props.demo, answerFor: props.demo?.answerFor || buildInterpreterAnswer },
@@ -282,8 +290,8 @@ export function useInterpreterDemo(props) {
   return {
     view,
     overlay,
+    toast,
     hrefFor,
     ...workspace,
-
   };
 }

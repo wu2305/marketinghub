@@ -181,7 +181,7 @@ describe("P10 metric dictionary process", () => {
     expect(pages[1].querySelectorAll(".mh-metric-page__list button")).toHaveLength(7);
   });
 
-  it.each([["Save", "Saved"], ["Submit", "Published"]])("validates model %s and keeps %s visible before closing", async (action, result) => {
+  it.each([["Save", "Saved"], ["Submit", "Submitted"]])("validates model %s and keeps %s visible before closing", async (action, result) => {
     render(<Harness initial={{ assistantOpen: true, flow: { step: "manual", threads: MODEL_FLOW.threads, rule: "", draft: {} } }} />);
     fireEvent.click(screen.getByRole("button", { name: action }));
     expect(screen.getByText("Name is required.")).toBeTruthy();
