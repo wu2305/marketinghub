@@ -12,7 +12,7 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Source-backed feedback table, filters and detail panel. The page is controlled; the private flow is shared with the standalone host. The original P13 launcher is inert because portal.js requires a missing subtitle; this story restores its intended assistant behavior." } } } };
+export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Feedback & Quality page on the governed-library table pattern: All / Thumbs Up / Thumbs Down tabs, search, Type and Time facets, the feedback table and its detail drawer. List states (filtered, empty) are shown by the Organisms/Library stories. The page is controlled; the private flow is shared with the standalone host. The original P13 launcher is inert because portal.js requires a missing subtitle; this story restores its intended assistant behavior." } } } };
 
 export const FeedbackQuality = {
   name: "Feedback & Quality",
@@ -27,6 +27,7 @@ export const FeedbackQuality = {
     onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "thumbs-up" }),
     onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "week" }),
     onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "loyalty" }),
+    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }),
     onOpen: callbackProp("onOpen", "({id:string}) => void", { id: "fb-3" }),
     onCloseDetail: callbackProp("onCloseDetail", "({reason:string}) => void", { reason: "escape" }),
     onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "review-center", params: {}, href: "/assets/pages/review-center.html", label: "Review Center" }),
@@ -40,12 +41,6 @@ export const FeedbackQuality = {
 };
 
 const state = (name, initial = {}) => ({ ...FeedbackQuality, name, args: { ...FeedbackQuality.args, initial, type: initial.type || "all", time: initial.time || "all", search: initial.search || "" } });
-export const FeedbackQualityUp = state("Feedback & Quality · Thumbs Up", { type: "thumbs-up" });
-export const FeedbackQualityDown = state("Feedback & Quality · Thumbs Down", { type: "thumbs-down" });
-export const FeedbackQualityToday = state("Feedback & Quality · Today", { time: "today" });
-export const FeedbackQualityWeek = state("Feedback & Quality · This week", { time: "week" });
-export const FeedbackQualityMonth = state("Feedback & Quality · This month", { time: "month" });
-export const FeedbackQualitySearch = state("Feedback & Quality · Search result", { search: "loyalty program" });
 export const FeedbackQualityEmpty = state("Feedback & Quality · No matching feedback", { search: "no matching feedback" });
 export const FeedbackQualityNegativeDetail = state("Feedback & Quality · Negative feedback detail", { selectedId: "fb-3" });
 export const FeedbackQualityPositiveDetail = state("Feedback & Quality · Positive feedback detail", { selectedId: "fb-1" });
