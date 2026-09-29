@@ -39,4 +39,28 @@ describe("Personal Memory demo composition", () => {
     expect(result.current.memory.counts.all).toBe(19);
     unmount();
   });
+
+  it("fills the description from AI Auto-fill without touching the title, and clears its error", () => {
+    const { result, unmount } = renderHook(() => usePersonalMemoryDemo({ content: PERSONAL_MEMORY, records: PERSONAL_MEMORY.records }));
+    act(() => result.current.create.onOpen());
+    act(() => result.current.create.onChange({ field: "title", value: "Typed title" }));
+    act(() => result.current.create.onSave());
+    expect(result.current.create.errors.description).toBe(true);
+    act(() => result.current.create.onAutoFill({ field: "description" }));
+    expect(result.current.create.draft.description).toBe(PERSONAL_MEMORY.labels.autoFillText);
+    expect(result.current.create.draft.title).toBe("Typed title");
+    expect(result.current.create.errors.description).toBe(false);
+    unmount();
+  });
+
+  it("shows the delete toast only after confirming, not on cancel", () => {
+    const { result, unmount } = renderHook(() => usePersonalMemoryDemo({ content: PERSONAL_MEMORY, records: PERSONAL_MEMORY.records }));
+    act(() => result.current.memory.onDelete({ id: "mem-meeting-1" }));
+    act(() => result.current.deletion.onCancel());
+    expect(result.current.toast).toBe("");
+    act(() => result.current.memory.onDelete({ id: "mem-meeting-1" }));
+    act(() => result.current.deletion.onConfirm());
+    expect(result.current.toast).toBe("Deleted successfully");
+    unmount();
+  });
 });

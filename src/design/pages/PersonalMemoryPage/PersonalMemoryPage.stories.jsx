@@ -25,7 +25,7 @@ export const PersonalMemory = {
     onConfirmDelete: callbackProp("onConfirmDelete", "({id:string}) => void", { id: "mem-analysis-1" }),
     onSaveMemory: callbackProp("onSaveMemory", "({item:object}) => void", { item: PERSONAL_MEMORY.records[0] }),
     onShare: callbackProp("onShare", "({id:string}) => void; source action has no resulting flow", { id: "mem-analysis-1" }),
-    onAutoFill: callbackProp("onAutoFill", "() => void; source action has no resulting flow", {}),
+    onAutoFill: callbackProp("onAutoFill", "({field:\"description\"}) => void", { field: "description" }),
     onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: routes.interpreter, label: "Knowledge Management" }),
     onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }),
   },
@@ -42,9 +42,10 @@ export const PersonalMemoryCategory = state("Personal Memory · Analysis categor
 export const PersonalMemoryEmpty = state("Personal Memory · Empty category", { category: "reference" }, { records: PERSONAL_MEMORY.records.filter((item) => item.category !== "reference") });
 export const PersonalMemoryBannerClosed = state("Personal Memory · AI banner dismissed", { bannerOpen: false });
 export const PersonalMemoryDetail = state("Personal Memory · Selected detail", { selectedId: "mem-analysis-1" });
-export const PersonalMemoryMenu = state("Personal Memory · Card actions", { selectedId: "mem-analysis-1", menuId: "mem-meeting-1" });
 export const PersonalMemoryEdit = state("Personal Memory · Editing detail", { selectedId: "mem-analysis-1", editing: true, editDraft: { title: PERSONAL_MEMORY.records[0].title, description: PERSONAL_MEMORY.records[0].description } });
 export const PersonalMemoryCreate = state("Personal Memory · New memory drawer", { createOpen: true });
+export const PersonalMemoryAutoFilled = state("Personal Memory · AI Auto-fill", { createOpen: true });
+PersonalMemoryAutoFilled.play = click(".mh-memory-page__textarea button");
 export const PersonalMemoryCreateErrors = state("Personal Memory · Required create fields", { createOpen: true });
 PersonalMemoryCreateErrors.play = click(".mh-memory-page__create-actions button:last-child");
 export const PersonalMemoryCrossCategory = state("Personal Memory · New detail outside active category", { category: "reference", createOpen: true, createDraft: { title: "Cross-category analysis", category: "analysis", description: "New analysis while Others remains selected." } });
