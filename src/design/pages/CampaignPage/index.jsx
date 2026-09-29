@@ -1,7 +1,6 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Button } from "../../components/Button/index.jsx";
 import { ColumnChart } from "../../components/ColumnChart/index.jsx";
 import { DataTable } from "../../components/DataTable/index.jsx";
@@ -9,7 +8,6 @@ import { FormField } from "../../components/FormField/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { ProgressList } from "../../components/ProgressList/index.jsx";
 import { SearchField } from "../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
@@ -73,13 +71,6 @@ export const campaignChannels = ["rednote", "douyin"];
  * @param {(event: { reason: "button" }) => void} [props.onBindAccount]
  * @param {(event: { reason: "scrim"|"escape"|"button"|"cancel" }) => void} [props.onCloseTask]
  * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask]
- * @param {boolean} [props.assistantOpen=false]
- * @param {string} [props.prompt=""]
- * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
- * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
- * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string }) => void} [props.onSubmit]
- * @param {(event: { prompt: string }) => void} [props.onSuggestion]
  */
 export function CampaignPage({
   current = "campaign",
@@ -124,13 +115,6 @@ export function CampaignPage({
   onBindAccount,
   onCloseTask,
   onSubmitTask,
-  assistantOpen = false,
-  prompt = "",
-  onOpenAssistant,
-  onCloseAssistant,
-  onPromptChange,
-  onSubmit,
-  onSuggestion,
 }) {
   const draft = taskDraft || { action: "", platform: "", account: "", object: "" };
   const updateTaskDraft = (name, value) => {
@@ -172,7 +156,6 @@ export function CampaignPage({
     auth: <StatusBadge status={row.authStatus}>{row.authLabel}</StatusBadge>,
     permission: row.permissionStatus ? <StatusBadge status={row.permissionStatus}>{row.permission}</StatusBadge> : row.permission,
   }));
-  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell>
       <Header logo={logo} items={navigation} current={current} density="comfortable" onNavigate={onNavigate} />
@@ -300,20 +283,7 @@ export function CampaignPage({
           ) : null}
         </main>
       </div>
-      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
-      <AssistantPanel
-        open={assistantOpen}
-        returnFocusRef={assistantLauncherRef}
-        placement="drawer"
-        {...assistant}
-        variant="campaign"
-        prompt={prompt}
-        onClose={onCloseAssistant}
-        onPromptChange={onPromptChange}
-        onSubmit={onSubmit}
-        onSuggestion={onSuggestion}
-      />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={assistant} skillFlow={skillFlow} />
       <Modal
         open={taskDialogOpen}
         eyebrow={taskDialog.eyebrow}

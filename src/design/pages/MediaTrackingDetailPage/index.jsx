@@ -1,10 +1,8 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { FormField } from "../../components/FormField/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Tabs } from "../../components/Tabs/index.jsx";
 import { normalizeOptions } from "../../lib/options.js";
 import { Icon } from "../../icons.jsx";
@@ -33,25 +31,10 @@ export const mediaTrackingPeriods = ["daily", "weekly", "monthly", "spot"];
  * @param {Array<{ term: string, text: string }>} [props.notes=[]]
  * @param {{ title?: string, count?: string, columns?: Array<{ key: string, header: string }>, rows?: Array<object> }} [props.table={}]
  * @param {object} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through
- * @param {boolean} [props.assistantOpen=false]
- * @param {string} [props.prompt=""]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
  * @param {(target: { href: string, id?: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]
- * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
- * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
- * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string }) => void} [props.onSubmit]
- * @param {(event: { prompt: string }) => void} [props.onSuggestion]
- * @param {() => void} [props.onNewSession]
- * @param {(event: { expanded: boolean }) => void} [props.onMaximize]
- * @param {(event: { open: boolean }) => void} [props.onHistory]
- * @param {(event: { label: string, prompt: string }) => void} [props.onHistorySelect]
- * @param {(event: { names: string[] }) => void} [props.onAttach]
- * @param {(event: { id?: string, type: string, title: string }) => void} [props.onSelectSkill]
- * @param {() => void} [props.onClearSkill]
- * @param {(event: { action: "history"|"manual" }) => void} [props.onSkillAction]
  */
 export function MediaTrackingDetailPage({
   current,
@@ -66,27 +49,11 @@ export function MediaTrackingDetailPage({
   notes = [],
   table = {},
   assistant = {},
-  assistantOpen = false,
-  prompt = "",
   skillFlow,
   onNavigate,
   onPeriodChange,
   onFilterChange,
-  onOpenAssistant,
-  onCloseAssistant,
-  onPromptChange,
-  onSubmit,
-  onSuggestion,
-  onNewSession,
-  onMaximize,
-  onHistory,
-  onHistorySelect,
-  onAttach,
-  onSelectSkill,
-  onClearSkill,
-  onSkillAction,
 }) {
-  const assistantLauncherRef = React.useRef(null);
   return (
     <Shell tone="tracking">
       <Header logo={logo} items={navigation} current={current} highlightCurrent={false} onNavigate={onNavigate} />
@@ -155,28 +122,7 @@ export function MediaTrackingDetailPage({
           </div>
         </section>
       </main>
-      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen} onOpen={onOpenAssistant} />
-      <AssistantPanel
-        open={assistantOpen}
-        returnFocusRef={assistantLauncherRef}
-        placement="drawer"
-        {...assistant}
-        variant="lite"
-        prompt={prompt}
-        onClose={onCloseAssistant}
-        onPromptChange={onPromptChange}
-        onSubmit={onSubmit}
-        onSuggestion={onSuggestion}
-        onNewSession={onNewSession}
-        onMaximize={onMaximize}
-        onHistory={onHistory}
-        onHistorySelect={onHistorySelect}
-        onAttach={onAttach}
-        onSelectSkill={onSelectSkill}
-        onClearSkill={onClearSkill}
-        onSkillAction={onSkillAction}
-      />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     </Shell>
   );
 }

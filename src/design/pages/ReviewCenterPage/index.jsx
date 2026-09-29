@@ -3,9 +3,7 @@ import React from "react";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
 import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
@@ -61,7 +59,6 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
   const { tab = "pending", search = "", type = "all", time = "all", onTabChange, onSearchChange, onTypeChange, onTimeChange, onClear } = filters;
   const { items: records = [], counts = {}, onOpenDetail, onReviewAction } = queue;
   const { selected, panel, reason = "", detailSuggestions = [], rejectSuggestions = [], onClose: onClosePanel, onReasonChange, onConfirmReject, onConfirmApprove } = decision;
-  const launcherRef = React.useRef(null);
   const reasonRef = React.useRef(null);
   const labels = content.labels;
   const action = (kind) => selected && onReviewAction?.({ id: selected.id, action: kind });
@@ -79,8 +76,6 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
       : <Button variant="secondary" size="sm" icon="eye" label={`${labels.view} ${item.title}`} onClick={() => onReviewAction?.({ id: item.id, action: "view" })}>{labels.view}</Button>}</span>,
   }));
   const single = (value) => (value === "all" ? "" : value);
-  const ai = assistant || {};
-  const { open: aiOpen = false, prompt: aiPrompt = "", answers: aiAnswers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = ai;
   return <div className="mh-review-page" data-review-tab={tab} data-review-panel={panel || "none"}>
     <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {} })} />
     <Hero image={image} eyebrow={content.hero.eyebrow} title={content.hero.title} description={content.hero.description} height={372} variant="home" scrim="none" asideLabel={labels.summaryAria}>
@@ -115,9 +110,7 @@ export function ReviewCenterPage({ content, logo, navigation = [], image, filter
         />
       </main>
     </div>
-    <AssistantLauncher ref={launcherRef} hidden={aiOpen} label={aiCopy.launcherLabel} onOpen={onAssistantOpen} />
-    <AssistantPanel open={aiOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...aiCopy} prompt={aiPrompt} answers={aiAnswers} selectedSkill={selectedSkill} onClose={onAssistantClose} onPromptChange={onPromptChange} onSubmit={onSubmit} onSuggestion={onSuggestion} onHistorySelect={onHistorySelect} onNewSession={onNewSession} onSelectSkill={onSelectSkill} onClearSkill={onClearSkill} onSkillAction={onSkillAction} onAttach={onAttach} onMaximize={onMaximize} onHistory={onHistory} />
-    {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+    <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     <Modal open={panel === "detail" && Boolean(selected)} variant="drawer" className="mh-review-page__detail" eyebrow={labels.reviewItem} title={selected?.title} closeLabel={labels.closeDetail} onClose={onClosePanel}>
       {selected && <><div className="mh-review-page__detail-head"><span>{selected.type}</span><small>{selected.source}</small><h2>{selected.title}</h2><p>{selected.summary}</p></div><dl className="mh-review-page__meta"><div><dt>{labels.submittedBy}</dt><dd>{selected.submittedBy}</dd></div><div><dt>{labels.submitted}</dt><dd>{selected.submitted}</dd></div><div><dt>{labels.status}</dt><dd>{labels[selected.status]}</dd></div><div><dt>{labels.aiCheck}</dt><dd>{selected.aiCheck}</dd></div></dl>{selected.warning && <section className="mh-review-page__warning"><h3>{labels.warning}</h3><p>{selected.warning}</p></section>}{detailSuggestions.length > 0 && <section className="mh-review-page__suggestions"><h3>{labels.aiSuggestions}</h3><ul>{detailSuggestions.map((text) => <li key={text}>{text}</li>)}</ul></section>}{selected.rejectionReason ? <section className="mh-review-page__suggestions"><h3>{labels.rejectionReason}</h3><p>{selected.rejectionReason}</p></section> : null}{selected.status === "rejected" ? null : <div className="mh-review-page__detail-actions">{selected.status === "pending" ? <><Button variant="gold" icon="check-circle" onClick={() => action("approve")}>{labels.approve}</Button><Button variant="danger" icon="close" onClick={() => action("reject")}>{labels.reject}</Button></> : <Button variant="secondary" onClick={() => action("view")}>{labels.viewKnowledge}</Button>}</div>}</>}
     </Modal>

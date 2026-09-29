@@ -4,9 +4,7 @@ import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
 import { LibraryList } from "../../components/LibraryList/index.jsx";
 import { LibraryToolbar } from "../../components/LibraryToolbar/index.jsx";
@@ -42,9 +40,6 @@ const HEART = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioLibraryPage({ content, logo, navigation = [], image, library = {}, detail = {}, form = {}, assistant = {}, skillFlow, dialog = null, toast = "", hrefFor, onNavigate }) {
-  const launcherRef = React.useRef(null);
-  const ai = assistant || {};
-  const { open: aiOpen = false, prompt: aiPrompt = "", answers: aiAnswers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = ai;
   const labels = content.labels;
   const { items = [], totalCount = 0, search = "", status = "all" } = library;
   const rows = items.map((item) => ({
@@ -70,9 +65,7 @@ export function ScenarioLibraryPage({ content, logo, navigation = [], image, lib
       />
       <LibraryList label={labels.listAria} layout="table" columns={COLUMN_KEYS.map((key, index) => ({ key, header: labels.columns[index] }))} rows={rows} empty={{ kind: totalCount ? "no-results" : "empty", title: labels.emptyTitle, message: labels.emptyHelp, clearLabel: labels.clearFilters }} onOpen={library.onOpen} onClear={library.onClear} />
     </>}</main></div>
-    <AssistantLauncher ref={launcherRef} hidden={aiOpen} label={aiCopy.launcherLabel} onOpen={onAssistantOpen} />
-    <AssistantPanel open={aiOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...aiCopy} prompt={aiPrompt} answers={aiAnswers} selectedSkill={selectedSkill} onClose={onAssistantClose} onPromptChange={onPromptChange} onSubmit={onSubmit} onSuggestion={onSuggestion} onHistorySelect={onHistorySelect} onNewSession={onNewSession} onSelectSkill={onSelectSkill} onClearSkill={onClearSkill} onSkillAction={onSkillAction} onAttach={onAttach} onMaximize={onMaximize} onHistory={onHistory} />
-    {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+    <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     <SkillDetail skill={detail.skill} labels={labels} previewOpen={detail.previewOpen} onCancel={detail.onCancel} onChange={detail.onChange} onOpen={detail.onOpen} onClick={detail.onClick} />
     <ConfirmDialog open={Boolean(dialog)} purpose={dialog?.purpose} title={dialog?.title} message={dialog?.message} confirmLabel={dialog?.confirmLabel} cancelLabel={dialog?.cancelLabel} onConfirm={dialog?.onConfirm} onCancel={dialog?.onCancel} />
     <Toast open={Boolean(toast)} message={toast} />

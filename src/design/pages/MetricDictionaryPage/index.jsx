@@ -1,7 +1,5 @@
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";
@@ -24,7 +22,8 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  * @param {string} props.metricId
  * @param {typeof metricDetailTabs[number]} [props.tab="definition"]
  * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks
- * @param {object} [props.assistant={}] copy, open, prompt, answers, selectedSkill, skillFlow and callbacks
+ * @param {object} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant)
+ * @param {object} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
  * @param {(id:string,params?:object)=>string} props.hrefFor
  * @param {(target:{id:string,params:object,href:string})=>void} props.onNavigate
  * @param {(event:{category:string})=>void} props.onCategoryChange
@@ -33,29 +32,19 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  */
 export function MetricDictionaryPage({
   logo, navigation = [], content, metrics = [], category = "Basic", metricId, tab = "definition",
-  derivedEditor = {}, assistant = {}, hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
+  derivedEditor = {}, assistant = {}, skillFlow, hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
 }) {
   const {
     open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "",
     onOpen, onCancel, onDraftChange, onOperator, onReference, onRemoveToken,
     onConstantAdd, onConstantCancel, onTest, onSave,
   } = derivedEditor;
-  const {
-    copy: assistantCopy = {}, open: assistantOpen = false, prompt: assistantPrompt = "",
-    answers: assistantAnswers = [], selectedSkill, skillFlow,
-    onOpen: onOpenAssistant, onClose: onCloseAssistant,
-    onPromptChange: onAssistantPromptChange, onSubmit: onAssistantSubmit,
-    onNewSession: onAssistantNewSession, onSuggestion: onAssistantSuggestion,
-    onHistorySelect: onAssistantHistorySelect, onSelectSkill: onAssistantSelectSkill,
-    onClearSkill: onAssistantClearSkill, onSkillAction: onAssistantSkillAction,
-  } = assistant;
   const { header, sidebar, detail, derivedPanel } = content;
   const metric = metrics.find((entry) => entry.id === metricId) || metrics[0];
   const visible = metrics.filter((entry) => entry.category === category);
   const basic = metrics.filter((entry) => entry.category === "Basic");
   const counts = { Basic: basic.length, Derived: metrics.length - basic.length };
   const unitOptions = metric?.unit && !detail.units.includes(metric.unit) ? [...detail.units, metric.unit] : detail.units;
-  const launcherRef = React.useRef(null);
   const navigate = (id, params = {}) => ({ id, params, href: hrefFor(id, params) });
   const headerItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id) }));
   const handleHeaderNavigate = ({ id }) => onNavigate?.(navigate(id));
@@ -67,7 +56,6 @@ export function MetricDictionaryPage({
   return (
     <Shell>
       <Header logo={{ ...logo, href: hrefFor("home") }} items={headerItems} density="comfortable" position="sticky" onNavigate={handleHeaderNavigate} />
-      <AssistantLauncher ref={launcherRef} label={assistantCopy.launcherLabel} hidden={assistantOpen} onOpen={onOpenAssistant} />
       <main className="mh-metric-page">
         <header className="mh-metric-page__header">
           <div>
@@ -144,8 +132,7 @@ export function MetricDictionaryPage({
       </main>
       <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
       {!panelOpen && notice ? <div className="mh-metric-page__toast" role="status">{notice}</div> : null}
-      <AssistantPanel open={assistantOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...assistantCopy} prompt={assistantPrompt} answers={assistantAnswers} selectedSkill={selectedSkill} onClose={onCloseAssistant} onPromptChange={onAssistantPromptChange} onSubmit={onAssistantSubmit} onNewSession={onAssistantNewSession} onSuggestion={onAssistantSuggestion} onHistorySelect={onAssistantHistorySelect} onSelectSkill={onAssistantSelectSkill} onClearSkill={onAssistantClearSkill} onSkillAction={onAssistantSkillAction} />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     </Shell>
   );
 }

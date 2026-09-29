@@ -289,6 +289,18 @@ Source: `assets/pages/personal-memory.html` (`.create-memory-ai-fill`), `assets/
 | PMA-01 | the AI Auto-fill control over the description was a bordered white button here and a gold pill in the Skill forms | same control, two looks | Normalize (one concept) | gold pill from `AutoFillTextarea`; behaviour unchanged (`onAutoFill({ field: "description" })` fills deterministic text and clears that field's error) | selector `.mh-memory-page__textarea button` → `.mh-autofill button` in the story and `p14` scenario |
 | PMA-02 | description textarea invalid state: red border only | `PersonalMemoryPage.css` before | Normalize | same invalid look as the Skill forms (red border plus a light red ring); the error message and first-error focus are unchanged | none |
 
+### Assistant wiring — Phase 3 WP2
+
+Source: no original behaviour changes; the rows record what the shared `AssistantDock` drops or normalises in React. React before: `pages/*/index.jsx` (13 copies of launcher, panel and model-flow wiring), `demo/{home,cockpit,campaign,media-tracking,metric-dictionary}-demo.js`.
+
+| # | behaviour | evidence | disposition | React behaviour | story / scenario change |
+|---|---|---|---|---|---|
+| AW-01 | `HomePage` `scope` / `onScopeChange` page props, passed on to `AssistantPanel` | `AssistantPanel` declares no `scope` prop and renders no scope control (`components/AssistantPanel/index.jsx:346` only reserves an empty row); nothing calls `onScopeChange` (grep: story argType and `useHomeDemo`) | Drop-stub | props removed from the page; `useHomeDemo` still reads `scope` as an input for `demo.answerFor(text, scope)` | `onScopeChange` argType removed from the Home stories |
+| AW-02 | four pages took assistant state as separate props (`assistantOpen`, `prompt`, `onOpenAssistant`, `onCloseAssistant`, `onPromptChange`, `onSubmit`, …) and mirrored it from their hook | `HomePage`, `CampaignPage`, `MarketingCockpitPage`, `MediaTrackingDetailPage` before | Normalize (one shape: the other nine pages already took an `assistant` object) | the hooks return the state and callbacks inside `assistant`; hook inputs (story args, host) are unchanged | none |
+| AW-03 | `MetricDictionaryPage` `assistant.copy` nesting, `skillFlow` inside the assistant object, and a second copy of the assistant state machine in `useMetricDictionaryDemo` | `demo/metric-dictionary-demo.js` before | Normalize | flat `assistant` plus `skillFlow` like every page; the hook uses `useWorkspaceAssistantDemo` (the model-flow dialog now also gets the shared `labels`, as on the other lite pages; without `answerFor` no canned answer is invented) | none |
+| AW-04 | lite and home pages dropped the panel's `onFeedback`, `onAttach` and `onMaximize` inconsistently | the destructure lists in the 13 pages before | Normalize | the panel receives the whole `assistant` object, so every page forwards every callback the host gives | none |
+| AW-05 | Cockpit painted launcher, Report Copilot, panel and flow dialog in that DOM order | `MarketingCockpitPage` before | Normalize | launcher, panel, flow dialog, then Report Copilot; stacking is decided by the overlay layer stack, not DOM order | none |
+
 ### Submit → Under Review — WP7k
 
 Source: `assets/js/knowledge/analytical-model-form.js`, `business-term-form.js`, `scenario-report-form.js`, `editor-runtime.js`, `assets/js/governance/skills.js`, `skill-editor.js`. React before: `demo/knowledge-create-demo.js` (`persist`), `demo/skill-library-demo.js` and `demo/scenario-edit-demo.js` (Submit), `components/ModelFlowDialog` copy, `demo/interpreter-demo.js`. Not a library view: no layout changes; only what Submit does and says. Seeds: D15, A1 ("Submit → Under Review; Review Center publishes"), R4 (Submit keeps the form's availability), B16.

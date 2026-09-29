@@ -63,7 +63,7 @@ export default {
       onTest: () => { demo.derivedEditor.onTest(); args.onTest?.(); },
       onSave: () => { demo.derivedEditor.onSave(); args.onSave?.(); },
     };
-    return <MetricDictionaryPage {...args} {...demo} derivedEditor={derivedEditor} assistant={{ copy: args.assistant, ...demo.assistantState }} onCategoryChange={(event) => { demo.onCategoryChange(event); args.onCategoryChange?.(event); }} onSelect={(event) => { demo.onSelect(event); args.onSelect?.(event); }} onTabChange={(event) => { demo.onTabChange(event); args.onTabChange?.(event); }} />;
+    return <MetricDictionaryPage {...args} {...demo} derivedEditor={derivedEditor} assistant={{ ...args.assistant, ...demo.assistant }} onCategoryChange={(event) => { demo.onCategoryChange(event); args.onCategoryChange?.(event); }} onSelect={(event) => { demo.onSelect(event); args.onSelect?.(event); }} onTabChange={(event) => { demo.onTabChange(event); args.onTabChange?.(event); }} />;
   },
 };
 

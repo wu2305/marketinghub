@@ -416,7 +416,7 @@ function MetricDictionaryRoute() {
     modelDraftFor: buildModelDraft,
     assistantAnswerFor: buildLiteAssistantAnswer,
   });
-  return <MetricDictionaryPage {...props} logo={hostLogo} navigation={hostNav()} content={METRIC_DICTIONARY} assistant={{ copy: METRIC_ASSISTANT, ...props.assistantState }} />;
+  return <MetricDictionaryPage {...props} logo={hostLogo} navigation={hostNav()} content={METRIC_DICTIONARY} assistant={{ ...METRIC_ASSISTANT, ...props.assistant }} />;
 }
 
 /* ------------------------------------------------------------------ */

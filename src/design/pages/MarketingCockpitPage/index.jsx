@@ -1,10 +1,8 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { SearchField } from "../../components/SearchField/index.jsx";
 import { CityInvestDashboard } from "../../features/cockpit/CityInvestDashboard/index.jsx";
 import { LiveOverview } from "../../features/cockpit/LiveOverview/index.jsx";
@@ -55,13 +53,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {boolean} [props.workspaceOpen=false]
  * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
  * @param {object} [props.assistant={}] AssistantPanel props
- * @param {boolean} [props.assistantOpen=false]
- * @param {string} [props.prompt=""]
  * @param {object} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
- * @param {(event: { reason: "open" }) => void} [props.onOpenAssistant]
- * @param {(event: { reason: "backdrop"|"escape"|"button" }) => void} [props.onCloseAssistant]
- * @param {(event: { name: string, value: string }) => void} [props.onPromptChange]
- * @param {(event: { prompt: string }) => void} [props.onSubmit]
  */
 export function MarketingCockpitPage({
   current = "cockpit",
@@ -92,13 +84,7 @@ export function MarketingCockpitPage({
   workspaceOpen = false,
   onOpenWorkspace,
   assistant = {},
-  assistantOpen = false,
-  prompt = "",
   skillFlow,
-  onOpenAssistant,
-  onCloseAssistant,
-  onPromptChange,
-  onSubmit,
 }) {
   const search = query.trim().toLowerCase();
   const active = project !== "all" && projects[project] ? projects[project] : null;
@@ -268,20 +254,8 @@ export function MarketingCockpitPage({
         }}
       />
       {/* body:has(#aiWorkspace.open) hides the launcher in the original too */}
-      <AssistantLauncher ref={assistantLauncherRef} hidden={assistantOpen || workspaceOpen} onOpen={isLive ? onOpenWorkspace : onOpenAssistant} />
+      <AssistantDock ref={assistantLauncherRef} assistant={assistant} skillFlow={skillFlow} variant="cockpit" launcherHidden={workspaceOpen} onLauncherOpen={isLive ? (event) => onOpenWorkspace?.(event) : undefined} />
       <ReportCopilot open={workspaceOpen} {...workspace} returnFocusRef={assistantLauncherRef} />
-      <AssistantPanel
-        open={assistantOpen}
-        returnFocusRef={assistantLauncherRef}
-        placement="drawer"
-        {...assistant}
-        variant="cockpit"
-        prompt={prompt}
-        onClose={onCloseAssistant}
-        onPromptChange={onPromptChange}
-        onSubmit={onSubmit}
-      />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </Shell>
   );
 }
