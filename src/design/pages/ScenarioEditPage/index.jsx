@@ -7,6 +7,7 @@ import { GovernanceNav } from "../../components/GovernanceNav/index.jsx";
 import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
 import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
+import { Toast } from "../../components/Toast/index.jsx";
 import { ScenarioEditForm } from "../../features/scenario-edit/ScenarioEditForm/index.jsx";
 import "./ScenarioEditPage.css";
 
@@ -17,12 +18,13 @@ import "./ScenarioEditPage.css";
  * @param {object} props.logo Header logo.
  * @param {object[]} [props.navigation=[]] Header destinations.
  * @param {object} [props.form={}] ScenarioEditForm values, validation, preview and named callbacks.
+ * @param {string} [props.toast=""] Acknowledgement after Save Draft (hidden when empty).
  * @param {object} [props.assistant={}] Lite assistant content/state/callbacks.
  * @param {object} [props.skillFlow] Model-flow dialog content/state/callbacks.
  * @param {(id:string,params?:object)=>string} [props.hrefFor]
  * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
  */
-export function ScenarioEditPage({ content, logo, navigation = [], form = {}, assistant = {}, skillFlow, hrefFor, onNavigate }) {
+export function ScenarioEditPage({ content, logo, navigation = [], form = {}, toast = "", assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { hero, sidebar, labels } = content;
   const launcherRef = React.useRef(null);
   const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
@@ -36,5 +38,6 @@ export function ScenarioEditPage({ content, logo, navigation = [], form = {}, as
     <AssistantLauncher ref={launcherRef} hidden={aiOpen} label={aiCopy.launcherLabel} onOpen={onAssistantOpen} />
     <AssistantPanel open={aiOpen} returnFocusRef={launcherRef} placement="drawer" variant="lite" {...aiCopy} prompt={aiPrompt} answers={answers} selectedSkill={selectedSkill} onClose={onAssistantClose} onPromptChange={onPromptChange} onSubmit={onSubmit} onSuggestion={onSuggestion} onHistorySelect={onHistorySelect} onNewSession={onNewSession} onSelectSkill={onSelectSkill} onClearSkill={onClearSkill} onSkillAction={onSkillAction} onAttach={onAttach} onMaximize={onMaximize} onHistory={onHistory} />
     {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+    <Toast open={Boolean(toast)} message={toast} />
   </div>;
 }

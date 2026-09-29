@@ -1,4 +1,5 @@
 import React from "react";
+import { useToast } from "./use-toast.js";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 const EMPTY = [];
@@ -36,6 +37,7 @@ export function useScenarioEditDemo(props) {
   const [values, setValues] = React.useState(() => ({ ...seed, ...initial.values }));
   const [errors, setErrors] = React.useState(initial.errors || {});
   const [preview, setPreview] = React.useState(initial.preview || null);
+  const { toast, showToast } = useToast();
   React.useEffect(() => { setValues({ ...seed, ...initial.values }); setErrors(initial.errors || {}); setPreview(initial.preview || null); }, [seed, initial]);
 
   const onChange = ({ field, value }) => { setValues((current) => ({ ...current, [field]: value })); props.onChange?.({ field, value }); };
@@ -64,10 +66,12 @@ export function useScenarioEditDemo(props) {
     content: props.content, logo: props.logo, navigation: props.navigation, hrefFor: props.hrefFor, onNavigate: props.onNavigate,
     form: { values, errors, preview, onChange, onSubmit,
       onRunPreview: ({ question }) => { const output = scenarioEditPreviewFor({ ...values, question }, props.content.labels); setPreview(output); props.onRunPreview?.({ question: question.trim(), output }); },
-      onAutoFill: ({ field }) => props.onAutoFill?.({ field }),
-      onSaveDraft: () => props.onSaveDraft?.({ values: { ...values } }),
+      onAutoFill: ({ field }) => { const text = props.content.labels.autoFillText?.[field]; if (text === undefined) return; setValues((current) => ({ ...current, [field]: text })); props.onAutoFill?.({ field }); },
+      /* A draft may be partial, so nothing is validated; it stays Draft (R4). */
+      onSaveDraft: () => { showToast(props.content.labels.draftSaved); props.onSaveDraft?.({ id: record?.id || null, status: "Draft", values: { ...values } }); },
       onSelectFiles: ({ files }) => props.onSelectFiles?.({ files }),
     },
+    toast,
     ...workspace,
   };
 }
