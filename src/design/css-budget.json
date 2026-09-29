@@ -162,9 +162,7 @@
     "--mh-bt-pag-ink"
   ],
   "pendingMigration": [
-    "features/feedback-quality/FeedbackList",
-    "features/scenario-library/SkillLibrary",
-    "pages/FeedbackQualityPage"
+    "features/scenario-library/SkillLibrary"
   ],
   "maxRawFoundationValues": {
     "fontSize": 0,

@@ -193,8 +193,8 @@ export default [
   {
     id: "neg-p13-wrong-type",
     base: "p13-down",
-    story: { id: "pages--feedback-quality-up" },
-    reason: "Thumbs Up's ten records cannot satisfy the five-record Thumbs Down state",
+    story: { id: "pages--feedback-quality", actions: [{ select: ['.mh-library-toolbar__facet:has-text("Feedback Type") select', "thumbs-up"] }] },
+    reason: "selecting Thumbs Up (ten records) cannot satisfy the five-record Thumbs Down state",
   },
   {
     id: "neg-p13-wrong-detail",

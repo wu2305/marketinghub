@@ -21,7 +21,7 @@ export function filterFeedback(records, { search = "", type = "all", time = "all
 /** Private source-backed flow shared by page stories and the independent host.
  * @param {Record<string, any>} options
  */
-export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, now = Date.UTC(2026, 8, 26, 12), initial = EMPTY_INITIAL, onNavigate, onTypeChange, onTimeChange, onSearchChange, onOpen, onCloseDetail, onAssistantSubmit, onFlowSave, onFlowSubmit } = {}) {
+export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, now = Date.UTC(2026, 8, 26, 12), initial = EMPTY_INITIAL, onNavigate, onTypeChange, onTimeChange, onSearchChange, onOpen, onCloseDetail, onClearFilters, onAssistantSubmit, onFlowSave, onFlowSubmit } = {}) {
   // Source rows are created at page load and filters run after that render.
   // One deterministic second of elapsed time keeps the exact 24h/168h rows
   // on the same side of the boundary that users see after selecting a filter.
@@ -51,6 +51,7 @@ export function useFeedbackQualityDemo({ content = FEEDBACK_QUALITY, records, no
       onSearchChange: ({ value }) => { setSearch(value); onSearchChange?.({ value }); },
       onTypeChange: ({ value }) => { setType(value); onTypeChange?.({ value }); },
       onTimeChange: ({ value }) => { setTime(value); onTimeChange?.({ value }); },
+      onClear: (event) => { setSearch(""); setType("all"); setTime("all"); onClearFilters?.(event); },
     },
     list: { items, counts: { total: sourceRecords.length, up, down: sourceRecords.length - up }, onOpen: ({ id }) => { setSelectedId(id); onOpen?.({ id }); } },
     detail: { selected, onClose: ({ reason }) => { setSelectedId(null); onCloseDetail?.({ reason }); } },

@@ -636,12 +636,12 @@ try {
   const notes = [];
   await page.goto(`${origin}${BASE}feedback-quality`, { waitUntil: "networkidle" });
   const boot = await page.evaluate(() => window.__mhHostBoot);
-  if ((await page.locator(".mh-feedback-list__row").count()) !== 15) notes.push("Feedback list should show fifteen source records");
+  if ((await page.locator(".mh-feedback-page tbody tr").count()) !== 15) notes.push("Feedback list should show fifteen source records");
   await page.getByLabel("Feedback Type").selectOption("thumbs-down");
-  if ((await page.locator(".mh-feedback-list__row").count()) !== 5) notes.push("Thumbs Down filter missed five records");
+  if ((await page.locator(".mh-feedback-page tbody tr").count()) !== 5) notes.push("Thumbs Down filter missed five records");
   await page.getByRole("tab", { name: /All Feedback/ }).click();
-  if ((await page.locator(".mh-feedback-list__row").count()) !== 15) notes.push("All Feedback did not reset Type");
-  await page.locator(".mh-feedback-list__row").nth(2).getByRole("button", { name: "View" }).click();
+  if ((await page.locator(".mh-feedback-page tbody tr").count()) !== 15) notes.push("All Feedback did not reset Type");
+  await page.locator(".mh-feedback-page tbody tr").nth(2).click();
   if (!(await page.locator(".mh-feedback-page__detail-reason").count())) notes.push("negative detail did not show full reason");
   await page.keyboard.press("Escape");
   if (await page.locator(".mh-feedback-page__detail-reason").count()) notes.push("feedback detail survived Escape");
