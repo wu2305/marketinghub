@@ -54,7 +54,7 @@ export const SCENARIO_EDIT = {
   labels: {
     navigationAria: "Knowledge navigation", categoriesAria: "Knowledge categories",
     formTitle: "Scenario Configuration", saved: "Auto-saved · Just now", name: "Scenario Name", namePlaceholder: "Enter scenario name...",
-    purpose: "Purpose", purposePlaceholder: "Describe the scenario purpose...", scope: "Scope", owner: "Owner", ownerPlaceholder: "Enter owner...",
+    purpose: "Purpose", purposePlaceholder: "Describe the scenario purpose...", scope: "Scope", selectScope: "Select scope", owner: "Owner", ownerPlaceholder: "Enter owner...",
     structure: "Scenario Structure", report: "Report", selectReport: "Select a report", openReportPrefix: "Open ",
     logic: "Analysis Logic", logicPlaceholder: "Describe the analysis logic flow...", output: "Output", outputPlaceholder: "What output does this scenario produce?",
     autoFill: "AI Auto-fill", materials: "Reference Materials", upload: "Upload supporting files to guide the analysis", uploadHint: "Use screenshots and reference docs to show what kind of analysis is wanted.",

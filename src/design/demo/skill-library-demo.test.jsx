@@ -60,7 +60,7 @@ describe("useSkillLibraryDemo form stubs (D11, D13, D14)", () => {
   it("AI Auto-fill replaces only the pressed field", () => {
     const onAutoFill = vi.fn();
     const hook = renderHook(() => useSkillLibraryDemo({ initial: CREATE, onAutoFill }));
-    act(() => hook.result.current.form.onChange({ key: "name", value: "Typed name" }));
+    act(() => hook.result.current.form.onChange({ field: "name", value: "Typed name" }));
     act(() => hook.result.current.form.onAutoFill({ field: "boundary" }));
     expect(hook.result.current.form.values.boundary).toBe(SKILL_LIBRARY.labels.autoFillText.boundary);
     expect(hook.result.current.form.values.name).toBe("Typed name");
@@ -74,7 +74,7 @@ describe("useSkillLibraryDemo form stubs (D11, D13, D14)", () => {
     expect(hook.result.current.form.preview).toBeNull();
     act(() => hook.result.current.form.onRunPreview({ question: "  " }));
     expect(hook.result.current.form.preview).toBe(SKILL_LIBRARY.labels.previewEmpty);
-    act(() => hook.result.current.form.onChange({ key: "question", value: "Why did Shanghai drop?" }));
+    act(() => hook.result.current.form.onChange({ field: "question", value: "Why did Shanghai drop?" }));
     act(() => hook.result.current.form.onRunPreview({ question: "Why did Shanghai drop?" }));
     expect(hook.result.current.form.preview).toContain('Generating preview for: "Why did Shanghai drop?"');
     hook.unmount();
@@ -93,7 +93,7 @@ describe("useSkillLibraryDemo form stubs (D11, D13, D14)", () => {
     expect(hook.result.current.library.items).toHaveLength(10);
     expect(hook.result.current.library.items[0]).toMatchObject({ name: "Untitled scenario", status: "Draft" });
     expect(hook.result.current.toast).toBe("Draft saved");
-    act(() => hook.result.current.form.onChange({ key: "name", value: "Renamed draft" }));
+    act(() => hook.result.current.form.onChange({ field: "name", value: "Renamed draft" }));
     act(() => hook.result.current.form.onSaveDraft());
     expect(hook.result.current.library.items).toHaveLength(10);
     expect(hook.result.current.library.items[0].name).toBe("Renamed draft");
@@ -125,7 +125,7 @@ describe("useSkillLibraryDemo form stubs (D11, D13, D14)", () => {
     const onSubmit = vi.fn();
     const alert = vi.spyOn(window, "alert").mockImplementation(() => {});
     const hook = renderHook(() => useSkillLibraryDemo({ initial: CREATE, onSubmit }));
-    act(() => hook.result.current.form.onChange({ key: "name", value: "Pacing check" }));
+    act(() => hook.result.current.form.onChange({ field: "name", value: "Pacing check" }));
     act(() => hook.result.current.form.onSubmit({ values: {} }));
     expect(hook.result.current.form.mode).toBe("list");
     expect(hook.result.current.library.items).toHaveLength(10);

@@ -39,7 +39,7 @@ export const ScenarioEditReportEmpty = state("Scenario Edit · No linked report"
 export const ScenarioEditPreview = state("Scenario Edit · Generated preview", { preview: scenarioEditPreviewFor(SCENARIO_EDIT.defaults, SCENARIO_EDIT.labels) });
 export const ScenarioEditPreviewEmpty = state("Scenario Edit · Empty preview question", { values: { question: "" }, preview: SCENARIO_EDIT.labels.previewEmpty });
 export const ScenarioEditRequired = state("Scenario Edit · Required fields", { values: { name: "", purpose: "", scope: "", owner: "", report: "" } }, { scenarioId: "scenario-campaign-review" });
-ScenarioEditRequired.play = afterFrames('.mh-scenario-edit-form__actions button[type="submit"]');
+ScenarioEditRequired.play = afterFrames('.mh-skill-form__submit');
 export const ScenarioEditAssistant = state("Scenario Edit · Assistant open", { assistantOpen: true });
 export const ScenarioEditAssistantFilled = state("Scenario Edit · Suggestion fills prompt", { assistantOpen: true, assistantPrompt: "Definition of Attributed ROI" });
 export const ScenarioEditAssistantAnswer = state("Scenario Edit · Assistant answer", { assistantOpen: true, assistantAnswers: [SCENARIO_EDIT_SHELL.answerFor("Definition of Attributed ROI")] });
