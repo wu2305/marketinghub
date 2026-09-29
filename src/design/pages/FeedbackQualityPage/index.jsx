@@ -18,6 +18,8 @@ import "./FeedbackQualityPage.css";
 export const feedbackFilterTypes = ["all", "thumbs-up", "thumbs-down"];
 /** @type {readonly ["all", "today", "week", "month"]} */
 export const feedbackFilterTimes = ["all", "today", "week", "month"];
+/** @type {readonly ["all", "thumbs-up", "thumbs-down"]} */
+export const feedbackTabs = ["all", "thumbs-up", "thumbs-down"];
 
 const COLUMN_KEYS = ["question", "answer", "type", "reason", "feedbackBy", "time"];
 const truncate = (value, limit) => (value.length > limit ? `${value.slice(0, limit)}...` : value);
@@ -33,7 +35,7 @@ const single = (value) => (value === "all" ? "" : value);
  * @param {object} props.content Hero, sidebar, labels and assistant copy.
  * @param {object} props.logo Header logo.
  * @param {object[]} [props.navigation=[]] Header links.
- * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void}} [props.filters={}] Controlled filters; Type also drives the tabs; `onClear` comes from the no-results state.
+ * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,tabs?:typeof feedbackTabs[number][]}} [props.filters={}] Controlled filters; Type also drives the tabs; `tabs` lists the visible tabs (each can be left out, default all three); `onClear` comes from the no-results state.
  * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} [props.list={}] Filtered rows and the dataset counts (Hero stats and tab labels).
  * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} [props.detail={}] Selected feedback.
  * @param {object} [props.assistant={}] Assistant state and callbacks.
@@ -43,8 +45,9 @@ const single = (value) => (value === "all" ? "" : value);
  */
 export function FeedbackQualityPage({ content, logo, navigation = [], filters = {}, list = {}, detail = {}, assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { hero, sidebar, labels } = content;
-  const { search = "", type = "all", time = "all", onSearchChange, onTypeChange, onTimeChange, onClear } = filters;
+  const { search = "", type = "all", time = "all", onSearchChange, onTypeChange, onTimeChange, onClear, tabs: visibleTabs = feedbackTabs } = filters;
   const { items = [], counts = {}, onOpen } = list;
+  const tabItems = [{ id: "all", label: `${labels.tab} ${counts.total ?? 0}` }, { id: "thumbs-up", label: `${labels.up} ${counts.up ?? 0}` }, { id: "thumbs-down", label: `${labels.down} ${counts.down ?? 0}` }].filter((tab) => visibleTabs.includes(tab.id));
   const { selected, onClose } = detail;
   const launcherRef = React.useRef(null);
   const { open: aiOpen = false, prompt: aiPrompt = "", answers = [], selectedSkill, onOpen: onAssistantOpen, onClose: onAssistantClose, onPromptChange, onSubmit, onSuggestion, onHistorySelect, onNewSession, onSelectSkill, onClearSkill, onSkillAction, onAttach, onMaximize, onHistory, ...aiCopy } = assistant;
@@ -67,7 +70,7 @@ export function FeedbackQualityPage({ content, logo, navigation = [], filters = 
       <GovernanceNav items={sidebar} current="feedback-quality" navigationAria={labels.navigationAria} categoriesAria={labels.categoriesAria} hrefFor={hrefFor} onNavigate={onNavigate} />
       <main className="mh-feedback-page__main">
         <LibraryToolbar
-          tabs={{ label: labels.tabsAria, value: type, items: [{ id: "all", label: `${labels.tab} ${counts.total ?? 0}` }, { id: "thumbs-up", label: `${labels.up} ${counts.up ?? 0}` }, { id: "thumbs-down", label: `${labels.down} ${counts.down ?? 0}` }] }}
+          tabs={tabItems.length ? { label: labels.tabsAria, value: type, items: tabItems } : undefined}
           search={{ label: labels.searchAria, placeholder: labels.search, value: search }}
           facets={[
             { id: "type", label: labels.type, kind: "single", allLabel: labels.typeOptions[0]?.label, options: facetOptions(labels.typeOptions), selected: single(type) },
