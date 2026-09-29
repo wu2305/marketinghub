@@ -2,6 +2,8 @@
 
 本文件是所有在此仓库工作的 agent 和开发者的长期规范。`handover/README.md` 记录当前状态与待办，由每次改动同步维护。两份文件冲突时，以本文件的规则为准，以 `handover/README.md` 的状态为准。
 
+**设计师同步**：若本次任务是把设计师更新后的 Demo（`index.html`、`assets/**`）同步进 Storybook，先读 `handover/design-sync/README.md` 并按其流程执行；设计意图问题问设计师，工程问题留给维护者。
+
 ## 1. 仓库目标
 
 从 `index.html` 与 `assets/pages/*.html` 这套静态 HTML 设计 Demo 中，全量重建 React 界面与既有前端交互，并按奥卡姆剃刀原则提取最小必要的可复用组件体系，形成各层级 Storybook 档案。
@@ -157,7 +159,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 从最新 `origin/main` 开分支。不在 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 及其派生分支上开发。
 - 每个 PR 只推进一个里程碑内的一个可独立验收的条目。PR 描述必须包含：改动的组件列表、对照截图（或脚本输出路径）、有意差异登记。
 - PR 合并后，同一 PR 内更新 `handover/README.md` 的状态表与维护日志。禁止只改代码不改 handover。
-- 不修改 `index.html`、`assets/**` 中的原始 Demo，除非是修复参照物本身的明显错误，且需在 PR 中单列说明。
+- 不修改 `index.html`、`assets/**` 中的原始 Demo，除非是修复参照物本身的明显错误（需在 PR 中单列说明），或是按 `handover/design-sync/README.md` 提交的设计师 Demo 更新（该 PR 首个提交只含 Demo 与变更说明）。
 
 ## 7. handover 维护规则
 
