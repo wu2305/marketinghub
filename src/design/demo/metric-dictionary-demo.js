@@ -1,4 +1,8 @@
 import React from "react";
+import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
+
+const EMPTY_ANSWERS = [];
+
 const paths = {
   home: "/index.html",
   cockpit: "/assets/pages/reports.html",
@@ -51,11 +55,12 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     }, 3000);
   };
   React.useEffect(() => () => window.clearTimeout(noticeTimer.current), []);
-  const [assistantOpen, setAssistantOpen] = React.useState(Boolean(initial.assistantOpen));
-  const [assistantPrompt, setAssistantPrompt] = React.useState(initial.assistantPrompt || "");
-  const [assistantAnswers, setAssistantAnswers] = React.useState(initial.assistantAnswers || []);
-  const [selectedSkill, setSelectedSkill] = React.useState(initial.selectedSkill || null);
-  const [flow, setFlow] = React.useState(initial.flow || null);
+  const workspace = useWorkspaceAssistantDemo({
+    variant: "lite",
+    initial,
+    assistant: { open: Boolean(initial.assistantOpen), prompt: initial.assistantPrompt || "", answers: initial.assistantAnswers || EMPTY_ANSWERS },
+    demo: { answerFor: assistantAnswerFor, modelFlow, modelDraftFor },
+  });
 
   React.useEffect(() => setCategory(initial.category || "Basic"), [initial.category]);
   React.useEffect(() => setTab(initial.tab || "definition"), [initial.tab]);
@@ -149,45 +154,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
       onSave,
       onDismissNotice: () => showNotice(""),
     },
-    assistantState: {
-      open: assistantOpen, prompt: assistantPrompt, answers: assistantAnswers, selectedSkill,
-      skillFlow: flow ? {
-        step: flow.step, threads: flow.threads, rule: flow.rule, draft: flow.draft,
-        sections: modelFlow?.sections || [],
-        onToggleMessage: ({ threadIndex, messageIndex, checked }) => setFlow((current) => ({
-          ...current, threads: current.threads.map((thread, ti) => ti === threadIndex
-            ? { ...thread, messages: thread.messages.map((message, mi) => mi === messageIndex ? { ...message, checked } : message) }
-            : thread),
-        })),
-        onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-        onGenerate: ({ messages, rule }) => setFlow((current) => ({ ...current, step: "generated", rule, draft: modelDraftFor?.(messages, rule) || {} })),
-        onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-        onClose: () => setFlow(null),
-      } : null,
-      onOpen: () => setAssistantOpen(true),
-      onClose: () => setAssistantOpen(false),
-      onPromptChange: ({ value }) => setAssistantPrompt(value),
-      onSuggestion: ({ prompt }) => setAssistantPrompt(prompt),
-      onHistorySelect: ({ prompt }) => setAssistantPrompt(prompt),
-      onSelectSkill: ({ id, type, title }) => setSelectedSkill({ id, type, title }),
-      onClearSkill: () => setSelectedSkill(null),
-      onSkillAction: ({ action }) => {
-        if (!modelFlow) return;
-        setFlow({
-          step: action === "history" ? "history" : "manual",
-          threads: (modelFlow.threads || []).map((thread) => ({
-            ...thread, messages: thread.messages.map((message) => ({ ...message })),
-          })),
-          rule: "", draft: {},
-        });
-      },
-      onSubmit: ({ prompt }) => {
-        const query = (prompt || assistantPrompt).trim();
-        if (!query) return;
-        setAssistantAnswers([assistantAnswerFor?.(query) || { query, variant: "simple", lead: "I will use the AI Interpreter knowledge context to answer:" }]);
-        setAssistantPrompt("");
-      },
-      onNewSession: () => { setAssistantPrompt(""); setAssistantAnswers([]); },
-    },
+    assistant: workspace.assistant,
+    skillFlow: workspace.skillFlow,
   };
 }

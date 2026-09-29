@@ -19,10 +19,11 @@ function useSynced(value) {
 /**
  * @param {object} props ordinary HomePage props:
  *   data (logo, navigation, hero, heading, cards, assistant, current) +
- *   initial state values (assistantOpen, prompt, scope — mirrored locally so
- *   host prop changes still drive them) + host callbacks (onNavigate, onOpen,
+ *   initial state values (assistantOpen, prompt — mirrored locally so host
+ *   prop changes still drive them) + `scope` (the scope handed to
+ *   `demo.answerFor`) + host callbacks (onNavigate, onOpen,
  *   onOpenAssistant, onCloseAssistant, onPromptChange, onSubmit, onSuggestion,
- *   onScopeChange, onNewSession, onMaximize, onHistory, onHistorySelect,
+ *   onNewSession, onMaximize, onHistory, onHistorySelect,
  *   onFeedback, onAttach, onSelectSkill, onClearSkill, onSkillAction,
  *   onFlowSave, onFlowSubmit). Host callbacks fire after the internal update
  *   with the same named payloads the page emits.
@@ -31,14 +32,13 @@ function useSynced(value) {
  *   when absent; `modelFlow` = `{ threads, sections }` for the model-
  *   generation dialog — skill actions open nothing when absent;
  *   `modelDraftFor(messages, rule)` → generated form draft.
- * @returns {object} HomePage props
+ * @returns {object} HomePage props; the assistant state and callbacks come back inside `assistant`
  */
 export function useHomeDemo(props) {
   const { answerFor, modelFlow, modelDraftFor } = props.demo || {};
 
   const [open, setOpen] = useSynced(props.assistantOpen);
   const [prompt, setPrompt] = useSynced(props.prompt);
-  const [scope, setScope] = useSynced(props.scope);
   const [answers, setAnswers] = React.useState([]);
   const answerSequence = React.useRef(0);
   const [skill, setSkill] = React.useState(null);
@@ -49,8 +49,48 @@ export function useHomeDemo(props) {
     hrefFor: props.hrefFor || demoHrefFor,
     assistant: {
       ...props.assistant,
+      open,
+      prompt,
       answers,
       selectedSkill: skill,
+      onOpen: (event) => {
+        setOpen(true);
+        props.onOpenAssistant?.(event);
+      },
+      onClose: (event) => {
+        setOpen(false);
+        props.onCloseAssistant?.(event);
+      },
+      onPromptChange: (event) => {
+        setPrompt(event.value);
+        props.onPromptChange?.(event);
+      },
+      onSuggestion: (event) => {
+        setPrompt(event.prompt);
+        props.onSuggestion?.(event);
+      },
+      onSubmit: (event) => {
+        const text = String(event.prompt || "").trim();
+        if (text) {
+          const entry = answerFor?.(text, props.scope);
+          // portal.js:754 replaces the feed on every send, including repeated questions.
+          if (entry) setAnswers([{ ...entry, id: `home-answer-${++answerSequence.current}` }]);
+          setPrompt("");
+        }
+        props.onSubmit?.(event);
+      },
+      onNewSession: () => {
+        setAnswers([]);
+        setPrompt("");
+        props.onNewSession?.();
+      },
+      onMaximize: props.onMaximize,
+      onHistory: props.onHistory,
+      onHistorySelect: (event) => {
+        setPrompt(event.prompt);
+        props.onHistorySelect?.(event);
+      },
+      onFeedback: props.onFeedback,
       onAttach: props.onAttach,
       onSelectSkill: (event) => {
         setSkill({ id: event.id, type: event.type, title: event.title });
@@ -71,9 +111,6 @@ export function useHomeDemo(props) {
         });
       },
     },
-    assistantOpen: open,
-    prompt,
-    scope,
     skillFlow: flow
       ? {
           step: flow.step,
@@ -101,47 +138,5 @@ export function useHomeDemo(props) {
       : undefined,
     onNavigate: props.onNavigate,
     onOpen: props.onOpen,
-    onOpenAssistant: (event) => {
-      setOpen(true);
-      props.onOpenAssistant?.(event);
-    },
-    onCloseAssistant: (event) => {
-      setOpen(false);
-      props.onCloseAssistant?.(event);
-    },
-    onPromptChange: (event) => {
-      setPrompt(event.value);
-      props.onPromptChange?.(event);
-    },
-    onSuggestion: (event) => {
-      setPrompt(event.prompt);
-      props.onSuggestion?.(event);
-    },
-    onScopeChange: (event) => {
-      setScope(event.scope);
-      props.onScopeChange?.(event);
-    },
-    onSubmit: (event) => {
-      const text = String(event.prompt || "").trim();
-      if (text) {
-        const entry = answerFor?.(text, scope);
-        // portal.js:754 replaces the feed on every send, including repeated questions.
-        if (entry) setAnswers([{ ...entry, id: `home-answer-${++answerSequence.current}` }]);
-        setPrompt("");
-      }
-      props.onSubmit?.(event);
-    },
-    onNewSession: () => {
-      setAnswers([]);
-      setPrompt("");
-      props.onNewSession?.();
-    },
-    onMaximize: props.onMaximize,
-    onHistory: props.onHistory,
-    onHistorySelect: (event) => {
-      setPrompt(event.prompt);
-      props.onHistorySelect?.(event);
-    },
-    onFeedback: props.onFeedback,
   };
 }

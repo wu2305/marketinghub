@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  AssistantDock,
   AssistantLauncher,
   AssistantPanel,
   CampaignPage,
@@ -586,8 +587,7 @@ describe("nested overlays", () => {
   it("restores the invoking launcher for each assistant instance when launchers hide on open", () => {
     function Pair({ name }) {
       const [open, setOpen] = React.useState(false);
-      const launcherRef = React.useRef(null);
-      return <><AssistantLauncher ref={launcherRef} label={name} hidden={open} onOpen={() => setOpen(true)} /><AssistantPanel open={open} title={name} prompt="" returnFocusRef={launcherRef} onClose={() => setOpen(false)} /></>;
+      return <AssistantDock assistant={{ launcherLabel: name, open, title: name, onOpen: () => setOpen(true), onClose: () => setOpen(false) }} />;
     }
     render(<><Pair name="First" /><Pair name="Second" /></>);
     const launchers = screen.getAllByLabelText("Open AI assistant");

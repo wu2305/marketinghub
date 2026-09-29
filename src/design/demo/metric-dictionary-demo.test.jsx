@@ -8,7 +8,7 @@ import { MetricDictionaryPage } from "../pages/MetricDictionaryPage/index.jsx";
 
 function Harness({ content = METRIC_DICTIONARY, initial }) {
   const state = useMetricDictionaryDemo({ content, initial, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft, assistantAnswerFor: buildLiteAssistantAnswer });
-  return <MetricDictionaryPage logo={LOGO} navigation={NAV} content={content} assistant={{ copy: METRIC_ASSISTANT, ...state.assistantState }} {...state} />;
+  return <MetricDictionaryPage logo={LOGO} navigation={NAV} content={content} {...state} assistant={{ ...METRIC_ASSISTANT, ...state.assistant }} />;
 }
 
 describe("P10 metric dictionary process", () => {

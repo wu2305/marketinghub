@@ -1,11 +1,9 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { FilterPills } from "../../components/FilterPills/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Tabs } from "../../components/Tabs/index.jsx";
 import { ActionCard } from "../../features/self-service/ActionCard/index.jsx";
 import { UploadHistory } from "../../features/self-service/UploadHistory/index.jsx";
@@ -65,7 +63,6 @@ export function SelfServicePage({
   onPreviewFile,
   onDownloadFile,
 }) {
-  const assistantLauncherRef = React.useRef(null);
   const source = tab === "upload" ? uploads : reports;
   const items = source.filter((item) => category === "all" || item.category === category);
   return (
@@ -93,14 +90,7 @@ export function SelfServicePage({
           ))}
         </div>
       </main>
-      <AssistantLauncher ref={assistantLauncherRef} hidden={assistant.open} onOpen={assistant.onOpen} />
-      <AssistantPanel
-        {...assistant}
-        returnFocusRef={assistantLauncherRef}
-        placement="drawer"
-        variant="campaign"
-      />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={assistant} skillFlow={skillFlow} />
       <UploadHistory
         open={uploadHistory.open}
         title={uploadHistory.title}

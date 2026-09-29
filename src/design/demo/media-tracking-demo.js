@@ -43,27 +43,11 @@ export function useMediaTrackingDemo(props) {
     onFlowSave: props.onFlowSave,
     onFlowSubmit: props.onFlowSubmit,
   });
-  const flow = workspace.assistant;
   return {
     ...props,
     period,
-    assistant: flow,
-    assistantOpen: flow.open,
-    prompt: flow.prompt,
+    assistant: workspace.assistant,
     skillFlow: workspace.skillFlow,
     onPeriodChange: (event) => { setPeriod(event.id); props.onPeriodChange?.(event); },
-    onOpenAssistant: flow.onOpen,
-    onCloseAssistant: flow.onClose,
-    onPromptChange: flow.onPromptChange,
-    onSubmit: flow.onSubmit,
-    onSuggestion: flow.onSuggestion,
-    onNewSession: flow.onNewSession,
-    onMaximize: flow.onMaximize,
-    onHistory: flow.onHistory,
-    onHistorySelect: flow.onHistorySelect,
-    onAttach: flow.onAttach,
-    onSelectSkill: flow.onSelectSkill,
-    onClearSkill: flow.onClearSkill,
-    onSkillAction: flow.onSkillAction,
   };
 }

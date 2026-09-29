@@ -80,8 +80,6 @@ export function useCampaignDemo(props) {
     taskDialogOpen: taskOpen,
     taskDraft,
     toast,
-    assistantOpen: workspace.assistant.open,
-    prompt: workspace.assistant.prompt,
     assistant: workspace.assistant,
     skillFlow: workspace.skillFlow,
     onSectionChange: (event) => { setSection(event.id); props.onSectionChange?.(event); },
@@ -97,10 +95,5 @@ export function useCampaignDemo(props) {
       props.onSubmitTask?.(event);
     },
     onTaskDraftChange: (event) => { setTaskDraft(event.draft); props.onTaskDraftChange?.(event); },
-    onOpenAssistant: workspace.assistant.onOpen,
-    onCloseAssistant: workspace.assistant.onClose,
-    onPromptChange: workspace.assistant.onPromptChange,
-    onSubmit: workspace.assistant.onSubmit,
-    onSuggestion: workspace.assistant.onSuggestion,
   };
 }

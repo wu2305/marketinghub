@@ -1,11 +1,9 @@
 import "../../tokens.css";
 import React from "react";
-import { AssistantLauncher } from "../../components/AssistantLauncher/index.jsx";
-import { AssistantPanel } from "../../components/AssistantPanel/index.jsx";
+import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Hero } from "../../components/Hero/index.jsx";
 import { MetricStat } from "../../components/MetricStat/index.jsx";
-import { ModelFlowDialog } from "../../components/ModelFlowDialog/index.jsx";
 import { Toast } from "../../components/Toast/index.jsx";
 import { cx } from "../../cx.js";
 import { BusinessTermView } from "../../features/interpreter/BusinessTermView/index.jsx";
@@ -74,7 +72,6 @@ export function AiInterpreterPage({
   const known = overview || Boolean(type);
   const searchRef = React.useRef(null);
   const rootRef = React.useRef(null);
-  const assistantLauncherRef = React.useRef(null);
   const rulesHintId = React.useId();
 
   // types.js: "/" and Cmd/Ctrl+K focus the visible search field on type pages;
@@ -154,9 +151,7 @@ export function AiInterpreterPage({
         </div>
       </div>
       {overlay}
-      <AssistantLauncher ref={assistantLauncherRef} label={copy.assistantLabel} hidden={assistant.open} onOpen={assistant.onOpen} />
-      <AssistantPanel {...assistant} returnFocusRef={assistantLauncherRef} placement="drawer" variant="campaign" />
-      {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
+      <AssistantDock assistant={assistant} skillFlow={skillFlow} launcherLabel={copy.assistantLabel} />
       <Toast open={Boolean(toast)} message={toast} />
     </Shell>
   );
