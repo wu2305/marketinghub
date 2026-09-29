@@ -5,20 +5,29 @@ import { AssistantPanel } from "../AssistantPanel/index.jsx";
 import { ModelFlowDialog } from "../ModelFlowDialog/index.jsx";
 
 /**
+ * @typedef {Parameters<typeof AssistantPanel>[0] & { launcherLabel?: string, onOpen?: (event: { reason: "open" }) => void }} AssistantDockState
+ * Everything AssistantPanel takes (`open`, `prompt`, `answers`, copy, callbacks), plus `launcherLabel` and `onOpen` for the launcher.
+ */
+
+/**
+ * @typedef {object} AssistantDockProps
+ * @property {AssistantDockState} [assistant={}]
+ * @property {Parameters<typeof ModelFlowDialog>[0]} [skillFlow] ModelFlowDialog props; the dialog renders while `skillFlow.step` is set
+ * @property {"home"|"cockpit"|"campaign"|"lite"} [variant="campaign"] AssistantPanel behavior preset; wins over `assistant.variant`
+ * @property {"modal"|"drawer"} [placement="drawer"]
+ * @property {"home"} [tone] AssistantPanel tone
+ * @property {string} [launcherLabel] launcher text; falls back to `assistant.launcherLabel`
+ * @property {boolean} [launcherHidden=false] hide the launcher while another overlay is open
+ * @property {(event: { reason: "open" }) => void} [onLauncherOpen] replaces `assistant.onOpen` when the launcher opens something else
+ */
+
+/**
  * The page-level assistant: corner launcher, panel drawer and the model-creation
  * dialog its skill menu opens. It owns the launcher ref, hides the launcher while
  * the panel is open and returns focus to it on close, so a page mounts one
  * element instead of wiring the three pieces itself. The forwarded ref points at
  * the launcher button, for a second overlay that also returns focus to it.
- * @param {object} props
- * @param {object} [props.assistant={}] everything the panel takes (`open`, `prompt`, `answers`, copy, callbacks; see AssistantPanel) plus `launcherLabel` and `onOpen` for the launcher
- * @param {object} [props.skillFlow] ModelFlowDialog props; the dialog renders while `skillFlow.step` is set
- * @param {"home"|"cockpit"|"campaign"|"lite"} [props.variant="campaign"] AssistantPanel behavior preset; wins over `assistant.variant`
- * @param {"modal"|"drawer"} [props.placement="drawer"]
- * @param {"home"|undefined} [props.tone] AssistantPanel tone
- * @param {string} [props.launcherLabel] launcher text; falls back to `assistant.launcherLabel`
- * @param {boolean} [props.launcherHidden=false] hide the launcher while another overlay is open
- * @param {(event: { reason: "open" }) => void} [props.onLauncherOpen] replaces `assistant.onOpen` when the launcher opens something else
+ * @type {React.ForwardRefExoticComponent<AssistantDockProps & React.RefAttributes<HTMLButtonElement>>}
  */
 export const AssistantDock = React.forwardRef(function AssistantDock({
   assistant = {},

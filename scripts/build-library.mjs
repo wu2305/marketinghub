@@ -46,4 +46,33 @@ if (errors.length) {
   }));
   process.exit(1);
 }
-console.log("dist/ ESM, CSS and declarations built");
+
+/* A TypeScript consumer compiled against the emitted declarations: emitting
+ * them is not proof they accept real usage (a forwardRef without a typed
+ * props object compiled to `RefAttributes<any>` and rejected every prop). */
+const consumer = ts.createProgram([path.join(root, "examples", "types", "consumer.tsx")], {
+  strict: true,
+  noEmit: true,
+  skipLibCheck: true,
+  jsx: ts.JsxEmit.ReactJSX,
+  module: ts.ModuleKind.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  target: ts.ScriptTarget.ES2020,
+  lib: ["lib.es2020.d.ts", "lib.dom.d.ts"],
+  baseUrl: root,
+  paths: {
+    "marketing-hub": ["dist/types/index.d.ts"],
+    "marketing-hub/demo": ["dist/types/demo/index.d.ts"],
+  },
+});
+const consumerErrors = ts.getPreEmitDiagnostics(consumer).filter((item) => item.category === ts.DiagnosticCategory.Error);
+if (consumerErrors.length) {
+  console.error("examples/types/consumer.tsx does not type-check against dist/types:");
+  console.error(ts.formatDiagnostics(consumerErrors, {
+    getCanonicalFileName: (file) => file,
+    getCurrentDirectory: () => root,
+    getNewLine: () => "\n",
+  }));
+  process.exit(1);
+}
+console.log("dist/ ESM, CSS and declarations built; TypeScript consumer type-checks");

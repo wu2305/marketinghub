@@ -4,11 +4,16 @@ import "./AssistantLauncher.css";
 
 
 /**
- * Floating corner button that opens the assistant panel.
- * @param {object} props
- * @param {string} [props.label="AI Interpreter"]
- * @param {boolean} [props.hidden=false] mirrors the original `display:none` while the panel is open
- * @param {(event: { reason: "open" }) => void} [props.onOpen]
+ * @typedef {object} AssistantLauncherProps
+ * @property {string} [label="AI Interpreter"]
+ * @property {boolean} [hidden=false] mirrors the original `display:none` while the panel is open
+ * @property {(event: { reason: "open" }) => void} [onOpen]
+ */
+
+/**
+ * Floating corner button that opens the assistant panel. The forwarded ref
+ * points at the button.
+ * @type {React.ForwardRefExoticComponent<AssistantLauncherProps & React.RefAttributes<HTMLButtonElement>>}
  */
 export const AssistantLauncher = React.forwardRef(function AssistantLauncher({ label = "AI Interpreter", hidden = false, onOpen }, ref) {
   return (

@@ -5,21 +5,25 @@ import "./TextArea.css";
 
 
 /**
+ * @typedef {object} TextAreaProps
+ * @property {string} [name]
+ * @property {string} [value]
+ * @property {string} [defaultValue=""]
+ * @property {string} [placeholder]
+ * @property {string} [autoComplete]
+ * @property {number} [rows=4]
+ * @property {boolean} [disabled=false]
+ * @property {boolean} [invalid=false]
+ * @property {boolean} [required=false] native required attribute
+ * @property {string} [label] accessible label (visually hidden)
+ * @property {(event: { name: string, value: string }) => void} [onChange]
+ * @property {(event: React.KeyboardEvent<HTMLTextAreaElement>) => void} [onKeyDown]
+ */
+
+/**
  * Multi-line input. Controlled when `value` is passed, uncontrolled otherwise.
- * @param {object} props
- * @param {string} [props.name]
- * @param {string} [props.value]
- * @param {string} [props.defaultValue=""]
- * @param {string} [props.placeholder]
- * @param {string} [props.autoComplete]
- * @param {number} [props.rows=4]
- * @param {boolean} [props.disabled=false]
- * @param {boolean} [props.invalid=false]
- * @param {boolean} [props.required=false] native required attribute
- * @param {string} [props.label] accessible label (visually hidden)
- * @param {React.Ref<HTMLTextAreaElement>} [props.ref] forwarded to the textarea
- * @param {(event: { name: string, value: string }) => void} [props.onChange]
- * @param {(event: React.KeyboardEvent<HTMLTextAreaElement>) => void} [props.onKeyDown]
+ * The forwarded ref points at the textarea.
+ * @type {React.ForwardRefExoticComponent<TextAreaProps & React.RefAttributes<HTMLTextAreaElement>>}
  */
 export const TextArea = React.forwardRef(function TextArea({
   name,
