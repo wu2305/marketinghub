@@ -2,7 +2,7 @@ import { LibraryList, libraryLayouts } from "./index.jsx";
 import { ItemActions } from "../ItemActions/index.jsx";
 import { StatusBadge } from "../StatusBadge/index.jsx";
 import { callbackProp, enumProp, prop } from "../../lib/story-helpers.js";
-import { records, toItem } from "../../lib/library-story-data.js";
+import { records, toItem } from "../../demo/library-story-data.js";
 
 const columns = [
   { key: "title", header: "Name" },

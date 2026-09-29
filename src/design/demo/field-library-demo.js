@@ -14,10 +14,11 @@ import { demoImage } from "./images.js";
  */
 import React from "react";
 import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
+import { fieldLibraryTypes } from "../features/interpreter/FieldLibraryView/index.jsx";
 
 const TOAST_MS = 3000;
 
-export const fieldLibraryTypes = ["Report Context", "Metric Dictionary", "Analytical Model", "Email Reports"];
+export { fieldLibraryTypes };
 
 /* knowledge-fields.js lookup tables (project key -> governed domain label,
    report-context rules/linked scenarios/scope per project). */
