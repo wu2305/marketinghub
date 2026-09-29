@@ -6,6 +6,7 @@ import {
   AssistantLauncher,
   AssistantPanel,
   CampaignPage,
+  ConfirmDialog,
   Modal,
   ModelFlowDialog,
   ReportCopilot,
@@ -314,6 +315,19 @@ function NestedHost() {
   );
 }
 
+function DeleteHost() {
+  const [items, setItems] = React.useState(["Alpha", "Beta", "Gamma"]);
+  const [pending, setPending] = React.useState(null);
+  return (
+    <div>
+      <ul aria-label="items">
+        {items.map((item) => <li key={item}><button type="button">{item}</button><button type="button" onClick={() => setPending(item)}>{`Delete ${item}`}</button></li>)}
+      </ul>
+      <ConfirmDialog open={Boolean(pending)} purpose="danger" title="Delete" message="Delete?" confirmLabel="Confirm Delete" onCancel={() => setPending(null)} onConfirm={() => { setItems((list) => list.filter((item) => item !== pending)); setPending(null); }} />
+    </div>
+  );
+}
+
 describe("nested overlays", () => {
   it("Escape closes only the top layer, restores focus in order, and unlocks after the last layer", () => {
     render(<NestedHost />);
@@ -333,6 +347,16 @@ describe("nested overlays", () => {
     expect(document.querySelector(".mh-assistant__dialog")).toBeNull();
     expect(document.activeElement).toBe(launcher);
     expect(document.body.classList.contains("dialog-open")).toBe(false);
+  });
+
+  it("returns focus to the list, not <body>, when the confirm deletes its opener", () => {
+    render(<DeleteHost />);
+    const opener = screen.getByText("Delete Beta");
+    opener.focus();
+    fireEvent.click(opener);
+    fireEvent.click(screen.getByText("Confirm Delete"));
+    expect(screen.queryByText("Delete Beta")).toBeNull();
+    expect(document.activeElement).toBe(screen.getByText("Alpha"));
   });
 
   it("cycles Tab in the top layer and redirects programmatic focus from the background", () => {

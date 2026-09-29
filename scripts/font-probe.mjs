@@ -7,7 +7,7 @@
 // Prints one line per affected story; no output means every text node uses a
 // design-system (or declared CJK/system fallback) font.
 import { chromium } from "playwright";
-import { affectedStoryIds, changedFiles, defaultBase } from "./affected.mjs";
+import { affectedStoryIds, changedFiles, defaultBase, unreachedSources } from "./affected.mjs";
 
 const args = process.argv.slice(2);
 const at = args.indexOf("--affected");
@@ -15,7 +15,13 @@ const affectedBase = at < 0 ? null : (args[at + 1] && !args[at + 1].startsWith("
 const base = args.find((arg, i) => arg.startsWith("http") && i !== at + 1) || "http://127.0.0.1:6007";
 const allowed = /DIN 2014|BentonMod|PingFang|YaHei|-apple-system|Arial/i;
 const index = await (await fetch(`${base}/index.json`)).json();
-const ids = affectedBase ? affectedStoryIds(index, changedFiles(affectedBase)) : null;
+const changed = affectedBase ? changedFiles(affectedBase) : [];
+const ids = affectedBase ? affectedStoryIds(index, changed) : null;
+const unreached = ids ? unreachedSources(index, changed) : [];
+if (unreached.length) {
+  console.error(`--affected: these changed sources reach no story: ${unreached.join(", ")}`);
+  process.exit(2);
+}
 if (affectedBase) console.error(`--affected ${affectedBase}: ${ids ? `${ids.size} stories` : "global change, all stories"}`);
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });

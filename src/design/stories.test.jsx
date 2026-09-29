@@ -49,10 +49,12 @@ const MOLECULE_MODULES = [
   "ProgressList", "ColumnChart", "DataTable",
   "FileDropzone", "Toast",
 ];
+// Phase 2 governed-library pattern components (patterns/library.md §2).
+const PATTERN_MODULES = ["LibraryToolbar", "LibraryList", "LibraryItem", "ItemActions", "LibraryEmpty"];
 const documentedComponents = new Set([
   ...Object.entries(componentModules)
     .filter(([path]) =>
-      [...ATOM_MODULES, ...MOLECULE_MODULES].some((n) => path === `./components/${n}/index.jsx`),
+      [...ATOM_MODULES, ...MOLECULE_MODULES, ...PATTERN_MODULES].some((n) => path === `./components/${n}/index.jsx`),
     )
     .flatMap(([, module]) => Object.entries(module))
     .filter(([name, value]) => isComponentExport(name, value))
@@ -85,7 +87,7 @@ describe("story coverage", () => {
 describe("docs completeness", () => {
   const documentedMetas = metas.filter((meta) => documentedComponents.has(meta.component));
 
-  it("covers every atoms/molecules component plus Icon and ReportRow", () => {
+  it("covers every atoms/molecules/pattern component plus Icon and ReportRow", () => {
     expect(documentedMetas.length).toBe(documentedComponents.size);
   });
 

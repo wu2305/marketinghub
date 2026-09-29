@@ -9,6 +9,7 @@ import { Pagination } from "../../../components/Pagination/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { Toast } from "../../../components/Toast/index.jsx";
 import "./ScenarioReportsView.css";
+import { availabilityOf } from "../../../lib/governance.js";
 
 const workflowBadge = (status) => <StatusBadge status={String(status || "").toLowerCase()}>{status}</StatusBadge>;
 
@@ -78,7 +79,7 @@ export function ScenarioReportsView({
   onCreate,
 }) {
   const availability = (record) =>
-    record.ai_interpreter_enabled ? { status: "enabled", label: strings.enabled || "Enabled" } : { status: "disabled", label: strings.disabled || "Disabled" };
+    availabilityOf(record) === "enabled" ? { status: "enabled", label: strings.enabled || "Enabled" } : { status: "disabled", label: strings.disabled || "Disabled" };
   const reportValue = (record) => (record.reportHref ? <a className="mh-srview__report" href={record.reportHref}>{record.report || "—"}</a> : record.report || "—");
   const items = records.map((record) => ({
     id: record.id,

@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # --affected needs the merge base with origin/main
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -18,5 +20,25 @@ jobs:
       - run: npm test
       - run: npm run build-storybook
       - run: npm run build:host
+      - run: npm run build:lib
       - run: npx playwright install --with-deps chromium
-      - run: node scripts/host-check.mjs
+      - run: node scripts/host-check.mjs --out ci-evidence/host
+      # The original demo is frozen, so passing original-side results are reused
+      # across runs until the demo, the runner or the browser changes.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/mh-visual-original
+          key: visual-original-${{ hashFiles('index.html', 'assets/**', 'scripts/visual-check.mjs', 'scripts/visual-check/common.mjs', 'package-lock.json') }}
+      - run: node scripts/visual-check.mjs --affected origin/main --out ci-evidence/visual
+      - run: node scripts/visual-check.mjs --affected origin/main --negative --out ci-evidence/negative
+      - name: font probe
+        run: |
+          (cd storybook-static && python3 -m http.server 6107 >/dev/null 2>&1 &)
+          sleep 1
+          node scripts/font-probe.mjs http://127.0.0.1:6107 --affected origin/main | tee ci-evidence/font-probe.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate-evidence
+          path: ci-evidence/
+          retention-days: 14

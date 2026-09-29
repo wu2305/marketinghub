@@ -1,5 +1,5 @@
 // Sample content for the Organisms/Library stories (patterns/library.md §4).
-import { governedActions } from "./governance.js";
+import { governedActions } from "../lib/governance.js";
 
 export const me = "Current User";
 export const records = [

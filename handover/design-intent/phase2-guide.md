@@ -364,6 +364,12 @@ node scripts/concept-count.mjs > /tmp/mh-wp<id>-count-after.txt
   `package.json`, the check scripts), and a `tokens.css` change selects nearly everything. Paste its
   selection line (`N changed files → S stories, X/Y scenarios`) with the summary. WP8 runs the full,
   unfiltered gate once.
+- CI (`.github/workflows/ci.yml`) runs the same `--affected` visual, negative, `build:lib` and font-probe
+  steps and uploads them as the `gate-evidence` artifact; link that run in the PR instead of pasting
+  local numbers when they differ. A changed source file under `src/design` that reaches no story fails
+  the selection (exit 2) instead of passing empty.
+- Original-side results are cached (the demo is frozen); `--fresh-original` re-runs them. A negative
+  counts only when its story side fails while the original side passes.
 - Font probe: only the existing intentional monospace lines (formulas/code) may appear. Any other line
   fails the gate.
 - Story count: `storybook-static/index.json` may drop only by the story ids you list as removed (WP7

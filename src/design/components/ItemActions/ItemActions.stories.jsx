@@ -1,7 +1,7 @@
 import { ItemActions } from "./index.jsx";
 import { governedActions } from "../../lib/governance.js";
 import { callbackProp, prop } from "../../lib/story-helpers.js";
-import { me } from "../../lib/library-story-data.js";
+import { me } from "../../demo/library-story-data.js";
 
 const actionsFor = (record) => governedActions(record, { currentUser: me });
 
