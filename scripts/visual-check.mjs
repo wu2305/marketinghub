@@ -585,6 +585,8 @@ if (AFFECTED_BASE) {
   }
   console.log(`--affected ${AFFECTED_BASE}: ${changed.length} changed files → ${ids ? `${ids.size} stories, ` : "global change, "}${list.length}/${before} scenarios`);
   if (list.length === 0) {
+    // A green CI job that checked nothing must say so.
+    if (process.env.GITHUB_ACTIONS) console.log("::warning::--affected selected 0 scenarios, so nothing was visually checked");
     console.log(changed.length ? "no affected scenarios (changes are outside Storybook: docs, tests or the host, which npm test and host-check cover)" : "no changes");
     process.exit(0);
   }
