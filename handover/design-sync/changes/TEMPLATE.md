@@ -11,6 +11,9 @@ a fix to something that was wrong, or removing something.
 
 Screenshots (optional): before/after paths or links.
 
+Bundle version: <e.g. v22> (set as the title of `docs/demo/README.md`). Local paths stripped from
+`docs/cleanup-manifest.json`: yes / no files of that kind in this bundle.
+
 ## B. Inventory (agent)
 
 One row per user-visible change. Regeneration noise with no visible effect gets one summary row.

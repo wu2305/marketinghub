@@ -164,7 +164,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 从最新 `origin/main` 开分支。不在 `cursor/storybook-design-e61c`、`cursor/component-ablation-e61c` 及其派生分支上开发。
 - 每个 PR 只推进一个里程碑内的一个可独立验收的条目。PR 描述必须包含：改动的组件列表、对照截图（或脚本输出路径）、有意差异登记。
 - PR 合并后，同一 PR 内更新 `handover/README.md` 的状态表与维护日志。禁止只改代码不改 handover。
-- 不修改 `index.html`、`assets/**` 中的原始 Demo，除非是修复参照物本身的明显错误（需在 PR 中单列说明），或是按 `handover/design-sync/README.md` 提交的设计师 Demo 更新（该 PR 首个提交只含 Demo 与变更说明）。
+- 不修改 `index.html`、`assets/**` 中的原始 Demo，除非是修复参照物本身的明显错误（需在 PR 中单列说明），或是按 `handover/design-sync/README.md` 提交的设计师 Demo 更新（该 PR 首个提交只含 Demo 与变更说明；附带的 `docs/cleanup-manifest.json` 与 README 按该文件 §2 清理本机路径、更新版本标题）。
 
 ## 7. handover 维护规则
 
