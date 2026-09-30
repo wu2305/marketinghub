@@ -49,9 +49,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.ref_type == 'tag'
     runs-on: ubuntu-latest
     timeout-minutes: 90
-    env:
-      # Tags check everything; manual runs only what differs from main.
-      AFFECTED: ${{ github.ref_type == 'tag' && '' || '--affected origin/main' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,6 +57,19 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      # Tags and manual runs on main check everything (on main --affected origin/main
+      # is an empty diff, so it would select zero scenarios and still pass); a
+      # manual run on another ref checks only what differs from main.
+      # (A `tag && '' || x` expression cannot do this: '' is falsy, so x always won.)
+      - name: choose scope
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ] || [ "$GITHUB_REF_NAME" = main ]; then
+            echo "AFFECTED=" >> "$GITHUB_ENV"
+            echo "scope: full"
+          else
+            echo "AFFECTED=--affected origin/main" >> "$GITHUB_ENV"
+            echo "scope: --affected origin/main"
+          fi
       - run: npm ci
       - run: npm run build-storybook
       - run: npm run build:host
