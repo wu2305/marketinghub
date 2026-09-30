@@ -53,6 +53,7 @@ if (errors.length) {
 const consumerFiles = [
   path.join(root, "examples", "types", "consumer.tsx"),
   path.join(root, "examples", "consumer", "BusinessTermApp.tsx"),
+  path.join(root, "examples", "consumer", "CockpitApp.tsx"),
 ];
 const consumer = ts.createProgram(consumerFiles, {
   strict: true,

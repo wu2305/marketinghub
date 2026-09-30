@@ -228,4 +228,22 @@ export default [
     reason: "a form that is cancelled (or a save the page never receives) cannot satisfy the new Draft card",
   },
   { id: "neg-consumer-form-not-opened", base: "consumer-p08-business-term", story: { actions: [] }, reason: "the library cannot satisfy the create form assertions" },
+  {
+    id: "neg-consumer-copilot-wrong-recommendation",
+    base: "consumer-p02-copilot-answer",
+    story: {
+      actions: [
+        { click: ".mh-project-card:has-text('City Strategy') a" },
+        { wait: ".mh-project-directory" },
+        { click: ".mh-report-row >> nth=0 >> .mh-report-row__open" },
+        { wait: ".mh-live" },
+        { click: ".mh-launcher" },
+        { wait: ".mh-copilot.is-open" },
+        { click: ".mh-copilot__rec >> nth=2" },
+        { wait: ".mh-copilot__answer" },
+      ],
+    },
+    reason: "the third recommendation's answer cannot satisfy the second one's title",
+  },
+  { id: "neg-consumer-copilot-not-asked", base: "consumer-p02-copilot-chat", story: { actions: [{ click: ".mh-project-card:has-text('City Strategy') a" }, { wait: ".mh-project-directory" }, { click: ".mh-report-row >> nth=0 >> .mh-report-row__open" }, { wait: ".mh-live" }, { click: ".mh-launcher" }, { wait: ".mh-copilot.is-open" }] }, reason: "an open Copilot with no question asked cannot satisfy the chat bubble and answer card" },
 ];
