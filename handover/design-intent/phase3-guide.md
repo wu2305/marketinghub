@@ -30,7 +30,8 @@ without retargeting, so a PR whose base is another PR's branch never reaches `ma
 | 1 | Shared components | 2 | Phase 2 merged | "Phase 3 skill form merge" |
 | 2 | Assistant wiring | 1 | Phase 2 merged | the Phase 3 guide thread |
 | 3 | Responsive cleanup | — | 1 and 2 merged | — |
-| 4 | Demo size and close-out | — | 3 merged | — |
+| 4 | Demo size and close-out | — | 3 and 5 merged | — |
+| 5 | Pages composed by a consumer | 3 | #74, #75 merged | "Codex workflow gaps check" |
 
 A WP may use several PRs when its items are independent (WP7 did); each PR still carries one item.
 "Merged" means merged to `main`. Claude does not merge Phase 3 PRs unless the operator says so for
@@ -105,6 +106,49 @@ Runs alone, after WP1 and WP2, because it touches CSS almost everywhere.
    prop group is now redundant. No new grouping objects for their own sake.
 4. Add a "Phase 3 result" column to `occam-baseline.md`; rewrite the AGENTS §2.4 facts that changed;
    update `handover/README.md` §1 and §4; full unfiltered gate once.
+
+### WP5 — Pages composed by a consumer (operator decision 2026-09-29)
+
+Concept: the goal is that the components **stack into pages and logic**. A page a consumer builds from
+them must **look the same and operate the same** as the demo (same screens, controls, dialogs, toasts,
+visible result of each action). How the data rules work underneath does not matter; the demo's storage,
+permission and availability logic is not reproduced for its own sake.
+
+A consumer app lives in `examples/consumer/`. It imports only from the package entries
+(`marketing-hub`; from `marketing-hub/demo` only upper-case **content** constants such as `INTERPRETER`,
+never `use*Demo` hooks or `build*` helpers) and keeps its own state. It is:
+- type-checked strictly against `dist/types` and run against `dist/` by `build:lib`;
+- driven by a jsdom test (`npm test`) that clicks through the demo's visible behaviour;
+- shown as `Examples/*` stories and paired with the original page in `visual-check` (manual/tag runs
+  only; CI stays light).
+
+Whatever the consumer can only do by copying demo code or importing an internal path is a **contract
+gap**; list it below and fix it in its own PR.
+
+1. Business Term library + create/edit form, rebuilt by a consumer. Behaviour checked: search and
+   filters, detail drawer, blocked action explains itself, disable/delete confirm then toast, Add →
+   Save shows the new card with its Draft badge, Edit → Save updates that card without duplicating,
+   Cancel changes nothing, two app instances stay independent.
+2. Contract fixes, one PR per gap found by item 1 (and 3).
+3. A page holding two independent assistants (Marketing Cockpit: workspace assistant and Report Copilot), rebuilt the same way with replacement data: each opens, answers and closes on its own, and swapping the data changes neither look nor interaction. The table pattern (Skill Library) follows if item 2 leaves doubts about it.
+4. Close-out folds into WP4: "consumer-built pages look and operate like the demo" is the composability
+   gate; the prop and stub counts in `occam-baseline.md` are labelled proxies.
+
+Not in this WP: carrying records between host routes, restore requests into Review Center, unifying the
+demo hooks' own availability rules, growing the reachable-state inventory.
+
+Contract gaps found (item 2 works this list):
+
+| id | gap | found by | evidence |
+|---|---|---|---|
+| G1 | Route params are typed `object`: `hrefFor(id, params)` and `onNavigate({ params })` on `AiInterpreterPage` / `KnowledgeCreatePage`. A TypeScript consumer cannot read `params.type` or pass a typed resolver without a cast. | item 1 | strict build:lib check reported TS2322 ×2 and TS2339 before the casts in `BusinessTermApp.tsx` |
+| G2 | `KnowledgeCreatePage` documents `onSave`/`onSubmit`/`onCancel` as `() => void`, but the Business Term form calls them with `{ values }`. The payload exists but cannot be used from TypeScript. | item 1 | `pages/KnowledgeCreatePage/index.jsx` JSDoc vs `features/interpreter/BusinessTermForm` |
+| G3 | The same term has two shapes: the form takes `synonyms` as one comma string, the library view takes `synonyms: string[]`. Every consumer writes both conversions. | item 1 | `openForm` and `persist` in `BusinessTermApp.tsx` |
+| G4 | `AiInterpreterPage`'s `view` and `assistant` props are typed `object`, so the Business Term view props and the assistant answer shape (`variant: "workspace"`, `banner`, `findings`, `sources`) are not checked or documented at the page boundary. The consumer copied the answer shape from demo code. | item 1 | `view={…}` and `answers` in `BusinessTermApp.tsx` compile with any keys |
+| G5 | The governed confirm flow (blocked reason → dialog content from copy → confirm → state change → toast) is caller-side. It now exists four times: three demo hooks and the consumer (~40 lines each). Decide in item 2 whether a small public helper earns its place, or whether this stays the caller's job by design. | item 1 | `act`/`confirm`/`dialog` in `BusinessTermApp.tsx` vs `demo/business-term-demo.js:129-222` |
+| G6 | Required fields are marked by the form (`required`), but validation is the caller's, so the consumer repeats which fields are required. Minor. | item 1 | `persist` in `BusinessTermApp.tsx` |
+
+Not gaps: filtering, paging and the facet option lists are the caller's by design (the views are controlled), and the consumer did them in a few lines each.
 
 ### Out of scope for Phase 3
 

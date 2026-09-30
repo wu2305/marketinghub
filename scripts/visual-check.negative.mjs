@@ -213,4 +213,19 @@ export default [
     story: { id: "pages--feedback-quality" },
     reason: "closed React default cannot satisfy the restored assistant-open assertion",
   },
+  {
+    id: "neg-consumer-draft-cancelled",
+    base: "consumer-business-term-saved-draft",
+    story: {
+      actions: [
+        { click: ".mh-btview a:has-text('Add Business Term')" },
+        { wait: ".mh-kcreate[data-kc-type='Business Term']" },
+        { fill: ["input[name='title']", "Repeat Buyer"] },
+        { click: ".mh-btform button:has-text('Cancel')" },
+        { wait: ".mh-btview" },
+      ],
+    },
+    reason: "a form that is cancelled (or a save the page never receives) cannot satisfy the new Draft card",
+  },
+  { id: "neg-consumer-form-not-opened", base: "consumer-p08-business-term", story: { actions: [] }, reason: "the library cannot satisfy the create form assertions" },
 ];

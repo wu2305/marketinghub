@@ -2,7 +2,7 @@
  * Source fingerprinting for the visual-check pipeline.
  *
  * `sourceFingerprint()` hashes every file that can change the built stories —
- * `src/design`, `.storybook`, `package.json`, `package-lock.json` — listing
+ * `src/design`, `examples/consumer`, `.storybook`, `package.json`, `package-lock.json` — listing
  * them with `git ls-files -co --exclude-standard` so both tracked and
  * untracked-but-not-ignored files count (gitignored output such as
  * storybook-static never does). The hash covers sorted `path\0content\0`
@@ -18,7 +18,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-export const SOURCE_PATHS = ["src/design", ".storybook", "package.json", "package-lock.json"];
+export const SOURCE_PATHS = ["src/design", "examples/consumer", ".storybook", "package.json", "package-lock.json"];
 
 function git(args) {
   return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" });

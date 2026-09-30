@@ -22,8 +22,11 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SRC = "src/design";
+/* The consumer example imports the package by name; it maps to the public entries. */
+const CONSUMER = "examples/consumer";
+const PACKAGE = { "marketing-hub": `${SRC}/index.js`, "marketing-hub/demo": `${SRC}/demo/index.js` };
 const GLOBAL = [/^\.storybook\//, /^assets\//, /^index\.html$/, /^package(-lock)?\.json$/, /^vite[^/]*\.config\./, /^scripts\/(visual-check(\.config)?\.mjs|visual-check\/common\.mjs|fingerprint\.mjs|build-storybook\.mjs|font-probe\.mjs|affected\.mjs)$/];
-const EXTENSIONS = ["", ".js", ".jsx", ".mjs", ".css", "/index.js", "/index.jsx"];
+const EXTENSIONS = ["", ".js", ".jsx", ".mjs", ".css", ".tsx", "/index.js", "/index.jsx"];
 const IMPORT = /(?:\bfrom|\bimport)\s*["']([^"']+)["']/g;
 const CSS_URL = /url\(\s*["']?([^"')]+)["']?\s*\)/g;
 // Changes under src/design that legitimately reach no story.
@@ -49,12 +52,13 @@ function walk(dir, out = []) {
   for (const name of readdirSync(path.join(ROOT, dir))) {
     const rel = `${dir}/${name}`;
     if (statSync(path.join(ROOT, rel)).isDirectory()) walk(rel, out);
-    else if (/\.(jsx?|mjs|css|mdx)$/.test(name)) out.push(rel);
+    else if (/\.(jsx?|tsx?|mjs|css|mdx)$/.test(name)) out.push(rel);
   }
   return out;
 }
 
 function resolveImport(from, spec) {
+  if (PACKAGE[spec]) return PACKAGE[spec];
   if (!spec.startsWith(".")) return null;
   const bare = path.posix.normalize(path.posix.join(path.posix.dirname(from), spec.replace(/\?.*$/, "")));
   for (const ext of EXTENSIONS) {
@@ -64,10 +68,10 @@ function resolveImport(from, spec) {
   return null;
 }
 
-/** Map of file → files under src/design that import it directly. */
+/** Map of file → files under src/design (and the consumer example) that import it directly. */
 function importers() {
   const map = new Map();
-  for (const file of walk(SRC)) {
+  for (const file of [...walk(SRC), ...walk(CONSUMER)]) {
     const source = readFileSync(path.join(ROOT, file), "utf8");
     const specs = [...source.matchAll(IMPORT), ...(file.endsWith(".css") ? source.matchAll(CSS_URL) : [])];
     for (const [, spec] of specs) {
@@ -119,7 +123,7 @@ export function unreachedSources(index, changed) {
 
 /** Scenario files (scripts/visual-check/scenarios/pNN.mjs) changed directly: their pages run in full. */
 export function changedScenarioPages(changed) {
-  return new Set(changed.map((file) => file.match(/^scripts\/visual-check\/scenarios\/(p\d+)\.mjs$/)?.[1]).filter(Boolean));
+  return new Set(changed.map((file) => file.match(/^scripts\/visual-check\/scenarios\/(p\d+|consumer)\.mjs$/)?.[1]).filter(Boolean));
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
