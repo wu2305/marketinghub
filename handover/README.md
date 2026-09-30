@@ -11,7 +11,7 @@
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
-| 故事数 | 484 stories + 93 docs（2026-09-29 Phase 3 WP5 第 1 项：新增 `Examples/Consumer business term` Workspace 故事及其 docs；此前 2026-09-29 Phase 3 ScenarioPreview 并入 ExamplePreview：删 `Organisms/ScenarioPreview`、新增 `Molecules/ExamplePreview` View 故事；此前 WP2：新增 `Organisms/Assistant dock` 3 个故事，483 + 93） |
+| 故事数 | 486 stories + 94 docs（2026-09-30 Phase 3 WP5 第 3 项 `examples/consumer/CockpitApp.stories.tsx` 新增 Cockpit 使用方故事及其 docs，本次核对 `storybook-static/index.json`；此前 484 stories + 93 docs，2026-09-29 Phase 3 WP5 第 1 项：新增 `Examples/Consumer business term` Workspace 故事及其 docs；此前 2026-09-29 Phase 3 ScenarioPreview 并入 ExamplePreview：删 `Organisms/ScenarioPreview`、新增 `Molecules/ExamplePreview` View 故事；此前 WP2：新增 `Organisms/Assistant dock` 3 个故事，483 + 93） |
 | 测试 | `npm test`：37 文件 428 条通过（2026-09-30，Pass A 审核整改：新增 Cockpit 路由参数字符串测试；此前 2026-09-29 Phase 3 WP5 第 1 项：`examples/consumer` 行为与导入边界测试；`build:lib` 另在 dist 上重跑 examples/consumer） |
 | lint | `npm run lint`：0 errors / 0 warnings（2026-09-29，WP8 全量门禁） |
 | 构建验证 | 2026-09-29 WP8 全量未过滤门禁（main 1ececf4 上仅改文档）：`build-storybook`、`build:host`、`build:lib` 通过；host-check 31/31；字体探针 33 条，均为既有公式/代码等宽字体，无其他字体命中。本环境 Playwright 期望的浏览器版本未安装，改用预装 Chromium 1194（scratchpad 符号链接并设 `PLAYWRIGHT_BROWSERS_PATH`；脚本未改） |
