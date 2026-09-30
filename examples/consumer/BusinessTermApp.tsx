@@ -23,7 +23,7 @@ export type Term = {
   stage?: "Draft" | "Under Review";
 };
 
-type FormValues = { title: string; kind: string; description: string; synonyms: string; scope: string[] };
+type FormValues = { title: string; kind: string; description: string; synonyms: string[]; scope: string[] };
 type Route = { page: "library"; type: string } | { page: "form"; mode: "create" | "edit"; id?: string };
 type Pending =
   | { kind: "info"; title: string; message: string }
@@ -33,7 +33,7 @@ type Pending =
 const LIBRARY = INTERPRETER.businessTermLibrary;
 const DIALOGS = LIBRARY.strings.dialogs;
 const TOOLTIPS = governanceMessages;
-const BLANK: FormValues = { title: "", kind: "Business Term", description: "", synonyms: "", scope: [] };
+const BLANK: FormValues = { title: "", kind: "Business Term", description: "", synonyms: [], scope: [] };
 const TOAST_MS = 3000;
 
 /** Seed terms from the demo content; any list of `Term`s works. */
@@ -74,7 +74,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   const update = (id: string, patch: Partial<Term>) => setRecords((all) => all.map((record) => (record.id === id ? { ...record, ...patch } : record)));
   const openForm = (mode: "create" | "edit", id?: string) => {
     const record = id ? find(id) : undefined;
-    setValues(record ? { title: record.title, kind: record.kind, description: record.description, synonyms: record.synonyms.join(", "), scope: record.scope } : BLANK);
+    setValues(record ? { title: record.title, kind: record.kind, description: record.description, synonyms: record.synonyms, scope: record.scope } : BLANK);
     setInvalid([]);
     setDetailId(null);
     setRoute({ page: "form", mode, id });
@@ -91,7 +91,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
       title: values.title.trim(),
       kind: values.kind,
       description: values.description.trim(),
-      synonyms: values.synonyms.split(",").map((value) => value.trim()).filter(Boolean),
+      synonyms: values.synonyms,
       scope: values.kind === "Global Synonym" ? [] : values.scope,
       creator: editing ? find(editing)?.creator || currentUser : currentUser,
       status: "Disable",

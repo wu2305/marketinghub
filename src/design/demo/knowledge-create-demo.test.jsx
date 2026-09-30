@@ -52,6 +52,26 @@ describe("P08 demo flow", () => {
     }
   });
 
+  it("keeps Business Term synonyms as a list: the field types comma text, the value is string[]", () => {
+    const changes = [];
+    const base = demoPropsFor("Business Term");
+    function Test() {
+      const [values, setValues] = React.useState({ synonyms: ["Gross Sales"] });
+      return <>
+        <KnowledgeCreatePage {...base} values={values} onChange={(event) => { changes.push(event); setValues((prior) => ({ ...prior, [event.name]: event.value })); }} />
+        <button type="button" onClick={() => setValues({ synonyms: ["Reset One", "Reset Two"] })}>reset</button>
+      </>;
+    }
+    render(<Test />);
+    const field = () => document.querySelector('[name="synonyms"]');
+    expect(field().value).toBe("Gross Sales");
+    fireEvent.change(field(), { target: { value: "Gross Sales, GMV," } });
+    expect(changes.at(-1)).toEqual({ name: "synonyms", value: ["Gross Sales", "GMV"] });
+    expect(field().value).toBe("Gross Sales, GMV,");
+    fireEvent.click(screen.getByRole("button", { name: "reset" }));
+    expect(field().value).toBe("Reset One, Reset Two");
+  });
+
   it("renders injected Business Term copy and scope options without leaking defaults", () => {
     const saved = vi.fn();
     const alternate = {
