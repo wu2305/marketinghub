@@ -17,6 +17,55 @@ import { pluralize, projectSearchText, reportSearchText, resolveReportAssets } f
 import "./MarketingCockpitPage.css";
 
 
+/**
+ * @typedef {object} CockpitRecommendation A suggested question of the live report's Copilot; also listed in the details drawer.
+ * @property {string} title
+ * @property {string} [meta]
+ * @property {string} [answerTitle]
+ * @property {string} [summary]
+ * @property {Array<string[]>} [findings] `[label, text]` pairs
+ */
+
+/**
+ * @typedef {object} CockpitReport One dashboard of a project.
+ * @property {string} title
+ * @property {string} type
+ * @property {string} description
+ * @property {string} owner
+ * @property {string} cadence
+ * @property {string} updated
+ * @property {string} [embed] `"city-invest"`: the live view is the CityInvestDashboard (needs `cityInvest`)
+ * @property {string[]} [knowledgeIds] ids into `knowledge`
+ * @property {Array<Array<string|number>>} [metrics] LiveOverview KPI rows: label, value, delta
+ * @property {Array<Array<string|number>>} [chart] LiveOverview bars: label, value, comparison
+ * @property {CockpitRecommendation[]} [recommendations]
+ * @property {{ panelTitle?: string, periodHint?: string }} [assistant]
+ */
+
+/**
+ * @typedef {object} CockpitProject One card of the catalog and its directory of reports.
+ * @property {string} title
+ * @property {string} kicker
+ * @property {string} description
+ * @property {string} group id of a `groups` entry
+ * @property {string} category
+ * @property {string} image
+ * @property {string} accent
+ * @property {string[]} sourceStrip first entry is the "updated" line
+ * @property {CockpitReport[]} reports
+ */
+
+/**
+ * @typedef {object} CockpitKnowledgeAsset A knowledge item linked to reports (counts, search text, context links).
+ * @property {string} id
+ * @property {string} title
+ * @property {string} type
+ * @property {string[]} [projects] project ids the asset is scoped to
+ * @property {Array<{ name: string, kind: string }>} [connections]
+ */
+
+/** @typedef {Omit<Parameters<typeof ReportCopilot>[0], "open" | "returnFocusRef">} CockpitWorkspace Report Copilot content, state and callbacks. */
+
 /** @type {readonly ["catalog", "live"]} */
 export const cockpitViews = ["catalog", "live"];
 
@@ -32,13 +81,13 @@ export const cockpitViews = ["catalog", "live"];
  * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details.
  * @param {string} [props.query=""] catalog search text
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
- * @param {Object<string, object>} [props.projects={}] project records keyed by id
+ * @param {Record<string, CockpitProject>} [props.projects={}] project records keyed by id
  * @param {string} [props.project="all"] active catalog project id or "all"
  * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view; advisory only — the original opens live whenever `dashboard` is present and rewrites `view=live` into the URL
  * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view
  * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
- * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
+ * @param {CockpitKnowledgeAsset[]} [props.knowledge=[]] knowledge assets used for report knowledge counts, search text and context links
  * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
  * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor semantic route resolver supplied by story or host
  * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
@@ -49,7 +98,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
  * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
- * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
+ * @param {CockpitWorkspace} [props.workspace] ReportCopilot props (report-scoped aiWorkspace)
  * @param {boolean} [props.workspaceOpen=false]
  * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
  * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props

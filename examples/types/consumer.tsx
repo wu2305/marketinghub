@@ -3,7 +3,7 @@
  * and still reject wrong usage (each @ts-expect-error must stay an error).
  * Not bundled or run; type-checked only. */
 import React from "react";
-import { AiInterpreterPage, AssistantDock, AssistantLauncher, AssistantPanel, Button, KnowledgeCreatePage, TextArea, type assistantVariants } from "marketing-hub";
+import { AiInterpreterPage, AssistantDock, AssistantLauncher, AssistantPanel, Button, KnowledgeCreatePage, MarketingCockpitPage, TextArea, type assistantVariants } from "marketing-hub";
 import { useWorkspaceAssistantDemo } from "marketing-hub/demo";
 
 export function DockHost({ variant }: { variant: (typeof assistantVariants)[number] }) {
@@ -77,3 +77,17 @@ export const view: InterpreterView = { records: [], query: "" };
 
 // @ts-expect-error route params are strings
 export const badHref: Href = (id: string, params?: { type: number }) => `${id}${params?.type}`;
+
+/* The Cockpit page: the Copilot workspace and the project records are typed. */
+type Workspace = NonNullable<React.ComponentProps<typeof MarketingCockpitPage>["workspace"]>;
+type Projects = NonNullable<React.ComponentProps<typeof MarketingCockpitPage>["projects"]>;
+
+export const ask: Workspace["onAsk"] = ({ question }) => question.length;
+export const projects: Projects = {
+  alpha: { title: "Alpha", kicker: "Alt / Alpha", description: "", group: "alt", category: "Alt", image: "", accent: "#000", sourceStrip: [], reports: [{ title: "R", type: "T", description: "", owner: "", cadence: "", updated: "" }] },
+};
+
+// @ts-expect-error the Copilot asks with { question }
+export const badAsk: Workspace["onAsk"] = ({ query }: { query: string }) => query;
+// @ts-expect-error a project needs its reports
+export const badProjects: Projects = { alpha: { title: "Alpha" } };
