@@ -44,7 +44,10 @@ const initialValues = {
 
 /**
  * Deterministic P08 flow: no assets/js, storage, server, or AI calls.
- * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`. Save is
+ * `onSave`/`onSubmit` receive `{type, mode, id, values, stage?}`: the page's own
+ * `{type, mode, values}` plus the record `id` and the `stage` the item enters, where
+ * `values` is what was persisted (Save keeps Business Term / Analytical Model
+ * offline; Scenario Reporting is always offline). Save is
  * `Draft`; Submit is `Under Review` (Review Center publishes, A1) except Scenario
  * Reporting, whose own build pipeline starts at `Queued`; the Report Context
  * description review is not a new item and has no stage.
