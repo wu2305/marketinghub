@@ -494,3 +494,59 @@ describe("src/design CSS budget (WP1)", () => {
     expect(newPrefixed, `new component/page-prefixed tokens: ${newPrefixed.join(", ")}`).toEqual([]);
   });
 });
+
+/* Token references must resolve. The ratchets above count raw values; nothing
+ * else notices a `var(--mh-x)` whose token was deleted or never defined (the
+ * declaration silently falls back to inherit/transparent), or a custom property
+ * that names itself (a cycle is invalid at computed-value time). */
+function sourceFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) return sourceFiles(full);
+    return /\.(css|jsx|js)$/.test(entry.name) && !/\.test\./.test(entry.name) ? [full] : [];
+  });
+}
+
+export function tokenReferences(sources, tokenNames) {
+  const defined = new Set(tokenNames);
+  const referenced = new Map();
+  const cycles = [];
+  for (const [file, raw] of sources) {
+    const text = file.endsWith(".css") ? withoutComments(raw) : raw;
+    // Custom properties a component sets itself: `--mh-x: …;` in CSS, or a JSX
+    // style key such as `{ "--mh-art": … }`.
+    for (const [, name] of text.matchAll(/(--mh-[a-z0-9-]+)\s*:/g)) defined.add(name);
+    for (const [, name] of text.matchAll(/["'`](--mh-[a-z0-9-]+)["'`]\s*:/g)) defined.add(name);
+    for (const [, name] of text.matchAll(/(--mh-[a-z0-9-]+)\s*:\s*var\(\s*\1\s*[,)]/g)) cycles.push(`${file}: ${name}`);
+    // A trailing dash marks a name assembled at runtime (`var(--mh-space-${n})`).
+    for (const [, name] of text.matchAll(/var\(\s*(--mh-[a-z0-9-]+)/g)) {
+      if (!name.endsWith("-") && !referenced.has(name)) referenced.set(name, file);
+    }
+  }
+  return {
+    dangling: [...referenced].filter(([name]) => !defined.has(name)).map(([name, file]) => `${name} (${file})`),
+    cycles,
+  };
+}
+
+describe("token references", () => {
+  const sources = sourceFiles(ROOT).map((file) => [path.relative(ROOT, file), fs.readFileSync(file, "utf8")]);
+  const tokenNames = tokens().map(({ name }) => name);
+
+  it("resolves every var(--mh-*) under src/design to a defined custom property", () => {
+    expect(tokenReferences(sources, tokenNames).dangling).toEqual([]);
+  });
+
+  it("never defines a custom property in terms of itself", () => {
+    expect(tokenReferences(sources, tokenNames).cycles).toEqual([]);
+  });
+
+  it("detects a deleted token and a self-reference", () => {
+    const probe = tokenReferences(
+      [["a.css", ".x { color: var(--mh-gone); --mh-loop: var(--mh-loop); }"], ["b.jsx", 'const s = { "--mh-art": 1 }; const c = "var(--mh-art)";']],
+      ["--mh-text"],
+    );
+    expect(probe.dangling).toEqual(["--mh-gone (a.css)"]);
+    expect(probe.cycles).toEqual(["a.css: --mh-loop"]);
+  });
+});
