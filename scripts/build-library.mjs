@@ -85,7 +85,7 @@ if (consumerErrors.length) {
 const consumerRun = spawnSync(process.execPath, [path.join(root, "node_modules", "vitest", "vitest.mjs"), "run", "examples/consumer"], {
   cwd: root,
   stdio: "inherit",
-  env: { ...process.env, MH_PACKAGE: "dist" },
+  env: { ...process.env, NODE_ENV: "test", MH_PACKAGE: "dist" },
 });
 if (consumerRun.status !== 0) process.exit(consumerRun.status ?? 1);
 console.log("dist/ ESM, CSS and declarations built; TypeScript consumers type-check; consumer pages pass on dist/");
