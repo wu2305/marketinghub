@@ -12,6 +12,7 @@ const DOM_PROP_WARNINGS = [
   /Unknown event handler property `[^`]+`/,
   /Received `[^`]+` for a non-boolean attribute/,
   /Invalid attribute name/,
+  /Invalid DOM property `[^`]+`/,
 ];
 
 const format = (args) => {
@@ -22,7 +23,7 @@ const format = (args) => {
 };
 
 const storyModules = import.meta.glob(
-  ["./components/**/*.stories.jsx", "./features/**/*.stories.jsx", "./pages/**/*.stories.jsx"],
+  ["./*.stories.jsx", "./components/**/*.stories.jsx", "./features/**/*.stories.jsx", "./pages/**/*.stories.jsx", "../../examples/consumer/*.stories.tsx"],
   { eager: true },
 );
 
@@ -36,6 +37,18 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+});
+
+describe("prop-leak patterns", () => {
+  it("match the warnings React 18 emits for the leak classes", () => {
+    for (const message of [
+      "React does not recognize the `centralId` prop on a DOM element.",
+      "Invalid DOM property `class`. Did you mean `className`?",
+      "Invalid DOM property `for`. Did you mean `htmlFor`?",
+    ]) {
+      expect(DOM_PROP_WARNINGS.some((pattern) => pattern.test(message)), message).toBe(true);
+    }
+  });
 });
 
 describe("no props leak onto DOM elements", () => {
