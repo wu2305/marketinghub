@@ -6,6 +6,10 @@ import { knowledgeCreateHrefFor, useKnowledgeCreateDemo, validateKnowledgeCreate
 import { KnowledgeCreatePage } from "../pages/KnowledgeCreatePage/index.jsx";
 import { Header } from "../components/Header/index.jsx";
 
+function useKnowledgeCreateDemoProps(type) {
+  return renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type })).result.current;
+}
+
 describe("P08 demo flow", () => {
   it("validates the dedicated required fields while a generic draft can be saved incomplete", () => {
     expect(validateKnowledgeCreate("Business Term", {}, "create")).toEqual(["title", "kind", "description"]);
@@ -30,6 +34,22 @@ describe("P08 demo flow", () => {
     expect(saved.mock.calls[0][0].values.status).toBe(false);
     expect(saved.mock.calls[0][0].values.enabled).toBe(false);
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Business Term", notice: "saved" } }));
+  });
+
+  it("reports one { type, mode, values } payload from Save, Submit and Cancel for every form", () => {
+    for (const type of ["Business Term", "Principles", "Analytical Model"]) {
+      const events = { onSave: vi.fn(), onSubmit: vi.fn(), onCancel: vi.fn() };
+      const values = { title: "Probe", description: "Probe text" };
+      const { unmount } = render(<KnowledgeCreatePage {...useKnowledgeCreateDemoProps(type)} values={values} {...events} />);
+      fireEvent.click(screen.getByRole("button", { name: "Save" }));
+      fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+      const expected = { type, mode: "create", values };
+      expect(events.onSave).toHaveBeenCalledWith(expected);
+      expect(events.onCancel).toHaveBeenCalledWith(expected);
+      expect(events.onSubmit).toHaveBeenCalledWith(expected);
+      unmount();
+    }
   });
 
   it("renders injected Business Term copy and scope options without leaking defaults", () => {

@@ -29,9 +29,9 @@ import "./KnowledgeCreatePage.css";
  * @param {(event:{id:string,params: Record<string,string>,href:string}) => void} [props.onNavigate]
  * @param {(event:{value:string}) => void} [props.onTypeChange]
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
- * @param {() => void} [props.onSave]
- * @param {() => void} [props.onSubmit]
- * @param {() => void} [props.onCancel]
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSave] Save draft; `values` is the controlled `values` prop, for every type.
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSubmit]
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onCancel]
  * @param {(event:{reason:string}) => void} [props.onResultClose]
  * @param {(event:{kind:string}) => void} [props.onDialog]
  * @param {(event?:{reason:string}) => void} [props.onDialogClose]
@@ -52,6 +52,10 @@ export function KnowledgeCreatePage({
         : isReportEdit ? `${labels.editReport} ${values.title || type}` : mode === "edit" ? values.title || labels.edit : mode === "copy" ? labels.copy : labels.create;
   const subtitle = isTerm ? "" : isAnalysis ? content.analysis.description : isScenario ? content.scenario.description : labels.genericDescription;
   const typeParam = { type };
+  const payload = { type, mode, values };
+  const save = () => onSave?.(payload);
+  const submit = () => onSubmit?.(payload);
+  const cancel = () => onCancel?.(payload);
   const route = (targetId, params = {}) => { const href = hrefFor(targetId, params); onNavigate?.({ id: targetId, params, href }); };
   const followLink = (event, targetId, params = {}) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.currentTarget.target || event.currentTarget.hasAttribute("download")) return;
@@ -72,18 +76,18 @@ export function KnowledgeCreatePage({
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
       <section className="mh-kcreate__card">
-        {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={values.synonyms || ""} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={onCancel} onSave={onSave} onSubmit={onSubmit} />
+        {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={values.synonyms || ""} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={cancel} onSave={save} onSubmit={submit} />
           : <>
             {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
-            <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : onSubmit?.(); }}>
+            <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : submit(); }}>
               <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
-              <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={onCancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={onSave}>{labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{labels.submit}</Button></div>{isAnalysis && <p>ⓘ {content.analysis.reminder}</p>}{isScenario && <p>ⓘ {content.scenario.reminder}</p>}</footer>
+              <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={cancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={save}>{labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{labels.submit}</Button></div>{isAnalysis && <p>ⓘ {content.analysis.reminder}</p>}{isScenario && <p>ⓘ {content.scenario.reminder}</p>}</footer>
             </form>
           </>}
       </section>
     </main>
     <ConfirmDialog open={Boolean(result)} purpose="info" title={resultTitle} message={resultText} closeLabel={labels.back} onCancel={onResultClose} />
-    <ConfirmDialog open={dialog === "confirm"} purpose="confirm" title={labels.confirmTitle} message={labels.confirmText} cancelLabel={labels.cancel} confirmLabel={labels.submit} onCancel={onDialogClose} onConfirm={() => { onDialogClose?.(); onSubmit?.(); }} />
+    <ConfirmDialog open={dialog === "confirm"} purpose="confirm" title={labels.confirmTitle} message={labels.confirmText} cancelLabel={labels.cancel} confirmLabel={labels.submit} onCancel={onDialogClose} onConfirm={() => { onDialogClose?.(); submit(); }} />
     <ConfirmDialog open={["test", "smart", "preview"].includes(dialog)} purpose="info" title={dialog === "test" ? values.metricFormula ? labels.testSuccessTitle : labels.testEmptyTitle : dialog === "smart" ? labels.smartTitle : labels.previewTitle} message={dialog === "test" ? values.metricFormula ? labels.testSuccess : labels.testEmpty : dialog === "smart" ? labels.smartText : labels.previewText} closeLabel={labels.back} onCancel={onDialogClose} />
     <Modal open={dialog === "history"} title={labels.historyTitle} className="mh-kcreate__history" closeLabel={labels.close} onClose={onDialogClose}><p><b>{labels.currentVersion}</b> · {content.reportHistory.author} · {values.updatedAt}</p><p>{values.originalDescription}</p><p><b>{labels.previousVersion}</b> · {content.reportHistory.priorAuthor} · {content.reportHistory.priorDate}</p><p>{content.reportHistory.priorDescription}</p></Modal>
   </div>;
