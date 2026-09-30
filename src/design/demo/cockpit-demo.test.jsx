@@ -71,6 +71,14 @@ describe("useCockpitDemo + MarketingCockpitPage with replacement fixtures", () =
     expect(screen.queryByText("Beta Portfolio")).toBeNull();
   });
 
+  it("opening a report reports the dashboard index as a string route param", () => {
+    const onNavigate = vi.fn();
+    render(<Harness {...baseProps({ project: "alpha", onNavigate })} />);
+    fireEvent.click(screen.getByText("Alt Weekly Digest").closest("a"));
+    const { params } = onNavigate.mock.calls.at(-1)[0];
+    expect(params).toEqual({ project: "alpha", dashboard: "1", view: "live" });
+  });
+
   it("project view shows the resolved knowledge-asset count per report", () => {
     const { container } = render(<Harness {...baseProps({ project: "alpha" })} />);
     // report 0 resolves 2 linked assets; report 1 resolves 1
