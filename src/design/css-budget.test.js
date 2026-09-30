@@ -130,7 +130,6 @@ function forbiddenPrefix(name, prefixes) {
 describe("src/design CSS budget (WP1)", () => {
   const definitions = tokens();
   const names = definitions.map(({ name }) => name);
-  const currentNames = new Set(names);
   const prefixes = reservedPrefixes();
 
   it("recognizes declarations after braces and other declarations on one line", () => {
