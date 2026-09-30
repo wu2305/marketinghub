@@ -1,6 +1,7 @@
 import { WorkspaceCard } from "./index.jsx";
 import { HOME } from "../../../content.js";
 import { demoHrefFor } from "../../../demo/navigation.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Home/Workspace card",
@@ -9,7 +10,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Home workspace card: image, description, capability links, full-card opener.",
+        component: bi("Home workspace card: image, description, capability links, full-card opener.", "Home 工作区卡片：图片、描述、能力链接，整张卡片可点击打开。"),
       },
     },
   },

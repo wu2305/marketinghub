@@ -1,5 +1,6 @@
 import { ProjectCatalog } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Cockpit/Project catalog",
@@ -8,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Cockpit catalog: category groups of ProjectCard.",
+        component: bi("Cockpit catalog: category groups of ProjectCard.", "Cockpit 目录：按分类分组的 ProjectCard。"),
       },
     },
   },

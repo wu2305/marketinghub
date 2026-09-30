@@ -19,19 +19,19 @@ export const mediaTrackingPeriods = ["daily", "weekly", "monthly", "spot"];
  * table. The assistant is the lite drawer variant (scope row, skill "+"
  * trigger, simple answer cards, "Recent Chats" popover).
  * @param {object} props
- * @param {string} [props.current] nav id for aria-current; the source marks Self-Service Center active
+ * @param {string} [props.current] nav id for aria-current; the source marks Self-Service Center active // 用于 aria-current 的导航 id；源页面将 Self-Service Center 标记为当前
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {{ backHref?: string, backLabel: string }} [props.toolbar={}] Back destination and visible label.
- * @param {{ periodAria: string, filtersAria: string, tableAria: string }} props.labels Accessible names for page controls and regions.
- * @param {{ eyebrow: string, title: string }} [props.head={}] Page heading copy.
+ * @param {{ backHref?: string, backLabel: string }} [props.toolbar={}] Back destination and visible label. // 返回目的地与可见文字。
+ * @param {{ periodAria: string, filtersAria: string, tableAria: string }} props.labels Accessible names for page controls and regions. // 页面控件与区域的无障碍名称。
+ * @param {{ eyebrow: string, title: string }} [props.head={}] Page heading copy. // 页面标题文案。
  * @param {Array<{ id: string, label: string }>} [props.periods=[]]
  * @param {typeof mediaTrackingPeriods[number]} [props.period="monthly"]
  * @param {Array<{ name: string, label: string, required?: boolean, options?: Array<string|object>, placeholder?: string, defaultValue?: string }>} [props.filters=[]]
  * @param {Array<{ term: string, text: string }>} [props.notes=[]]
  * @param {{ title?: string, count?: string, columns?: Array<{ key: string, header: string }>, rows?: Array<object> }} [props.table={}]
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through // AssistantPanel 的 props（lite 变体）；`skillMenu`/`selectedSkill` 会透传
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog // ModelFlowDialog 的 props；`skillFlow.step` 为真时渲染流程对话框
  * @param {(target: { href: string, id?: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]

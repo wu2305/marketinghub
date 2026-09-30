@@ -14,19 +14,19 @@ import "./SelfServicePage.css";
 /**
  * Self-Service Center: analysis/upload tabs, category pills, entry cards.
  * @param {object} props
- * @param {string} [props.current] nav id for aria-current; the original self-service page marks no item
+ * @param {string} [props.current] nav id for aria-current; the original self-service page marks no item // 用于 aria-current 的导航 id；原始 Self-Service 页面不标记任何项
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
- * @param {object} [props.hero={}] Hero props
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host // 由故事或宿主提供的语义链接解析函数
+ * @param {object} [props.hero={}] Hero props // Hero 的 props
  * @param {Array<{ id: string, label: string }>} [props.tabs=[]]
- * @param {{ tabAria: string, analysisFilterAria: string, uploadFilterAria: string }} props.labels Accessible names for the page tabs and each filter group.
- * @param {{ analysis?: Array<object>, upload?: Array<object> }} [props.filters={}] pills per tab id
- * @param {Array<object>} [props.reports=[]] ActionCard props for the analysis tab
- * @param {Array<object>} [props.uploads=[]] ActionCard props for the upload tab; items may carry `history` rows for the upload-history dialog
- * @param {{ open?: boolean, title?: string, rows?: Array<object>, emptyMessage?: string }} [props.uploadHistory={}] upload-history dialog state
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel data, state and named callbacks; `onOpen` opens from the launcher
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
+ * @param {{ tabAria: string, analysisFilterAria: string, uploadFilterAria: string }} props.labels Accessible names for the page tabs and each filter group. // 页面标签页及各筛选组的无障碍名称。
+ * @param {{ analysis?: Array<object>, upload?: Array<object> }} [props.filters={}] pills per tab id // 每个标签页 id 对应的胶囊
+ * @param {Array<object>} [props.reports=[]] ActionCard props for the analysis tab // 分析标签页的 ActionCard props
+ * @param {Array<object>} [props.uploads=[]] ActionCard props for the upload tab; items may carry `history` rows for the upload-history dialog // 上传标签页的 ActionCard props；条目可携带 `history` 行用于上传历史对话框
+ * @param {{ open?: boolean, title?: string, rows?: Array<object>, emptyMessage?: string }} [props.uploadHistory={}] upload-history dialog state // 上传历史对话框状态
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel data, state and named callbacks; `onOpen` opens from the launcher // AssistantPanel 的数据、状态与具名回调；`onOpen` 从启动器打开
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions // 助手技能操作所用的 ModelFlowDialog props
  * @param {"analysis"|"upload"} [props.tab="analysis"]
  * @param {string} [props.category="all"]
  * @param {(target: { id:string, params: Record<string,string>, href:string, label?:string }) => void} [props.onNavigate]

@@ -1,4 +1,5 @@
 import { Panel } from "./index.jsx";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Campaign/Panel",
@@ -7,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Bordered section panel with heading and optional actions slot.",
+        component: bi("Bordered section panel with heading and optional actions slot.", "带标题和可选操作插槽的有边框区块面板。"),
       },
     },
   },

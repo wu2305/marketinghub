@@ -1,7 +1,7 @@
 import React from "react";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, HOME, MODEL_FLOW, buildHomeAssistantAnswer, buildModelDraft } from "../../content.js";
 import { useHomeDemo } from "../../demo/home-demo.js";
-import { pageShell } from "../../lib/story-helpers.js";
+import { pageShell, bi } from "../../lib/story-helpers.js";
 import { HomePage } from "./index.jsx";
 
 const HOME_DEMO = { answerFor: buildHomeAssistantAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft };
@@ -26,7 +26,7 @@ export const Home = {
     assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU },
   },
   argTypes: {
-    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
+    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
     scope: { control: "select", options: ASSISTANT.scopes },
     assistantOpen: { control: "boolean" },
     onNavigate: { action: "onNavigate" },

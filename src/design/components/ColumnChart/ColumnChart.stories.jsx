@@ -1,5 +1,5 @@
 import { ColumnChart } from "./index.jsx";
-import { prop } from "../../lib/story-helpers.js";
+import { prop, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Molecules/Column chart",
@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "CSS-only column chart; `height` is a 0–100 percentage.",
+        component: bi("CSS-only column chart; `height` is a 0–100 percentage.", "纯 CSS 柱状图；`height` 为 0–100 的百分比。"),
       },
     },
   },
@@ -21,10 +21,10 @@ export default {
     ],
   },
   argTypes: {
-    label: prop("string", { defaultValue: "Chart", description: "aria-label on the chart." }),
+    label: prop("string", { defaultValue: "Chart", description: bi("aria-label on the chart.", "图表的 aria-label。") }),
     items: prop("Array<{ label: string, value: React.ReactNode, height: number }>", {
       defaultValue: [],
-      description: "Columns — `height` is a 0–100 percentage.",
+      description: bi("Columns — `height` is a 0–100 percentage.", "各柱数据，`height` 为 0–100 的百分比。"),
     }),
   },
   render: (args) => <ColumnChart {...args} />,

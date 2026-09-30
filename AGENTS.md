@@ -96,6 +96,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 故事同样遵守奥卡姆剃刀：每个原始可达状态恰好一个命名故事；不为同一状态写重复故事，不为不可达或隐藏的残留 DOM 写故事；组件形态的差异优先用 Controls 切换枚举，只有原始页面中真实出现的组合才单独成故事。
 - 组件同样遵守奥卡姆剃刀：不写只转发 props 的包装组件；同义组件合并为一个并以 `variant`/`tone`/`size` 区分；新组件先放 `features/<page>/`，被第二个真实页面使用时才提升到 `components/`；不预建通用渲染器；没有页面或故事之外使用者的导出、props 与分支应删除。新增前先确认现有组件或 prop 无法覆盖。
 - Pages 故事的渲染树只允许出现 `src/design` 内的组件。
+- **文档双语（English + 中文）**：Storybook 文档文字（组件 `docs.description.component`、`argTypes` 的 `description`、故事级 `docs.description.story`）一律写成 `bi("English…", "中文…")`（来自 `lib/story-helpers.js`，英文在前、中文为第二段；`prop`/`enumProp`/`callbackProp` 的描述参数同样传 `bi(...)`）；页面组件 JSDoc 的 `@param` 描述写成 `English text // 中文`，由 `.storybook/PageInterface.jsx` 拆成两段。代码、prop 名、回调名与界面标签在两种语言中都保持英文。组件渲染出的界面文案与故事 args 保持原始 Demo 的英文，不在此翻译。`src/design/docs-bilingual.test.js` 强制每条文档文字含中文。
 - 所有故事文件启用 `tags: ["autodocs"]`。每个组件用 JSDoc 或 PropTypes 声明 props 的类型与取值；若引入 TypeScript，一次性迁移整个 `src/design`。
 - 故事 title 反映代码层级：共享组件用 `Atoms`/`Molecules`/`Organisms`，单页模块用 `Features/<Page>/<Name>`，页面用 `Pages`；改变 title 即改变 story id，须在 handover 登记旧→新映射并同步引用。
 - 提供 `src/design/index.js` 作为唯一公共导出入口。

@@ -1,6 +1,7 @@
 import React from "react";
 import { ModelFlowDialog, modelFlowSteps } from "./index.jsx";
 import { MODEL_FLOW, buildModelDraft } from "../../content.js";
+import { bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Model flow dialog",
@@ -11,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          '"Generate Analytical Model" flow dialog reached from the skill menu. `step="history"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step="generated"` shows the drafted model form; `step="manual"` shows the same form empty. Escape closes only this dialog and restores focus to its opener.',
+          bi("\"Generate Analytical Model\" flow dialog reached from the skill menu. `step=\"history\"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step=\"generated\"` shows the drafted model form; `step=\"manual\"` shows the same form empty. Escape closes only this dialog and restores focus to its opener.", "从技能菜单进入的 \"Generate Analytical Model\" 流程对话框。`step=\"history\"` 回放聊天会话，每条消息带复选框，并有生成规则文本域；`step=\"generated\"` 显示生成的模型表单；`step=\"manual\"` 显示同一表单的空白版本。Escape 只关闭此对话框，并把焦点还给打开它的元素。"),
       },
     },
   },

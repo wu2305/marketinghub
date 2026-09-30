@@ -32,35 +32,35 @@ export const campaignChannels = ["rednote", "douyin"];
  * @param {string} [props.current="campaign"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
- * @param {object} [props.rail={ items: [] }] CampaignRail props
- * @param {Array<{ id: string, label: string }>} [props.channels=[]] overview channel tabs
- * @param {Array<object>} [props.metrics=[]] overview MetricStat props
- * @param {Array<object>} [props.distribution=[]] ProgressList items
- * @param {Array<object>} [props.objectives=[]] ProgressList items
- * @param {Array<object>} [props.accountColumns=[]] DataTable columns
- * @param {Array<object>} [props.accountRows=[]] DataTable rows
- * @param {{ channelViewAria: string, objectiveChartAria: string, accountSearch: string, filterLabel: string, resetLabel: string, accountCaption: (count: number) => string }} props.labels Page control copy and accessible names.
- * @param {Object<string, { eyebrow?: string, title?: string, description?: string, action?: string, badge?: string, status?: string }>} [props.headings={}] per-section headings and section action/status copy
- * @param {Object<string, object>} [props.panels={}] per-section panel copy
- * @param {Array<object>} [props.executionSummary=[]] SummaryStrip items
- * @param {Array<object>} [props.taskQueue=[]] TaskList items
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props // AssistantPanel 的 props
+ * @param {object} [props.rail={ items: [] }] CampaignRail props // CampaignRail 的 props
+ * @param {Array<{ id: string, label: string }>} [props.channels=[]] overview channel tabs // 概览页的渠道标签页
+ * @param {Array<object>} [props.metrics=[]] overview MetricStat props // 概览页的 MetricStat props
+ * @param {Array<object>} [props.distribution=[]] ProgressList items // ProgressList 的条目
+ * @param {Array<object>} [props.objectives=[]] ProgressList items // ProgressList 的条目
+ * @param {Array<object>} [props.accountColumns=[]] DataTable columns // DataTable 的列
+ * @param {Array<object>} [props.accountRows=[]] DataTable rows // DataTable 的行
+ * @param {{ channelViewAria: string, objectiveChartAria: string, accountSearch: string, filterLabel: string, resetLabel: string, accountCaption: (count: number) => string }} props.labels Page control copy and accessible names. // 页面控件文案与无障碍名称。
+ * @param {Object<string, { eyebrow?: string, title?: string, description?: string, action?: string, badge?: string, status?: string }>} [props.headings={}] per-section headings and section action/status copy // 各分区的标题以及分区操作/状态文案
+ * @param {Object<string, object>} [props.panels={}] per-section panel copy // 各分区面板的文案
+ * @param {Array<object>} [props.executionSummary=[]] SummaryStrip items // SummaryStrip 的条目
+ * @param {Array<object>} [props.taskQueue=[]] TaskList items // TaskList 的条目
  * @param {{ columns: Array<object>, rows: Array<object> }} [props.actionLog]
  * @param {Array<object>} [props.creativeColumns=[]]
  * @param {Array<object>} [props.creatives=[]]
- * @param {Array<object>} [props.efficiency=[]] ProgressList items
- * @param {Array<object>} [props.recommendations=[]] recommendation card contents
+ * @param {Array<object>} [props.efficiency=[]] ProgressList items // ProgressList 的条目
+ * @param {Array<object>} [props.recommendations=[]] recommendation card contents // 推荐卡片内容
  * @param {Array<object>} [props.bindingColumns=[]]
  * @param {Array<object>} [props.accounts=[]]
- * @param {{ eyebrow?: string, title?: string, description?: string, fields?: { actionLabel?: string, actions?: Array<string|object>, platformLabel?: string, platforms?: Array<string|object>, accountLabel?: string, accounts?: Array<string|object> }, object?: { label?: string, value?: string }, preview?: { eyebrow?: string, state?: string, note?: string }, cancelLabel?: string, submitLabel?: string }} [props.taskDialog={}] Create Campaign Task dialog fields and action copy.
+ * @param {{ eyebrow?: string, title?: string, description?: string, fields?: { actionLabel?: string, actions?: Array<string|object>, platformLabel?: string, platforms?: Array<string|object>, accountLabel?: string, accounts?: Array<string|object> }, object?: { label?: string, value?: string }, preview?: { eyebrow?: string, state?: string, note?: string }, cancelLabel?: string, submitLabel?: string }} [props.taskDialog={}] Create Campaign Task dialog fields and action copy. // Create Campaign Task 对话框的字段与操作文案。
  * @param {boolean} [props.taskDialogOpen=false]
- * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes.
- * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft
- * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
+ * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes. // 受控的草稿值；demo hook 会在对话框关闭后保留它们。
+ * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft // 字段编辑；`draft` 是下一版完整草稿
+ * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state // 操作 Toast 状态
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog // ModelFlowDialog 的 props；`skillFlow.step` 为真时渲染建模对话框
  * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
  * @param {"rednote"|"douyin"} [props.channel="rednote"]
- * @param {string} [props.query=""] account search text
+ * @param {string} [props.query=""] account search text // 账户搜索文字
  * @param {(target: object) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onSectionChange]
  * @param {(event: { id: string, label: string }) => void} [props.onChannelChange]

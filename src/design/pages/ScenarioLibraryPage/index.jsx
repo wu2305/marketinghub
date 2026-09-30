@@ -25,18 +25,18 @@ const HEART = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c
 /**
  * Controlled P15 page. All visible page copy, rows, workflow state and navigation are props.
  * @param {object} props
- * @param {object} props.content Hero, navigation, table, detail and form copy.
- * @param {object} props.logo Header logo.
- * @param {object[]} [props.navigation=[]] Primary navigation links.
- * @param {string} props.image Hero image URL.
- * @param {{items:object[],totalCount:number,search:string,status:typeof skillStatuses[number],onChange?:(event:{value:string})=>void,onSelect?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,onOpen?:(event:{id:string})=>void,onClick?:(event:{action:"create"})=>void}} [props.library={}] Filtered skills and the controlled search/status filters; `onClick` is Create New Scenario, `onClear` the no-results state.
- * @param {object} [props.detail={}] Selected record and preview state.
- * @param {{purpose:string,title:string,message:string,confirmLabel:string,cancelLabel:string,onConfirm?:Function,onCancel?:Function}|null} [props.dialog=null] Delete confirmation.
- * @param {string} [props.toast=""] Success message after a delete (hidden when empty).
- * @param {object} [props.form={}] Controlled inline create/edit state.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Controlled lite assistant.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional model flow overlay.
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
+ * @param {object} props.content Hero, navigation, table, detail and form copy. // Hero、导航、表格、详情与表单文案。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {object[]} [props.navigation=[]] Primary navigation links. // 主导航链接。
+ * @param {string} props.image Hero image URL. // Hero 图片 URL。
+ * @param {{items:object[],totalCount:number,search:string,status:typeof skillStatuses[number],onChange?:(event:{value:string})=>void,onSelect?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,onOpen?:(event:{id:string})=>void,onClick?:(event:{action:"create"})=>void}} [props.library={}] Filtered skills and the controlled search/status filters; `onClick` is Create New Scenario, `onClear` the no-results state. // 筛选后的技能以及受控的搜索/状态筛选；`onClick` 是 Create New Scenario，`onClear` 用于无结果状态。
+ * @param {object} [props.detail={}] Selected record and preview state. // 选中的记录与预览状态。
+ * @param {{purpose:string,title:string,message:string,confirmLabel:string,cancelLabel:string,onConfirm?:Function,onCancel?:Function}|null} [props.dialog=null] Delete confirmation. // 删除确认。
+ * @param {string} [props.toast=""] Success message after a delete (hidden when empty). // 删除后的成功消息（为空时隐藏）。
+ * @param {object} [props.form={}] Controlled inline create/edit state. // 受控的页内创建/编辑状态。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Controlled lite assistant. // 受控的轻量助手。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional model flow overlay. // 可选的建模流程覆盖层。
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter. // 路由适配器。
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioLibraryPage({ content, logo, navigation = [], image, library = {}, detail = {}, form = {}, assistant = {}, skillFlow, dialog = null, toast = "", hrefFor, onNavigate }) {

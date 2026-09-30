@@ -17,14 +17,14 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  * @param {object} props
  * @param {object} props.logo
  * @param {Array<{id:string,label:string,href:string}>} [props.navigation=[]]
- * @param {object} props.content header/sidebar/detail/derivedPanel copy
+ * @param {object} props.content header/sidebar/detail/derivedPanel copy // header/sidebar/detail/derivedPanel 文案
  * @param {Array<object>} [props.metrics=[]]
  * @param {typeof metricCategories[number]} [props.category="Basic"]
  * @param {string} props.metricId
  * @param {typeof metricDetailTabs[number]} [props.tab="definition"]
- * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant)
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
+ * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks // open、draft、tokens、constantOpen、notice 以及编辑器回调
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant) // AssistantPanel 的文案、状态与回调（lite 变体）
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions // 助手技能操作所用的 ModelFlowDialog props
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
  * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} props.onNavigate
  * @param {(event:{category:string})=>void} props.onCategoryChange

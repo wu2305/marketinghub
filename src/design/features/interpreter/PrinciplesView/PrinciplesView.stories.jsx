@@ -1,7 +1,7 @@
 import { PrinciplesView } from "./index.jsx";
 import { INTERPRETER } from "../../../content.js";
 import { filterPrinciples, paginateRows } from "../../../demo/interpreter-demo.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Interpreter/Principles library",
@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          'Principles library (`?type=Principles`) on the governed-library pattern: LibraryToolbar (search, Category facet, "Showing X of Y" count), read-only LibraryList cards whose long descriptions expand in place, compact Pagination. List states (filtered, empty, paged) are shown by the Organisms/Library stories.',
+          bi("Principles library (`?type=Principles`) on the governed-library pattern: LibraryToolbar (search, Category facet, \"Showing X of Y\" count), read-only LibraryList cards whose long descriptions expand in place, compact Pagination. List states (filtered, empty, paged) are shown by the Organisms/Library stories.", "基于受治理库模式的 Principles 库（`?type=Principles`）：LibraryToolbar（搜索、Category 筛选、\"Showing X of Y\" 数量）、长描述可原地展开的只读 LibraryList 卡片，以及紧凑分页。列表状态（筛选后、空、分页）在 Organisms/Library 故事中展示。"),
       },
     },
   },

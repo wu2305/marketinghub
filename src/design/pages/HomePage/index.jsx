@@ -13,17 +13,17 @@ import "./HomePage.css";
 /**
  * Home page: header, hero with stats, workspace grid, assistant drawer.
  * @param {object} props
- * @param {string} [props.current="home"] active nav id
+ * @param {string} [props.current="home"] active nav id // 当前导航 id
  * @param {{ src: string, alt?: string, href?: string }} props.logo
  * @param {Array<{ id: string, label: string, href: string }>} [props.navigation=[]]
  * @param {{ image?: string, eyebrow?: string, title: React.ReactNode, description?: React.ReactNode, stats?: Array<object> }} [props.hero]
- * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid
- * @param {Array<object>} [props.cards=[]] WorkspaceCard props
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState & { homeSuggestions?: Array<string|{ label: string, prompt: string }> }} [props.assistant={}] AssistantPanel props; `homeSuggestions` replaces `suggestions` in the Home drawer
+ * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid // 工作区网格上方的区块标题
+ * @param {Array<object>} [props.cards=[]] WorkspaceCard props // WorkspaceCard 的 props
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host // 由故事或宿主提供的语义链接解析函数
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState & { homeSuggestions?: Array<string|{ label: string, prompt: string }> }} [props.assistant={}] AssistantPanel props; `homeSuggestions` replaces `suggestions` in the Home drawer // AssistantPanel 的 props；Home 抽屉中 `homeSuggestions` 会替换 `suggestions`
  * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
- * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
+ * @param {(target: { title: string }) => void} [props.onOpen] workspace card open // 打开工作区卡片
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog // ModelFlowDialog 的 props；`skillFlow.step` 为真时渲染建模对话框
  */
 export function HomePage({
   current = "home",

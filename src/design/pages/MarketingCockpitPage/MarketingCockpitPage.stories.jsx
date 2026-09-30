@@ -3,7 +3,7 @@ import { COCKPIT, COCKPIT_SKILL_MENU, MODEL_FLOW, buildReportAssistantAnswer } f
 import { useCockpitDemo } from "../../demo/cockpit-demo.js";
 import { cityInvestScenarioSource } from "../../demo/report-demo.js";
 import { CITY_INVEST, COPILOT, KNOWLEDGE_ASSETS } from "../../demo/report-fixtures.js";
-import { enumProp, pageShell } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, bi } from "../../lib/story-helpers.js";
 import { MarketingCockpitPage, cockpitViews } from "./index.jsx";
 
 /* CityInvestDashboard arg data: the component never reads `baseline` — only the
@@ -42,9 +42,9 @@ export const MarketingCockpit = {
   name: "Marketing Cockpit",
   args,
   argTypes: {
-    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
+    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
     project: { control: "select", options: ["all", ...Object.keys(args.projects)] },
-    view: enumProp(cockpitViews, "catalog", "Catalog or live view; a dashboard index opens the live report"),
+    view: enumProp(cockpitViews, "catalog", bi("Catalog or live view; a dashboard index opens the live report", "目录或实时视图；点击仪表盘索引会打开实时报表")),
     dashboard: { control: { type: "number", min: 0, max: 1 } },
     knowledge: { control: false },
     cityInvest: { control: false },
@@ -81,8 +81,8 @@ export const MarketingCockpit = {
     onSelectSkill: { action: "onSelectSkill" },
     onClearSkill: { action: "onClearSkill" },
     onSkillAction: { action: "onSkillAction" },
-    onFlowSave: { action: "onFlowSave", description: "Model draft save callback: `{ values }`." },
-    onFlowSubmit: { action: "onFlowSubmit", description: "Model submission callback: `{ values }`." },
+    onFlowSave: { action: "onFlowSave", description: bi("Model draft save callback: `{ values }`.", "模型草稿保存回调：`{ values }`。") },
+    onFlowSubmit: { action: "onFlowSubmit", description: bi("Model submission callback: `{ values }`.", "模型提交回调：`{ values }`。") },
   },
   render: function CockpitStory(args) {
     return <MarketingCockpitPage {...useCockpitDemo(args)} />;

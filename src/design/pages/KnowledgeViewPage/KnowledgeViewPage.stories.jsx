@@ -1,5 +1,5 @@
 import React from "react";
-import { pageShell, enumProp, callbackProp } from "../../lib/story-helpers.js";
+import { pageShell, enumProp, callbackProp, bi } from "../../lib/story-helpers.js";
 import { KNOWLEDGE_VIEW } from "../../demo/content/knowledge-view.js";
 import { useKnowledgeViewDemo } from "../../demo/knowledge-view-demo.js";
 import { knowledgeDetailTypes, knowledgeModelActions, knowledgeModelGroups, knowledgeModelTabs } from "../../features/knowledge-view/KnowledgeDetail/index.jsx";
@@ -18,14 +18,14 @@ export default {
   title: "Pages",
   component: KnowledgeViewPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: "Full knowledge detail page for stable Business Term and Scenario views, plus intended gated Principles and Data Model views. Direct known IDs and source actions are represented with deterministic local state." } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("Full knowledge detail page for stable Business Term and Scenario views, plus intended gated Principles and Data Model views. Direct known IDs and source actions are represented with deterministic local state.", "完整的知识详情页，覆盖稳定的 Business Term 与 Scenario 视图，以及预期受限的 Principles 与 Data Model 视图。直接访问已知 ID 及源页面操作均以确定性的本地状态表示。") } } },
   args: { recordId: "business-term-gmv", overlay: "none", collapsed: false, query: "", group: "entity", tab: "fields", tableId: "channel" },
   argTypes: {
-    recordId: enumProp(recordIds, "business-term-gmv", "Source-backed detail record; type options are " + knowledgeDetailTypes.join(", ")),
-    overlay: enumProp(overlays, "none", "Open version or action notice"),
-    group: enumProp(knowledgeModelGroups, "entity", "Data Model sidebar switch"),
-    tab: enumProp(knowledgeModelTabs, "fields", "Data Model tab highlight; source keeps the field table visible"),
-    tableId: enumProp(KNOWLEDGE_VIEW.model.tables.map((table) => table.id), "channel", "Active Data Model table"),
+    recordId: enumProp(recordIds, "business-term-gmv", bi("Source-backed detail record; type options are " + knowledgeDetailTypes.join(", "), "以源页面为依据的详情记录；类型选项为 " + knowledgeDetailTypes.join("、"))),
+    overlay: enumProp(overlays, "none", bi("Open version or action notice", "打开版本或操作提示")),
+    group: enumProp(knowledgeModelGroups, "entity", bi("Data Model sidebar switch", "Data Model 侧栏切换")),
+    tab: enumProp(knowledgeModelTabs, "fields", bi("Data Model tab highlight; source keeps the field table visible", "Data Model 标签页高亮；源页面保持字段表可见")),
+    tableId: enumProp(KNOWLEDGE_VIEW.model.tables.map((table) => table.id), "channel", bi("Active Data Model table", "当前激活的 Data Model 表")),
     onNavigate: callbackProp("onNavigate", "({id,params,href}) => void", { id: "knowledgeCreate", params: { mode: "edit", id: "business-term-gmv" }, href: "/assets/pages/knowledge-create.html?mode=edit&id=business-term-gmv" }),
     onOpen: callbackProp("onOpen", "({kind,recordId}) => void", { kind: "versions", recordId: "business-term-gmv" }),
     onAction: callbackProp("onAction", "({id,recordId}) => void", { id: "preview", recordId: "channel-data-model" }),

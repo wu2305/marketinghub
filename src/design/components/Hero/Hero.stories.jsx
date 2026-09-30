@@ -1,6 +1,7 @@
 import { Hero } from "./index.jsx";
 import { MetricStat } from "../MetricStat/index.jsx";
 import { HOME } from "../../content.js";
+import { bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Hero",
@@ -9,7 +10,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Image hero with title, description and optional aside content (stats, ask bar).",
+        component: bi("Image hero with title, description and optional aside content (stats, ask bar).", "带标题、描述及可选侧边内容（统计、提问栏）的图片英雄区。"),
       },
     },
   },

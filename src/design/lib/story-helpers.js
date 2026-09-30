@@ -6,6 +6,17 @@ export const pageShell = { logo: LOGO, navigation: NAV };
 export { useSynced } from "../demo/use-synced.js";
 
 /**
+ * Bilingual documentation text: English first, Chinese (中文) in a second
+ * paragraph. Every description a story writes (component docs, argTypes,
+ * story docs) goes through `bi` so Storybook docs read in both languages;
+ * `stories.test.jsx` fails on a description without Chinese text. Keep code,
+ * prop names and UI labels in English inside both halves.
+ */
+export function bi(en, zh) {
+  return `${en}\n\n${zh}`;
+}
+
+/**
  * ArgTypes row carrying the real interface contract. `summary` is the type
  * shown in the docs table; `detail` (optional) renders inside the type's
  * tooltip; `defaultValue` is the component's actual destructured default

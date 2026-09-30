@@ -1,6 +1,6 @@
 import { DATA_UPLOAD, SELF_SERVICE } from "../../content.js";
 import { useDataUploadDemo } from "../../demo/data-upload-demo.js";
-import { callbackProp, pageShell, prop } from "../../lib/story-helpers.js";
+import { callbackProp, pageShell, prop, bi } from "../../lib/story-helpers.js";
 import { DataUploadPage } from "./index.jsx";
 
 const assertState = (selector, value) => async ({ canvasElement }) => {
@@ -32,9 +32,9 @@ export const DataUpload = {
     selectedFile: undefined,
   },
   argTypes: {
-    submitting: prop("boolean", { control: "boolean", defaultValue: false, description: "Source 1500ms submit feedback; the demo hook restores false." }),
-    bulkImportOpen: prop("boolean", { control: "boolean", defaultValue: false, description: "Template Import dialog visibility." }),
-    selectedFile: prop("string | undefined", { control: "text", description: "Selected file name displayed in the dropzone." }),
+    submitting: prop("boolean", { control: "boolean", defaultValue: false, description: bi("Source 1500ms submit feedback; the demo hook restores false.", "源页面 1500ms 的提交反馈；由 demo hook 恢复为 false。") }),
+    bulkImportOpen: prop("boolean", { control: "boolean", defaultValue: false, description: bi("Template Import dialog visibility.", "Template Import 对话框的可见性。") }),
+    selectedFile: prop("string | undefined", { control: "text", description: bi("Selected file name displayed in the dropzone.", "显示在拖放区中的已选文件名。") }),
     onNavigate: callbackProp("onNavigate", "({ href: string }) => void", { href: "/assets/pages/flexible.html?tab=upload" }),
     onOpenImport: callbackProp("onOpenImport", "({ label: string }) => void", { label: "Template Import" }),
     onCloseImport: callbackProp("onCloseImport", "({ reason: string }) => void", { reason: "escape" }),

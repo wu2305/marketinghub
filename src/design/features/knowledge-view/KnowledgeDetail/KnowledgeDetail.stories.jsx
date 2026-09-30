@@ -1,7 +1,7 @@
 import React from "react";
 import { KNOWLEDGE_VIEW } from "../../../demo/content/knowledge-view.js";
 import { useKnowledgeViewDemo } from "../../../demo/knowledge-view-demo.js";
-import { callbackProp, enumProp } from "../../../lib/story-helpers.js";
+import { callbackProp, enumProp, bi } from "../../../lib/story-helpers.js";
 import { KnowledgeDetail, knowledgeDetailTypes, knowledgeModelActions, knowledgeModelGroups, knowledgeModelTabs } from "./index.jsx";
 
 const ID_BY_TYPE = {
@@ -17,13 +17,13 @@ function DetailStory(args) {
 }
 
 export default {
-  title: "Features/Knowledge View/Knowledge Detail", component: KnowledgeDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Four source-backed P09 detail compositions. Select a type and interact with version, model, and navigation controls; callbacks emit named payload objects." } } },
+  title: "Features/Knowledge View/Knowledge Detail", component: KnowledgeDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Four source-backed P09 detail compositions. Select a type and interact with version, model, and navigation controls; callbacks emit named payload objects.", "四种源页面可见的 P09 详情组合。选择一种类型，并操作版本、模型与导航控件；回调会发出具名载荷对象。") } } },
   args: { type: "Business Term", group: "entity", tab: "fields", action: "none" },
   argTypes: {
-    type: enumProp(knowledgeDetailTypes, "Business Term", "Select one of the four active P09 compositions"),
-    group: enumProp(knowledgeModelGroups, "entity", "Data Model group"),
-    tab: enumProp(knowledgeModelTabs, "fields", "Data Model tab"),
-    action: enumProp(["none", ...knowledgeModelActions], "none", "Data Model notice"),
+    type: enumProp(knowledgeDetailTypes, "Business Term", bi("Select one of the four active P09 compositions", "选择四种处于激活状态的 P09 组合之一")),
+    group: enumProp(knowledgeModelGroups, "entity", bi("Data Model group", "Data Model 分组")),
+    tab: enumProp(knowledgeModelTabs, "fields", bi("Data Model tab", "Data Model 标签页")),
+    action: enumProp(["none", ...knowledgeModelActions], "none", bi("Data Model notice", "Data Model 提示")),
     onNavigate: callbackProp("onNavigate", "({id,params,href}) => void", { id: "knowledge", params: {}, href: "/assets/pages/knowledge.html" }),
     onAction: callbackProp("onAction", "({id,recordId}) => void", { id: "preview", recordId: "channel-data-model" }),
     onOpen: callbackProp("onOpen", "({kind,recordId}) => void", { kind: "versions", recordId: "business-term-gmv" }),

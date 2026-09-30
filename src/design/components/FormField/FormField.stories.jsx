@@ -1,5 +1,5 @@
 import { FormField, formFieldControls } from "./index.jsx";
-import { callbackProp, enumProp, prop, useSynced } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Molecules/Form field",
@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Labelled form control wrapping TextInput / TextArea / Select.",
+        component: bi("Labelled form control wrapping TextInput / TextArea / Select.", "带标签的表单控件，包裹 TextInput / TextArea / Select。"),
       },
     },
   },
@@ -24,26 +24,26 @@ export default {
     options: ["Business Term", "Global Synonym"],
   },
   argTypes: {
-    label: prop("string", { description: "Field label." }),
-    name: prop("string", { description: "Field name echoed in the onChange payload." }),
-    control: enumProp(formFieldControls, "text", "Which control renders.", "inline-radio"),
-    required: prop("boolean", { defaultValue: false, description: "Renders the required marker." }),
-    invalid: prop("boolean", { defaultValue: false, description: "Error styling on the wrapper and control." }),
-    hint: prop("string", { description: "Hint line under the control." }),
-    value: prop("string", { description: "Controlled value — omit for uncontrolled." }),
-    defaultValue: prop("string", { description: "Initial value when uncontrolled." }),
-    placeholder: prop("string", { description: "Placeholder text (leading option for select)." }),
-    autoComplete: prop("string", { description: "Native autocomplete attribute." }),
+    label: prop("string", { description: bi("Field label.", "字段标签。") }),
+    name: prop("string", { description: bi("Field name echoed in the onChange payload.", "字段名，会回传在 onChange 的载荷中。") }),
+    control: enumProp(formFieldControls, "text", bi("Which control renders.", "渲染哪种控件。"), "inline-radio"),
+    required: prop("boolean", { defaultValue: false, description: bi("Renders the required marker.", "显示必填标记。") }),
+    invalid: prop("boolean", { defaultValue: false, description: bi("Error styling on the wrapper and control.", "在外层和控件上显示错误样式。") }),
+    hint: prop("string", { description: bi("Hint line under the control.", "控件下方的提示行。") }),
+    value: prop("string", { description: bi("Controlled value — omit for uncontrolled.", "受控值；不传则为非受控。") }),
+    defaultValue: prop("string", { description: bi("Initial value when uncontrolled.", "非受控时的初始值。") }),
+    placeholder: prop("string", { description: bi("Placeholder text (leading option for select).", "占位文字（select 时为首个引导选项）。") }),
+    autoComplete: prop("string", { description: bi("Native autocomplete attribute.", "原生 autocomplete 属性。") }),
     options: prop('Array<{ id?: string, value?: string, label: string } | string>', {
-      description: "Select only — the option list.",
+      description: bi("Select only — the option list.", "仅 select 使用：选项列表。"),
     }),
-    rows: prop("number", { description: "Textarea only — visible row count." }),
-    className: prop("string", { description: "Extra class on the field wrapper." }),
+    rows: prop("number", { description: bi("Textarea only — visible row count.", "仅 textarea 使用：可见行数。") }),
+    className: prop("string", { description: bi("Extra class on the field wrapper.", "附加在字段外层上的额外 class。") }),
     onChange: callbackProp(
       "onChange",
       "(event: { name: string, value: string }) => void",
       { name: "title", value: "Share of search" },
-      "Fired on every edit, whichever control is active.",
+      bi("Fired on every edit, whichever control is active.", "任何一种控件被编辑时都会触发。"),
     ),
   },
   render: function FormFieldStory(args) {

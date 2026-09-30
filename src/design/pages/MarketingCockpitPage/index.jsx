@@ -77,19 +77,19 @@ export const cockpitViews = ["catalog", "live"];
  * @param {string} [props.current="cockpit"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {object} [props.hero={}] Hero props
- * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details.
- * @param {string} [props.query=""] catalog search text
- * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups
- * @param {Record<string, CockpitProject>} [props.projects={}] project records keyed by id
- * @param {string} [props.project="all"] active catalog project id or "all"
- * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view; advisory only — the original opens live whenever `dashboard` is present and rewrites `view=live` into the URL
- * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view
- * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target
- * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
- * @param {CockpitKnowledgeAsset[]} [props.knowledge=[]] knowledge assets used for report knowledge counts, search text and context links
- * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
- * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor semantic route resolver supplied by story or host
+ * @param {object} [props.hero={}] Hero props // Hero 的 props
+ * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details. // 用于目录、目录列表、实时页头与详情的页面文案。
+ * @param {string} [props.query=""] catalog search text // 目录搜索文字
+ * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups // 分类分组
+ * @param {Record<string, CockpitProject>} [props.projects={}] project records keyed by id // 按 id 索引的项目记录
+ * @param {string} [props.project="all"] active catalog project id or "all" // 当前激活的目录项目 id，或 "all"
+ * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view; advisory only — the original opens live whenever `dashboard` is present and rewrites `view=live` into the URL // 目录或实时仪表盘视图；仅作参考：原始 Demo 只要存在 `dashboard` 就会打开实时视图，并把 `view=live` 写入 URL
+ * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view // 实时报表索引（原始参数值）；存在即为实时视图
+ * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target // 打开报表详情抽屉的目标
+ * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections // 静态的抽屉资产分区
+ * @param {CockpitKnowledgeAsset[]} [props.knowledge=[]] knowledge assets used for report knowledge counts, search text and context links // 用于报表知识计数、搜索文字与上下文链接的知识资产
+ * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"` // CityInvestDashboard 的 props（copy/periods/options/kpis/…/getScenario）；对 `embed: "city-invest"` 的报表必填
+ * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor semantic route resolver supplied by story or host // 由故事或宿主提供的语义路由解析函数
  * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
@@ -97,12 +97,12 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
  * @param {(target: { href?: string }) => void} [props.onOpenLive]
- * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library
- * @param {CockpitWorkspace} [props.workspace] ReportCopilot props (report-scoped aiWorkspace)
+ * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library // 实时视图中返回报表库
+ * @param {CockpitWorkspace} [props.workspace] ReportCopilot props (report-scoped aiWorkspace) // ReportCopilot 的 props（按报表范围的 aiWorkspace）
  * @param {boolean} [props.workspaceOpen=false]
- * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
+ * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot) // 实时视图中的 AI 启动器（Report Copilot）
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props // AssistantPanel 的 props
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render // ModelFlowDialog 的 props；必须提供 `{ step }` 才会渲染
  */
 export function MarketingCockpitPage({
   current = "cockpit",

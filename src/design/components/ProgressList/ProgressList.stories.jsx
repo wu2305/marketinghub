@@ -1,5 +1,5 @@
 import { ProgressList } from "./index.jsx";
-import { prop } from "../../lib/story-helpers.js";
+import { prop, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Molecules/Progress list",
@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Label / value / bar rows for distribution summaries.",
+        component: bi("Label / value / bar rows for distribution summaries.", "用于分布汇总的 标签/数值/进度条 行。"),
       },
     },
   },
@@ -22,7 +22,7 @@ export default {
   argTypes: {
     items: prop("Array<{ label: string, value: React.ReactNode, percent: number }>", {
       defaultValue: [],
-      description: "Rows — `percent` is the bar width (0–100).",
+      description: bi("Rows — `percent` is the bar width (0–100).", "行数据：`percent` 为进度条宽度（0–100）。"),
     }),
   },
   render: (args) => (

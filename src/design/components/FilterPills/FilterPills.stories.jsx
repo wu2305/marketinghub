@@ -1,5 +1,5 @@
 import { FilterPills } from "./index.jsx";
-import { callbackProp, prop, useSynced } from "../../lib/story-helpers.js";
+import { callbackProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 const ITEMS = [
   { id: "all", label: "All" },
@@ -14,20 +14,20 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Single-select pill filter group.",
+        component: bi("Single-select pill filter group.", "单选胶囊筛选组。"),
       },
     },
   },
   args: { label: "Filter reports", items: ITEMS, value: "all" },
   argTypes: {
-    label: prop("string", { defaultValue: "Filters", description: "Group aria-label." }),
-    items: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: "Pill entries." }),
-    value: prop("string", { description: "id of the active pill.", control: "inline-radio", options: ITEMS.map((item) => item.id) }),
+    label: prop("string", { defaultValue: "Filters", description: bi("Group aria-label.", "分组的 aria-label。") }),
+    items: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: bi("Pill entries.", "胶囊条目。") }),
+    value: prop("string", { description: bi("id of the active pill.", "当前选中胶囊的 id。"), control: "inline-radio", options: ITEMS.map((item) => item.id) }),
     onChange: callbackProp(
       "onChange",
       "(event: { id: string, label: string }) => void",
       { id: "dg", label: "DG" },
-      "Fired when a pill is clicked.",
+      bi("Fired when a pill is clicked.", "点击胶囊时触发。"),
     ),
   },
   render: function FilterPillsStory(args) {

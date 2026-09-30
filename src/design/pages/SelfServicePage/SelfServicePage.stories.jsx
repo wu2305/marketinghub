@@ -1,6 +1,6 @@
 import { ASSISTANT_SKILL_MENU, MODEL_FLOW, SELF_SERVICE, buildModelDraft } from "../../content.js";
 import { buildSelfServiceAnswer, useSelfServiceDemo } from "../../demo/self-service-demo.js";
-import { enumProp, pageShell } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, bi } from "../../lib/story-helpers.js";
 import { SelfServicePage } from "./index.jsx";
 
 export default {
@@ -26,8 +26,8 @@ export const SelfService = {
     assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
   },
   argTypes: {
-    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
-    tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", "Active Self-Service section.", "inline-radio"),
+    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
+    tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", bi("Active Self-Service section.", "当前激活的 Self-Service 分区。"), "inline-radio"),
     category: { control: "inline-radio", options: ["all", "dg", "dc"] },
     onNavigate: { action: "onNavigate" },
     onTabChange: { action: "onTabChange" },
@@ -37,7 +37,7 @@ export const SelfService = {
     onCloseHistory: { action: "onCloseHistory" },
     onPreviewFile: { action: "onPreviewFile" },
     onDownloadFile: { action: "onDownloadFile" },
-    assistant: { control: "object", description: "Grouped AssistantPanel content, state and callback contract; launch, submit and skill actions run in useSelfServiceDemo." },
+    assistant: { control: "object", description: bi("Grouped AssistantPanel content, state and callback contract; launch, submit and skill actions run in useSelfServiceDemo.", "分组的 AssistantPanel 内容、状态与回调约定；启动、提交与技能操作由 useSelfServiceDemo 执行。") },
   },
   render: function SelfServiceStory(args) {
     const props = useSelfServiceDemo({

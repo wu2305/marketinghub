@@ -20,15 +20,15 @@ import "./DataUploadPage.css";
  * @param {string} [props.current="self-service"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {object} [props.hero={}] Hero props
- * @param {{ backHref?: string, backLabel: string, importLabel: string }} [props.toolbar={}] Back destination and visible toolbar copy.
+ * @param {object} [props.hero={}] Hero props // Hero 的 props
+ * @param {{ backHref?: string, backLabel: string, importLabel: string }} [props.toolbar={}] Back destination and visible toolbar copy. // 返回目的地与工具栏上可见的文案。
  * @param {Array<{ name: string, label: string, placeholder: string }>} [props.fields=[]]
  * @param {string} props.submitLabel
  * @param {string} props.submittingLabel
  * @param {boolean} [props.submitting=false]
- * @param {{ title: string, dropzoneTitle: string, dropzoneHint: string, selectedPrefix: string, accept: string, templateLabel: string, templateHref?: string, tipsTitle: string, tips: string[] }} [props.bulkImport={}] modal copy and file constraints
+ * @param {{ title: string, dropzoneTitle: string, dropzoneHint: string, selectedPrefix: string, accept: string, templateLabel: string, templateHref?: string, tipsTitle: string, tips: string[] }} [props.bulkImport={}] modal copy and file constraints // 弹窗文案与文件限制
  * @param {boolean} [props.bulkImportOpen=false]
- * @param {string} [props.selectedFile] file name shown in the dropzone hint
+ * @param {string} [props.selectedFile] file name shown in the dropzone hint // 显示在拖放区提示中的文件名
  * @param {(target: { href: string, id?: string, params?: Record<string,string>, label?: string }) => void} [props.onNavigate]
  * @param {(target: { label: string }) => void} [props.onOpenImport]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]

@@ -1,5 +1,6 @@
 import { ProjectCard } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 const cityProject = COCKPIT.projects.city;
 
@@ -10,7 +11,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: 'Cockpit project card with image, title and "View Dashboards" links.',
+        component: bi("Cockpit project card with image, title and \"View Dashboards\" links.", "Cockpit 项目卡片，含图片、标题与 \"View Dashboards\" 链接。"),
       },
     },
   },

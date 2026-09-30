@@ -3,6 +3,7 @@ import { AssistantDock } from "./index.jsx";
 import { assistantPlacements, assistantVariants } from "../AssistantPanel/index.jsx";
 import { ASSISTANT, ASSISTANT_SKILL_MENU, MODEL_FLOW, buildCampaignAnswer, buildModelDraft } from "../../content.js";
 import { useWorkspaceAssistantDemo } from "../../demo/workspace-assistant-demo.js";
+import { bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Assistant dock",
@@ -13,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          "Launcher, assistant panel and model-creation dialog as one element, so a page wires the assistant once. Closed, only the launcher shows; opening it hides the launcher and shows the panel; the skill menu's model actions open the dialog. State here comes from the same `useWorkspaceAssistantDemo` container the pages use.",
+          bi("Launcher, assistant panel and model-creation dialog as one element, so a page wires the assistant once. Closed, only the launcher shows; opening it hides the launcher and shows the panel; the skill menu's model actions open the dialog. State here comes from the same `useWorkspaceAssistantDemo` container the pages use.", "启动器、助手面板和建模对话框合为一个元素，页面只需接线一次助手。关闭时只显示启动器；打开后隐藏启动器并显示面板；技能菜单中的建模操作会打开对话框。这里的状态来自页面所用的同一个 `useWorkspaceAssistantDemo` 容器。"),
       },
     },
   },

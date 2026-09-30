@@ -30,14 +30,14 @@ const single = (value) => (value === "all" ? "" : value);
  * table and its detail drawer. Feedback is immutable, so rows carry no actions.
  * Every visible label and record is supplied by the caller.
  * @param {object} props
- * @param {object} props.content Hero, sidebar, labels and assistant copy.
- * @param {object} props.logo Header logo.
- * @param {object[]} [props.navigation=[]] Header links.
- * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,tabs?:typeof feedbackTabs[number][]}} [props.filters={}] Controlled filters; Type also drives the tabs; `tabs` lists the visible tabs (each can be left out, default all three); `onClear` comes from the no-results state.
- * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} [props.list={}] Filtered rows and the dataset counts (Hero stats and tab labels).
- * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} [props.detail={}] Selected feedback.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Assistant state and callbacks.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model flow state and callbacks.
+ * @param {object} props.content Hero, sidebar, labels and assistant copy. // Hero、侧栏、标签与助手文案。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
+ * @param {{search:string,type:typeof feedbackFilterTypes[number],time:typeof feedbackFilterTimes[number],onSearchChange?:(event:{value:string})=>void,onTypeChange?:(event:{value:string})=>void,onTimeChange?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,tabs?:typeof feedbackTabs[number][]}} [props.filters={}] Controlled filters; Type also drives the tabs; `tabs` lists the visible tabs (each can be left out, default all three); `onClear` comes from the no-results state. // 受控的筛选；Type 同时驱动标签页；`tabs` 列出可见标签页（每个都可以不传，默认全部三个）；`onClear` 来自无结果状态。
+ * @param {{items:object[],counts:{total:number,up:number,down:number},onOpen?:(event:{id:string})=>void}} [props.list={}] Filtered rows and the dataset counts (Hero stats and tab labels). // 筛选后的行以及数据集计数（Hero 统计与标签页标签）。
+ * @param {{selected:object|null,onClose?:(event:{reason:string})=>void}} [props.detail={}] Selected feedback. // 选中的反馈。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Assistant state and callbacks. // 助手状态与回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model flow state and callbacks. // 建模流程状态与回调。
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */

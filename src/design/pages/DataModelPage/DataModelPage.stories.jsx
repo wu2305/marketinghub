@@ -1,5 +1,5 @@
 import React from "react";
-import { callbackProp, enumProp, prop } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, prop, bi } from "../../lib/story-helpers.js";
 import { DATA_MODEL_PAGE } from "../../demo/content/data-model-page.js";
 import { useDataModelPageDemo, dataModelPageTabs, dataModelPageDrawerTabs } from "../../demo/data-model-page-demo.js";
 import { DataModelPage } from "./index.jsx";
@@ -19,14 +19,14 @@ function Story(args) {
 
 export default {
   title: "Pages", component: DataModelPage, tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: "Standalone P11 Data Model page composed from the P07 DataModelView. Three visible domains, search, relationship graph and the table detail dialog are source-backed; related-report clicks emit a callback but open no standalone drawer." } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("Standalone P11 Data Model page composed from the P07 DataModelView. Three visible domains, search, relationship graph and the table detail dialog are source-backed; related-report clicks emit a callback but open no standalone drawer.", "由 P07 DataModelView 组合而成的独立 P11 Data Model 页面。三个可见域、搜索、关系图和表详情对话框均以源页面为依据；点击关联报表会触发回调，但不会打开独立抽屉。") } } },
   args: { query: "", selectedDomainId: "business-data", activeTab: "basic", tableId: null, drawerTab: "fields" },
   argTypes: {
-    query: prop("string", { defaultValue: "", description: "Initial sidebar search." }),
-    selectedDomainId: enumProp(domainIds, "business-data", "Active visible domain."),
-    activeTab: enumProp(dataModelPageTabs, "basic", "Basic information or Relationship graph."),
-    tableId: enumProp([null, ...tableIds], null, "Open table detail by ID."),
-    drawerTab: enumProp(dataModelPageDrawerTabs, "fields", "Field Details or Data Preview."),
+    query: prop("string", { defaultValue: "", description: bi("Initial sidebar search.", "初始侧栏搜索。") }),
+    selectedDomainId: enumProp(domainIds, "business-data", bi("Active visible domain.", "当前激活的可见域。")),
+    activeTab: enumProp(dataModelPageTabs, "basic", bi("Basic information or Relationship graph.", "Basic information 或 Relationship graph。")),
+    tableId: enumProp([null, ...tableIds], null, bi("Open table detail by ID.", "按 ID 打开表详情。")),
+    drawerTab: enumProp(dataModelPageDrawerTabs, "fields", bi("Field Details or Data Preview.", "Field Details 或 Data Preview。")),
     onNavigate: callbackProp("onNavigate", "({id,params,href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }),
     onChange: callbackProp("onChange", "({name,value}) => void", { name: "query", value: "ABO" }),
     onSelect: callbackProp("onSelect", "({kind,id}) => void", { kind: "domain", id: "finance-analysis" }),

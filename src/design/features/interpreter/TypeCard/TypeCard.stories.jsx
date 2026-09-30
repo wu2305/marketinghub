@@ -1,6 +1,6 @@
 import { TypeCard } from "./index.jsx";
 import { INTERPRETER } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Interpreter/Type card",
@@ -10,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          "Knowledge-type card in the overview grid. `manageable` flips read-only vs manage styling; `art` picks one of 8 baked background images (0–7).",
+          bi("Knowledge-type card in the overview grid. `manageable` flips read-only vs manage styling; `art` picks one of 8 baked background images (0–7).", "概览网格中的知识类型卡片。`manageable` 切换只读与可管理样式；`art` 选择 8 张内置背景图之一（0–7）。"),
       },
     },
   },

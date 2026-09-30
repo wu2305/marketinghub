@@ -1,6 +1,6 @@
 import { TypeGrid } from "./index.jsx";
 import { INTERPRETER } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Interpreter/Type grid",
@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Overview grid of TypeCard for the eight knowledge types.",
+        component: bi("Overview grid of TypeCard for the eight knowledge types.", "概览网格，包含八种知识类型的 TypeCard。"),
       },
     },
   },

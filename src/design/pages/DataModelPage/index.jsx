@@ -8,7 +8,7 @@ import "./DataModelPage.css";
  * @param {object} props
  * @param {{src:string,alt:string}} props.logo
  * @param {Array<{id:string,label:string}>} props.navigation
- * @param {object} props.model Prepared `DataModelView` props
+ * @param {object} props.model Prepared `DataModelView` props // 已准备好的 `DataModelView` props
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
  * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  */

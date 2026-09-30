@@ -1,6 +1,6 @@
 import { KnowledgeSidebar } from "./index.jsx";
 import { INTERPRETER } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Interpreter/Knowledge sidebar",
@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "AI Interpreter sidebar: brand, overview entry, and the 8-type navigation.",
+        component: bi("AI Interpreter sidebar: brand, overview entry, and the 8-type navigation.", "AI Interpreter 侧栏：品牌、概览入口以及 8 个类型的导航。"),
       },
     },
   },

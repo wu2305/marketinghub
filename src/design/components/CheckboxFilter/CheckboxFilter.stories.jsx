@@ -1,5 +1,5 @@
 import { CheckboxFilter } from "./index.jsx";
-import { callbackProp, prop, useSynced } from "../../lib/story-helpers.js";
+import { callbackProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 const OPTIONS = [
   { id: "Role", label: "Role" },
@@ -17,7 +17,7 @@ export default {
     docs: {
       description: {
         component:
-          "Multi-select dropdown filter — a field label plus a `<details>`/`<summary>` disclosure holding checkbox options. Mirrors the shared `.business-filter-field` / `.fm-options` control used for status, data-model and category filters in the original knowledge libraries.",
+          bi("Multi-select dropdown filter — a field label plus a `<details>`/`<summary>` disclosure holding checkbox options. Mirrors the shared `.business-filter-field` / `.fm-options` control used for status, data-model and category filters in the original knowledge libraries.", "多选下拉筛选：字段标签加一个 `<details>`/`<summary>` 展开区，内含复选框选项。对应原始知识库中用于状态、数据模型和分类筛选的共享 `.business-filter-field` / `.fm-options` 控件。"),
       },
     },
   },
@@ -29,13 +29,13 @@ export default {
     selected: [],
   },
   argTypes: {
-    label: prop("string", { description: 'Field label, e.g. "Category".' }),
-    allLabel: prop("string", { defaultValue: "All", description: "Summary text when nothing is selected." }),
-    selectedLabel: prop("string", { defaultValue: "{count} selected", description: "Summary template once options are checked — `{count}` is replaced." }),
-    options: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: "Checkbox options." }),
+    label: prop("string", { description: bi("Field label, e.g. \"Category\".", "字段标签，例如 \"Category\"。") }),
+    allLabel: prop("string", { defaultValue: "All", description: bi("Summary text when nothing is selected.", "未选择任何项时的摘要文字。") }),
+    selectedLabel: prop("string", { defaultValue: "{count} selected", description: bi("Summary template once options are checked — `{count}` is replaced.", "勾选选项后的摘要模板，其中的 `{count}` 会被替换为数量。") }),
+    options: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: bi("Checkbox options.", "复选框选项。") }),
     selected: prop("Array<string>", {
       defaultValue: [],
-      description: "Checked option ids.",
+      description: bi("Checked option ids.", "已勾选选项的 id。"),
       control: "check",
       options: OPTIONS.map((option) => option.id),
     }),
@@ -43,7 +43,7 @@ export default {
       "onToggle",
       "(event: { id: string, checked: boolean }) => void",
       { id: "Role", checked: true },
-      "Fired when an option is checked or unchecked.",
+      bi("Fired when an option is checked or unchecked.", "勾选或取消勾选某个选项时触发。"),
     ),
   },
   render: function CheckboxFilterStory(args) {

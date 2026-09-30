@@ -20,6 +20,7 @@ Designer: <name> · Change note: `handover/design-sync/changes/<yyyy-mm-dd>-<slu
 
 ### Gate (phase2-guide §3)
 - [ ] lint · test · build-storybook
+- [ ] New stories, argTypes and page props documented in English + 中文 (`bi()`; `npm test` checks)
 - [ ] build:host + host-check
 - [ ] visual-check (full) — output path:
 - [ ] visual-check --negative
