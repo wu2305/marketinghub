@@ -10,5 +10,6 @@
     "radius": 0,
     "shadow": 0,
     "color": 0
-  }
+  },
+  "maxMediaWidths": 3
 }

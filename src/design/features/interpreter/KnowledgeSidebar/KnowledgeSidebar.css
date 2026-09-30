@@ -32,7 +32,7 @@ padding: 0 0 8px;
   text-transform: uppercase;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .mh-interpreter .mh-sidebar {
     min-height: 0;
     border-right: 0;
@@ -48,7 +48,7 @@ padding: 0 0 8px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .mh-interpreter .mh-sidebar__group {
     grid-template-columns: minmax(0, 1fr);
   }

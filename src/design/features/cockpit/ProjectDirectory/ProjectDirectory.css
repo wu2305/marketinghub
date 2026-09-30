@@ -160,7 +160,7 @@ display: grid;
   gap: 10px;
 }
 
-@media (max-width: 880px) {
+@media (max-width: 900px) {
   .mh-project-directory__intro {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -45,3 +45,20 @@ export function rawFoundationValues(root, skip = []) {
   }
   return Object.fromEntries(Object.entries(sets).map(([key, set]) => [key, set.size]));
 }
+
+/**
+ * Distinct `@media` width values (px) across component/page CSS, sorted. Height
+ * queries and `prefers-*` queries are not counted. Used by the budget test
+ * (css-budget.json `maxMediaWidths`) and concept-count.mjs.
+ * @returns {number[]}
+ */
+export function mediaWidths(root) {
+  const widths = new Set();
+  for (const file of cssFiles(root)) {
+    const css = withoutComments(fs.readFileSync(file, "utf8"));
+    for (const [, query] of css.matchAll(/@media\s*([^{]+)\{/g)) {
+      for (const [, px] of query.matchAll(/width\s*[:<>=]+\s*(\d+)px/g)) widths.add(Number(px));
+    }
+  }
+  return [...widths].sort((a, b) => a - b);
+}

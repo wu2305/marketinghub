@@ -31,13 +31,13 @@ margin: 0;
   font-weight: var(--mh-font-weight-bold);
 }
 
-@media (max-width: 880px) {
+@media (max-width: 900px) {
   .mh-project-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .mh-project-grid {
     grid-template-columns: minmax(0, 1fr);
   }
