@@ -6,7 +6,7 @@ import { knowledgeCreateHrefFor, useKnowledgeCreateDemo, validateKnowledgeCreate
 import { KnowledgeCreatePage } from "../pages/KnowledgeCreatePage/index.jsx";
 import { Header } from "../components/Header/index.jsx";
 
-function useKnowledgeCreateDemoProps(type) {
+function demoPropsFor(type) {
   return renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type })).result.current;
 }
 
@@ -40,7 +40,7 @@ describe("P08 demo flow", () => {
     for (const type of ["Business Term", "Principles", "Analytical Model"]) {
       const events = { onSave: vi.fn(), onSubmit: vi.fn(), onCancel: vi.fn() };
       const values = { title: "Probe", description: "Probe text" };
-      const { unmount } = render(<KnowledgeCreatePage {...useKnowledgeCreateDemoProps(type)} values={values} {...events} />);
+      const { unmount } = render(<KnowledgeCreatePage {...demoPropsFor(type)} values={values} {...events} />);
       fireEvent.click(screen.getByRole("button", { name: "Save" }));
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       fireEvent.click(screen.getByRole("button", { name: "Submit" }));
