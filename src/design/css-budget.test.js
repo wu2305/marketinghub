@@ -541,6 +541,12 @@ describe("token references", () => {
     expect(tokenReferences(sources, tokenNames).cycles).toEqual([]);
   });
 
+  it("only names tokens that exist in the design-sync conventions handed to consumers", () => {
+    const conventions = fs.readFileSync(path.resolve(ROOT, "../../.design-sync/conventions.md"), "utf8");
+    const named = [...new Set(conventions.match(/--mh-[a-z0-9]+(?:-[a-z0-9]+)*/g))];
+    expect(named.filter((name) => !tokenNames.includes(name))).toEqual([]);
+  });
+
   it("detects a deleted token and a self-reference", () => {
     const probe = tokenReferences(
       [["a.css", ".x { color: var(--mh-gone); --mh-loop: var(--mh-loop); }"], ["b.jsx", 'const s = { "--mh-art": 1 }; const c = "var(--mh-art)";']],

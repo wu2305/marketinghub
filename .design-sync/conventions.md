@@ -2,10 +2,10 @@
 
 **Setup.** There's no provider or theme wrapper. Every component is a plain React function on `window.MarketingHub`, and the styles come from `styles.css`: tokens, `@font-face` rules and all `mh-*` component styles. Components still render without context, but they only look right when `styles.css` is loaded.
 
-**Always set the font on your layout root.** Components set `font-family: var(--mh-font)` on most of their own elements, but not all. Some inner text (pagination labels, dropzone copy, table cells in some organisms) inherits from the page and falls back to the browser's serif if you don't set it:
+**Always set the font on your layout root.** Components set `font-family: var(--mh-font-sans)` on most of their own elements, but not all. Some inner text (pagination labels, dropzone copy, table cells in some organisms) inherits from the page and falls back to the browser's serif if you don't set it:
 
 ```jsx
-<main style={{ fontFamily: "var(--mh-font)", color: "var(--mh-ink)", background: "var(--mh-page-bg)" }}>
+<main style={{ fontFamily: "var(--mh-font-sans)", color: "var(--mh-text-strong)", background: "var(--mh-surface-page)" }}>
 ```
 
 **Styling idiom: props first, tokens for your own glue.**
@@ -19,15 +19,16 @@
   - `SearchField` `variant`: field | plain
   - `AssistantPanel` `placement`: modal | drawer
 - For your own layout (page grids, spacing wrappers), use the `--mh-*` CSS variables. Never hard-code hex colors. The core palette:
-  - Type: `--mh-font` (DIN 2014, body/UI) and `--mh-display` (BentonModDisplay italic, headlines)
-  - Ink and copy: `--mh-ink`, `--mh-copy`, `--mh-muted`, `--mh-faint`
-  - Surfaces: `--mh-bg`, `--mh-bg-soft`, `--mh-surface`, `--mh-page-bg`
-  - Rules: `--mh-line`, `--mh-line-strong`
-  - Brand gold: `--mh-gold`, `--mh-gold-deep`, `--mh-gold-text`
-  - Status: `--mh-green`, `--mh-red`, `--mh-amber`, `--mh-blue`
-  - Overlays: `--mh-scrim`, `--mh-modal-shadow`
+  - Type: `--mh-font-sans` (DIN 2014, body/UI), `--mh-font-display` (BentonModDisplay italic, headlines), `--mh-font-mono`; sizes `--mh-font-size-xs` to `-display`, weights `--mh-font-weight-light|regular|bold`
+  - Text: `--mh-text-strong`, `--mh-text`, `--mh-text-muted`, `--mh-text-faint` (`--mh-text-inverse` on dark surfaces)
+  - Surfaces: `--mh-surface-page`, `--mh-surface`, `--mh-surface-subtle`, `--mh-surface-muted`
+  - Rules: `--mh-line-subtle`, `--mh-line`, `--mh-line-strong`
+  - Brand gold: `--mh-accent` (borders, markers), `--mh-accent-fill` (primary action fill), `--mh-accent-ink` (gold text and links), `--mh-accent-wash`, `--mh-accent-soft`
+  - Status: `--mh-success`, `--mh-warning`, `--mh-danger`, `--mh-info`, each with a `-wash` background for `success`/`warning`/`danger`/`info`
+  - Overlays: `--mh-scrim`, `--mh-shadow-modal`
+  - Layout: `--mh-space-1` to `--mh-space-9`, `--mh-radius-sm|md|lg|pill`
 
-  Prefixed families (`--mh-copilot-*`, `--mh-reports-*`, `--mh-sc-*`, `--mh-bt-*`, ...) belong to single components. Don't reuse them.
+  These roles are the whole token set. There are no component- or page-named tokens; don't invent or look for them.
 - `mh-*` class names are internal BEM. Don't add them to your own markup.
 
 **Callbacks receive named objects, not DOM events.** For example: `Button` `onClick({ label })`, `TextInput` `onChange({ name, value })`. Navigation renders a real `<a href>`, and actions render `<button type="button">`.
@@ -43,7 +44,7 @@ const { Header, Hero, SectionHeading, MetricStat, Button, demoContent } = window
 
 function Dashboard() {
   return (
-    <main style={{ fontFamily: "var(--mh-font)", background: "var(--mh-page-bg)", minHeight: "100vh" }}>
+    <main style={{ fontFamily: "var(--mh-font-sans)", background: "var(--mh-surface-page)", minHeight: "100vh" }}>
       <Header logo={demoContent.LOGO} items={demoContent.NAV} current="home" />
       <section style={{ padding: "32px 48px", display: "grid", gap: 24 }}>
         <SectionHeading eyebrow="Workspaces" title="Enter the work that matters" />
