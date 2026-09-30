@@ -21,7 +21,9 @@ lists), and every earlier note in `handover/design-sync/changes/`. Then follow
 1. Branch `design-sync/<today>-<slug>` from the latest `origin/main`.
 2. Commit 1 contains only my new bundle (`index.html`, `assets/**`) plus a change note copied from
    `handover/design-sync/changes/TEMPLATE.md`. Draft section A from the diff, then show it to me and
-   let me correct it before you commit.
+   let me correct it before you commit. If my bundle has a `docs/cleanup-manifest.json` or a README,
+   clean them as `handover/design-sync/README.md` §2 says (no local folder paths, README title set to
+   the new version) and run the path check in §5 before committing.
 3. Commit 2 is the inventory: classify every user-visible change. Put design questions to me **one at a
    time**, in product language, with 2–4 options and your recommendation. Record my answers in the
    note. Don't guess where I haven't answered. Leave the item open.
@@ -43,4 +45,6 @@ Hard rules:
   or the work needs a change to `.storybook/`, `scripts/` (except visual-check scenarios),
   `package*.json`, CI or `examples/host`, stop that item and leave a pull request comment for Wu
   with the exact output. Then continue with the rest.
+- Keep my computer's folder paths (`C:\Users\...`, `D:/...`, `/Users/...`) and personal tool files
+  (`.DS_Store`, `.codebuddy`) out of every commit, including files I hand over.
 - Never merge. Never force-push to `main`. Never disable or loosen a check to make it pass.

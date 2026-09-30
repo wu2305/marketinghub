@@ -19,6 +19,7 @@ Designer: <name> · Change note: `handover/design-sync/changes/<yyyy-mm-dd>-<slu
 - For the maintainer:
 
 ### Gate (phase2-guide §3)
+- [ ] bundle provenance clean: no local paths in `docs/cleanup-manifest.json`, `docs/demo/README.md` title = new version (`handover/design-sync/README.md` §5)
 - [ ] lint · test · build-storybook
 - [ ] build:host + host-check
 - [ ] visual-check (full) — output path:

@@ -24,12 +24,24 @@ Explain design questions in product terms (what users see and can do), not in co
 One sync = one branch `design-sync/<yyyy-mm-dd>-<slug>` from the latest `origin/main` = one PR, made of
 these commits in this order. Each commit must build (`npm run lint && npm test && npm run build-storybook`).
 
-1. **`demo: <summary>`** changes only `index.html`, `assets/**` and the new change note
+1. **`demo: <summary>`** changes only `index.html`, `assets/**`, the provenance files below and the new change note
    `handover/design-sync/changes/<yyyy-mm-dd>-<slug>.md` (copied from `changes/TEMPLATE.md`, with
    §A filled in). This is the designer's bundle, unchanged. If the designer hands over a whole new bundle, copy
    it over the old one file by file. Keep file names stable where the page is the same page. Do
    not delete an image or font that `src/design` still references (`grep -rn "/assets/" src/design`)
    without replacing that reference in a later commit.
+
+   **Provenance files in the bundle are not copied verbatim.** The designer's bundle may also carry
+   `docs/cleanup-manifest.json` and a README. Both come from her machine, so fix them in this same
+   commit (this is the one exception to "unchanged"):
+   - `docs/cleanup-manifest.json`: delete the top-level `"source"` and `"target"` keys (they hold
+     her local folders, for example `D:/...` or `C:\Users\...`). Keep the `files` mapping, hashes and
+     logs. Paths inside the manifest stay repo-relative.
+   - Her README goes to `docs/demo/README.md` (the root `README.md` is the engineering one). Set its
+     first line to `# Marketing Hub AI · <bundle version>` (the version in her folder or file name,
+     for example `v22`); leave the history sections below it as she wrote them.
+   - Never commit `.DS_Store`, `.codebuddy/` or any other tool or personal memory files.
+   Run the check in §5 before committing.
 2. **`sync: inventory <slug>`** fills in §B of the change note: every changed behaviour or visual,
    per page, with its disposition (§4), the React files it affects, and any open question. Ask the
    designer the Ask items now, record her answers, and commit.
@@ -75,6 +87,16 @@ in stories, or any DOM-recognition pipeline. Components keep their semantic prop
 evidence of intent.
 
 ## 5. Gate
+
+Before the first commit, and again on the final one, check that no local path came in with the
+bundle (both commands must print nothing on the first line and `ok` on the second):
+
+```sh
+grep -nE '"(source|target)" *:|"[A-Za-z]:[\\/]|"/(Users|home)/' docs/cleanup-manifest.json
+head -1 docs/demo/README.md | grep -q "<bundle version>" && echo ok
+```
+
+(Replace `<bundle version>` with the version you imported, for example `v22`.)
 
 On the final commit, run the full gate from `handover/design-intent/phase2-guide.md` §3 (lint, test,
 build-storybook, host build + check, visual-check, `--negative`, build:lib, font probe). Put outputs in
