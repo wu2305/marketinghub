@@ -1,4 +1,6 @@
-# Marketing Hub AI · v20.11
+# Marketing Hub AI · v22
+
+> Designer's demo README, archived here by the design sync. The title names the bundle currently in `index.html` + `assets/**` (v22, imported in PR #92). The sections below are the designer's notes and keep the version they were written for (v20.11 baseline, then the v20.11.01 refresh). Update the title line on every sync.
 
 This is a cleaned, behavior-preserving baseline generated from `marketing-hub-ai-v20.10.05` before the AI Interpreter visual refresh.
 

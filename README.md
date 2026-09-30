@@ -64,6 +64,10 @@ or push to `main`:
 - Deploy: `npx wrangler deploy`
 - Root directory: `/`; production branch: `main`.
 
+`wrangler.jsonc` also has a `build.command` that builds Storybook only when
+`storybook-static` is missing, so a build whose own build command is empty (a
+branch-preview build that goes straight to `wrangler preview`) still works.
+
 Cloudflare uses its existing build token. No GitHub deployment secrets are
 needed. Tag pushes do not deploy; the existing `v*` visual CI remains separate.
 Repository changes are submitted through pull requests.
