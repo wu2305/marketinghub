@@ -12,6 +12,7 @@
  */
 import React from "react";
 import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
+import { useGovernedFlow } from "../lib/governed-flow.js";
 
 /** Controlled-prop mirror: local state re-syncs when the input value changes. */
 function useSynced(value) {
@@ -86,13 +87,9 @@ export function useBusinessTermDemo(props) {
   const [page, setPage] = useSynced(props.page || 1);
   const [pageSize, setPageSize] = useSynced(props.pageSize || 10);
   const [detailId, setDetailId] = useSynced(props.detail ?? null);
-  /* { kind: "info"|"disable-first"|"disable"|"delete", record?, then?, title?, message? } */
-  const [pending, setPending] = React.useState(null);
   const [toast, setToast] = React.useState("");
   const toastTimer = React.useRef(null);
   React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-
-  if (props.active === false) return null;
 
   const showToast = (message) => {
     clearTimeout(toastTimer.current);
@@ -106,6 +103,23 @@ export function useBusinessTermDemo(props) {
     setDetailId((current) => current === id ? null : current);
   };
   const edit = (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id });
+  /* Pattern B6-B8. business-term-library.js:199-250 is the source flow; the sequence lives in useGovernedFlow. */
+  const flow = useGovernedFlow({
+    find: (id) => list.find((item) => item.id === id),
+    copy,
+    tooltips,
+    onEdit: edit,
+    onDisable: (record) => {
+      setStatus(record.id, "Disable");
+      showToast(copy.disabledToast || "Disabled successfully");
+    },
+    onDelete: (record) => {
+      remove(record.id);
+      showToast(copy.deletedToast || "Deleted successfully");
+    },
+  });
+
+  if (props.active === false) return null;
 
   const queryText = query.trim().toLowerCase();
   const matches = (record) =>
@@ -125,66 +139,10 @@ export function useBusinessTermDemo(props) {
   const detail = detailId ? list.find((record) => record.id === detailId) || null : null;
   const withActions = (record) => ({ ...record, actions: governedActions(record, { currentUser }) });
 
-  /* Pattern B6-B8. business-term-library.js:199-250 is the source flow. */
   const act = (event) => {
-    const record = list.find((item) => item.id === event.id);
-    if (!record) return;
+    if (!list.some((item) => item.id === event.id)) return;
     props.onAction?.(event);
-    if (event.reason === "permission") {
-      setPending({ kind: "info", title: copy.permissionDeniedTitle || "Permission denied", message: tooltips.permission });
-    } else if (event.reason === "already-disabled") {
-      setPending({ kind: "info", title: copy.alreadyDisabledTitle || "Knowledge already disabled", message: tooltips["already-disabled"] });
-    } else if (event.reason === "disable-first") {
-      setPending({ kind: "disable-first", record, then: event.action });
-    } else if (event.action === "edit") {
-      edit(record);
-    } else {
-      setPending({ kind: event.action, record });
-    }
-  };
-
-  const dialogFor = (state) => {
-    if (!state) return null;
-    if (state.kind === "info") return { purpose: "info", title: state.title, message: state.message, closeLabel: copy.closeLabel || "Close" };
-    if (state.kind === "disable-first") {
-      return {
-        purpose: "warning",
-        title: copy.offlineFirstTitle || "Please take the knowledge offline first",
-        message: copy.offlineFirstMessage || governanceMessages.dialogs["disable-first"].message,
-        confirmLabel: copy.offlineFirstConfirm || "Go Offline",
-        cancelLabel: copy.cancelLabel || "Cancel",
-      };
-    }
-    const isDelete = state.kind === "delete";
-    return {
-      purpose: isDelete ? "danger" : "warning",
-      title: copy.confirmTitle || "Confirm Operation",
-      message: isDelete ? copy.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : copy.offlineMessage || "Please confirm whether to offline this knowledge.",
-      confirmLabel: isDelete ? copy.deleteConfirm || "Confirm Delete" : copy.offlineConfirm || "Confirm Offline",
-      cancelLabel: copy.cancelLabel || "Cancel",
-    };
-  };
-
-  const confirm = (event) => {
-    const state = pending;
-    setPending(null);
-    props.onDialogConfirm?.(event);
-    if (!state || state.kind === "info") return;
-    if (state.kind === "disable-first") {
-      setStatus(state.record.id, "Disable");
-      showToast(copy.disabledToast || "Disabled successfully");
-      if (state.then === "edit") edit(state.record);
-      if (state.then === "delete") setPending({ kind: "delete", record: { ...state.record, status: "Disable" } });
-      return;
-    }
-    if (state.kind === "disable") {
-      setStatus(state.record.id, "Disable");
-      showToast(copy.disabledToast || "Disabled successfully");
-    }
-    if (state.kind === "delete") {
-      remove(state.record.id);
-      showToast(copy.deletedToast || "Deleted successfully");
-    }
+    flow.onAction(event);
   };
 
   const creators = [...new Set(list.map((record) => record.creator))];
@@ -219,7 +177,7 @@ export function useBusinessTermDemo(props) {
     strings: { ...strings, tooltips },
     createHref: props.createHref,
     detail: detail ? withActions(detail) : null,
-    dialog: dialogFor(pending),
+    dialog: flow.dialog,
     toast,
     onQueryChange: (event) => {
       setQuery(event.value);
@@ -261,9 +219,12 @@ export function useBusinessTermDemo(props) {
       setDetailId(null);
       props.onCloseDetail?.(event);
     },
-    onDialogConfirm: confirm,
+    onDialogConfirm: (event) => {
+      props.onDialogConfirm?.(event);
+      flow.onDialogConfirm();
+    },
     onDialogCancel: (event) => {
-      setPending(null);
+      flow.onDialogCancel();
       props.onDialogCancel?.(event);
     },
     onCreate: (event) => props.onCreate?.(event),

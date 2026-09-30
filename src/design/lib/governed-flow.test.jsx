@@ -73,4 +73,11 @@ describe("useGovernedFlow", () => {
     act(() => result.current.onAction({ action: "delete", id: "a" }));
     expect(result.current.dialog).toMatchObject({ title: "Sure?", confirmLabel: "Remove it" });
   });
+
+  it("can open a confirmation on first render, and a blocked delete opens its explanation", () => {
+    const { result } = setup({ initial: { kind: "disable", record: records.a } });
+    expect(result.current.dialog).toMatchObject({ purpose: "warning", confirmLabel: "Confirm Offline" });
+    const blocked = setup({ initial: { kind: "delete", record: records.b }, deleteBlocked: () => ({ message: "In use." }) });
+    expect(blocked.result.current.dialog).toMatchObject({ purpose: "info", message: "In use." });
+  });
 });
