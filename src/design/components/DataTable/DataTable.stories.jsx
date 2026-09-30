@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Data table. `columns[].key` indexes into each row object; `columns[].header` is the displayed heading. Below 760px each row stacks as a labelled block.", "数据表格。`columns[].key` 对应每个行对象中的键；`columns[].header` 是显示的列标题。宽度低于 760px 时每一行堆叠为带标签的块。"),
+        component: bi("Data table. `columns[].key` indexes into each row object; `columns[].header` is the displayed heading. Below 760px each row stacks as a labelled block.\n\n**When to use.** Tabular records with a few named columns. Pass `onOpen` when a row should open a detail view. For governed lists with search, filters and actions use LibraryList (its `table` layout is built on this). **Used in:** Campaign and LibraryList.", "数据表格。`columns[].key` 对应每个行对象中的键；`columns[].header` 是显示的列标题。宽度低于 760px 时每一行堆叠为带标签的块。\n\n**何时使用。** 有若干命名列的表格型记录。当某一行需要打开详情视图时传入 `onOpen`。带搜索、筛选和操作的受治理列表请用 LibraryList（其 `table` 布局即基于本组件）。**使用位置：** Campaign 与 LibraryList。"),
       },
     },
   },

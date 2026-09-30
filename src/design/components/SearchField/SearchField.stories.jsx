@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Labeled search input with an icon that can lead, trail, or be omitted.", "带图标的搜索输入框，图标可放在前面、后面或省略。"),
+        component: bi("Labeled search input with an icon that can lead, trail, or be omitted.\n\n**When to use.** Free-text search over a list or page. The container filters the data on every change. **Used in:** LibraryToolbar (every governed library), Campaign, Marketing Cockpit, Metric Dictionary, Data Model and Knowledge View.", "带图标的搜索输入框，图标可放在前面、后面或省略。\n\n**何时使用。** 对列表或页面做自由文本搜索，容器在每次变化时过滤数据。**使用位置：** LibraryToolbar（所有受治理库）、Campaign、Marketing Cockpit、Metric Dictionary、Data Model 与 Knowledge View。"),
       },
     },
   },

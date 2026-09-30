@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Label / value / bar rows for distribution summaries.", "用于分布汇总的 标签/数值/进度条 行。"),
+        component: bi("Label / value / bar rows for distribution summaries.\n\n**When to use.** A short distribution summary where each row is a label, a value and a proportional bar. Use ColumnChart instead when the comparison is across categories over a shared axis. **Used in:** Campaign (distribution, objectives and efficiency panels).", "用于分布汇总的 标签/数值/进度条 行。\n\n**何时使用。** 简短的分布汇总，每一行包含标签、数值和按比例的进度条。若要在共同坐标轴上比较各分类，请改用 ColumnChart。**使用位置：** Campaign（分布、目标与效率面板）。"),
       },
     },
   },

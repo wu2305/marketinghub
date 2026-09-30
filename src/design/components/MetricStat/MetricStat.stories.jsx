@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Label + value KPI block used in heroes and dashboards.", "带标签和数值的 KPI 块，用于英雄区与仪表盘。"),
+        component: bi("Label + value KPI block used in heroes and dashboards.\n\n**When to use.** One headline figure with a label and an optional supporting line. `glass` sits on hero imagery, `card` on a plain surface. **Used in:** the hero of most pages (Home, AI Interpreter, Review Center, Feedback & Quality, Scenario Library, Detail and Edit) and Campaign dashboards.", "带标签和数值的 KPI 块，用于英雄区与仪表盘。\n\n**何时使用。** 带标签和可选辅助说明行的单个核心数值。`glass` 用于英雄图片之上，`card` 用于普通底色。**使用位置：** 大多数页面的英雄区（Home、AI Interpreter、Review Center、Feedback & Quality、Scenario Library、Detail 与 Edit）以及 Campaign 仪表盘。"),
       },
     },
   },

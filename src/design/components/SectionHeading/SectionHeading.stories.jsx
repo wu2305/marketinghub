@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Section heading: eyebrow + title + optional description and trailing content. `variant=\"home\"` right-aligns (or stacks) the description; `variant=\"view\"` puts the description under the title, adds a bottom border and renders `children` as trailing actions.", "区块标题：眉标 + 标题 + 可选描述与尾部内容。`variant=\"home\"` 将描述右对齐（或堆叠）；`variant=\"view\"` 将描述放在标题下方，添加底部边框，并把 `children` 渲染为尾部操作。"),
+          bi("Section heading: eyebrow + title + optional description and trailing content. `variant=\"home\"` right-aligns (or stacks) the description; `variant=\"view\"` puts the description under the title, adds a bottom border and renders `children` as trailing actions.\n\n**When to use.** The heading above a block of content: `home` for a landing section, `view` for a page view that also carries actions or Tabs. **Used in:** Home and Campaign.", "区块标题：眉标 + 标题 + 可选描述与尾部内容。`variant=\"home\"` 将描述右对齐（或堆叠）；`variant=\"view\"` 将描述放在标题下方，添加底部边框，并把 `children` 渲染为尾部操作。\n\n**何时使用。** 内容区块上方的标题：`home` 用于落地页区块，`view` 用于同时带有操作或 Tabs 的页面视图。**使用位置：** Home 与 Campaign。"),
       },
     },
   },

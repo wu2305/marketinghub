@@ -17,7 +17,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Multi-select dropdown filter — a field label plus a `<details>`/`<summary>` disclosure holding checkbox options. Mirrors the shared `.business-filter-field` / `.fm-options` control used for status, data-model and category filters in the original knowledge libraries.", "多选下拉筛选：字段标签加一个 `<details>`/`<summary>` 展开区，内含复选框选项。对应原始知识库中用于状态、数据模型和分类筛选的共享 `.business-filter-field` / `.fm-options` 控件。"),
+          bi("Multi-select dropdown filter — a field label plus a `<details>`/`<summary>` disclosure holding checkbox options. Mirrors the shared `.business-filter-field` / `.fm-options` control used for status, data-model and category filters in the original knowledge libraries.\n\n**When to use.** A filter with several options where more than one can be checked (status, creator, category). For one-of choices use Select or FilterPills. **Used in:** LibraryToolbar (so every governed library) and the field-mapping libraries.", "多选下拉筛选：字段标签加一个 `<details>`/`<summary>` 展开区，内含复选框选项。对应原始知识库中用于状态、数据模型和分类筛选的共享 `.business-filter-field` / `.fm-options` 控件。\n\n**何时使用。** 有多个选项且可同时勾选多项的筛选（状态、创建人、分类）。只能单选时请用 Select 或 FilterPills。**使用位置：** LibraryToolbar（即所有受治理库）与字段映射类库。"),
       },
     },
   },

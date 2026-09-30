@@ -14,7 +14,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Single-select pill filter group.", "单选胶囊筛选组。"),
+        component: bi("Single-select pill filter group.\n\n**When to use.** A short, always-visible choice that filters what is shown (one pill active at a time). For longer option lists or multi-select use CheckboxFilter. **Used in:** Self-Service (analysis and upload filters).", "单选胶囊筛选组。\n\n**何时使用。** 用于筛选当前显示内容的、简短且始终可见的单选项（同一时间只有一个胶囊处于激活）。选项较多或需要多选时请用 CheckboxFilter。**使用位置：** Self-Service（分析与上传筛选）。"),
       },
     },
   },

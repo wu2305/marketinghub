@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Labelled form control wrapping TextInput / TextArea / Select.", "带标签的表单控件，包裹 TextInput / TextArea / Select。"),
+        component: bi("Labelled form control wrapping TextInput / TextArea / Select.\n\n**When to use.** Any labelled form control: it wraps TextInput, TextArea or Select with the label, required marker, hint and error state, so pages never style these themselves. **Used in:** Media Tracking Detail, Campaign, Data Upload and the Business Term form.", "带标签的表单控件，包裹 TextInput / TextArea / Select。\n\n**何时使用。** 任何带标签的表单控件：它用标签、必填标记、提示与错误状态包裹 TextInput、TextArea 或 Select，页面无需自行设置这些样式。**使用位置：** Media Tracking Detail、Campaign、Data Upload 与 Business Term 表单。"),
       },
     },
   },

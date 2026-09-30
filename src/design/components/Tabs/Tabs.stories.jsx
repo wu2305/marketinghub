@@ -13,7 +13,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Tab strip (role=tablist). Items may be disabled.", "标签页条（role=tablist）。条目可以禁用。"),
+        component: bi("Tab strip (role=tablist). Items may be disabled.\n\n**When to use.** Switching between sibling views of the same page, where exactly one view is visible at a time. For filtering a list by one choice use FilterPills instead. **Used in:** Media Tracking Detail, Campaign, Self-Service and LibraryToolbar tabs.", "标签页条（role=tablist）。条目可以禁用。\n\n**何时使用。** 在同一页面的并列视图之间切换，同一时间只显示一个视图。若只是按单一选项筛选列表，请用 FilterPills。**使用位置：** Media Tracking Detail、Campaign、Self-Service 与 LibraryToolbar 的标签页。"),
       },
     },
   },

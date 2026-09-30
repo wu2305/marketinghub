@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Clickable / drag-and-drop file target. Clicking opens the native file picker; dragover adds the `is-dragover` visual state; selecting or dropping a file calls `onSelect` with the file name. `fileName` switches the hint to the selected-file message.", "可点击或拖放的文件目标区。点击会打开系统文件选择器；拖入时加上 `is-dragover` 视觉状态；选择或放入文件会以文件名调用 `onSelect`。传入 `fileName` 后提示文字切换为已选文件的消息。"),
+          bi("Clickable / drag-and-drop file target. Clicking opens the native file picker; dragover adds the `is-dragover` visual state; selecting or dropping a file calls `onSelect` with the file name. `fileName` switches the hint to the selected-file message.\n\n**When to use.** Any step that asks the user to pick a file to upload. It only reports the chosen file name; the page decides what to do with it. **Used in:** Data Upload (bulk import dialog).", "可点击或拖放的文件目标区。点击会打开系统文件选择器；拖入时加上 `is-dragover` 视觉状态；选择或放入文件会以文件名调用 `onSelect`。传入 `fileName` 后提示文字切换为已选文件的消息。\n\n**何时使用。** 任何需要用户选择文件上传的步骤。它只回报所选文件名，如何处理由页面决定。**使用位置：** Data Upload（批量导入对话框）。"),
       },
     },
   },

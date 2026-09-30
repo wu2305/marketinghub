@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Footer pagination row — total label, rows-per-page select and page controls. “numbered” mirrors `#businessPagination` / `renderPagination` (‹ 1 2 3 ›); “compact” mirrors `fm-pagination` in the Business Term / Scenario libraries (Previous / “page / total” / Next, always plural unit).", "底部分页行：总数文字、每页条数选择和翻页控件。\"numbered\" 对应 `#businessPagination` / `renderPagination`（‹ 1 2 3 ›）；\"compact\" 对应 Business Term / Scenario 库中的 `fm-pagination`（Previous / \"page / total\" / Next，单位始终用复数）。"),
+          bi("Footer pagination row — total label, rows-per-page select and page controls. “numbered” mirrors `#businessPagination` / `renderPagination` (‹ 1 2 3 ›); “compact” mirrors `fm-pagination` in the Business Term / Scenario libraries (Previous / “page / total” / Next, always plural unit).\n\n**When to use.** Below any paged list. Choose `numbered` for page buttons or `compact` for Previous / Next. The container owns the current page and slices the data. **Used in:** the AI Interpreter knowledge libraries (Principles, Business Term, Scenario Reporting and the field-mapping libraries).", "底部分页行：总数文字、每页条数选择和翻页控件。\"numbered\" 对应 `#businessPagination` / `renderPagination`（‹ 1 2 3 ›）；\"compact\" 对应 Business Term / Scenario 库中的 `fm-pagination`（Previous / \"page / total\" / Next，单位始终用复数）。\n\n**何时使用。** 任何分页列表的下方。`numbered` 显示页码按钮，`compact` 显示 Previous / Next。当前页与数据切片由容器负责。**使用位置：** AI Interpreter 各知识库（Principles、Business Term、Scenario Reporting 以及字段映射类库）。"),
       },
     },
   },
