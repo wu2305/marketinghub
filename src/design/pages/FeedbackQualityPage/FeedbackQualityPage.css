@@ -115,7 +115,7 @@
 }
 
 /* Keep all three governance summary metrics readable below the desktop Hero width. */
-@media (max-width: 1024px) {
+@media (max-width: 1180px) {
   .mh-feedback-page__body {
     grid-template-columns: 1fr;
     width: calc(100% - 40px);
@@ -147,7 +147,7 @@
   }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 760px) {
   .mh-feedback-page > .mh-hero .mh-hero__layout {
     width: calc(100% - 40px);
     display: block;

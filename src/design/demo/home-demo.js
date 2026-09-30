@@ -6,15 +6,8 @@
  * plus a `demo` bundle of content simulators and returns the fully wired prop
  * set. No Storybook imports; any host can drive the page the same way.
  */
-import React from "react";
 import { demoHrefFor } from "./navigation.js";
-
-/** Controlled-prop mirror: local state re-syncs when the input value changes. */
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
+import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 /**
  * @param {object} props ordinary HomePage props:
@@ -36,107 +29,36 @@ function useSynced(value) {
  */
 export function useHomeDemo(props) {
   const { answerFor, modelFlow, modelDraftFor } = props.demo || {};
-
-  const [open, setOpen] = useSynced(props.assistantOpen);
-  const [prompt, setPrompt] = useSynced(props.prompt);
-  const [answers, setAnswers] = React.useState([]);
-  const answerSequence = React.useRef(0);
-  const [skill, setSkill] = React.useState(null);
-  const [flow, setFlow] = React.useState(null);
+  const workspace = useWorkspaceAssistantDemo({
+    variant: "home",
+    assistant: {
+      ...props.assistant,
+      open: props.assistantOpen,
+      prompt: props.prompt,
+      onOpen: props.onOpenAssistant,
+      onClose: props.onCloseAssistant,
+      onPromptChange: props.onPromptChange,
+      onSuggestion: props.onSuggestion,
+      onSubmit: props.onSubmit,
+      onNewSession: props.onNewSession,
+      onMaximize: props.onMaximize,
+      onHistory: props.onHistory,
+      onHistorySelect: props.onHistorySelect,
+      onFeedback: props.onFeedback,
+      onAttach: props.onAttach,
+      onSelectSkill: props.onSelectSkill,
+      onClearSkill: props.onClearSkill,
+      onSkillAction: props.onSkillAction,
+    },
+    demo: { answerFor: answerFor && ((text) => answerFor(text, props.scope)), modelFlow, modelDraftFor },
+    onFlowSave: props.onFlowSave,
+    onFlowSubmit: props.onFlowSubmit,
+  });
 
   return {
     ...props,
     hrefFor: props.hrefFor || demoHrefFor,
-    assistant: {
-      ...props.assistant,
-      open,
-      prompt,
-      answers,
-      selectedSkill: skill,
-      onOpen: (event) => {
-        setOpen(true);
-        props.onOpenAssistant?.(event);
-      },
-      onClose: (event) => {
-        setOpen(false);
-        props.onCloseAssistant?.(event);
-      },
-      onPromptChange: (event) => {
-        setPrompt(event.value);
-        props.onPromptChange?.(event);
-      },
-      onSuggestion: (event) => {
-        setPrompt(event.prompt);
-        props.onSuggestion?.(event);
-      },
-      onSubmit: (event) => {
-        const text = String(event.prompt || "").trim();
-        if (text) {
-          const entry = answerFor?.(text, props.scope);
-          // portal.js:754 replaces the feed on every send, including repeated questions.
-          if (entry) setAnswers([{ ...entry, id: `home-answer-${++answerSequence.current}` }]);
-          setPrompt("");
-        }
-        props.onSubmit?.(event);
-      },
-      onNewSession: () => {
-        setAnswers([]);
-        setPrompt("");
-        props.onNewSession?.();
-      },
-      onMaximize: props.onMaximize,
-      onHistory: props.onHistory,
-      onHistorySelect: (event) => {
-        setPrompt(event.prompt);
-        props.onHistorySelect?.(event);
-      },
-      onFeedback: props.onFeedback,
-      onAttach: props.onAttach,
-      onSelectSkill: (event) => {
-        setSkill({ id: event.id, type: event.type, title: event.title });
-        props.onSelectSkill?.(event);
-      },
-      onClearSkill: () => {
-        setSkill(null);
-        props.onClearSkill?.();
-      },
-      onSkillAction: ({ action }) => {
-        props.onSkillAction?.({ action });
-        if (!modelFlow) return;
-        setFlow({
-          step: action === "history" ? "history" : "manual",
-          threads: (modelFlow.threads || []).map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-          rule: "",
-          draft: {},
-        });
-      },
-    },
-    skillFlow: flow
-      ? {
-          step: flow.step,
-          threads: flow.threads,
-          rule: flow.rule,
-          draft: flow.draft,
-          sections: modelFlow.sections,
-          onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-            setFlow((current) => ({
-              ...current,
-              threads: current.threads.map((thread, ti) =>
-                ti === threadIndex
-                  ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                  : thread,
-              ),
-            })),
-          onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-          onGenerate: ({ messages, rule }) =>
-            setFlow((current) => ({ ...current, step: "generated", rule, draft: modelDraftFor?.(messages, rule) || {} })),
-          onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-          onClose: () => setFlow(null),
-          onSave: ({ values }) => props.onFlowSave?.({ values }),
-          onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
-        }
-      : undefined,
-    onNavigate: props.onNavigate,
-    onOpen: props.onOpen,
+    assistant: workspace.assistant,
+    skillFlow: workspace.skillFlow,
   };
 }

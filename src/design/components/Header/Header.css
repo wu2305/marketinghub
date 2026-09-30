@@ -96,7 +96,7 @@ color: var(--mh-text-strong);
 opacity: 1;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 760px) {
   .mh-header__bar {
     width: calc(100% - 32px);
     gap: 16px;

@@ -19,15 +19,12 @@ export function cssFiles(root) {
 
 /**
  * Distinct raw font-size, font-weight, radius, shadow and colour values outside
- * tokens.css. Files under `skip` (css-budget.json `pendingMigration`) are left
- * out; they are counted separately by the report.
+ * tokens.css.
  * @returns {{fontSize:number,fontWeight:number,radius:number,shadow:number,color:number}}
  */
-export function rawFoundationValues(root, skip = []) {
-  const skipped = skip.map((prefix) => path.join(root, prefix));
+export function rawFoundationValues(root) {
   const sets = { fontSize: new Set(), fontWeight: new Set(), radius: new Set(), shadow: new Set(), color: new Set() };
   for (const file of cssFiles(root)) {
-    if (skipped.some((prefix) => file.startsWith(prefix))) continue;
     const css = withoutComments(fs.readFileSync(file, "utf8"));
     for (const [, prop, raw] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]+);/g)) {
       const value = raw.replace(/!important/, "").trim();
@@ -44,4 +41,21 @@ export function rawFoundationValues(root, skip = []) {
     }
   }
   return Object.fromEntries(Object.entries(sets).map(([key, set]) => [key, set.size]));
+}
+
+/**
+ * Distinct `@media` width values (px) across component/page CSS, sorted. Height
+ * queries and `prefers-*` queries are not counted. Used by the budget test
+ * (css-budget.json `maxMediaWidths`) and concept-count.mjs.
+ * @returns {number[]}
+ */
+export function mediaWidths(root) {
+  const widths = new Set();
+  for (const file of cssFiles(root)) {
+    const css = withoutComments(fs.readFileSync(file, "utf8"));
+    for (const [, query] of css.matchAll(/@media\s*([^{]+)\{/g)) {
+      for (const [, px] of query.matchAll(/width\s*[:<>=]+\s*(\d+)px/g)) widths.add(Number(px));
+    }
+  }
+  return [...widths].sort((a, b) => a - b);
 }

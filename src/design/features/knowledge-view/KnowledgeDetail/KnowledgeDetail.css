@@ -100,7 +100,7 @@
 .mh-kdetail__model-toggle { display: inline-flex; align-items: center; }
 .mh-kdetail__model-toggle input { accent-color: var(--mh-accent-ink); }
 @media (max-width: 900px) { .mh-kdetail__model-work { grid-template-columns: 1fr; } .mh-kdetail__model-side { min-height: 0; } .mh-kdetail__model-ai, .mh-kdetail__model-head, .mh-kdetail__head { flex-wrap: wrap; } .mh-kdetail__model-ai .mh-kdetail__primary { margin-left: 0; } }
-@media (max-width: 600px) { .mh-kdetail__grid { grid-template-columns: 1fr; } .mh-kdetail__model-actions { flex-wrap: wrap; } .mh-kdetail__model-config header { flex-wrap: wrap; padding-bottom: 12px; } .mh-kdetail__scenario-actions { flex-wrap: wrap; } }
+@media (max-width: 760px) { .mh-kdetail__grid { grid-template-columns: 1fr; } .mh-kdetail__model-actions { flex-wrap: wrap; } .mh-kdetail__model-config header { flex-wrap: wrap; padding-bottom: 12px; } .mh-kdetail__scenario-actions { flex-wrap: wrap; } }
 /* P09's Business Term read-only form uses a four-column first section and a
    single six-field governance row; the shared field primitive remains small. */
 .mh-kdetail { max-width: 1236px; }
@@ -141,7 +141,7 @@
 .mh-kdetail__version-number { display: grid; place-items: center; width: 42px; height: 42px; border-radius: var(--mh-radius-md); background: var(--mh-surface-muted); color: var(--mh-text-strong); }
 .mh-kdetail__version--current .mh-kdetail__version-number { background: var(--mh-accent-ink); color: var(--mh-surface); }
 @media (max-width: 900px) { .mh-kdetail--business .mh-kdetail__section:last-child .mh-kdetail__grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
-@media (max-width: 600px) { .mh-kdetail--business .mh-kdetail__section:first-child .mh-kdetail__grid, .mh-kdetail--business .mh-kdetail__section:last-child .mh-kdetail__grid { grid-template-columns: 1fr; } .mh-kdetail--business .mh-kdetail__section:first-child .mh-kdetail__field--full { grid-column: auto; } .mh-kdetail__scenario-card { padding: 12px; } .mh-kdetail__scenario-actions { margin: 0 -12px -12px; } }
+@media (max-width: 760px) { .mh-kdetail--business .mh-kdetail__section:first-child .mh-kdetail__grid, .mh-kdetail--business .mh-kdetail__section:last-child .mh-kdetail__grid { grid-template-columns: 1fr; } .mh-kdetail--business .mh-kdetail__section:first-child .mh-kdetail__field--full { grid-column: auto; } .mh-kdetail__scenario-card { padding: 12px; } .mh-kdetail__scenario-actions { margin: 0 -12px -12px; } }
 /* Exact effective compact sizing from business-term.css:160–276. */
 .mh-kdetail--business .mh-kdetail__sections { gap: 14px; }
 .mh-kdetail--business .mh-kdetail__section-head { padding: 15px 18px; }

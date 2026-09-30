@@ -3,12 +3,12 @@
   "maxTokenDefinitions": 67,
   "maxDuplicateValues": 8,
   "legacyPrefixExemptions": [],
-  "pendingMigration": [],
   "maxRawFoundationValues": {
     "fontSize": 0,
     "fontWeight": 0,
     "radius": 0,
     "shadow": 0,
     "color": 0
-  }
+  },
+  "maxMediaWidths": 3
 }

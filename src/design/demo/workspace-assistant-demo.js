@@ -1,4 +1,5 @@
 import React from "react";
+import { useModelFlowState } from "./model-flow-state.js";
 
 const EMPTY_ANSWERS = [];
 
@@ -16,14 +17,15 @@ export function useWorkspaceAssistantDemo(props) {
   const [answers, setAnswers] = React.useState(source.answers || EMPTY_ANSWERS);
   const answerSequence = React.useRef(0);
   const [skill, setSkill] = React.useState(props.initial?.selectedSkill || null);
-  const [flow, setFlow] = React.useState(props.initial?.flow || null);
+  const { setFlow, start, dialog } = useModelFlowState(props.initial?.flow || null);
 
   React.useEffect(() => setOpen(Boolean(source.open)), [source.open]);
   React.useEffect(() => setPrompt(source.prompt || ""), [source.prompt]);
   React.useEffect(() => setAnswers(source.answers || EMPTY_ANSWERS), [source.answers]);
   React.useEffect(() => setSkill(props.initial?.selectedSkill || null), [props.initial?.selectedSkill]);
-  React.useEffect(() => setFlow(props.initial?.flow || null), [props.initial?.flow]);
+  React.useEffect(() => setFlow(props.initial?.flow || null), [props.initial?.flow, setFlow]);
 
+  const modelFlow = props.demo?.modelFlow;
   const emit = (callback, event) => {
     if (!callback) return;
     if (props.typeId === undefined) return event === undefined ? callback() : callback(event);
@@ -37,19 +39,6 @@ export function useWorkspaceAssistantDemo(props) {
     // identical prompts. A fresh key also resets local feedback/copy state.
     if (answer) setAnswers([{ ...answer, id: `workspace-answer-${++answerSequence.current}` }]);
     setPrompt("");
-  };
-  const modelFlow = props.demo?.modelFlow;
-  const openFlow = (action) => {
-    if (!modelFlow) return;
-    setFlow({
-      step: action === "history" ? "history" : "manual",
-      threads: (modelFlow.threads || []).map((thread) => ({
-        ...thread,
-        messages: thread.messages.map((message) => ({ ...message })),
-      })),
-      rule: "",
-      draft: {},
-    });
   };
 
   return {
@@ -68,34 +57,17 @@ export function useWorkspaceAssistantDemo(props) {
       onNewSession: () => { setPrompt(""); setAnswers([]); emit(source.onNewSession); },
       onSelectSkill: (event) => { setSkill({ id: event.id, type: event.type, title: event.title }); emit(source.onSelectSkill, event); },
       onClearSkill: () => { setSkill(null); emit(source.onClearSkill); },
-      onSkillAction: (event) => { openFlow(event.action); emit(source.onSkillAction, event); },
+      onSkillAction: (event) => { if (modelFlow) start(modelFlow.threads, event.action); emit(source.onSkillAction, event); },
       onAttach: (event) => emit(source.onAttach, event),
       onMaximize: (event) => emit(source.onMaximize, event),
       onHistory: (event) => emit(source.onHistory, event),
       onFeedback: (event) => emit(source.onFeedback, event),
     },
-    skillFlow: flow ? {
-      step: flow.step,
-      threads: flow.threads,
-      rule: flow.rule,
-      draft: flow.draft,
-      sections: modelFlow.sections,
+    skillFlow: dialog((messages, rule) => props.demo?.modelDraftFor?.(messages, rule), {
+      sections: modelFlow?.sections,
       labels: modelFlow,
-      onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-        setFlow((current) => ({ ...current, threads: current.threads.map((thread, ti) =>
-          ti === threadIndex ? { ...thread, messages: thread.messages.map((message, mi) =>
-            mi === messageIndex ? { ...message, checked } : message) } : thread) })),
-      onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-      onGenerate: ({ messages, rule }) => setFlow((current) => ({
-        ...current,
-        step: "generated",
-        rule,
-        draft: props.demo?.modelDraftFor?.(messages, rule) || {},
-      })),
-      onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-      onClose: () => setFlow(null),
       onSave: (event) => emit(props.onFlowSave, event),
       onSubmit: (event) => emit(props.onFlowSubmit, event),
-    } : undefined,
+    }),
   };
 }

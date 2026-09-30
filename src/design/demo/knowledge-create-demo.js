@@ -18,7 +18,7 @@ export function knowledgeCreateHrefFor(id, params = {}) {
 
 export { knowledgeCreateTypes };
 
-export function requiredKnowledgeCreateFields(type) {
+function requiredKnowledgeCreateFields(type) {
   if (type === "Business Term") return ["title", "kind", "description"];
   if (type === "Analytical Model") return ["analysis_name", "trigger_when", "output_requirements"];
   if (type === "Scenario Reporting") return ["scenario_report_title", "scenario_report_linked", "scenario_report_description", "scenario_report_blueprint"];

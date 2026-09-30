@@ -6,4 +6,4 @@
 .mh-governance-nav a:hover{background:var(--mh-surface-muted);color:var(--mh-text-strong)}
 .mh-governance-nav a[aria-current=page]{background:var(--mh-accent-wash);color:var(--mh-accent-ink)}
 .mh-governance-nav a:focus-visible{outline:2px solid var(--mh-focus-ring);outline-offset:2px}
-@media(max-width:1100px){.mh-governance-nav{position:static}.mh-governance-nav nav{display:flex;flex-wrap:wrap;gap:4px}.mh-governance-nav a{padding:8px 12px}}
+@media(max-width:1180px){.mh-governance-nav{position:static}.mh-governance-nav nav{display:flex;flex-wrap:wrap;gap:4px}.mh-governance-nav a{padding:8px 12px}}

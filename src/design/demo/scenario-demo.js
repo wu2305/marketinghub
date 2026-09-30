@@ -1,8 +1,9 @@
 import React from "react";
+import { useSynced } from "./use-synced.js";
+import { useToast } from "./use-toast.js";
 import { governanceMessages, governedActions } from "../lib/governance.js";
 import { useGovernedFlow } from "../lib/governed-flow.js";
 
-const TOAST_MS = 3000;
 
 /**
  * Deterministic demo state for the Scenario Reporting library —
@@ -159,12 +160,6 @@ const DEFAULT_STRINGS = {
 
 const EMPTY_SELECTED = {};
 
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
-
 /**
  * @param {object} props
  * @param {Array<object>} [props.records] raw records — normalized internally
@@ -209,14 +204,7 @@ export function useScenarioDemo(props = {}) {
   );
   const [records, setRecords] = React.useState(null);
   const list = records || all;
-  const [toast, setToast] = React.useState("");
-  const toastTimer = React.useRef(null);
-  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-  const showToast = (message) => {
-    clearTimeout(toastTimer.current);
-    setToast(message);
-    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
-  };
+  const { toast, showToast, hideToast } = useToast();
   const patch = (id, next) =>
     setRecords((prev) => (prev || all).map((item) => (item.id === id ? { ...item, ...next } : item)));
   const disable = (record) => {
@@ -266,9 +254,8 @@ export function useScenarioDemo(props = {}) {
     setRecords(null);
     closeFlowDialog();
     setDetailId(null);
-    clearTimeout(toastTimer.current);
-    setToast("");
-  }, [props.records, currentUser, setDetailId, closeFlowDialog]);
+    hideToast();
+  }, [props.records, currentUser, setDetailId, closeFlowDialog, hideToast]);
 
   const statusPick = props.active === false ? undefined : selected.status;
   const processPick = props.active === false ? undefined : selected.process;

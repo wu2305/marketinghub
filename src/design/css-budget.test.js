@@ -8,7 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import budget from "./css-budget.json";
-import { cssFiles, rawFoundationValues, withoutComments } from "../../scripts/css-metrics.mjs";
+import { cssFiles, mediaWidths, rawFoundationValues, withoutComments } from "../../scripts/css-metrics.mjs";
 
 const ROOT = path.resolve(__dirname);
 const TOKENS = path.join(ROOT, "tokens.css");
@@ -142,12 +142,9 @@ describe("src/design CSS budget (WP1)", () => {
   });
 
   it("ratchets raw font-size, weight, radius, shadow and colour values toward zero", () => {
-    const counts = rawFoundationValues(ROOT, budget.pendingMigration || []);
+    const counts = rawFoundationValues(ROOT);
     for (const [key, limit] of Object.entries(budget.maxRawFoundationValues)) {
       expect(counts[key], `raw ${key} values`).toBeLessThanOrEqual(limit);
-    }
-    for (const prefix of budget.pendingMigration) {
-      expect(fs.existsSync(path.join(ROOT, prefix)), `pendingMigration path ${prefix}`).toBe(true);
     }
   });
 
@@ -155,6 +152,13 @@ describe("src/design CSS budget (WP1)", () => {
     expect(definitions.length).toBeLessThanOrEqual(budget.maxTokenDefinitions);
     expect(new Set(names).size).toBe(definitions.length);
     expect(duplicateValueGroups(definitions)).toBeLessThanOrEqual(budget.maxDuplicateValues);
+  });
+
+  it("uses only the three documented width breakpoints", () => {
+    // foundations.md §3.3: 1180 · 900 · 760. Height and prefers-* queries are not counted.
+    const widths = mediaWidths(ROOT);
+    expect(widths.length).toBeLessThanOrEqual(budget.maxMediaWidths);
+    expect(widths.filter((w) => ![760, 900, 1180].includes(w))).toEqual([]);
   });
 
   it("has no legacy prefix exemptions left", () => {

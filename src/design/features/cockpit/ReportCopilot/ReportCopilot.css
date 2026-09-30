@@ -1609,7 +1609,7 @@ outline: 2px solid var(--mh-focus-ring);
 /* The only original breakpoints touching the workspace: expanded fills the
    viewport under 768px; the rich answer's grids collapse under 560px. */
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .mh-copilot.is-open.mh-copilot--expanded {
   inset: 12px;
       width: auto;
@@ -1621,7 +1621,7 @@ outline: 2px solid var(--mh-focus-ring);
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 760px) {
   .mh-ra-channels,
   .mh-ra-explore {
   grid-template-columns: 1fr;
