@@ -4,6 +4,8 @@
 
 **设计师同步**：若本次任务是把设计师更新后的 Demo（`index.html`、`assets/**`）同步进 Storybook，先读 `handover/design-sync/README.md` 并按其流程执行；设计意图问题问设计师，工程问题留给维护者。
 
+**客户演示页**：若本次任务是用 Storybook 组件为客户拼装演示页，读 `handover/customer-demos/README.md`；这类任务只新增 `examples/demos/<name>/`，不改 `src/design`。
+
 ## 1. 仓库目标
 
 从 `index.html` 与 `assets/pages/*.html` 这套静态 HTML 设计 Demo 中，全量重建 React 界面与既有前端交互，并按奥卡姆剃刀原则提取最小必要的可复用组件体系，形成各层级 Storybook 档案。

@@ -27,3 +27,6 @@ ds-bundle/
 
 # temporary investigation scripts belong in /tmp
 scripts/.*.tmp.mjs
+
+# customer demo builds (scripts/demo.mjs)
+demo-dist/
