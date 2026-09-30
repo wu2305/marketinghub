@@ -36,8 +36,8 @@ const HEART = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c
  * @param {object} [props.form={}] Controlled inline create/edit state.
  * @param {object} [props.assistant={}] Controlled lite assistant.
  * @param {object|null} props.skillFlow Optional model flow overlay.
- * @param {(id:string,params?:object)=>string} props.hrefFor Route adapter.
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioLibraryPage({ content, logo, navigation = [], image, library = {}, detail = {}, form = {}, assistant = {}, skillFlow, dialog = null, toast = "", hrefFor, onNavigate }) {
   const labels = content.labels;

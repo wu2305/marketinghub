@@ -33,7 +33,7 @@ const typeViews = {
  * @param {string} [props.current="interpreter"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {(id:string,params?:object)=>string} props.hrefFor semantic link resolver supplied by story or host
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
  * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
  * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
@@ -45,7 +45,7 @@ const typeViews = {
  * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
- * @param {(target: { id:string, params:object, href:string, typeId:string }) => void} [props.onNavigate]
+ * @param {(target: { id:string, params: Record<string,string>, href:string, typeId:string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType]
  */
 export function AiInterpreterPage({

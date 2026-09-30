@@ -118,8 +118,8 @@ function DataModelDetail({ record, copy, model, hrefFor, onNavigate, query, grou
  * @param {object} props
  * @param {{id:string,type:typeof knowledgeDetailTypes[number],title:string}} props.record
  * @param {object} props.copy All visible shell and detail text
- * @param {(id:string,params?:object)=>string} props.hrefFor
- * @param {(target:{id:string,params:object,href:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  * @param {(action:{id:typeof knowledgeModelActions[number]})=>void} [props.onAction]
  */
 export function KnowledgeDetail(props) {

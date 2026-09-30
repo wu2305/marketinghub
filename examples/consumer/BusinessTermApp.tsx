@@ -39,10 +39,9 @@ const TOAST_MS = 3000;
 /** Seed terms from the demo content; any list of `Term`s works. */
 export const seedTerms: Term[] = LIBRARY.records.map((record) => ({ ...record, status: record.status === "Disable" ? "Disable" : "Enable" }));
 
-/** Links stay real `<a href>`s; this app routes on their callbacks, the hash is cosmetic.
- *  The pages type route params as plain `object` (contract gap G1 in phase3-guide.md), hence the casts. */
-const hrefFor = (id: string, params: object = {}) => {
-  const query = new URLSearchParams(params as Record<string, string>).toString();
+/** Links stay real `<a href>`s; this app routes on their callbacks, the hash is cosmetic. */
+const hrefFor = (id: string, params: Record<string, string> = {}) => {
+  const query = new URLSearchParams(params).toString();
   return `#${id}${query ? `?${query}` : ""}`;
 };
 
@@ -254,7 +253,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
       view={route.type === "Business Term" ? view : {}}
       toast={pageToast}
       assistant={assistantProps}
-      onNavigate={({ id, params }) => { if (id === "interpreter") setRoute({ page: "library", type: (params as { type?: string }).type || "overview" }); }}
+      onNavigate={({ id, params }) => { if (id === "interpreter") setRoute({ page: "library", type: params.type || "overview" }); }}
     />
   );
 }

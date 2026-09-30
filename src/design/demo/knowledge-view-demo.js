@@ -36,8 +36,8 @@ export function knowledgeViewRedirectFor(recordId, records = []) {
  * @param {object} props
  * @param {object} [props.content=KNOWLEDGE_VIEW] records, copy, promptSections, model
  * @param {string} [props.recordId]
- * @param {(id:string, params?:object)=>string} [props.hrefFor]
- * @param {(target:{id:string,params:object,href:string})=>void} [props.onNavigate]
+ * @param {(id:string, params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  */
 export function useKnowledgeViewDemo(props = {}) {
   const content = props.content || KNOWLEDGE_VIEW;

@@ -10,8 +10,8 @@ import "./KnowledgeViewPage.css";
  * @param {Array<{id:string,label:string,href:string}>} props.navigation
  * @param {object} props.copy
  * @param {object} props.record
- * @param {(id:string,params?:object)=>string} props.hrefFor
- * @param {(target:{id:string,params:object,href:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  */
 export function KnowledgeViewPage({ logo, navigation, hrefFor, onNavigate, ...detail }) {
   const nav = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));

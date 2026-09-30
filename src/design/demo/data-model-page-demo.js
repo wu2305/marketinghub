@@ -32,8 +32,8 @@ export function normalizedDataModelSearch(search = "") {
 /** Standalone P11 state composed from the existing P07 Data Model demo hook.
  * @param {object} props
  * @param {object} [props.content=DATA_MODEL_PAGE] All page shell copy and model records
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(target:{id:string,params:object,href:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  * @param {(change:{name:string,value:string})=>void} [props.onChange]
  * @param {(selection:{kind:string,id:string})=>void} [props.onSelect]
  * @param {(target:{kind:string,id:string})=>void} [props.onOpen]

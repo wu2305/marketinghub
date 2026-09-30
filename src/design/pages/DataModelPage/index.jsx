@@ -9,8 +9,8 @@ import "./DataModelPage.css";
  * @param {{src:string,alt:string}} props.logo
  * @param {Array<{id:string,label:string}>} props.navigation
  * @param {object} props.model Prepared `DataModelView` props
- * @param {(id:string,params?:object)=>string} props.hrefFor
- * @param {(target:{id:string,params:object,href:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} [props.onNavigate]
  */
 export function DataModelPage({ logo, navigation, model, hrefFor, onNavigate }) {
   const links = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));

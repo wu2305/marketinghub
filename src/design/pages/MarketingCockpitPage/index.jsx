@@ -40,8 +40,8 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections
  * @param {Array<object>} [props.knowledge=[]] knowledge assets (id/title/type/category/projects/connections) used for report knowledge counts, search text and context links
  * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"`
- * @param {(id: string, params?: object) => string} props.hrefFor semantic route resolver supplied by story or host
- * @param {(target: { id: string, params: object, href: string, label?: string }) => void} [props.onNavigate]
+ * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor semantic route resolver supplied by story or host
+ * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]

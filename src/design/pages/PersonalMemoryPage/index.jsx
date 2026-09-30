@@ -30,8 +30,8 @@ export const memoryCategories = ["all", "analysis", "meeting", "findings", "refe
  * @param {string} [props.toast=""] Success message after a delete (hidden when empty).
  * @param {object} [props.assistant={}] Lite assistant props and named callbacks.
  * @param {object} [props.skillFlow] Model-flow props.
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}, create = {}, deletion = {}, toast = "", assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { labels, hero, categories, sidebar } = content;

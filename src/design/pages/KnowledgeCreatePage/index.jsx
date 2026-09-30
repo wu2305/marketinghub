@@ -25,8 +25,8 @@ import "./KnowledgeCreatePage.css";
  * @param {string|null} props.menu Open picker name.
  * @param {boolean} [props.unavailable=false] Analytical Model edit has no editable record or creator access.
  * @param {boolean} [props.reportEditAvailable=false] A Report Context edit ID resolves to its dedicated record.
- * @param {(id:string, params?:object) => string} props.hrefFor Route adapter.
- * @param {(event:{id:string,params:object,href:string}) => void} [props.onNavigate]
+ * @param {(id:string, params?: Record<string,string>) => string} props.hrefFor Route adapter.
+ * @param {(event:{id:string,params: Record<string,string>,href:string}) => void} [props.onNavigate]
  * @param {(event:{value:string}) => void} [props.onTypeChange]
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
  * @param {() => void} [props.onSave]

@@ -13,8 +13,8 @@ function isPlainPrimaryLink(event) {
  * @param {string} props.current Active route id.
  * @param {string} props.navigationAria
  * @param {string} props.categoriesAria
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function GovernanceNav({ items = [], current, navigationAria, categoriesAria, hrefFor, onNavigate }) {
   return <aside className="mh-governance-nav" aria-label={navigationAria}>

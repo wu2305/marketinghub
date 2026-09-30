@@ -19,8 +19,8 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {(event:{files:string[]})=>void} [props.onSelectFiles] Native picker selection; static pills do not change.
  * @param {(event:{values:object})=>void} [props.onSaveDraft] Save Draft pressed; the demo container saves and acknowledges it.
  * @param {(event:{values:object})=>void} [props.onSubmit] The demo container validates the submitted values and emits the final named payload.
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioEditForm({ content, values, errors = {}, preview = null, onChange, onRunPreview, onAutoFill, onSelectFiles, onSaveDraft, onSubmit, hrefFor, onNavigate }) {
   const { labels, reports, scopes, attachments, attachmentAccept } = content;
