@@ -1,6 +1,6 @@
 import { LITE_ASSISTANT, MEDIA_TRACKING } from "../../content.js";
 import { useMediaTrackingDemo } from "../../demo/media-tracking-demo.js";
-import { enumProp, pageShell } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, bi } from "../../lib/story-helpers.js";
 import { MediaTrackingDetailPage, mediaTrackingPeriods } from "./index.jsx";
 
 export default {
@@ -9,7 +9,7 @@ export default {
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
-    docs: { description: { component: "Media Tracking's report and lite assistant. The private demo hook drives both these states and the standalone host." } },
+    docs: { description: { component: bi("Media Tracking's report and lite assistant. The private demo hook drives both these states and the standalone host.", "Media Tracking 的报表与轻量助手。私有 demo hook 同时驱动这些状态和独立宿主。") } },
   },
 };
 
@@ -31,9 +31,9 @@ export const MediaTrackingDetail = {
     prompt: "",
   },
   argTypes: {
-    period: enumProp(mediaTrackingPeriods, "monthly", "Active report period; the source changes the tab without filtering the static table.", "inline-radio"),
-    assistantOpen: { control: "boolean", description: "Initial lite assistant visibility." },
-    prompt: { control: "text", description: "Initial assistant composer text." },
+    period: enumProp(mediaTrackingPeriods, "monthly", bi("Active report period; the source changes the tab without filtering the static table.", "当前激活的报表周期；源页面只切换标签页，并不筛选静态表格。"), "inline-radio"),
+    assistantOpen: { control: "boolean", description: bi("Initial lite assistant visibility.", "轻量助手的初始可见性。") },
+    prompt: { control: "text", description: bi("Initial assistant composer text.", "助手输入框的初始文字。") },
     onNavigate: { action: "onNavigate" },
     onPeriodChange: { action: "onPeriodChange" },
     onFilterChange: { action: "onFilterChange" },

@@ -77,6 +77,13 @@ Ask), with these sync-specific readings:
   has no behaviour in the bundle and nothing says what it should do, it's an **Ask** (not a silent
   Drop-stub). The designer is the one person who can say what she meant.
 - **Changed copy or data**: update `content.js` and fixtures. Pages receive copy via props (AGENTS §3.1).
+- **New or changed stories, argTypes and page props: keep the docs bilingual** (English + 中文, AGENTS §3.4).
+  Write every documentation string as `bi("English", "中文")` (`bi` is exported from
+  `src/design/lib/story-helpers.js`; also pass it as the description of `prop`, `enumProp` and
+  `callbackProp`), and write page-prop JSDoc as `@param {type} props.x English text // 中文`. Keep code, prop
+  names and UI labels in English in both halves, and leave the rendered UI copy as the demo has it.
+  `npm test` fails (`docs-bilingual.test.js`) on a description without Chinese text. Translate from the
+  English sentence, and ask the designer only if a product term has no established Chinese wording.
 - **Removed feature**: delete its props, stories and scenarios, and list the removed story ids in the
   handover (AGENTS §4.1).
 - **Accidental noise** from regeneration (renamed classes, reordered CSS, reformatted JS with the same

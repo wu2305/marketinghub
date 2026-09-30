@@ -1,5 +1,6 @@
 import { SummaryStrip } from "./index.jsx";
 import { CAMPAIGN } from "../../../content.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Campaign/Summary strip",
@@ -8,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Horizontal execution-status strip (label / caption / value cells).",
+        component: bi("Horizontal execution-status strip (label / caption / value cells).", "横向的执行状态条（标签 / 说明 / 数值单元格）。"),
       },
     },
   },

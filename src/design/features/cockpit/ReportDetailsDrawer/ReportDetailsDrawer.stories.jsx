@@ -1,6 +1,6 @@
 import { ReportDetailsDrawer } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Cockpit/Report details drawer",
@@ -10,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          "Report details drawer: right-side panel with thumbnail, meta, knowledge pills and the report's AI analysis scenarios. Internal state (fullscreen, selected scenario, view-more expansion) resets per `resetKey`.",
+          bi("Report details drawer: right-side panel with thumbnail, meta, knowledge pills and the report's AI analysis scenarios. Internal state (fullscreen, selected scenario, view-more expansion) resets per `resetKey`.", "报表详情抽屉：右侧面板，含缩略图、元信息、知识标签以及该报表的 AI 分析场景。内部状态（全屏、选中场景、查看更多展开）会随 `resetKey` 重置。"),
       },
     },
   },

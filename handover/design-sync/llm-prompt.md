@@ -41,6 +41,10 @@ Hard rules:
   evidence of the design intent.
 - Colours, fonts, spacing, radii and shadows come from `src/design/tokens.css` roles (see
   `handover/design-intent/foundations.md`). A deliberate change I make to a role applies everywhere.
+- Storybook docs are bilingual (English + 中文). For every story, argType and page prop you add or
+  change, write the description as `bi("English", "中文")` (from `src/design/lib/story-helpers.js`), or
+  `English text // 中文` in a page's `@param` JSDoc. Leave the rendered UI copy as my demo has it.
+  `npm test` checks this.
 - Don't ask me engineering questions. If a check fails for a reason you can't trace to this sync,
   or the work needs a change to `.storybook/`, `scripts/` (except visual-check scenarios),
   `package*.json`, CI or `examples/host`, stop that item and leave a pull request comment for Wu

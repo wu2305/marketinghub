@@ -35,18 +35,18 @@ const typeViews = {
  * @param {string} [props.current="interpreter"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
- * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host // 由故事或宿主提供的语义链接解析函数
+ * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props // Hero 的 props；`stats` 是 MetricStat props 的数组
  * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
- * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view)
- * @param {AiInterpreterView} [props.view] props for the active registered type (`view` in its `types` entry); other views ignore them
- * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
- * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it
- * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
- * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host
+ * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view) // 知识类型条目（id、title、icon、summary、action、manageable、createLabel、stats、view）
+ * @param {AiInterpreterView} [props.view] props for the active registered type (`view` in its `types` entry); other views ignore them // 当前激活的已注册类型的 props（其 `types` 条目中的 `view`）；其他视图会忽略它们
+ * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host // 由 demo hook 或宿主提供的独立覆盖层插槽
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace // 知识工作台的 AssistantPanel 内容/状态/回调
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions // 助手技能操作所用的 ModelFlowDialog 状态/回调
+ * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it // 临时成功消息（例如表单 Submit 之后）；为空则隐藏
+ * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state) // "overview"、某个类型 id，或未知 id（渲染明确的空状态）
+ * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host // 由宿主提供的页壳文案
  * @param {(target: { id:string, params: Record<string,string>, href:string, typeId:string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType]
  */

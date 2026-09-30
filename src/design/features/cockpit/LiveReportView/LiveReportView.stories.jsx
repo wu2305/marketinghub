@@ -1,6 +1,7 @@
 import { LiveOverview } from "../LiveOverview/index.jsx";
 import { LiveReportView } from "./index.jsx";
 import { COCKPIT } from "../../../content.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Cockpit/Live report view",
@@ -9,7 +10,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Live report shell: back-to-library toolbar, kicker/title heading, live panel.",
+        component: bi("Live report shell: back-to-library toolbar, kicker/title heading, live panel.", "实时报表外壳：返回报表库的工具栏、眉标/标题头部、实时面板。"),
       },
     },
   },

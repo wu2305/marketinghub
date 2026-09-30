@@ -3,24 +3,24 @@ import { KnowledgeCreatePage } from "./index.jsx";
 import { KNOWLEDGE_CREATE } from "../../demo/content/knowledge-create.js";
 import { useKnowledgeCreateDemo } from "../../demo/knowledge-create-demo.js";
 import { knowledgeCreateTypes, knowledgeCreateModes } from "../../knowledge-create-options.js";
-import { callbackProp, enumProp, prop } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, prop, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Pages", component: KnowledgeCreatePage, tags: ["autodocs"], parameters: { layout: "fullscreen" },
   args: { type: "Business Term", mode: "create", id: "", initial: {}, state: {} },
   argTypes: {
-    type: enumProp(knowledgeCreateTypes, "Business Term", "Selected P08 knowledge form."),
-    mode: enumProp(knowledgeCreateModes, "create", "Create, edit, or copy flow."),
-    id: prop("string", { description: "Fixture record id for edit/copy." }),
-    initial: prop("object", { description: "Starting controlled form values." }),
-    state: prop("object", { description: "Starting result, dialog, menu, and validation state." }),
+    type: enumProp(knowledgeCreateTypes, "Business Term", bi("Selected P08 knowledge form.", "当前选中的 P08 知识表单。")),
+    mode: enumProp(knowledgeCreateModes, "create", bi("Create, edit, or copy flow.", "创建、编辑或复制流程。")),
+    id: prop("string", { description: bi("Fixture record id for edit/copy.", "用于编辑/复制的夹具记录 id。") }),
+    initial: prop("object", { description: bi("Starting controlled form values.", "起始的受控表单值。") }),
+    state: prop("object", { description: bi("Starting result, dialog, menu, and validation state.", "起始的结果、对话框、菜单与校验状态。") }),
     onNavigate: callbackProp("onNavigate", "({id, params, href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }),
     onTypeChange: callbackProp("onTypeChange", "({value}) => void", { value: "Data Model" }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "New term" }),
-    onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Draft" }, "Payload of `useKnowledgeCreateDemo`, which wraps the page: the page itself emits `{type, mode, values}` and the hook adds `id` and `stage`."),
-    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Under Review" }, "Same payload as `onSave`; Submit enters Under Review (Scenario Reporting: Queued)."),
+    onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Draft" }, bi("Payload of `useKnowledgeCreateDemo`, which wraps the page: the page itself emits `{type, mode, values}` and the hook adds `id` and `stage`.", "包裹该页面的 `useKnowledgeCreateDemo` 的载荷：页面本身发出 `{type, mode, values}`，hook 再补充 `id` 与 `stage`。")),
+    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Under Review" }, bi("Same payload as `onSave`; Submit enters Under Review (Scenario Reporting: Queued).", "与 `onSave` 相同的载荷；Submit 进入 Under Review（Scenario Reporting：Queued）。")),
     onCancel: callbackProp("onCancel", "({type}) => void", { type: "Business Term" }),
-    onDiscard: callbackProp("onDiscard", "({type, mode, values}) => void", { type: "Analytical Model", mode: "create", values: { analysis_name: "Draft analysis" } }, "Analytical Model: Discard confirmed after Cancel with unsaved changes."),
+    onDiscard: callbackProp("onDiscard", "({type, mode, values}) => void", { type: "Analytical Model", mode: "create", values: { analysis_name: "Draft analysis" } }, bi("Analytical Model: Discard confirmed after Cancel with unsaved changes.", "Analytical Model：有未保存更改时点击 Cancel 后，已确认放弃。")),
     onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "guidance" }),
     onDialogClose: callbackProp("onDialogClose", "({reason}) => void", { reason: "close" }),
     onResultClose: callbackProp("onResultClose", "({reason}) => void", { reason: "close" }),

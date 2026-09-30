@@ -1,7 +1,7 @@
 import React from "react";
 import { PERSONAL_MEMORY, PERSONAL_MEMORY_SHELL } from "../../demo/content/personal-memory.js";
 import { usePersonalMemoryDemo } from "../../demo/personal-memory-demo.js";
-import { enumProp, callbackProp } from "../../lib/story-helpers.js";
+import { enumProp, callbackProp, bi } from "../../lib/story-helpers.js";
 import { PersonalMemoryPage, memoryCategories } from "./index.jsx";
 
 const routes = { interpreter: "/assets/pages/knowledge.html", "review-center": "/assets/pages/review-center.html", "scenario-library": "/assets/pages/scenario-library.html", "feedback-quality": "/assets/pages/feedback-quality.html" };
@@ -9,14 +9,14 @@ const hrefFor = (id, params = {}) => { const path = routes[id]; const query = ne
 const flowThreads = () => PERSONAL_MEMORY_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const checkedMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: PersonalMemoryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Personal Memory page, composed from the reusable governance navigation, card/detail workspace, overlay shell and lite assistant. The demo hook drives Storybook and the standalone host." } } } };
+export default { title: "Pages", component: PersonalMemoryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Personal Memory page, composed from the reusable governance navigation, card/detail workspace, overlay shell and lite assistant. The demo hook drives Storybook and the standalone host.", "受控的 Personal Memory 页面，由可复用的治理导航、卡片/详情工作区、覆盖层外壳与轻量助手组合而成。demo hook 同时驱动 Storybook 与独立宿主。") } } } };
 export const PersonalMemory = {
   name: "Personal Memory",
   args: { content: PERSONAL_MEMORY, records: PERSONAL_MEMORY.records, initial: {}, category: "all", ...PERSONAL_MEMORY_SHELL },
   argTypes: {
-    category: enumProp(memoryCategories, "all", "Active memory category, driven by the private demo hook."),
-    records: { control: "object", description: "Replaceable personal-memory fixtures." },
-    initial: { control: "object", description: "Initial page, assistant, and model-flow state." },
+    category: enumProp(memoryCategories, "all", bi("Active memory category, driven by the private demo hook.", "当前激活的记忆分类，由私有 demo hook 驱动。")),
+    records: { control: "object", description: bi("Replaceable personal-memory fixtures.", "可替换的个人记忆夹具。") },
+    initial: { control: "object", description: bi("Initial page, assistant, and model-flow state.", "初始页面、助手与建模流程状态。") },
     onCategoryChange: callbackProp("onCategoryChange", "({value:string}) => void", { value: "analysis" }),
     onSelectMemory: callbackProp("onSelectMemory", "({id:string}) => void", { id: "mem-analysis-1" }),
     onEditMemory: callbackProp("onEditMemory", "({id:string}) => void", { id: "mem-analysis-1" }),

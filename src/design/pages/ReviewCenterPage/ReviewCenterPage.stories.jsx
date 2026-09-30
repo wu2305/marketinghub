@@ -1,7 +1,7 @@
 import React from "react";
 import { REVIEW_CENTER, REVIEW_SHELL } from "../../demo/content/review-center.js";
 import { useReviewCenterDemo } from "../../demo/review-center-demo.js";
-import { enumProp, callbackProp } from "../../lib/story-helpers.js";
+import { enumProp, callbackProp, bi } from "../../lib/story-helpers.js";
 import { ReviewCenterPage, reviewTabs, reviewTypes, reviewTimes, reviewPanels } from "./index.jsx";
 
 const restoration = { id: "restore-warning", title: "Restored validation item", summary: "Restoration awaiting governance review.", type: "Data Model", source: "Shared", submittedBy: "Current User", submitted: "Today", status: "pending", aiCheck: "Warning", warning: "Check the restored lineage before approval." };
@@ -10,19 +10,19 @@ const missingSuggestion = { ...restoration, id: "restore-fallback", title: "Rest
 const flowThreads = () => REVIEW_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const selectedFlowMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Review Center page on the governed-library table pattern: Pending / Approved / Rejected tabs, search, Type and Submitted facets, the review queue, detail and decision overlays with success toasts, and the lite AI assistant. List states (filtered, empty) are shown by the Organisms/Library stories; the private demo hook drives Storybook and the standalone host." } } } };
+export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Review Center page on the governed-library table pattern: Pending / Approved / Rejected tabs, search, Type and Submitted facets, the review queue, detail and decision overlays with success toasts, and the lite AI assistant. List states (filtered, empty) are shown by the Organisms/Library stories; the private demo hook drives Storybook and the standalone host.", "基于受治理库表格模式的受控 Review Center 页面：Pending / Approved / Rejected 标签页、搜索、Type 与 Submitted 筛选、审核队列、带成功 Toast 的详情与决策覆盖层，以及轻量 AI 助手。列表状态（筛选后、空）在 Organisms/Library 故事中展示；私有 demo hook 驱动 Storybook 与独立宿主。") } } } };
 
 export const ReviewCenter = {
   name: "Review Center",
   args: { content: REVIEW_CENTER, records: REVIEW_CENTER.records, suggestions: REVIEW_CENTER.suggestions, fallbackSuggestions: REVIEW_CENTER.fallbackSuggestions, restorations: [], initial: { selectedId: "pending-1" }, tab: "pending", type: "all", time: "all", panel: "none", ...REVIEW_SHELL },
   argTypes: {
-    initial: { control: "object", description: "Initial page and assistant state for the deterministic workflow." },
-    records: { control: "object", description: "Source-backed review fixtures; replaceable by a host." },
-    restorations: { control: "object", description: "One-time records merged by id, without localStorage." },
-    tab: enumProp(reviewTabs, "pending", "Review tab (the demo hook owns interactive state)."),
-    type: enumProp(reviewTypes, "all", "Source type filter."),
-    time: enumProp(reviewTimes, "all", "Submitted window: today, this week or this month (D01)."),
-    panel: enumProp(reviewPanels, "none", "Selected review overlay; choose an item in initial.selectedId."),
+    initial: { control: "object", description: bi("Initial page and assistant state for the deterministic workflow.", "确定性工作流的初始页面与助手状态。") },
+    records: { control: "object", description: bi("Source-backed review fixtures; replaceable by a host.", "以源页面为依据的审核夹具；宿主可替换。") },
+    restorations: { control: "object", description: bi("One-time records merged by id, without localStorage.", "按 id 合并的一次性记录，不使用 localStorage。") },
+    tab: enumProp(reviewTabs, "pending", bi("Review tab (the demo hook owns interactive state).", "审核标签页（交互状态由 demo hook 持有）。")),
+    type: enumProp(reviewTypes, "all", bi("Source type filter.", "源页面的类型筛选。")),
+    time: enumProp(reviewTimes, "all", bi("Submitted window: today, this week or this month (D01).", "提交时间窗口：今天、本周或本月（D01）。")),
+    panel: enumProp(reviewPanels, "none", bi("Selected review overlay; choose an item in initial.selectedId.", "当前选中的审核覆盖层；请通过 initial.selectedId 选择条目。")),
     onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "approved" }),
     onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "Campaign ROI" }),
     onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "Data Model" }),

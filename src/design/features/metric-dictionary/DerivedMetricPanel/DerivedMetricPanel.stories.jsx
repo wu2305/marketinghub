@@ -1,12 +1,13 @@
 import React from "react";
 import { METRIC_DICTIONARY } from "../../../demo/content/metric-dictionary.js";
 import { DerivedMetricPanel, formulaOperators } from "./index.jsx";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Metric Dictionary/Derived Metric Panel",
   component: DerivedMetricPanel,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: "P10 derived metric drawer: controlled form fields, basic metric references, token formula toolbar, test, constant dialog, and Save callbacks. The story writes field and formula changes back to the canvas." } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("P10 derived metric drawer: controlled form fields, basic metric references, token formula toolbar, test, constant dialog, and Save callbacks. The story writes field and formula changes back to the canvas.", "P10 派生指标抽屉：受控表单字段、基础指标引用、token 公式工具栏、测试、常量对话框以及 Save 回调。故事会把字段与公式的变化回写到画布。") } } },
   args: {
     open: true,
     copy: METRIC_DICTIONARY.derivedPanel,

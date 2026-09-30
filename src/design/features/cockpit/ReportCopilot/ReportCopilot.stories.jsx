@@ -4,7 +4,7 @@ import { COCKPIT } from "../../../content.js";
 import { COPILOT, KNOWLEDGE_ASSETS } from "../../../demo/report-fixtures.js";
 import { buildCopilotChatEntry, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "../../../demo/report-demo.js";
 import { buildReportModelDraft } from "../lib/report-logic.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 import { demoHrefFor } from "../../../demo/navigation.js";
 
 export default {
@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          "Report Copilot workspace: fixed right drawer on the live report view. Start view = AI summary card + scenario recommendations; an open answer or chat exchange swaps in the answer view with context-dock shortcuts. Chat and answer content are controlled props — the host owns the deterministic AI simulation.",
+          bi("Report Copilot workspace: fixed right drawer on the live report view. Start view = AI summary card + scenario recommendations; an open answer or chat exchange swaps in the answer view with context-dock shortcuts. Chat and answer content are controlled props — the host owns the deterministic AI simulation.", "Report Copilot 工作区：位于实时报表视图右侧的固定抽屉。起始视图为 AI 摘要卡片加场景推荐；打开某个回答或进行对话后切换为带上下文快捷入口的回答视图。对话与回答内容是受控 props，确定性的 AI 模拟由宿主负责。"),
       },
     },
   },
@@ -26,7 +26,7 @@ export const Default = {
   argTypes: {
     project: { control: "select", options: Object.keys(COCKPIT.projects) },
     index: { control: { type: "number", min: 0, max: 1 } },
-    contextHref: { control: "text", description: "Fallback knowledge destination for chat entries without a linked source." },
+    contextHref: { control: "text", description: bi("Fallback knowledge destination for chat entries without a linked source.", "没有关联来源的对话条目所使用的回退知识目的地。") },
     onClose: { action: "onClose" },
     onBack: { action: "onBack" },
     onNewSession: { action: "onNewSession" },

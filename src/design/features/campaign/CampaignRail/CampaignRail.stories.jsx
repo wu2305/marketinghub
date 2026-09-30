@@ -1,6 +1,6 @@
 import { CampaignRail } from "./index.jsx";
 import { CAMPAIGN } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Campaign/Campaign rail",
@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "RedNote Campaign Tool left rail: numbered view navigation.",
+        component: bi("RedNote Campaign Tool left rail: numbered view navigation.", "RedNote Campaign Tool 左侧栏：带编号的视图导航。"),
       },
     },
   },

@@ -2,7 +2,7 @@ import React from "react";
 import { SCENARIO_EDIT, SCENARIO_EDIT_SHELL } from "../../demo/content/scenario-edit.js";
 import { SKILL_RECORDS } from "../../demo/content/skill-records.js";
 import { useScenarioEditDemo, scenarioEditPreviewFor } from "../../demo/scenario-edit-demo.js";
-import { callbackProp } from "../../lib/story-helpers.js";
+import { callbackProp, bi } from "../../lib/story-helpers.js";
 import { ScenarioEditPage } from "./index.jsx";
 
 const routes = { interpreter: "/assets/pages/knowledge.html", "review-center": "/assets/pages/review-center.html", "scenario-library": "/assets/pages/scenario-library.html", "feedback-quality": "/assets/pages/feedback-quality.html", cockpit: "/assets/pages/reports.html" };
@@ -11,14 +11,14 @@ const flowThreads = () => SCENARIO_EDIT_SHELL.modelFlow.threads.map((thread) => 
 const checkedMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 const afterFrames = (selector) => async ({ canvasElement }) => { const doc = canvasElement.ownerDocument; await new Promise((resolve) => doc.defaultView.requestAnimationFrame(() => doc.defaultView.requestAnimationFrame(resolve))); const control = canvasElement.querySelector(selector) || doc.querySelector(selector); if (!control) throw new Error(`Scenario Edit control missing: ${selector}`); control.click(); };
 
-export default { title: "Pages", component: ScenarioEditPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Full Skill Edit page composed from semantic governance navigation, Hero metrics, a controlled scenario form and the existing lite assistant/model flow. Source-backed demo state runs in Storybook and the standalone host." } } } };
+export default { title: "Pages", component: ScenarioEditPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Full Skill Edit page composed from semantic governance navigation, Hero metrics, a controlled scenario form and the existing lite assistant/model flow. Source-backed demo state runs in Storybook and the standalone host.", "完整的 Skill Edit 页面，由语义化治理导航、Hero 指标、受控的场景表单以及现有轻量助手/建模流程组合而成。以源页面为依据的 demo 状态在 Storybook 与独立宿主中运行。") } } } };
 export const ScenarioEdit = {
   name: "Scenario Edit",
   args: { content: SCENARIO_EDIT, records: SKILL_RECORDS, scenarioId: "", initial: {}, ...SCENARIO_EDIT_SHELL },
   argTypes: {
-    scenarioId: { control: "text", description: "Known source record id; empty or unknown retains the HTML City Comparison defaults." },
-    initial: { control: "object", description: "Initial editable values, preview, validation, assistant and model state." },
-    records: { control: "object", description: "Replaceable source Skill Library records." },
+    scenarioId: { control: "text", description: bi("Known source record id; empty or unknown retains the HTML City Comparison defaults.", "已知的源记录 id；为空或未知时保留 HTML 中 City Comparison 的默认值。") },
+    initial: { control: "object", description: bi("Initial editable values, preview, validation, assistant and model state.", "初始的可编辑值、预览、校验、助手与建模状态。") },
+    records: { control: "object", description: bi("Replaceable source Skill Library records.", "可替换的源页面 Skill Library 记录。") },
     onChange: callbackProp("onChange", "({field:string,value:string}) => void", { field: "scope", value: "Global" }),
     onRunPreview: callbackProp("onRunPreview", "({question:string,output:string}) => void", { question: "Compare cities", output: "Generating preview..." }),
     onValidation: callbackProp("onValidation", "({firstInvalid:string,errors:object}) => void", { firstInvalid: "name", errors: { name: true } }),

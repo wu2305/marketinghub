@@ -1,7 +1,7 @@
 import React from "react";
 import { SKILL_LIBRARY, SKILL_LIBRARY_SHELL } from "../../demo/content/skill-library.js";
 import { useSkillLibraryDemo } from "../../demo/skill-library-demo.js";
-import { callbackProp, enumProp } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, bi } from "../../lib/story-helpers.js";
 import { ScenarioLibraryPage, skillLibraryModes, skillStatuses } from "./index.jsx";
 
 const hrefFor = (id, params = {}) => {
@@ -10,16 +10,16 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "P15 Skill Library. Semantic page props are driven by the same private deterministic hook in Storybook and the independent host. The inline form intentionally accepts blank Submit, matching the source's novalidate behavior." } } } };
+export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("P15 Skill Library. Semantic page props are driven by the same private deterministic hook in Storybook and the independent host. The inline form intentionally accepts blank Submit, matching the source's novalidate behavior.", "P15 Skill Library。语义化的页面 props 由 Storybook 与独立宿主共用的同一个私有确定性 hook 驱动。页内表单有意接受空白提交，与源页面的 novalidate 行为一致。") } } } };
 
 export const ScenarioLibrary = {
   name: "Skill Library",
   args: { content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, search: "", status: "all", mode: "list", initial: {} },
   argTypes: {
-    records: { control: "object", description: "Replaceable source-backed skill fixture." },
-    initial: { control: "object", description: "Selected id, preview, form and assistant starting state." },
-    status: enumProp(skillStatuses, "all", "Status filter controlled by the private demo hook."),
-    mode: enumProp(skillLibraryModes, "list", "List, fresh create or populated inline edit."),
+    records: { control: "object", description: bi("Replaceable source-backed skill fixture.", "可替换的、以源页面为依据的技能夹具。") },
+    initial: { control: "object", description: bi("Selected id, preview, form and assistant starting state.", "选中 id、预览、表单与助手的起始状态。") },
+    status: enumProp(skillStatuses, "all", bi("Status filter controlled by the private demo hook.", "由私有 demo hook 控制的状态筛选。")),
+    mode: enumProp(skillLibraryModes, "list", bi("List, fresh create or populated inline edit.", "列表、全新创建或已填充的页内编辑。")),
     search: { control: "text" },
     onChange: callbackProp("onChange", "({key:string,value:string|boolean}) => void", { key: "search", value: "Emily Wang" }),
     onSelect: callbackProp("onSelect", "({value:string}) => void", { value: "Draft" }),

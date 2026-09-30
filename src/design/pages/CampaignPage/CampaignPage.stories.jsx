@@ -1,6 +1,6 @@
 import { CAMPAIGN, MODEL_FLOW, buildModelDraft } from "../../content.js";
 import { useCampaignDemo } from "../../demo/campaign-demo.js";
-import { enumProp, pageShell } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, bi } from "../../lib/story-helpers.js";
 import { CampaignPage, campaignChannels, campaignSections } from "./index.jsx";
 
 export default {
@@ -46,12 +46,12 @@ export const Campaign = {
   name: "RedNote Campaign Tool",
   args,
   argTypes: {
-    section: enumProp(campaignSections, "overview", "Active campaign workspace section"),
-    channel: enumProp(campaignChannels, "rednote", "Source channel; Douyin remains disabled"),
+    section: enumProp(campaignSections, "overview", bi("Active campaign workspace section", "当前激活的 Campaign 工作区分区")),
+    channel: enumProp(campaignChannels, "rednote", bi("Source channel; Douyin remains disabled", "来源渠道；Douyin 仍保持禁用")),
     assistantOpen: { control: "boolean" },
     taskDialogOpen: { control: "boolean" },
-    taskDraft: { control: "object", description: "Controlled task values retained when the dialog closes and reopens." },
-    assistant: { control: "object", description: "Assistant content; the demo hook owns answer, skill and model state." },
+    taskDraft: { control: "object", description: bi("Controlled task values retained when the dialog closes and reopens.", "受控的任务值；对话框关闭后再打开时仍会保留。") },
+    assistant: { control: "object", description: bi("Assistant content; the demo hook owns answer, skill and model state.", "助手内容；回答、技能与模型状态由 demo hook 负责。") },
     onNavigate: { action: "onNavigate" },
     onSectionChange: { action: "onSectionChange" },
     onChannelChange: { action: "onChannelChange" },

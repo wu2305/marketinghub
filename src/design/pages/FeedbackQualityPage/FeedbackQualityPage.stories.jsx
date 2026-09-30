@@ -1,7 +1,7 @@
 import React from "react";
 import { FEEDBACK_QUALITY, makeFeedbackRecords } from "../../demo/content/feedback-quality.js";
 import { useFeedbackQualityDemo } from "../../demo/feedback-quality-demo.js";
-import { callbackProp, enumProp } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, bi } from "../../lib/story-helpers.js";
 import { FeedbackQualityPage, feedbackFilterTypes, feedbackFilterTimes, feedbackTabs } from "./index.jsx";
 
 const NOW = Date.UTC(2026, 8, 26, 12);
@@ -12,18 +12,18 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled Feedback & Quality page on the governed-library table pattern: All / Thumbs Up / Thumbs Down tabs, search, Type and Time facets, the feedback table and its detail drawer. List states (filtered, empty) are shown by the Organisms/Library stories. The page is controlled; the private flow is shared with the standalone host. The original P13 launcher is inert because portal.js requires a missing subtitle; this story restores its intended assistant behavior." } } } };
+export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Feedback & Quality page on the governed-library table pattern: All / Thumbs Up / Thumbs Down tabs, search, Type and Time facets, the feedback table and its detail drawer. List states (filtered, empty) are shown by the Organisms/Library stories. The page is controlled; the private flow is shared with the standalone host. The original P13 launcher is inert because portal.js requires a missing subtitle; this story restores its intended assistant behavior.", "基于受治理库表格模式的受控 Feedback & Quality 页面：All / Thumbs Up / Thumbs Down 标签页、搜索、Type 与 Time 筛选、反馈表格及其详情抽屉。列表状态（筛选后、空）在 Organisms/Library 故事中展示。页面为受控；私有流程与独立宿主共用。原始 P13 的启动器因 portal.js 依赖缺失的 subtitle 而无效；本故事恢复了其本应有的助手行为。") } } } };
 
 export const FeedbackQuality = {
   name: "Feedback & Quality",
   args: { content: FEEDBACK_QUALITY, records, now: NOW, initial: {}, type: "all", time: "all", search: "" },
   argTypes: {
-    records: { control: "object", description: "Replaceable source feedback fixtures." },
-    now: { control: "date", description: "One clock for all time thresholds." },
-    initial: { control: "object", description: "Initial selected detail and assistant state." },
-    type: enumProp(feedbackFilterTypes, "all", "Visible feedback type select and All Feedback tab state."),
-    time: enumProp(feedbackFilterTimes, "all", "Source time filter."),
-    tabs: { control: "check", options: feedbackTabs, description: "Visible tabs; each one can be turned off separately." },
+    records: { control: "object", description: bi("Replaceable source feedback fixtures.", "可替换的源页面反馈夹具。") },
+    now: { control: "date", description: bi("One clock for all time thresholds.", "所有时间阈值共用的一个时钟。") },
+    initial: { control: "object", description: bi("Initial selected detail and assistant state.", "初始选中的详情与助手状态。") },
+    type: enumProp(feedbackFilterTypes, "all", bi("Visible feedback type select and All Feedback tab state.", "可见的反馈类型下拉与 All Feedback 标签页状态。")),
+    time: enumProp(feedbackFilterTimes, "all", bi("Source time filter.", "源页面的时间筛选。")),
+    tabs: { control: "check", options: feedbackTabs, description: bi("Visible tabs; each one can be turned off separately.", "可见的标签页；每个标签页都可以单独关闭。") },
     search: { control: "text" },
     onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "thumbs-up" }),
     onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "week" }),

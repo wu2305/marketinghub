@@ -2,6 +2,7 @@ import { ProjectDirectory } from "./index.jsx";
 import { ReportRow } from "../ReportRow/index.jsx";
 import { COCKPIT } from "../../../content.js";
 import { pluralize } from "../lib/report-logic.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 const project = COCKPIT.projects.city;
 
@@ -12,7 +13,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Project catalog mode: back link, project intro header and report list.",
+        component: bi("Project catalog mode: back link, project intro header and report list.", "项目目录模式：返回链接、项目介绍头部与报表列表。"),
       },
     },
   },

@@ -1,6 +1,6 @@
 import { UploadHistory } from "./index.jsx";
 import { SELF_SERVICE } from "../../../content.js";
-import { useSynced } from "../../../lib/story-helpers.js";
+import { useSynced, bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Self-Service/Upload history",
@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          "Upload-history dialog: table of file/uploader/time rows with per-row Preview and Download actions, or an empty-state message. Built on Modal.",
+          bi("Upload-history dialog: table of file/uploader/time rows with per-row Preview and Download actions, or an empty-state message. Built on Modal.", "上传历史对话框：文件/上传人/时间行的表格，每行带 Preview 与 Download 操作，或显示空状态消息。基于 Modal 构建。"),
       },
     },
   },

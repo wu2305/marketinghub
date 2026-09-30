@@ -37,7 +37,8 @@ function parameterRows(source, name) {
     const key = parameter.slice(6);
     rows[key] = {
       name: key,
-      description: rest.slice(end).split(/\n@/)[0].trim().replace(/\s+/g, " "),
+      // " // " separates the English text from its Chinese (中文) translation.
+      description: rest.slice(end).split(/\n@/)[0].trim().replace(/\s+/g, " ").replace(" // ", "\n\n"),
       type: { name: "other", value: type, required: !optional },
       table: { type: { summary: type }, ...(separator >= 0 ? { defaultValue: { summary: declaration.slice(separator + 1) } } : {}) },
     };

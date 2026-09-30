@@ -1,5 +1,6 @@
 import { ActionCard } from "./index.jsx";
 import { demoHrefFor } from "../../../demo/navigation.js";
+import { bi } from "../../../lib/story-helpers.js";
 
 export default {
   title: "Features/Self-Service/Action card",
@@ -8,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Self-Service entry card with a single action.",
+        component: bi("Self-Service entry card with a single action.", "只有一个操作的 Self-Service 入口卡片。"),
       },
     },
   },

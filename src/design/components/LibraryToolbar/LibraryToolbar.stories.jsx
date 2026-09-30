@@ -1,5 +1,5 @@
 import { LibraryToolbar } from "./index.jsx";
-import { callbackProp, prop } from "../../lib/story-helpers.js";
+import { callbackProp, prop, bi } from "../../lib/story-helpers.js";
 
 const facets = [
   { id: "status", label: "Status", allLabel: "All statuses", options: [{ id: "Enable", label: "Enabled" }, { id: "Disable", label: "Disabled" }, { id: "Draft", label: "Draft" }], selected: [] },
@@ -10,7 +10,7 @@ export default {
   title: "Organisms/Library/LibraryToolbar",
   component: LibraryToolbar,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: "Find controls of a governed library: search, facets, the always-visible count, optional create link and tabs. Every control reports through `onChange({ field, value, checked? })`." } } },
+  parameters: { docs: { description: { component: bi("Find controls of a governed library: search, facets, the always-visible count, optional create link and tabs. Every control reports through `onChange({ field, value, checked? })`.", "受治理库的查找控件：搜索、筛选项、始终可见的数量、可选的创建链接以及标签页。所有控件都通过 `onChange({ field, value, checked? })` 回报。") } } },
   args: {
     search: { label: "Search business terms", placeholder: "Search terms or synonyms", value: "" },
     facets,
@@ -18,13 +18,13 @@ export default {
     create: { label: "Add Business Term", href: "#knowledge-create" },
   },
   argTypes: {
-    search: prop("{ label, placeholder?, value? }", { description: "Search field." }),
-    facets: prop("Array<{ id, label, kind?, options, selected?, allLabel? }>", { description: "multi → CheckboxFilter, single → Select." }),
-    count: prop("string", { description: "Result count text (B3)." }),
-    create: prop("{ label, href? }", { description: "Optional create action: a link when `href` is set (creation navigates), a button otherwise (creation happens in the page)." }),
-    tabs: prop("{ label, value, items }", { description: "Optional tabs above the row." }),
-    onChange: callbackProp("onChange", "(event: { field, value, checked? }) => void", { field: "search", value: "gmv" }, "Search, facet or tab change."),
-    onCreate: callbackProp("onCreate", "(event: { href? }) => void", { href: "#knowledge-create" }, "Create link or button activated."),
+    search: prop("{ label, placeholder?, value? }", { description: bi("Search field.", "搜索框。") }),
+    facets: prop("Array<{ id, label, kind?, options, selected?, allLabel? }>", { description: bi("multi → CheckboxFilter, single → Select.", "multi 使用 CheckboxFilter，single 使用 Select。") }),
+    count: prop("string", { description: bi("Result count text (B3).", "结果数量文字（B3）。") }),
+    create: prop("{ label, href? }", { description: bi("Optional create action: a link when `href` is set (creation navigates), a button otherwise (creation happens in the page).", "可选的创建操作：设置了 `href` 时为链接（创建会跳转），否则为按钮（在页面内创建）。") }),
+    tabs: prop("{ label, value, items }", { description: bi("Optional tabs above the row.", "行上方的可选标签页。") }),
+    onChange: callbackProp("onChange", "(event: { field, value, checked? }) => void", { field: "search", value: "gmv" }, bi("Search, facet or tab change.", "搜索、筛选项或标签页发生变化。")),
+    onCreate: callbackProp("onCreate", "(event: { href? }) => void", { href: "#knowledge-create" }, bi("Create link or button activated.", "点击创建链接或按钮。")),
   },
 };
 

@@ -1,9 +1,9 @@
 import React from "react";
 import { SKILL_LIBRARY } from "../../../demo/content/skill-library.js";
-import { callbackProp } from "../../../lib/story-helpers.js";
+import { callbackProp, bi } from "../../../lib/story-helpers.js";
 import { SkillDetail } from "./index.jsx";
 
-export default { title: "Features/ScenarioLibrary/SkillDetail", component: SkillDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Skill detail drawer containing governance, five structure blocks, example preview and source-visible actions." } } } };
+export default { title: "Features/ScenarioLibrary/SkillDetail", component: SkillDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Skill detail drawer containing governance, five structure blocks, example preview and source-visible actions.", "Skill 详情抽屉：包含治理信息、五个结构块、示例预览以及源页面可见的操作。") } } } };
 export const Default = {
   args: { skill: SKILL_LIBRARY.records[0], labels: SKILL_LIBRARY.labels, previewOpen: false },
   argTypes: {

@@ -1,7 +1,7 @@
 import { LibraryList, libraryLayouts } from "./index.jsx";
 import { ItemActions } from "../ItemActions/index.jsx";
 import { StatusBadge } from "../StatusBadge/index.jsx";
-import { callbackProp, enumProp, prop } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, prop, bi } from "../../lib/story-helpers.js";
 import { records, toItem } from "../../demo/library-story-data.js";
 
 const columns = [
@@ -26,18 +26,18 @@ export default {
   title: "Organisms/Library/LibraryList",
   component: LibraryList,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: "The item region of a governed library. Owns both layouts and the empty state; views never render the grid or DataTable directly." } } },
+  parameters: { docs: { description: { component: bi("The item region of a governed library. Owns both layouts and the empty state; views never render the grid or DataTable directly.", "受治理库的条目区域。负责两种布局和空状态；视图不要直接渲染网格或 DataTable。") } } },
   args: { label: "Business terms", layout: "cards", items: records.map(toItem), columns, rows, empty },
   argTypes: {
-    label: prop("string", { description: "Accessible name." }),
-    layout: enumProp(libraryLayouts, "cards", "Card grid, one card per row, or table.", "inline-radio"),
-    items: prop("Array<LibraryItem props>", { description: "cards layout." }),
-    columns: prop("Array<{ key, header }>", { description: "table layout." }),
-    rows: prop("Array<{ id, ...cells }>", { description: "table layout." }),
-    empty: prop("LibraryEmpty props", { description: "Shown when there is nothing to list." }),
-    onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "gmv" }, "Open an item."),
-    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "gmv", blocked: false, reason: null }, "Card actions."),
-    onClear: callbackProp("onClear", "(event: { kind }) => void", { kind: "no-results" }, "Clear filters from the no-results state."),
+    label: prop("string", { description: bi("Accessible name.", "无障碍名称。") }),
+    layout: enumProp(libraryLayouts, "cards", bi("Card grid, one card per row, or table.", "卡片网格、每行一张卡片，或表格。"), "inline-radio"),
+    items: prop("Array<LibraryItem props>", { description: bi("cards layout.", "cards 布局。") }),
+    columns: prop("Array<{ key, header }>", { description: bi("table layout.", "table 布局。") }),
+    rows: prop("Array<{ id, ...cells }>", { description: bi("table layout.", "table 布局。") }),
+    empty: prop("LibraryEmpty props", { description: bi("Shown when there is nothing to list.", "没有内容可列出时显示。") }),
+    onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "gmv" }, bi("Open an item.", "打开某个条目。")),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "gmv", blocked: false, reason: null }, bi("Card actions.", "卡片操作。")),
+    onClear: callbackProp("onClear", "(event: { kind }) => void", { kind: "no-results" }, bi("Clear filters from the no-results state.", "在无结果状态下清除筛选。")),
   },
 };
 

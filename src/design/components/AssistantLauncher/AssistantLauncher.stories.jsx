@@ -1,4 +1,5 @@
 import { AssistantLauncher } from "./index.jsx";
+import { bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Assistant launcher",
@@ -7,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "Floating corner button that opens the assistant panel.",
+        component: bi("Floating corner button that opens the assistant panel.", "位于页面角落、用于打开助手面板的悬浮按钮。"),
       },
     },
   },

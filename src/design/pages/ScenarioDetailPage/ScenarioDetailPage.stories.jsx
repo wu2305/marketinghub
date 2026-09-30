@@ -2,24 +2,24 @@ import React from "react";
 import { SCENARIO_DETAIL, SCENARIO_DETAIL_SHELL } from "../../demo/content/scenario-detail.js";
 import { SKILL_RECORDS } from "../../demo/content/skill-records.js";
 import { useScenarioDetailDemo } from "../../demo/scenario-detail-demo.js";
-import { enumProp, callbackProp } from "../../lib/story-helpers.js";
+import { enumProp, callbackProp, bi } from "../../lib/story-helpers.js";
 import { ScenarioDetailPage, scenarioDetailTabs } from "./index.jsx";
 
 const flowThreads = () => SCENARIO_DETAIL_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const checkedMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ScenarioDetailPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: "Controlled six-tab Scenario Detail page. The private demo hook supplies URL-id selection, preview and lite assistant flows to Storybook and the independent host." } } } };
+export default { title: "Pages", component: ScenarioDetailPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled six-tab Scenario Detail page. The private demo hook supplies URL-id selection, preview and lite assistant flows to Storybook and the independent host.", "受控的六标签页 Scenario Detail 页面。私有 demo hook 为 Storybook 和独立宿主提供按 URL id 选择、预览以及轻量助手流程。") } } } };
 
 export const ScenarioDetail = {
   name: "Scenario Detail",
   args: { content: SCENARIO_DETAIL, records: SKILL_RECORDS, shell: SCENARIO_DETAIL_SHELL, initial: {}, tab: "content", previewOpen: false },
   argTypes: {
-    content: { control: "object", description: "All page-visible copy, navigation and static panel content." },
-    records: { control: "object", description: "Nine replaceable source-backed skill records." },
-    shell: { control: "object", description: "Lite assistant copy, skills and deterministic model data." },
-    initial: { control: "object", description: "Initial URL id and assistant state." },
-    tab: enumProp(scenarioDetailTabs, "content", "One of the six visible detail panels."),
-    previewOpen: { control: "boolean", description: "Whether Content shows example question and output." },
+    content: { control: "object", description: bi("All page-visible copy, navigation and static panel content.", "页面上可见的全部文案、导航与静态面板内容。") },
+    records: { control: "object", description: bi("Nine replaceable source-backed skill records.", "九条可替换的、以源页面为依据的技能记录。") },
+    shell: { control: "object", description: bi("Lite assistant copy, skills and deterministic model data.", "轻量助手的文案、技能与确定性的模型数据。") },
+    initial: { control: "object", description: bi("Initial URL id and assistant state.", "初始的 URL id 与助手状态。") },
+    tab: enumProp(scenarioDetailTabs, "content", bi("One of the six visible detail panels.", "六个可见详情面板之一。")),
+    previewOpen: { control: "boolean", description: bi("Whether Content shows example question and output.", "Content 面板是否显示示例问题与输出。") },
     onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "related" }),
     onTogglePreview: callbackProp("onTogglePreview", "({open:boolean}) => void", { open: true }),
     onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "scenario-edit", params: { id: "city-comparison" }, href: "/assets/pages/scenario-edit.html?id=city-comparison", label: "Edit Scenario" }),

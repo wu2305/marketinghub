@@ -41,18 +41,18 @@ const COLUMN_KEYS = ["title", "type", "submittedBy", "submitted", "status", "aiC
  * Controlled Review Center page. All visible copy, records, filter state,
  * decision overlays and assistant state arrive through semantic props.
  * @param {object} props
- * @param {object} props.content Source-backed labels, hero, sidebar and suggestions; hero stats carry a `key` matching queue counts.
- * @param {object} props.logo Header logo.
- * @param {object[]} [props.navigation=[]] Primary navigation.
- * @param {string} props.image Hero image URL.
- * @param {object} [props.filters={}] Controlled tab/search/type/time, change callbacks and `onClear` (no-results state).
- * @param {object} [props.queue={}] Filtered records, counts, open-detail and action callbacks.
- * @param {object} [props.decision={}] Selected item, panel, reason, suggestions and decision callbacks.
- * @param {(event:{id:string,reason:string})=>void} [props.decision.onConfirmReject] Reject request with named fields.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state and callbacks.
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional ModelFlowDialog state.
- * @param {string} [props.toast=""] success message after approve/reject (hidden when empty)
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
+ * @param {object} props.content Source-backed labels, hero, sidebar and suggestions; hero stats carry a `key` matching queue counts. // 以源页面为依据的标签、Hero、侧栏与建议；Hero 统计带有与队列计数对应的 `key`。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {object[]} [props.navigation=[]] Primary navigation. // 主导航。
+ * @param {string} props.image Hero image URL. // Hero 图片 URL。
+ * @param {object} [props.filters={}] Controlled tab/search/type/time, change callbacks and `onClear` (no-results state). // 受控的标签页/搜索/类型/时间、变更回调以及 `onClear`（无结果状态）。
+ * @param {object} [props.queue={}] Filtered records, counts, open-detail and action callbacks. // 筛选后的记录、计数、打开详情与操作回调。
+ * @param {object} [props.decision={}] Selected item, panel, reason, suggestions and decision callbacks. // 选中的条目、面板、原因、建议与决策回调。
+ * @param {(event:{id:string,reason:string})=>void} [props.decision.onConfirmReject] Reject request with named fields. // 带具名字段的拒绝请求。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state and callbacks. // 轻量助手的文案、状态与回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional ModelFlowDialog state. // 可选的 ModelFlowDialog 状态。
+ * @param {string} [props.toast=""] success message after approve/reject (hidden when empty) // 通过/拒绝后的成功消息（为空时隐藏）
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter. // 路由适配器。
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} props.onNavigate
  */
 export function ReviewCenterPage({ content, logo, navigation = [], image, filters = {}, queue = {}, decision = {}, assistant = {}, skillFlow, toast = "", hrefFor, onNavigate }) {

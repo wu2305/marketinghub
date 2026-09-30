@@ -1,7 +1,7 @@
 import React from "react";
 import { INTERPRETER, MODEL_FLOW, buildModelDraft } from "../../content.js";
 import { buildInterpreterAnswer, useInterpreterDemo } from "../../demo/interpreter-demo.js";
-import { enumProp, pageShell, useSynced } from "../../lib/story-helpers.js";
+import { enumProp, pageShell, useSynced, bi } from "../../lib/story-helpers.js";
 import { AiInterpreterPage } from "./index.jsx";
 
 export default {
@@ -36,8 +36,8 @@ export const Interpreter = {
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
   },
   argTypes: {
-    hrefFor: { control: false, description: "Story/host supplied semantic route resolver `(id, params) => href`." },
-    activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", "Selected knowledge view; unknown-type is a fallback contract probe."),
+    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
+    activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", bi("Selected knowledge view; unknown-type is a fallback contract probe.", "当前选中的知识视图；unknown-type 是用于回退约定的探针。")),
     onNavigate: { action: "onNavigate" },
     onSelectType: { action: "onSelectType" },
     onQueryChange: { action: "onQueryChange" },
@@ -62,8 +62,8 @@ export const Interpreter = {
     onOpenTable: { action: "onOpenTable" },
     onCloseTable: { action: "onCloseTable" },
     onDrawerTab: { action: "onDrawerTab" },
-    notice: enumProp(["", "submitted"], "", "Arrival notice key (the host's ?notice=); `submitted` shows the Submitted-for-review toast."),
-    assistant: { control: "object", description: "Knowledge workspace assistant content, state and named callbacks; useInterpreterDemo owns the local flow." },
+    notice: enumProp(["", "submitted"], "", bi("Arrival notice key (the host's ?notice=); `submitted` shows the Submitted-for-review toast.", "到达页面时的提示键（宿主的 ?notice=）；`submitted` 会显示 Submitted-for-review 的 Toast。")),
+    assistant: { control: "object", description: bi("Knowledge workspace assistant content, state and named callbacks; useInterpreterDemo owns the local flow.", "知识工作台助手的内容、状态与具名回调；本地流程由 useInterpreterDemo 负责。") },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);

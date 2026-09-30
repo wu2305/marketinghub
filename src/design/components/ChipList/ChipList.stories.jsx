@@ -1,19 +1,19 @@
 import { ChipList, chipListTones } from "./index.jsx";
-import { enumProp, prop } from "../../lib/story-helpers.js";
+import { enumProp, prop, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Library/ChipList",
   component: ChipList,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: "Labelled row of short values in a library card or drawer. Shows the first `max` values and counts the rest in a \"+N\" chip (dispositions D07)." } } },
+  parameters: { docs: { description: { component: bi("Labelled row of short values in a library card or drawer. Shows the first `max` values and counts the rest in a \"+N\" chip (dispositions D07).", "库卡片或抽屉中带标签的一行短值。显示前 `max` 个值，其余以 \"+N\" 标签计数（dispositions D07）。") } } },
   args: { label: "Synonyms", values: ["Gross Sales", "Merchandise Value", "Gross Merchandise Sales"], max: 3, moreLabel: "More synonyms", tone: "neutral" },
   argTypes: {
-    label: prop("string", { description: "Row label; omit under a drawer heading." }),
-    values: prop("Array<string>", { description: "Values in display order." }),
-    max: prop("number", { defaultValue: 3, description: "Values shown before the +N chip." }),
-    moreLabel: prop("string", { defaultValue: "More", description: "Accessible prefix of the +N chip." }),
-    tone: enumProp(chipListTones, "neutral", "Chip colour role.", "inline-radio"),
-    emptyLabel: prop("string", { defaultValue: "—", description: "Shown with no values." }),
+    label: prop("string", { description: bi("Row label; omit under a drawer heading.", "行标签；在抽屉标题下使用时可省略。") }),
+    values: prop("Array<string>", { description: bi("Values in display order.", "按显示顺序排列的值。") }),
+    max: prop("number", { defaultValue: 3, description: bi("Values shown before the +N chip.", "+N 标签之前显示的值的数量。") }),
+    moreLabel: prop("string", { defaultValue: "More", description: bi("Accessible prefix of the +N chip.", "+N 标签的无障碍前缀。") }),
+    tone: enumProp(chipListTones, "neutral", bi("Chip colour role.", "标签的颜色角色。"), "inline-radio"),
+    emptyLabel: prop("string", { defaultValue: "—", description: bi("Shown with no values.", "没有任何值时显示的文字。") }),
   },
 };
 
