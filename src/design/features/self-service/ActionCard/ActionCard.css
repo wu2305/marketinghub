@@ -71,7 +71,7 @@ color: var(--mh-text-strong);
   outline: 0;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .mh-action-card {
     align-items: flex-start;
     flex-direction: column;

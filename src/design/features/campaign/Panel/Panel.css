@@ -47,7 +47,7 @@ color: var(--mh-text-faint);
   font-size: var(--mh-font-size-xs);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 760px) {
   .mh-panel__head {
     flex-wrap: wrap;
   }

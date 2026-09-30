@@ -278,7 +278,7 @@ animation-name: mhAssistantModalEnter;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
   .mh-assistant__dialog {
   width: 100vw;
       max-width: 100vw;

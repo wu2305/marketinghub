@@ -5,7 +5,7 @@
 // Only reads files. Counts are distinct values unless the label says "uses".
 import fs from "node:fs";
 import path from "node:path";
-import { rawFoundationValues } from "./css-metrics.mjs";
+import { mediaWidths, rawFoundationValues } from "./css-metrics.mjs";
 
 const ROOT = path.resolve("src/design");
 const walk = (dir) =>
