@@ -109,6 +109,25 @@ describe("AssistantDock", () => {
     expect(ref.current.hidden).toBe(true);
   });
 
+  it("returns focus to the launcher on close even when opening never focused it", () => {
+    function Host() {
+      const [open, setOpen] = React.useState(false);
+      return <AssistantDock assistant={{ open, onOpen: () => setOpen(true), onClose: () => setOpen(false) }} />;
+    }
+    render(<Host />);
+    const launcher = screen.getByLabelText("Open AI assistant");
+    expect(document.activeElement).not.toBe(launcher);
+    fireEvent.click(launcher);
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(document.activeElement).toBe(launcher);
+  });
+
+  it("lets the dock's placement, tone and variant win over the assistant object", () => {
+    const { container } = render(<AssistantDock assistant={{ open: true, placement: "modal", tone: "home", variant: "home" }} placement="drawer" variant="cockpit" />);
+    expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
+    expect(container.querySelector(".mh-assistant--home")).toBeNull();
+  });
+
   it("renders the model-flow dialog only while its step is set", () => {
     const flow = { step: "manual", threads: [], sections: [], draft: {} };
     const { rerender } = render(<AssistantDock assistant={{ open: true }} skillFlow={flow} />);
@@ -119,17 +138,26 @@ describe("AssistantDock", () => {
 });
 
 describe("AssistantDock stories", () => {
-  const { Closed, CustomLauncherLabel } = composeStories(dockStories);
+  const { Closed, Open, ModelDialog } = composeStories(dockStories);
 
-  it.each([["Closed", Closed], ["CustomLauncherLabel", CustomLauncherLabel]])(
-    "%s opens the panel from the launcher even when the Actions panel supplies onLauncherOpen",
-    (_name, Story) => {
-      const onLauncherOpen = vi.fn();
-      const { container } = render(<Story onLauncherOpen={onLauncherOpen} />);
-      expect(container.querySelector(".mh-assistant")).toBeNull();
-      fireEvent.click(screen.getByLabelText("Open AI assistant"));
-      expect(onLauncherOpen).toHaveBeenCalledWith({ reason: "open" });
-      expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
-    },
-  );
+  it("Closed opens the panel from the launcher even when the Actions panel supplies onLauncherOpen", () => {
+    const onLauncherOpen = vi.fn();
+    const { container } = render(<Closed onLauncherOpen={onLauncherOpen} />);
+    expect(container.querySelector(".mh-assistant")).toBeNull();
+    fireEvent.click(screen.getByLabelText("Open AI assistant"));
+    expect(onLauncherOpen).toHaveBeenCalledWith({ reason: "open" });
+    expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
+  });
+
+  it("Open shows the panel and hides the launcher, without the model dialog", () => {
+    const { container } = render(<Open />);
+    expect(container.querySelector(".mh-assistant--drawer")).toBeTruthy();
+    expect(screen.getByLabelText("Open AI assistant").hidden).toBe(true);
+    expect(screen.getAllByRole("dialog").length).toBe(1);
+  });
+
+  it("ModelDialog shows the model-creation dialog over the open panel", () => {
+    render(<ModelDialog />);
+    expect(screen.getAllByRole("dialog").length).toBe(2);
+  });
 });
