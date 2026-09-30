@@ -130,7 +130,7 @@ gap**; list it below and fix it in its own PR.
    Save shows the new card with its Draft badge, Edit → Save updates that card without duplicating,
    Cancel changes nothing, two app instances stay independent.
 2. Contract fixes, one PR per gap found by item 1 (and 3).
-3. A page holding two independent assistants (Marketing Cockpit: workspace assistant and Report Copilot), rebuilt the same way with replacement data: each opens, answers and closes on its own, and swapping the data changes neither look nor interaction. The table pattern (Skill Library) follows if item 2 leaves doubts about it.
+3. A page holding two independent assistants (Marketing Cockpit: workspace assistant and Report Copilot), rebuilt the same way with replacement data: each opens, answers and closes on its own, and swapping the data changes neither look nor interaction. Done in `examples/consumer/CockpitApp.tsx` (7 behaviour cases; not covered: the assistants' model-creation dialog, the City Invest embed). The table pattern (Skill Library) follows if item 2 leaves doubts about it.
 4. Close-out folds into WP4: "consumer-built pages look and operate like the demo" is the composability
    gate; the prop and stub counts in `occam-baseline.md` are labelled proxies.
 
