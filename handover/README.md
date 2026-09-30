@@ -501,7 +501,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
-| 2026-10-01 | Cloudflare 首次部署成功：通过插件从 PR 提交 `22ca53c` 启动生产构建（未修改 main），lint/tests/build/deploy 均通过，线上 HTTP/索引/构建戳检查通过；证据见 §1。PR 的分支 preview 继承了创建时空 build command，也已补全并重试。 | Codex |
+| 2026-10-01 | Cloudflare 首次部署成功：通过插件从 PR 提交 `22ca53c` 启动生产构建（未修改 main），lint/tests/build/deploy 均通过，线上 HTTP/索引/构建戳检查通过；证据见 §1。PR 的分支 preview 继承了创建时空 build command，也已补全；随后确认 `wrangler preview` 需要 `previews: {}`，已补入配置并重跑生产 dry-run 通过，等待云 preview 验证。 | Codex |
 | 2026-10-01 | 用户取消 tag 部署，仅保留 main merge 刷新；PR #98 删除 GitHub 部署 workflow，使用既有 Cloudflare Workers Builds/token，无需 GitHub secret。配置与文档改为最终 Worker 方案。 | Codex |
 | 2026-10-01 | 用户确认改用新建 `marketinghub` Worker。Cloudflare 插件核实旧失败 build 初始化前终止、旧 trigger 关联 ID 已不存在；新 Worker trigger 原构建命令为空，已补全 lint/test/Storybook build。PR #98 新增 wrangler 静态资源配置，GitHub workflow 改为 tag/manual，main 由 Workers Builds 处理。组件与视觉无改动，验证继续。 | Codex |
 | 2026-10-01 | Cloudflare Pages：新增独立部署工作流，main/全部 tag/手动触发，lint→test→Storybook build→Wrangler 上传，固定 Pages 分支 main；上传后比对线上 index.json。README 记录账户配置与 tag 发布语义。无组件、故事或视觉差异。Cloudflare 插件连接、账户配置、上线与真实事件验证仍 pending。 | Codex |
