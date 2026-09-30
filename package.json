@@ -31,13 +31,14 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^29.1.1",
     "playwright": "^1.63.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "sirv": "^3.0.2",
     "storybook": "^8.6.14",
     "typescript": "^5.9.3",
     "vite": "^6.2.2",
     "vitest": "^4.1.11",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "wrangler": "^4.145.0"
   },
   "exports": {
     ".": {

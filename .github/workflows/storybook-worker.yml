@@ -1,17 +1,16 @@
-name: Storybook Pages
+name: Storybook Worker
 
 on:
   push:
-    branches: [main]
     tags: ['**']
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# All triggers update the same Pages site; do not interrupt an active upload.
+# All triggers update the same Worker; do not interrupt an active upload.
 concurrency:
-  group: storybook-pages
+  group: storybook-worker
   cancel-in-progress: false
 
 jobs:
@@ -27,19 +26,13 @@ jobs:
       - name: Check deployment configuration
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
         run: |
-          for name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_PAGES_PROJECT; do
+          for name in CLOUDFLARE_API_TOKEN; do
             if [ -z "${!name}" ]; then
               echo "::error::Missing repository configuration: $name"
               exit 1
             fi
           done
-          if [[ ! "$CLOUDFLARE_PAGES_PROJECT" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
-            echo "::error::Invalid Pages project name"
-            exit 1
-          fi
       - run: npm ci
       - run: npm run lint
       - run: npm test
@@ -49,12 +42,11 @@ jobs:
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Explicit main also publishes tag builds to the stable production URL.
-          command: pages deploy storybook-static --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+          accountId: b00a0a78ddfa0b2e9051f6cc7946bd85
+          command: deploy
       - name: Check deployed Storybook
         env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+          DEPLOYMENT_URL: https://marketinghub.gdindex.workers.dev
         run: |
           test -n "$DEPLOYMENT_URL"
           curl --fail --silent --show-error --retry 6 --retry-all-errors --retry-delay 10 "$DEPLOYMENT_URL/index.json" -o /tmp/deployed-index.json

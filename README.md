@@ -51,31 +51,30 @@ docs-only changes and cancels superseded runs. The heavy browser gate
 tag is pushed, and can be started by hand (Actions > ci > Run workflow, choose
 the branch), where it is limited to what changed against `main`.
 
-## Storybook on Cloudflare Pages
+## Storybook on Cloudflare Workers
 
-`.github/workflows/storybook-pages.yml` builds and deploys `storybook-static`
-on every push to `main` (including PR merges), every tag push, and manual runs.
-Lint, tests, and the Storybook build must pass before upload. There are no path
-filters, so documentation-only merges also refresh the site. The existing
-`v*` visual gate remains a separate workflow.
+Storybook is deployed to the existing `marketinghub` Worker at
+https://marketinghub.gdindex.workers.dev. `wrangler.jsonc` serves the
+`storybook-static` output as static assets.
 
-Create a Pages Direct Upload project with production branch `main`, then set
-these in the GitHub repository's Settings → Secrets and variables → Actions:
+- Merges/pushes to `main`: the connected Cloudflare Workers Build runs
+  `npm ci && npm run lint && npm test && npm run build-storybook`, then
+  `npx wrangler deploy`.
+- Tag pushes and manual runs: `.github/workflows/storybook-worker.yml` runs
+  the same checks and deploys to the same Worker through GitHub Actions.
+  A tag on an older commit deliberately publishes that version.
+- Branch previews use Cloudflare's preview build configuration. They do not
+  update the production URL.
 
-- Secret `CLOUDFLARE_API_TOKEN`: Cloudflare token with Account → Cloudflare Pages
-  → Edit, scoped to the deployment account.
-- Secret `CLOUDFLARE_ACCOUNT_ID`: that account's ID.
-- Variable `CLOUDFLARE_PAGES_PROJECT`: the Pages project name.
+For tag/manual deployments, add the GitHub Actions repository secret
+`CLOUDFLARE_API_TOKEN` with Account → Workers Scripts → Edit permission,
+scoped to the account in `wrangler.jsonc`. The account ID is public configuration.
+The workflow compares the deployed `index.json` with the local build.
+Cloudflare builds and GitHub Actions have separate queues; when releasing a
+main commit, wait for its Cloudflare build to finish before pushing its tag.
 
-Both merge and tag deployments use `--branch=main`, refreshing the project's
-stable `https://<project>.pages.dev` URL. A tag on an older commit deliberately
-publishes that version. Manual runs publish the selected ref in the same way.
-Deployments share one concurrency group; active uploads are not cancelled.
-After upload, the workflow checks the deployment's `index.json` against the
-local build and writes its URL to the Actions summary.
-
-Setup follows [Cloudflare's continuous integration guide](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
-Deployment connection and verification status live in `handover/README.md`.
+Local validation: `npm run build-storybook && npx wrangler deploy --dry-run`.
+Deployment status and evidence live in `handover/README.md`.
 
 ## The static demo (reference)
 
