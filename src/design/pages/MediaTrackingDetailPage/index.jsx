@@ -30,8 +30,8 @@ export const mediaTrackingPeriods = ["daily", "weekly", "monthly", "spot"];
  * @param {Array<{ name: string, label: string, required?: boolean, options?: Array<string|object>, placeholder?: string, defaultValue?: string }>} [props.filters=[]]
  * @param {Array<{ term: string, text: string }>} [props.notes=[]]
  * @param {{ title?: string, count?: string, columns?: Array<{ key: string, header: string }>, rows?: Array<object> }} [props.table={}]
- * @param {object} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through
- * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props (lite variant); `skillMenu`/`selectedSkill` pass through
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the flow dialog
  * @param {(target: { href: string, id?: string, label?: string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onPeriodChange]
  * @param {(event: { name: string, value: string }) => void} [props.onFilterChange]

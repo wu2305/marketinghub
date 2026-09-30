@@ -17,8 +17,8 @@ export { scenarioDetailTabs };
  * @param {{src:string,alt:string,href:string}} props.logo
  * @param {object[]} [props.navigation=[]] Header destinations.
  * @param {{record:object,tab:typeof scenarioDetailTabs[number],previewOpen:boolean,onTabChange?:(event:{value:string})=>void,onTogglePreview?:(event:{open:boolean})=>void}} [props.detail={}] Detail view state.
- * @param {object} [props.assistant={}] Lite assistant state and named callbacks.
- * @param {object} [props.skillFlow] Model flow state and callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant state and named callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model flow state and callbacks.
  * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */

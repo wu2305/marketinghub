@@ -3,7 +3,7 @@
  * and still reject wrong usage (each @ts-expect-error must stay an error).
  * Not bundled or run; type-checked only. */
 import React from "react";
-import { AssistantDock, AssistantLauncher, AssistantPanel, Button, TextArea, type assistantVariants } from "marketing-hub";
+import { AiInterpreterPage, AssistantDock, AssistantLauncher, AssistantPanel, Button, KnowledgeCreatePage, TextArea, type assistantVariants } from "marketing-hub";
 import { useWorkspaceAssistantDemo } from "marketing-hub/demo";
 
 export function DockHost({ variant }: { variant: (typeof assistantVariants)[number] }) {
@@ -58,6 +58,22 @@ export function Rejected() {
       <AssistantDock assistant={{ open: "yes" }} />
       {/* @ts-expect-error unknown variant */}
       <Button variant="nope">Bad</Button>
+      {/* @ts-expect-error an answer is { query, ... } and its variant is an enum */}
+      <AssistantDock assistant={{ answers: [{ query: "q", variant: "nope" }] }} />
     </>
   );
 }
+
+/* Pages: route params and the active view are typed, not `object`. Checked as
+ * property types so a missing required prop cannot satisfy the expect-error. */
+type Href = NonNullable<React.ComponentProps<typeof KnowledgeCreatePage>["hrefFor"]>;
+type Save = NonNullable<React.ComponentProps<typeof KnowledgeCreatePage>["onSave"]>;
+type InterpreterView = NonNullable<React.ComponentProps<typeof AiInterpreterPage>["view"]>;
+
+export const hrefFor: Href = (id, params = {}) => `#${id}?type=${params.type ?? ""}`;
+export const onSave: Save = ({ type, mode, values }) => `${type}${mode}${Object.keys(values)}`;
+/* DataModelView still declares its props as `Record<string, any>`, so the union accepts any object; the other four views are checked. */
+export const view: InterpreterView = { records: [], query: "" };
+
+// @ts-expect-error route params are strings
+export const badHref: Href = (id: string, params?: { type: number }) => `${id}${params?.type}`;

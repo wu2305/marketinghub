@@ -20,10 +20,10 @@ import "./HomePage.css";
  * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid
  * @param {Array<object>} [props.cards=[]] WorkspaceCard props
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
- * @param {object} [props.assistant={}] AssistantPanel props
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
  * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
- * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  */
 export function HomePage({
   current = "home",

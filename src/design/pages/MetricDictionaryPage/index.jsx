@@ -23,8 +23,8 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  * @param {string} props.metricId
  * @param {typeof metricDetailTabs[number]} [props.tab="definition"]
  * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks
- * @param {object} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant)
- * @param {object} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant)
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
  * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} props.onNavigate
  * @param {(event:{category:string})=>void} props.onCategoryChange

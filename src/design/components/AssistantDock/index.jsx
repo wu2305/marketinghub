@@ -9,6 +9,8 @@ import { ModelFlowDialog } from "../ModelFlowDialog/index.jsx";
  * Everything AssistantPanel takes (`open`, `prompt`, `answers`, copy, callbacks), plus `launcherLabel` and `onOpen` for the launcher.
  */
 
+/** @typedef {NonNullable<AssistantDockProps["skillFlow"]>} AssistantSkillFlow ModelFlowDialog props for a page's `skillFlow`. */
+
 /**
  * @typedef {object} AssistantDockProps
  * @property {AssistantDockState} [assistant={}]

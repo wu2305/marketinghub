@@ -49,8 +49,8 @@ const COLUMN_KEYS = ["title", "type", "submittedBy", "submitted", "status", "aiC
  * @param {object} [props.queue={}] Filtered records, counts, open-detail and action callbacks.
  * @param {object} [props.decision={}] Selected item, panel, reason, suggestions and decision callbacks.
  * @param {(event:{id:string,reason:string})=>void} [props.decision.onConfirmReject] Reject request with named fields.
- * @param {object} [props.assistant={}] Lite assistant copy, state and callbacks.
- * @param {object|null} props.skillFlow Optional ModelFlowDialog state.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state and callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow|null} props.skillFlow Optional ModelFlowDialog state.
  * @param {string} [props.toast=""] success message after approve/reject (hidden when empty)
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} props.onNavigate

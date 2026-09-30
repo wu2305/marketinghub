@@ -28,8 +28,8 @@ export const memoryCategories = ["all", "analysis", "meeting", "findings", "refe
  * @param {{open:boolean,draft:{title:string,category:string,description:string},errors:{title?:boolean,description?:boolean},onOpen?:Function,onClose?:(event:{reason:string})=>void,onChange?:(event:{field:string,value:string})=>void,onAutoFill?:(event:{field:"description"})=>void,onSave?:Function}} [props.create={}] Create drawer state/actions.
  * @param {{target:object|null,onCancel?:(event:{reason:string})=>void,onConfirm?:(event:{confirmed:true})=>void}} [props.deletion={}] Delete confirmation state/actions.
  * @param {string} [props.toast=""] Success message after a delete (hidden when empty).
- * @param {object} [props.assistant={}] Lite assistant props and named callbacks.
- * @param {object} [props.skillFlow] Model-flow props.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant props and named callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model-flow props.
  * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
