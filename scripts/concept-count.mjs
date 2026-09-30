@@ -24,9 +24,7 @@ const tokenCount = [...rootBlock.matchAll(/(--mh-[a-z0-9-]+)\s*:/g)].length;
 const budget = JSON.parse(read(path.join(ROOT, "css-budget.json")));
 
 const labels = { fontSize: "font-size", fontWeight: "font-weight", radius: "border-radius", shadow: "box-shadow", color: "color literal" };
-const pending = budget.pendingMigration || [];
-const gated = rawFoundationValues(ROOT, pending);
-const all = rawFoundationValues(ROOT);
+const raw = rawFoundationValues(ROOT);
 
 const uiJsx = files.filter((f) => /^(features|pages)\//.test(rel(f)) && f.endsWith("index.jsx"));
 const uses = (re) => uiJsx.reduce((n, f) => n + (read(f).match(re) || []).length, 0);
@@ -44,8 +42,8 @@ const allStories = files.filter((f) => f.endsWith(".stories.jsx")).reduce((n, f)
 const rows = [
   ["tokens", tokenCount],
   ["legacy-named tokens (css-budget exemptions)", budget.legacyPrefixExemptions.length],
-  // Same numbers the CSS budget test enforces; files still in pendingMigration add the rest.
-  ...Object.entries(labels).map(([k, label]) => [`raw ${label} values outside tokens.css${all[k] > gated[k] ? ` (+${all[k] - gated[k]} in pendingMigration)` : ""}`, gated[k]]),
+  // Same numbers the CSS budget test enforces.
+  ...Object.entries(labels).map(([k, label]) => [`raw ${label} values outside tokens.css`, raw[k]]),
   ["raw <button> uses in features/pages", uses(/<button\b/g)],
   ["raw <select> uses in features/pages", uses(/<select\b/g)],
   ["raw <input> uses in features/pages", uses(/<input\b/g)],

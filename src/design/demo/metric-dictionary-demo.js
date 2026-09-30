@@ -13,7 +13,7 @@ const paths = {
 };
 
 /** Original Demo links used by P10 stories; hosts inject their own resolver. */
-export function metricDictionaryHrefFor(id, params = {}) {
+function metricDictionaryHrefFor(id, params = {}) {
   const query = new URLSearchParams(params);
   return (paths[id] || paths.interpreter) + (query.size ? `?${query}` : "");
 }

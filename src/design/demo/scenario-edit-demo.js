@@ -6,7 +6,7 @@ const EMPTY = [];
 const INITIAL = {};
 const REQUIRED = ["name", "purpose", "scope", "owner", "report"];
 
-export function scenarioEditValuesFor(record, defaults) {
+function scenarioEditValuesFor(record, defaults) {
   if (!record) return { ...defaults };
   return {
     ...defaults,

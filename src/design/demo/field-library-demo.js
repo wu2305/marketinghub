@@ -13,11 +13,12 @@ import { demoImage } from "./images.js";
  * state the way the original's sync() does.
  */
 import React from "react";
+import { useToast } from "./use-toast.js";
+import { useSynced } from "./use-synced.js";
 import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
 import { useGovernedFlow } from "../lib/governed-flow.js";
 import { fieldLibraryTypes } from "../features/interpreter/FieldLibraryView/index.jsx";
 
-const TOAST_MS = 3000;
 
 export { fieldLibraryTypes };
 
@@ -239,12 +240,6 @@ export function normalizeFieldRecord(asset) {
   };
 }
 
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
-
 const EMPTY_SELECTED = {};
 /**
  * @param {object} props FieldLibraryView inputs:
@@ -298,14 +293,7 @@ export function useFieldLibraryDemo(props) {
      edit/delete; a referenced model cannot be deleted; completed changes
      show a toast. `props.dialog` seeds an open dialog for stories. */
   const tooltips = { ...governanceMessages, ...(strings.tooltips || {}) };
-  const [toast, setToast] = React.useState("");
-  const toastTimer = React.useRef(null);
-  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-  const showToast = (message) => {
-    clearTimeout(toastTimer.current);
-    setToast(message);
-    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
-  };
+  const { toast, showToast } = useToast();
   const editRecord = (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id });
   const seedDialog = props.dialog;
   const seedRecord = seedDialog ? seed().find((item) => item.id === seedDialog.id) : null;
