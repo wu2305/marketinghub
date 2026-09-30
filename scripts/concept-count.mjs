@@ -5,7 +5,7 @@
 // Only reads files. Counts are distinct values unless the label says "uses".
 import fs from "node:fs";
 import path from "node:path";
-import { rawFoundationValues } from "./css-metrics.mjs";
+import { mediaWidths, rawFoundationValues } from "./css-metrics.mjs";
 
 const ROOT = path.resolve("src/design");
 const walk = (dir) =>
@@ -46,6 +46,7 @@ const rows = [
   ["legacy-named tokens (css-budget exemptions)", budget.legacyPrefixExemptions.length],
   // Same numbers the CSS budget test enforces; files still in pendingMigration add the rest.
   ...Object.entries(labels).map(([k, label]) => [`raw ${label} values outside tokens.css${all[k] > gated[k] ? ` (+${all[k] - gated[k]} in pendingMigration)` : ""}`, gated[k]]),
+  ["distinct @media width values", mediaWidths(ROOT).length],
   ["raw <button> uses in features/pages", uses(/<button\b/g)],
   ["raw <select> uses in features/pages", uses(/<select\b/g)],
   ["raw <input> uses in features/pages", uses(/<input\b/g)],

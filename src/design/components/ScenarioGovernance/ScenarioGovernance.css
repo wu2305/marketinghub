@@ -8,4 +8,4 @@
 .mh-scenario-governance--columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .mh-scenario-governance--columns .mh-scenario-governance__item{padding:10px 12px;border-radius:var(--mh-radius-md);background:var(--mh-surface)}
 .mh-scenario-governance--columns .mh-scenario-governance__label{min-width:80px}
-@media(max-width:650px){.mh-scenario-governance--columns{grid-template-columns:1fr}.mh-scenario-governance__label{min-width:80px}}
+@media(max-width:760px){.mh-scenario-governance--columns{grid-template-columns:1fr}.mh-scenario-governance__label{min-width:80px}}
