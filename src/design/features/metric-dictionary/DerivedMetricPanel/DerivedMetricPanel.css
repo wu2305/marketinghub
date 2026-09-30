@@ -21,7 +21,7 @@
 .mh-derived-panel__operators button:nth-last-child(2) { margin-left: auto; color: var(--mh-warning); }
 .mh-derived-panel__token { display: inline-flex; align-items: center; padding: 0 8px; min-height: 28px; border-radius: var(--mh-radius-md); font-size: var(--mh-font-size-md); font-weight: var(--mh-font-weight-bold); }
 .mh-derived-panel__token--metric { background: var(--mh-info-wash); color: var(--mh-info); }
-.mh-derived-panel__token--operator { background: var(--mh-warning-wash); color: var(--mh-accent); }
+.mh-derived-panel__token--operator { background: var(--mh-warning-wash); color: var(--mh-accent-ink); }
 .mh-derived-panel__token--constant { background: var(--mh-success-wash); color: var(--mh-success); }
 .mh-derived-panel__token--parenthesis { background: var(--mh-surface-muted); color: var(--mh-text-muted); }
 .mh-derived-panel__token button { margin-left: 6px; border: 0; background: transparent; color: inherit; cursor: pointer; }

@@ -148,7 +148,7 @@ function HrTrendChart({ chart }) {
         return (
           <g key={s.name}>
             <polyline points={pts} fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
-            <circle cx={lastX} cy={lastY} r="3" fill={color} stroke="#fff" strokeWidth="1" />
+            <circle cx={lastX} cy={lastY} r="3" fill={color} stroke="var(--mh-surface)" strokeWidth="1" />
             <text x={lastX - 2} y={lastY - 6} textAnchor="end" fontSize="9" fontWeight="600" fill={color}>
               {last > 0 ? "+" : ""}
               {last.toFixed(1)}%

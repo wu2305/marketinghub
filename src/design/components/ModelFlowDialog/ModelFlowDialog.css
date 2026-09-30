@@ -130,6 +130,12 @@ background: var(--mh-surface-subtle);
 margin: 6px 0 0;
 }
 
+.mh-flow__head button:focus-visible,
+.mh-flow__msg input:focus-visible {
+  outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
+}
+
 .mh-flow__msg.is-selected {
 border-left-color: var(--mh-accent);
   background: var(--mh-accent-wash);

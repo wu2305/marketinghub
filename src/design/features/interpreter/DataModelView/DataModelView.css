@@ -221,7 +221,7 @@
   place-items: center;
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface-muted);
-  color: var(--mh-accent);
+  color: var(--mh-accent-ink);
 }
 
 .mh-dmview__report-icon svg {
@@ -250,7 +250,7 @@
 }
 
 .mh-dmview__report:hover .mh-dmview__report-copy strong {
-  color: var(--mh-accent);
+  color: var(--mh-accent-ink);
 }
 
 /* ── Relationship graph ── */

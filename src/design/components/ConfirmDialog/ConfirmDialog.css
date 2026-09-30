@@ -70,8 +70,8 @@
 
 .mh-confirm__btn--primary {
   border-color: var(--mh-accent);
-  background: var(--mh-accent);
-  color: var(--mh-surface);
+  background: var(--mh-accent-fill);
+  color: var(--mh-text-strong);
 }
 
 .mh-confirm__btn:focus-visible {
