@@ -1,5 +1,6 @@
 import React from "react";
 import { governanceMessages, governedActions } from "../lib/governance.js";
+import { useGovernedFlow } from "../lib/governed-flow.js";
 
 const TOAST_MS = 3000;
 
@@ -208,39 +209,9 @@ export function useScenarioDemo(props = {}) {
   );
   const [records, setRecords] = React.useState(null);
   const list = records || all;
-  /* { kind: "info"|"disable-first"|"disable"|"delete", record?, then?, title?, message? }.
-     Stories seed `{ kind: "disable-confirm" | "delete-confirm" | "disable-first", record: { id } }`. */
-  const [pending, setPending] = React.useState(() => {
-    const seed = props.dialog;
-    const record = seed && all.find((item) => item.id === seed.record?.id);
-    if (!record) return null;
-    const kind = { "disable-confirm": "disable", "delete-confirm": "delete" }[seed.kind] || seed.kind;
-    return { kind, record, then: seed.kind === "disable-first" ? "edit" : undefined };
-  });
   const [toast, setToast] = React.useState("");
   const toastTimer = React.useRef(null);
   React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-  // Reset local mutations when the host supplies a different collection or identity.
-  // Ordinary active/type switches keep the same seed and preserve local changes.
-  const seed = React.useRef({ records: props.records, currentUser });
-  React.useEffect(() => {
-    if (seed.current.records === props.records && seed.current.currentUser === currentUser) return;
-    seed.current = { records: props.records, currentUser };
-    setRecords(null);
-    setPending(null);
-    setDetailId(null);
-    clearTimeout(toastTimer.current);
-    setToast("");
-  }, [props.records, currentUser, setDetailId]);
-
-  const statusPick = props.active === false ? undefined : selected.status;
-  const processPick = props.active === false ? undefined : selected.process;
-  React.useEffect(() => {
-    if (props.active !== false) setPage(1);
-  }, [props.active, query, statusPick, processPick, pageSize, setPage]);
-
-  if (props.active === false) return null;
-
   const showToast = (message) => {
     clearTimeout(toastTimer.current);
     setToast(message);
@@ -254,50 +225,63 @@ export function useScenarioDemo(props = {}) {
     return { ...record, ai_interpreter_enabled: false, status: "Disable", availability: "disabled" };
   };
   const edit = (record) => props.onNavigate?.({ href: editScenarioHref(record), id: record.id });
-
-  /* Pattern B6-B8; scenario-reports.js:191-214,1015-1080 is the source flow. */
-  const act = (event) => {
-    const record = list.find((item) => item.id === event.id);
-    if (!record) return;
-    props.onAction?.(event);
-    if (event.reason === "permission") setPending({ kind: "info", title: strings.permissionDeniedTitle, message: tooltips.permission });
-    else if (event.reason === "already-disabled") setPending({ kind: "info", title: strings.alreadyDisabledTitle, message: tooltips["already-disabled"] });
-    else if (event.reason === "disable-first") setPending({ kind: "disable-first", record, then: event.action });
-    else if (event.action === "edit") edit(record);
-    else setPending({ kind: event.action, record });
-  };
-  const dialogFor = (state) => {
-    if (!state) return null;
-    if (state.kind === "info") return { purpose: "info", title: state.title, message: state.message, closeLabel: strings.closeLabel };
-    if (state.kind === "disable-first") {
-      return { purpose: "warning", title: strings.offlineFirstTitle, message: governanceMessages.dialogs["disable-first"].message, confirmLabel: strings.offlineFirstConfirm, cancelLabel: strings.cancelLabel };
-    }
-    const isDelete = state.kind === "delete";
-    return {
-      purpose: isDelete ? "danger" : "warning",
-      title: strings.confirmTitle,
-      message: isDelete ? strings.deleteConfirmMessage : strings.disableConfirmMessage,
-      confirmLabel: isDelete ? strings.deleteConfirmLabel : strings.disableConfirmLabel,
+  /* Pattern B6-B8; scenario-reports.js:191-214,1015-1080 is the source flow, the sequence is useGovernedFlow.
+     Stories seed `{ kind: "disable-confirm" | "delete-confirm" | "disable-first", record: { id } }`. */
+  const seedDialog = props.dialog;
+  const seedRecord = seedDialog && all.find((item) => item.id === seedDialog.record?.id);
+  const flow = useGovernedFlow({
+    find: (id) => list.find((item) => item.id === id),
+    copy: {
+      permissionDeniedTitle: strings.permissionDeniedTitle,
+      alreadyDisabledTitle: strings.alreadyDisabledTitle,
+      closeLabel: strings.closeLabel,
       cancelLabel: strings.cancelLabel,
-    };
-  };
-  const confirm = (event) => {
-    const state = pending;
-    setPending(null);
-    props.onDialogConfirm?.(event);
-    if (!state || state.kind === "info") return;
-    if (state.kind === "disable-first") {
-      const disabledRecord = disable(state.record);
-      if (state.then === "edit") edit(disabledRecord);
-      if (state.then === "delete") setPending({ kind: "delete", record: disabledRecord });
-      return;
-    }
-    if (state.kind === "disable") disable(state.record);
-    if (state.kind === "delete") {
-      setRecords((prev) => (prev || all).filter((item) => item.id !== state.record.id));
-      if (detailId === state.record.id) setDetailId(null);
+      offlineFirstTitle: strings.offlineFirstTitle,
+      offlineFirstConfirm: strings.offlineFirstConfirm,
+      confirmTitle: strings.confirmTitle,
+      deleteMessage: strings.deleteConfirmMessage,
+      deleteConfirm: strings.deleteConfirmLabel,
+      offlineMessage: strings.disableConfirmMessage,
+      offlineConfirm: strings.disableConfirmLabel,
+    },
+    tooltips,
+    onEdit: edit,
+    onDisable: disable,
+    onDelete: (record) => {
+      setRecords((prev) => (prev || all).filter((item) => item.id !== record.id));
+      if (detailId === record.id) setDetailId(null);
       showToast(strings.deletedToast);
-    }
+    },
+    initial: seedRecord
+      ? { kind: { "disable-confirm": "disable", "delete-confirm": "delete" }[seedDialog.kind] || seedDialog.kind, record: seedRecord, then: seedDialog.kind === "disable-first" ? "edit" : undefined }
+      : undefined,
+  });
+  // Reset local mutations when the host supplies a different collection or identity.
+  // Ordinary active/type switches keep the same seed and preserve local changes.
+  const closeFlowDialog = flow.onDialogCancel;
+  const seed = React.useRef({ records: props.records, currentUser });
+  React.useEffect(() => {
+    if (seed.current.records === props.records && seed.current.currentUser === currentUser) return;
+    seed.current = { records: props.records, currentUser };
+    setRecords(null);
+    closeFlowDialog();
+    setDetailId(null);
+    clearTimeout(toastTimer.current);
+    setToast("");
+  }, [props.records, currentUser, setDetailId, closeFlowDialog]);
+
+  const statusPick = props.active === false ? undefined : selected.status;
+  const processPick = props.active === false ? undefined : selected.process;
+  React.useEffect(() => {
+    if (props.active !== false) setPage(1);
+  }, [props.active, query, statusPick, processPick, pageSize, setPage]);
+
+  if (props.active === false) return null;
+
+  const act = (event) => {
+    if (!list.some((item) => item.id === event.id)) return;
+    props.onAction?.(event);
+    flow.onAction(event);
   };
 
   const isOwn = (item) => item.creator === currentUser;
@@ -376,11 +360,14 @@ export function useScenarioDemo(props = {}) {
       setDetailId(null);
       props.onCloseDetail?.(event);
     },
-    dialog: dialogFor(pending),
+    dialog: flow.dialog,
     toast,
-    onDialogConfirm: confirm,
+    onDialogConfirm: (event) => {
+      props.onDialogConfirm?.(event);
+      flow.onDialogConfirm();
+    },
     onDialogCancel: (event) => {
-      setPending(null);
+      flow.onDialogCancel();
       props.onDialogCancel?.(event);
     },
     createHref: props.createHref || "/assets/pages/knowledge-create.html?type=Scenario%20Reporting",

@@ -26,6 +26,7 @@ import { governanceMessages } from "./governance.js";
  * @property {(record: any) => void} [onDelete] Remove the record (and show the toast).
  * @property {(record: any) => void} [onEdit] Open the editor.
  * @property {(record: any) => ({ title?: string, message: string } | null | undefined)} [deleteBlocked] An explanation when this record cannot be deleted; shown instead of the delete confirm.
+ * @property {{ kind: "disable"|"delete"|"disable-first", record: any, then?: "edit"|"delete" }} [initial] Open this confirmation on first render (stories, tests).
  */
 
 /**
@@ -42,14 +43,15 @@ import { governanceMessages } from "./governance.js";
  *   onDialogCancel: () => void,
  * }}
  */
-export function useGovernedFlow({ find, copy = {}, tooltips = governanceMessages, onDisable, onDelete, onEdit, deleteBlocked }) {
-  const [pending, setPending] = React.useState(null);
+export function useGovernedFlow({ find, copy = {}, tooltips = governanceMessages, onDisable, onDelete, onEdit, deleteBlocked, initial }) {
   const dialogs = governanceMessages.dialogs;
-
-  const requestDelete = (record) => {
+  const deletePending = (record) => {
     const blocked = deleteBlocked?.(record);
-    setPending(blocked ? { kind: "info", title: blocked.title || copy.deleteBlockedTitle || "Deletion blocked", message: blocked.message } : { kind: "delete", record });
+    return blocked ? { kind: "info", title: blocked.title || copy.deleteBlockedTitle || "Deletion blocked", message: blocked.message } : { kind: "delete", record };
   };
+  const [pending, setPending] = React.useState(() => (initial?.kind === "delete" ? deletePending(initial.record) : initial || null));
+  const closeDialog = React.useCallback(() => setPending(null), []);
+  const requestDelete = (record) => setPending(deletePending(record));
   const disable = (record) => onDisable?.(record) || { ...record, status: "Disable" };
 
   const onAction = ({ action, id, reason = null }) => {
@@ -96,5 +98,5 @@ export function useGovernedFlow({ find, copy = {}, tooltips = governanceMessages
     };
   }
 
-  return { dialog, onAction, onDialogConfirm, onDialogCancel: () => setPending(null) };
+  return { dialog, onAction, onDialogConfirm, onDialogCancel: closeDialog };
 }

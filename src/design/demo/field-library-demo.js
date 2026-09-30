@@ -14,6 +14,7 @@ import { demoImage } from "./images.js";
  */
 import React from "react";
 import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
+import { useGovernedFlow } from "../lib/governed-flow.js";
 import { fieldLibraryTypes } from "../features/interpreter/FieldLibraryView/index.jsx";
 
 const TOAST_MS = 3000;
@@ -297,14 +298,6 @@ export function useFieldLibraryDemo(props) {
      edit/delete; a referenced model cannot be deleted; completed changes
      show a toast. `props.dialog` seeds an open dialog for stories. */
   const tooltips = { ...governanceMessages, ...(strings.tooltips || {}) };
-  const [pending, setPending] = React.useState(() => {
-    const seedDialog = props.dialog;
-    if (!seedDialog) return null;
-    const record = seed().find((item) => item.id === seedDialog.id);
-    if (!record) return null;
-    const kind = { "disable-confirm": "disable", "delete-confirm": "delete", "delete-blocked": "delete-blocked" }[seedDialog.kind] || seedDialog.kind;
-    return { kind, record };
-  });
   const [toast, setToast] = React.useState("");
   const toastTimer = React.useRef(null);
   React.useEffect(() => () => clearTimeout(toastTimer.current), []);
@@ -313,10 +306,31 @@ export function useFieldLibraryDemo(props) {
     setToast(message);
     toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
   };
-  const clearDialog = React.useCallback(() => setPending(null), []);
   const editRecord = (record) => props.onNavigate?.({ href: props.editHref ? props.editHref(record.id) : undefined, id: record.id });
-  const requestDelete = (record) =>
-    setPending({ kind: (record.references || []).length ? "delete-blocked" : "delete", record });
+  const seedDialog = props.dialog;
+  const seedRecord = seedDialog ? seed().find((item) => item.id === seedDialog.id) : null;
+  const seedKind = seedDialog ? { "disable-confirm": "disable", "delete-confirm": "delete", "delete-blocked": "delete" }[seedDialog.kind] || seedDialog.kind : null;
+  const flow = useGovernedFlow({
+    find: (id) => all.find((item) => item.id === id),
+    copy: dialogs,
+    tooltips,
+    onEdit: editRecord,
+    onDisable: (record) => {
+      patchRecord(record.id, { status: "Disable", availability: "disabled", isDisabled: true, updated_at: now() });
+      showToast(dialogs.disabledToast || "Disabled successfully");
+    },
+    onDelete: (record) => {
+      setAll((current) => current.filter((item) => item.id !== record.id));
+      setDetailId((current) => (current === record.id ? null : current));
+      showToast(dialogs.deletedToast || "Deleted successfully");
+    },
+    deleteBlocked: (record) => {
+      const refs = record.references || [];
+      return refs.length ? { message: dialogs.deleteBlocked?.(refs) || `This analysis is referenced by: ${refs.join(", ")}. Remove these references before deleting.` } : null;
+    },
+    initial: seedRecord ? { kind: seedKind, record: seedRecord } : undefined,
+  });
+  const clearDialog = flow.onDialogCancel;
   const [descriptionEdit, setDescriptionEdit] = React.useState(() =>
     props.descriptionEdit ? { id: props.descriptionEdit, value: null } : null,
   );
@@ -383,65 +397,7 @@ export function useFieldLibraryDemo(props) {
     }
     if (record.type !== "Analytical Model") return;
     const gate = governedActions(record, { currentUser }).find((item) => item.action === action);
-    const reason = gate?.reason ?? null;
-    if (reason === "permission") setPending({ kind: "info", title: dialogs.permissionDeniedTitle || "Permission denied", message: tooltips.permission });
-    else if (reason === "already-disabled") setPending({ kind: "info", title: dialogs.alreadyDisabledTitle || "Knowledge already disabled", message: tooltips["already-disabled"] });
-    else if (reason === "disable-first") setPending({ kind: "disable-first", record, then: action });
-    else if (action === "edit") editRecord(record);
-    else if (action === "delete") requestDelete(record);
-    else setPending({ kind: "disable", record });
-  };
-  const dialogFor = (state) => {
-    if (!state) return null;
-    if (state.kind === "info") return { purpose: "info", title: state.title, message: state.message, closeLabel: dialogs.closeLabel || "Close" };
-    if (state.kind === "delete-blocked") {
-      const refs = state.record.references || [];
-      return {
-        purpose: "info",
-        title: dialogs.deleteBlockedTitle || "Deletion blocked",
-        message: dialogs.deleteBlocked?.(refs) || `This analysis is referenced by: ${refs.join(", ")}. Remove these references before deleting.`,
-        closeLabel: dialogs.closeLabel || "Close",
-      };
-    }
-    if (state.kind === "disable-first") {
-      return {
-        purpose: "warning",
-        title: dialogs.offlineFirstTitle || governanceMessages.dialogs["disable-first"].title,
-        message: dialogs.offlineFirstMessage || governanceMessages.dialogs["disable-first"].message,
-        confirmLabel: dialogs.offlineFirstConfirm || "Go Offline",
-        cancelLabel: dialogs.cancelLabel || "Cancel",
-      };
-    }
-    const isDelete = state.kind === "delete";
-    return {
-      purpose: isDelete ? "danger" : "warning",
-      title: dialogs.confirmTitle || "Confirm Operation",
-      message: isDelete ? dialogs.deleteMessage || "Please confirm whether to delete this knowledge. Deletion cannot be undone." : dialogs.offlineMessage || "Please confirm whether to offline this knowledge.",
-      confirmLabel: isDelete ? dialogs.deleteConfirm || "Confirm Delete" : dialogs.offlineConfirm || "Confirm Offline",
-      cancelLabel: dialogs.cancelLabel || "Cancel",
-    };
-  };
-  const disableRecord = (record) => {
-    patchRecord(record.id, { status: "Disable", availability: "disabled", isDisabled: true, updated_at: now() });
-    showToast(dialogs.disabledToast || "Disabled successfully");
-  };
-  const confirmDialog = (event) => {
-    const state = pending;
-    setPending(null);
-    props.onDialogConfirm?.(event);
-    if (!state || state.kind === "info" || state.kind === "delete-blocked") return;
-    if (state.kind === "disable-first") {
-      disableRecord(state.record);
-      if (state.then === "edit") editRecord(state.record);
-      if (state.then === "delete") requestDelete({ ...state.record, status: "Disable" });
-      return;
-    }
-    if (state.kind === "disable") disableRecord(state.record);
-    if (state.kind === "delete") {
-      setAll((current) => current.filter((item) => item.id !== state.record.id));
-      setDetailId((current) => (current === state.record.id ? null : current));
-      showToast(dialogs.deletedToast || "Deleted successfully");
-    }
+    flow.onAction({ action, id, reason: gate?.reason ?? null });
   };
 
   /* Filter descriptors per type — field-library.js render(): insertion-order
@@ -569,7 +525,7 @@ export function useFieldLibraryDemo(props) {
     dashboardHref: props.dashboardHref,
     detail: detailRecord,
     peek: peekDetail ? { type: peeked.type, detail: peekDetail } : null,
-    dialog: dialogFor(pending),
+    dialog: flow.dialog,
     toast,
     descriptionEdit: descriptionEdit
       ? {
@@ -619,9 +575,12 @@ export function useFieldLibraryDemo(props) {
       setDetailId(null);
       props.onCloseDetail?.(event);
     },
-    onDialogConfirm: confirmDialog,
+    onDialogConfirm: (event) => {
+      props.onDialogConfirm?.(event);
+      flow.onDialogConfirm();
+    },
     onDialogCancel: (event) => {
-      setPending(null);
+      flow.onDialogCancel();
       props.onDialogCancel?.(event);
     },
     onClearFilters: (event) => {
