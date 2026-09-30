@@ -35,7 +35,7 @@ npm test               # vitest 行为测试
 
 | 阶段 | 条目 | 状态 | PR |
 |---|---|---|---|
-| M7 | Storybook Cloudflare Pages 与 merge/tag 自动刷新 | 进行中；工作流已准备，待 Cloudflare 连接与首次部署 | `deploy/cloudflare-storybook`，PR 待开 |
+| M7 | Storybook Cloudflare Pages 与 merge/tag 自动刷新 | 进行中；工作流已准备，待 Cloudflare 连接与首次部署 | [PR #98](https://github.com/wu2305/marketinghub/pull/98)，draft；`deploy/cloudflare-storybook` |
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。WP1 加 CSS 预算棘轮（裸十六进制、token 数、同值别名及新组件前缀）；WP4 冻结现有 47 个公共 demo/content/routes/fixtures 导出身份，新增拒绝、删除允许，待 M7 R5(b) 拆入口；仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 机器集成完成；人工整页收敛继续 | Header PR #21、首页状态/窄屏 PR #22；完整入口与15命名状态见§2.2 P01，原不可达platformGuide/picker/upload残留不复活 |
