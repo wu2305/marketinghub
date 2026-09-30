@@ -8,7 +8,7 @@
 
 | 项 | 值 |
 |---|---|
-| Cloudflare Worker | 2026-10-01 用户改用已创建的 `marketinghub` Worker（`marketinghub.gdindex.workers.dev`）；[PR #98](https://github.com/wu2305/marketinghub/pull/98) 改为 `wrangler.jsonc` 静态资源配置与 tag/manual GitHub workflow，main merge 由 Cloudflare Workers Builds 自动发布。已通过插件补全新 trigger 的构建命令；旧失败 trigger 指向已不存在的 Worker ID，已通过插件删除该失效连接。线上部署验证进行中；GitHub token secret 待用户设置。前轮本地 lint、457 tests、492 stories + 94 docs 通过。 |
+| Cloudflare Worker | 2026-10-01 用户决定用新建 `marketinghub` Worker（`marketinghub.gdindex.workers.dev`），仅 main merge/push 自动刷新，取消 tag 部署；[PR #98](https://github.com/wu2305/marketinghub/pull/98) 新增 `wrangler.jsonc`，不需 GitHub secret。已通过 Cloudflare 插件配置新 trigger 的 lint/test/Storybook build，删除失效旧 trigger。Wrangler dry-run 与 Storybook build 通过；首次云验证在拉取短 SHA 时失败，继续重试完整提交。线上验证进行中。 |
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 本次安装锁定版本 8.6.18，`@storybook/react-vite` |
@@ -35,7 +35,7 @@ npm test               # vitest 行为测试
 
 | 阶段 | 条目 | 状态 | PR |
 |---|---|---|---|
-| M7 | Storybook Cloudflare Worker 与 merge/tag 自动刷新 | 进行中；使用用户新建 Worker，部署与触发验证中 | [PR #98](https://github.com/wu2305/marketinghub/pull/98)，draft；`deploy/cloudflare-storybook` |
+| M7 | Storybook Cloudflare Worker 与 merge 自动刷新 | 进行中；配置已完成，线上验证中 | [PR #98](https://github.com/wu2305/marketinghub/pull/98)，draft；`deploy/cloudflare-storybook` |
 | M0 | 全量入口/子视图/状态/动作与组件候选盘点；生效参照与冲突登记 | 进行中 | 888177a 完成首轮静态扫描；运行时可达路径、状态 ID/故事映射与共用边界尚未完成 |
 | M1 | 最小可重复验证、公共出口/文档、故事状态接线、token/资源/导航基础 | 进行中 | 本轮：index.js 公共出口、全组件 JSDoc+autodocs（47 stories/5 docs）、缺失组件故事补齐、Library 故事受控回写、真实导航 href；visual-check 10/10 已入库。2026-09-24 纠偏：visual-check 构建戳/三态/负向/几何（A）、fixture-逻辑-展示分层与替换夹具测试（B）、作用域 reset + assetUrl + 链接适配 + 独立宿主（E）。WP1 加 CSS 预算棘轮（裸十六进制、token 数、同值别名及新组件前缀）；WP4 冻结现有 47 个公共 demo/content/routes/fixtures 导出身份，新增拒绝、删除允许，待 M7 R5(b) 拆入口；仍缺：token 化全覆盖、各页 @media 复核、键盘验证 |
 | M2 | 外壳与完整 Home，包括助手实际可达状态 | 机器集成完成；人工整页收敛继续 | Header PR #21、首页状态/窄屏 PR #22；完整入口与15命名状态见§2.2 P01，原不可达platformGuide/picker/upload残留不复活 |
@@ -501,6 +501,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-10-01 | 用户取消 tag 部署，仅保留 main merge 刷新；PR #98 删除 GitHub 部署 workflow，使用既有 Cloudflare Workers Builds/token，无需 GitHub secret。配置与文档改为最终 Worker 方案。 | Codex |
 | 2026-10-01 | 用户确认改用新建 `marketinghub` Worker。Cloudflare 插件核实旧失败 build 初始化前终止、旧 trigger 关联 ID 已不存在；新 Worker trigger 原构建命令为空，已补全 lint/test/Storybook build。PR #98 新增 wrangler 静态资源配置，GitHub workflow 改为 tag/manual，main 由 Workers Builds 处理。组件与视觉无改动，验证继续。 | Codex |
 | 2026-10-01 | Cloudflare Pages：新增独立部署工作流，main/全部 tag/手动触发，lint→test→Storybook build→Wrangler 上传，固定 Pages 分支 main；上传后比对线上 index.json。README 记录账户配置与 tag 发布语义。无组件、故事或视觉差异。Cloudflare 插件连接、账户配置、上线与真实事件验证仍 pending。 | Codex |
 | 2026-09-30 | v22 设计同步（设计师 PR #92 之上，同一分支，不推到她的分支）：按新 Demo 重建 Analytical Model 创建/编辑表单——扁平字段；Business Domain 必填多选；Referenced Metrics 随业务域过滤、可搜索、未选域时禁用；Analysis Logic 与 Notes & Guardrails 改名并带帮助提示；Save Draft / Publish & Enable；保存/发布结果框；有未保存修改时 Cancel 弹 “Discard changes?”；下拉 Esc/↓/外点关闭。组件：`KnowledgeCreateFields`（`AnalysisFields`、`MultiPicker` 新增 searchable/disabled/help/invalid 等，`HelpTip`，删 `TagInput`/`Section`）、`KnowledgeCreatePage`（`onDiscard`、结果/放弃对话框）、`useKnowledgeCreateDemo`（域→指标裁剪、Analytical Model 提交 stage `Published`、快照放弃确认）。新增 6 个故事、4 个单测、6 个 p08 场景与 2 条负向，P08 既有 4 个场景断言随新表单更新；参照物 `skill-editor.js` 空值保护单独提交恢复。全量门禁：lint 0、457 测试（40 文件）、492 stories、host 31/31、visual-check 540/540 机器通过（人工 pending，按 2026-09-29 决定不再要求）、`--negative` 50/50、字体探针 0、build:lib 通过。向设计师提 5 个问题（Issue 与 `design-sync/designer-questions/2026-09-30-v22.md`），答案回填变更说明 §C。 | Claude |

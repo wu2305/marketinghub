@@ -57,21 +57,16 @@ Storybook is deployed to the existing `marketinghub` Worker at
 https://marketinghub.gdindex.workers.dev. `wrangler.jsonc` serves the
 `storybook-static` output as static assets.
 
-- Merges/pushes to `main`: the connected Cloudflare Workers Build runs
-  `npm ci && npm run lint && npm test && npm run build-storybook`, then
-  `npx wrangler deploy`.
-- Tag pushes and manual runs: `.github/workflows/storybook-worker.yml` runs
-  the same checks and deploys to the same Worker through GitHub Actions.
-  A tag on an older commit deliberately publishes that version.
-- Branch previews use Cloudflare's preview build configuration. They do not
-  update the production URL.
+The connected Cloudflare Workers Build refreshes the site after every merge
+or push to `main`:
 
-For tag/manual deployments, add the GitHub Actions repository secret
-`CLOUDFLARE_API_TOKEN` with Account → Workers Scripts → Edit permission,
-scoped to the account in `wrangler.jsonc`. The account ID is public configuration.
-The workflow compares the deployed `index.json` with the local build.
-Cloudflare builds and GitHub Actions have separate queues; when releasing a
-main commit, wait for its Cloudflare build to finish before pushing its tag.
+- Build: `npm ci && npm run lint && npm test && npm run build-storybook`
+- Deploy: `npx wrangler deploy`
+- Root directory: `/`; production branch: `main`.
+
+Cloudflare uses its existing build token. No GitHub deployment secrets are
+needed. Tag pushes do not deploy; the existing `v*` visual CI remains separate.
+Repository changes are submitted through pull requests.
 
 Local validation: `npm run build-storybook && npx wrangler deploy --dry-run`.
 Deployment status and evidence live in `handover/README.md`.
