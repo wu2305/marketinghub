@@ -8,7 +8,7 @@
  * library and create/edit form; the data rules underneath are this app's.
  */
 import React from "react";
-import { AiInterpreterPage, KnowledgeCreatePage, governanceMessages, governedActions } from "marketing-hub";
+import { AiInterpreterPage, KnowledgeCreatePage, governanceMessages, governedActions, useGovernedFlow } from "marketing-hub";
 import { INTERPRETER, KNOWLEDGE_CREATE, LOGO, NAV } from "marketing-hub/demo";
 
 export type Term = {
@@ -26,10 +26,6 @@ export type Term = {
 type FormValues = { title: string; kind: string; description: string; synonyms: string[]; scope: string[] };
 type Answer = NonNullable<React.ComponentProps<typeof AiInterpreterPage>["assistant"]>["answers"] extends (infer A)[] | undefined ? A : never;
 type Route = { page: "library"; type: string } | { page: "form"; mode: "create" | "edit"; id?: string };
-type Pending =
-  | { kind: "info"; title: string; message: string }
-  | { kind: "disable-first"; id: string; then: "edit" | "delete" }
-  | { kind: "disable" | "delete"; id: string };
 
 const LIBRARY = INTERPRETER.businessTermLibrary;
 const DIALOGS = LIBRARY.strings.dialogs;
@@ -58,7 +54,6 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   const [page, setPage] = React.useState(1);
   const [pageSize, setPageSize] = React.useState(10);
   const [detailId, setDetailId] = React.useState<string | null>(null);
-  const [pending, setPending] = React.useState<Pending | null>(null);
   const [values, setValues] = React.useState<FormValues>(BLANK);
   const [invalid, setInvalid] = React.useState<string[]>([]);
   const [toast, setToast] = React.useState("");
@@ -103,6 +98,25 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
     if (submit) flash(setPageToast, INTERPRETER.notices.submitted);
   };
 
+  /* The blocked-reason / dialog / confirm / toast sequence is the package's `useGovernedFlow`;
+   * what "disable", "delete" and "edit" do to this app's records stays here. */
+  const flow = useGovernedFlow({
+    find,
+    copy: DIALOGS,
+    tooltips: TOOLTIPS,
+    onEdit: (record: Term) => openForm("edit", record.id),
+    onDisable: (record: Term) => {
+      update(record.id, { status: "Disable" });
+      flash(setToast, DIALOGS.disabledToast);
+      return { ...record, status: "Disable" };
+    },
+    onDelete: (record: Term) => {
+      setRecords((all) => all.filter((item) => item.id !== record.id));
+      setDetailId(null);
+      flash(setToast, DIALOGS.deletedToast);
+    },
+  });
+
   if (route.page === "form") {
     return (
       <KnowledgeCreatePage
@@ -141,41 +155,6 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   const withActions = (record: Term) => ({ ...record, actions: governedActions(record, { currentUser }) });
   const detail = detailId ? find(detailId) : undefined;
 
-  const act = ({ action, id, reason }: { action: string; id: string; reason: string | null }) => {
-    if (reason === "permission") return setPending({ kind: "info", title: DIALOGS.permissionDeniedTitle, message: TOOLTIPS.permission });
-    if (reason === "already-disabled") return setPending({ kind: "info", title: DIALOGS.alreadyDisabledTitle, message: DIALOGS.alreadyDisabledMessage });
-    if (reason === "disable-first") return setPending({ kind: "disable-first", id, then: action === "edit" ? "edit" : "delete" });
-    if (action === "edit") return openForm("edit", id);
-    setPending({ kind: action === "delete" ? "delete" : "disable", id });
-  };
-  const confirm = () => {
-    const state = pending;
-    setPending(null);
-    if (!state || state.kind === "info") return;
-    if (state.kind === "delete") {
-      setRecords((all) => all.filter((record) => record.id !== state.id));
-      setDetailId(null);
-      return flash(setToast, DIALOGS.deletedToast);
-    }
-    update(state.id, { status: "Disable" });
-    flash(setToast, DIALOGS.disabledToast);
-    if (state.kind === "disable-first" && state.then === "edit") openForm("edit", state.id);
-    if (state.kind === "disable-first" && state.then === "delete") setPending({ kind: "delete", id: state.id });
-  };
-  const dialog = !pending
-    ? null
-    : pending.kind === "info"
-      ? { purpose: "info", title: pending.title, message: pending.message, closeLabel: DIALOGS.closeLabel }
-      : pending.kind === "disable-first"
-        ? { purpose: "warning", title: DIALOGS.offlineFirstTitle, message: DIALOGS.offlineFirstMessage, confirmLabel: DIALOGS.offlineFirstConfirm, cancelLabel: DIALOGS.cancelLabel }
-        : {
-            purpose: pending.kind === "delete" ? "danger" : "warning",
-            title: DIALOGS.confirmTitle,
-            message: pending.kind === "delete" ? DIALOGS.deleteMessage : DIALOGS.offlineMessage,
-            confirmLabel: pending.kind === "delete" ? DIALOGS.deleteConfirm : DIALOGS.offlineConfirm,
-            cancelLabel: DIALOGS.cancelLabel,
-          };
-
   const facet = (id: "status" | "creator", label: string, allLabel: string, options: { id: string; label: string }[]) => ({ id, label, allLabel, options, selected: selected[id] });
   const view = {
     records: visible.slice((current - 1) * pageSize, current * pageSize).map(withActions),
@@ -191,7 +170,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
     strings: { ...LIBRARY.strings, tooltips: TOOLTIPS },
     createHref: hrefFor("knowledge-create", { type: "Business Term" }),
     detail: detail ? withActions(detail) : null,
-    dialog,
+    dialog: flow.dialog,
     toast,
     onQueryChange: ({ value }: { value: string }) => { setQuery(value); setPage(1); },
     onFilterToggle: ({ id, value, checked }: { id: string; value: string; checked: boolean }) => {
@@ -203,9 +182,9 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
     onPageSize: ({ pageSize: next }: { pageSize: number }) => { setPageSize(next); setPage(1); },
     onOpen: ({ id }: { id: string }) => setDetailId(id),
     onCloseDetail: () => setDetailId(null),
-    onAction: act,
-    onDialogConfirm: confirm,
-    onDialogCancel: () => setPending(null),
+    onAction: flow.onAction,
+    onDialogConfirm: flow.onDialogConfirm,
+    onDialogCancel: flow.onDialogCancel,
     onCreate: () => openForm("create"),
   };
 
