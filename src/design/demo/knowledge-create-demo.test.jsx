@@ -13,7 +13,7 @@ function demoPropsFor(type) {
 describe("P08 demo flow", () => {
   it("validates the dedicated required fields while a generic draft can be saved incomplete", () => {
     expect(validateKnowledgeCreate("Business Term", {}, "create")).toEqual(["title", "kind", "description"]);
-    expect(validateKnowledgeCreate("Analytical Model", { analysis_name: "A" }, "create")).toEqual(["trigger_when", "output_requirements"]);
+    expect(validateKnowledgeCreate("Analytical Model", { analysis_name: "A" }, "create")).toEqual(["businessDomain", "trigger_when", "output_requirements"]);
     expect(validateKnowledgeCreate("Scenario Reporting", {}, "create")).toHaveLength(4);
     expect(validateKnowledgeCreate("Metric Dictionary", { metricName: "Sales" }, "create")).toEqual(["metricFormula"]);
   });
@@ -41,9 +41,10 @@ describe("P08 demo flow", () => {
       const events = { onSave: vi.fn(), onSubmit: vi.fn(), onCancel: vi.fn() };
       const values = { title: "Probe", description: "Probe text" };
       const { unmount } = render(<KnowledgeCreatePage {...demoPropsFor(type)} values={values} {...events} />);
-      fireEvent.click(screen.getByRole("button", { name: "Save" }));
+      const analysis = type === "Analytical Model";
+      fireEvent.click(screen.getByRole("button", { name: analysis ? "Save Draft" : "Save" }));
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-      fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+      fireEvent.click(screen.getByRole("button", { name: analysis ? "Publish & Enable" : "Submit" }));
       const expected = { type, mode: "create", values };
       expect(events.onSave).toHaveBeenCalledWith(expected);
       expect(events.onCancel).toHaveBeenCalledWith(expected);
@@ -287,13 +288,14 @@ describe("P08 demo flow", () => {
   });
 
   it("only exposes source-backed workflow stages and persisted availability", () => {
+    // The analysis form publishes and enables in one step (v22 bundle); the others go to review or the build queue.
     const analysisSave = vi.fn();
     const analysisSubmit = vi.fn();
-    const analysis = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", trigger_when: "T", output_requirements: "O", status: true }, onSave: analysisSave, onSubmit: analysisSubmit }));
+    const analysis = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", businessDomain: ["4P"], trigger_when: "T", output_requirements: "O", status: false }, onSave: analysisSave, onSubmit: analysisSubmit }));
     act(() => analysis.result.current.onSave());
     expect(analysisSave.mock.calls[0][0]).toMatchObject({ stage: "Draft", values: { status: false, enabled: false } });
     act(() => analysis.result.current.onSubmit());
-    expect(analysisSubmit.mock.calls[0][0]).toMatchObject({ stage: "Under Review", values: { status: true, enabled: true } });
+    expect(analysisSubmit.mock.calls[0][0]).toMatchObject({ stage: "Published", values: { status: true, enabled: true } });
     analysis.unmount();
 
     const scenarioSubmit = vi.fn();
@@ -319,21 +321,105 @@ describe("P08 demo flow", () => {
     term.unmount();
   });
 
-  it("prefills Analytical Model edit from source-linked record values and only source metrics", () => {
+  it("prefills Analytical Model edit from the record: domains and metrics as chips, only in-domain metrics offered", () => {
     function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", mode: "edit", id: "playbook-opportunity-scan" })} />; }
     const { container } = render(<Test />);
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Edit Analysis");
     expect(container.querySelector(".mh-kcreate__breadcrumb b")?.textContent).toBe("Opportunity scan playbook");
     expect(screen.getByRole("textbox", { name: "Description" }).value).toBe("Repeatable routine for identifying and prioritizing growth opportunities across channels and regions.");
     expect(screen.getByRole("textbox", { name: /Trigger When/ }).value).toBe("When a user request matches this analysis approach and its supported business context.");
-    expect(screen.getByRole("textbox", { name: /Structure & Guidance/ }).value).toBe("Start with an executive summary, then list evidence, prioritized opportunities, limitations and recommended actions.");
-    expect(container.querySelector(".mh-kcf__tag-input")?.textContent).toContain("City Strategy");
-    expect(container.querySelector(".mh-kcf__tag-input")?.textContent).toContain("4P");
-    expect(screen.getByRole("button", { name: /Member conversion, Campaign ROI/ })).toBeTruthy();
+    expect(screen.getByRole("textbox", { name: "Analysis Logic" }).value).toBe("Start with an executive summary, then list evidence, prioritized opportunities, limitations and recommended actions.");
+    expect([...screen.getByRole("button", { name: /Business Domain/ }).querySelectorAll(".mh-kcf__multi-value")].map((chip) => chip.textContent)).toEqual(["City Strategy", "4P"]);
+    expect([...screen.getByRole("button", { name: "Referenced Metrics" }).querySelectorAll(".mh-kcf__multi-value")].map((chip) => chip.textContent)).toEqual(["Member conversion", "Campaign ROI"]);
     expect(screen.queryByRole("checkbox")).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: /Member conversion, Campaign ROI/ }));
-    expect(screen.getByRole("checkbox", { name: "Promotion lift" })).toBeTruthy();
-    expect(screen.queryByRole("checkbox", { name: "Exposure Count" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Referenced Metrics" }));
+    expect(screen.getAllByRole("checkbox").map((box) => box.parentElement.textContent)).toEqual(["Campaign ROI", "Promotion lift"]);
+  });
+
+  it("Analytical Model: metrics follow the chosen domains, are searchable and are pruned when a domain is removed", () => {
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model" })} />; }
+    render(<Test />);
+    const metrics = () => screen.getByRole("button", { name: "Referenced Metrics" });
+    expect(metrics().disabled).toBe(true);
+    expect(metrics().textContent).toBe("Select business domain first");
+    fireEvent.click(screen.getByRole("button", { name: /Business Domain/ }));
+    expect(screen.getAllByRole("checkbox").map((box) => box.parentElement.textContent)).toEqual(["Marketing", "City Strategy", "4P", "Customer", "ABO", "Rednote", "OTTOLV"]);
+    fireEvent.click(screen.getByRole("checkbox", { name: "City Strategy" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Customer" }));
+    expect(metrics().disabled).toBe(false);
+    fireEvent.click(metrics());
+    expect(screen.getAllByRole("checkbox").map((box) => box.parentElement.textContent)).toEqual(["Member conversion", "Campaign ROI"]);
+    fireEvent.click(screen.getByRole("checkbox", { name: "Member conversion" }));
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search metrics..." }), { target: { value: "roi" } });
+    expect(screen.getAllByRole("checkbox").map((box) => box.parentElement.textContent)).toEqual(["Campaign ROI"]);
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search metrics..." }), { target: { value: "zzz" } });
+    expect(screen.getByText("No matching metrics found.")).toBeTruthy();
+    fireEvent.keyDown(screen.getByRole("searchbox", { name: "Search metrics..." }), { key: "Escape" });
+    expect(screen.queryByRole("searchbox")).toBeNull();
+    expect(metrics().textContent).toBe("Member conversion");
+    // Removing Customer drops the metric only Customer offered.
+    fireEvent.click(screen.getByRole("button", { name: /Business Domain/ }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Customer" }));
+    expect(metrics().textContent).toBe("Select metrics based on the chosen domains");
+    // A domain without metrics says so.
+    fireEvent.click(screen.getByRole("checkbox", { name: "City Strategy" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "Marketing" }));
+    fireEvent.click(metrics());
+    expect(screen.getByText("No metrics available for the selected domains.")).toBeTruthy();
+  });
+
+  it("Analytical Model: Save Draft and Publish validate, then show a result dialog that returns to the library", () => {
+    const navigate = vi.fn();
+    const submit = vi.fn();
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", onNavigate: navigate, onSubmit: submit })} />; }
+    const { container } = render(<Test />);
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
+    expect([...container.querySelectorAll(".mh-kcf__error")].map((node) => node.textContent)).toEqual([
+      "Analysis name is required.", "At least one business domain is required.", "Trigger condition is required.", "Analysis logic is required.",
+    ]);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    fireEvent.change(container.querySelector('[name="analysis_name"]'), { target: { value: "Revenue Drop" } });
+    fireEvent.click(screen.getByRole("button", { name: /Business Domain/ }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "4P" }));
+    fireEvent.change(container.querySelector('[name="trigger_when"]'), { target: { value: "Why did revenue drop?" } });
+    fireEvent.change(container.querySelector('[name="output_requirements"]'), { target: { value: "Compare WoW" } });
+    fireEvent.click(screen.getByRole("button", { name: "Publish & Enable" }));
+    expect(submit).toHaveBeenCalledWith(expect.objectContaining({ stage: "Published", values: expect.objectContaining({ analysis_name: "Revenue Drop", businessDomain: ["4P"], status: true }) }));
+    expect(screen.getByText("Analysis model published and enabled.")).toBeTruthy();
+    expect(screen.getByText("This analysis model is now enabled and available for AI use.")).toBeTruthy();
+    expect(navigate).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Back to Knowledge Management" }));
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Analytical Model" } }));
+  });
+
+  it("Analytical Model: Save Draft says the model stays disabled", () => {
+    const save = vi.fn();
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", businessDomain: ["4P"], trigger_when: "T", output_requirements: "O" }, onSave: save })} />; }
+    render(<Test />);
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
+    expect(save).toHaveBeenCalledWith(expect.objectContaining({ stage: "Draft", values: expect.objectContaining({ status: false, enabled: false }) }));
+    expect(screen.getByText("Draft saved.")).toBeTruthy();
+    expect(screen.getByText("This analysis model is disabled and will not be used by AI.")).toBeTruthy();
+  });
+
+  it("Analytical Model: Cancel leaves at once when nothing changed and asks to discard when something did", () => {
+    const navigate = vi.fn();
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", onNavigate: navigate })} />; }
+    const { container } = render(<Test />);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(navigate).toHaveBeenLastCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Analytical Model" } }));
+    fireEvent.change(container.querySelector('[name="analysis_name"]'), { target: { value: "Changed" } });
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(navigate).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("Discard changes?")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Keep Editing" }));
+    expect(screen.queryByText("Discard changes?")).toBeNull();
+    expect(container.querySelector('[name="analysis_name"]').value).toBe("Changed");
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    fireEvent.click(screen.getByRole("button", { name: "Discard" }));
+    expect(navigate).toHaveBeenCalledTimes(2);
+    expect(navigate).toHaveBeenLastCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Analytical Model" } }));
   });
 
   it("uses the source Business Term edit heading and preserves its breadcrumb links", () => {

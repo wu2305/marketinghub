@@ -59,9 +59,13 @@ export default [
     id: "p08-analysis",
     original: { url: `${url}?type=Analytical%20Model`, fullPage: true, expect: [
       { sel: "h1", text: "Create Analysis" }, { sel: "body", text: "Trigger When" }, { sel: "body", text: "Referenced Metrics" },
+      { sel: "#fmAnalysisForm", text: "Analysis Logic" }, { sel: "#fmSave", text: "Save Draft" }, { sel: "#fmAnalysisForm button[type='submit']", text: "Publish & Enable" },
+      { sel: "#fmMetrics .v20-multi-display", text: "Select business domain first" },
     ] },
     story: { id: "pages--knowledge-create-analysis", fullPage: true, expect: [
       { sel: ".mh-kcreate[data-kc-type='Analytical Model']" }, { sel: ".mh-kcf__analysis", text: "Trigger When" },
+      { sel: ".mh-kcf__analysis", text: "Analysis Logic" }, { sel: ".mh-kcreate__footer", text: "Save Draft" }, { sel: ".mh-kcreate__footer", text: "Publish & Enable" },
+      { sel: ".mh-kcf__analysis-scope .mh-kcf__multi-trigger:disabled", text: "Select business domain first" },
     ] },
   },
   {
@@ -99,10 +103,10 @@ export default [
   {
     id: "p08-analysis-edit",
     original: { url: `${url}?type=Analytical%20Model&mode=edit&id=playbook-opportunity-scan`, expect: [
-      { sel: "h1", text: "Edit Analysis" }, { sel: ".fm-breadcrumb > span:last-child", text: "Opportunity scan playbook" }, { sel: ".fm-tag-editor", text: "City Strategy" }, { sel: ".v20-multi-display", text: "Member conversion" },
+      { sel: "h1", text: "Edit Analysis" }, { sel: ".fm-breadcrumb > span:last-child", text: "Opportunity scan playbook" }, { sel: "#fmDomains .v20-multi-display", text: "City Strategy" }, { sel: "#fmMetrics .v20-multi-display", text: "Campaign ROI" },
     ] },
     story: { id: "pages--knowledge-create-analysis-edit", expect: [
-      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcf__analysis input[name='analysis_name']", count: 1 }, { sel: ".mh-kcreate h1", text: "Edit Analysis" }, { sel: ".mh-kcreate__breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".mh-kcf__tag-input", text: "City Strategy" }, { sel: ".mh-kcf__multi-trigger", text: "Member conversion" },
+      { sel: ".mh-kcreate[data-kc-mode='edit']" }, { sel: ".mh-kcf__analysis input[name='analysis_name']", count: 1 }, { sel: ".mh-kcreate h1", text: "Edit Analysis" }, { sel: ".mh-kcreate__breadcrumb b", text: "Opportunity scan playbook" }, { sel: ".mh-kcf__analysis-scope .mh-kcf__multi-trigger", text: "City Strategy" }, { sel: ".mh-kcf__analysis-scope .mh-kcf__multi:last-child .mh-kcf__multi-trigger", text: "Campaign ROI" },
     ] },
   },
   {
@@ -346,19 +350,88 @@ export default [
   {
     id: "p08-analysis-required",
     original: { url: `${url}?type=Analytical%20Model`, actions: [{ click: "#fmSave" }], expect: [
-      { sel: ".fm-field.is-invalid", count: 3 },
+      { sel: ".fm-field.is-invalid", count: 4 }, { sel: "#business_domainError", text: "At least one business domain is required." },
     ] },
     story: { id: "pages--knowledge-create-analysis-required", expect: [
-      { sel: ".mh-kcf__analysis .mh-kcf__field.is-invalid", count: 3 },
+      { sel: ".mh-kcf__analysis .mh-kcf__field.is-invalid", count: 4 }, { sel: ".mh-kcf__analysis .mh-kcf__error", text: "Analysis name is required." },
     ] },
   },
   {
     id: "p08-analysis-guidance",
-    original: { url: `${url}?type=Analytical%20Model`, actions: [{ hover: ".fm-guidance-tooltip-trigger" }], expect: [
-      { sel: ".fm-guidance-tooltip", text: "For example:" },
+    original: { url: `${url}?type=Analytical%20Model`, actions: [{ hover: ".fm-analysis-logic-help .fm-metric-help-trigger" }], expect: [
+      { sel: ".fm-analysis-logic-help .fm-metric-help-tooltip", text: "For example" },
     ] },
     story: { id: "pages--knowledge-create-analysis-guidance", expect: [
-      { sel: ".mh-kcf__help-tip", text: "For example:" },
+      { sel: ".mh-kcf__help-wrap:focus-within .mh-kcf__help-tip", text: "For example" },
+    ] },
+  },
+  {
+    id: "p08-analysis-domains",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { click: "#fmDomains button" }, { check: "#fmDomains input[value='City Strategy']" }, { check: "#fmDomains input[value='4P']" },
+    ], expect: [
+      { sel: "#fmDomains .v20-multi-display", text: "City Strategy" }, { sel: "#fmDomains .v20-multi-menu", text: "OTTOLV" }, { sel: "#fmDomains .v20-multi-menu label", count: 7 },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-domains", expect: [
+      { sel: ".mh-kcf__analysis-scope .mh-kcf__multi-trigger", text: "City Strategy" }, { sel: ".mh-kcf__multi-menu", text: "OTTOLV" }, { sel: ".mh-kcf__multi-menu label", count: 7 },
+    ] },
+  },
+  {
+    id: "p08-analysis-metrics",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { click: "#fmDomains button" }, { check: "#fmDomains input[value='City Strategy']" }, { check: "#fmDomains input[value='4P']" },
+      { click: "#fmMetrics button" }, { check: "#fmMetrics input[value='Campaign ROI']" },
+    ], expect: [
+      { sel: "#fmMetrics .v20-multi-display", text: "Campaign ROI" }, { sel: "#fmMetrics .fm-dropdown-options label", count: 2 }, { sel: "#fmMetrics .fm-metric-search input" },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-metrics", expect: [
+      { sel: ".mh-kcf__multi:last-child .mh-kcf__multi-trigger", text: "Campaign ROI" }, { sel: ".mh-kcf__multi-options label", count: 2 }, { sel: ".mh-kcf__multi-search input" },
+    ] },
+  },
+  {
+    id: "p08-analysis-no-metrics",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { click: "#fmDomains button" }, { check: "#fmDomains input[value='Marketing']" }, { click: "#fmMetrics button" },
+    ], expect: [
+      { sel: "#fmMetrics .fm-multi-empty", text: "No metrics available for the selected domains." },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-no-metrics", expect: [
+      { sel: ".mh-kcf__multi-empty", text: "No metrics available for the selected domains." },
+    ] },
+  },
+  {
+    id: "p08-analysis-discard",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { fill: ["[name='analysis_name']", "Draft analysis"] }, { click: "#fmCancel" },
+    ], expect: [
+      { sel: "dialog.fm-analysis-dialog[open]", text: "Discard changes?" }, { sel: "#fmKeepEditing", text: "Keep Editing" }, { sel: "#fmDiscard", text: "Discard" },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-discard", expect: [
+      { sel: "[role='dialog']", text: "Discard changes?" }, { sel: "[role='dialog']", text: "Keep Editing" }, { sel: "[role='dialog']", text: "Your unsaved changes will be lost." },
+    ] },
+  },
+  {
+    id: "p08-analysis-saved",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { fill: ["[name='analysis_name']", "Draft analysis"] }, { click: "#fmDomains button" }, { check: "#fmDomains input[value='4P']" },
+      { fill: ["[name='trigger_when']", "Why did revenue drop?"] }, { fill: ["[name='output_requirements']", "Compare week over week"] }, { click: "#fmSave" },
+    ], expect: [
+      { sel: "#resultDialog[open]", text: "Draft saved." }, { sel: "#resultDialog", text: "This analysis model is disabled and will not be used by AI." },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-saved", expect: [
+      { sel: "[role='dialog']", text: "Draft saved." }, { sel: "[role='dialog']", text: "This analysis model is disabled and will not be used by AI." },
+    ] },
+  },
+  {
+    id: "p08-analysis-published",
+    original: { url: `${url}?type=Analytical%20Model`, actions: [
+      { fill: ["[name='analysis_name']", "Draft analysis"] }, { click: "#fmDomains button" }, { check: "#fmDomains input[value='4P']" },
+      { fill: ["[name='trigger_when']", "Why did revenue drop?"] }, { fill: ["[name='output_requirements']", "Compare week over week"] }, { click: "#fmAnalysisForm button[type='submit']" },
+    ], expect: [
+      { sel: "#resultDialog[open]", text: "Analysis model published and enabled." }, { sel: "#resultDialog", text: "This analysis model is now enabled and available for AI use." },
+    ] },
+    story: { id: "pages--knowledge-create-analysis-published", expect: [
+      { sel: "[role='dialog']", text: "Analysis model published and enabled." }, { sel: "[role='dialog']", text: "This analysis model is now enabled and available for AI use." },
     ] },
   },
   {

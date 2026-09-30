@@ -3,7 +3,10 @@
 .mh-kcreate__footer .mh-button--gold{border-color:var(--mh-accent-ink);background:var(--mh-accent-ink);color:var(--mh-surface);box-shadow:none}
 
 .mh-kcreate__history{max-width:520px;padding:22px}.mh-kcreate__history p{color:var(--mh-text);line-height:1.5}
-.mh-kcreate--term .mh-kcreate__main:before{background:linear-gradient(90deg,var(--mh-surface) 38%,transparent 75%),url("../../assets/images/business-term-create-hero.webp") right top/cover no-repeat}
+.mh-kcreate--term .mh-kcreate__main:before,.mh-kcreate--analysis .mh-kcreate__main:before{background:linear-gradient(90deg,var(--mh-surface) 38%,transparent 75%),url("../../assets/images/business-term-create-hero.webp") right top/cover no-repeat}
 .mh-kcreate--report-edit .mh-kcreate__card{max-width:780px}
 
 .mh-kcreate__unavailable{margin:0;color:var(--mh-accent-ink);font-size:var(--mh-font-size-md);line-height:1.6}
+
+/* Analytical Model: actions sit directly under the fields, without a divider. */
+.mh-kcreate--analysis .mh-kcreate__footer { margin-top: var(--mh-space-7); padding-top: 0; border-top: 0; }

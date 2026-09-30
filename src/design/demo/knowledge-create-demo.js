@@ -20,7 +20,7 @@ export { knowledgeCreateTypes };
 
 function requiredKnowledgeCreateFields(type) {
   if (type === "Business Term") return ["title", "kind", "description"];
-  if (type === "Analytical Model") return ["analysis_name", "trigger_when", "output_requirements"];
+  if (type === "Analytical Model") return ["analysis_name", "businessDomain", "trigger_when", "output_requirements"];
   if (type === "Scenario Reporting") return ["scenario_report_title", "scenario_report_linked", "scenario_report_description", "scenario_report_blueprint"];
   if (type === "Metric Dictionary") return ["metricName", "metricFormula"];
   if (type === "Data Model") return ["modelName"];
@@ -36,6 +36,8 @@ export function validateKnowledgeCreate(type, values) {
   });
 }
 
+const snapshot = (values) => JSON.stringify(Object.entries(values).sort(([a], [b]) => (a < b ? -1 : 1)).map(([key, value]) => [key, Array.isArray(value) ? [...value].sort() : value]));
+
 const initialValues = {
   kind: "Business Term", scope: [], businessDomain: [], reports: [], datasets: [], aiOverview: true,
   enabled: true, status: true, metrics: [], attachments: [], modelGroup: "entity", modelTable: "dim_channel",
@@ -50,7 +52,11 @@ const initialValues = {
  * offline; Scenario Reporting is always offline). Save is
  * `Draft`; Submit is `Under Review` (Review Center publishes, A1) except Scenario
  * Reporting, whose own build pipeline starts at `Queued`; the Report Context
- * description review is not a new item and has no stage.
+ * description review is not a new item and has no stage. Analytical Model is the
+ * exception to Submit → Under Review: its form says "Publish & Enable", so Submit
+ * is `Published` and enabled (v22 bundle; see change note 2026-09-30-v22-bundle Q1).
+ * Its Save Draft / Publish show a result dialog whose dismissal returns to the
+ * library, and Cancel with unsaved changes asks to discard first.
  * @param {Record<string, any>} options
  */
 export function useKnowledgeCreateDemo({
@@ -71,8 +77,15 @@ export function useKnowledgeCreateDemo({
   const [result, setResult] = useState(state.result || null);
   const [dialog, setDialog] = useState(state.dialog || null);
   const [menu, setMenu] = useState(state.menu || null);
+  const [baseline] = useState(() => snapshot(values));
+  const availableMetrics = (domains) => (content.analysis?.metrics || []).filter((metric) => metric.domains.some((domain) => domains.includes(domain))).map((metric) => metric.name);
   const update = ({ name, value }) => {
-    setValues((prior) => ({ ...prior, [name]: value, ...(name === "kind" && value === "Global Synonym" ? { scope: [] } : {}) }));
+    setValues((prior) => ({
+      ...prior, [name]: value,
+      ...(name === "kind" && value === "Global Synonym" ? { scope: [] } : {}),
+      /* Referenced metrics must belong to a chosen business domain. */
+      ...(name === "businessDomain" && type === "Analytical Model" ? { metrics: (prior.metrics || []).filter((metric) => availableMetrics(value).includes(metric)) } : {}),
+    }));
     setInvalid((prior) => prior.filter((item) => item !== name));
   };
   const selectType = ({ value }) => {
@@ -90,11 +103,12 @@ export function useKnowledgeCreateDemo({
     const persistedValues = { ...values };
     /* Save keeps knowledge offline; Submit keeps the form's availability (R4). Nothing is published here: Submit sends it to review (A1). */
     if (action === "save" && ["Business Term", "Analytical Model"].includes(type)) persistedValues.status = persistedValues.enabled = false;
+    if (action === "submit" && type === "Analytical Model") persistedValues.status = persistedValues.enabled = true;
     if (type === "Scenario Reporting") persistedValues.status = persistedValues.enabled = false;
-    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : reportEditAvailable ? undefined : "Under Review";
+    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : type === "Analytical Model" ? "Published" : reportEditAvailable ? undefined : "Under Review";
     const payload = { type, mode, id, values: persistedValues, ...(stage ? { stage } : {}) };
     (action === "save" ? onSave : onSubmit)?.(payload);
-    if (["Business Term", "Analytical Model", "Scenario Reporting"].includes(type) || reportEditAvailable) {
+    if (["Business Term", "Scenario Reporting"].includes(type) || reportEditAvailable) {
       navigate({ id: "interpreter", params: type === "Report Context" ? { type } : { type, notice: action === "save" ? "saved" : "submitted" } });
     } else {
       setResult({ action, ...payload });
@@ -107,8 +121,16 @@ export function useKnowledgeCreateDemo({
     type, mode, id, values, invalid, result, dialog, menu, unavailable, reportEditAvailable, hrefFor,
     onNavigate: navigate, onTypeChange: selectType, onChange: update,
     onSave: () => persist("save"), onSubmit: () => persist("submit"),
-    onCancel: () => navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || reportEditAvailable ? { type } : {} }),
-    onResultClose: ({ reason } = { reason: undefined }) => { setResult(null); if (reason === "close") navigate({ id: "interpreter" }); },
+    onCancel: () => {
+      if (type === "Analytical Model" && snapshot(values) !== baseline) setDialog("discard");
+      else navigate({ id: "interpreter", params: type === "Business Term" || type === "Analytical Model" || type === "Scenario Reporting" || reportEditAvailable ? { type } : {} });
+    },
+    onDiscard: () => navigate({ id: "interpreter", params: { type } }),
+    onResultClose: ({ reason } = { reason: undefined }) => {
+      setResult(null);
+      if (type === "Analytical Model") navigate({ id: "interpreter", params: { type } });
+      else if (reason === "close") navigate({ id: "interpreter" });
+    },
     onDialog: ({ kind }) => setDialog(kind), onDialogClose: ({ reason } = { reason: undefined }) => { setDialog(null); if (reason === "close" && ["test", "smart", "preview"].includes(dialog)) navigate({ id: "interpreter" }); },
     onMenu: ({ name }) => setMenu((prior) => prior === name ? null : name),
   };
