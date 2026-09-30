@@ -103,7 +103,9 @@ B7. **Blocked actions stay focusable and clickable** (`aria-disabled="true"`, ne
     - `already-disabled` → purpose `info`.
     Tooltip (`title`) carries the same one-line reason.
 B8. **Destructive and availability changes confirm first**, then show a success `Toast` (R6): "Disabled
-    successfully", "Deleted successfully".
+    successfully", "Deleted successfully". The B6–B8 sequence (blocked reason → dialog → confirm → change)
+    is `useGovernedFlow` in `lib/governed-flow.js`, public; the page supplies `find`, what `onDisable` /
+    `onDelete` / `onEdit` do to its records, and the toast.
 B9. **Drafts** show a "Draft" marker next to the title, are visible only to their creator, and count as
     disabled (R3).
 B10. **Availability vocabulary** is `enabled | disabled`, labelled "Enabled"/"Disabled" everywhere,

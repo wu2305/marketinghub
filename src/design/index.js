@@ -92,6 +92,7 @@ export {
   LibraryToolbar,
   libraryFacetKinds,
 } from "./components/LibraryToolbar/index.jsx";
+export { useGovernedFlow } from "./lib/governed-flow.js";
 export {
   availabilityOf,
   governedActions,
