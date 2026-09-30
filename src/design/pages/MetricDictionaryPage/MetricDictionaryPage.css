@@ -12,11 +12,11 @@
 .mh-metric-page__action, .mh-metric-page__banner button, .mh-metric-page__preview { border: 1px solid var(--mh-line); background: var(--mh-surface); color: var(--mh-text); cursor: pointer; }
 .mh-metric-page__action--primary { border-color: var(--mh-text-strong); background: var(--mh-text-strong); color: var(--mh-surface); }
 .mh-metric-page__banner { display: flex; align-items: center; gap: 14px; padding: 16px 20px; margin-bottom: 20px; border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); }
-.mh-metric-page__banner-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: var(--mh-radius-md); color: var(--mh-accent); background: var(--mh-warning-wash); font-size: var(--mh-font-size-3xl); }
+.mh-metric-page__banner-icon { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: var(--mh-radius-md); color: var(--mh-accent-ink); background: var(--mh-warning-wash); font-size: var(--mh-font-size-3xl); }
 .mh-metric-page__banner-copy { flex: 1; }
 .mh-metric-page__banner-copy div { display: flex; align-items: center; gap: 8px; }
 .mh-metric-page__banner-copy strong { font-size: var(--mh-font-size-lg); }
-.mh-metric-page__banner-copy span { padding: 3px 6px; background: var(--mh-warning-wash); border-radius: var(--mh-radius-sm); color: var(--mh-accent); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-bold); }
+.mh-metric-page__banner-copy span { padding: 3px 6px; background: var(--mh-warning-wash); border-radius: var(--mh-radius-sm); color: var(--mh-accent-ink); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-bold); }
 .mh-metric-page__banner-copy p { margin: 4px 0 0; font-size: var(--mh-font-size-md); line-height: 1.5; color: var(--mh-text-muted); }
 .mh-metric-page__layout { display: grid; grid-template-columns: 280px minmax(0,1fr); align-items: start; gap: 20px; }
 .mh-metric-page__sidebar, .mh-metric-page__detail { border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); background: var(--mh-surface); overflow: hidden; }

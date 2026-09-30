@@ -74,6 +74,11 @@ position: relative;
   text-decoration: none;
 }
 
+.mh-workspace-card__links a:focus-visible {
+  outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
+}
+
 .mh-workspace-card__open {
 position: absolute;
   inset: 0;

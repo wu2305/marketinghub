@@ -20,13 +20,12 @@ export const governanceMessages = {
   "disable-first": "Disable knowledge first",
   "already-disabled": "This knowledge is already disabled.",
   dialogs: {
-    permission: { title: "Permission denied", message: "Knowledge created by others cannot be operated.", confirmLabel: "OK" },
+    permission: { title: "Permission denied", message: "Knowledge created by others cannot be operated." },
     "disable-first": {
       title: "Disable knowledge first",
       message: "To edit or delete this knowledge, take it offline first. Once offline, users cannot access it temporarily.",
-      confirmLabel: "Disable",
     },
-    "already-disabled": { title: "Knowledge already disabled", message: "This knowledge is already disabled.", confirmLabel: "OK" },
+    "already-disabled": { title: "Knowledge already disabled", message: "This knowledge is already disabled." },
   },
 };
 

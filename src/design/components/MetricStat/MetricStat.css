@@ -56,28 +56,28 @@ position: absolute;
   right: 14px;
   left: 14px;
   height: 3px;
-  background: var(--mh-accent, var(--mh-accent));
+  background: var(--mh-accent);
   content: "";
 }
 
-.mh-metric--gold {
---mh-accent: var(--mh-accent);
+.mh-metric--gold::before {
+  background: var(--mh-accent);
 }
 
-.mh-metric--green {
---mh-accent: var(--mh-success);
+.mh-metric--green::before {
+  background: var(--mh-success);
 }
 
-.mh-metric--amber {
---mh-accent: var(--mh-accent-ink);
+.mh-metric--amber::before {
+  background: var(--mh-accent-ink);
 }
 
-.mh-metric--blue {
---mh-accent: var(--mh-info);
+.mh-metric--blue::before {
+  background: var(--mh-info);
 }
 
-.mh-metric--red {
---mh-accent: var(--mh-danger);
+.mh-metric--red::before {
+  background: var(--mh-danger);
 }
 
 .mh-metric__label {

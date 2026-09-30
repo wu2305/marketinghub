@@ -65,8 +65,8 @@
 }
 
 :root {
-  /* Foundations (handover/design-intent/foundations.md §3). Role tokens; every
-     legacy token below should resolve to one of these.
+  /* Foundations (handover/design-intent/foundations.md §3). Role tokens only:
+     no component- or page-named token belongs here.
      Breakpoints (media queries cannot read custom properties): 1180px (wide
      layouts drop a column), 900px (sidebars stack), 760px (single column). */
   --mh-text-strong: #16191d;
@@ -134,49 +134,6 @@
   --mh-space-9: 48px;
   --mh-layout-header-height: 56px;
 
-  /* Shared foreground, action, and status colors extracted from component CSS. */
-  /* P07: exact existing Field Library / Data Model / Scenario CSS colors. */
-  /* P14 exact source category indicators, info banner, and required errors. */
-  /* workspace.css global :focus-visible ring */
-  /* global AI launcher (assistant-launcher.css) */
-  /* assistant surface scale (assistant-panel.css --ai-*) */
-  /* media tracking page palette */
-  /* assistant answer feedback chips (assistant-panel.css #assistantPanel scope) */
-  /* assistant composer (assistant-panel.css #assistantPanel .ask-composer) */
-  /* skill menu / model-flow dialog */
-
-  /* reports catalog palette (assets/css/reports/catalog.css) */
-
-
-  /* Live report view (reports-core dark accents over the catalog light skin) */
-
-  /* Six-city invest analysis embed (assets/css/reports/city-invest-analysis.css) */
-
-  /* Report Copilot workspace (aiWorkspace) — v4 light palette + reports accents */
-
-
-
-
-  /* Copilot holistic report (hr-*) — city-invest-analysis.css */
-
-
-
-  /* Copilot rich answer (ra-*) — city-invest-analysis.css */
-
-
-
-
-  /* Knowledge type libraries — checkbox filter, principles cards, pagination
-     (ai-interpreter-overview.css / principles-library.css / library.css) */
-
-  /* Business Term dedicated view (business-term.css / business-term-reference.css /
-     ai-interpreter-overview.css / unified-type-toolbar.css / field-components.css) */
-
-  /* Field-mapping library shared view — Report Context, Metric Dictionary,
-     Analytical Model, Email Reports (field-library.js / field-components.css /
-     ai-interpreter-overview.css / library.css). Effective values probed from
-     the rendered type pages; the toolbar/search/filter chrome reuses the
-     SearchField "plain" pill + boxed CheckboxFilter tokens. */
   /* overlay stacking scale — assistant-launcher.css / field-components.css
      order: launcher (~900) < .fm-overlay (1900) < topmost dialogs */
   --mh-z-launcher: 880;
