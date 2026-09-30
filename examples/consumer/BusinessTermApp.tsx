@@ -24,6 +24,7 @@ export type Term = {
 };
 
 type FormValues = { title: string; kind: string; description: string; synonyms: string[]; scope: string[] };
+type Answer = NonNullable<React.ComponentProps<typeof AiInterpreterPage>["assistant"]>["answers"] extends (infer A)[] | undefined ? A : never;
 type Route = { page: "library"; type: string } | { page: "form"; mode: "create" | "edit"; id?: string };
 type Pending =
   | { kind: "info"; title: string; message: string }
@@ -62,7 +63,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   const [invalid, setInvalid] = React.useState<string[]>([]);
   const [toast, setToast] = React.useState("");
   const [pageToast, setPageToast] = React.useState("");
-  const [assistant, setAssistant] = React.useState<{ open: boolean; prompt: string; answers: object[]; skill: { id?: string; type: string; title: string } | null }>({ open: false, prompt: "", answers: [], skill: null });
+  const [assistant, setAssistant] = React.useState<{ open: boolean; prompt: string; answers: Answer[]; skill: { id?: string; type: string; title: string } | null }>({ open: false, prompt: "", answers: [], skill: null });
   const timers = React.useRef<ReturnType<typeof setTimeout>[]>([]);
   React.useEffect(() => () => timers.current.forEach(clearTimeout), []);
   const flash = (set: (message: string) => void, message: string) => {
@@ -211,7 +212,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   /* The assistant is this app's too: any answer shape AssistantPanel renders will do. */
   const ask = (prompt: string) => {
     if (!prompt.trim()) return;
-    const answer = {
+    const answer: Answer = {
       query: prompt,
       variant: "workspace",
       banner: "AI Response",

@@ -52,8 +52,8 @@ export const cockpitViews = ["catalog", "live"];
  * @param {object} [props.workspace={}] ReportCopilot props (report-scoped aiWorkspace)
  * @param {boolean} [props.workspaceOpen=false]
  * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot)
- * @param {object} [props.assistant={}] AssistantPanel props
- * @param {object} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render
  */
 export function MarketingCockpitPage({
   current = "cockpit",

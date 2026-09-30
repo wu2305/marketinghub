@@ -26,6 +26,8 @@ const typeViews = {
   "scenario-reports": ScenarioReportsView,
 };
 
+/** @typedef {Partial<Parameters<typeof PrinciplesView>[0]> | Partial<Parameters<typeof BusinessTermView>[0]> | Partial<Parameters<typeof DataModelView>[0]> | Partial<Parameters<typeof FieldLibraryView>[0]> | Partial<Parameters<typeof ScenarioReportsView>[0]>} AiInterpreterView Props of whichever registered view is active. */
+
 /**
  * AI Interpreter knowledge workspace: sidebar type navigation, type overview
  * grid, and per-type views dispatched through the registry.
@@ -38,10 +40,10 @@ const typeViews = {
  * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
  * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view)
- * @param {object} [props.view] props for the active registered type
+ * @param {AiInterpreterView} [props.view] props for the active registered type (`view` in its `types` entry); other views ignore them
  * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host
- * @param {object} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace
- * @param {object} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions
  * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state)
  * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host

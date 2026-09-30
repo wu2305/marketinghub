@@ -32,7 +32,7 @@ export const campaignChannels = ["rednote", "douyin"];
  * @param {string} [props.current="campaign"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {object} [props.assistant={}] AssistantPanel props
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
  * @param {object} [props.rail={ items: [] }] CampaignRail props
  * @param {Array<{ id: string, label: string }>} [props.channels=[]] overview channel tabs
  * @param {Array<object>} [props.metrics=[]] overview MetricStat props
@@ -57,7 +57,7 @@ export const campaignChannels = ["rednote", "douyin"];
  * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes.
  * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft
  * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state
- * @param {object} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
  * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
  * @param {"rednote"|"douyin"} [props.channel="rednote"]
  * @param {string} [props.query=""] account search text

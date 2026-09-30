@@ -38,10 +38,14 @@ const panelShellClasses = {
 };
 
 /**
+ * @typedef {{ query: string, kicker?: string, title?: string, body?: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: typeof assistantAnswerVariants[number], banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, lead?: string }} AssistantAnswerEntry One answer of `answers`: the query, the grounded card (`variant` picks its layout) and the lite `{ variant: "simple", lead, query }` line.
+ */
+
+/**
  * One assistant answer entry: user query bubble plus the grounded answer card
  * with sources, related actions and feedback buttons.
  * @param {object} props
- * @param {{ query: string, kicker?: string, title?: string, body?: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: typeof assistantAnswerVariants[number], banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, lead?: string }} props.answer
+ * @param {AssistantAnswerEntry} props.answer
  * @param {(event: { query: string, feedback: "helpful"|"not-helpful"|"copy"|null }) => void} [props.onFeedback]
  */
 function AssistantAnswer({ answer, onFeedback }) {
@@ -205,7 +209,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {Array<string|{ label: string, prompt: string }>} [props.suggestions=[]]
  * @param {typeof assistantVariants[number]} [props.variant="campaign"] real page behavior preset
  * @param {string} [props.prompt=""]
- * @param {Array<object>} [props.answers=[]] AssistantAnswer entries, oldest first; `{ variant: "simple", lead, query }` renders the lite single-line card
+ * @param {AssistantAnswerEntry[]} [props.answers=[]] answers, oldest first
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
  * @param {string} [props.historyTitle="Recent"]
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"

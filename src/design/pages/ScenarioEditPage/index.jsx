@@ -17,8 +17,8 @@ import "./ScenarioEditPage.css";
  * @param {object[]} [props.navigation=[]] Header destinations.
  * @param {object} [props.form={}] ScenarioEditForm values, validation, preview and named callbacks.
  * @param {string} [props.toast=""] Acknowledgement after Save Draft (hidden when empty).
- * @param {object} [props.assistant={}] Lite assistant content/state/callbacks.
- * @param {object} [props.skillFlow] Model-flow dialog content/state/callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant content/state/callbacks.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model-flow dialog content/state/callbacks.
  * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */

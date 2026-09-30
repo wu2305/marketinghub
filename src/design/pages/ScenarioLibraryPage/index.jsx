@@ -34,8 +34,8 @@ const HEART = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c
  * @param {{purpose:string,title:string,message:string,confirmLabel:string,cancelLabel:string,onConfirm?:Function,onCancel?:Function}|null} [props.dialog=null] Delete confirmation.
  * @param {string} [props.toast=""] Success message after a delete (hidden when empty).
  * @param {object} [props.form={}] Controlled inline create/edit state.
- * @param {object} [props.assistant={}] Controlled lite assistant.
- * @param {object|null} props.skillFlow Optional model flow overlay.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Controlled lite assistant.
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow|null} props.skillFlow Optional model flow overlay.
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */

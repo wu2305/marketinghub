@@ -25,8 +25,8 @@ import "./SelfServicePage.css";
  * @param {Array<object>} [props.reports=[]] ActionCard props for the analysis tab
  * @param {Array<object>} [props.uploads=[]] ActionCard props for the upload tab; items may carry `history` rows for the upload-history dialog
  * @param {{ open?: boolean, title?: string, rows?: Array<object>, emptyMessage?: string }} [props.uploadHistory={}] upload-history dialog state
- * @param {object} [props.assistant={}] AssistantPanel data, state and named callbacks; `onOpen` opens from the launcher
- * @param {object} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel data, state and named callbacks; `onOpen` opens from the launcher
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
  * @param {"analysis"|"upload"} [props.tab="analysis"]
  * @param {string} [props.category="all"]
  * @param {(target: { id:string, params: Record<string,string>, href:string, label?:string }) => void} [props.onNavigate]
