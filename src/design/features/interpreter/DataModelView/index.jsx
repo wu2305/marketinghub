@@ -13,6 +13,38 @@ const REPORT_ICON = "M7 3.5h6l4 4V20.5H7V3.5Zm6 0v5h5";
 const CLOSE_ICON = "M6 6l12 12M18 6 6 18";
 const FIT_ICON = "M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7";
 
+/**
+ * @typedef {{ field: string, name?: string, synonyms?: string[], unit?: string, [column: string]: any }} DataModelField One column of a table; extra keys are extra detail columns for `fieldFormat`.
+ * @typedef {{ id: string, name: string, physicalName?: string, description?: string, rowCount?: string | number, type: "fact" | "dimension", fields?: DataModelField[] }} DataModelTable
+ * @typedef {{ id: string, name: string, description?: string, status: "enable" | "disable", synonyms?: string[], reports?: string[], tables?: DataModelTable[] }} DataModelDomain
+ * @typedef {{ table: DataModelTable, isFact: boolean, tab: "fields" | "preview", fields: DataModelField[], previewRows: string[][] }} DataModelDrawer The open table dialog; the view renders `null` when it is absent.
+ *
+ * @typedef {object} DataModelViewProps
+ * @property {Record<string, any>} strings visible copy (labels, aria text, `relatedAria(report)`)
+ * @property {DataModelDomain[]} [domains=[]] domains shown in the sidebar
+ * @property {DataModelDomain | null} [domain] the selected domain
+ * @property {string} [query] domain search text
+ * @property {(value: string) => void} [onQueryChange]
+ * @property {(id: string) => void} [onSelectDomain]
+ * @property {"basic"|"graph"} [activeTab="basic"]
+ * @property {(tab: "basic"|"graph") => void} [onTabChange]
+ * @property {{ x: number, y: number, scale: number }} [graph] pan and zoom of the relationship graph
+ * @property {DataModelTable[]} [graphNodes=[]]
+ * @property {Array<{ from: string, to: string, path: string }>} [graphLinks=[]]
+ * @property {{ width: number, height: number }} [graphSize]
+ * @property {(canvasWidth?: number) => void} [onGraphFit]
+ * @property {(delta: number, center?: [number, number]) => void} [onGraphZoom]
+ * @property {(dx: number, dy: number) => void} [onGraphPan]
+ * @property {DataModelDrawer | null} [drawer]
+ * @property {(tab: "fields"|"preview") => void} [onDrawerTab]
+ * @property {(id: string) => void} [onOpenTable]
+ * @property {(event?: { reason: string }) => void} [onCloseTable]
+ * @property {(domain: DataModelDomain, report: string) => string} [reportContextId] Report Context id a related report opens
+ * @property {(id: string) => void} [onOpenReportContext]
+ * @property {(field: DataModelField) => React.ReactNode} [fieldFormat] node graph field line
+ * @property {React.Ref<HTMLInputElement>} [searchRef] forwarded to the domain search input ("/" shortcut)
+ */
+
 function DmTagList({ values, className = "mh-dmview__tag" }) {
   const items = (values || []).filter(Boolean);
   if (!items.length) return <span className="mh-dmview__none">None</span>;
@@ -144,8 +176,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * status pill, synonyms, related-report links that open the Report Context
  * drawer), and the pannable/zoomable relationship graph whose nodes open the
  * centered table detail dialog.
- * @param {Record<string, any>} props — prepared by `useDataModelDemo`
- * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the domain search input ("/" shortcut)
+ * @param {DataModelViewProps} props prepared by `useDataModelDemo`
  */
 export function DataModelView({
   strings,

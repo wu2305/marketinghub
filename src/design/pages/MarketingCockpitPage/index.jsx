@@ -159,7 +159,7 @@ export function MarketingCockpitPage({
   }
   const assistantLauncherRef = React.useRef(null);
   const projectTarget = (id) => ({ id: "cockpit", params: id === "all" ? {} : { project: id } });
-  const liveTarget = (id, index) => ({ id: "cockpit", params: { project: id, dashboard: index, view: "live" } });
+  const liveTarget = (id, index) => ({ id: "cockpit", params: { project: id, dashboard: String(index), view: "live" } });
   const emitNavigation = (target, label) => onNavigate?.({ ...target, href: hrefFor(target.id, target.params), label });
   const navItems = navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }));
   return (

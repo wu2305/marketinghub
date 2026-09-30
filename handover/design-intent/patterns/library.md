@@ -22,9 +22,9 @@ product are this one idea:
 | 6 | Scenario Reports | `features/interpreter/ScenarioReportsView` | knowledge | cards |
 | 7 | Principles | `features/interpreter/PrinciplesView` | knowledge | cards |
 | 8 | Data Models (domain list only) | `features/interpreter/DataModelView` | knowledge | cards |
-| 9 | Review Center queue | `features/review-center/ReviewQueue` + `pages/ReviewCenterPage` | review items | table |
-| 10 | Feedback & Quality | `features/feedback-quality/FeedbackList` + page | feedback | table |
-| 11 | Skill Library | `features/scenario-library/SkillLibrary` | skills | table |
+| 9 | Review Center queue | `pages/ReviewCenterPage` | review items | table |
+| 10 | Feedback & Quality | `pages/FeedbackQualityPage` | feedback | table |
+| 11 | Skill Library | `pages/ScenarioLibraryPage` | skills | table |
 | 12 | Personal Memory list | `features/personal-memory/MemoryWorkspace` (left column) | memories | cards |
 
 "Layout" is what the original renders. Correction 2026-09-27: all Field Library types and Scenario Reports

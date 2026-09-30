@@ -72,8 +72,11 @@ type InterpreterView = NonNullable<React.ComponentProps<typeof AiInterpreterPage
 
 export const hrefFor: Href = (id, params = {}) => `#${id}?type=${params.type ?? ""}`;
 export const onSave: Save = ({ type, mode, values }) => `${type}${mode}${Object.keys(values)}`;
-/* DataModelView still declares its props as `Record<string, any>`, so the union accepts any object; the other four views are checked. */
 export const view: InterpreterView = { records: [], query: "" };
+/* Every member of the union is a closed shape, so a key no view declares is an error. */
+// @ts-expect-error no registered view has a `bogus` prop
+export const bogusView: InterpreterView = { bogus: 1 };
+export const dataModelView: InterpreterView = { domains: [], activeTab: "graph", onSelectDomain: ({ length }: string) => length };
 
 // @ts-expect-error route params are strings
 export const badHref: Href = (id: string, params?: { type: number }) => `${id}${params?.type}`;

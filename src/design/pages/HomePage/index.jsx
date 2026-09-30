@@ -20,7 +20,7 @@ import "./HomePage.css";
  * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid
  * @param {Array<object>} [props.cards=[]] WorkspaceCard props
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState & { homeSuggestions?: Array<string|{ label: string, prompt: string }> }} [props.assistant={}] AssistantPanel props; `homeSuggestions` replaces `suggestions` in the Home drawer
  * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
  * @param {(target: { title: string }) => void} [props.onOpen] workspace card open
  * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog
