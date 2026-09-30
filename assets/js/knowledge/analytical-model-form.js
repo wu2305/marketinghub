@@ -58,194 +58,160 @@
       '<p class="fm-feedback">This analysis is unavailable or you do not have permission to edit it. Return to Analytical Model to select another record.</p>';
     return;
   }
-  const requiredLabel = (label) =>
-    label.replace(" *", ' <i class="unified-required" aria-hidden="true">*</i>');
-  const field = (key, label, full, textarea = false, hint = "", labelHelp = "") =>
-    `<label class="fm-field ${full ? "full" : ""}"><span>${requiredLabel(label)}${labelHelp}</span>${textarea ? `<textarea name="${key}" placeholder="${esc(hint)}">${esc(record[key])}</textarea>` : `<input name="${key}" value="${esc(record[key])}" placeholder="${esc(hint)}">`}</label>`;
-  const chipField = (key, label, suggestions = [], full = false) =>
-    `<div class="fm-field ${full ? "full" : ""}"><span>${label}</span><div class="fm-tag-editor" data-tags="${key}"><div class="fm-tags"></div><div class="fm-tag-entry"><input aria-label="${label}" placeholder="Type and press Enter; use semicolons for multiple values" ${suggestions.length ? `list="fm-${key}"` : ""}></div>${suggestions.length ? `<datalist id="fm-${key}">${suggestions.map((x) => `<option value="${esc(x)}"></option>`).join("")}</datalist>` : ""}</div></div>`;
-  const group = (name, content) =>
-    `<section class="fm-section"><h3>${requiredLabel(name)}</h3><div class="fm-grid">${content}</div></section>`;
-  const defaultGuidanceText = () =>
-    [
-      "Describe the analysis logic and reasoning path. Focus on how to analyze the question and what final result should be returned. Do not ask AI to create charts or extra report sections.",
-      "",
-      "For example:",
-      "1. Confirm the user's business question, analysis period, target scope and comparison baseline.",
-      "2. Check whether the selected metrics changed materially, and identify the main direction of the change.",
-      "3. Compare related dimensions or segments to locate the most likely driver of the change.",
-      "4. Judge whether the evidence supports a clear cause. If not, explain the limitation.",
-      "5. Return one concise analysis result with the key finding, reason and recommended next action.",
-    ].join("\n");
-  const guidanceTooltip = (text) =>
-    `<span class="fm-guidance-tooltip-wrap"><button class="fm-guidance-tooltip-trigger" type="button" aria-label="Show Structure and Guidance prompt" aria-describedby="fmGuidanceHelp">?</button><span class="fm-guidance-tooltip" id="fmGuidanceHelp" role="tooltip"><span class="fm-guidance-tooltip-copy">${esc(text)}</span></span></span>`;
-  const metricOptions = [
-    ...new Set([
-      ...data.records("Metric Dictionary").map((x) => x.metric_name),
-      ...record.referenced_metrics,
-    ]),
-  ];
-  const metricsField = () =>
-    '<div class="fm-field"><span id="fmMetricsLabel">Referenced Metrics</span><div class="v20-multi" id="fmMetrics"><button type="button" class="v20-multi-display" aria-labelledby="fmMetricsLabel" aria-expanded="false" aria-controls="fmMetricsMenu"></button><div class="v20-multi-menu" id="fmMetricsMenu">' +
-    metricOptions
-      .map(
-        (value) =>
-          '<label><input type="checkbox" value="' +
-          esc(value) +
-          '"' +
-          (record.referenced_metrics.includes(value) ? " checked" : "") +
-          ">" +
-          esc(value) +
-          "</label>",
-      )
-      .join("") +
-    "</div></div></div>";
-  const guidanceText = defaultGuidanceText();
+  const requiredLabel = (label) => label.replace(" *", ' <i class="unified-required" aria-hidden="true">*</i>');
+  const field = (key, label, hint, rows = 0) => {
+    if (key === "output_requirements") {
+      const guidance = hint.split("\n").filter((line) => line.trim()).join("\n");
+      return `<div class="fm-field full fm-analysis-logic-field"><div class="fm-multi-label"><label for="fmAnalysisLogic">${requiredLabel(label)}</label><span class="fm-metric-help fm-analysis-logic-help"><button type="button" class="fm-metric-help-trigger" aria-label="About Analysis Logic" aria-describedby="fmAnalysisLogicHelp">?</button><span class="fm-metric-help-tooltip" id="fmAnalysisLogicHelp" role="tooltip">${esc(guidance)}</span></span></div><textarea id="fmAnalysisLogic" name="${key}" rows="${rows}" placeholder="${esc(guidance)}" aria-describedby="fmAnalysisLogicHelp">${esc(record[key] || "")}</textarea></div>`;
+    }
+    return `<label class="fm-field full"><span>${requiredLabel(label)}</span>${rows ? `<textarea name="${key}" rows="${rows}" placeholder="${esc(hint)}">${esc(record[key] || "")}</textarea>` : `<input name="${key}" value="${esc(record[key] || "")}" placeholder="${esc(hint)}">`}</label>`;
+  };
+  const group = (_name, content) => `<div class="fm-section fm-flat-fields"><div class="fm-grid">${content}</div></div>`;
+  const multi = (id, label, helper) => `<div class="fm-field"><div class="fm-multi-label"><span id="${id}Label">${requiredLabel(label)}</span>${id === "fmMetrics" ? `<span class="fm-metric-help"><button type="button" class="fm-metric-help-trigger" aria-label="About Referenced Metrics" aria-describedby="${id}Help">?</button><span class="fm-metric-help-tooltip" id="${id}Help" role="tooltip">${esc(helper)}</span></span>` : ""}</div><div class="v20-multi" id="${id}"><button type="button" class="v20-multi-display" aria-labelledby="${id}Label" ${id === "fmMetrics" ? `aria-describedby="${id}Help"` : ""} aria-expanded="false" aria-controls="${id}Menu"></button><div class="v20-multi-menu" id="${id}Menu" hidden></div></div></div>`;
+  const metricRecords = data.records("Metric Dictionary").filter((metric) => metric.metric_name);
+  record.business_domain = data.list(record.business_domain);
+  record.referenced_metrics = data.list(record.referenced_metrics);
+  const domainOptions = [...new Set(["Marketing", ...Object.values(data.domains), ...metricRecords.flatMap((metric) => data.list(metric.business_domain)), ...record.business_domain])];
   form.innerHTML =
-    group(
-      "Basic Information",
-      field("analysis_name", "Analysis Name *", true, false, "Enter a name for this new analysis.") +
-        field(
-          "applicable_scenarios",
-          "Description",
-          true,
-          true,
-          "Briefly state the business goal, decision to support, and expected insight. Do not list analysis steps here.",
-        ) +
-        field(
-          "trigger_when",
-          "Trigger When *",
-          true,
-          true,
-          "Describe the user questions, business events, or conditions that should trigger this analysis.",
-        ),
-    ) +
-    group(
-      "Metrics",
-      chipField("business_domain", "Business Domain", [
-        "Marketing",
-        ...Object.values(data.domains),
-      ]) + metricsField(),
-    ) +
-    group(
-      "Structure & Guidance *",
-      field(
-        "output_requirements",
-        "Structure & Guidance *",
-        true,
-        true,
-        guidanceText,
-        guidanceTooltip(guidanceText),
-      ).replace('class="fm-field full"', 'class="fm-field full fm-guidance-field"'),
-    ) +
-    group(
-      "Constraints",
-      field(
-        "analysis_constraints",
-        "Prohibited Analysis Directions",
-        true,
-        true,
-        "State unsupported dimensions, missing data and conclusions AI must avoid.",
-      ),
-    ) +
-    '<footer class="fm-editor-footer"><div><button class="fm-button" type="button" id="fmCancel">Cancel</button><button class="fm-button" type="button" id="fmSave">Save</button><button class="fm-button primary" type="submit">Submit</button></div></footer><p class="knowledge-operation-reminder"><span aria-hidden="true">i</span><span>Operation reminder: Save keeps this model disabled. Submit publishes it using the selected AI Interpreter Status.</span></p><p class="fm-feedback" id="fmFormFeedback" role="status" aria-live="polite"></p>';
+    group("Basic Information",
+      field("analysis_name", "Analysis Name *", 'Name this reusable analysis model, e.g. “Revenue Drop Analysis” or “Campaign Performance Review”.') +
+      field("applicable_scenarios", "Description", "Briefly describe the business purpose, the decision this analysis supports, and the type of insight users should expect.", 3)) +
+    group("Business Scope",
+      multi("fmDomains", "Business Domain *", "Select one or more business domains this analysis model applies to.") +
+      multi("fmMetrics", "Referenced Metrics", "Only metrics from your selected business domains are shown.")) +
+    group("Applicable Scenarios",
+      field("trigger_when", "Trigger When *", 'Describe when to use this analysis, e.g. "Why did revenue drop?" or "What caused conversion to decline?"', 3)) +
+    group("Analysis Method",
+      field("output_requirements", "Analysis Logic *", "Describe the analysis method, including comparison logic, calculation rules, reasoning path, and expected output.\n\nFor example：\n- Identify the key change or anomaly\n- Compare performance using methods such as WoW, MoM, YoY, target gap, or benchmark comparison\n- Break down the result by key dimensions\n- Find major contributors or drivers\n- Follow required calculation or business rules\n- Summarize the final insight, root cause, impact, and recommended next checks", 8)) +
+    group("Notes & Guardrails",
+      field("analysis_constraints", "Notes & Guardrails", "Note any data limitations, unsupported analyses, or conclusions AI should avoid.", 3)) +
+    '<footer class="fm-editor-footer"><div><button class="fm-button" type="button" id="fmCancel">Cancel</button><button class="fm-button" type="button" id="fmSave">Save Draft</button><button class="fm-button primary" type="submit">Publish &amp; Enable</button></div></footer><p class="knowledge-operation-reminder"><span aria-hidden="true">i</span><span>Save a draft to continue editing later. Publish to enable this analysis model for AI use and make it available to all authorized users.</span></p><p class="fm-feedback" id="fmFormFeedback" role="status" aria-live="polite"></p>';
   form.noValidate = true;
-  const requiredControls = ["analysis_name", "trigger_when", "output_requirements"].map((key) => form.querySelector(`[name="${key}"]`)).filter(Boolean);
-  requiredControls.forEach((control) => {
-    control.required = true;
-    control.setAttribute("aria-required", "true");
-    control.addEventListener("input", () => {
-      if (!control.value.trim()) return;
-      const field = control.closest(".fm-field");
-      field?.classList.remove("is-invalid");
-      field?.querySelector(".fm-field-error")?.remove();
-    });
+  const requiredFields = [
+    ["analysis_name", "Analysis name is required."],
+    ["business_domain", "At least one business domain is required."],
+    ["trigger_when", "Trigger condition is required."],
+    ["output_requirements", "Analysis logic is required."],
+  ].map(([key, message]) => ({ key, message, control: key === "business_domain" ? form.querySelector("#fmDomains button") : form.querySelector(`[name="${key}"]`) }));
+  function setError(item, missing) {
+    const field = item.control.closest(".fm-field");
+    field.classList.toggle("is-invalid", missing);
+    item.control.setAttribute("aria-invalid", String(missing));
+    field.querySelector(".fm-field-error")?.remove();
+    if (missing) {
+      field.insertAdjacentHTML("beforeend", `<span class="fm-field-error" id="${item.key}Error">${esc(item.message)}</span>`);
+      item.control.setAttribute("aria-describedby", `${item.key === "output_requirements" ? "fmAnalysisLogicHelp " : ""}${item.key}Error`);
+    } else if (item.key === "output_requirements") item.control.setAttribute("aria-describedby", "fmAnalysisLogicHelp");
+    else item.control.removeAttribute("aria-describedby");
+  }
+  requiredFields.forEach((item) => {
+    if (item.key === "business_domain") return;
+    item.control.required = true;
+    item.control.setAttribute("aria-required", "true");
+    item.control.addEventListener("input", () => { if (item.control.value.trim()) setError(item, false); });
   });
   function validateRequired() {
-    let firstInvalid = null;
-    requiredControls.forEach((control) => {
-      const field = control.closest(".fm-field");
-      const missing = !control.value.trim();
-      field?.classList.toggle("is-invalid", missing);
-      field?.querySelector(".fm-field-error")?.remove();
-      if (missing) {
-        field?.insertAdjacentHTML("beforeend", '<span class="fm-field-error">This field is required.</span>');
-        firstInvalid ||= control;
-      }
+    let firstInvalid;
+    requiredFields.forEach((item) => {
+      const missing = item.key === "business_domain" ? !record.business_domain.length : !item.control.value.trim();
+      setError(item, missing);
+      if (missing) firstInvalid ||= item.control;
     });
     firstInvalid?.focus();
     return !firstInvalid;
   }
-  const metrics = form.querySelector("#fmMetrics"),
-    metricsButton = metrics.querySelector("button"),
-    metricsMenu = metrics.querySelector(".v20-multi-menu");
-  metrics.closest(".fm-section").classList.add("fm-metrics-section");
-  const paintMetrics = () => {
-    metricsButton.innerHTML = record.referenced_metrics.length
-      ? record.referenced_metrics.map((value) => "<span>" + esc(value) + "</span>").join("")
-      : "<em>Select one or more</em>";
-  };
-  const closeMetrics = () => {
-    metricsMenu.classList.remove("open");
-    metricsButton.setAttribute("aria-expanded", "false");
-  };
-  metricsButton.addEventListener("click", () => {
-    const open = metricsMenu.classList.toggle("open");
-    metricsButton.setAttribute("aria-expanded", String(open));
-  });
-  metricsMenu.addEventListener("change", () => {
-    record.referenced_metrics = [...metricsMenu.querySelectorAll("input:checked")].map(
-      (input) => input.value,
-    );
-    paintMetrics();
-  });
-  document.addEventListener("click", (event) => {
-    if (!metrics.contains(event.target)) closeMetrics();
-  });
-  metrics.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeMetrics();
-      metricsButton.focus();
-    }
-  });
-  paintMetrics();
-  const statusToggle = form.querySelector('[name="status"]');
-  const updateStatusToggle = () => {
-    if (statusToggle)
-      statusToggle.nextElementSibling.textContent = statusToggle.checked ? "Enabled" : "Disabled";
-  };
-  statusToggle?.addEventListener("change", updateStatusToggle);
-  updateStatusToggle();
-  function paintTags(key) {
-    const box = form.querySelector(`[data-tags="${key}"] .fm-tags`);
-    box.innerHTML = record[key]
-      .map(
-        (value, index) =>
-          `<span class="fm-chip">${esc(value)}<button type="button" data-remove-tag="${key}" data-index="${index}" aria-label="Remove ${esc(value)}">×</button></span>`,
-      )
-      .join("");
+  const selectors = [
+    { id: "fmDomains", key: "business_domain", placeholder: "Select one or more business domains this analysis model applies to." },
+    { id: "fmMetrics", key: "referenced_metrics", placeholder: "Select metrics based on the chosen domains" },
+  ].map((item) => ({ ...item, box: form.querySelector(`#${item.id}`), button: form.querySelector(`#${item.id} button`), menu: form.querySelector(`#${item.id}Menu`) }));
+  function closeMenu(item) {
+    item.menu.hidden = true;
+    item.menu.classList.remove("open");
+    item.button.setAttribute("aria-expanded", "false");
   }
-  function addTags(key) {
-    const input = form.querySelector(`[data-tags="${key}"] input`);
-    record[key] = [...new Set([...record[key], ...data.list(input.value)])];
-    input.value = "";
-    paintTags(key);
+  function paintSelect(item, options) {
+    item.button.innerHTML = record[item.key].length ? record[item.key].map((value) => `<span>${esc(value)}</span>`).join("") : `<em>${esc(item.button.disabled ? "Select business domain first" : item.placeholder)}</em>`;
+    const search = item.id === "fmMetrics" ? '<div class="fm-metric-search"><input type="search" placeholder="Search metrics..." aria-label="Search metrics" autocomplete="off"></div>' : "";
+    const choices = options.map((value) => `<label><input type="checkbox" value="${esc(value)}" ${record[item.key].includes(value) ? "checked" : ""}>${esc(value)}</label>`).join("");
+    item.menu.innerHTML = search + `<div class="fm-dropdown-options">${choices}</div><p class="fm-multi-empty" role="status" ${options.length ? "hidden" : ""}>No metrics available for the selected domains.</p>`;
   }
-  const tagKeys = ["business_domain"];
-  tagKeys.forEach(paintTags);
-  form.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && event.target.matches("[data-tags] input")) {
-      event.preventDefault();
-      addTags(event.target.closest("[data-tags]").dataset.tags);
-    }
+  function filterMetrics(item) {
+    const query = (item.menu.querySelector('input[type="search"]')?.value || "").trim().toLowerCase();
+    let matches = 0;
+    item.menu.querySelectorAll(".fm-dropdown-options label").forEach((label) => {
+      label.hidden = !label.querySelector("input").value.toLowerCase().includes(query);
+      if (!label.hidden) matches++;
+    });
+    const empty = item.menu.querySelector(".fm-multi-empty");
+    empty.hidden = matches > 0;
+    empty.textContent = query ? "No matching metrics found." : "No metrics available for the selected domains.";
+  }
+
+  function syncMetrics() {
+    const item = selectors[1];
+    const available = [...new Set(metricRecords.filter((metric) => data.list(metric.business_domain).some((domain) => record.business_domain.includes(domain))).map((metric) => metric.metric_name))];
+    record.referenced_metrics = record.referenced_metrics.filter((metric) => available.includes(metric));
+    item.button.disabled = !record.business_domain.length;
+    closeMenu(item);
+    paintSelect(item, available);
+    return available;
+  }
+  selectors.forEach((item) => {
+    item.box.closest(".fm-section").classList.add("fm-scope-section");
+    item.button.addEventListener("click", () => {
+      const open = item.menu.hidden;
+      selectors.forEach(closeMenu);
+      item.menu.hidden = !open;
+      item.menu.classList.toggle("open", open);
+      item.button.setAttribute("aria-expanded", String(open));
+      if (open && item.id === "fmMetrics") {
+        const search = item.menu.querySelector('input[type="search"]');
+        search.value = "";
+        filterMetrics(item);
+        search.focus();
+      }
+    });
+    item.menu.addEventListener("input", (event) => {
+      if (event.target.type === "search") filterMetrics(item);
+    });
+    item.menu.addEventListener("change", (event) => {
+      if (event.target.type !== "checkbox") return;
+      record[item.key] = [...item.menu.querySelectorAll("input:checked")].map((input) => input.value);
+      // Keep the checkbox node focused when selecting several options with the keyboard.
+      item.button.innerHTML = record[item.key].length ? record[item.key].map((value) => `<span>${esc(value)}</span>`).join("") : `<em>${esc(item.placeholder)}</em>`;
+      if (item.key === "business_domain") {
+        syncMetrics();
+        if (record.business_domain.length) setError(requiredFields[1], false);
+      }
+    });
+    item.box.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && event.target.type === "search") event.preventDefault();
+      if (event.key === "Escape") { event.preventDefault(); closeMenu(item); item.button.focus(); }
+      if (event.key === "ArrowDown" && event.target === item.button && !item.button.disabled) {
+        event.preventDefault();
+        if (item.menu.hidden) item.button.click();
+        item.menu.querySelector("input")?.focus();
+      }
+    });
+    item.box.addEventListener("focusout", (event) => { if (!item.box.contains(event.relatedTarget)) closeMenu(item); });
   });
-  form.addEventListener("click", (event) => {
-    const remove = event.target.closest("[data-remove-tag]");
-    if (remove) {
-      record[remove.dataset.removeTag].splice(Number(remove.dataset.index), 1);
-      paintTags(remove.dataset.removeTag);
-    }
-  });
+  document.addEventListener("click", (event) => selectors.forEach((item) => { if (!item.box.contains(event.target)) closeMenu(item); }));
+  paintSelect(selectors[0], domainOptions);
+  syncMetrics();
+  const snapshot = () => JSON.stringify({ fields: [...new FormData(form)], domains: [...record.business_domain].sort(), metrics: [...record.referenced_metrics].sort() });
+  let baseline = snapshot();
+  let saved = false;
+  window.addEventListener("beforeunload", (event) => { if (!saved && snapshot() !== baseline) { event.preventDefault(); event.returnValue = ""; } });
+  const returnToLibrary = () => { saved = true; location.href = "knowledge.html?type=Analytical%20Model"; };
+  const discardDialog = document.createElement("dialog");
+  discardDialog.className = "fm-dialog fm-analysis-dialog";
+  discardDialog.setAttribute("aria-labelledby", "fmDiscardTitle");
+  discardDialog.innerHTML = '<h3 id="fmDiscardTitle">Discard changes?</h3><p>Your unsaved changes will be lost.</p><footer><button type="button" class="fm-button" id="fmKeepEditing" autofocus>Keep Editing</button><button type="button" class="fm-button primary" id="fmDiscard">Discard</button></footer>';
+  document.body.append(discardDialog);
+  discardDialog.querySelector("#fmKeepEditing").onclick = () => discardDialog.close();
+  discardDialog.querySelector("#fmDiscard").onclick = returnToLibrary;
+  discardDialog.addEventListener("close", () => form.querySelector("#fmCancel").focus());
+
   function persist(submit) {
     if (!validateRequired()) return;
     if (editing && !data.records("Analytical Model").some((x) => x.id === record.id)) {
@@ -253,7 +219,6 @@
         "This analysis has been deleted. It cannot be saved.";
       return;
     }
-    tagKeys.forEach(addTags);
     const values = new FormData(form);
     for (const key of [
       "analysis_name",
@@ -263,16 +228,7 @@
       "output_requirements",
     ])
       record[key] = String(values.get(key) || "").trim();
-    // Save always keeps knowledge offline. Submit retains the form's enabled setting.
-    record.status = !submit
-      ? "Disable"
-      : statusToggle
-        ? statusToggle.checked
-          ? "Enable"
-          : "Disable"
-        : "Enable";
-    if (statusToggle) statusToggle.checked = record.status === "Enable";
-    updateStatusToggle();
+    record.status = submit ? "Enable" : "Disable";
     record.analysis_steps = String(record.output_requirements || "")
       .split(/\n+/)
       .map((x) => x.trim())
@@ -299,14 +255,24 @@
     record.isDisabled = record.status === "Disable";
     try {
       data.save(record);
-      location.href = `knowledge.html?type=Analytical%20Model&notice=${submit ? "published" : "saved"}`;
+      saved = true;
+      baseline = snapshot();
+      const dialog = document.querySelector("#resultDialog");
+      dialog.classList.add("fm-analysis-dialog");
+      dialog.setAttribute("aria-labelledby", "dialogTitle");
+      dialog.querySelector("#dialogTitle").textContent = submit ? "Analysis model published and enabled." : "Draft saved.";
+      dialog.querySelector("#dialogText").textContent = submit ? "This analysis model is now enabled and available for AI use." : "This analysis model is disabled and will not be used by AI.";
+      dialog.querySelector("#dialogClose").onclick = returnToLibrary;
+      dialog.addEventListener("cancel", (event) => { event.preventDefault(); returnToLibrary(); }, { once: true });
+      dialog.showModal();
     } catch (_) {
       form.querySelector("#fmFormFeedback").textContent =
         "Unable to save local demo changes. Please allow browser storage and retry.";
     }
   }
   form.querySelector("#fmCancel").onclick = () => {
-    location.href = "knowledge.html?type=Analytical%20Model";
+    if (snapshot() === baseline) returnToLibrary();
+    else discardDialog.showModal();
   };
   form.querySelector("#fmSave").onclick = () => {
     persist(false);

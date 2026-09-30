@@ -10,24 +10,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const scenarioId = urlParams.get("id");
   const scenario = scenarioId ? scenarioLibraryData.find((s) => s.id === scenarioId) : null;
 
-  const assignValue = (id, value) => {
-    const field = document.getElementById(id);
-    if (field) field.value = value == null ? "" : value;
-  };
-
-  // If editing existing scenario, populate fields that exist on this page.
+  // If editing existing scenario, populate fields
   if (scenario) {
-    assignValue("scenarioName", scenario.name);
-    assignValue("scenarioCategory", scenario.category);
-    assignValue("scenarioPurpose", scenario.purpose);
-    assignValue("scenarioScope", scenario.scope);
-    assignValue("scenarioOwner", scenario.owner);
+    document.getElementById("scenarioName").value = scenario.name;
+    document.getElementById("scenarioCategory").value = scenario.category;
+    document.getElementById("scenarioPurpose").value = scenario.purpose;
+    document.getElementById("scenarioScope").value = scenario.scope;
+    document.getElementById("scenarioOwner").value = scenario.owner;
     const editReport = document.getElementById("editReport");
     if (editReport) editReport.value = "Invest City Strategy Analysis";
-    assignValue("editLogic", scenario.logic);
-    assignValue("editOutput", scenario.output);
-    if (previewQuestion) previewQuestion.value = scenario.previewQuestion || "";
-    if (previewOutput) previewOutput.textContent = scenario.previewOutput || "";
+    document.getElementById("editLogic").value = scenario.logic;
+    document.getElementById("editOutput").value = scenario.output;
+    document.getElementById("previewQuestion").value = scenario.previewQuestion;
+    document.getElementById("previewOutput").textContent = scenario.previewOutput;
     document.title = `Tapestry Marketing Portal | Edit ${scenario.name}`;
   }
 
