@@ -3,6 +3,9 @@
   "name": "marketinghub",
   "account_id": "b00a0a78ddfa0b2e9051f6cc7946bd85",
   "compatibility_date": "2026-09-30",
+  "build": {
+    "command": "[ -d storybook-static ] || npm run build-storybook"
+  },
   "workers_dev": true,
   "preview_urls": true,
   "previews": {},
