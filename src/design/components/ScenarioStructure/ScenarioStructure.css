@@ -9,4 +9,4 @@
 .mh-scenario-structure__icon svg{width:18px;height:18px}
 .mh-scenario-structure__item strong{color:var(--mh-text-strong);font-size:var(--mh-font-size-sm);letter-spacing:.02em;text-transform:uppercase}
 .mh-scenario-structure__item p{margin:6px 0 0;color:var(--mh-text-muted);font-size:var(--mh-font-size-md);line-height:1.6;overflow-wrap:anywhere}
-@media(max-width:560px){.mh-scenario-structure__item{padding:12px}}
+@media(max-width:760px){.mh-scenario-structure__item{padding:12px}}

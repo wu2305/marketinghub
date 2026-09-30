@@ -191,7 +191,7 @@
   color: var(--mh-surface);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 760px) {
   .mh-confirm--warning.mh-modal__dialog {
     padding: 24px 20px;
   }

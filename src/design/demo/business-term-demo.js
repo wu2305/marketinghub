@@ -11,15 +11,10 @@
  * then continues the requested action; completed changes show a toast.
  */
 import React from "react";
+import { useSynced } from "./use-synced.js";
+import { useToast } from "./use-toast.js";
 import { availabilityOf, governanceMessages, governedActions } from "../lib/governance.js";
 import { useGovernedFlow } from "../lib/governed-flow.js";
-
-/** Controlled-prop mirror: local state re-syncs when the input value changes. */
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
 
 const statusOf = (record) => (availabilityOf(record) === "enabled" ? "Enable" : "Disable");
 
@@ -56,7 +51,6 @@ function buildList(records, drafts, currentUser) {
   return normalized.filter((item) => item.stage !== "Draft" || (item.created_by ?? item.creator) === currentUser);
 }
 
-const TOAST_MS = 3000;
 
 /**
  * @param {object} props ordinary BusinessTermView inputs:
@@ -87,15 +81,7 @@ export function useBusinessTermDemo(props) {
   const [page, setPage] = useSynced(props.page || 1);
   const [pageSize, setPageSize] = useSynced(props.pageSize || 10);
   const [detailId, setDetailId] = useSynced(props.detail ?? null);
-  const [toast, setToast] = React.useState("");
-  const toastTimer = React.useRef(null);
-  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-
-  const showToast = (message) => {
-    clearTimeout(toastTimer.current);
-    setToast(message);
-    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
-  };
+  const { toast, showToast } = useToast();
   /* Keep both availability spellings in step; lib/governance.js reads `availability` first. */
   const setStatus = (id, status) => setList((current) => current.map((item) => item.id === id ? { ...item, status, availability: status === "Disable" ? "disabled" : "enabled" } : item));
   const remove = (id) => {
