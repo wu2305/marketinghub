@@ -38,7 +38,7 @@ const panelShellClasses = {
 };
 
 /**
- * @typedef {{ query: string, kicker?: string, title?: string, body?: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: typeof assistantAnswerVariants[number], banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, lead?: string }} AssistantAnswerEntry One answer of `answers`: the query, the grounded card (`variant` picks its layout) and the lite `{ variant: "simple", lead, query }` line.
+ * @typedef {{ query: string, id?: string, kicker?: string, title?: string, body?: string, sources?: string[], actions?: Array<{ label: string, href?: string }>, variant?: typeof assistantAnswerVariants[number], banner?: string, context?: string, findings?: Array<{ label: string, detail: string }>, lead?: string }} AssistantAnswerEntry One answer of `answers`: the query, the grounded card (`variant` picks its layout) and the lite `{ variant: "simple", lead, query }` line. `id` keys the answer, so a fresh `id` per answer resets its Helpful/Copy state.
  */
 
 /**
