@@ -17,7 +17,7 @@ import "./SelfServicePage.css";
  * @param {string} [props.current] nav id for aria-current; the original self-service page marks no item
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {(id:string,params?:object)=>string} props.hrefFor semantic link resolver supplied by story or host
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host
  * @param {object} [props.hero={}] Hero props
  * @param {Array<{ id: string, label: string }>} [props.tabs=[]]
  * @param {{ tabAria: string, analysisFilterAria: string, uploadFilterAria: string }} props.labels Accessible names for the page tabs and each filter group.
@@ -29,7 +29,7 @@ import "./SelfServicePage.css";
  * @param {object} [props.skillFlow] ModelFlowDialog props for the assistant skill actions
  * @param {"analysis"|"upload"} [props.tab="analysis"]
  * @param {string} [props.category="all"]
- * @param {(target: { id:string, params:object, href:string, label?:string }) => void} [props.onNavigate]
+ * @param {(target: { id:string, params: Record<string,string>, href:string, label?:string }) => void} [props.onNavigate]
  * @param {(event: { id: string, label: string }) => void} [props.onTabChange]
  * @param {(event: { id: string, label: string }) => void} [props.onCategoryChange]
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen]

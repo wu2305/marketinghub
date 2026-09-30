@@ -141,7 +141,7 @@ Contract gaps found (item 2 works this list):
 
 | id | gap | found by | evidence |
 |---|---|---|---|
-| G1 | Route params are typed `object`: `hrefFor(id, params)` and `onNavigate({ params })` on `AiInterpreterPage` / `KnowledgeCreatePage`. A TypeScript consumer cannot read `params.type` or pass a typed resolver without a cast. | item 1 | strict build:lib check reported TS2322 ×2 and TS2339 before the casts in `BusinessTermApp.tsx` |
+| G1 | ~~Route params typed `object`~~ Fixed: `hrefFor(id, params?)` and `onNavigate({ params })` are `Record<string,string>` on every page and page-level demo hook, so a TypeScript consumer reads `params.type` without a cast. `BusinessTermApp.tsx` lost its casts; `build:lib` type-checks it. | item 1 | strict build:lib check reported TS2322 ×2 and TS2339 before the casts in `BusinessTermApp.tsx` |
 | G2 | `KnowledgeCreatePage` documents `onSave`/`onSubmit`/`onCancel` as `() => void`, but the Business Term form calls them with `{ values }`. The payload exists but cannot be used from TypeScript. | item 1 | `pages/KnowledgeCreatePage/index.jsx` JSDoc vs `features/interpreter/BusinessTermForm` |
 | G3 | The same term has two shapes: the form takes `synonyms` as one comma string, the library view takes `synonyms: string[]`. Every consumer writes both conversions. | item 1 | `openForm` and `persist` in `BusinessTermApp.tsx` |
 | G4 | `AiInterpreterPage`'s `view` and `assistant` props are typed `object`, so the Business Term view props and the assistant answer shape (`variant: "workspace"`, `banner`, `findings`, `sources`) are not checked or documented at the page boundary. The consumer copied the answer shape from demo code. | item 1 | `view={…}` and `answers` in `BusinessTermApp.tsx` compile with any keys |

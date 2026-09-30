@@ -29,7 +29,7 @@ import "./DataUploadPage.css";
  * @param {{ title: string, dropzoneTitle: string, dropzoneHint: string, selectedPrefix: string, accept: string, templateLabel: string, templateHref?: string, tipsTitle: string, tips: string[] }} [props.bulkImport={}] modal copy and file constraints
  * @param {boolean} [props.bulkImportOpen=false]
  * @param {string} [props.selectedFile] file name shown in the dropzone hint
- * @param {(target: { href: string, id?: string, params?: object, label?: string }) => void} [props.onNavigate]
+ * @param {(target: { href: string, id?: string, params?: Record<string,string>, label?: string }) => void} [props.onNavigate]
  * @param {(target: { label: string }) => void} [props.onOpenImport]
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseImport]
  * @param {(file: { name: string }) => void} [props.onSelectFile]

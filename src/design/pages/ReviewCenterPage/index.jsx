@@ -52,8 +52,8 @@ const COLUMN_KEYS = ["title", "type", "submittedBy", "submitted", "status", "aiC
  * @param {object} [props.assistant={}] Lite assistant copy, state and callbacks.
  * @param {object|null} props.skillFlow Optional ModelFlowDialog state.
  * @param {string} [props.toast=""] success message after approve/reject (hidden when empty)
- * @param {(id:string,params?:object)=>string} props.hrefFor Route adapter.
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} props.onNavigate
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter.
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} props.onNavigate
  */
 export function ReviewCenterPage({ content, logo, navigation = [], image, filters = {}, queue = {}, decision = {}, assistant = {}, skillFlow, toast = "", hrefFor, onNavigate }) {
   const { tab = "pending", search = "", type = "all", time = "all", onTabChange, onSearchChange, onTypeChange, onTimeChange, onClear } = filters;

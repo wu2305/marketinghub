@@ -75,8 +75,8 @@ function ActivityPanel({ items }) {
  * @param {boolean} props.previewOpen
  * @param {(event:{value:string})=>void} [props.onTabChange]
  * @param {(event:{open:boolean})=>void} [props.onTogglePreview]
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioDetailWorkspace({ record, labels, tab = "content", previewOpen = false, onTabChange, onTogglePreview, hrefFor, onNavigate }) {
   if (!record) return null;

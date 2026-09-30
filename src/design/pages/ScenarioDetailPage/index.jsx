@@ -19,8 +19,8 @@ export { scenarioDetailTabs };
  * @param {{record:object,tab:typeof scenarioDetailTabs[number],previewOpen:boolean,onTabChange?:(event:{value:string})=>void,onTogglePreview?:(event:{open:boolean})=>void}} [props.detail={}] Detail view state.
  * @param {object} [props.assistant={}] Lite assistant state and named callbacks.
  * @param {object} [props.skillFlow] Model flow state and callbacks.
- * @param {(id:string,params?:object)=>string} [props.hrefFor]
- * @param {(event:{id:string,params:object,href:string,label:string})=>void} [props.onNavigate]
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
 export function ScenarioDetailPage({ content, logo, navigation = [], detail = {}, assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { hero, sidebar, labels } = content;
