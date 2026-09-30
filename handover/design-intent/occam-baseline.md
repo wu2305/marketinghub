@@ -1,6 +1,6 @@
 # Occam baseline — concept counts now, and targets
 
-Status: **Phase 1 baseline** (2026-09-27, measured on `main` @ cbf5cc6). The **Phase 2 result** column was measured on `main` @ 1ececf4 (2026-09-29, after WP7k) with `node scripts/concept-count.mjs` where it prints the row, and by the greps named in the row otherwise. The **Phase 3 result** column was measured on `main` @ 1db9e43 plus the WP4 change (2026-09-30), the same way; rows marked "not re-measured" have no script or grep that was rerun. Phase 3 WP3 (responsive cleanup) is not done, so the `@media` row is unchanged.
+Status: **Phase 1 baseline** (2026-09-27, measured on `main` @ cbf5cc6). The **Phase 2 result** column was measured on `main` @ 1ececf4 (2026-09-29, after WP7k) with `node scripts/concept-count.mjs` where it prints the row, and by the greps named in the row otherwise. The **Phase 3 result** column was measured on `main` @ 1db9e43 plus the WP4 change (2026-09-30), the same way; rows marked "not re-measured" have no script or grep that was rerun. Phase 3 WP3 (#90, responsive cleanup) merged just before WP4, so the `@media` row shows its result.
 
 Rule (user decision, 2026-09-27): Occam's Razor is measured in **concepts** — patterns, variants, tokens,
 states, props — not in files or component count. A variation earns its own variant, token, prop or story
@@ -35,7 +35,7 @@ Not covered by a consumer page: the assistants' model-creation dialog and the Ci
 | raw `border-radius` values | 24 | 0 (4 tokens) | **0** | **0** | script |
 | raw `box-shadow` values | 34 | 0 (3 tokens + focus ring) | **0** | **0** | script; 67 distinct if `var()`-based shadows are included |
 | raw colour literals outside tokens (hex + `rgb[a]()`) | 56 | 0 | **0** | **0** | script; hex alone is already 0 by budget, these are `rgba()` |
-| `@media` width values | ~20 | 3 | 19 distinct (not a Phase 2 package; Phase 3 candidate) | 19 distinct, unchanged (WP3 not done: 480 560 600 620 650 680 690 760 768 800 850 860 880 900 960 1024 1100 1240 1280) | 1180 / 900 / 760 |
+| `@media` width values | ~20 | 3 | 19 distinct (not a Phase 2 package; Phase 3 candidate) | **3** (1180 / 900 / 760; Phase 3 WP3 #90, `css-budget.json` `maxMediaWidths`) | 1180 / 900 / 760 |
 
 ## 2. Structural concepts
 
