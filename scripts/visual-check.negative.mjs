@@ -74,6 +74,18 @@ export default [
     reason: "Analytical Model must not satisfy Business Term form assertions",
   },
   {
+    id: "neg-p08-analysis-metrics-wrong-domain",
+    base: "p08-analysis-metrics",
+    story: { id: "pages--knowledge-create-analysis-no-metrics" },
+    reason: "a domain without metrics must not satisfy the City Strategy / 4P metric list assertions",
+  },
+  {
+    id: "neg-p08-analysis-published-wrong-result",
+    base: "p08-analysis-published",
+    story: { id: "pages--knowledge-create-analysis-saved" },
+    reason: "the Draft saved dialog must not satisfy the published-and-enabled dialog assertions",
+  },
+  {
     // Pages--campaign renders the campaign workspace, so the Home hero and
     // workspace-card expects can never be satisfied.
     id: "neg-p01-wrong-story",

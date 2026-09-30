@@ -86,7 +86,7 @@ export const KNOWLEDGE_CREATE = {
     synonymManagement: "Synonym Management", synonymIntro: "Maintain global language mappings so AI can understand different business expressions.", addSynonym: "Add Synonym", synonymHint: "New rows appear at the top. Complete required fields before submitting.",
     standardTerm: "Standard term", termType: "Term type", select: "Select", applicableDomain: "Applicable domain", relatedDataset: "Related dataset", status: "Status", removeRow: "Remove row", readOnly: "Read only", disabled: "Disabled",
     reportPreview: "Report preview unavailable", reportDescription: "REPORT DESCRIPTION", reportContext: "Report Context", reportDataModel: "Data Model", unlockReport: "Unlock report description", lockReport: "Lock report description", versionHistory: "Version history", reportEditable: "You can now update the report description.", reportLocked: "Unlock the description to edit this governed report context.", aiStatus: "AI Interpreter Status", aiSummary: "AI Summary", scenarioReports: "Scenario Reports", reportScope: "Report Data Scope", reportScopeEmpty: "Report data scope has not been configured.",
-    basicInformation: "Basic Information", analysisName: "Analysis Name", triggerWhen: "Trigger When", metrics: "Metrics", referencedMetrics: "Referenced Metrics", structureGuidance: "Structure & Guidance", constraints: "Constraints", prohibitedDirections: "Prohibited Analysis Directions", showGuidance: "Show Structure and Guidance prompt",
+    analysisName: "Analysis Name", triggerWhen: "Trigger When", businessDomain: "Business Domain", referencedMetrics: "Referenced Metrics", analysisLogic: "Analysis Logic", notesGuardrails: "Notes & Guardrails", structureGuidance: "Structure & Guidance", showGuidance: "Show Structure and Guidance prompt",
     scenarioName: "Scenario Reporting Name", relatedReport: "Related Report", upload: "Upload reference", uploadHint: "Show how this scenario reporting should be written. You can upload reports, screenshots, slides, or documents.", statusHint: "AI Interpreter Status is enabled automatically when processing reaches Published.",
     knowledgeTitle: "Knowledge Title", coreDescription: "Core Description", dashboardDescription: "Dashboard Description", aiOverview: "Enable AI Overview", aiOverviewOff: "Disable AI Overview", aiDescription: "AI Overview Description", aiSources: "AI Overview Parameter Sources",
   },
@@ -95,7 +95,7 @@ export const KNOWLEDGE_CREATE = {
   placeholders: {
     metricDomain: "Select a business domain", metricName: "Enter metric name...", unit: "e.g. USD, %, count", formula: "Click a metric or operator to build your formula...", metricDescription: "Describe the metric purpose and calculation logic...", metricSynonyms: "Comma separated",
     modelName: "Enter model name", modelDescription: "Describe the purpose and scope of this data model", modelSearch: "Search table name or description...", synonym: "Enter synonym",
-    analysisName: "Enter a name for this new analysis.", analysisDescription: "Briefly state the business goal, decision to support, and expected insight. Do not list analysis steps here.", triggerWhen: "Describe the user questions, business events, or conditions that should trigger this analysis.", domainTags: "Type and press Enter; use semicolons for multiple values", constraints: "State unsupported dimensions, missing data and conclusions AI must avoid.",
+    analysisName: "Name this reusable analysis model, e.g. “Revenue Drop Analysis” or “Campaign Performance Review”.", analysisDescription: "Briefly describe the business purpose, the decision this analysis supports, and the type of insight users should expect.", triggerWhen: "Describe when to use this analysis, e.g. \"Why did revenue drop?\" or \"What caused conversion to decline?\"", constraints: "Note any data limitations, unsupported analyses, or conclusions AI should avoid.",
     scenarioName: "Enter scenario reporting name", relatedReport: "Select a report", scenarioDescription: "Describe this scenario report's use case and main purpose, so it is easy to reference later.", principlesTitle: "Enter knowledge title", principlesDescription: "Describe the principle and rule details",
   },
   businessTerm: {
@@ -108,9 +108,29 @@ export const KNOWLEDGE_CREATE = {
   analysis: {
     title: "Create Analysis", description: "Describe a reusable analysis framework.",
     unavailable: "This analysis is unavailable or you do not have permission to edit it. Return to Analytical Model to select another record.",
-    guidance: "Describe the analysis logic and reasoning path. Focus on how to analyze the question and what final result should be returned. Do not ask AI to create charts or extra report sections.\n\nFor example:\n1. Confirm the user's business question, analysis period, target scope and comparison baseline.\n2. Check whether the selected metrics changed materially, and identify the main direction of the change.\n3. Compare related dimensions or segments to locate the most likely driver of the change.\n4. Judge whether the evidence supports a clear cause. If not, explain the limitation.\n5. Return one concise analysis result with the key finding, reason and recommended next action.",
-    reminder: "Operation reminder: Save keeps this model disabled. Submit publishes it using the selected AI Interpreter Status.",
-    metrics: ["Member conversion", "Campaign ROI", "Promotion lift"],
+    guidance: "Describe the analysis method, including comparison logic, calculation rules, reasoning path, and expected output.\nFor example:\n- Identify the key change or anomaly\n- Compare performance using methods such as WoW, MoM, YoY, target gap, or benchmark comparison\n- Break down the result by key dimensions\n- Find major contributors or drivers\n- Follow required calculation or business rules\n- Summarize the final insight, root cause, impact, and recommended next checks",
+    metricsHelp: "Only metrics from your selected business domains are shown.",
+    reminder: "Save a draft to continue editing later. Publish to enable this analysis model for AI use and make it available to all authorized users.",
+    saveLabel: "Save Draft", submitLabel: "Publish & Enable",
+    domains: ["Marketing", "City Strategy", "4P", "Customer", "ABO", "Rednote", "OTTOLV"],
+    metrics: [
+      { name: "Member conversion", domains: ["Customer"] },
+      { name: "Campaign ROI", domains: ["City Strategy", "4P", "ABO"] },
+      { name: "Promotion lift", domains: ["4P"] },
+    ],
+    picker: {
+      domains: "Select one or more business domains this analysis model applies to.", metrics: "Select metrics based on the chosen domains",
+      metricsLocked: "Select business domain first", search: "Search metrics...", noMetrics: "No metrics available for the selected domains.", noMatch: "No matching metrics found.",
+    },
+    errors: {
+      analysis_name: "Analysis name is required.", businessDomain: "At least one business domain is required.",
+      trigger_when: "Trigger condition is required.", output_requirements: "Analysis logic is required.",
+    },
+    results: {
+      save: { title: "Draft saved.", text: "This analysis model is disabled and will not be used by AI." },
+      submit: { title: "Analysis model published and enabled.", text: "This analysis model is now enabled and available for AI use." },
+    },
+    discard: { title: "Discard changes?", text: "Your unsaved changes will be lost.", keep: "Keep Editing", confirm: "Discard" },
   },
   scenario: {
     title: "Create Scenario Reporting", description: "Use a related report, supporting materials, and a structure note to define how this report should be written.",

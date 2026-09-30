@@ -6,35 +6,101 @@ import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import "../../../tokens.css";
 import "./KnowledgeCreateFields.css";
 
-function Field({ name, label, value = "", onChange, invalid, required, placeholder, textarea = false, select, children, wide = false, rows, errorText }) {
-  return <label className={`mh-kcf__field${wide ? " mh-kcf__field--wide" : ""}${invalid ? " is-invalid" : ""}`}>
-    <span>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>
-    {select ? <Select name={name} value={value} options={select} onChange={onChange} invalid={invalid} />
-      : textarea ? <TextArea name={name} rows={rows || 3} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} />
-      : <TextInput name={name} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} />}
-    {children}{invalid && <small className="mh-kcf__error">{errorText}</small>}
-  </label>;
+/** Circled "?" beside a label; the tip opens on hover or keyboard focus. */
+function HelpTip({ label, children }) {
+  return <span className="mh-kcf__help-wrap"><button type="button" className="mh-kcf__help" aria-label={label}>?</button><span role="tooltip" className="mh-kcf__help-tip">{children}</span></span>;
 }
 
-function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, required = false, placeholder }) {
+function Field({ name, label, value = "", onChange, invalid, required, placeholder, textarea = false, select, children, wide = false, rows, errorText, help }) {
+  /* A help tip must not become part of the control's accessible name, so a field
+     with one is a div and its control carries the label text itself. */
+  const Wrap = help ? "div" : "label";
+  const accessible = help ? label : undefined;
+  return <Wrap className={`mh-kcf__field${wide ? " mh-kcf__field--wide" : ""}${invalid ? " is-invalid" : ""}`}>
+    <span className="mh-kcf__label"><span>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>{help}</span>
+    {select ? <Select name={name} value={value} options={select} onChange={onChange} invalid={invalid} />
+      : textarea ? <TextArea name={name} rows={rows || 3} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} label={accessible} />
+      : <TextInput name={name} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} label={accessible} />}
+    {children}{invalid && <small className="mh-kcf__error">{errorText}</small>}
+  </Wrap>;
+}
+
+/**
+ * Checkbox dropdown. The parent owns which picker is open (`open`, `onMenu`); the
+ * search text is local. Escape, a click outside and tabbing away close the menu.
+ * `searchable` adds a filter box and the `emptyText` / `noMatchText` messages.
+ */
+function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, required = false, placeholder, help, disabled = false, invalid = false, errorText, searchable = false, searchPlaceholder, emptyText, noMatchText }) {
   const selected = Array.isArray(value) ? value : [];
-  return <div className="mh-kcf__field mh-kcf__multi"><span>{label}{required && <b className="mh-kcf__required"> *</b>}</span>
-    <div className="mh-kcf__multi-button"><button type="button" className="mh-kcf__multi-trigger" aria-expanded={Boolean(open)} onClick={() => onMenu?.({ name })}>{selected.length ? selected.join(", ") : <em>{placeholder}</em>}</button>{selected.map((item) => <button type="button" className="mh-kcf__chip" key={item} aria-label={`Remove ${item}`} onClick={() => onChange?.({ name, value: selected.filter((x) => x !== item) })}>×</button>)}</div>
-    {open && <div className="mh-kcf__multi-menu">{options.map((option) => <label key={option}><input type="checkbox" checked={selected.includes(option)} onChange={() => onChange?.({ name, value: selected.includes(option) ? selected.filter((x) => x !== option) : [...selected, option] })} />{option}</label>)}</div>}
+  const [query, setQuery] = React.useState("");
+  const rootRef = React.useRef(null);
+  const triggerRef = React.useRef(null);
+  const searchRef = React.useRef(null);
+  const focusOption = React.useRef(false);
+  const id = React.useId();
+  const close = () => onMenu?.({ name });
+  React.useEffect(() => {
+    if (!open) return undefined;
+    const outside = (event) => { if (!rootRef.current?.contains(event.target)) onMenu?.({ name }); };
+    document.addEventListener("mousedown", outside);
+    return () => document.removeEventListener("mousedown", outside);
+  }, [open, name, onMenu]);
+  React.useEffect(() => {
+    if (!open) return;
+    if (searchRef.current) searchRef.current.focus();
+    else if (focusOption.current) rootRef.current?.querySelector(".mh-kcf__multi-menu input")?.focus();
+    focusOption.current = false;
+  }, [open]);
+  const shown = options.filter((option) => option.toLowerCase().includes(query.trim().toLowerCase()));
+  const toggle = (option) => onChange?.({ name, value: selected.includes(option) ? selected.filter((x) => x !== option) : [...selected, option] });
+  const keyDown = (event) => {
+    if (event.key === "Enter" && event.target.type === "search") event.preventDefault();
+    if (event.key === "Escape" && open) { event.preventDefault(); close(); triggerRef.current?.focus(); }
+    if (event.key === "ArrowDown" && event.target === triggerRef.current && !disabled) {
+      event.preventDefault();
+      if (open) rootRef.current?.querySelector(".mh-kcf__multi-menu input")?.focus();
+      else { focusOption.current = true; onMenu?.({ name }); }
+    }
+  };
+  const message = query ? noMatchText : emptyText;
+  return <div ref={rootRef} className={`mh-kcf__field mh-kcf__multi${invalid ? " is-invalid" : ""}`} onKeyDown={keyDown} onBlur={(event) => { if (open && event.relatedTarget && !rootRef.current?.contains(event.relatedTarget)) close(); }}>
+    <span className="mh-kcf__label"><span id={`${id}-label`}>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>{help}</span>
+    <button ref={triggerRef} type="button" className="mh-kcf__multi-trigger" aria-labelledby={`${id}-label`} aria-expanded={Boolean(open)} aria-controls={`${id}-menu`} aria-invalid={invalid || undefined} disabled={disabled}
+      onClick={() => { setQuery(""); onMenu?.({ name }); }}>
+      {selected.length ? selected.map((item) => <span className="mh-kcf__multi-value" key={item}>{item}</span>) : <em>{placeholder}</em>}
+    </button>
+    {open && <div className="mh-kcf__multi-menu" id={`${id}-menu`}>
+      {searchable && <div className="mh-kcf__multi-search"><input ref={searchRef} type="search" value={query} placeholder={searchPlaceholder} aria-label={searchPlaceholder} autoComplete="off" onChange={(event) => setQuery(event.target.value)} /></div>}
+      <div className="mh-kcf__multi-options">{shown.map((option) => <label key={option}><input type="checkbox" checked={selected.includes(option)} onChange={() => toggle(option)} />{option}</label>)}</div>
+      {!shown.length && message && <p className="mh-kcf__multi-empty" role="status">{message}</p>}
+    </div>}
+    {invalid && <small className="mh-kcf__error">{errorText}</small>}
   </div>;
 }
 
-function TagInput({ name, label, value = [], onChange, placeholder }) {
-  const [entry, setEntry] = React.useState("");
-  const add = () => { const next = entry.split(/[,，;]/).map((x) => x.trim()).filter(Boolean); onChange?.({ name, value: [...new Set([...(value || []), ...next])] }); setEntry(""); };
-  return <div className="mh-kcf__field mh-kcf__field--wide"><span>{label}</span><div className="mh-kcf__tag-input">
-    {(value || []).map((item) => <span className="mh-kcf__chip" key={item}>{item}<button type="button" aria-label={`Remove ${item}`} onClick={() => onChange?.({ name, value: value.filter((x) => x !== item) })}>×</button></span>)}
-    <input aria-label={label} value={entry} placeholder={placeholder} onChange={(e) => setEntry(e.target.value)} onBlur={add} onKeyDown={(e) => { if (["Enter", ","].includes(e.key)) { e.preventDefault(); add(); } }} />
-  </div></div>;
-}
-
 function Toggle({ name, label, checked, onChange }) { return <label className="mh-kcf__toggle"><input type="checkbox" checked={Boolean(checked)} onChange={(e) => onChange?.({ name, value: e.target.checked })} /><i aria-hidden="true" /><span>{label}</span></label>; }
-function Section({ title, children }) { return <section className="mh-kcf__section"><h2>{title}</h2><div className="mh-kcf__grid">{children}</div></section>; }
+/** Flat Analytical Model form: metrics offered depend on the chosen business domains. */
+function AnalysisFields({ content, values, invalid, menu, onChange, onMenu }) {
+  const t = content.copy;
+  const a = content.analysis;
+  const domains = Array.isArray(values.businessDomain) ? values.businessDomain : [];
+  const metrics = a.metrics.filter((metric) => metric.domains.some((domain) => domains.includes(domain))).map((metric) => metric.name);
+  const field = (name, label, extra) => <Field errorText={a.errors[name]} name={name} label={label} value={values[name] || ""} onChange={onChange} textarea wide invalid={invalid.includes(name)} {...extra} />;
+  return <div className="mh-kcf__analysis">
+    {field("analysis_name", t.analysisName, { textarea: false, required: true, placeholder: content.placeholders.analysisName })}
+    {field("description", t.description, { placeholder: content.placeholders.analysisDescription })}
+    <div className="mh-kcf__analysis-scope">
+      <MultiPicker name="businessDomain" label={t.businessDomain} required options={a.domains} value={domains} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu}
+        invalid={invalid.includes("businessDomain")} errorText={a.errors.businessDomain} placeholder={a.picker.domains} />
+      <MultiPicker name="metrics" label={t.referencedMetrics} help={<HelpTip label={`About ${t.referencedMetrics}`}>{a.metricsHelp}</HelpTip>} options={metrics} value={values.metrics} onChange={onChange}
+        open={menu === "metrics"} onMenu={onMenu} disabled={!domains.length} placeholder={domains.length ? a.picker.metrics : a.picker.metricsLocked}
+        searchable searchPlaceholder={a.picker.search} emptyText={a.picker.noMetrics} noMatchText={a.picker.noMatch} />
+    </div>
+    {field("trigger_when", t.triggerWhen, { required: true, placeholder: content.placeholders.triggerWhen })}
+    {field("output_requirements", t.analysisLogic, { required: true, rows: 8, placeholder: a.guidance, help: <HelpTip label={`About ${t.analysisLogic}`}>{a.guidance}</HelpTip> })}
+    {field("analysis_constraints", t.notesGuardrails, { placeholder: content.placeholders.constraints })}
+  </div>;
+}
 
 function SharedFields({ type, content, values, onChange, menu, onMenu }) { const c = content.shared; const t = content.copy; return <div className="mh-kcf__grid mh-kcf__shared">
   <MultiPicker name="businessDomain" label={t.scopeDomain} options={c.businessDomains} value={values.businessDomain} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu} placeholder={t.selectMany} />
@@ -173,8 +239,8 @@ export function KnowledgeCreateFields({ type, mode = "create", content, values =
       <section className="mh-kcf__rc-readonly"><h3>{t.scenarioReports}</h3>{tags(values.scenarioReports)}<h3>{t.reportScope}</h3><p>{values.reportScope || t.reportScopeEmpty}</p></section>
     </div>;
   }
-  if (type === "Analytical Model") return <div className="mh-kcf__analysis"><Section title={t.basicInformation}><Field errorText={t.required} name="analysis_name" label={t.analysisName} value={values.analysis_name || ""} onChange={change} required invalid={invalid.includes("analysis_name")} wide placeholder={content.placeholders.analysisName} /><Field errorText={t.required} name="description" label={t.description} value={values.description || ""} onChange={change} textarea wide placeholder={content.placeholders.analysisDescription} /><Field errorText={t.required} name="trigger_when" label={t.triggerWhen} value={values.trigger_when || ""} onChange={change} textarea wide required invalid={invalid.includes("trigger_when")} placeholder={content.placeholders.triggerWhen} /></Section><Section title={t.metrics}><TagInput name="businessDomain" label={t.metricDomain} value={values.businessDomain || []} onChange={change} placeholder={content.placeholders.domainTags} /><MultiPicker name="metrics" label={t.referencedMetrics} options={content.analysis.metrics} value={values.metrics} onChange={change} open={menu === "metrics"} onMenu={onMenu} placeholder={t.selectMany} /></Section><Section title={`${t.structureGuidance} *`}><Field errorText={t.required} name="output_requirements" label={t.structureGuidance} value={values.output_requirements || ""} onChange={change} textarea wide rows={8} required invalid={invalid.includes("output_requirements")} placeholder={content.analysis.guidance}><span className="mh-kcf__help-wrap"><button type="button" className="mh-kcf__help" aria-label={t.showGuidance}>?</button><span role="tooltip" className="mh-kcf__help-tip">{content.analysis.guidance}</span></span></Field></Section><Section title={t.constraints}><Field errorText={t.required} name="analysis_constraints" label={t.prohibitedDirections} value={values.analysis_constraints || ""} onChange={change} textarea wide placeholder={content.placeholders.constraints} /></Section></div>;
-  if (type === "Scenario Reporting") return <div className="mh-kcf__scenario"><div className="mh-kcf__grid"><Field errorText={t.required} name="scenario_report_title" label={t.scenarioName} value={values.scenario_report_title || ""} onChange={change} required invalid={invalid.includes("scenario_report_title")} placeholder={content.placeholders.scenarioName} /><Field errorText={t.required} name="scenario_report_linked" label={t.relatedReport} value={values.scenario_report_linked || ""} onChange={change} required invalid={invalid.includes("scenario_report_linked")} select={[{ value: "", label: content.placeholders.relatedReport }, ...content.shared.reportLinks]} /><Field errorText={t.required} name="scenario_report_description" label={t.description} value={values.scenario_report_description || ""} onChange={change} textarea wide required invalid={invalid.includes("scenario_report_description")} placeholder={content.placeholders.scenarioDescription} /><Field errorText={t.required} name="scenario_report_blueprint" label={t.structureGuidance} value={values.scenario_report_blueprint || ""} onChange={change} textarea wide rows={8} required invalid={invalid.includes("scenario_report_blueprint")} placeholder={content.scenario.guidance}><span className="mh-kcf__help-wrap"><button type="button" className="mh-kcf__help" aria-label={t.showGuidance}>?</button><span role="tooltip" className="mh-kcf__help-tip">{content.scenario.guidance}</span></span></Field><div className="mh-kcf__upload"><label>{t.upload}<input type="file" multiple accept=".doc,.docx,.pdf,.ppt,.pptx,.png,.jpg,.jpeg,.webp" onChange={(e) => change?.({ name: "attachments", value: [...(values.attachments || []), ...[...e.target.files].map((x) => x.name)] })} /></label><small>{t.uploadHint}</small><div>{(values.attachments || []).map((file) => <span className="mh-kcf__chip" key={file}>{file}<button type="button" aria-label={`Remove ${file}`} onClick={() => change?.({ name: "attachments", value: values.attachments.filter((x) => x !== file) })}>×</button></span>)}</div></div><div className="mh-kcf__status"><b>{t.aiStatus}</b><small>{t.statusHint}</small><strong>{t.disabled}</strong></div></div></div>;
+  if (type === "Analytical Model") return <AnalysisFields content={content} values={values} invalid={invalid} menu={menu} onChange={change} onMenu={onMenu} />;
+  if (type === "Scenario Reporting") return <div className="mh-kcf__scenario"><div className="mh-kcf__grid"><Field errorText={t.required} name="scenario_report_title" label={t.scenarioName} value={values.scenario_report_title || ""} onChange={change} required invalid={invalid.includes("scenario_report_title")} placeholder={content.placeholders.scenarioName} /><Field errorText={t.required} name="scenario_report_linked" label={t.relatedReport} value={values.scenario_report_linked || ""} onChange={change} required invalid={invalid.includes("scenario_report_linked")} select={[{ value: "", label: content.placeholders.relatedReport }, ...content.shared.reportLinks]} /><Field errorText={t.required} name="scenario_report_description" label={t.description} value={values.scenario_report_description || ""} onChange={change} textarea wide required invalid={invalid.includes("scenario_report_description")} placeholder={content.placeholders.scenarioDescription} /><Field errorText={t.required} name="scenario_report_blueprint" label={t.structureGuidance} value={values.scenario_report_blueprint || ""} onChange={change} textarea wide rows={8} required invalid={invalid.includes("scenario_report_blueprint")} placeholder={content.scenario.guidance} help={<HelpTip label={t.showGuidance}>{content.scenario.guidance}</HelpTip>} /><div className="mh-kcf__upload"><label>{t.upload}<input type="file" multiple accept=".doc,.docx,.pdf,.ppt,.pptx,.png,.jpg,.jpeg,.webp" onChange={(e) => change?.({ name: "attachments", value: [...(values.attachments || []), ...[...e.target.files].map((x) => x.name)] })} /></label><small>{t.uploadHint}</small><div>{(values.attachments || []).map((file) => <span className="mh-kcf__chip" key={file}>{file}<button type="button" aria-label={`Remove ${file}`} onClick={() => change?.({ name: "attachments", value: values.attachments.filter((x) => x !== file) })}>×</button></span>)}</div></div><div className="mh-kcf__status"><b>{t.aiStatus}</b><small>{t.statusHint}</small><strong>{t.disabled}</strong></div></div></div>;
   return <div className="mh-kcf__generic"><div className="mh-kcf__grid">
     {type === "Principles" && <><Field errorText={t.required} name="title" label={t.knowledgeTitle} value={values.title || ""} onChange={change} required invalid={invalid.includes("title")} wide placeholder={content.placeholders.principlesTitle} /><Field errorText={t.required} name="description" label={t.coreDescription} value={values.description || ""} onChange={change} textarea wide required invalid={invalid.includes("description")} placeholder={content.placeholders.principlesDescription} /></>}
     {type === "Report Context" && <><Field errorText={t.required} name="description" label={t.dashboardDescription} value={values.description || ""} onChange={change} textarea wide required invalid={invalid.includes("description")} /><Toggle name="aiOverview" label={values.aiOverview ? t.aiOverview : t.aiOverviewOff} checked={values.aiOverview} onChange={change} />{values.aiOverview && <><Field errorText={t.required} name="aiDescription" label={t.aiDescription} value={values.aiDescription || ""} onChange={change} textarea wide /><MultiPicker name="aiSources" label={t.aiSources} options={content.options.aiSources} value={values.aiSources} onChange={change} open={menu === "aiSources"} onMenu={onMenu} placeholder={t.selectMany} /></>}</>}

@@ -20,6 +20,7 @@ export default {
     onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Draft" }, "Payload of `useKnowledgeCreateDemo`, which wraps the page: the page itself emits `{type, mode, values}` and the hook adds `id` and `stage`."),
     onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Under Review" }, "Same payload as `onSave`; Submit enters Under Review (Scenario Reporting: Queued)."),
     onCancel: callbackProp("onCancel", "({type}) => void", { type: "Business Term" }),
+    onDiscard: callbackProp("onDiscard", "({type, mode, values}) => void", { type: "Analytical Model", mode: "create", values: { analysis_name: "Draft analysis" } }, "Analytical Model: Discard confirmed after Cancel with unsaved changes."),
     onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "guidance" }),
     onDialogClose: callbackProp("onDialogClose", "({reason}) => void", { reason: "close" }),
     onResultClose: callbackProp("onResultClose", "({reason}) => void", { reason: "close" }),
@@ -31,7 +32,7 @@ export default {
 function Demo({ args }) {
   const props = useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: args.type, mode: args.mode, id: args.id || undefined, initial: args.initial, state: args.state,
     onNavigate: args.onNavigate, onSave: args.onSave, onSubmit: args.onSubmit });
-  return <KnowledgeCreatePage {...props} onTypeChange={(event) => { props.onTypeChange(event); args.onTypeChange?.(event); }} onChange={(event) => { props.onChange(event); args.onChange?.(event); }} onCancel={() => { props.onCancel(); args.onCancel?.({ type: props.type }); }} onDialog={(event) => { props.onDialog(event); args.onDialog?.(event); }} onDialogClose={(event) => { props.onDialogClose(event); args.onDialogClose?.(event); }} onResultClose={(event) => { props.onResultClose(event); args.onResultClose?.(event); }} onMenu={(event) => { props.onMenu(event); args.onMenu?.(event); }} />;
+  return <KnowledgeCreatePage {...props} onTypeChange={(event) => { props.onTypeChange(event); args.onTypeChange?.(event); }} onChange={(event) => { props.onChange(event); args.onChange?.(event); }} onCancel={() => { props.onCancel(); args.onCancel?.({ type: props.type }); }} onDiscard={(event) => { props.onDiscard(event); args.onDiscard?.(event); }} onDialog={(event) => { props.onDialog(event); args.onDialog?.(event); }} onDialogClose={(event) => { props.onDialogClose(event); args.onDialogClose?.(event); }} onResultClose={(event) => { props.onResultClose(event); args.onResultClose?.(event); }} onMenu={(event) => { props.onMenu(event); args.onMenu?.(event); }} />;
 }
 
 export const KnowledgeCreate = { name: "P08 · Business Term create" };
@@ -68,8 +69,14 @@ export const KnowledgeCreateSynonyms = { name: "P08 · Synonym Management", args
 export const KnowledgeCreateSynonymRequired = { name: "P08 · Synonym row required errors", args: { type: "Synonyms", initial: { synonymRows: [{ term: "", synonym: "", kind: "", domain: [], reports: [], dataset: [], status: "Enabled" }] }, state: { invalid: ["synonymRows"] } } };
 export const KnowledgeCreateSynonymRow = { name: "P08 · New synonym row", args: { type: "Synonyms", initial: { synonymRows: [{ term: "", synonym: "", kind: "", domain: [], reports: [], dataset: [], status: "Enabled" }] } } };
 export const KnowledgeCreateAnalysis = { name: "P08 · Analytical Model create", args: { type: "Analytical Model" } };
-export const KnowledgeCreateAnalysisRequired = { name: "P08 · Analytical Model required errors", args: { type: "Analytical Model", state: { invalid: ["analysis_name", "trigger_when", "output_requirements"] } } };
-export const KnowledgeCreateAnalysisGuidance = { name: "P08 · Analytical Model guidance", args: { type: "Analytical Model" }, play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-kcf__help")?.focus(); } };
+export const KnowledgeCreateAnalysisRequired = { name: "P08 · Analytical Model required errors", args: { type: "Analytical Model", state: { invalid: ["analysis_name", "businessDomain", "trigger_when", "output_requirements"] } } };
+export const KnowledgeCreateAnalysisGuidance = { name: "P08 · Analytical Model guidance", args: { type: "Analytical Model" }, play: async ({ canvasElement }) => { canvasElement.querySelector(".mh-kcf__help[aria-label='About Analysis Logic']")?.focus(); } };
+export const KnowledgeCreateAnalysisDomains = { name: "P08 · Analytical Model business domain menu", args: { type: "Analytical Model", initial: { businessDomain: ["City Strategy", "4P"] }, state: { menu: "businessDomain" } } };
+export const KnowledgeCreateAnalysisMetrics = { name: "P08 · Analytical Model metrics for chosen domains", args: { type: "Analytical Model", initial: { businessDomain: ["City Strategy", "4P"], metrics: ["Campaign ROI"] }, state: { menu: "metrics" } } };
+export const KnowledgeCreateAnalysisNoMetrics = { name: "P08 · Analytical Model domain without metrics", args: { type: "Analytical Model", initial: { businessDomain: ["Marketing"] }, state: { menu: "metrics" } } };
+export const KnowledgeCreateAnalysisDiscard = { name: "P08 · Analytical Model discard changes", args: { type: "Analytical Model", initial: { analysis_name: "Draft analysis" }, state: { dialog: "discard" } } };
+export const KnowledgeCreateAnalysisSaved = { name: "P08 · Analytical Model draft saved", args: { type: "Analytical Model", state: { result: { action: "save" } } } };
+export const KnowledgeCreateAnalysisPublished = { name: "P08 · Analytical Model published and enabled", args: { type: "Analytical Model", state: { result: { action: "submit" } } } };
 export const KnowledgeCreateAnalysisEdit = { name: "P08 · Analytical Model edit", args: { type: "Analytical Model", mode: "edit", id: "playbook-opportunity-scan" } };
 export const KnowledgeCreateAnalysisUnavailable = { name: "P08 · Analytical Model edit unavailable", args: { type: "Analytical Model", mode: "edit", id: "missing-analysis" } };
 export const KnowledgeCreateScenario = { name: "P08 · Scenario Reporting create", args: { type: "Scenario Reporting" } };
