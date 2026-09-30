@@ -7,13 +7,16 @@ import "./BusinessTermForm.css";
 /** @type {readonly ["Business Term", "Global Synonym"]} */
 export const businessTermKinds = ["Business Term", "Global Synonym"];
 
+const parseSynonyms = (text) => text.split(",").map((item) => item.trim()).filter(Boolean);
+const sameList = (a, b) => a.length === b.length && a.every((item, index) => item === b[index]);
+
 /**
  * Controlled Business Term form. `onChange` receives `{name,value}`; actions receive `{values}`.
  * @param {object} props
  * @param {string} props.title Term name.
  * @param {typeof businessTermKinds[number]} props.kind One of businessTermKinds.
  * @param {string} props.description Meaning and boundary.
- * @param {string} props.synonyms Comma-separated aliases.
+ * @param {string[]} props.synonyms Aliases, the same list shape the library view shows. The field is typed as comma-separated text and reports the parsed list.
  * @param {string[]} props.scope Linked Data Models.
  * @param {string[]} props.scopeOptions Available Data Models.
  * @param {string} props.guidanceTitle
@@ -28,7 +31,7 @@ export const businessTermKinds = ["Business Term", "Global Synonym"];
  * @param {(event:{values:object}) => void} [props.onSubmit]
  */
 export function BusinessTermForm({
-  title = "", kind = "Business Term", description = "", synonyms = "", scope = [],
+  title = "", kind = "Business Term", description = "", synonyms = [], scope = [],
   scopeOptions = [], guidanceTitle = "Build a common language", guidance = "", reminder = "",
   labels = { title: "Title", kind: "Term Type", description: "Description", synonyms: "Synonyms", scope: "Data Model", select: "Select one or more", cancel: "Cancel", save: "Save", submit: "Submit", required: "This field is required." },
   placeholders = { title: "Enter the business term title.", description: "Explain the meaning, usage, and boundary of this term.", synonyms: "Add aliases, abbreviations, or equivalent terms, separated by commas." },
@@ -44,6 +47,9 @@ export function BusinessTermForm({
     document.addEventListener("keydown", closeEscape);
     return () => { document.removeEventListener("click", closeOutside); document.removeEventListener("keydown", closeEscape); };
   }, [scopeOpen]);
+  /* The input keeps the raw text (so "a," survives while typing) and follows the list whenever it changes from outside. */
+  const [synonymText, setSynonymText] = React.useState(() => synonyms.join(", "));
+  const synonymField = sameList(parseSynonyms(synonymText), synonyms) ? synonymText : synonyms.join(", ");
   const values = { title, kind, description, synonyms, scope };
   const errors = Array.isArray(invalid) ? invalid : invalid ? ["title", "description"] : [];
   const set = (name, value) => onChange?.({ name, value });
@@ -53,7 +59,7 @@ export function BusinessTermForm({
       <FormField label={labels.title} name="title" value={title} required invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
       <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds} required onChange={onChange} />
       <FormField label={labels.description} name="description" control="textarea" rows={3} value={description} required invalid={errors.includes("description")} hint={errors.includes("description") ? labels.required : undefined} placeholder={placeholders.description} onChange={onChange} />
-      <FormField label={labels.synonyms} name="synonyms" value={synonyms} placeholder={placeholders.synonyms} onChange={onChange} />
+      <FormField label={labels.synonyms} name="synonyms" value={synonymField} placeholder={placeholders.synonyms} onChange={({ value }) => { setSynonymText(value); set("synonyms", parseSynonyms(value)); }} />
       {kind === "Business Term" && <div className="mh-btform__scope" ref={scopeRef}><span>{labels.scope}</span><button type="button" aria-expanded={scopeOpen} onClick={() => setScopeOpen((x) => !x)}>{scope.length ? scope.map((item) => <i key={item}>{item}</i>) : <em>{labels.select}</em>}</button>{scopeOpen && <div className="mh-btform__scope-menu">{scopeOptions.map((item) => <label key={item}><input type="checkbox" checked={scope.includes(item)} onChange={() => set("scope", scope.includes(item) ? scope.filter((x) => x !== item) : [...scope, item])} />{item}</label>)}</div>}</div>}
     </div>
     <footer className="mh-btform__footer"><div><Button variant="secondary" onClick={() => onCancel?.({ values })}>{labels.cancel}</Button><Button variant="secondary" onClick={() => onSave?.({ values })}>{labels.save}</Button><Button variant="gold" type="submit">{labels.submit}</Button></div><p>ⓘ {reminder}</p></footer>

@@ -5,12 +5,12 @@ import { callbackProp, enumProp, prop } from "../../../lib/story-helpers.js";
 export default {
   title: "Features/Interpreter/Business term form", component: BusinessTermForm, tags: ["autodocs"],
   parameters: { docs: { description: { component: "Controlled P08 Business Term fields, Data Model links, and Save/Submit actions. onChange carries {name,value}; action callbacks carry {values}." } } },
-  args: { title: "", kind: "Business Term", description: "", synonyms: "", scope: [], scopeOptions: ["Marketing", "Customer", "Global"], guidanceTitle: "Build a common language", guidance: "Clearly define the meaning, usage, and boundaries of this business term to help teams talk about data consistently.", reminder: "Operation reminder: Save keeps this term in Draft. Submit publishes it for AI use.", invalid: [] },
+  args: { title: "", kind: "Business Term", description: "", synonyms: [], scope: [], scopeOptions: ["Marketing", "Customer", "Global"], guidanceTitle: "Build a common language", guidance: "Clearly define the meaning, usage, and boundaries of this business term to help teams talk about data consistently.", reminder: "Operation reminder: Save keeps this term in Draft. Submit publishes it for AI use.", invalid: [] },
   argTypes: {
     title: prop("string", { description: "Business term title." }),
     kind: enumProp(businessTermKinds, "Business Term", "Term category."),
     description: prop("string", { description: "Governed meaning and boundaries." }),
-    synonyms: prop("string", { description: "Comma-separated aliases." }),
+    synonyms: prop("string[]", { description: "Aliases. The field shows them comma-separated and reports the parsed list." }),
     scope: prop("string[]", { description: "Selected Data Model links." }),
     scopeOptions: prop("string[]", { description: "Available Data Model links." }),
     invalid: prop("string[]", { description: "Required field names in error state." }),
