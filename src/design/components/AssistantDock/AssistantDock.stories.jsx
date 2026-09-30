@@ -26,10 +26,11 @@ export default {
     onLauncherOpen: { action: "onLauncherOpen" },
   },
   args: { variant: "campaign", placement: "drawer" },
-  render: function DockStory({ assistant, onLauncherOpen, ...args }) {
+  render: function DockStory({ assistant, initialFlow, onLauncherOpen, ...args }) {
     const { assistant: state, skillFlow } = useWorkspaceAssistantDemo({
       variant: args.variant,
       assistant,
+      initial: { flow: initialFlow },
       demo: { answerFor: buildCampaignAnswer, modelFlow: MODEL_FLOW, modelDraftFor: buildModelDraft },
     });
     // The Actions panel injects an `onLauncherOpen` spy; passed straight through it
@@ -50,4 +51,11 @@ export const Closed = { args: { assistant: { ...ASSISTANT, skillMenu: ASSISTANT_
 
 export const Open = { args: { assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU, open: true } } };
 
-export const CustomLauncherLabel = { args: { assistant: { ...ASSISTANT, open: false }, launcherLabel: "Ask Cockpit" } };
+// `initialFlow` is the state the skill menu's "create model" action sets; starting from
+// it keeps the dialog reachable here without a play function clicking through the menu.
+export const ModelDialog = {
+  args: {
+    assistant: { ...ASSISTANT, skillMenu: ASSISTANT_SKILL_MENU, open: true },
+    initialFlow: { step: "manual", threads: MODEL_FLOW.threads, rule: "", draft: {} },
+  },
+};

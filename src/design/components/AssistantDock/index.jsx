@@ -16,8 +16,8 @@ import { ModelFlowDialog } from "../ModelFlowDialog/index.jsx";
  * @property {AssistantDockState} [assistant={}]
  * @property {Parameters<typeof ModelFlowDialog>[0]} [skillFlow] ModelFlowDialog props; the dialog renders while `skillFlow.step` is set
  * @property {"home"|"cockpit"|"campaign"|"lite"} [variant="campaign"] AssistantPanel behavior preset; wins over `assistant.variant`
- * @property {"modal"|"drawer"} [placement="drawer"]
- * @property {"home"} [tone] AssistantPanel tone
+ * @property {"modal"|"drawer"} [placement="drawer"] AssistantPanel layout; wins over `assistant.placement`
+ * @property {"home"} [tone] AssistantPanel tone; wins over `assistant.tone`
  * @property {string} [launcherLabel] launcher text; falls back to `assistant.launcherLabel`
  * @property {boolean} [launcherHidden=false] hide the launcher while another overlay is open
  * @property {(event: { reason: "open" }) => void} [onLauncherOpen] replaces `assistant.onOpen` when the launcher opens something else
@@ -56,7 +56,7 @@ export const AssistantDock = React.forwardRef(function AssistantDock({
         hidden={Boolean(panel.open) || launcherHidden}
         onOpen={onLauncherOpen ?? onOpen}
       />
-      <AssistantPanel placement={placement} tone={tone} {...panel} variant={variant} returnFocusRef={launcherRef} />
+      <AssistantPanel {...panel} placement={placement} tone={tone} variant={variant} returnFocusRef={launcherRef} />
       {skillFlow?.step ? <ModelFlowDialog {...skillFlow} /> : null}
     </>
   );
