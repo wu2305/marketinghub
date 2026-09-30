@@ -1531,3 +1531,75 @@ body.scenario-reporting-create.unified-knowledge-create .v20-required {
 
 
 
+
+/* PRD: Business-facing Analytical Model form. Hero styling is retained above. */
+.analytical-model-create #fmAnalysisForm .fm-scope-section { overflow: visible; position: relative; z-index: 2; }
+.analytical-model-create #fmAnalysisForm .v20-multi { position: relative; }
+.analytical-model-create #fmAnalysisForm .v20-multi-display { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid #d7dfe6; border-radius: 7px; background: #fff; text-align: left; cursor: pointer; }
+.analytical-model-create #fmAnalysisForm .v20-multi-display em { color: #757575; font: normal 400 14px/1.45 var(--font-ui); }
+.analytical-model-create #fmAnalysisForm .v20-multi-display span { padding: 3px 8px; border-radius: 5px; background: #f3f4f5; color: #344054; font-size: 12px; font-weight: 500; }
+.analytical-model-create #fmAnalysisForm .v20-multi-display:disabled { background: #f5f6f8; cursor: not-allowed; }
+.analytical-model-create #fmAnalysisForm .v20-multi-display:focus-visible { outline: 2px solid #e6c48f; outline-offset: 2px; }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; right: 0; max-height: 250px; overflow: auto; padding: 6px; border: 1px solid #d7dfe6; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(32,42,56,.14); }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu[hidden] { display: none !important; }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu.open { display: block; }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu label { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 5px; color: #344054; font-size: 14px; font-weight: 400; cursor: pointer; }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu label:hover { background: #f5f6f8; }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu input { width: 16px; height: 16px; padding: 0; margin: 0; accent-color: #cf8a20; }
+.analytical-model-create #fmAnalysisForm .fm-field-helper { color: #7a8593; font-size: 12px; line-height: 1.5; font-weight: 400; }
+.analytical-model-create #fmAnalysisForm .fm-multi-empty { margin: 8px; font-size: 13px; font-weight: 400; }
+.analytical-model-create #fmAnalysisForm .fm-field.is-invalid .v20-multi-display { border-color: #ff7474; background: #fff8f8; }
+.analytical-model-create #fmAnalysisForm textarea { line-height: 1.6; }
+.analytical-model-create #fmAnalysisForm textarea::placeholder { white-space: pre-line; }
+.analytical-model-create #fmAnalysisForm .fm-editor-footer > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.analytical-model-create .fm-analysis-dialog { box-sizing: border-box; width: min(480px, calc(100vw - 32px)); padding: 26px; border: 0; border-radius: 14px; color: #344054; background: #fff; box-shadow: 0 24px 64px rgba(32,42,56,.26); }
+.analytical-model-create .fm-analysis-dialog::backdrop { background: rgba(48,56,68,.5); }
+.analytical-model-create .fm-analysis-dialog h3 { margin: 0 0 12px; }
+.analytical-model-create .fm-analysis-dialog p { font-size: 14px; line-height: 1.6; }
+.analytical-model-create .fm-analysis-dialog footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+@media (max-width: 720px) {
+ .analytical-model-create #fmAnalysisForm .fm-grid { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+ .analytical-model-create #fmAnalysisForm textarea { font-size: 14px; }
+ .analytical-model-create #fmAnalysisForm .fm-section h3 { padding: 16px; }
+}
+/* Override the demo's desktop minimum width only on this workflow. */
+html:has(body.analytical-model-create),
+body.analytical-model-create { min-width: 0 !important; }
+@media (max-width: 720px) {
+ .analytical-model-create .site-header .primary-nav { max-width: 100%; min-width: 0; gap: 16px; padding-inline: 18px; }
+ .analytical-model-create .site-header .brand-mark { flex-shrink: 0; }
+ .analytical-model-create .site-header .nav-links { min-width: 0; overflow-x: auto; flex-wrap: nowrap; justify-content: flex-start; }
+ .analytical-model-create .site-header .nav-link { flex-shrink: 0; }
+}
+
+/* Flat Analytical Model form: fields without section headings or cards. */
+.analytical-model-create #fmAnalysisForm .fm-flat-fields { margin: 0 0 24px; border: 0; border-radius: 0; background: transparent; overflow: visible; }
+.analytical-model-create #fmAnalysisForm .fm-flat-fields > .fm-grid { padding: 0; gap: 22px; }
+
+/* Referenced Metrics inline explanation, shown on hover or keyboard focus. */
+.analytical-model-create #fmAnalysisForm .fm-multi-label { display: flex; align-items: center; gap: 7px; }
+.analytical-model-create #fmAnalysisForm .fm-metric-help { position: relative; display: inline-flex; }
+.analytical-model-create #fmAnalysisForm .fm-metric-help-trigger { display: inline-grid; place-items: center; width: 16px; height: 16px; padding: 0; border: 1px solid #919baa; border-radius: 50%; color: #7a8593; background: transparent; font: 700 11px/1 var(--font-ui); cursor: help; }
+.analytical-model-create #fmAnalysisForm .fm-metric-help-tooltip { position: absolute; z-index: 30; top: calc(100% + 8px); left: -10px; width: 245px; max-width: calc(100vw - 96px); padding: 10px 12px; border-radius: 7px; background: #344054; color: #fff; font-size: 12px; line-height: 1.5; font-weight: 400; box-shadow: 0 6px 18px rgba(32,42,56,.16); visibility: hidden; opacity: 0; pointer-events: none; }
+.analytical-model-create #fmAnalysisForm .fm-metric-help:hover .fm-metric-help-tooltip,
+.analytical-model-create #fmAnalysisForm .fm-metric-help:focus-within .fm-metric-help-tooltip { visibility: visible; opacity: 1; }
+
+/* Multi-select dropdown affordance and searchable metric options. */
+.analytical-model-create #fmAnalysisForm .v20-multi-display { position: relative; padding-right: 36px !important; }
+.analytical-model-create #fmAnalysisForm .v20-multi-display::after { content: ""; position: absolute; right: 15px; top: 50%; width: 7px; height: 7px; margin-top: -5px; border-right: 1.5px solid #7a8593; border-bottom: 1.5px solid #7a8593; transform: rotate(45deg); }
+.analytical-model-create #fmAnalysisForm .v20-multi-display[aria-expanded="true"]::after { margin-top: -1px; transform: rotate(225deg); }
+.analytical-model-create #fmAnalysisForm .v20-multi-menu { max-height: none; overflow: visible; }
+.analytical-model-create #fmAnalysisForm .fm-dropdown-options { max-height: 220px; overflow-y: auto; }
+.analytical-model-create #fmAnalysisForm .fm-metric-search { padding: 6px 6px 10px; border-bottom: 1px solid #e6eaf0; margin-bottom: 4px; }
+.analytical-model-create #fmAnalysisForm .fm-metric-search input { width: 100%; height: 38px; margin: 0; padding: 8px 10px; font-size: 13px; border: 1px solid #d7dfe6; border-radius: 6px; background: #f8f9fb; }
+.analytical-model-create #fmAnalysisForm .fm-dropdown-options label[hidden],
+.analytical-model-create #fmAnalysisForm .fm-multi-empty[hidden] { display: none !important; }
+
+/* Keep the final actions directly on the form, without an enclosing box. */
+.analytical-model-create #fmAnalysisForm .fm-editor-footer { border: 0; border-radius: 0; background: transparent; box-shadow: none; padding: 0; }
+
+/* Analysis Logic guidance lives beside the field label. */
+.analytical-model-create #fmAnalysisForm .fm-analysis-logic-help .fm-metric-help-tooltip { width: 480px; white-space: pre-line; }
+@media (max-width: 720px) {
+ .analytical-model-create #fmAnalysisForm .fm-analysis-logic-help .fm-metric-help-tooltip { left: -100px; width: 260px; max-width: calc(100vw - 90px); }
+}
