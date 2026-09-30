@@ -51,6 +51,32 @@ docs-only changes and cancels superseded runs. The heavy browser gate
 tag is pushed, and can be started by hand (Actions > ci > Run workflow, choose
 the branch), where it is limited to what changed against `main`.
 
+## Storybook on Cloudflare Pages
+
+`.github/workflows/storybook-pages.yml` builds and deploys `storybook-static`
+on every push to `main` (including PR merges), every tag push, and manual runs.
+Lint, tests, and the Storybook build must pass before upload. There are no path
+filters, so documentation-only merges also refresh the site. The existing
+`v*` visual gate remains a separate workflow.
+
+Create a Pages Direct Upload project with production branch `main`, then set
+these in the GitHub repository's Settings → Secrets and variables → Actions:
+
+- Secret `CLOUDFLARE_API_TOKEN`: Cloudflare token with Account → Cloudflare Pages
+  → Edit, scoped to the deployment account.
+- Secret `CLOUDFLARE_ACCOUNT_ID`: that account's ID.
+- Variable `CLOUDFLARE_PAGES_PROJECT`: the Pages project name.
+
+Both merge and tag deployments use `--branch=main`, refreshing the project's
+stable `https://<project>.pages.dev` URL. A tag on an older commit deliberately
+publishes that version. Manual runs publish the selected ref in the same way.
+Deployments share one concurrency group; active uploads are not cancelled.
+After upload, the workflow checks the deployment's `index.json` against the
+local build and writes its URL to the Actions summary.
+
+Setup follows [Cloudflare's continuous integration guide](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
+Deployment connection and verification status live in `handover/README.md`.
+
 ## The static demo (reference)
 
 `index.html` and `assets/` are the original static demo — the visual and

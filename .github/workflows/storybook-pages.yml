@@ -1,0 +1,68 @@
+name: Storybook Pages
+
+on:
+  push:
+    branches: [main]
+    tags: ['**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# All triggers update the same Pages site; do not interrupt an active upload.
+concurrency:
+  group: storybook-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Check deployment configuration
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+        run: |
+          for name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID CLOUDFLARE_PAGES_PROJECT; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing repository configuration: $name"
+              exit 1
+            fi
+          done
+          if [[ ! "$CLOUDFLARE_PAGES_PROJECT" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+            echo "::error::Invalid Pages project name"
+            exit 1
+          fi
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build-storybook
+      - name: Deploy Storybook
+        id: deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Explicit main also publishes tag builds to the stable production URL.
+          command: pages deploy storybook-static --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=main
+      - name: Check deployed Storybook
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          test -n "$DEPLOYMENT_URL"
+          curl --fail --silent --show-error --retry 6 --retry-all-errors --retry-delay 10 "$DEPLOYMENT_URL/index.json" -o /tmp/deployed-index.json
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const local = JSON.parse(readFileSync('storybook-static/index.json'));
+          const remote = JSON.parse(readFileSync('/tmp/deployed-index.json'));
+          assert.deepEqual(remote, local, 'Deployed Storybook index differs from this build');
+          NODE
+          printf 'Storybook deployment: %s\n' "$DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
