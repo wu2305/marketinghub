@@ -142,12 +142,9 @@ describe("src/design CSS budget (WP1)", () => {
   });
 
   it("ratchets raw font-size, weight, radius, shadow and colour values toward zero", () => {
-    const counts = rawFoundationValues(ROOT, budget.pendingMigration || []);
+    const counts = rawFoundationValues(ROOT);
     for (const [key, limit] of Object.entries(budget.maxRawFoundationValues)) {
       expect(counts[key], `raw ${key} values`).toBeLessThanOrEqual(limit);
-    }
-    for (const prefix of budget.pendingMigration) {
-      expect(fs.existsSync(path.join(ROOT, prefix)), `pendingMigration path ${prefix}`).toBe(true);
     }
   });
 

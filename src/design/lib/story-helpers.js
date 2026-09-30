@@ -1,20 +1,9 @@
-import React from "react";
 import { LOGO, NAV } from "../content.js";
 
 /** Shared shell props for page-level stories: logo + primary navigation. */
 export const pageShell = { logo: LOGO, navigation: NAV };
 
-/**
- * Local state seeded from a story arg and re-synced whenever the arg changes.
- * Controlled-story pattern: canvas interaction writes back through state, so
- * typing/selecting keeps its result, while Controls edits still drive the
- * component. Internal only — not part of the public index.js API.
- */
-export function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
+export { useSynced } from "../demo/use-synced.js";
 
 /**
  * ArgTypes row carrying the real interface contract. `summary` is the type

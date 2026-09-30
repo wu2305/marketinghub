@@ -19,15 +19,12 @@ export function cssFiles(root) {
 
 /**
  * Distinct raw font-size, font-weight, radius, shadow and colour values outside
- * tokens.css. Files under `skip` (css-budget.json `pendingMigration`) are left
- * out; they are counted separately by the report.
+ * tokens.css.
  * @returns {{fontSize:number,fontWeight:number,radius:number,shadow:number,color:number}}
  */
-export function rawFoundationValues(root, skip = []) {
-  const skipped = skip.map((prefix) => path.join(root, prefix));
+export function rawFoundationValues(root) {
   const sets = { fontSize: new Set(), fontWeight: new Set(), radius: new Set(), shadow: new Set(), color: new Set() };
   for (const file of cssFiles(root)) {
-    if (skipped.some((prefix) => file.startsWith(prefix))) continue;
     const css = withoutComments(fs.readFileSync(file, "utf8"));
     for (const [, prop, raw] of css.matchAll(/([a-z-]+)\s*:\s*([^;{}]+);/g)) {
       const value = raw.replace(/!important/, "").trim();

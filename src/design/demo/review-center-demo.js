@@ -1,9 +1,9 @@
 import React from "react";
+import { useToast } from "./use-toast.js";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 const EMPTY = [];
 const EMPTY_INITIAL = {};
-const TOAST_MS = 3000;
 /* Same windows as Feedback & Quality (feedback.js:101-107). */
 const LIMIT_DAYS = { today: 1, week: 7, month: 30 };
 
@@ -72,14 +72,7 @@ export function useReviewCenterDemo(props) {
   const [panel, setPanel] = React.useState(initial.panel || null);
   const [selectedId, setSelectedId] = React.useState(initial.selectedId || null);
   const [reason, setReason] = React.useState(initial.reason || "");
-  const [toast, setToast] = React.useState("");
-  const toastTimer = React.useRef(null);
-  React.useEffect(() => () => clearTimeout(toastTimer.current), []);
-  const showToast = (message) => {
-    clearTimeout(toastTimer.current);
-    setToast(message);
-    toastTimer.current = setTimeout(() => setToast(""), TOAST_MS);
-  };
+  const { toast, showToast } = useToast();
   const toasts = props.content?.labels?.toasts || {};
 
   // The source consumes pendingRestorations once. New equivalent restoration

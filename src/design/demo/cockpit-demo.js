@@ -6,7 +6,9 @@
  * No Storybook imports; any host can drive the page the same way.
  */
 import React from "react";
+import { useSynced } from "./use-synced.js";
 import { demoHrefFor, demoTargetForHref } from "./navigation.js";
+import { useModelFlowState } from "./model-flow-state.js";
 import { buildModelDraft } from "../content.js";
 import { buildReportModelDraft } from "../features/cockpit/lib/report-logic.js";
 import {
@@ -16,13 +18,6 @@ import {
   copilotSources,
   resolveCopilotAnswer,
 } from "./report-demo.js";
-
-/** Controlled-prop mirror: local state re-syncs when the input value changes. */
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
-}
 
 /**
  * @param {object} props ordinary MarketingCockpitPage props:
@@ -62,7 +57,7 @@ export function useCockpitDemo(props) {
   const [prompt, setPrompt] = useSynced(props.prompt);
   const [answers, setAnswers] = React.useState([]);
   const [skill, setSkill] = React.useState(null);
-  const [flow, setFlow] = React.useState(null);
+  const flow = useModelFlowState();
   /* Report Copilot host state — the deterministic "AI" the original fakes
      with report-core.js: answers resolve from the active report, custom
      questions append to the chat thread when the answer view is open. */
@@ -70,7 +65,7 @@ export function useCockpitDemo(props) {
   const [wsPrompt, setWsPrompt] = useSynced("");
   const [wsAnswer, setWsAnswer] = React.useState(null);
   const [wsChat, setWsChat] = React.useState([]);
-  const [wsFlow, setWsFlow] = React.useState(null);
+  const wsFlow = useModelFlowState();
 
   const submitAnswer = (text) => {
     const trimmed = String(text || "").trim();
@@ -152,39 +147,14 @@ export function useCockpitDemo(props) {
       },
       onSkillAction: ({ action }) => {
         props.onSkillAction?.({ action });
-        setFlow({
-          step: action === "history" ? "history" : "manual",
-          threads: (modelFlow.threads || []).map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-          rule: "",
-          draft: {},
-        });
+        flow.start(modelFlow.threads, action);
       },
     },
-    skillFlow: flow
-      ? {
-          step: flow.step,
-          threads: flow.threads,
-          rule: flow.rule,
-          draft: flow.draft,
-          sections: modelFlow.sections,
-          onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-            setFlow((current) => ({
-              ...current,
-              threads: current.threads.map((thread, ti) =>
-                ti === threadIndex
-                  ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                  : thread,
-              ),
-            })),
-          onRuleChange: ({ value }) => setFlow((current) => ({ ...current, rule: value })),
-          onGenerate: ({ messages, rule }) =>
-            setFlow((current) => ({ ...current, step: "generated", rule, draft: buildModelDraft(messages, rule, modelFlow.generatedDefaults) })),
-          onBack: () => setFlow((current) => ({ ...current, step: "history" })),
-          onClose: () => setFlow(null),
-          onSave: ({ values }) => props.onFlowSave?.({ values }),
-          onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
-        }
-      : undefined,
+    skillFlow: flow.dialog((messages, rule) => buildModelDraft(messages, rule, modelFlow.generatedDefaults), {
+      sections: modelFlow.sections,
+      onSave: ({ values }) => props.onFlowSave?.({ values }),
+      onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
+    }),
     workspace: {
       title: wsProfile.panelTitle,
       eyebrow: copilot.eyebrow,
@@ -201,33 +171,13 @@ export function useCockpitDemo(props) {
       inputPlaceholder: copilot.inputPlaceholder,
       answerLabel: copilot.answerLabel,
       skillMenu: copilot.skillMenu ? { ...copilot.skillMenu, items: copilotSkillItems(knowledge, copilot.skillFallback) } : undefined,
-      flow: wsFlow
-        ? {
-            step: wsFlow.step,
-            submitFirst: true,
-            threads: wsFlow.threads,
-            rule: wsFlow.rule,
-            draft: wsFlow.draft,
-            sections: copilot.flow?.sections,
-            labels: copilot.flow?.labels,
-            onToggleMessage: ({ threadIndex, messageIndex, checked }) =>
-              setWsFlow((current) => ({
-                ...current,
-                threads: current.threads.map((thread, ti) =>
-                  ti === threadIndex
-                    ? { ...thread, messages: thread.messages.map((message, mi) => (mi === messageIndex ? { ...message, checked } : message)) }
-                    : thread,
-                ),
-              })),
-            onRuleChange: ({ value }) => setWsFlow((current) => ({ ...current, rule: value })),
-            onGenerate: ({ messages, rule }) =>
-              setWsFlow((current) => ({ ...current, step: "generated", rule, draft: buildReportModelDraft(messages, rule, copilot.flow?.generatedDefaults) })),
-            onBack: () => setWsFlow((current) => ({ ...current, step: "history" })),
-            onClose: () => setWsFlow(null),
-            onSave: ({ values }) => props.onFlowSave?.({ values }),
-            onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
-          }
-        : undefined,
+      flow: wsFlow.dialog((messages, rule) => buildReportModelDraft(messages, rule, copilot.flow?.generatedDefaults), {
+        submitFirst: true,
+        sections: copilot.flow?.sections,
+        labels: copilot.flow?.labels,
+        onSave: ({ values }) => props.onFlowSave?.({ values }),
+        onSubmit: ({ values }) => props.onFlowSubmit?.({ values }),
+      }),
       onClose: (event) => {
         setWsOpen(false);
         props.onWorkspaceClose?.(event);
@@ -264,12 +214,7 @@ export function useCockpitDemo(props) {
       onSelectSkill: props.onSelectSkill,
       onSkillAction: ({ action }) => {
         props.onSkillAction?.({ action });
-        setWsFlow({
-          step: action === "history" ? "history" : "manual",
-          threads: (copilot.flow?.threads || []).map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) })),
-          rule: "",
-          draft: {},
-        });
+        wsFlow.start(copilot.flow?.threads, action);
       },
     },
     workspaceOpen: wsOpen,

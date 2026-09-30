@@ -8,6 +8,7 @@
  * drive the page the same way.
  */
 import React from "react";
+import { useSynced } from "./use-synced.js";
 import { useBusinessTermDemo } from "./business-term-demo.js";
 import { useDataModelDemo } from "./data-model-demo.js";
 import { useFieldLibraryDemo } from "./field-library-demo.js";
@@ -38,13 +39,6 @@ export function buildInterpreterAnswer(query) {
       "Governed Definitions",
     ],
   };
-}
-
-/** Controlled-prop mirror: local state re-syncs when the input value changes. */
-function useSynced(value) {
-  const [state, setState] = React.useState(value);
-  React.useEffect(() => setState(value), [value]);
-  return [state, setState];
 }
 
 /** matchingPrinciples() in types.js: category set + free-text over category/title/description. */
