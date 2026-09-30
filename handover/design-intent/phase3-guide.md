@@ -96,7 +96,7 @@ Runs alone, after WP1 and WP2, because it touches CSS almost everywhere.
 
 ### WP4 — Demo size and close-out (candidates ⑤ rest, ⑧)
 
-Status (2026-09-30): items 1–4 done in one PR except the WP3-dependent parts (the full gate ran once on the WP4 commit while WP3 is still open, so the `@media` row stays at 19 in `occam-baseline.md`). `demo/` 9,785 → 9,619 lines (Phase 2 result 9,936); largest page prop count 42 before and after (`CampaignPage`: what is left is section data and copy, so no grouping was added); `pendingMigration` deleted; the baseline gained a "Phase 3 result" column and the proxy label.
+Status (2026-09-30): items 1–4 done in one PR except the WP3-dependent parts (the full gate ran once on the WP4 commit before WP3 (#90) merged; the `@media` row in `occam-baseline.md` now reads 3 after the WP3 merge). `demo/` 9,785 → 9,619 lines (Phase 2 result 9,936); largest page prop count 42 before and after (`CampaignPage`: what is left is section data and copy, so no grouping was added); `pendingMigration` deleted; the baseline gained a "Phase 3 result" column and the proxy label.
 
 1. Trim `demo/`: remove state and branches that only existed to mirror page props (WP2 leaves some),
    dead exports, and fixtures no story or test reads. Report `demo/` line count before → after
