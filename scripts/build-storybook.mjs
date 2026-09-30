@@ -11,7 +11,7 @@
  * Usage: npm run build-storybook -- [--disable-telemetry ...]
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
 
@@ -31,6 +31,18 @@ const result = spawnSync(process.execPath, [bin, "build", "-o", "storybook-stati
 });
 if (result.error) throw result.error;
 if (result.status !== 0) process.exit(result.status ?? 1);
+
+// AGENTS 4.1: the story count must not shrink. The floor lives in
+// src/design/storybook-budget.json; raise it when stories are added, and lower it
+// only for a deletion the handover lists (duplicate or unused stories, 3.4).
+const index = JSON.parse(readFileSync(path.join(STATIC, "index.json"), "utf8"));
+const counts = { stories: 0, docs: 0 };
+for (const entry of Object.values(index.entries)) counts[entry.type === "docs" ? "docs" : "stories"] += 1;
+const floor = JSON.parse(readFileSync(path.join(ROOT, "src/design/storybook-budget.json"), "utf8"));
+if (counts.stories < floor.minStories || counts.docs < floor.minDocs) {
+  console.error(`story count fell: ${counts.stories} stories (floor ${floor.minStories}), ${counts.docs} docs (floor ${floor.minDocs}). Restore them, or lower src/design/storybook-budget.json and list the removed story ids in handover/README.md (AGENTS 4.1).`);
+  process.exit(1);
+}
 
 const after = sourceFingerprint();
 if (after.hash !== before.hash) {
