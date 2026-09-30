@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "marketinghub",
+  "account_id": "b00a0a78ddfa0b2e9051f6cc7946bd85",
+  "compatibility_date": "2026-09-30",
+  "workers_dev": true,
+  "preview_urls": true,
+  "previews": {},
+  "assets": {
+    "directory": "./storybook-static",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

@@ -51,6 +51,26 @@ docs-only changes and cancels superseded runs. The heavy browser gate
 tag is pushed, and can be started by hand (Actions > ci > Run workflow, choose
 the branch), where it is limited to what changed against `main`.
 
+## Storybook on Cloudflare Workers
+
+Storybook is deployed to the existing `marketinghub` Worker at
+https://marketinghub.gdindex.workers.dev. `wrangler.jsonc` serves the
+`storybook-static` output as static assets.
+
+The connected Cloudflare Workers Build refreshes the site after every merge
+or push to `main`:
+
+- Build: `npm ci && npm run lint && npm test && npm run build-storybook`
+- Deploy: `npx wrangler deploy`
+- Root directory: `/`; production branch: `main`.
+
+Cloudflare uses its existing build token. No GitHub deployment secrets are
+needed. Tag pushes do not deploy; the existing `v*` visual CI remains separate.
+Repository changes are submitted through pull requests.
+
+Local validation: `npm run build-storybook && npx wrangler deploy --dry-run`.
+Deployment status and evidence live in `handover/README.md`.
+
 ## The static demo (reference)
 
 `index.html` and `assets/` are the original static demo — the visual and
