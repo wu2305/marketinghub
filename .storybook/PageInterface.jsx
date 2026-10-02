@@ -1,4 +1,4 @@
-import { PureArgsTable } from "@storybook/blocks";
+import { PureArgsTable } from "@storybook/addon-docs/blocks";
 
 // React docgen omits required destructured props from these JavaScript pages.
 // Read their existing public JSDoc instead of duplicating the API in each MDX.

@@ -6,7 +6,7 @@ const entry = (file) => fileURLToPath(new URL(file, import.meta.url));
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
   stories: ["../src/design/**/*.stories.jsx", "../src/design/**/*.docs.mdx", "../examples/consumer/*.stories.tsx"],
-  addons: ["@storybook/addon-essentials"],
+  addons: ["@storybook/addon-docs"],
   framework: {
     name: "@storybook/react-vite",
     options: {},

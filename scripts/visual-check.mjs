@@ -208,7 +208,7 @@ function serve(dir, port, label) {
 }
 
 /**
- * Flatten a scenario `args` object into Storybook 8.6 `args=` key:value pairs.
+ * Flatten a scenario `args` object into Storybook `args=` key:value pairs (8.6 and 10.6).
  * Verified against @storybook/core preview-api parseArgsParam: scalars are
  * plain (numbers auto-coerce), booleans/null/undefined are `!`-prefixed,
  * objects flatten to `obj.key:value`, arrays to `arr[0]:value`. Plain-string

@@ -1,5 +1,5 @@
 import React from "react";
-import { DocsPage, useOf } from "@storybook/blocks";
+import { DocsPage, useOf } from "@storybook/addon-docs/blocks";
 import "../src/design/tokens.css";
 
 /**
@@ -28,6 +28,25 @@ function DemoLinkGuard({ children }) {
   return children;
 }
 
+/**
+ * Storybook 10 skips inferring an arg's type from its story args whenever docgen already
+ * supplied a `type` (it does for every prop here, as `{ required }` only). The type then has no
+ * `name`, so Controls pick the JSON editor for booleans and numbers, and URL args
+ * (`&args=view:live`, used by visual-check) are dropped as incompatible. Restore the name
+ * from the story's args, as Storybook 8 did (same shapes as its `inferArgTypes`).
+ */
+const inferTypeName = (value) => {
+  if (["boolean", "string", "number", "function", "symbol"].includes(typeof value)) return { name: typeof value };
+  if (!value) return { name: "object", value: {} };
+  if (Array.isArray(value)) return { name: "array", value: value.length ? inferTypeName(value[0]) : { name: "other", value: "unknown" } };
+  return { name: "object", value: Object.fromEntries(Object.entries(value).map(([key, field]) => [key, inferTypeName(field)])) };
+};
+const restoreInferredTypes = ({ argTypes, initialArgs = {} }) => Object.fromEntries(Object.entries(argTypes).map(([key, argType]) => [
+  key,
+  argType.type && !argType.type.name && key in initialArgs ? { ...argType, type: { ...inferTypeName(initialArgs[key]), ...argType.type } } : argType,
+]));
+restoreInferredTypes.secondPass = true;
+
 const pageNames = Object.keys(import.meta.glob("../src/design/pages/*/*.docs.mdx"))
   .map((file) => file.split("/").at(-2)).sort();
 
@@ -39,7 +58,7 @@ function DocumentationPage() {
   return <><h1>Page components · 页面组件</h1><p>Open a page to inspect its inputs, callbacks and working preview. Named states remain in the Pages story list.</p><p>打开某个页面即可查看它的输入、回调与可运行的预览；各命名状态仍在 Pages 故事列表中。</p><ul>{pageNames.map((name) => <li key={name}><a href={`./?path=/docs/pages--${name.toLowerCase()}`} target="_top">{name}</a></li>)}</ul></>;
 }
 
-/** @type { import('@storybook/react').Preview } */
+/** @type { import('@storybook/react-vite').Preview } */
 const preview = {
   decorators: [(Story) => <DemoLinkGuard><Story /></DemoLinkGuard>],
   parameters: {
@@ -52,10 +71,13 @@ const preview = {
       },
     },
     backgrounds: {
-      default: "workspace",
-      values: [{ name: "workspace", value: "#f4f6f8" }],
+      options: {
+        workspace: { name: "workspace", value: "#f4f6f8" },
+      },
     },
   },
+  argTypesEnhancers: [restoreInferredTypes],
+  initialGlobals: { backgrounds: { value: "workspace" } },
 };
 
 export default preview;
