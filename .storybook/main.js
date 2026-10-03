@@ -13,7 +13,7 @@ const config = {
   },
   staticDirs: [{ from: "../assets", to: "/assets" }],
   async viteFinal(config) {
-    // Storybook's Vite builder compiles JSX with esbuild's classic runtime
+    // Storybook's Vite builder compiles JSX with the classic runtime
     // (React.createElement) and does not register @vitejs/plugin-react, so
     // stories that use JSX without importing React throw "React is not defined".
     return mergeConfig(config, {
@@ -24,8 +24,8 @@ const config = {
           { find: /^marketing-hub\/demo$/, replacement: entry("../src/design/demo/index.js") },
         ],
       },
-      esbuild: { jsx: "automatic" },
-      optimizeDeps: { esbuildOptions: { jsx: "automatic" } },
+      oxc: { jsx: { runtime: "automatic" } },
+      optimizeDeps: { rolldownOptions: { transform: { jsx: { runtime: "automatic" } } } },
     });
   },
 };
