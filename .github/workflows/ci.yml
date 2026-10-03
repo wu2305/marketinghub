@@ -28,7 +28,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
+  # lint + unit tests and the three builds are independent, so they run side by
+  # side; `verify` is the single gate (keep this name if branch protection
+  # requires it).
+  test:
     if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -41,9 +44,32 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+
+  build:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
       - run: npm run build-storybook
       - run: npm run build:host
       - run: npm run build:lib
+
+  verify:
+    # Runs even when a needed job failed (a skipped required check would pass).
+    if: ${{ !cancelled() && github.event_name != 'workflow_dispatch' }}
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "test: ${{ needs.test.result }}, build: ${{ needs.build.result }}"
+          [ "${{ needs.test.result }}" = success ] && [ "${{ needs.build.result }}" = success ]
 
   visual:
     if: github.event_name == 'workflow_dispatch' || github.ref_type == 'tag'
@@ -73,6 +99,13 @@ jobs:
       - run: npm ci
       - run: npm run build-storybook
       - run: npm run build:host
+      # Browser download is cached by Playwright version; system deps still install.
+      - id: playwright
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
       - run: npx playwright install --with-deps chromium
       - run: node scripts/host-check.mjs --out ci-evidence/host
       # The original demo is frozen, so passing original-side results are reused

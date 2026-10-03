@@ -33,6 +33,6 @@ export default defineConfig({
     assetsInlineLimit: 100_000_000,
     modulePreload: false,
     chunkSizeWarningLimit: 10_000,
-    rollupOptions: { output: { inlineDynamicImports: true } },
+    rolldownOptions: { output: { inlineDynamicImports: true } },
   },
 });

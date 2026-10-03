@@ -45,7 +45,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 ### 2.3 当前方案（PR #6 起，main）
 
 - 代码位于 `src/design`：`tokens.css`；通用组件在 `components/<Name>/`，单页功能模块在 `features/<page>/<Name>/`，页面组件在 `pages/<Page>/`，跨组件共享的私有模块在 `lib/`；每个组件目录内为 `index.jsx` + `<Name>.css` + `<Name>.stories.jsx`，页面故事在 `pages/<Page>/<Page>.stories.jsx`（meta title 统一为 `"Pages"`，story id 不变）；`index.js` 是唯一公共入口；`demo/` 放 fixture 与确定性演示状态（`useXxxDemo`）；`content.js` 是故事与宿主的默认文案和数据；`report-logic.js`、`report-routes.js` 是纯函数；`icons.jsx`、`cx.js`、`asset-url.js` 是工具。
-- Storybook 10.6，`@storybook/react-vite` 与 `@storybook/addon-docs`（Node ≥ 20.19 / 22.12，仅 ESM），`.storybook/main.js` 以 `esbuild.jsx = "automatic"` 编译 JSX，`staticDirs` 把 `assets/` 映射到 `/assets`。
+- Storybook 10.6，`@storybook/react-vite` 与 `@storybook/addon-docs`（Node ≥ 20.19 / 22.12，仅 ESM），Vite 8（Rolldown）；`.storybook/main.js` 以 `oxc.jsx.runtime = "automatic"` 编译 JSX，`staticDirs` 把 `assets/` 映射到 `/assets`。
 - 独立宿主 `examples/host`（base `/mh-host/`）由 `scripts/host-check.mjs` 验证；配对视觉对照由 `scripts/visual-check.mjs` 执行（绑定构建戳，含 `--negative` 负向变异）。
 - 使用方示例 `examples/consumer`（Phase 3 WP5）只经包入口 `marketing-hub`（及 `marketing-hub/demo` 的大写内容常量）组装页面，状态与规则自持；`npm test` 驱动其行为，`build:lib` 在 dist 上类型检查并重跑，Storybook 的 `Examples/*` 故事与 visual-check 的 `consumer-*` 场景把它与原始页面配对。
 - 故事数、测试数、构建与对照结论只记在 `handover/README.md` §1，本文件不写这些数字。

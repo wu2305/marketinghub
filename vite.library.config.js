@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   publicDir: false,
-  esbuild: { jsx: "automatic" },
+  oxc: { jsx: { runtime: "automatic" } },
   build: {
     lib: {
       entry: { index: "src/design/index.js", demo: "src/design/demo/index.js" },
@@ -11,7 +11,7 @@ export default defineConfig({
       cssFileName: "index",
     },
     cssCodeSplit: false,
-    rollupOptions: {
+    rolldownOptions: {
       external: ["react", "react-dom", "react/jsx-runtime", "react-dom/client"],
     },
   },
