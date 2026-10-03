@@ -36,7 +36,7 @@ output under `/tmp`.
 ## Project layout
 
 - `src/design` — tokens, components, features, pages, demo state, `index.js`
-- `.storybook` — Storybook 8 config (`@storybook/react-vite`)
+- `.storybook` — Storybook 10 config (`@storybook/react-vite`, `@storybook/addon-docs`)
 - `examples/host` — standalone host consuming the public entry (base `/mh-host/`)
 - `scripts/` — build stamps, host-check, visual-check (+ per-page scenarios)
 - `handover/` — `README.md` status source of truth, `structural-review.md` work items

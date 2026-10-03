@@ -20,8 +20,11 @@ const args = process.argv.slice(2);
 const command = ["storybook", "build", "-o", "storybook-static", ...args].join(" ");
 
 const before = sourceFingerprint();
-const bin = path.join(ROOT, "node_modules", "storybook", "bin", "index.cjs");
-if (!existsSync(bin)) {
+// The CLI entry moved between majors (8: bin/index.cjs, 10: dist/bin/dispatcher.js), so read it from the package.
+const pkgFile = path.join(ROOT, "node_modules", "storybook", "package.json");
+const binField = existsSync(pkgFile) ? JSON.parse(readFileSync(pkgFile, "utf8")).bin : null;
+const bin = binField && path.join(path.dirname(pkgFile), typeof binField === "string" ? binField : binField.storybook ?? Object.values(binField)[0]);
+if (!bin || !existsSync(bin)) {
   console.error("storybook package not installed — run npm install first");
   process.exit(1);
 }
