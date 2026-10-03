@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Inline SVG icon (24×24, currentColor stroke). `path` renders raw SVG path data and takes precedence over `name`; unknown names render nothing.", "内联 SVG 图标（24×24，描边取 currentColor）。`path` 直接渲染 SVG 路径数据，优先于 `name`；未知名称不渲染任何内容。"),
+          bi("The icon size is 24 by 24 pixels. The line color is the same as the current text color (`currentColor`). Set `path` to show a different icon. `path` has priority over `name`. If `name` is not in the list, the component shows no icon.", "图标尺寸是 24×24。线条颜色和当前文字颜色相同（`currentColor`）。要显示一个不在列表里的图标，就设置 `path`。`path` 优先于 `name`。如果 `name` 不在列表里，组件不会显示图标。"),
       },
     },
   },

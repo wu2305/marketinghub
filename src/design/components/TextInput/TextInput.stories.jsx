@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Single-line input. Controlled when `value` is passed, uncontrolled otherwise.", "单行输入。传入 `value` 时为受控，否则为非受控。"),
+        component: bi("This component shows one line of text. Set `value` if the page controls the text. If you do not set `value`, the field holds the text.", "这个组件显示一行文字。如果页面要控制文字，就设置 `value`。如果不设置 `value`，输入框自己保存文字。"),
       },
     },
   },
@@ -37,7 +37,7 @@ export default {
       "onChange",
       "(event: { name: string, value: string }) => void",
       { name: "title", value: "AUDIT" },
-      bi("Fired on every edit; `name` is empty when the prop is unset.", "每次编辑时触发；未设置 `name` 时其值为空。"),
+      bi("The function runs at each change. If you do not set `name`, `name` in the result is empty.", "每次变化都会调用这个函数。如果没有设置 `name`，结果里的 `name` 是空的。"),
     ),
   },
   render: function TextInputStory(args) {

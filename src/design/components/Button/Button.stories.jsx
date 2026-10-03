@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Action button. Renders `<button type=\"button\">`; with `href` it renders a link with the same look, for actions that navigate.", "操作按钮。渲染为 `<button type=\"button\">`；传入 `href` 时渲染为外观相同的链接，用于导航类操作。"),
+        component: bi("The button starts one function. The element is `<button type=\"button\">`. Set `href` if the function opens a different page. The element then becomes a link. The link has the same appearance.", "这个按钮用来启动一次操作。元素是 `<button type=\"button\">`。如果这次操作会打开另一个页面，就设置 `href`。元素会变成链接，外观不变。"),
       },
     },
   },

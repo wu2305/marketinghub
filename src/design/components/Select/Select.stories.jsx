@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Native select. `options` accept `{ id|value, label }` or plain strings.", "原生下拉选择。`options` 可为 `{ id|value, label }` 或纯字符串。"),
+        component: bi("This component is a standard selection list. An option can be a text string. An option can also be an object. The object has `label`, and `id` or `value`.", "这是一个标准下拉列表。选项可以是一段文字，也可以是一个对象。对象里有 `label`，以及 `id` 或 `value`。"),
       },
     },
   },
@@ -31,7 +31,7 @@ export default {
       description: bi("Options — objects or plain strings.", "选项：对象或纯字符串。"),
     }),
     placeholder: prop("string", {
-      description: bi("Renders a leading placeholder option (implicit value = its text, matching the demo markup).", "渲染一个前置的占位选项（隐含值为其文字，与 Demo 标记一致）。"),
+      description: bi("The value of the first option is the option text. This agrees with the Demo.", "第一项的值就是这段文字，和 Demo 里的写法一样。"),
     }),
     autoComplete: prop("string", { description: bi("Native autocomplete attribute.", "原生 autocomplete 属性。") }),
     disabled: prop("boolean", { defaultValue: false, description: bi("Disables the field.", "禁用该字段。") }),
@@ -41,7 +41,7 @@ export default {
       "onChange",
       "(event: { name: string, value: string }) => void",
       { name: "kind", value: "Global Synonym" },
-      bi("Fired when the selection changes.", "选择变化时触发。"),
+      bi("The function runs at each change. If you do not set `name`, `name` in the result is empty.", "每次变化都会调用这个函数。如果没有设置 `name`，结果里的 `name` 是空的。"),
     ),
   },
   render: function SelectStory(args) {
