@@ -14,20 +14,20 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Single-select pill filter group.\n\n**When to use.** A short, always-visible choice that filters what is shown (one pill active at a time). For longer option lists or multi-select use CheckboxFilter. **Used in:** Self-Service (analysis and upload filters).", "单选胶囊筛选组。\n\n**何时使用。** 用于筛选当前显示内容的、简短且始终可见的单选项（同一时间只有一个胶囊处于激活）。选项较多或需要多选时请用 CheckboxFilter。**使用位置：** Self-Service（分析与上传筛选）。"),
+        component: bi("This component is a group of filter pills. The user can select one pill.\n\n**When to use.** Use this component for a short, always-visible choice that filters what is shown. One pill is active at a time. For a longer list, or for more than one choice, use CheckboxFilter. **Used in:** Self-Service Center.", "这个组件是一组筛选胶囊。用户只能选中其中一个。\n\n**何时使用。** 用于筛选当前显示内容的、简短且始终可见的单选项。同一时间只有一个胶囊处于选中。选项较多或需要多选时，请用 CheckboxFilter。**使用位置：** Self-Service Center。"),
       },
     },
   },
   args: { label: "Filter reports", items: ITEMS, value: "all" },
   argTypes: {
-    label: prop("string", { defaultValue: "Filters", description: bi("Group aria-label.", "分组的 aria-label。") }),
-    items: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: bi("Pill entries.", "胶囊条目。") }),
-    value: prop("string", { description: bi("id of the active pill.", "当前选中胶囊的 id。"), control: "inline-radio", options: ITEMS.map((item) => item.id) }),
+    label: prop("string", { defaultValue: "Filters", description: bi("Accessible name of the group.", "分组的无障碍名称。") }),
+    items: prop("Array<{ id: string, label: string }>", { defaultValue: [], description: bi("Pills to show. Each pill has `id` and `label`.", "要显示的胶囊。每个胶囊有 `id` 和 `label`。") }),
+    value: prop("string", { description: bi("`id` of the selected pill.", "当前选中胶囊的 `id`。"), control: "inline-radio", options: ITEMS.map((item) => item.id) }),
     onChange: callbackProp(
       "onChange",
       "(event: { id: string, label: string }) => void",
       { id: "dg", label: "DG" },
-      bi("Fired when a pill is clicked.", "点击胶囊时触发。"),
+      bi("The function runs when the user clicks a pill. The result has `id` and `label`.", "用户点击胶囊时会调用这个函数。结果里带有 `id` 和 `label`。"),
     ),
   },
   render: function FilterPillsStory(args) {

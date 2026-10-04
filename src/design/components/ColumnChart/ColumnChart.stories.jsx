@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("CSS-only column chart; `height` is a 0–100 percentage.\n\n**When to use.** A small, dependency-free bar comparison with values given as 0–100 percentages. Use ProgressList for a label / value / bar list. **Used in:** Campaign.", "纯 CSS 柱状图；`height` 为 0–100 的百分比。\n\n**何时使用。** 小型、无外部依赖的柱状对比，数值以 0–100 的百分比给出。若需要「标签 / 数值 / 进度条」列表，请用 ProgressList。**使用位置：** Campaign。"),
+        component: bi("This component is a column chart. It uses CSS only. Each column has `height` as a percentage from 0 to 100.\n\n**When to use.** Use this component for a small bar comparison. Give each value as a percentage from 0 to 100. Use ProgressList for a list of label, value, and bar. **Used in:** Campaign.", "这个组件是柱状图。它只用 CSS。每根柱的 `height` 是 0 到 100 的百分比。\n\n**何时使用。** 用于小型柱状对比。每个数值用 0 到 100 的百分比给出。若需要「标签、数值、进度条」列表，请用 ProgressList。**使用位置：** Campaign。"),
       },
     },
   },
@@ -21,10 +21,10 @@ export default {
     ],
   },
   argTypes: {
-    label: prop("string", { defaultValue: "Chart", description: bi("aria-label on the chart.", "图表的 aria-label。") }),
+    label: prop("string", { defaultValue: "Chart", description: bi("Accessible name of the chart.", "图表的无障碍名称。") }),
     items: prop("Array<{ label: string, value: React.ReactNode, height: number }>", {
       defaultValue: [],
-      description: bi("Columns — `height` is a 0–100 percentage.", "各柱数据，`height` 为 0–100 的百分比。"),
+      description: bi("Columns to show. `height` is a percentage from 0 to 100.", "要显示的各柱。`height` 是 0 到 100 的百分比。"),
     }),
   },
   render: (args) => <ColumnChart {...args} />,

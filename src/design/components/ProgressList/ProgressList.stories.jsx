@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Label / value / bar rows for distribution summaries.\n\n**When to use.** A short distribution summary where each row is a label, a value and a proportional bar. Use ColumnChart instead when the comparison is across categories over a shared axis. **Used in:** Campaign (distribution, objectives and efficiency panels).", "用于分布汇总的 标签/数值/进度条 行。\n\n**何时使用。** 简短的分布汇总，每一行包含标签、数值和按比例的进度条。若要在共同坐标轴上比较各分类，请改用 ColumnChart。**使用位置：** Campaign（分布、目标与效率面板）。"),
+        component: bi("This component shows rows of label, value, and bar. Use it for a short distribution summary.\n\n**When to use.** Use this component when each row is a label, a value, and a bar. Use ColumnChart when the comparison is across categories on a shared axis. **Used in:** Campaign.", "这个组件显示「标签、数值、进度条」行。用于简短的分布汇总。\n\n**何时使用。** 每一行是标签、数值和进度条时使用。若要在共同坐标轴上比较各分类，请用 ColumnChart。**使用位置：** Campaign。"),
       },
     },
   },
@@ -22,7 +22,7 @@ export default {
   argTypes: {
     items: prop("Array<{ label: string, value: React.ReactNode, percent: number }>", {
       defaultValue: [],
-      description: bi("Rows — `percent` is the bar width (0–100).", "行数据：`percent` 为进度条宽度（0–100）。"),
+      description: bi("Rows to show. `percent` is the bar width from 0 to 100.", "要显示的行。`percent` 是进度条宽度，从 0 到 100。"),
     }),
   },
   render: (args) => (
