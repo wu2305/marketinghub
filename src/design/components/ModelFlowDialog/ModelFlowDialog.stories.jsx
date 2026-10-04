@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("\"Generate Analytical Model\" flow dialog reached from the skill menu. `step=\"history\"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step=\"generated\"` shows the drafted model form; `step=\"manual\"` shows the same form empty. Escape closes only this dialog and restores focus to its opener.", "从技能菜单进入的 \"Generate Analytical Model\" 流程对话框。`step=\"history\"` 回放聊天会话，每条消息带复选框，并有生成规则文本域；`step=\"generated\"` 显示生成的模型表单；`step=\"manual\"` 显示同一表单的空白版本。Escape 只关闭此对话框，并把焦点还给打开它的元素。"),
+          bi("This component is the Generate Analytical Model dialog. It opens from the assistant skill menu. Set `step` to `history` to show chat threads. Each message has a checkbox. A text area holds the generation rule. Generate needs at least one checked message. Set `step` to `generated` to show the filled model form. Set `step` to `manual` to show the same form empty. Save and Submit check required fields. The dialog then shows Saved or Submitted, and closes. Escape closes only this dialog. Focus returns to the opener.", "这个组件是 Generate Analytical Model 对话框。它从助手的技能菜单打开。`step` 设为 `history` 时，显示聊天会话。每条消息有复选框。文本域保存生成规则。Generate 至少需要勾选一条消息。`step` 设为 `generated` 时，显示已填好的模型表单。`step` 设为 `manual` 时，显示同一表单的空白版。Save 和 Submit 会检查必填字段。对话框随后显示 Saved 或 Submitted，然后关闭。Escape 只关闭这个对话框。焦点回到打开它的元素。"),
       },
     },
   },

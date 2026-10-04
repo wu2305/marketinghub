@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Purpose-based confirmation and notice dialog. Confirm is neutral, info has one dismissal action, warning emphasizes risk, and danger emphasizes deletion. Modal supplies overlay/focus/Escape behavior.", "按用途区分的确认与通知对话框。confirm 为中性确认，info 只有一个关闭操作，warning 强调风险，danger 强调删除。遮罩、焦点与 Escape 行为由 Modal 提供。"),
+          bi("This component is a confirmation dialog or a notice dialog. `confirm` is a neutral confirm. `info` has one Close action. `warning` marks risk. `danger` marks deletion. Overlay, focus, and Escape come from Modal.", "这个组件是确认对话框或通知对话框。`confirm` 是中性确认。`info` 只有一个 Close 操作。`warning` 强调风险。`danger` 强调删除。遮罩、焦点和 Escape 由 Modal 提供。"),
       },
     },
   },
@@ -24,14 +24,14 @@ export default {
   },
   argTypes: {
     open: prop("boolean", { defaultValue: false, description: bi("Whether the dialog is visible.", "对话框是否可见。") }),
-    purpose: enumProp(confirmDialogPurposes, "confirm", bi("Action purpose: neutral confirm, informational notice, risk warning, or destructive action.", "操作用途：中性确认、信息通知、风险警告或破坏性操作。")),
+    purpose: enumProp(confirmDialogPurposes, "confirm", bi("Action purpose. `confirm` is neutral. `info` is a notice. `warning` marks risk. `danger` marks deletion.", "操作用途。`confirm` 是中性确认。`info` 是通知。`warning` 强调风险。`danger` 强调删除。")),
     title: prop("string", { description: bi("Dialog title.", "对话框标题。") }),
-    message: prop("string", { description: bi("Body copy.", "正文文案。") }),
-    confirmLabel: prop("string", { defaultValue: "Confirm", description: bi("Primary action label for confirmations.", "确认类对话框的主操作文字。") }),
-    cancelLabel: prop("string", { defaultValue: "Cancel", description: bi("Secondary action label for confirmations.", "确认类对话框的次操作文字。") }),
-    closeLabel: prop("string", { defaultValue: "Close", description: bi("Single dismiss button label for notices.", "通知类对话框唯一的关闭按钮文字。") }),
-    onConfirm: callbackProp("onConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, bi("Fired by the primary confirm button.", "点击主确认按钮时触发。")),
-    onCancel: callbackProp("onCancel", "(event: { reason: string }) => void", { reason: "cancel" }, bi("Fired on any dismissal — Cancel, Close, scrim or Escape.", "任何关闭方式（Cancel、Close、点击遮罩或 Escape）都会触发。")),
+    message: prop("string", { description: bi("Body text.", "正文文字。") }),
+    confirmLabel: prop("string", { defaultValue: "Confirm", description: bi("Label of the primary button for confirmations.", "确认类对话框主按钮的文字。") }),
+    cancelLabel: prop("string", { defaultValue: "Cancel", description: bi("Label of the Cancel button for confirmations.", "确认类对话框 Cancel 按钮的文字。") }),
+    closeLabel: prop("string", { defaultValue: "Close", description: bi("Label of the single Close button for notices.", "通知类对话框唯一 Close 按钮的文字。") }),
+    onConfirm: callbackProp("onConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, bi("The function runs when the primary button is pressed. The result has `confirmed: true`.", "按下主按钮时调用这个函数。结果里带有 `confirmed: true`。")),
+    onCancel: callbackProp("onCancel", "(event: { reason: string }) => void", { reason: "cancel" }, bi("The function runs when the dialog closes. Cancel, Close, the dimmed area, or Escape all close it. `reason` is `cancel`, `close`, `scrim`, or `escape`.", "对话框关闭时调用这个函数。Cancel、Close、点击遮罩或 Escape 都会关闭。`reason` 是 `cancel`、`close`、`scrim` 或 `escape`。")),
   },
   render: function ConfirmDialogStory(args) {
     return <ConfirmDialog {...args} />;

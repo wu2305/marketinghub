@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Launcher, assistant panel and model-creation dialog as one element, so a page wires the assistant once. Closed, only the launcher shows; opening it hides the launcher and shows the panel; the skill menu's model actions open the dialog. State here comes from the same `useWorkspaceAssistantDemo` container the pages use.", "启动器、助手面板和建模对话框合为一个元素，页面只需接线一次助手。关闭时只显示启动器；打开后隐藏启动器并显示面板；技能菜单中的建模操作会打开对话框。这里的状态来自页面所用的同一个 `useWorkspaceAssistantDemo` 容器。"),
+          bi("This component is the page assistant. It holds the corner button, the assistant panel, and the model dialog. A page mounts this component once. When the panel is closed, only the button shows. When the panel is open, the button is hidden. A model action in the skill menu opens the dialog. When the panel closes, focus returns to the button. The story uses `useWorkspaceAssistantDemo`. Pages use the same container.", "这个组件是页面上的助手。它包含角落按钮、助手面板和建模对话框。页面只需挂载一次。面板关闭时只显示按钮。面板打开时按钮隐藏。技能菜单里的建模操作会打开对话框。面板关闭后，焦点回到按钮。这个故事使用 `useWorkspaceAssistantDemo`。页面使用同一个容器。"),
       },
     },
   },

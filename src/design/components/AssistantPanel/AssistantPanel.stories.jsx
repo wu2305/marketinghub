@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Assistant dialog. `placement=\"drawer\"` renders the right-edge full-height variant used on Home; \"modal\" is the centered variant. Renders nothing when `open` is false. Reachable states mirror the original runtime: suggestion/history items fill the prompt, submit appends entries to the answer feed, the expand button toggles the drawer into a centered dialog, the history button opens a popover, Escape closes the panel, and focus returns to the invoking element on close.", "助手对话框。`placement=\"drawer\"` 是 Home 页使用的右侧全高抽屉形态；\"modal\" 是居中弹窗形态。`open` 为 false 时不渲染。可达状态与原始 Demo 一致：点击建议或历史条目会填入提示词，提交会向回答列表追加条目，展开按钮在抽屉与居中对话框之间切换，历史按钮打开气泡，Escape 关闭面板，关闭后焦点回到触发元素。"),
+          bi("This component is the assistant dialog. Set `placement` to `drawer` for the full-height panel on the right. Home uses that layout. Set `placement` to `modal` for a centered dialog. If `open` is false, the component shows nothing. A suggestion or a history item fills the prompt. Submit sends the prompt. The expand control switches the drawer to a centered dialog. The history control opens a list. Escape closes the panel. When the panel closes, focus returns to the opener.", "这个组件是助手对话框。`placement` 设为 `drawer` 时，是右侧全高面板。Home 使用这种布局。`placement` 设为 `modal` 时，是居中对话框。`open` 为 false 时，组件不显示任何内容。建议或历史条目会填入提示词。提交会送出提示词。展开控件把抽屉换成居中对话框。历史控件打开列表。Escape 关闭面板。面板关闭后，焦点回到打开它的元素。"),
       },
     },
   },
@@ -23,7 +23,7 @@ export const AskPanel = {
   argTypes: {
     placement: { control: "inline-radio", options: assistantPlacements },
     variant: { control: "inline-radio", options: assistantVariants },
-    answerVariant: { control: "select", options: assistantAnswerVariants, description: bi("Story preview of answer.variant; submitting still uses onSubmit.", "在故事中预览 answer.variant；提交仍然使用 onSubmit。") },
+    answerVariant: { control: "select", options: assistantAnswerVariants, description: bi("This control only changes the answer card in this story. Submit still uses `onSubmit`.", "这个控件只改变本故事里的回答卡片。提交仍然使用 `onSubmit`。") },
     onClose: { action: "onClose" },
     onSubmit: { action: "onSubmit" },
     onPromptChange: { action: "onPromptChange" },
