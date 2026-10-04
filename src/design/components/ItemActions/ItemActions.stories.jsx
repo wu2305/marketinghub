@@ -13,7 +13,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component shows Edit, Delete, and Disable for one library item. Pass the output of `governedActions()`. A blocked action stays focusable. A blocked action stays clickable. The button has `aria-disabled`. Each click sends `action`, `id`, `blocked`, and `reason`. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed.", "这个组件显示一条库记录的 Edit、Delete 和 Disable。传入 `governedActions()` 的结果。被阻止的操作仍可聚焦，也可点击。按钮带 `aria-disabled`。每次点击都会发出 `action`、`id`、`blocked` 和 `reason`。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。"),
+          bi("This component shows Edit, Delete, and Disable for one library item. Pass the output of `governedActions()`. A blocked action stays focusable. A blocked action stays clickable. The button has `aria-disabled`. Each click sends `action`, `id`, `blocked`, and `reason`. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed.", "这个组件显示一条库记录的 Edit、Delete 和 Disable。传入 `governedActions()` 的结果。被阻止的操作仍可聚焦，也可点击。按钮带 `aria-disabled`。每次点击都会发出 `action`、`id`、`blocked` 和 `reason`。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。"),
       },
     },
   },

@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the Business Term library on AI Interpreter. Open it with `?type=Business Term`. It has search, Status and Creator filters, a count, and Add Business Term. Cards show three synonym chips. Other synonyms are counted in a \"+N\" chip. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Offline knowledge is unavailable for AI use and can be enabled again. Deletion is permanent and cannot be undone. Save keeps knowledge disabled. Submit publishes it for AI use. This library is not Skill Library and not Scenario Reports.", "这是 AI Interpreter 上的 Business Term 库。用 `?type=Business Term` 打开。它有搜索、Status 和 Creator 筛选、数量，以及 Add Business Term。卡片显示三个同义词标签。其余同义词记在 \"+N\" 标签里。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。下线后的知识不能给 AI 用，也可以再启用。删除后不能恢复。Save 会让知识保持停用。Submit 会发布知识，供 AI 使用。这个库不是 Skill Library，也不是 Scenario Reports。"),
+          bi("This component is the Business Term library on AI Interpreter. Open it with `?type=Business Term`. It has search, Status and Creator filters, a count, and Add Business Term. Cards show three synonym chips. Other synonyms are counted in a \"+N\" chip. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed. Disabled knowledge is unavailable for AI use and can be enabled again. Deletion is permanent and cannot be undone. This library is not Skill Library and not Scenario Reports.", "这是 AI Interpreter 上的 Business Term 库。用 `?type=Business Term` 打开。它有搜索、Status 和 Creator 筛选、数量，以及 Add Business Term。卡片显示三个同义词标签。其余同义词记在 \"+N\" 标签里。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。Disable 后的知识不能给 AI 用，也可以再启用。删除后不能恢复。这个库不是 Skill Library，也不是 Scenario Reports。"),
       },
     },
   },

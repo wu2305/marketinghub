@@ -10,7 +10,7 @@ import "./KnowledgeCreatePage.css";
 /**
  * Knowledge create page. It creates or edits one knowledge record.
  * `content` supplies visible copy. `type` selects the form. `mode` is create, edit, or copy.
- * Cancel does not save. For Business Term, Save sets Disabled and Draft. Submit sets Enabled and Published.
+ * Cancel does not save. The page sends `{type, mode, values}` on Save and Submit. The demo hook sets status and stage.
  * @param {object} props
  * @param {object} props.content All visible labels and form fixtures. // 全部可见标签与表单夹具。
  * @param {object} props.logo Header logo model. // 页头 Logo 模型。
@@ -28,8 +28,8 @@ import "./KnowledgeCreatePage.css";
  * @param {(event:{id:string,params: Record<string,string>,href:string}) => void} [props.onNavigate] The function runs when a link opens another page. // 链接要打开另一页时会调用这个函数。
  * @param {(event:{value:string}) => void} [props.onTypeChange] The function runs when the knowledge type changes. // 知识类型变化时会调用这个函数。
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange] The function runs at each field change. // 每次字段变化都会调用这个函数。
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSave] The function runs on Save. Save sets Disabled and Draft for Business Term. // 点击 Save 时会调用这个函数。Business Term 的 Save 会写成 Disabled 和 Draft。
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSubmit] The function runs on Submit. The 21 Sep note for IT says Business Term Submit sets Enabled and Published. // 点击 Submit 时会调用这个函数。9 月 21 日给 IT 的说明里，Business Term 的 Submit 会写成 Enabled 和 Published。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSave] The function runs on Save. The page sends `{type, mode, values}`. // 点击 Save 时会调用这个函数。页面发出 `{type, mode, values}`。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSubmit] The function runs on Submit. The page sends `{type, mode, values}`. // 点击 Submit 时会调用这个函数。页面发出 `{type, mode, values}`。
  * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onCancel] The function runs on Cancel. Cancel does not save. // 点击 Cancel 时会调用这个函数。Cancel 不保存。
  * @param {(event:{reason:string}) => void} [props.onResultClose] The function runs when the result dialog closes. // 结果对话框关闭时会调用这个函数。
  * @param {(event:{kind:string}) => void} [props.onDialog] The function runs when a dialog opens. // 对话框打开时会调用这个函数。

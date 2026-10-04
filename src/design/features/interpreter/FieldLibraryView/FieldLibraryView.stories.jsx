@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component shows four knowledge libraries on AI Interpreter. The types are Report Context, Metric Dictionary, Analytical Model, and Email Reports. Analytical Model has Edit, Delete, and Disable. A blocked action stays clickable. The result has `reason`. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Report Context can edit the description without that gate. This view is not Scenario Reports and not Skill Library.", "这个组件显示 AI Interpreter 上的四个知识库。类型是 Report Context、Metric Dictionary、Analytical Model 和 Email Reports。Analytical Model 有 Edit、Delete 和 Disable。被阻止的操作仍可点击。结果里有 `reason`。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。Report Context 编辑描述不受这个限制。这个视图不是 Scenario Reports，也不是 Skill Library。"),
+          bi("This component shows four knowledge libraries on AI Interpreter. The types are Report Context, Metric Dictionary, Analytical Model, and Email Reports. Analytical Model has Edit, Delete, and Disable. A blocked action stays clickable. The result has `reason`. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed. Report Context can edit the description without that gate. This view is not Scenario Reports and not Skill Library.", "这个组件显示 AI Interpreter 上的四个知识库。类型是 Report Context、Metric Dictionary、Analytical Model 和 Email Reports。Analytical Model 有 Edit、Delete 和 Disable。被阻止的操作仍可点击。结果里有 `reason`。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。Report Context 编辑描述不受这个限制。这个视图不是 Scenario Reports，也不是 Skill Library。"),
       },
     },
   },

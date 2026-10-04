@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the Scenario Reports library on AI Interpreter. It is a knowledge type. It is not Skill Library, Scenario Detail, or Skill Edit. It has Status and Process filters, search, a count, and Add. Cards show Enabled or Disabled. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Seeded records in this story belong to other users. Their actions stay clickable. The click explains the permission.", "这是 AI Interpreter 上的 Scenario Reports 库。它是一种知识类型。它不是 Skill Library、Scenario Detail 或 Skill Edit。它有 Status 和 Process 筛选、搜索、数量和 Add。卡片显示 Enabled 或 Disabled。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。本故事里的预置记录属于其他用户。操作仍可点击。点击后会说明权限原因。"),
+          bi("This component is the Scenario Reports library on AI Interpreter. It is a knowledge type. It is not Skill Library, Scenario Detail, or Skill Edit. It has Status and Process filters, search, a count, and Add. Cards show Enabled or Disabled. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed. Seeded records in this story belong to other users. Their actions stay clickable. The click explains the permission.", "这是 AI Interpreter 上的 Scenario Reports 库。它是一种知识类型。它不是 Skill Library、Scenario Detail 或 Skill Edit。它有 Status 和 Process 筛选、搜索、数量和 Add。卡片显示 Enabled 或 Disabled。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。本故事里的预置记录属于其他用户。操作仍可点击。点击后会说明权限原因。"),
       },
     },
   },
