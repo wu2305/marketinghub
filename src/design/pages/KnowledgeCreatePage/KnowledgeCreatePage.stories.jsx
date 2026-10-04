@@ -6,21 +6,29 @@ import { knowledgeCreateTypes, knowledgeCreateModes } from "../../knowledge-crea
 import { callbackProp, enumProp, prop, bi } from "../../lib/story-helpers.js";
 
 export default {
-  title: "Pages", component: KnowledgeCreatePage, tags: ["autodocs"], parameters: { layout: "fullscreen" },
+  title: "Pages", component: KnowledgeCreatePage, tags: ["autodocs"],
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: bi("This page is Knowledge create. It creates or edits one knowledge record. Set `type` to choose the form. Cancel does not save. Cancel returns to the list. For Business Term, Save sets status to Disabled and stage to Draft. Submit sets status to Enabled and stage to Published. The Business Term edit form has no Enable or Disable switch. Save and Submit set the status. Required Business Term fields are Title, Term Type, and Description. Empty required fields show a light red background, a red border, and \"This field is required.\" For Analytical Model, Save sets status to Disabled and stage to Draft. Save always writes Disabled. Submit sets stage to Published. The 21 Sep note for IT keeps the Enable or Disable switch on Submit. The Demo buttons on Analytical Model are Save Draft and Publish & Enable. The note lists Analysis Name, Trigger When, and Output Requirements as required. The Demo also requires Business Domain.", "这是 Knowledge create 页面。它用来创建或编辑一条知识。用 `type` 选择表单。Cancel 不保存，并返回列表。Business Term 的 Save 把 status 设为 Disabled，把 stage 设为 Draft。Submit 把 status 设为 Enabled，把 stage 设为 Published。Business Term 编辑页没有 Enable 或 Disable 开关。状态由 Save 和 Submit 决定。必填字段是 Title、Term Type 和 Description。空的必填字段会显示浅红底、红色边框和 \"This field is required.\"。Analytical Model 的 Save 把 status 设为 Disabled，把 stage 设为 Draft。Save 会强制写成 Disabled。Submit 把 stage 设为 Published。9 月 21 日给 IT 的说明里，Submit 会保留 Enable 或 Disable 开关。Demo 上 Analytical Model 的按钮是 Save Draft 和 Publish & Enable。说明里的必填项是 Analysis Name、Trigger When 和 Output Requirements。Demo 还要求填写 Business Domain。"),
+      },
+    },
+  },
   args: { type: "Business Term", mode: "create", id: "", initial: {}, state: {} },
   argTypes: {
-    type: enumProp(knowledgeCreateTypes, "Business Term", bi("Selected P08 knowledge form.", "当前选中的 P08 知识表单。")),
-    mode: enumProp(knowledgeCreateModes, "create", bi("Create, edit, or copy flow.", "创建、编辑或复制流程。")),
-    id: prop("string", { description: bi("Fixture record id for edit/copy.", "用于编辑/复制的夹具记录 id。") }),
-    initial: prop("object", { description: bi("Starting controlled form values.", "起始的受控表单值。") }),
+    type: enumProp(knowledgeCreateTypes, "Business Term", bi("Knowledge form on this page.", "本页当前的知识表单。")),
+    mode: enumProp(knowledgeCreateModes, "create", bi("Create, edit, or copy.", "创建、编辑或复制。")),
+    id: prop("string", { description: bi("Record id for edit or copy.", "用于编辑或复制的记录 id。") }),
+    initial: prop("object", { description: bi("Starting field values.", "起始字段值。") }),
     state: prop("object", { description: bi("Starting result, dialog, menu, and validation state.", "起始的结果、对话框、菜单与校验状态。") }),
     onNavigate: callbackProp("onNavigate", "({id, params, href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }),
     onTypeChange: callbackProp("onTypeChange", "({value}) => void", { value: "Data Model" }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "New term" }),
-    onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Draft" }, bi("Payload of `useKnowledgeCreateDemo`, which wraps the page: the page itself emits `{type, mode, values}` and the hook adds `id` and `stage`.", "包裹该页面的 `useKnowledgeCreateDemo` 的载荷：页面本身发出 `{type, mode, values}`，hook 再补充 `id` 与 `stage`。")),
-    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Under Review" }, bi("Same payload as `onSave`; Submit enters Under Review (Scenario Reporting: Queued).", "与 `onSave` 相同的载荷；Submit 进入 Under Review（Scenario Reporting：Queued）。")),
-    onCancel: callbackProp("onCancel", "({type}) => void", { type: "Business Term" }),
-    onDiscard: callbackProp("onDiscard", "({type, mode, values}) => void", { type: "Analytical Model", mode: "create", values: { analysis_name: "Draft analysis" } }, bi("Analytical Model: Discard confirmed after Cancel with unsaved changes.", "Analytical Model：有未保存更改时点击 Cancel 后，已确认放弃。")),
+    onSave: callbackProp("onSave", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Draft" }, bi("The function runs on Save. The page sends `{type, mode, values}`. The demo hook adds `id` and `stage`. Save sets Disabled and Draft.", "点击 Save 时会调用这个函数。页面发出 `{type, mode, values}`。demo hook 再补上 `id` 和 `stage`。Save 会写成 Disabled 和 Draft。")),
+    onSubmit: callbackProp("onSubmit", "({type, mode, id, values, stage?}) => void", { type: "Business Term", mode: "create", id: "", values: { title: "New term" }, stage: "Under Review" }, bi("The function runs on Submit. The 21 Sep note for IT says Business Term Submit sets Enabled and Published. The demo hook still sets Under Review for Business Term. Analytical Model Submit in the Demo sets Published. Scenario Reporting Submit sets Queued.", "点击 Submit 时会调用这个函数。9 月 21 日给 IT 的说明里，Business Term 的 Submit 会写成 Enabled 和 Published。demo hook 目前仍把 Business Term 写成 Under Review。Demo 里 Analytical Model 的 Submit 会写成 Published。Scenario Reporting 的 Submit 会写成 Queued。")),
+    onCancel: callbackProp("onCancel", "({type}) => void", { type: "Business Term" }, bi("The function runs on Cancel. Cancel does not save. Cancel returns to the list.", "点击 Cancel 时会调用这个函数。Cancel 不保存，并返回列表。")),
+    onDiscard: callbackProp("onDiscard", "({type, mode, values}) => void", { type: "Analytical Model", mode: "create", values: { analysis_name: "Draft analysis" } }, bi("The function runs after Discard on Analytical Model. That happens when Cancel runs with unsaved changes.", "Analytical Model 确认 Discard 后会调用这个函数。有未保存更改时点击 Cancel 就会走到这一步。")),
     onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "guidance" }),
     onDialogClose: callbackProp("onDialogClose", "({reason}) => void", { reason: "close" }),
     onResultClose: callbackProp("onResultClose", "({reason}) => void", { reason: "close" }),

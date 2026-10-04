@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Business Term library (`?type=Business Term` on the AI Interpreter page) on the governed-library pattern: LibraryToolbar (search, Status/Creator facets, count, Add link), LibraryList cards with synonym chips (three shown, the rest counted), compact pagination, detail drawer, ConfirmDialog and success Toast. `useBusinessTermDemo` owns filtering, lib/governance.js rules and dialogs.", "基于受治理库模式的 Business Term 库（AI Interpreter 页面的 `?type=Business Term`）：LibraryToolbar（搜索、Status/Creator 筛选、数量、Add 链接）、带同义词标签的 LibraryList 卡片（显示三个，其余计数）、紧凑分页、详情抽屉、ConfirmDialog 以及成功 Toast。`useBusinessTermDemo` 负责筛选、lib/governance.js 规则与对话框。"),
+          bi("This component is the Business Term library on AI Interpreter. Open it with `?type=Business Term`. It has search, Status and Creator filters, a count, and Add Business Term. Cards show three synonym chips. Other synonyms are counted in a \"+N\" chip. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Offline knowledge is unavailable for AI use and can be enabled again. Deletion is permanent and cannot be undone. Save keeps knowledge disabled. Submit publishes it for AI use. This library is not Skill Library and not Scenario Reports.", "这是 AI Interpreter 上的 Business Term 库。用 `?type=Business Term` 打开。它有搜索、Status 和 Creator 筛选、数量，以及 Add Business Term。卡片显示三个同义词标签。其余同义词记在 \"+N\" 标签里。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。下线后的知识不能给 AI 用，也可以再启用。删除后不能恢复。Save 会让知识保持停用。Submit 会发布知识，供 AI 使用。这个库不是 Skill Library，也不是 Scenario Reports。"),
       },
     },
   },
@@ -38,8 +38,8 @@ export default {
     }),
     currentUser: prop("string", { defaultValue: "Current User", description: bi("Identity constant — only own records can be managed.", "身份常量：只能管理自己的记录。") }),
     strings: prop("object", { description: bi("All copy: labels, tooltips, dialog text, detail section headings.", "全部文案：标签、提示、对话框文字、详情区块标题。"), control: false }),
-    createHref: prop("string", { description: bi("\"Add Business Term\" link target (M5 create page, not built).", "\"Add Business Term\" 的链接目标（M5 创建页，尚未构建）。") }),
-    editHref: prop("(id: string) => string", { description: bi("Edit target for disabled records (M5 create page, not built) — emitted via onNavigate.", "被禁用记录的编辑目标（M5 创建页，尚未构建），通过 onNavigate 触发。"), control: false }),
+    createHref: prop("string", { description: bi("Add Business Term link target. The link opens Knowledge create.", "Add Business Term 的链接目标。链接会打开 Knowledge create。") }),
+    editHref: prop("(id: string) => string", { description: bi("Edit target for a disabled record. The click runs `onNavigate`.", "被停用记录的编辑目标。点击会调用 `onNavigate`。"), control: false }),
     query: prop("string", { defaultValue: "", description: bi("Initial search text (trimmed lowercase substring over title/description/synonyms/scope/creator).", "初始搜索文字（对 title/description/synonyms/scope/creator 做去空白、小写的子串匹配）。") }),
     selected: prop("{ status: string[], creator: string[] }", { description: bi("Initial filter selections — OR within a filter, AND across.", "初始筛选选择：同一筛选内为 OR，不同筛选之间为 AND。"), control: false }),
     page: prop("number", { defaultValue: 1, description: bi("Initial page (clamped after deletes).", "初始页码（删除后会被限制在有效范围内）。") }),
@@ -56,7 +56,7 @@ export default {
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, bi("Previous/Next page.", "上一页/下一页。")),
     onPageSize: callbackProp("onPageSize", "(event: { pageSize: number }) => void", { pageSize: 20 }, bi("Rows-per-page change; resets to page 1.", "每页条数变化；重置到第 1 页。")),
     onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "business-term-gmv" }, bi("Title button or card click opens the detail drawer.", "点击标题按钮或卡片会打开详情抽屉。")),
-    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "business-term-gmv", blocked: true, reason: "disable-first" }, bi("Every action click; blocked actions report why (pattern B7).", "每次操作点击都会触发；被阻止的操作会回报原因（模式 B7）。")),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "business-term-gmv", blocked: true, reason: "disable-first" }, bi("The function runs on every action click. A blocked click still runs. The result has `reason`.", "每次操作点击都会调用这个函数。被阻止的点击也会调用。结果里有 `reason`。")),
     onClearFilters: callbackProp("onClearFilters", "(event: { reason }) => void", { reason: "empty-state" }, bi("Clear filters from the no-results state.", "在无结果状态下清除筛选。")),
     onCloseDetail: callbackProp("onCloseDetail", "(event: { reason }) => void", { reason: "button" }, bi("Detail drawer dismissed (×, scrim, Escape).", "详情抽屉被关闭（×、遮罩、Escape）。")),
     onDialogConfirm: callbackProp("onDialogConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, bi("Confirm dialog's primary action — runs the pending operation.", "确认对话框的主操作：执行待处理的操作。")),

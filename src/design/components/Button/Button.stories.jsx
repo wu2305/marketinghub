@@ -33,7 +33,7 @@ export default {
       "onClick",
       "(event: { label: string }) => void",
       { label: "Create Campaign Task" },
-      bi("Fired on click. `label` is the `label` prop when set, otherwise the trimmed visible text.", "点击时触发。`label` 在设置了 `label` 属性时取该值，否则取去除首尾空白的可见文字。"),
+      bi("The function runs on click. `label` is the `label` prop when you set it. If you do not set `label`, `label` is the visible text with spaces trimmed.", "点击时会调用这个函数。如果你设置了 `label` 属性，结果里的 `label` 就是它。如果没有设置，`label` 是去掉首尾空白的可见文字。"),
     ),
   },
   render: (args) => <Button {...args} />,

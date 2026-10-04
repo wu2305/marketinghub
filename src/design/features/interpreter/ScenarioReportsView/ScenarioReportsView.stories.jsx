@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Scenario Reporting knowledge type (scenario-reports.js `#scenarioReportOverview`): unified toolbar with Status and Process filters, the gold search pill, the result count and the right-aligned create link, a three-column card grid carrying the Enabled/Disabled pill, both workflow axes and the governed icon actions, and the shared `#knowledgeDetail` slide-in drawer with the availability/workflow title pills and the icon-action footer. The seeded records are all owned by other users, so the action buttons are blocked but remain operable for the permission explanation; with an owned record the disable-first/delete/disable confirm flows become reachable. Driven by `useScenarioDemo` so canvas interactions are live.", "Scenario Reporting 知识类型（scenario-reports.js 的 `#scenarioReportOverview`）：统一工具栏含 Status 与 Process 筛选、金色搜索胶囊、结果数量和右对齐的创建链接；三列卡片网格，带 Enabled/Disabled 胶囊、两条工作流轴和受治理的图标操作；以及共用的 `#knowledgeDetail` 滑入抽屉，含可用性/工作流标题胶囊和图标操作页脚。预置记录都归属其他用户，所以操作按钮被阻止但仍可点击以查看权限说明；对自己名下的记录，则可触达先停用/删除/停用的确认流程。由 `useScenarioDemo` 驱动，因此画布交互是实时的。"),
+          bi("This component is the Scenario Reports library on AI Interpreter. It is a knowledge type. It is not Skill Library, Scenario Detail, or Skill Edit. It has Status and Process filters, search, a count, and Add. Cards show Enabled or Disabled. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Seeded records in this story belong to other users. Their actions stay clickable. The click explains the permission.", "这是 AI Interpreter 上的 Scenario Reports 库。它是一种知识类型。它不是 Skill Library、Scenario Detail 或 Skill Edit。它有 Status 和 Process 筛选、搜索、数量和 Add。卡片显示 Enabled 或 Disabled。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。本故事里的预置记录属于其他用户。操作仍可点击。点击后会说明权限原因。"),
       },
     },
   },
@@ -34,7 +34,7 @@ export default {
     }),
     currentUser: prop("string", { defaultValue: "Current User", description: bi("Identity constant — only own scenarios can be managed.", "身份常量：只能管理自己的场景。") }),
     strings: prop("object", { description: bi("All copy: filters, sections, dialog text, tooltips.", "全部文案：筛选、区块、对话框文字、提示。"), control: false }),
-    createHref: prop("string", { description: bi("\"Add Scenario reporting\" link target (knowledge-create.html, M5 — not built).", "\"Add Scenario reporting\" 的链接目标（knowledge-create.html，M5，尚未构建）。") }),
+    createHref: prop("string", { description: bi("Add Scenario reporting link target. The link opens Knowledge create.", "Add Scenario reporting 的链接目标。链接会打开 Knowledge create。") }),
     query: prop("string", { defaultValue: "", description: bi("Initial search text.", "初始搜索文字。") }),
     filterValues: prop("{ status?: string, process?: string }", { description: bi("Initial select values — single option per filter, like the original `<select>`.", "初始选择值：每个筛选只选一项，与原始的 `<select>` 一致。") }),
     page: prop("number", { defaultValue: 1 }),
@@ -47,7 +47,7 @@ export default {
     onPageSize: callbackProp("onPageSize", "(event: { pageSize }) => void", { pageSize: 20 }, bi("Rows-per-page change; resets to page 1.", "每页条数变化；重置到第 1 页。")),
     onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "scenario-channel-performance" }, bi("Card title activation opens the detail drawer.", "点击卡片标题会打开详情抽屉。")),
     onCloseDetail: callbackProp("onCloseDetail", "(event: { reason }) => void", { reason: "button" }, bi("Drawer dismissed (×, scrim, Escape).", "抽屉被关闭（×、遮罩、Escape）。")),
-    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "disable", id: "scenario-channel-performance", blocked: true, reason: "permission" }, bi("Edit/delete/disable action reports its governance result.", "编辑/删除/停用操作会回报其治理结果。")),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "disable", id: "scenario-channel-performance", blocked: true, reason: "permission" }, bi("The function runs on Edit, Delete, or Disable. A blocked click still runs. The result has `reason`.", "Edit、Delete 或 Disable 时会调用这个函数。被阻止的点击也会调用。结果里有 `reason`。")),
     onDialogConfirm: callbackProp("onDialogConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, bi("Confirm dialog's primary action — runs the pending operation.", "确认对话框的主操作：执行待处理的操作。")),
     onDialogCancel: callbackProp("onDialogCancel", "(event: { reason }) => void", { reason: "cancel" }, bi("Confirm dialog dismissed.", "确认对话框被关闭。")),
     onCreate: callbackProp("onCreate", "(event: { href }) => void", { href: "knowledge-create.html?type=Scenario%20Reporting" }, bi("Add Scenario reporting link activated.", "点击 Add Scenario reporting 链接。")),

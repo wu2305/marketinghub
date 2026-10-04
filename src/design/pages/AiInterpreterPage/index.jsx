@@ -29,26 +29,26 @@ const typeViews = {
 /** @typedef {Partial<Parameters<typeof PrinciplesView>[0]> | Partial<Parameters<typeof BusinessTermView>[0]> | Partial<Parameters<typeof DataModelView>[0]> | Partial<Parameters<typeof FieldLibraryView>[0]> | Partial<Parameters<typeof ScenarioReportsView>[0]>} AiInterpreterView Props of whichever registered view is active. */
 
 /**
- * AI Interpreter knowledge workspace: sidebar type navigation, type overview
- * grid, and per-type views dispatched through the registry.
+ * AI Interpreter knowledge workspace. A composing engineer sets the header,
+ * the header image area, the metric blocks, the type list, and the assistant.
  * @param {object} props
  * @param {string} [props.current="interpreter"]
  * @param {object} props.logo
  * @param {Array<object>} [props.navigation=[]]
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host // 由故事或宿主提供的语义链接解析函数
- * @param {object} [props.hero={}] Hero props; `stats` is an array of MetricStat props // Hero 的 props；`stats` 是 MetricStat props 的数组
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Function that turns a route id into an href. The story or host supplies it. // 把路由 id 转成 href 的函数。由故事或宿主提供。
+ * @param {object} [props.hero={}] Header image area props. `stats` is an array of MetricStat props. // 头图区的 props。`stats` 是 MetricStat props 的数组。
  * @param {{ id: string, label: string, icon?: string }} props.overviewItem
  * @param {string} [props.sidebarTitle]
- * @param {Array<object>} [props.types=[]] knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view) // 知识类型条目（id、title、icon、summary、action、manageable、createLabel、stats、view）
- * @param {AiInterpreterView} [props.view] props for the active registered type (`view` in its `types` entry); other views ignore them // 当前激活的已注册类型的 props（其 `types` 条目中的 `view`）；其他视图会忽略它们
- * @param {React.ReactNode} [props.overlay] independent overlay slot supplied by the demo hook or host // 由 demo hook 或宿主提供的独立覆盖层插槽
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel content/state/callbacks for the knowledge workspace // 知识工作台的 AssistantPanel 内容/状态/回调
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog state/callbacks for the assistant skill actions // 助手技能操作所用的 ModelFlowDialog 状态/回调
- * @param {string} [props.toast=""] transient success message (for example after a form's Submit); empty hides it // 临时成功消息（例如表单 Submit 之后）；为空则隐藏
- * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id (renders an explicit empty state) // "overview"、某个类型 id，或未知 id（渲染明确的空状态）
- * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy shell copy supplied by the host // 由宿主提供的页壳文案
- * @param {(target: { id:string, params: Record<string,string>, href:string, typeId:string }) => void} [props.onNavigate]
- * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType]
+ * @param {Array<object>} [props.types=[]] Knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view). // 知识类型条目（id、title、icon、summary、action、manageable、createLabel、stats、view）。
+ * @param {AiInterpreterView} [props.view] Props for the active registered type (`view` in its `types` entry). Other views ignore them. // 当前激活的已注册类型的 props（其 `types` 条目中的 `view`）。其他视图会忽略它们。
+ * @param {React.ReactNode} [props.overlay] Overlay slot from the demo hook or host. // 由 demo hook 或宿主提供的覆盖层插槽。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Assistant content, state, and callbacks for this workspace. // 这个工作台的助手内容、状态和回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog state and callbacks for skill menu actions. // 技能菜单操作所用的建模对话框状态和回调。
+ * @param {string} [props.toast=""] Short success message. Empty hides it. // 简短成功消息。为空则隐藏。
+ * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id. An unknown id shows an empty state. // "overview"、某个类型 id，或未知 id。未知 id 会显示空状态。
+ * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy Shell copy from the host. // 由宿主提供的页壳文案。
+ * @param {(target: { id:string, params: Record<string,string>, href:string, typeId:string }) => void} [props.onNavigate] The function runs when a link opens another page. // 链接要打开另一页时会调用这个函数。
+ * @param {(event: { id: string, label: string, typeId: string }) => void} [props.onSelectType] The function runs when a knowledge type is selected. // 选中一种知识类型时会调用这个函数。
  */
 export function AiInterpreterPage({
   current = "interpreter",

@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Field-mapping libraries (Report Context, Metric Dictionary, Analytical Model, Email Reports) on the governed-library pattern: LibraryToolbar, LibraryList cards (per-type fields and chip row), compact pagination, the per-type detail drawer, the Report Context description editor and a success Toast. `useFieldLibraryDemo` owns normalization, filters and lib/governance.js rules.", "基于受治理库模式的字段映射库（Report Context、Metric Dictionary、Analytical Model、Email Reports）：LibraryToolbar、LibraryList 卡片（各类型字段与标签行）、紧凑分页、各类型详情抽屉、Report Context 描述编辑器以及成功 Toast。`useFieldLibraryDemo` 负责规范化、筛选与 lib/governance.js 规则。"),
+          bi("This component shows four knowledge libraries on AI Interpreter. The types are Report Context, Metric Dictionary, Analytical Model, and Email Reports. Analytical Model has Edit, Delete, and Disable. A blocked action stays clickable. The result has `reason`. Take knowledge offline before you edit or delete it. Only knowledge created by you can be managed. Report Context can edit the description without that gate. This view is not Scenario Reports and not Skill Library.", "这个组件显示 AI Interpreter 上的四个知识库。类型是 Report Context、Metric Dictionary、Analytical Model 和 Email Reports。Analytical Model 有 Edit、Delete 和 Disable。被阻止的操作仍可点击。结果里有 `reason`。编辑或删除前要先把知识下线。只有你自己创建的知识才能管理。Report Context 编辑描述不受这个限制。这个视图不是 Scenario Reports，也不是 Skill Library。"),
       },
     },
   },
@@ -39,7 +39,7 @@ export default {
     }),
     currentUser: prop("string", { defaultValue: "Current User", description: bi("Identity constant — only own Analytical Model records can be managed.", "身份常量：只能管理自己的 Analytical Model 记录。") }),
     strings: prop("object", { description: bi("All copy: search/filter labels, card labels, drawer section headings, dialog text, tooltips.", "全部文案：搜索/筛选标签、卡片标签、抽屉区块标题、对话框文字、提示。"), control: false }),
-    createHref: prop("string", { description: bi("\"Add Analytical Model\" link target (knowledge-create.html, M5 — not built).", "\"Add Analytical Model\" 的链接目标（knowledge-create.html，M5，尚未构建）。") }),
+    createHref: prop("string", { description: bi("Add Analytical Model link target. The link opens Knowledge create.", "Add Analytical Model 的链接目标。链接会打开 Knowledge create。") }),
     editHref: prop("(id: string) => string", { description: bi("AM edit target — emitted via onNavigate.", "AM 编辑目标，通过 onNavigate 触发。"), control: false }),
     dashboardHref: prop("string", { description: bi("RC drawer \"Open Dashboard\" link target.", "RC 抽屉中 \"Open Dashboard\" 的链接目标。") }),
     scenarioHref: prop("(id: string) => string", { description: bi("RC drawer linked-scenario chip href builder.", "RC 抽屉中关联场景标签的 href 生成函数。"), control: false }),
@@ -60,7 +60,7 @@ export default {
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, bi("Previous/Next page.", "上一页/下一页。")),
     onPageSize: callbackProp("onPageSize", "(event: { pageSize: number }) => void", { pageSize: 20 }, bi("Rows-per-page change; resets to page 1.", "每页条数变化；重置到第 1 页。")),
     onOpen: callbackProp("onOpen", "(event: { id }) => void", { id: "city-report-context" }, bi("Title button or card click opens the detail drawer.", "点击标题按钮或卡片会打开详情抽屉。")),
-    onAction: callbackProp("onAction", "(event: { action, id, blocked?, reason? }) => void", { action: "edit", id: AM_ID, blocked: false, reason: null }, bi("Analytical Model actions (blocked ones report why, pattern B7), or the RC drawer's edit-description pencil (action \"edit-description\").", "Analytical Model 操作（被阻止的会回报原因，模式 B7），或 RC 抽屉的编辑描述铅笔按钮（操作名 \"edit-description\"）。")),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked?, reason? }) => void", { action: "edit", id: AM_ID, blocked: false, reason: null }, bi("The function runs on an Analytical Model action. It also runs on the Report Context pencil. That pencil action is `edit-description`. A blocked click still runs.", "Analytical Model 的操作会调用这个函数。Report Context 的铅笔按钮也会调用。那个操作名是 `edit-description`。被阻止的点击也会调用。")),
     onClearFilters: callbackProp("onClearFilters", "(event: { reason }) => void", { reason: "empty-state" }, bi("Clear filters from the no-results state.", "在无结果状态下清除筛选。")),
     onCloseDetail: callbackProp("onCloseDetail", "(event: { reason }) => void", { reason: "button" }, bi("Detail drawer dismissed (×, scrim, Escape, Close button).", "详情抽屉被关闭（×、遮罩、Escape、Close 按钮）。")),
     onDialogConfirm: callbackProp("onDialogConfirm", "(event: { confirmed: true }) => void", { confirmed: true }, bi("Confirm dialog's primary action — runs the pending operation.", "确认对话框的主操作：执行待处理的操作。")),

@@ -8,7 +8,14 @@ export default {
   title: "Pages",
   component: AiInterpreterPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: bi("This page is AI Interpreter. It is the knowledge workspace. A composing engineer sets the header, the header image area, the metric blocks, the type list, and the assistant. The overview shows eight knowledge types. Set `activeType` to open one type. Business Terms, Analytical Models, and Scenario Reports show a `!` icon under the metric block. The icon aligns with the right edge of the metric block. Hover or keyboard focus opens a tip above the icon. The tip can overflow the header image area. The tip does not cover Add. The tip lines are: Only knowledge created by you can be managed. Take knowledge offline before editing or deleting it. Offline knowledge is unavailable for AI use and can be enabled again. Deletion is permanent and cannot be undone. Save keeps knowledge disabled; Submit publishes it for AI use. Scenario Reports on this page is a knowledge type. It is not Skill Library, Scenario Detail, or Skill Edit.", "这是 AI Interpreter 页面，也是知识工作台。组合页面时，设置页头、头图区、指标块、类型列表和助手。概览显示八类知识。用 `activeType` 打开其中一类。Business Terms、Analytical Models 和 Scenario Reports 会在指标块下方显示 `!` 图标。图标和指标块右边缘对齐。鼠标悬停或键盘聚焦时，提示框从图标上方展开。头图区允许提示框溢出。提示框不会挡住 Add。提示文案是：Only knowledge created by you can be managed. Take knowledge offline before editing or deleting it. Offline knowledge is unavailable for AI use and can be enabled again. Deletion is permanent and cannot be undone. Save keeps knowledge disabled; Submit publishes it for AI use. 本页的 Scenario Reports 是一种知识类型。它不是 Skill Library、Scenario Detail 或 Skill Edit。"),
+      },
+    },
+  },
 };
 
 export const Interpreter = {
@@ -36,8 +43,8 @@ export const Interpreter = {
     assistant: { ...INTERPRETER.assistant, open: false, prompt: "" },
   },
   argTypes: {
-    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
-    activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", bi("Selected knowledge view; unknown-type is a fallback contract probe.", "当前选中的知识视图；unknown-type 是用于回退约定的探针。")),
+    hrefFor: { control: false, description: bi("Set this function to turn a route id into an href. The story and the host supply it.", "用这个函数把路由 id 转成 href。由故事或宿主提供。") },
+    activeType: enumProp(["overview", "unknown-type", ...INTERPRETER.types.map((type) => type.id)], "overview", bi("Selected knowledge view. `unknown-type` shows the empty unknown state.", "当前选中的知识视图。`unknown-type` 会显示未知类型的空状态。")),
     onNavigate: { action: "onNavigate" },
     onSelectType: { action: "onSelectType" },
     onQueryChange: { action: "onQueryChange" },
@@ -62,8 +69,8 @@ export const Interpreter = {
     onOpenTable: { action: "onOpenTable" },
     onCloseTable: { action: "onCloseTable" },
     onDrawerTab: { action: "onDrawerTab" },
-    notice: enumProp(["", "submitted"], "", bi("Arrival notice key (the host's ?notice=); `submitted` shows the Submitted-for-review toast.", "到达页面时的提示键（宿主的 ?notice=）；`submitted` 会显示 Submitted-for-review 的 Toast。")),
-    assistant: { control: "object", description: bi("Knowledge workspace assistant content, state and named callbacks; useInterpreterDemo owns the local flow.", "知识工作台助手的内容、状态与具名回调；本地流程由 useInterpreterDemo 负责。") },
+    notice: enumProp(["", "submitted"], "", bi("Arrival notice key from the host `?notice=`. `submitted` shows the Submitted-for-review toast.", "到达页面时的提示键，来自宿主的 `?notice=`。`submitted` 会显示 Submitted-for-review 的 Toast。")),
+    assistant: { control: "object", description: bi("Assistant content, state, and named callbacks. `useInterpreterDemo` owns the local flow.", "助手的内容、状态和具名回调。本地流程由 `useInterpreterDemo` 负责。") },
   },
   render: function InterpreterStory(args) {
     const [activeType, setActiveType] = useSynced(args.activeType);

@@ -17,12 +17,12 @@ export default {
   argTypes: {
     status: prop("string", {
       defaultValue: "draft",
-      description: bi("Visible label; auto tone recognizes exact known states and keeps unknown labels neutral.", "可见标签；auto 色调会识别确切的已知状态，未知标签保持中性。"),
+      description: bi("Visible label. If `tone` is `auto`, this text selects the color. Unknown text uses neutral.", "可见标签。`tone` 为 `auto` 时，这段文字决定颜色。未知文字用 neutral。"),
       control: "text",
     }),
     variant: enumProp(statusBadgeVariants, "default", bi("The default variant changes width with the text. The knowledge variant keeps a fixed position on the card. The detail variant changes width with the text.", "default 的宽度随文字变化。knowledge 在卡片上占一个固定位置。detail 的宽度随文字变化。")),
     size: enumProp(statusBadgeSizes, "sm", bi("lg makes every variant 32px high; sm keeps each variant's compact shape.", "lg 使所有变体高度为 32px；sm 保持各变体的紧凑形态。")),
-    tone: enumProp(statusBadgeTones, "auto", bi("Explicit semantic tone across all variants, or exact known-state mapping with knowledge/detail availability colors in auto mode.", "对所有变体显式指定语义色调；auto 模式下则按确切已知状态映射到知识/详情可用性配色。")),
+    tone: enumProp(statusBadgeTones, "auto", bi("Set the color. If `tone` is `auto`, the label text selects the color. If you set `tone`, the component does not use the text to select the color.", "设置颜色。`tone` 为 `auto` 时，标签文字决定颜色。如果你自己设置了 `tone`，组件就不再用文字来选颜色。")),
     outline: prop("boolean", { defaultValue: false, description: bi("Outline variant.", "描边变体。") }),
     children: prop("React.ReactNode", { description: bi("Overrides `status` as the visible label.", "覆盖 `status` 作为可见标签。"), control: "text" }),
   },
