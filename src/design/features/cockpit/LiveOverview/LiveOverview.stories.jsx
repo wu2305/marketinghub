@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Generic live overview: KPI cards, primary/comparison bar chart, and the \"Leading views\" rank list (first five chart rows, original chart order).", "通用的实时概览：KPI 卡片、主/对比柱状图，以及 \"Leading views\" 排名列表（取图表前五行，保持原图表顺序）。"),
+          bi("This component is the live report overview on Marketing Cockpit. It shows metric cards. It shows a primary and comparison column chart. It also shows a Leading views rank list. The rank list uses the first five rows of `chart`. The order stays the same as `chart`.", "这是 Marketing Cockpit 上的实时报表概览。它显示指标卡片。它显示主柱与对比柱的柱状图。它还显示 Leading views 排名列表。排名列表取 `chart` 的前五行。顺序与 `chart` 相同。"),
       },
     },
   },

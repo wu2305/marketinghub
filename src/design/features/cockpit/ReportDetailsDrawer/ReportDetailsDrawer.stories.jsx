@@ -10,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Report details drawer: right-side panel with thumbnail, meta, knowledge pills and the report's AI analysis scenarios. Internal state (fullscreen, selected scenario, view-more expansion) resets per `resetKey`.", "报表详情抽屉：右侧面板，含缩略图、元信息、知识标签以及该报表的 AI 分析场景。内部状态（全屏、选中场景、查看更多展开）会随 `resetKey` 重置。"),
+          bi("This component is the report details drawer on Marketing Cockpit. It shows a thumbnail, meta, knowledge pills, and AI analysis scenarios. The first three scenarios are visible. The user can click view more to show the rest. Fullscreen, the selected scenario, and view more reset when `resetKey` changes. The function `onClose` runs when the drawer closes. The function `onOpenLive` runs when the user clicks Open Dashboard.", "这是 Marketing Cockpit 上的报表详情抽屉。它显示缩略图、元信息、知识标签和 AI 分析场景。默认可见前三个场景。用户点击 view more 会显示其余场景。全屏、选中场景和 view more 会在 `resetKey` 变化时重置。抽屉关闭时会调用 `onClose`。用户点击 Open Dashboard 时会调用 `onOpenLive`。"),
       },
     },
   },

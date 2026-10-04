@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Task queue rows with an outline StatusBadge.", "带描边 StatusBadge 的任务队列行。"),
+        component: bi("This component is a task queue on Campaign. Each row shows an outline status badge, a title, and a detail line.", "这是 Campaign 上的任务队列。每一行显示描边状态标签、标题和一行说明。"),
       },
     },
   },

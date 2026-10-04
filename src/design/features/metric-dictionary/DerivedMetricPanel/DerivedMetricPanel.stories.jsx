@@ -7,7 +7,7 @@ export default {
   title: "Features/Metric Dictionary/Derived Metric Panel",
   component: DerivedMetricPanel,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: bi("P10 derived metric drawer: controlled form fields, basic metric references, token formula toolbar, test, constant dialog, and Save callbacks. The story writes field and formula changes back to the canvas.", "P10 派生指标抽屉：受控表单字段、基础指标引用、token 公式工具栏、测试、常量对话框以及 Save 回调。故事会把字段与公式的变化回写到画布。") } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("This component is the derived metric drawer on Metric Dictionary. The user can edit domain, name, unit, description, synonyms, and whether the metric is enabled. The user can add basic metrics and operators to a formula. Test and Save are callbacks. The host owns the formula tokens. Set `constantOpen` to show the constant dialog.", "这是 Metric Dictionary 上的派生指标抽屉。用户可以编辑域、名称、单位、说明、同义词，以及该指标是否启用。用户可以把基础指标和运算符加入公式。Test 和 Save 都是回调。公式 token 由宿主保存。设置 `constantOpen` 可打开常量对话框。") } } },
   args: {
     open: true,
     copy: METRIC_DICTIONARY.derivedPanel,

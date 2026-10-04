@@ -10,7 +10,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Live report shell: back-to-library toolbar, kicker/title heading, live panel.", "实时报表外壳：返回报表库的工具栏、眉标/标题头部、实时面板。"),
+        component: bi("This component is the live report shell on Marketing Cockpit. It shows a sticky back bar, a kicker, the report title, and a panel. Put `LiveOverview` or `CityInvestDashboard` in `children`. The back control is `<a href>`. The function `onBack` runs on a plain click. The result has `href`.", "这是 Marketing Cockpit 上的实时报表外壳。它显示一条贴顶的返回栏、眉标、报表标题和一块面板。把 `LiveOverview` 或 `CityInvestDashboard` 放进 `children`。返回控件是 `<a href>`。普通点击会调用 `onBack`。结果里带有 `href`。"),
       },
     },
   },

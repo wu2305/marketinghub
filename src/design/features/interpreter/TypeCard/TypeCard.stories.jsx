@@ -10,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Knowledge-type card in the overview grid. `manageable` flips read-only vs manage styling; `art` picks one of 8 baked background images (0–7).", "概览网格中的知识类型卡片。`manageable` 切换只读与可管理样式；`art` 选择 8 张内置背景图之一（0–7）。"),
+          bi("This component is one knowledge-type card on the AI Interpreter overview. It shows a title, a count, a summary, and an action line. Set `manageable` for the manage style. If you do not set `manageable`, the card uses the read-only style. Set `art` to pick one of eight background images (0–7). The function `onSelect` runs when the user clicks the card. The result has `title`.", "这是 AI Interpreter 概览里的一张知识类型卡片。它显示标题、数量、摘要和一行操作。设置 `manageable` 会使用可管理样式。不设置 `manageable` 时使用只读样式。用 `art` 选择八张背景图之一（0–7）。用户点击卡片时会调用 `onSelect`。结果里带有 `title`。"),
       },
     },
   },

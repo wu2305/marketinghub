@@ -3,7 +3,7 @@ import { SKILL_LIBRARY } from "../../../demo/content/skill-library.js";
 import { callbackProp, bi } from "../../../lib/story-helpers.js";
 import { SkillDetail } from "./index.jsx";
 
-export default { title: "Features/ScenarioLibrary/SkillDetail", component: SkillDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Skill detail drawer containing governance, five structure blocks, example preview and source-visible actions.", "Skill 详情抽屉：包含治理信息、五个结构块、示例预览以及源页面可见的操作。") } } } };
+export default { title: "Features/ScenarioLibrary/SkillDetail", component: SkillDetail, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This component is the skill detail drawer on Skill Library. It shows status, scope, version, purpose, governance, five structure blocks, and an example preview. The footer has Edit Scenario and Delete. Set `skill` to open the drawer. Set `skill` to `null` to close it. The function `onCancel` runs when the drawer closes. The function `onOpen` runs when the user clicks Edit Scenario. The function `onClick` runs when the user clicks Delete. The page confirms the delete.", "这是 Skill Library 上的技能详情抽屉。它显示状态、范围、版本、用途、治理信息、五个结构块和示例预览。页脚有 Edit Scenario 和 Delete。设置 `skill` 会打开抽屉。把 `skill` 设为 `null` 会关闭抽屉。抽屉关闭时会调用 `onCancel`。用户点击 Edit Scenario 时会调用 `onOpen`。用户点击 Delete 时会调用 `onClick`。删除确认由页面完成。") } } } };
 export const Default = {
   args: { skill: SKILL_LIBRARY.records[0], labels: SKILL_LIBRARY.labels, previewOpen: false },
   argTypes: {

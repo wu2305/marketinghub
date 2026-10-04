@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Principles library (`?type=Principles`) on the governed-library pattern: LibraryToolbar (search, Category facet, \"Showing X of Y\" count), read-only LibraryList cards whose long descriptions expand in place, compact Pagination. List states (filtered, empty, paged) are shown by the Organisms/Library stories.", "基于受治理库模式的 Principles 库（`?type=Principles`）：LibraryToolbar（搜索、Category 筛选、\"Showing X of Y\" 数量）、长描述可原地展开的只读 LibraryList 卡片，以及紧凑分页。列表状态（筛选后、空、分页）在 Organisms/Library 故事中展示。"),
+          bi("This component is the Principles library on AI Interpreter. The user can search. The user can filter by Category. The toolbar shows a Showing X of Y count. Each card is read-only. A long description can expand on the card. Compact pagination sits under the list. There is no status badge, no item action, and no create control. Set `items` to the current page of rows. The host filters, pages, and stores which descriptions are open.", "这是 AI Interpreter 上的 Principles 库。用户可以搜索。用户可以按 Category 筛选。工具栏显示 Showing X of Y 数量。每张卡片是只读的。长描述可以在卡片上展开。列表下方是紧凑分页。没有状态标签，没有条目操作，也没有创建控件。把当前页的行传入 `items`。筛选、分页和展开状态由宿主保存。"),
       },
     },
   },

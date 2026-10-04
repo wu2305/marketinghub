@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Overview grid of TypeCard for the eight knowledge types.", "概览网格，包含八种知识类型的 TypeCard。"),
+        component: bi("This component is the overview grid on AI Interpreter. It shows one `TypeCard` for each of the eight knowledge types. Set `activeId` for the selected type. The function `onSelect` runs when the user clicks a card. The result has `id` and `title`.", "这是 AI Interpreter 上的概览网格。八种知识类型各显示一张 `TypeCard`。用 `activeId` 设置当前选中的类型。用户点击卡片时会调用 `onSelect`。结果里带有 `id` 和 `title`。"),
       },
     },
   },

@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Horizontal execution-status strip (label / caption / value cells).", "横向的执行状态条（标签 / 说明 / 数值单元格）。"),
+        component: bi("This component is a horizontal status row on Campaign. Each cell has a label, an optional caption, and a value.", "这是 Campaign 上的横向状态条。每个单元格有标签、可选说明和数值。"),
       },
     },
   },

@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Cockpit catalog: category groups of ProjectCard.", "Cockpit 目录：按分类分组的 ProjectCard。"),
+        component: bi("This component is the project catalog on Marketing Cockpit. It groups `ProjectCard` by category. Each group has a title. The function `onOpen` runs when the user opens a project card. The result has `title` and the project `id`.", "这是 Marketing Cockpit 上的项目目录。它按分类分组显示 `ProjectCard`。每个分组有一个标题。用户打开项目卡片时会调用 `onOpen`。结果里带有 `title` 和项目的 `id`。"),
       },
     },
   },

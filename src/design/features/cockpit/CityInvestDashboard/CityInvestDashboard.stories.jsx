@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("City-invest analysis embed. Filter state stays local and uncontrolled — seeded from `defaultFilters`, every change regenerates the scenario via `getScenario(filters)` and briefly dims the canvas, matching `initCityInvestDashboard`. All data and visible copy arrive via props.", "City Invest 分析嵌入。筛选状态保持局部、非受控：由 `defaultFilters` 初始化，每次变化都会通过 `getScenario(filters)` 重新生成场景并短暂淡化画布，与 `initCityInvestDashboard` 一致。所有数据和可见文案均通过 props 传入。"),
+          bi("This component is the City Invest analysis on Marketing Cockpit. The user can change the end period, channel, pilot cities, and stores. Filter state stays inside the component. Set `defaultFilters` for the first values. After each change, the component calls `getScenario` with the filters. The canvas dims for a short time. All labels and data come from props. The function `onFiltersChange` runs after each change.", "这是 Marketing Cockpit 上的 City Invest 分析。用户可以改结束周期、渠道、试点城市和门店。筛选状态留在组件内部。用 `defaultFilters` 设置初始值。每次变化后，组件用这些筛选调用 `getScenario`。画布会短暂变淡。所有标签和数据都来自 props。每次变化都会调用 `onFiltersChange`。"),
       },
     },
   },

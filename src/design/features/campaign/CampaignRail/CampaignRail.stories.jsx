@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("RedNote Campaign Tool left rail: numbered view navigation.", "RedNote Campaign Tool 左侧栏：带编号的视图导航。"),
+        component: bi("This component is the left rail on Campaign. It shows a header and numbered view buttons. Set `current` to the active item `id`. The function `onSelect` runs when the user clicks an item. The result has `id` and `label`.", "这是 Campaign 的左侧栏。它显示页头和带编号的视图按钮。把 `current` 设为当前项的 `id`。用户点击某一项时会调用 `onSelect`。结果里带有 `id` 和 `label`。"),
       },
     },
   },

@@ -15,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Report Copilot workspace: fixed right drawer on the live report view. Start view = AI summary card + scenario recommendations; an open answer or chat exchange swaps in the answer view with context-dock shortcuts. Chat and answer content are controlled props — the host owns the deterministic AI simulation.", "Report Copilot 工作区：位于实时报表视图右侧的固定抽屉。起始视图为 AI 摘要卡片加场景推荐；打开某个回答或进行对话后切换为带上下文快捷入口的回答视图。对话与回答内容是受控 props，确定性的 AI 模拟由宿主负责。"),
+          bi("This component is the report Copilot on Marketing Cockpit. It is a drawer on the right of the live report. The start view shows an AI summary card and scenario recommendations. After the user opens an answer or sends a question, the drawer shows the answer view. Chat and answer text come from props. The host supplies that text. Set `stream` if the answer should appear in steps.", "这是 Marketing Cockpit 上的报表 Copilot。它是实时报表右侧的抽屉。起始视图显示一张 AI 摘要卡片和场景推荐。用户打开某个回答或发出问题后，抽屉切到回答视图。对话和回答的文字来自 props。这些文字由宿主提供。如果回答需要逐步出现，就设置 `stream`。"),
       },
     },
   },
@@ -26,7 +26,7 @@ export const Default = {
   argTypes: {
     project: { control: "select", options: Object.keys(COCKPIT.projects) },
     index: { control: { type: "number", min: 0, max: 1 } },
-    contextHref: { control: "text", description: bi("Fallback knowledge destination for chat entries without a linked source.", "没有关联来源的对话条目所使用的回退知识目的地。") },
+    contextHref: { control: "text", description: bi("Fallback link for a chat entry that has no linked source.", "没有关联来源的对话条目所使用的回退链接。") },
     onClose: { action: "onClose" },
     onBack: { action: "onBack" },
     onNewSession: { action: "onNewSession" },
