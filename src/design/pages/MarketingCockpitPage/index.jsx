@@ -74,35 +74,35 @@ export const cockpitViews = ["catalog", "live"];
  * a `project` id switches to the project directory with report rows. Search
  * covers project fields plus linked knowledge titles, mirroring the original.
  * @param {object} props
- * @param {string} [props.current="cockpit"]
- * @param {object} props.logo
- * @param {Array<object>} [props.navigation=[]]
- * @param {object} [props.hero={}] Hero props // Hero 的 props
- * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details. // 用于目录、目录列表、实时页头与详情的页面文案。
- * @param {string} [props.query=""] catalog search text // 目录搜索文字
- * @param {Array<{ id: string, label: string }>} [props.groups=[]] category groups // 分类分组
- * @param {Record<string, CockpitProject>} [props.projects={}] project records keyed by id // 按 id 索引的项目记录
- * @param {string} [props.project="all"] active catalog project id or "all" // 当前激活的目录项目 id，或 "all"
- * @param {"catalog"|"live"} [props.view="catalog"] catalog or live dashboard view; advisory only — the original opens live whenever `dashboard` is present and rewrites `view=live` into the URL // 目录或实时仪表盘视图；仅作参考：原始 Demo 只要存在 `dashboard` 就会打开实时视图，并把 `view=live` 写入 URL
- * @param {number|string|null} [props.dashboard=null] live report index (raw param value); present ⇒ live view // 实时报表索引（原始参数值）；存在即为实时视图
- * @param {{ project: string, index: number }|null} [props.details=null] open report details drawer target // 打开报表详情抽屉的目标
- * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] static drawer asset sections // 静态的抽屉资产分区
- * @param {CockpitKnowledgeAsset[]} [props.knowledge=[]] knowledge assets used for report knowledge counts, search text and context links // 用于报表知识计数、搜索文字与上下文链接的知识资产
- * @param {object} [props.cityInvest] CityInvestDashboard props (copy/periods/options/kpis/…/getScenario); required for reports with `embed: "city-invest"` // CityInvestDashboard 的 props（copy/periods/options/kpis/…/getScenario）；对 `embed: "city-invest"` 的报表必填
- * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor semantic route resolver supplied by story or host // 由故事或宿主提供的语义路由解析函数
- * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
- * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
- * @param {(target: { id: string, href: string }) => void} [props.onOpenProject]
- * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport]
- * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails]
- * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails]
- * @param {(target: { href?: string }) => void} [props.onOpenLive]
- * @param {(target: { project: string, href: string }) => void} [props.onBack] live view back-to-library // 实时视图中返回报表库
- * @param {CockpitWorkspace} [props.workspace] ReportCopilot props (report-scoped aiWorkspace) // ReportCopilot 的 props（按报表范围的 aiWorkspace）
- * @param {boolean} [props.workspaceOpen=false]
- * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] live view AI launcher (Report Copilot) // 实时视图中的 AI 启动器（Report Copilot）
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props // AssistantPanel 的 props
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `{ step }` required to render // ModelFlowDialog 的 props；必须提供 `{ step }` 才会渲染
+ * @param {string} [props.current="cockpit"] Active nav id. // 当前导航 id。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {Array<object>} [props.navigation=[]] Header links. // 页头链接。
+ * @param {object} [props.hero={}] Header image area. // 头图区。
+ * @param {{ liveReportLabel: string, searchLabel: string, imageAltSuffix: string, dashboardUnit: string, assetUnit: string, updatedFallback: string, catalogBackLabel: string, emptyTitle: string, emptyDescription: string, meta: { owner: string, cadence: string, updated: string, knowledge: string } }} props.copy Page copy used in catalog, directory, live header and details. // 用于目录、项目列表、实时页头和详情的页面文案。
+ * @param {string} [props.query=""] Catalog search text. // 目录搜索文字。
+ * @param {Array<{ id: string, label: string }>} [props.groups=[]] Category groups. // 分类分组。
+ * @param {Record<string, CockpitProject>} [props.projects={}] Project records keyed by id. // 按 id 索引的项目记录。
+ * @param {string} [props.project="all"] Active catalog project id, or `"all"`. // 当前目录项目的 id，或 `"all"`。
+ * @param {"catalog"|"live"} [props.view="catalog"] Catalog or live view. A set `dashboard` opens the live report. // 目录或实时视图。设置了 `dashboard` 就会打开实时报表。
+ * @param {number|string|null} [props.dashboard=null] Live report index. When this value is set, the live view opens. // 实时报表索引。设置了这个值就会打开实时视图。
+ * @param {{ project: string, index: number }|null} [props.details=null] Open report details drawer. // 打开的报表详情抽屉。
+ * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] Static drawer asset sections. // 抽屉里的静态资产分区。
+ * @param {CockpitKnowledgeAsset[]} [props.knowledge=[]] Knowledge assets used for report counts, search text, and context links. // 用于报表计数、搜索文字和上下文链接的知识资产。
+ * @param {object} [props.cityInvest] City Invest dashboard data. Required for reports with `embed: "city-invest"`. // City Invest 仪表盘数据。带 `embed: "city-invest"` 的报表需要它。
+ * @param {(id: string, params?: Record<string,string>) => string} props.hrefFor Turns a route id into an href. The story and the host each supply this function. // 把路由 id 转成 href。故事和宿主各自提供这个函数。
+ * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate] The function runs when a link opens another page. The result has `id`, `params`, and `href`. // 链接要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange] The function runs at each change in catalog search. The result has `name` and `value`. // 目录搜索每次变化都会调用这个函数。结果里有 `name` 和 `value`。
+ * @param {(target: { id: string, href: string }) => void} [props.onOpenProject] The function runs when the user opens a project directory. The result has `id` and `href`. // 用户打开项目目录时，会调用这个函数。结果里有 `id` 和 `href`。
+ * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport] The function runs when the user opens a live report. The result has `project`, `index`, and `href`. // 用户打开实时报表时，会调用这个函数。结果里有 `project`、`index` 和 `href`。
+ * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails] The function runs when the user opens the report details drawer. The result has `project`, `index`, and `href`. // 用户打开报表详情抽屉时，会调用这个函数。结果里有 `project`、`index` 和 `href`。
+ * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails] The function runs when the user closes the details drawer. The result has `reason`. // 用户关闭详情抽屉时，会调用这个函数。结果里有 `reason`。
+ * @param {(target: { href?: string }) => void} [props.onOpenLive] The function runs when the details drawer opens the live report. // 详情抽屉要打开实时报表时，会调用这个函数。
+ * @param {(target: { project: string, href: string }) => void} [props.onBack] The function runs when the live view returns to the catalog. The result has `project` and `href`. // 实时视图返回目录时，会调用这个函数。结果里有 `project` 和 `href`。
+ * @param {CockpitWorkspace} [props.workspace] Report Copilot copy, state, and callbacks. // Report Copilot 的文案、状态和回调。
+ * @param {boolean} [props.workspaceOpen=false] Set true to open Report Copilot. // 设为 true 时打开 Report Copilot。
+ * @param {(event: { reason: "open" }) => void} [props.onOpenWorkspace] The function runs when the user opens Report Copilot. The result has `reason: "open"`. // 用户打开 Report Copilot 时，会调用这个函数。结果里的 `reason` 是 `"open"`。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Corner assistant copy, state, and callbacks. // 角落助手的文案、状态和回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog props. The dialog shows when `skillFlow.step` is set. // 建模对话框的 props。设置了 `skillFlow.step` 时显示对话框。
  */
 export function MarketingCockpitPage({
   current = "cockpit",

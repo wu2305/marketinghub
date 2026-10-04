@@ -29,48 +29,48 @@ export const campaignChannels = ["rednote", "douyin"];
  * analytics, accounts) plus the assistant drawer. All section data arrives via
  * props; the original switches sections via location.hash.
  * @param {object} props
- * @param {string} [props.current="campaign"]
- * @param {object} props.logo
- * @param {Array<object>} [props.navigation=[]]
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel props // AssistantPanel 的 props
- * @param {object} [props.rail={ items: [] }] CampaignRail props // CampaignRail 的 props
- * @param {Array<{ id: string, label: string }>} [props.channels=[]] overview channel tabs // 概览页的渠道标签页
- * @param {Array<object>} [props.metrics=[]] overview MetricStat props // 概览页的 MetricStat props
- * @param {Array<object>} [props.distribution=[]] ProgressList items // ProgressList 的条目
- * @param {Array<object>} [props.objectives=[]] ProgressList items // ProgressList 的条目
- * @param {Array<object>} [props.accountColumns=[]] DataTable columns // DataTable 的列
- * @param {Array<object>} [props.accountRows=[]] DataTable rows // DataTable 的行
- * @param {{ channelViewAria: string, objectiveChartAria: string, accountSearch: string, filterLabel: string, resetLabel: string, accountCaption: (count: number) => string }} props.labels Page control copy and accessible names. // 页面控件文案与无障碍名称。
- * @param {Object<string, { eyebrow?: string, title?: string, description?: string, action?: string, badge?: string, status?: string }>} [props.headings={}] per-section headings and section action/status copy // 各分区的标题以及分区操作/状态文案
- * @param {Object<string, object>} [props.panels={}] per-section panel copy // 各分区面板的文案
- * @param {Array<object>} [props.executionSummary=[]] SummaryStrip items // SummaryStrip 的条目
- * @param {Array<object>} [props.taskQueue=[]] TaskList items // TaskList 的条目
- * @param {{ columns: Array<object>, rows: Array<object> }} [props.actionLog]
- * @param {Array<object>} [props.creativeColumns=[]]
- * @param {Array<object>} [props.creatives=[]]
- * @param {Array<object>} [props.efficiency=[]] ProgressList items // ProgressList 的条目
- * @param {Array<object>} [props.recommendations=[]] recommendation card contents // 推荐卡片内容
- * @param {Array<object>} [props.bindingColumns=[]]
- * @param {Array<object>} [props.accounts=[]]
- * @param {{ eyebrow?: string, title?: string, description?: string, fields?: { actionLabel?: string, actions?: Array<string|object>, platformLabel?: string, platforms?: Array<string|object>, accountLabel?: string, accounts?: Array<string|object> }, object?: { label?: string, value?: string }, preview?: { eyebrow?: string, state?: string, note?: string }, cancelLabel?: string, submitLabel?: string }} [props.taskDialog={}] Create Campaign Task dialog fields and action copy. // Create Campaign Task 对话框的字段与操作文案。
- * @param {boolean} [props.taskDialogOpen=false]
- * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values; the demo hook preserves them across dialog closes. // 受控的草稿值；demo hook 会在对话框关闭后保留它们。
- * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] field edits; `draft` is the next full draft // 字段编辑；`draft` 是下一版完整草稿
- * @param {{ open?: boolean, message?: string }} [props.toast={}] action toast state // 操作 Toast 状态
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog // ModelFlowDialog 的 props；`skillFlow.step` 为真时渲染建模对话框
- * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"]
- * @param {"rednote"|"douyin"} [props.channel="rednote"]
- * @param {string} [props.query=""] account search text // 账户搜索文字
- * @param {(target: object) => void} [props.onNavigate]
- * @param {(event: { id: string, label: string }) => void} [props.onSectionChange]
- * @param {(event: { id: string, label: string }) => void} [props.onChannelChange]
- * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
- * @param {(target: { query: string }) => void} [props.onFilter]
- * @param {(event: { reason: "button" }) => void} [props.onReset]
- * @param {(event: { reason: "button" }) => void} [props.onCreateTask]
- * @param {(event: { reason: "button" }) => void} [props.onBindAccount]
- * @param {(event: { reason: "scrim"|"escape"|"button"|"cancel" }) => void} [props.onCloseTask]
- * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask]
+ * @param {string} [props.current="campaign"] Active nav id. // 当前导航 id。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {Array<object>} [props.navigation=[]] Header links. // 页头链接。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Assistant copy, state, and callbacks. // 助手的文案、状态和回调。
+ * @param {object} [props.rail={ items: [] }] Left rail items and labels. // 左侧栏的条目和文案。
+ * @param {Array<{ id: string, label: string }>} [props.channels=[]] Channel tabs on overview. // 概览上的渠道标签。
+ * @param {Array<object>} [props.metrics=[]] Metric blocks on overview. // 概览上的指标块。
+ * @param {Array<object>} [props.distribution=[]] Distribution list items. // 分布列表的条目。
+ * @param {Array<object>} [props.objectives=[]] Objective chart items. // 目标图表的条目。
+ * @param {Array<object>} [props.accountColumns=[]] Account table columns. // 账户表的列。
+ * @param {Array<object>} [props.accountRows=[]] Account table rows. // 账户表的行。
+ * @param {{ channelViewAria: string, objectiveChartAria: string, accountSearch: string, filterLabel: string, resetLabel: string, accountCaption: (count: number) => string }} props.labels Page control copy and accessible names. // 页面控件文案和无障碍名称。
+ * @param {Object<string, { eyebrow?: string, title?: string, description?: string, action?: string, badge?: string, status?: string }>} [props.headings={}] Per-section headings and action copy. // 各分区的标题和操作文案。
+ * @param {Object<string, object>} [props.panels={}] Per-section panel copy. // 各分区面板的文案。
+ * @param {Array<object>} [props.executionSummary=[]] Execution summary items. // 执行摘要的条目。
+ * @param {Array<object>} [props.taskQueue=[]] Task queue items. // 任务队列的条目。
+ * @param {{ columns: Array<object>, rows: Array<object> }} [props.actionLog] Action log table. // 操作日志表。
+ * @param {Array<object>} [props.creativeColumns=[]] Creative table columns. // 素材表的列。
+ * @param {Array<object>} [props.creatives=[]] Creative table rows. // 素材表的行。
+ * @param {Array<object>} [props.efficiency=[]] Efficiency list items. // 效率列表的条目。
+ * @param {Array<object>} [props.recommendations=[]] Recommendation cards. // 推荐卡片。
+ * @param {Array<object>} [props.bindingColumns=[]] Account binding columns. // 账户绑定表的列。
+ * @param {Array<object>} [props.accounts=[]] Account binding rows. // 账户绑定表的行。
+ * @param {{ eyebrow?: string, title?: string, description?: string, fields?: { actionLabel?: string, actions?: Array<string|object>, platformLabel?: string, platforms?: Array<string|object>, accountLabel?: string, accounts?: Array<string|object> }, object?: { label?: string, value?: string }, preview?: { eyebrow?: string, state?: string, note?: string }, cancelLabel?: string, submitLabel?: string }} [props.taskDialog={}] Create Campaign Task dialog fields and action copy. // Create Campaign Task 对话框的字段和操作文案。
+ * @param {boolean} [props.taskDialogOpen=false] Set true to open the Create Campaign Task dialog. // 设为 true 时打开 Create Campaign Task 对话框。
+ * @param {{ action: string, platform: string, account: string, object: string }} props.taskDraft Controlled draft values. The demo hook keeps them after the dialog closes. // 受控的草稿值。demo hook 会在对话框关闭后保留它们。
+ * @param {(event: { name: string, value: string, draft: object }) => void} [props.onTaskDraftChange] The function runs at each change in the task dialog. The result has `name`, `value`, and the next full `draft`. // 任务对话框每次变化都会调用这个函数。结果里有 `name`、`value`，以及下一版完整的 `draft`。
+ * @param {{ open?: boolean, message?: string }} [props.toast={}] Toast after a submitted task. // 提交任务后的 Toast。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog props. The dialog shows when `skillFlow.step` is set. // 建模对话框的 props。设置了 `skillFlow.step` 时显示对话框。
+ * @param {"overview"|"execution"|"assets"|"analytics"|"accounts"} [props.section="overview"] Active campaign workspace. // 当前的 Campaign 工作区。
+ * @param {"rednote"|"douyin"} [props.channel="rednote"] Source channel on overview. Douyin stays disabled. // 概览上的来源渠道。Douyin 保持禁用。
+ * @param {string} [props.query=""] Account search text. // 账户搜索文字。
+ * @param {(target: object) => void} [props.onNavigate] The function runs when a nav link opens another page. // 导航要打开另一页时，会调用这个函数。
+ * @param {(event: { id: string, label: string }) => void} [props.onSectionChange] The function runs when the user selects a rail section. The result has `id` and `label`. // 用户选择侧栏分区时，会调用这个函数。结果里有 `id` 和 `label`。
+ * @param {(event: { id: string, label: string }) => void} [props.onChannelChange] The function runs when the user selects a channel tab. The result has `id` and `label`. // 用户选择渠道标签时，会调用这个函数。结果里有 `id` 和 `label`。
+ * @param {(event: { name: string, value: string }) => void} [props.onQueryChange] The function runs at each change in the account search. The result has `name` and `value`. // 账户搜索每次变化都会调用这个函数。结果里有 `name` 和 `value`。
+ * @param {(target: { query: string }) => void} [props.onFilter] The function runs when the user submits the account search. The result has `query`. // 用户提交账户搜索时，会调用这个函数。结果里有 `query`。
+ * @param {(event: { reason: "button" }) => void} [props.onReset] The function runs when the user resets the account search. // 用户重置账户搜索时，会调用这个函数。
+ * @param {(event: { reason: "button" }) => void} [props.onCreateTask] The function runs when the user opens Create Campaign Task. // 用户打开 Create Campaign Task 时，会调用这个函数。
+ * @param {(event: { reason: "button" }) => void} [props.onBindAccount] The function runs when the user starts Bind Account. // 用户启动 Bind Account 时，会调用这个函数。
+ * @param {(event: { reason: "scrim"|"escape"|"button"|"cancel" }) => void} [props.onCloseTask] The function runs when the user closes the task dialog. The result has `reason`. // 用户关闭任务对话框时，会调用这个函数。结果里有 `reason`。
+ * @param {(event: { action: string, platform: string, account: string, object: string }) => void} [props.onSubmitTask] The function runs when the user submits a task. The result has `action`, `platform`, `account`, and `object`. // 用户提交任务时，会调用这个函数。结果里有 `action`、`platform`、`account` 和 `object`。
  */
 export function CampaignPage({
   current = "campaign",

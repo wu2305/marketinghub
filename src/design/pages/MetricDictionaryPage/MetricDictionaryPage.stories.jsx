@@ -1,13 +1,21 @@
 import { LOGO, NAV, MODEL_FLOW, buildModelDraft, buildLiteAssistantAnswer } from "../../content.js";
 import { METRIC_ASSISTANT, METRIC_DICTIONARY } from "../../demo/content/metric-dictionary.js";
 import { useMetricDictionaryDemo } from "../../demo/metric-dictionary-demo.js";
+import { bi } from "../../lib/story-helpers.js";
 import { MetricDictionaryPage, metricCategories, metricDetailTabs } from "./index.jsx";
 
 export default {
   title: "Pages",
   tags: ["autodocs"],
   component: MetricDictionaryPage,
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: bi("This page is Metric Dictionary. It shows Basic and Derived metrics. A composing engineer sets the list, the selected metric, and the detail tabs. The tabs are Definition, Formula, and Dimensions. Set `derivedEditor` to open the Add derived drawer. The assistant is the lite drawer.", "这是 Metric Dictionary 页面。它列出 Basic 和 Derived 指标。组合页面时，设置列表、当前指标和详情标签。标签是 Definition、Formula 和 Dimensions。用 `derivedEditor` 打开 Add derived 抽屉。助手是轻量抽屉。"),
+      },
+    },
+  },
   args: {
     logo: LOGO,
     navigation: NAV,
@@ -20,23 +28,23 @@ export default {
     metricId: "promotion_daily.exposure_count",
   },
   argTypes: {
-    category: { control: "inline-radio", options: metricCategories },
-    tab: { control: "inline-radio", options: metricDetailTabs },
-    panelOpen: { control: "boolean" },
-    constantOpen: { control: "boolean" },
-    onNavigate: { action: "onNavigate" },
-    onCategoryChange: { action: "onCategoryChange" },
-    onSelect: { action: "onSelect" },
-    onTabChange: { action: "onTabChange" },
-    onOpen: { action: "onOpen" },
-    onCancel: { action: "onCancel" },
-    onDraftChange: { action: "onDraftChange" },
-    onOperator: { action: "onOperator" },
-    onReference: { action: "onReference" },
-    onRemoveToken: { action: "onRemoveToken" },
-    onConstantAdd: { action: "onConstantAdd" },
-    onTest: { action: "onTest" },
-    onSave: { action: "onSave" },
+    category: { control: "inline-radio", options: metricCategories, description: bi("Metric list. Values are Basic and Derived.", "指标列表。取值是 Basic 和 Derived。") },
+    tab: { control: "inline-radio", options: metricDetailTabs, description: bi("Detail tab. Values are definition, formula, and dimensions.", "详情标签。取值是 definition、formula 和 dimensions。") },
+    panelOpen: { control: "boolean", description: bi("Set true to open the Add derived drawer.", "设为 true 时打开 Add derived 抽屉。") },
+    constantOpen: { control: "boolean", description: bi("Set true to open the constant pad in the formula builder.", "设为 true 时打开公式构建器里的常数面板。") },
+    onNavigate: { action: "onNavigate", description: bi("The function runs when a crumb or a nav link opens another page. The result has `id`, `params`, and `href`.", "面包屑或导航要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。") },
+    onCategoryChange: { action: "onCategoryChange", description: bi("The function runs when the user selects Basic or Derived. The result has `category`.", "用户选择 Basic 或 Derived 时，会调用这个函数。结果里有 `category`。") },
+    onSelect: { action: "onSelect", description: bi("The function runs when the user selects a metric. The result has `id`.", "用户选择一项指标时，会调用这个函数。结果里有 `id`。") },
+    onTabChange: { action: "onTabChange", description: bi("The function runs when the user selects a detail tab. The result has `tab`.", "用户选择详情标签时，会调用这个函数。结果里有 `tab`。") },
+    onOpen: { action: "onOpen", description: bi("The function runs when the user opens Add derived.", "用户打开 Add derived 时，会调用这个函数。") },
+    onCancel: { action: "onCancel", description: bi("The function runs when the user closes the Add derived drawer. The result has `reason`.", "用户关闭 Add derived 抽屉时，会调用这个函数。结果里有 `reason`。") },
+    onDraftChange: { action: "onDraftChange", description: bi("The function runs at each change in the derived form. The result has `field` and `value`.", "派生表单每次变化都会调用这个函数。结果里有 `field` 和 `value`。") },
+    onOperator: { action: "onOperator", description: bi("The function runs when the user picks a formula operator. The result has `operator`.", "用户选择公式运算符时，会调用这个函数。结果里有 `operator`。") },
+    onReference: { action: "onReference", description: bi("The function runs when the user inserts a basic metric. The result has `metric`.", "用户插入一项基础指标时，会调用这个函数。结果里有 `metric`。") },
+    onRemoveToken: { action: "onRemoveToken", description: bi("The function runs when the user removes a formula token. The result has `index`.", "用户删除一个公式标记时，会调用这个函数。结果里有 `index`。") },
+    onConstantAdd: { action: "onConstantAdd", description: bi("The function runs when the user inserts a constant. The result has `value`.", "用户插入常数时，会调用这个函数。结果里有 `value`。") },
+    onTest: { action: "onTest", description: bi("The function runs when the user tests the formula.", "用户测试公式时，会调用这个函数。") },
+    onSave: { action: "onSave", description: bi("The function runs when the user saves a derived metric.", "用户保存派生指标时，会调用这个函数。") },
   },
   render: function MetricDictionaryStory(args) {
     const demo = useMetricDictionaryDemo({

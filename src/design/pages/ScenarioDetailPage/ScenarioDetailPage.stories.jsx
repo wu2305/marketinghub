@@ -8,22 +8,22 @@ import { ScenarioDetailPage, scenarioDetailTabs } from "./index.jsx";
 const flowThreads = () => SCENARIO_DETAIL_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const checkedMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ScenarioDetailPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled six-tab Scenario Detail page. The private demo hook supplies URL-id selection, preview and lite assistant flows to Storybook and the independent host.", "受控的六标签页 Scenario Detail 页面。私有 demo hook 为 Storybook 和独立宿主提供按 URL id 选择、预览以及轻量助手流程。") } } } };
+export default { title: "Pages", component: ScenarioDetailPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Scenario Detail. It shows one skill record in six tabs. The tabs are Content, Related Objects, AI Check, Usage & Feedback, Version History, and Activity Log. A composing engineer sets `detail.record` and the tab. Set `previewOpen` to show the example question and output on Content. This page is not Skill Library, Skill Edit, or Scenario Reports.", "这是 Scenario Detail 页面。它用六个标签显示一条技能记录。标签是 Content、Related Objects、AI Check、Usage & Feedback、Version History 和 Activity Log。组合页面时，设置 `detail.record` 和当前标签。用 `previewOpen` 在 Content 上显示示例问题和输出。本页不是 Skill Library、Skill Edit 或 Scenario Reports。") } } } };
 
 export const ScenarioDetail = {
   name: "Scenario Detail",
   args: { content: SCENARIO_DETAIL, records: SKILL_RECORDS, shell: SCENARIO_DETAIL_SHELL, initial: {}, tab: "content", previewOpen: false },
   argTypes: {
-    content: { control: "object", description: bi("All page-visible copy, navigation and static panel content.", "页面上可见的全部文案、导航与静态面板内容。") },
-    records: { control: "object", description: bi("Nine replaceable source-backed skill records.", "九条可替换的、以源页面为依据的技能记录。") },
-    shell: { control: "object", description: bi("Lite assistant copy, skills and deterministic model data.", "轻量助手的文案、技能与确定性的模型数据。") },
-    initial: { control: "object", description: bi("Initial URL id and assistant state.", "初始的 URL id 与助手状态。") },
+    content: { control: "object", description: bi("Visible copy, navigation, and static panel content.", "可见文案、导航和静态面板内容。") },
+    records: { control: "object", description: bi("Skill records. A host can replace this list.", "技能记录。宿主可以替换这份列表。") },
+    shell: { control: "object", description: bi("Lite assistant copy, skills, and model data.", "轻量助手的文案、技能和模型数据。") },
+    initial: { control: "object", description: bi("Initial URL id and assistant state.", "初始的 URL id 和助手状态。") },
     tab: enumProp(scenarioDetailTabs, "content", bi("One of the six visible detail panels.", "六个可见详情面板之一。")),
-    previewOpen: { control: "boolean", description: bi("Whether Content shows example question and output.", "Content 面板是否显示示例问题与输出。") },
-    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "related" }),
-    onTogglePreview: callbackProp("onTogglePreview", "({open:boolean}) => void", { open: true }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "scenario-edit", params: { id: "city-comparison" }, href: "/assets/pages/scenario-edit.html?id=city-comparison", label: "Edit Scenario" }),
-    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Compare Shanghai and Beijing" }),
+    previewOpen: { control: "boolean", description: bi("Set true to show the example question and output on Content.", "设为 true 时，在 Content 上显示示例问题和输出。") },
+    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "related" }, bi("The function runs when the user selects a detail tab. The result has `value`.", "用户选择详情标签时，会调用这个函数。结果里有 `value`。")),
+    onTogglePreview: callbackProp("onTogglePreview", "({open:boolean}) => void", { open: true }, bi("The function runs when the user opens or closes the example preview. The result has `open`.", "用户打开或关闭示例预览时，会调用这个函数。结果里有 `open`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "scenario-edit", params: { id: "city-comparison" }, href: "/assets/pages/scenario-edit.html?id=city-comparison", label: "Edit Scenario" }, bi("The function runs when a link opens another page. The result has `id`, `params`, `href`, and `label`.", "链接要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。")),
+    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Compare Shanghai and Beijing" }, bi("The function runs when the user sends an assistant prompt. The result has `prompt`.", "用户发送助手提示时，会调用这个函数。结果里有 `prompt`。")),
   },
   render: function ScenarioDetailStory(args) {
     const initial = React.useMemo(() => ({ ...args.initial, tab: args.tab, previewOpen: args.previewOpen }), [args.initial, args.tab, args.previewOpen]);

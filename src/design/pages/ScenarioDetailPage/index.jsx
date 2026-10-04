@@ -13,14 +13,14 @@ export { scenarioDetailTabs };
 /**
  * Scenario Detail page. Page copy and the selected skill record come from the caller.
  * @param {object} props
- * @param {object} props.content Hero, navigation and six-panel visible copy. // Hero、导航与六个面板上可见的文案。
- * @param {{src:string,alt:string,href:string}} props.logo
- * @param {object[]} [props.navigation=[]] Header destinations. // 页头目的地。
+ * @param {object} props.content Header image area, navigation, and six-panel visible copy. // 头图区、导航和六个面板上可见的文案。
+ * @param {{src:string,alt:string,href:string}} props.logo Header logo. // 页头 Logo。
+ * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
  * @param {{record:object,tab:typeof scenarioDetailTabs[number],previewOpen:boolean,onTabChange?:(event:{value:string})=>void,onTogglePreview?:(event:{open:boolean})=>void}} [props.detail={}] Detail view state. // 详情视图状态。
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant state and named callbacks. // 轻量助手状态与具名回调。
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model flow state and callbacks. // 建模流程状态与回调。
- * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
- * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant state and named callbacks. // 轻量助手状态和具名回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog state and callbacks. // 建模对话框的状态和回调。
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor] Turns a route id into an href. // 把路由 id 转成 href。
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate] The function runs when a link opens another page. The result has `id`, `params`, `href`, and `label`. // 链接要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。
  */
 export function ScenarioDetailPage({ content, logo, navigation = [], detail = {}, assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { hero, sidebar, labels } = content;

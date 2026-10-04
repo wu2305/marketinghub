@@ -7,7 +7,14 @@ export default {
   title: "Pages",
   component: SelfServicePage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component: bi("This page is Self-Service Center. It has Analysis and Data Upload tabs. A composing engineer sets the header image area, the tabs, the filter pills, and the action cards. Upload cards can open an upload-history dialog. Set `tab` to show Analysis or Data Upload. Set `onOpen` when a card opens a destination. The assistant is one `assistant` object.", "这是 Self-Service Center 页面。它有 Analysis 和 Data Upload 两个标签。组合页面时，设置头图区、标签、筛选胶囊和入口卡片。上传卡片可以打开上传历史对话框。用 `tab` 显示 Analysis 或 Data Upload。卡片要打开目的地时，设置 `onOpen`。助手的内容放在一个 `assistant` 对象里。"),
+      },
+    },
+  },
 };
 
 export const SelfService = {
@@ -26,18 +33,18 @@ export const SelfService = {
     assistant: { ...SELF_SERVICE.assistant, skillMenu: ASSISTANT_SKILL_MENU, open: false, prompt: "" },
   },
   argTypes: {
-    hrefFor: { control: false, description: bi("Story/host supplied semantic route resolver `(id, params) => href`.", "由故事/宿主提供的语义路由解析函数 `(id, params) => href`。") },
-    tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", bi("Active Self-Service section.", "当前激活的 Self-Service 分区。"), "inline-radio"),
-    category: { control: "inline-radio", options: ["all", "dg", "dc"] },
-    onNavigate: { action: "onNavigate" },
-    onTabChange: { action: "onTabChange" },
-    onCategoryChange: { action: "onCategoryChange" },
-    onOpen: { action: "onOpen" },
-    onOpenHistory: { action: "onOpenHistory" },
-    onCloseHistory: { action: "onCloseHistory" },
-    onPreviewFile: { action: "onPreviewFile" },
-    onDownloadFile: { action: "onDownloadFile" },
-    assistant: { control: "object", description: bi("Grouped AssistantPanel content, state and callback contract; launch, submit and skill actions run in useSelfServiceDemo.", "分组的 AssistantPanel 内容、状态与回调约定；启动、提交与技能操作由 useSelfServiceDemo 执行。") },
+    hrefFor: { control: false, description: bi("Set `hrefFor` to turn a route id into an href. The story and the host each supply this function.", "用 `hrefFor` 把路由 id 转成 href。故事和宿主各自提供这个函数。") },
+    tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", bi("Active section. Values are analysis and upload.", "当前分区。取值是 analysis 和 upload。"), "inline-radio"),
+    category: { control: "inline-radio", options: ["all", "dg", "dc"], description: bi("Active filter pill. `all` shows every card in the tab.", "当前筛选胶囊。`all` 显示该标签下的全部卡片。") },
+    onNavigate: { action: "onNavigate", description: bi("The function runs when a link opens another page. The result has `id`, `params`, and `href`.", "链接要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。") },
+    onTabChange: { action: "onTabChange", description: bi("The function runs when the user selects Analysis or Data Upload. The result has `id` and `label`.", "用户选择 Analysis 或 Data Upload 时，会调用这个函数。结果里有 `id` 和 `label`。") },
+    onCategoryChange: { action: "onCategoryChange", description: bi("The function runs when the user selects a filter pill. The result has `id` and `label`.", "用户选择筛选胶囊时，会调用这个函数。结果里有 `id` 和 `label`。") },
+    onOpen: { action: "onOpen", description: bi("The function runs when a card opens a destination. The result has `title` and may have `href`.", "卡片要打开目的地时，会调用这个函数。结果里有 `title`，也可能有 `href`。") },
+    onOpenHistory: { action: "onOpenHistory", description: bi("The function runs when the user opens upload history. The result has `item`.", "用户打开上传历史时，会调用这个函数。结果里有 `item`。") },
+    onCloseHistory: { action: "onCloseHistory", description: bi("The function runs when the user closes upload history. The result has `reason`.", "用户关闭上传历史时，会调用这个函数。结果里有 `reason`。") },
+    onPreviewFile: { action: "onPreviewFile", description: bi("The function runs when the user previews a history file. The result is the row.", "用户预览历史上的文件时，会调用这个函数。结果就是该行。") },
+    onDownloadFile: { action: "onDownloadFile", description: bi("The function runs when the user downloads a history file. The result is the row.", "用户下载历史上的文件时，会调用这个函数。结果就是该行。") },
+    assistant: { control: "object", description: bi("Assistant copy, state, and callbacks. Launch, submit, and skill actions run in `useSelfServiceDemo`.", "助手的文案、状态和回调。启动、提交和技能操作由 `useSelfServiceDemo` 执行。") },
   },
   render: function SelfServiceStory(args) {
     const props = useSelfServiceDemo({

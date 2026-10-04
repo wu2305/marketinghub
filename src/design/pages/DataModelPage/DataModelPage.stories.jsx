@@ -19,19 +19,19 @@ function Story(args) {
 
 export default {
   title: "Pages", component: DataModelPage, tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: bi("Standalone P11 Data Model page composed from the P07 DataModelView. Three visible domains, search, relationship graph and the table detail dialog are source-backed; related-report clicks emit a callback but open no standalone drawer.", "由 P07 DataModelView 组合而成的独立 P11 Data Model 页面。三个可见域、搜索、关系图和表详情对话框均以源页面为依据；点击关联报表会触发回调，但不会打开独立抽屉。") } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Data Model. It is a standalone page. It reuses the Data Model view from AI Interpreter. A composing engineer sets domains, search, the relationship graph, and the table detail dialog. A related-report click runs `onOpen`. It does not open a second drawer.", "这是 Data Model 页面。它是独立页面，复用 AI Interpreter 里的 Data Model 视图。组合页面时，设置域、搜索、关系图和表详情对话框。点击关联报表会调用 `onOpen`，不会再打开一个抽屉。") } } },
   args: { query: "", selectedDomainId: "business-data", activeTab: "basic", tableId: null, drawerTab: "fields" },
   argTypes: {
-    query: prop("string", { defaultValue: "", description: bi("Initial sidebar search.", "初始侧栏搜索。") }),
-    selectedDomainId: enumProp(domainIds, "business-data", bi("Active visible domain.", "当前激活的可见域。")),
-    activeTab: enumProp(dataModelPageTabs, "basic", bi("Basic information or Relationship graph.", "Basic information 或 Relationship graph。")),
-    tableId: enumProp([null, ...tableIds], null, bi("Open table detail by ID.", "按 ID 打开表详情。")),
-    drawerTab: enumProp(dataModelPageDrawerTabs, "fields", bi("Field Details or Data Preview.", "Field Details 或 Data Preview。")),
-    onNavigate: callbackProp("onNavigate", "({id,params,href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }),
-    onChange: callbackProp("onChange", "({name,value}) => void", { name: "query", value: "ABO" }),
-    onSelect: callbackProp("onSelect", "({kind,id}) => void", { kind: "domain", id: "finance-analysis" }),
-    onOpen: callbackProp("onOpen", "({kind,id}) => void", { kind: "table", id: "fact_sales_order" }),
-    onCancel: callbackProp("onCancel", "({kind}) => void", { kind: "table" }),
+    query: prop("string", { defaultValue: "", description: bi("Initial sidebar search.", "侧栏搜索的初始文字。") }),
+    selectedDomainId: enumProp(domainIds, "business-data", bi("Active visible domain.", "当前可见的域。")),
+    activeTab: enumProp(dataModelPageTabs, "basic", bi("Main tab. Values are basic and graph.", "主标签。取值是 basic 和 graph。")),
+    tableId: enumProp([null, ...tableIds], null, bi("Open table detail by id. `null` keeps the dialog closed.", "按 id 打开表详情。`null` 表示对话框关闭。")),
+    drawerTab: enumProp(dataModelPageDrawerTabs, "fields", bi("Table dialog tab. Values are fields and preview.", "表对话框的标签。取值是 fields 和 preview。")),
+    onNavigate: callbackProp("onNavigate", "({id,params,href}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html" }, bi("The function runs when a nav link opens another page. The result has `id`, `params`, and `href`.", "导航要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。")),
+    onChange: callbackProp("onChange", "({name,value}) => void", { name: "query", value: "ABO" }, bi("The function runs at each sidebar search change. The result has `name` and `value`.", "侧栏搜索每次变化都会调用这个函数。结果里有 `name` 和 `value`。")),
+    onSelect: callbackProp("onSelect", "({kind,id}) => void", { kind: "domain", id: "finance-analysis" }, bi("The function runs when the user selects a domain, a main tab, or a drawer tab. The result has `kind` and `id`.", "用户选择域、主标签或抽屉标签时，会调用这个函数。结果里有 `kind` 和 `id`。")),
+    onOpen: callbackProp("onOpen", "({kind,id}) => void", { kind: "table", id: "fact_sales_order" }, bi("The function runs when the user opens a table or a related report. The result has `kind` and `id`.", "用户打开一张表或一条关联报表时，会调用这个函数。结果里有 `kind` 和 `id`。")),
+    onCancel: callbackProp("onCancel", "({kind}) => void", { kind: "table" }, bi("The function runs when the user closes the table dialog. The result has `kind`.", "用户关闭表对话框时，会调用这个函数。结果里有 `kind`。")),
   },
 };
 

@@ -13,17 +13,17 @@ import "./HomePage.css";
 /**
  * Home page: header, hero with stats, workspace grid, assistant drawer.
  * @param {object} props
- * @param {string} [props.current="home"] active nav id // 当前导航 id
- * @param {{ src: string, alt?: string, href?: string }} props.logo
- * @param {Array<{ id: string, label: string, href: string }>} [props.navigation=[]]
- * @param {{ image?: string, eyebrow?: string, title: React.ReactNode, description?: React.ReactNode, stats?: Array<object> }} [props.hero]
- * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading section heading over the workspace grid // 工作区网格上方的区块标题
- * @param {Array<object>} [props.cards=[]] WorkspaceCard props // WorkspaceCard 的 props
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor semantic link resolver supplied by story or host // 由故事或宿主提供的语义链接解析函数
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState & { homeSuggestions?: Array<string|{ label: string, prompt: string }> }} [props.assistant={}] AssistantPanel props; `homeSuggestions` replaces `suggestions` in the Home drawer // AssistantPanel 的 props；Home 抽屉中 `homeSuggestions` 会替换 `suggestions`
- * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate]
- * @param {(target: { title: string }) => void} [props.onOpen] workspace card open // 打开工作区卡片
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props; `skillFlow.step` truthy renders the model-generation dialog // ModelFlowDialog 的 props；`skillFlow.step` 为真时渲染建模对话框
+ * @param {string} [props.current="home"] Active nav id. Home does not underline the current item. // 当前导航 id。Home 不为当前项加下划线。
+ * @param {{ src: string, alt?: string, href?: string }} props.logo Header logo. // 页头 Logo。
+ * @param {Array<{ id: string, label: string, href: string }>} [props.navigation=[]] Header links. // 页头链接。
+ * @param {{ image?: string, eyebrow?: string, title: React.ReactNode, description?: React.ReactNode, stats?: Array<object> }} [props.hero] Header image area. `stats` are the metric blocks. // 头图区。`stats` 是指标块。
+ * @param {{ eyebrow?: string, title: React.ReactNode, description?: React.ReactNode }} props.heading Section heading above the workspace cards. // 工作区卡片上方的区块标题。
+ * @param {Array<object>} [props.cards=[]] Workspace cards. Each card can open a destination. // 工作区卡片。每张卡片都可以打开一个目的地。
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Turns a route id into an href. The story and the host each supply this function. // 把路由 id 转成 href。故事和宿主各自提供这个函数。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState & { homeSuggestions?: Array<string|{ label: string, prompt: string }> }} [props.assistant={}] Assistant copy, state, and callbacks. On Home, `homeSuggestions` replaces `suggestions`. // 助手的文案、状态和回调。在 Home 上，`homeSuggestions` 会替换 `suggestions`。
+ * @param {(target: { id: string, params: Record<string,string>, href: string, label?: string }) => void} [props.onNavigate] The function runs when a card or a nav link opens another page. The result has `id`, `params`, and `href`. // 卡片或导航要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。
+ * @param {(target: { title: string }) => void} [props.onOpen] The function runs when a workspace card starts an action. The result has `title`. // 工作区卡片要启动一次操作时，会调用这个函数。结果里有 `title`。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog props. The dialog shows when `skillFlow.step` is set. // 建模对话框的 props。设置了 `skillFlow.step` 时显示对话框。
  */
 export function HomePage({
   current = "home",
