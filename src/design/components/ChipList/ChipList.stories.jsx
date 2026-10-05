@@ -5,7 +5,7 @@ export default {
   title: "Organisms/Library/ChipList",
   component: ChipList,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: bi("Labelled row of short values in a library card or drawer. Shows the first `max` values and counts the rest in a \"+N\" chip (dispositions D07).", "库卡片或抽屉中带标签的一行短值。显示前 `max` 个值，其余以 \"+N\" 标签计数（dispositions D07）。") } } },
+  parameters: { docs: { description: { component: bi("This component shows a labelled row of short values. It sits on a library card or in a drawer. It shows the first `max` values. Other values are counted in a \"+N\" chip.", "这个组件显示一行带标签的短值。它用在库卡片或抽屉里。先显示前 `max` 个值。其余的值记在 \"+N\" 标签里。") } } },
   args: { label: "Synonyms", values: ["Gross Sales", "Merchandise Value", "Gross Merchandise Sales"], max: 3, moreLabel: "More synonyms", tone: "neutral" },
   argTypes: {
     label: prop("string", { description: bi("Row label; omit under a drawer heading.", "行标签；在抽屉标题下使用时可省略。") }),

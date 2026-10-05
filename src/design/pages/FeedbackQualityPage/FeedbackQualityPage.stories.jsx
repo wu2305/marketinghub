@@ -12,27 +12,27 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Feedback & Quality page on the governed-library table pattern: All / Thumbs Up / Thumbs Down tabs, search, Type and Time facets, the feedback table and its detail drawer. List states (filtered, empty) are shown by the Organisms/Library stories. The page is controlled; the private flow is shared with the standalone host. The original P13 launcher is inert because portal.js requires a missing subtitle; this story restores its intended assistant behavior.", "基于受治理库表格模式的受控 Feedback & Quality 页面：All / Thumbs Up / Thumbs Down 标签页、搜索、Type 与 Time 筛选、反馈表格及其详情抽屉。列表状态（筛选后、空）在 Organisms/Library 故事中展示。页面为受控；私有流程与独立宿主共用。原始 P13 的启动器因 portal.js 依赖缺失的 subtitle 而无效；本故事恢复了其本应有的助手行为。") } } } };
+export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Feedback & Quality. It lists assistant feedback. Tabs are All, Thumbs Up, and Thumbs Down. Feedback rows have no actions. They cannot change. To build this page, set the filters, the table, and the detail drawer. The original launcher did not open because a subtitle was missing. This page restores the intended assistant.", "这是 Feedback & Quality 页面。它列出助手反馈。标签是 All、Thumbs Up 和 Thumbs Down。反馈行没有操作，也不能改。组合页面时，设置筛选、表格和详情抽屉。原始启动器因为缺少 subtitle 而打不开。本页恢复了本应有的助手。") } } } };
 
 export const FeedbackQuality = {
   name: "Feedback & Quality",
   args: { content: FEEDBACK_QUALITY, records, now: NOW, initial: {}, type: "all", time: "all", search: "" },
   argTypes: {
-    records: { control: "object", description: bi("Replaceable source feedback fixtures.", "可替换的源页面反馈夹具。") },
+    records: { control: "object", description: bi("Feedback records. A host can replace this list.", "反馈记录。宿主可以替换这份列表。") },
     now: { control: "date", description: bi("One clock for all time thresholds.", "所有时间阈值共用的一个时钟。") },
-    initial: { control: "object", description: bi("Initial selected detail and assistant state.", "初始选中的详情与助手状态。") },
-    type: enumProp(feedbackFilterTypes, "all", bi("Visible feedback type select and All Feedback tab state.", "可见的反馈类型下拉与 All Feedback 标签页状态。")),
-    time: enumProp(feedbackFilterTimes, "all", bi("Source time filter.", "源页面的时间筛选。")),
-    tabs: { control: "check", options: feedbackTabs, description: bi("Visible tabs; each one can be turned off separately.", "可见的标签页；每个标签页都可以单独关闭。") },
-    search: { control: "text" },
-    onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "thumbs-up" }),
-    onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "week" }),
-    onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "loyalty" }),
-    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }),
-    onOpen: callbackProp("onOpen", "({id:string}) => void", { id: "fb-3" }),
-    onCloseDetail: callbackProp("onCloseDetail", "({reason:string}) => void", { reason: "escape" }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "review-center", params: {}, href: "/assets/pages/review-center.html", label: "Review Center" }),
-    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }),
+    initial: { control: "object", description: bi("Initial selected detail and assistant state.", "初始选中的详情和助手状态。") },
+    type: enumProp(feedbackFilterTypes, "all", bi("Visible type select and All Feedback tab.", "可见的类型下拉和 All Feedback 标签。")),
+    time: enumProp(feedbackFilterTimes, "all", bi("Time filter.", "时间筛选。")),
+    tabs: { control: "check", options: feedbackTabs, description: bi("Visible tabs. Each tab can be turned off.", "可见的标签。每个标签都可以单独关掉。") },
+    search: { control: "text", description: bi("Search text.", "搜索文字。") },
+    onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "thumbs-up" }, bi("The function runs when the user selects a type filter. The result has `value`.", "用户选择类型筛选时，会调用这个函数。结果里有 `value`。")),
+    onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "week" }, bi("The function runs when the user selects a time filter. The result has `value`.", "用户选择时间筛选时，会调用这个函数。结果里有 `value`。")),
+    onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "loyalty" }, bi("The function runs at each search change. The result has `value`.", "搜索每次变化都会调用这个函数。结果里有 `value`。")),
+    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }, bi("The function runs when the user clears filters from the empty state. The result has `kind`.", "用户从空状态清除筛选时，会调用这个函数。结果里有 `kind`。")),
+    onOpen: callbackProp("onOpen", "({id:string}) => void", { id: "fb-3" }, bi("The function runs when the user opens a feedback row. The result has `id`.", "用户打开一条反馈时，会调用这个函数。结果里有 `id`。")),
+    onCloseDetail: callbackProp("onCloseDetail", "({reason:string}) => void", { reason: "escape" }, bi("The function runs when the user closes the detail drawer. The result has `reason`.", "用户关闭详情抽屉时，会调用这个函数。结果里有 `reason`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "review-center", params: {}, href: "/assets/pages/review-center.html", label: "Review Center" }, bi("The function runs when a nav link opens another page. The result has `id`, `params`, `href`, and `label`.", "导航要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。")),
+    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }, bi("The function runs when the user sends an assistant prompt. The result has `prompt`.", "用户发送助手提示时，会调用这个函数。结果里有 `prompt`。")),
   },
   render: function FeedbackQualityStory(args) {
     const initial = React.useMemo(() => ({ ...args.initial, type: args.type, time: args.time, search: args.search }), [args.initial, args.type, args.time, args.search]);

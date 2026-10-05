@@ -10,7 +10,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Image hero with title, description and optional aside content (stats, ask bar).", "带标题、描述及可选侧边内容（统计、提问栏）的图片英雄区。"),
+        component: bi("This component is the page header image area. It shows a title and a description. You can put extra content on the side. Extra content can be metric blocks or an ask bar.", "这个组件是页面的头图区。它显示标题和描述。侧边可以放额外内容。额外内容可以是指标块，也可以是提问栏。"),
       },
     },
   },

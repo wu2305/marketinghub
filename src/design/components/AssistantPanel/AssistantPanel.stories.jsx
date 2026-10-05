@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Assistant dialog. `placement=\"drawer\"` renders the right-edge full-height variant used on Home; \"modal\" is the centered variant. Renders nothing when `open` is false. Reachable states mirror the original runtime: suggestion/history items fill the prompt, submit appends entries to the answer feed, the expand button toggles the drawer into a centered dialog, the history button opens a popover, Escape closes the panel, and focus returns to the invoking element on close.", "助手对话框。`placement=\"drawer\"` 是 Home 页使用的右侧全高抽屉形态；\"modal\" 是居中弹窗形态。`open` 为 false 时不渲染。可达状态与原始 Demo 一致：点击建议或历史条目会填入提示词，提交会向回答列表追加条目，展开按钮在抽屉与居中对话框之间切换，历史按钮打开气泡，Escape 关闭面板，关闭后焦点回到触发元素。"),
+          bi("This component is the assistant dialog. Set `placement` to `drawer` for the full-height panel on the right. Home uses that layout. Set `placement` to `modal` for a centered dialog. If `open` is false, the component shows nothing. A suggestion or a history item fills the prompt. Submit sends the prompt. The expand control switches the drawer to a centered dialog. The history control opens a list. Escape closes the panel. When the panel closes, focus returns to the opener.", "这个组件是助手对话框。`placement` 设为 `drawer` 时，是右侧全高面板。Home 使用这种布局。`placement` 设为 `modal` 时，是居中对话框。`open` 为 false 时，组件不显示任何内容。建议或历史条目会填入提示词。提交会送出提示词。展开控件把抽屉换成居中对话框。历史控件打开列表。Escape 关闭面板。面板关闭后，焦点回到打开它的元素。"),
       },
     },
   },
@@ -21,13 +21,13 @@ export default {
 export const AskPanel = {
   args: { open: true, placement: "drawer", variant: "campaign", answerVariant: "default", prompt: "" },
   argTypes: {
-    placement: { control: "inline-radio", options: assistantPlacements },
-    variant: { control: "inline-radio", options: assistantVariants },
-    answerVariant: { control: "select", options: assistantAnswerVariants, description: bi("Story preview of answer.variant; submitting still uses onSubmit.", "在故事中预览 answer.variant；提交仍然使用 onSubmit。") },
-    onClose: { action: "onClose" },
-    onSubmit: { action: "onSubmit" },
-    onPromptChange: { action: "onPromptChange" },
-    onSuggestion: { action: "onSuggestion" },
+    placement: { control: "inline-radio", options: assistantPlacements, description: bi("`drawer` is the full-height panel on the right. `modal` is a centered dialog.", "`drawer` 是右侧全高面板。`modal` 是居中对话框。") },
+    variant: { control: "inline-radio", options: assistantVariants, description: bi("Assistant behavior preset.", "助手行为预设。") },
+    answerVariant: { control: "select", options: assistantAnswerVariants, description: bi("This control only changes the answer card in this story. Submit still uses `onSubmit`.", "这个控件只改变本故事里的回答卡片。提交仍然使用 `onSubmit`。") },
+    onClose: { action: "onClose", description: bi("The function runs when the panel closes. The result has `reason`: `\"backdrop\"`, `\"escape\"`, or `\"button\"`.", "面板关闭时会调用这个函数。结果里的 `reason` 是 `\"backdrop\"`、`\"escape\"` 或 `\"button\"`。") },
+    onSubmit: { action: "onSubmit", description: bi("The function runs when the user sends a prompt. The result has `prompt`.", "用户发送提示时会调用这个函数。结果里有 `prompt`。") },
+    onPromptChange: { action: "onPromptChange", description: bi("The function runs at each change in the composer. The result has `name` and `value`.", "输入框每次变化都会调用这个函数。结果里有 `name` 和 `value`。") },
+    onSuggestion: { action: "onSuggestion", description: bi("The function runs when the user selects a suggestion. The result has `prompt`.", "用户选择一条建议时会调用这个函数。结果里有 `prompt`。") },
   },
   render: function AskPanelStory(args) {
     const [open, setOpen] = useSynced(args.open);
@@ -70,14 +70,14 @@ export const AskPanel = {
 export const LiteAskPanel = {
   args: { open: true, variant: "lite" },
   argTypes: {
-    open: { control: "boolean" },
-    variant: { control: "inline-radio", options: assistantVariants },
-    onClose: { action: "onClose" },
-    onSubmit: { action: "onSubmit" },
-    onAttach: { action: "onAttach" },
-    onSelectSkill: { action: "onSelectSkill" },
-    onClearSkill: { action: "onClearSkill" },
-    onSkillAction: { action: "onSkillAction" },
+    open: { control: "boolean", description: bi("Set true to show the panel.", "设为 true 时显示面板。") },
+    variant: { control: "inline-radio", options: assistantVariants, description: bi("Assistant behavior preset. This story uses `lite`.", "助手行为预设。这个故事使用 `lite`。") },
+    onClose: { action: "onClose", description: bi("The function runs when the panel closes.", "面板关闭时会调用这个函数。") },
+    onSubmit: { action: "onSubmit", description: bi("The function runs when the user sends a prompt. The result has `prompt`.", "用户发送提示时会调用这个函数。结果里有 `prompt`。") },
+    onAttach: { action: "onAttach", description: bi("The function runs after the user picks files in Upload File. The result has `names`.", "用户在 Upload File 里选完文件后，会调用这个函数。结果里有 `names`。") },
+    onSelectSkill: { action: "onSelectSkill", description: bi("The function runs when the user selects a skill. The result has `type` and `title`. `id` is present when the skill has one.", "用户选择一项技能时，会调用这个函数。结果里有 `type` 和 `title`。技能有 `id` 时，结果里也会带上。") },
+    onClearSkill: { action: "onClearSkill", description: bi("The function runs when the user clears the selected skill.", "用户清除已选技能时，会调用这个函数。") },
+    onSkillAction: { action: "onSkillAction", description: bi("The function runs when the user starts a model action. The result has `action`: `\"history\"` or `\"manual\"`.", "用户启动一项建模操作时，会调用这个函数。结果里的 `action` 是 `\"history\"` 或 `\"manual\"`。") },
   },
   render: function LiteAskPanelStory(args) {
     const [open, setOpen] = useSynced(args.open);

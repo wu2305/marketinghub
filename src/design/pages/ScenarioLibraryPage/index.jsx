@@ -23,21 +23,21 @@ const COLUMN_KEYS = ["name", "purpose", "calls", "likes", "status", "owner"];
 const HEART = "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z";
 
 /**
- * Controlled P15 page. All visible page copy, rows, workflow state and navigation are props.
+ * Controlled Skill Library page. All visible page copy, rows, workflow state and navigation are props.
  * @param {object} props
- * @param {object} props.content Hero, navigation, table, detail and form copy. // Hero、导航、表格、详情与表单文案。
+ * @param {object} props.content Header image area, navigation, table, detail, and form copy. // 头图区、导航、表格、详情和表单文案。
  * @param {object} props.logo Header logo. // 页头 Logo。
- * @param {object[]} [props.navigation=[]] Primary navigation links. // 主导航链接。
- * @param {string} props.image Hero image URL. // Hero 图片 URL。
- * @param {{items:object[],totalCount:number,search:string,status:typeof skillStatuses[number],onChange?:(event:{value:string})=>void,onSelect?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,onOpen?:(event:{id:string})=>void,onClick?:(event:{action:"create"})=>void}} [props.library={}] Filtered skills and the controlled search/status filters; `onClick` is Create New Scenario, `onClear` the no-results state. // 筛选后的技能以及受控的搜索/状态筛选；`onClick` 是 Create New Scenario，`onClear` 用于无结果状态。
- * @param {object} [props.detail={}] Selected record and preview state. // 选中的记录与预览状态。
+ * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
+ * @param {string} props.image Header image URL. // 头图区图片 URL。
+ * @param {{items:object[],totalCount:number,search:string,status:typeof skillStatuses[number],onChange?:(event:{value:string})=>void,onSelect?:(event:{value:string})=>void,onClear?:(event:{kind:string})=>void,onOpen?:(event:{id:string})=>void,onClick?:(event:{action:"create"})=>void}} [props.library={}] Filtered skills and the controlled search and status filters. `onClick` is Create New Scenario. `onClear` is the empty state. // 筛选后的技能，以及受控的搜索和状态筛选。`onClick` 是 Create New Scenario。`onClear` 用于空状态。
+ * @param {object} [props.detail={}] Selected record and preview state. // 选中的记录和预览状态。
  * @param {{purpose:string,title:string,message:string,confirmLabel:string,cancelLabel:string,onConfirm?:Function,onCancel?:Function}|null} [props.dialog=null] Delete confirmation. // 删除确认。
- * @param {string} [props.toast=""] Success message after a delete (hidden when empty). // 删除后的成功消息（为空时隐藏）。
- * @param {object} [props.form={}] Controlled inline create/edit state. // 受控的页内创建/编辑状态。
+ * @param {string} [props.toast=""] Success message after a delete. Hidden when empty. // 删除后的成功消息。为空时隐藏。
+ * @param {object} [props.form={}] Controlled inline create or edit state. // 受控的页内创建或编辑状态。
  * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Controlled lite assistant. // 受控的轻量助手。
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional model flow overlay. // 可选的建模流程覆盖层。
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Route adapter. // 路由适配器。
- * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Optional model dialog overlay. // 可选的建模对话框覆盖层。
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Turns a route id into an href. // 把路由 id 转成 href。
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate] The function runs when a nav link opens another page. The result has `id`, `params`, `href`, and `label`. // 导航要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。
  */
 export function ScenarioLibraryPage({ content, logo, navigation = [], image, library = {}, detail = {}, form = {}, assistant = {}, skillFlow, dialog = null, toast = "", hrefFor, onNavigate }) {
   const labels = content.labels;

@@ -13,18 +13,18 @@ export default {
     docs: {
       description: {
         component:
-          bi("Edit / delete / disable for one governed item (patterns/library.md B6–B7). Renders `governedActions()` output; blocked actions stay focusable and clickable (`aria-disabled`) and report their reason so the caller can explain or offer the fix.", "单个受治理条目的编辑、删除、停用操作（patterns/library.md B6–B7）。渲染 `governedActions()` 的输出；被阻止的操作仍可聚焦、可点击（`aria-disabled`），并回报阻止原因，方便调用方解释或提供修复入口。"),
+          bi("This component shows Edit, Delete, and Disable for one library item. Pass the output of `governedActions()`. A blocked action stays focusable. A blocked action stays clickable. The button has `aria-disabled`. Each click sends `action`, `id`, `blocked`, and `reason`. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed.", "这个组件显示一条库记录的 Edit、Delete 和 Disable。传入 `governedActions()` 的结果。被阻止的操作仍可聚焦，也可点击。按钮带 `aria-disabled`。每次点击都会发出 `action`、`id`、`blocked` 和 `reason`。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。"),
       },
     },
   },
   args: { id: "gmv", name: "GMV", actions: actionsFor({ creator: me, status: "Disable" }) },
   argTypes: {
-    id: prop("string", { description: bi("Item id reported with every action.", "每个操作都会回传的条目 id。") }),
-    name: prop("string", { description: bi("Item name appended to each accessible label.", "追加到每个无障碍标签后的条目名称。") }),
+    id: prop("string", { description: bi("Item id. Every action result includes this id.", "条目 id。每次操作的结果里都带这个 id。") }),
+    name: prop("string", { description: bi("Item name. Each accessible label adds this name.", "条目名称。每个无障碍标签都会加上这个名称。") }),
     actions: prop("Array<{ action, blocked, reason }>", { description: bi("Output of `governedActions(record, { currentUser })`.", "`governedActions(record, { currentUser })` 的输出。") }),
     labels: prop("{ edit?, delete?, disable? }", { description: bi("Action names.", "操作名称。") }),
-    messages: prop("{ permission?, 'disable-first'?, 'already-disabled'? }", { description: bi("Tooltip per block reason; defaults from lib/governance.js.", "各阻止原因对应的提示文字；默认值来自 lib/governance.js。") }),
-    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "gmv", blocked: false, reason: null }, bi("Every click, blocked or not.", "每次点击都会触发，无论是否被阻止。")),
+    messages: prop("{ permission?, 'disable-first'?, 'already-disabled'? }", { description: bi("Tooltip for each block reason. Defaults come from `lib/governance.js`.", "各阻止原因对应的提示文字。默认值来自 `lib/governance.js`。") }),
+    onAction: callbackProp("onAction", "(event: { action, id, blocked, reason }) => void", { action: "edit", id: "gmv", blocked: false, reason: null }, bi("The function runs on every click. It runs for a blocked action too.", "每次点击都会调用这个函数。被阻止的操作也会调用。")),
   },
 };
 

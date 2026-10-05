@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Data table. `columns[].key` indexes into each row object; `columns[].header` is the displayed heading. Below 760px each row stacks as a labelled block.\n\n**When to use.** Tabular records with a few named columns. Pass `onOpen` when a row should open a detail view. For governed lists with search, filters and actions use LibraryList (its `table` layout is built on this). **Used in:** Campaign and LibraryList.", "数据表格。`columns[].key` 对应每个行对象中的键；`columns[].header` 是显示的列标题。宽度低于 760px 时每一行堆叠为带标签的块。\n\n**何时使用。** 有若干命名列的表格型记录。当某一行需要打开详情视图时传入 `onOpen`。带搜索、筛选和操作的受治理列表请用 LibraryList（其 `table` 布局即基于本组件）。**使用位置：** Campaign 与 LibraryList。"),
+        component: bi("This component is a data table. `columns[].key` selects the field in each row. `columns[].header` is the column heading. Below 760px, each row stacks as a labelled block.\n\n**When to use.** Use this component for records with a few named columns. Set `onOpen` if a row should open a detail view. For a governed list with search, filters, and actions, use LibraryList. The `table` layout of LibraryList uses this component. **Used in:** Campaign, Skill Library, Review Center, and Feedback & Quality.", "这个组件是数据表格。`columns[].key` 对应每行对象里的字段。`columns[].header` 是列标题。宽度低于 760px 时，每一行堆叠成带标签的块。\n\n**何时使用。** 用于有若干命名列的表格记录。某一行需要打开详情时，设置 `onOpen`。带搜索、筛选和操作的受治理列表请用 LibraryList。LibraryList 的 `table` 布局就基于这个组件。**使用位置：** Campaign、Skill Library、Review Center 与 Feedback & Quality。"),
       },
     },
   },
@@ -25,11 +25,11 @@ export default {
     ],
   },
   argTypes: {
-    columns: prop("Array<{ key: string, header: React.ReactNode }>", { defaultValue: [], description: bi("Column definitions.", "列定义。") }),
-    rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: bi("Row objects keyed by column key.", "以列 key 为键的行对象。") }),
-    caption: prop("React.ReactNode", { description: bi("Note rendered under the table.", "显示在表格下方的备注。"), control: "text" }),
-    emptyState: prop("React.ReactNode", { description: bi("Shown in place of the rows when `rows` is empty.", "`rows` 为空时代替行显示的内容。"), control: "text" }),
-    onOpen: callbackProp("onOpen", "(event: { id: string|number }) => void", { id: "1" }, bi("Makes rows openable: the first cell becomes a button; a click elsewhere on the row (outside other controls) also opens it.", "让行可以被打开：第一个单元格变为按钮；点击行内其他位置（其他控件之外）同样会打开。")),
+    columns: prop("Array<{ key: string, header: React.ReactNode }>", { defaultValue: [], description: bi("Column list. Each column has `key` and `header`.", "列列表。每列有 `key` 和 `header`。") }),
+    rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: bi("Row objects. Each field matches a column `key`.", "行对象。每个字段对应一个列 `key`。") }),
+    caption: prop("React.ReactNode", { description: bi("Note under the table.", "表格下方的备注。"), control: "text" }),
+    emptyState: prop("React.ReactNode", { description: bi("Content shown in place of the rows when `rows` is empty.", "`rows` 为空时代替行显示的内容。"), control: "text" }),
+    onOpen: callbackProp("onOpen", "(event: { id: string|number }) => void", { id: "1" }, bi("Set this if a row should open. The first cell becomes a button. A click elsewhere on the row, outside other controls, also opens it. The result has `id` from the row.", "某一行需要打开时设置。第一个单元格会变成按钮。点击行内其他位置（其他控件之外）同样会打开。结果里带有该行的 `id`。")),
   },
   render: (args) => <DataTable {...args} />,
 };

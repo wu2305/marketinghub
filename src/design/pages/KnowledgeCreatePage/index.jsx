@@ -8,10 +8,9 @@ import { KnowledgeCreateFields } from "../../features/knowledge-create/Knowledge
 import "./KnowledgeCreatePage.css";
 
 /**
- * Controlled P08 page. `content` supplies visible copy, type options, and fixture data.
- * `type` selects a reachable form; `mode` is create, edit, or copy. `values`,
- * `invalid`, `result`, `dialog`, and `menu` are controlled state. Change callbacks
- * receive `{name,value}`; navigation receives `{id,params,href}`.
+ * Knowledge create page. It creates or edits one knowledge record.
+ * `content` supplies visible copy. `type` selects the form. `mode` is create, edit, or copy.
+ * Cancel does not save. The page sends `{type, mode, values}` on Save and Submit. The demo hook sets status and stage.
  * @param {object} props
  * @param {object} props.content All visible labels and form fixtures. // 全部可见标签与表单夹具。
  * @param {object} props.logo Header logo model. // 页头 Logo 模型。
@@ -20,23 +19,23 @@ import "./KnowledgeCreatePage.css";
  * @param {string} [props.mode="create"] One of knowledgeCreateModes. // knowledgeCreateModes 之一。
  * @param {object} [props.values={}] Controlled field values. // 受控的字段值。
  * @param {string[]} [props.invalid=[]] Required field names to mark invalid. // 需要标记为无效的必填字段名。
- * @param {object|null} props.result Save/submit confirmation state. // 保存/提交的确认状态。
- * @param {string|null} props.dialog Active guidance, history, test, confirm, or discard dialog. // 当前激活的引导、历史、测试、确认或放弃对话框。
+ * @param {object|null} props.result Save or Submit confirmation state. // Save 或 Submit 后的确认状态。
+ * @param {string|null} props.dialog Active guidance, history, test, confirm, or discard dialog. // 当前打开的引导、历史、测试、确认或放弃对话框。
  * @param {string|null} props.menu Open picker name. // 已打开的选择器名称。
  * @param {boolean} [props.unavailable=false] Analytical Model edit has no editable record or creator access. // 该 Analytical Model 编辑没有可编辑的记录或创建者权限。
  * @param {boolean} [props.reportEditAvailable=false] A Report Context edit ID resolves to its dedicated record. // Report Context 的编辑 ID 会解析到其专属记录。
- * @param {(id:string, params?: Record<string,string>) => string} props.hrefFor Route adapter. // 路由适配器。
- * @param {(event:{id:string,params: Record<string,string>,href:string}) => void} [props.onNavigate]
- * @param {(event:{value:string}) => void} [props.onTypeChange]
- * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSave] Save draft; `values` is the controlled `values` prop, for every type. // 保存草稿；`values` 是受控的 `values` prop，适用于所有类型。
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSubmit]
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onCancel]
- * @param {(event:{reason:string}) => void} [props.onResultClose]
- * @param {(event:{kind:string}) => void} [props.onDialog]
- * @param {(event?:{reason:string}) => void} [props.onDialogClose]
- * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onDiscard] Analytical Model: Discard confirmed in the unsaved-changes dialog. // Analytical Model：在未保存更改对话框中确认放弃。
- * @param {(event:{name:string}) => void} [props.onMenu]
+ * @param {(id:string, params?: Record<string,string>) => string} props.hrefFor Function that turns a route id into an href. // 把路由 id 转成 href 的函数。
+ * @param {(event:{id:string,params: Record<string,string>,href:string}) => void} [props.onNavigate] The function runs when a link opens another page. // 链接要打开另一页时会调用这个函数。
+ * @param {(event:{value:string}) => void} [props.onTypeChange] The function runs when the knowledge type changes. // 知识类型变化时会调用这个函数。
+ * @param {(event:{name:string,value:unknown}) => void} [props.onChange] The function runs at each field change. // 每次字段变化都会调用这个函数。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSave] The function runs on Save. The page sends `{type, mode, values}`. // 点击 Save 时会调用这个函数。页面发出 `{type, mode, values}`。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onSubmit] The function runs on Submit. The page sends `{type, mode, values}`. // 点击 Submit 时会调用这个函数。页面发出 `{type, mode, values}`。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onCancel] The function runs on Cancel. Cancel does not save. // 点击 Cancel 时会调用这个函数。Cancel 不保存。
+ * @param {(event:{reason:string}) => void} [props.onResultClose] The function runs when the result dialog closes. // 结果对话框关闭时会调用这个函数。
+ * @param {(event:{kind:string}) => void} [props.onDialog] The function runs when a dialog opens. // 对话框打开时会调用这个函数。
+ * @param {(event?:{reason:string}) => void} [props.onDialogClose] The function runs when a dialog closes. // 对话框关闭时会调用这个函数。
+ * @param {(event:{type:string,mode:string,values:Record<string,unknown>}) => void} [props.onDiscard] The function runs after Discard on Analytical Model. // Analytical Model 确认 Discard 后会调用这个函数。
+ * @param {(event:{name:string}) => void} [props.onMenu] The function runs when a picker opens or closes. // 选择器打开或关闭时会调用这个函数。
  */
 export function KnowledgeCreatePage({
   content, logo, navigation = [], type, mode = "create", values = {}, invalid = [], result, dialog, menu, unavailable = false, reportEditAvailable = false,

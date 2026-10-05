@@ -10,31 +10,31 @@ const missingSuggestion = { ...restoration, id: "restore-fallback", title: "Rest
 const flowThreads = () => REVIEW_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const selectedFlowMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Review Center page on the governed-library table pattern: Pending / Approved / Rejected tabs, search, Type and Submitted facets, the review queue, detail and decision overlays with success toasts, and the lite AI assistant. List states (filtered, empty) are shown by the Organisms/Library stories; the private demo hook drives Storybook and the standalone host.", "基于受治理库表格模式的受控 Review Center 页面：Pending / Approved / Rejected 标签页、搜索、Type 与 Submitted 筛选、审核队列、带成功 Toast 的详情与决策覆盖层，以及轻量 AI 助手。列表状态（筛选后、空）在 Organisms/Library 故事中展示；私有 demo hook 驱动 Storybook 与独立宿主。") } } } };
+export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Review Center. It is a review queue. Tabs are Pending, Approved, and Rejected. To build this page, set the filters, the queue, the decision overlays, and the assistant. Set `onConfirmApprove` and `onConfirmReject` to finish a decision. A success toast shows after a decision.", "这是 Review Center 页面，也就是审核队列。标签是 Pending、Approved 和 Rejected。组合页面时，设置筛选、队列、决策覆盖层和助手。用 `onConfirmApprove` 和 `onConfirmReject` 完成一次决策。决策后会显示成功 Toast。") } } } };
 
 export const ReviewCenter = {
   name: "Review Center",
   args: { content: REVIEW_CENTER, records: REVIEW_CENTER.records, suggestions: REVIEW_CENTER.suggestions, fallbackSuggestions: REVIEW_CENTER.fallbackSuggestions, restorations: [], initial: { selectedId: "pending-1" }, tab: "pending", type: "all", time: "all", panel: "none", ...REVIEW_SHELL },
   argTypes: {
-    initial: { control: "object", description: bi("Initial page and assistant state for the deterministic workflow.", "确定性工作流的初始页面与助手状态。") },
-    records: { control: "object", description: bi("Source-backed review fixtures; replaceable by a host.", "以源页面为依据的审核夹具；宿主可替换。") },
-    restorations: { control: "object", description: bi("One-time records merged by id, without localStorage.", "按 id 合并的一次性记录，不使用 localStorage。") },
-    tab: enumProp(reviewTabs, "pending", bi("Review tab (the demo hook owns interactive state).", "审核标签页（交互状态由 demo hook 持有）。")),
-    type: enumProp(reviewTypes, "all", bi("Source type filter.", "源页面的类型筛选。")),
-    time: enumProp(reviewTimes, "all", bi("Submitted window: today, this week or this month (D01).", "提交时间窗口：今天、本周或本月（D01）。")),
-    panel: enumProp(reviewPanels, "none", bi("Selected review overlay; choose an item in initial.selectedId.", "当前选中的审核覆盖层；请通过 initial.selectedId 选择条目。")),
-    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "approved" }),
-    onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "Campaign ROI" }),
-    onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "Data Model" }),
-    onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "today" }),
-    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }),
-    onOpenDetail: callbackProp("onOpenDetail", "({id:string}) => void", { id: "pending-1" }),
-    onReviewAction: callbackProp("onReviewAction", "({id:string,action:string}) => void", { id: "pending-1", action: "reject" }),
-    onClosePanel: callbackProp("onClosePanel", "({panel:string,reason:string}) => void", { panel: "detail", reason: "escape" }),
-    onConfirmReject: callbackProp("onConfirmReject", "({id:string,reason:string}) => void", { id: "pending-1", reason: "" }),
-    onConfirmApprove: callbackProp("onConfirmApprove", "({id:string}) => void", { id: "pending-1" }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }),
-    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }),
+    initial: { control: "object", description: bi("Initial page and assistant state for the review flow.", "审核流程的初始页面和助手状态。") },
+    records: { control: "object", description: bi("Review records. A host can replace this list.", "审核记录。宿主可以替换这份列表。") },
+    restorations: { control: "object", description: bi("One-time records merged by id. They do not use localStorage.", "按 id 合并的一次性记录。不使用 localStorage。") },
+    tab: enumProp(reviewTabs, "pending", bi("Review tab. Values are pending, approved, and rejected.", "审核标签。取值是 pending、approved 和 rejected。")),
+    type: enumProp(reviewTypes, "all", bi("Type filter.", "类型筛选。")),
+    time: enumProp(reviewTimes, "all", bi("Submitted window. Values are today, this week, or this month.", "提交时间窗口。取值是今天、本周或本月。")),
+    panel: enumProp(reviewPanels, "none", bi("Open review overlay. Choose an item with `initial.selectedId`.", "打开的审核覆盖层。用 `initial.selectedId` 选择条目。")),
+    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "approved" }, bi("The function runs when the user selects a review tab. The result has `value`.", "用户选择审核标签时，会调用这个函数。结果里有 `value`。")),
+    onSearchChange: callbackProp("onSearchChange", "({value:string}) => void", { value: "Campaign ROI" }, bi("The function runs at each search change. The result has `value`.", "搜索每次变化都会调用这个函数。结果里有 `value`。")),
+    onTypeChange: callbackProp("onTypeChange", "({value:string}) => void", { value: "Data Model" }, bi("The function runs when the user selects a type filter. The result has `value`.", "用户选择类型筛选时，会调用这个函数。结果里有 `value`。")),
+    onTimeChange: callbackProp("onTimeChange", "({value:string}) => void", { value: "today" }, bi("The function runs when the user selects a submitted window. The result has `value`.", "用户选择提交时间窗口时，会调用这个函数。结果里有 `value`。")),
+    onClearFilters: callbackProp("onClearFilters", "({kind:string}) => void", { kind: "no-results" }, bi("The function runs when the user clears filters from the empty state. The result has `kind`.", "用户从空状态清除筛选时，会调用这个函数。结果里有 `kind`。")),
+    onOpenDetail: callbackProp("onOpenDetail", "({id:string}) => void", { id: "pending-1" }, bi("The function runs when the user opens a review item. The result has `id`.", "用户打开一条审核条目时，会调用这个函数。结果里有 `id`。")),
+    onReviewAction: callbackProp("onReviewAction", "({id:string,action:string}) => void", { id: "pending-1", action: "reject" }, bi("The function runs when the user starts approve, reject, or risk review. The result has `id` and `action`.", "用户开始通过、拒绝或风险审核时，会调用这个函数。结果里有 `id` 和 `action`。")),
+    onClosePanel: callbackProp("onClosePanel", "({panel:string,reason:string}) => void", { panel: "detail", reason: "escape" }, bi("The function runs when the user closes an overlay. The result has `panel` and `reason`.", "用户关闭覆盖层时，会调用这个函数。结果里有 `panel` 和 `reason`。")),
+    onConfirmReject: callbackProp("onConfirmReject", "({id:string,reason:string}) => void", { id: "pending-1", reason: "" }, bi("The function runs when the user confirms reject. The result has `id` and `reason`.", "用户确认拒绝时，会调用这个函数。结果里有 `id` 和 `reason`。")),
+    onConfirmApprove: callbackProp("onConfirmApprove", "({id:string}) => void", { id: "pending-1" }, bi("The function runs when the user confirms approve. The result has `id`.", "用户确认通过时，会调用这个函数。结果里有 `id`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }, bi("The function runs when a nav link opens another page. The result has `id`, `params`, `href`, and `label`.", "导航要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。")),
+    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }, bi("The function runs when the user sends an assistant prompt. The result has `prompt`.", "用户发送助手提示时，会调用这个函数。结果里有 `prompt`。")),
   },
   render: function ReviewCenterStory(args) {
     const initial = React.useMemo(() => ({ ...args.initial, tab: args.tab, type: args.type, time: args.time, panel: args.panel === "none" ? null : args.panel }), [args.initial, args.tab, args.type, args.time, args.panel]);

@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Multi-line input. Controlled when `value` is passed, uncontrolled otherwise.", "多行输入。传入 `value` 时为受控，否则为非受控。"),
+        component: bi("This component shows more than one line of text. Set `value` if the page controls the text. If you do not set `value`, the field holds the text.", "这个组件显示多行文字。如果页面要控制文字，就设置 `value`。如果不设置 `value`，输入框自己保存文字。"),
       },
     },
   },
@@ -36,7 +36,7 @@ export default {
       "onChange",
       "(event: { name: string, value: string }) => void",
       { name: "description", value: "Share of search" },
-      bi("Fired on every edit.", "每次编辑时触发。"),
+      bi("The function runs at each change. If you do not set `name`, `name` in the result is empty.", "每次变化都会调用这个函数。如果没有设置 `name`，结果里的 `name` 是空的。"),
     ),
     onKeyDown: prop("React.KeyboardEventHandler<HTMLTextAreaElement>", {
       description: bi("Native keydown handler — receives the React keyboard event, not a named payload (used by the assistant composer for Enter-to-submit).", "原生 keydown 处理函数：接收 React 键盘事件，而不是具名载荷（助手输入框用它实现 Enter 提交）。"),

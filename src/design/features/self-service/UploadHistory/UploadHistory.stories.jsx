@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Upload-history dialog: table of file/uploader/time rows with per-row Preview and Download actions, or an empty-state message. Built on Modal.", "上传历史对话框：文件/上传人/时间行的表格，每行带 Preview 与 Download 操作，或显示空状态消息。基于 Modal 构建。"),
+          bi("This component is the upload history dialog on Self-Service Center. It uses Modal. When `rows` has items, it shows a table with File Name, Uploader, Upload Time, and Action. Each row has Preview and Download. When `rows` is empty, it shows `emptyMessage`.", "这是 Self-Service Center 上的上传历史对话框。它使用 Modal。`rows` 有内容时，显示 File Name、Uploader、Upload Time 和 Action 表格。每行有 Preview 和 Download。`rows` 为空时显示 `emptyMessage`。"),
       },
     },
   },

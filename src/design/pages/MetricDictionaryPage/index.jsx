@@ -15,21 +15,21 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
 /**
  * Standalone Metric Dictionary page. All copy, records and state arrive from props.
  * @param {object} props
- * @param {object} props.logo
- * @param {Array<{id:string,label:string,href:string}>} [props.navigation=[]]
- * @param {object} props.content header/sidebar/detail/derivedPanel copy // header/sidebar/detail/derivedPanel 文案
- * @param {Array<object>} [props.metrics=[]]
- * @param {typeof metricCategories[number]} [props.category="Basic"]
- * @param {string} props.metricId
- * @param {typeof metricDetailTabs[number]} [props.tab="definition"]
- * @param {object} [props.derivedEditor={}] open, draft, tokens, constantOpen, notice and editor callbacks // open、draft、tokens、constantOpen、notice 以及编辑器回调
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] AssistantPanel copy, state and callbacks (lite variant) // AssistantPanel 的文案、状态与回调（lite 变体）
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] ModelFlowDialog props for the assistant skill actions // 助手技能操作所用的 ModelFlowDialog props
- * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor
- * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} props.onNavigate
- * @param {(event:{category:string})=>void} props.onCategoryChange
- * @param {(event:{id:string})=>void} props.onSelect
- * @param {(event:{tab:string})=>void} props.onTabChange
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {Array<{id:string,label:string,href:string}>} [props.navigation=[]] Header links. // 页头链接。
+ * @param {object} props.content Header, sidebar, detail, and Add derived copy. // 页头、侧栏、详情和 Add derived 文案。
+ * @param {Array<object>} [props.metrics=[]] Metric records. // 指标记录。
+ * @param {typeof metricCategories[number]} [props.category="Basic"] Metric list. Values are Basic and Derived. // 指标列表。取值是 Basic 和 Derived。
+ * @param {string} props.metricId Selected metric id. // 当前指标的 id。
+ * @param {typeof metricDetailTabs[number]} [props.tab="definition"] Detail tab. Values are definition, formula, and dimensions. // 详情标签。取值是 definition、formula 和 dimensions。
+ * @param {object} [props.derivedEditor={}] Add derived drawer. Includes `open`, `draft`, `tokens`, `constantOpen`, `notice`, and editor callbacks. // Add derived 抽屉。包含 `open`、`draft`、`tokens`、`constantOpen`、`notice` 以及编辑器回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state, and callbacks. // 轻量助手的文案、状态和回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog props for the assistant skill actions. // 助手技能操作用的建模对话框 props。
+ * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Turns a route id into an href. // 把路由 id 转成 href。
+ * @param {(target:{id:string,params: Record<string,string>,href:string})=>void} props.onNavigate The function runs when a crumb or a nav link opens another page. The result has `id`, `params`, and `href`. // 面包屑或导航要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。
+ * @param {(event:{category:string})=>void} props.onCategoryChange The function runs when the user selects Basic or Derived. The result has `category`. // 用户选择 Basic 或 Derived 时，会调用这个函数。结果里有 `category`。
+ * @param {(event:{id:string})=>void} props.onSelect The function runs when the user selects a metric. The result has `id`. // 用户选择一项指标时，会调用这个函数。结果里有 `id`。
+ * @param {(event:{tab:string})=>void} props.onTabChange The function runs when the user selects a detail tab. The result has `tab`. // 用户选择详情标签时，会调用这个函数。结果里有 `tab`。
  */
 export function MetricDictionaryPage({
   logo, navigation = [], content, metrics = [], category = "Basic", metricId, tab = "definition",

@@ -1,4 +1,5 @@
 import "./tokens.css";
+import { bi } from "./lib/story-helpers.js";
 
 // Role tokens from handover/design-intent/foundations.md §3.
 const colorGroups = [
@@ -19,7 +20,17 @@ const label = { margin: "0 0 12px", fontSize: "var(--mh-font-size-xs)", fontWeig
 const caption = { display: "block", marginTop: 6, fontSize: "var(--mh-font-size-sm)", color: "var(--mh-text-muted)" };
 const page = { display: "grid", gap: 32, fontFamily: "var(--mh-font-sans)", color: "var(--mh-text)", background: "var(--mh-surface-page)", padding: 24 };
 
-export default { title: "Foundations", tags: ["autodocs"] };
+export default {
+  title: "Foundations",
+  tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        component: bi("These values are the colors, type, spaces, corner radii, and shadows for all components. Body text uses DIN 2014. Titles use BentonMod Display. The words \"Marketing Portal\" are an example of a product name. They are not the name of a token.", "这些是整个组件库共用的颜色、字体、间距、圆角和阴影。正文用 DIN 2014，大标题用 BentonMod Display。页面上的 \"Marketing Portal\" 只是示例里的产品名，不是某个 token 的名字。"),
+      },
+    },
+  },
+};
 
 export const Tokens = {
   name: "Color and type",

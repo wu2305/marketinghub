@@ -9,25 +9,25 @@ const hrefFor = (id, params = {}) => { const path = routes[id]; const query = ne
 const flowThreads = () => PERSONAL_MEMORY_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const checkedMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: PersonalMemoryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("Controlled Personal Memory page, composed from the reusable governance navigation, card/detail workspace, overlay shell and lite assistant. The demo hook drives Storybook and the standalone host.", "受控的 Personal Memory 页面，由可复用的治理导航、卡片/详情工作区、覆盖层外壳与轻量助手组合而成。demo hook 同时驱动 Storybook 与独立宿主。") } } } };
+export default { title: "Pages", component: PersonalMemoryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Personal Memory. It lists personal notes in categories. To build this page, set the header image area, the category list, the selected note, the create drawer, and the delete confirm. Set `onSaveMemory` to add a note. Set `onConfirmDelete` to remove a note. The assistant is the lite drawer.", "这是 Personal Memory 页面。它按分类列出个人笔记。组合页面时，设置头图区、分类列表、当前笔记、创建抽屉和删除确认。用 `onSaveMemory` 新增笔记。用 `onConfirmDelete` 删除笔记。助手是轻量抽屉。") } } } };
 export const PersonalMemory = {
   name: "Personal Memory",
   args: { content: PERSONAL_MEMORY, records: PERSONAL_MEMORY.records, initial: {}, category: "all", ...PERSONAL_MEMORY_SHELL },
   argTypes: {
-    category: enumProp(memoryCategories, "all", bi("Active memory category, driven by the private demo hook.", "当前激活的记忆分类，由私有 demo hook 驱动。")),
-    records: { control: "object", description: bi("Replaceable personal-memory fixtures.", "可替换的个人记忆夹具。") },
-    initial: { control: "object", description: bi("Initial page, assistant, and model-flow state.", "初始页面、助手与建模流程状态。") },
-    onCategoryChange: callbackProp("onCategoryChange", "({value:string}) => void", { value: "analysis" }),
-    onSelectMemory: callbackProp("onSelectMemory", "({id:string}) => void", { id: "mem-analysis-1" }),
-    onEditMemory: callbackProp("onEditMemory", "({id:string}) => void", { id: "mem-analysis-1" }),
-    onSaveEdit: callbackProp("onSaveEdit", "({id:string,title:string,description:string}) => void", { id: "mem-analysis-1", title: "Updated", description: "Updated note" }),
-    onDeleteMemory: callbackProp("onDeleteMemory", "({id:string}) => void", { id: "mem-analysis-1" }),
-    onConfirmDelete: callbackProp("onConfirmDelete", "({id:string}) => void", { id: "mem-analysis-1" }),
-    onSaveMemory: callbackProp("onSaveMemory", "({item:object}) => void", { item: PERSONAL_MEMORY.records[0] }),
-    onShare: callbackProp("onShare", "({id:string}) => void; source action has no resulting flow", { id: "mem-analysis-1" }),
-    onAutoFill: callbackProp("onAutoFill", "({field:\"description\"}) => void", { field: "description" }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: routes.interpreter, label: "Knowledge Management" }),
-    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }),
+    category: enumProp(memoryCategories, "all", bi("Active memory category.", "当前记忆分类。")),
+    records: { control: "object", description: bi("Personal memory records. A host can replace this list.", "个人记忆记录。宿主可以替换这份列表。") },
+    initial: { control: "object", description: bi("Initial page, assistant, and model-dialog state.", "页面、助手和建模对话框的初始状态。") },
+    onCategoryChange: callbackProp("onCategoryChange", "({value:string}) => void", { value: "analysis" }, bi("The function runs when the user selects a category. The result has `value`.", "用户选择分类时，会调用这个函数。结果里有 `value`。")),
+    onSelectMemory: callbackProp("onSelectMemory", "({id:string}) => void", { id: "mem-analysis-1" }, bi("The function runs when the user opens a note. The result has `id`.", "用户打开一条笔记时，会调用这个函数。结果里有 `id`。")),
+    onEditMemory: callbackProp("onEditMemory", "({id:string}) => void", { id: "mem-analysis-1" }, bi("The function runs when the user starts editing a note. The result has `id`.", "用户开始编辑笔记时，会调用这个函数。结果里有 `id`。")),
+    onSaveEdit: callbackProp("onSaveEdit", "({id:string,title:string,description:string}) => void", { id: "mem-analysis-1", title: "Updated", description: "Updated note" }, bi("The function runs when the user saves an edited note. The result has `id`, `title`, and `description`.", "用户保存已编辑的笔记时，会调用这个函数。结果里有 `id`、`title` 和 `description`。")),
+    onDeleteMemory: callbackProp("onDeleteMemory", "({id:string}) => void", { id: "mem-analysis-1" }, bi("The function runs when the user asks to delete a note. The result has `id`.", "用户要求删除笔记时，会调用这个函数。结果里有 `id`。")),
+    onConfirmDelete: callbackProp("onConfirmDelete", "({id:string}) => void", { id: "mem-analysis-1" }, bi("The function runs when the user confirms delete. The result has `id`.", "用户确认删除时，会调用这个函数。结果里有 `id`。")),
+    onSaveMemory: callbackProp("onSaveMemory", "({item:object}) => void", { item: PERSONAL_MEMORY.records[0] }, bi("The function runs when the user saves a new note. The result has `item`.", "用户保存新笔记时，会调用这个函数。结果里有 `item`。")),
+    onShare: callbackProp("onShare", "({id:string}) => void; source action has no resulting flow", { id: "mem-analysis-1" }, bi("The function runs when the user chooses Share. The result has `id`. The Demo has no follow-up flow.", "用户选择 Share 时，会调用这个函数。结果里有 `id`。Demo 没有后续流程。")),
+    onAutoFill: callbackProp("onAutoFill", "({field:\"description\"}) => void", { field: "description" }, bi("The function runs when the user presses AI Auto-fill. The result has `field: \"description\"`.", "用户按下 AI Auto-fill 时，会调用这个函数。结果里的 `field` 是 `\"description\"`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: routes.interpreter, label: "Knowledge Management" }, bi("The function runs when a nav link opens another page. The result has `id`, `params`, `href`, and `label`.", "导航要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。")),
+    onAssistantSubmit: callbackProp("onAssistantSubmit", "({prompt:string}) => void", { prompt: "Definition of Attributed ROI" }, bi("The function runs when the user sends an assistant prompt. The result has `prompt`.", "用户发送助手提示时，会调用这个函数。结果里有 `prompt`。")),
   },
   render: function PersonalMemoryStory(args) {
     const initial = React.useMemo(() => ({ ...args.initial, category: args.category }), [args.initial, args.category]);

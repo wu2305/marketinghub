@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("\"Generate Analytical Model\" flow dialog reached from the skill menu. `step=\"history\"` replays chat threads with per-message checkboxes and a generation-rule textarea; `step=\"generated\"` shows the drafted model form; `step=\"manual\"` shows the same form empty. Escape closes only this dialog and restores focus to its opener.", "从技能菜单进入的 \"Generate Analytical Model\" 流程对话框。`step=\"history\"` 回放聊天会话，每条消息带复选框，并有生成规则文本域；`step=\"generated\"` 显示生成的模型表单；`step=\"manual\"` 显示同一表单的空白版本。Escape 只关闭此对话框，并把焦点还给打开它的元素。"),
+          bi("This component is the Generate Analytical Model dialog. It opens from the assistant skill menu. Set `step` to `history` to show chat threads. Each message has a checkbox. A text area holds the generation rule. Generate needs at least one checked message. Set `step` to `generated` to show the filled model form. Set `step` to `manual` to show the same form empty. Save and Submit check required fields. The dialog then shows Saved or Submitted, and closes. Escape closes only this dialog. Focus returns to the opener.", "这个组件是 Generate Analytical Model 对话框。它从助手的技能菜单打开。`step` 设为 `history` 时，显示聊天会话。每条消息有复选框。文本域保存生成规则。Generate 至少需要勾选一条消息。`step` 设为 `generated` 时，显示已填好的模型表单。`step` 设为 `manual` 时，显示同一表单的空白版。Save 和 Submit 会检查必填字段。对话框随后显示 Saved 或 Submitted，然后关闭。Escape 只关闭这个对话框。焦点回到打开它的元素。"),
       },
     },
   },
@@ -21,14 +21,14 @@ export default {
 export const Default = {
   args: { step: "history" },
   argTypes: {
-    step: { control: "inline-radio", options: modelFlowSteps },
-    onToggleMessage: { action: "onToggleMessage" },
-    onRuleChange: { action: "onRuleChange" },
-    onGenerate: { action: "onGenerate" },
-    onBack: { action: "onBack" },
-    onClose: { action: "onClose" },
-    onSave: { action: "onSave" },
-    onSubmit: { action: "onSubmit" },
+    step: { control: "inline-radio", options: modelFlowSteps, description: bi("`history` shows chat threads. `generated` shows the filled model form. `manual` shows the same form empty.", "`history` 显示聊天会话。`generated` 显示已填好的模型表单。`manual` 显示同一表单的空白版。") },
+    onToggleMessage: { action: "onToggleMessage", description: bi("The function runs when a message checkbox changes. The result has `threadIndex`, `messageIndex`, and `checked`.", "消息复选框变化时会调用这个函数。结果里有 `threadIndex`、`messageIndex` 和 `checked`。") },
+    onRuleChange: { action: "onRuleChange", description: bi("The function runs at each change in the generation rule. The result has `value`.", "生成规则每次变化都会调用这个函数。结果里有 `value`。") },
+    onGenerate: { action: "onGenerate", description: bi("The function runs on Generate. The result has `messages` and `rule`.", "点击 Generate 时会调用这个函数。结果里有 `messages` 和 `rule`。") },
+    onBack: { action: "onBack", description: bi("The function runs on Back. The result has `reason: \"back\"`.", "点击 Back 时会调用这个函数。结果里的 `reason` 是 `\"back\"`。") },
+    onClose: { action: "onClose", description: bi("The function runs when the dialog closes. The result has `reason`.", "对话框关闭时会调用这个函数。结果里有 `reason`。") },
+    onSave: { action: "onSave", description: bi("The function runs on Save. The result has `values`.", "点击 Save 时会调用这个函数。结果里有 `values`。") },
+    onSubmit: { action: "onSubmit", description: bi("The function runs on Submit. The result has `values`.", "点击 Submit 时会调用这个函数。结果里有 `values`。") },
   },
   render: function ModelFlowStory(args) {
     const [step, setStep] = React.useState(args.step);
@@ -62,9 +62,9 @@ export const Default = {
           setStep("generated");
           args.onGenerate?.(event);
         }}
-        onBack={() => {
+        onBack={(event) => {
           setStep("history");
-          args.onBack?.();
+          args.onBack?.(event);
         }}
         onClose={(event) => {
           setStep(null);

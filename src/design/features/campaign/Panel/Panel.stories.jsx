@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Bordered section panel with heading and optional actions slot.", "带标题和可选操作插槽的有边框区块面板。"),
+        component: bi("This component is a bordered section on Campaign. It shows an optional eyebrow, a title, and a body. Set `actions` for controls in the header. If you set `actions`, the header does not show `meta`.", "这是 Campaign 上带边框的区块。它显示可选眉标、标题和主体。如果页头需要控件，就设置 `actions`。设置了 `actions` 时，页头不再显示 `meta`。"),
       },
     },
   },

@@ -373,12 +373,13 @@ export function useFieldLibraryDemo(props) {
   const currentPage = Math.min(Math.max(1, page), totalPages);
   const detail = detailId ? typeRecords.find((record) => record.id === detailId) || null : null;
 
-  const act = ({ action, id }) => {
+  const act = (event) => {
+    const { action, id } = event;
     /* Resolve across `all` — the drawer can be peeked for a Report Context
        record from another type page (reportcontext:view). */
     const record = all.find((item) => item.id === id);
     if (!record) return;
-    props.onAction?.({ action, id });
+    props.onAction?.(event);
     if (action === "edit-description" && record.type === "Report Context") {
       setDescriptionEdit({ id, value: record.report_description || "" });
       return;

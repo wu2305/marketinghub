@@ -14,7 +14,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("The fm detail drawer + dialogs as a standalone layer: field-library.js listens for the page-level `reportcontext:view` event (fired by the Data Model related-report buttons and the generic asset list) and opens the Report Context drawer over the *current* type page without switching to it. The page composes this component from the `peek` payload `useFieldLibraryDemo` returns; the Record Detail / Description edit dialogs work the same as inside the full view.", "作为独立层的 fm 详情抽屉与对话框：field-library.js 监听页面级的 `reportcontext:view` 事件（由 Data Model 关联报表按钮和通用资产列表触发），在*当前*类型页之上打开 Report Context 抽屉而不切换页面。页面用 `useFieldLibraryDemo` 返回的 `peek` 载荷组合此组件；Record Detail / Description 编辑对话框的行为与完整视图内一致。"),
+          bi("This component is the Report Context drawer. It can open over another knowledge type. It does not switch the type. Data Model related-report links open this drawer. The description editor works the same as in the full Report Context library.", "这个组件是 Report Context 抽屉。它可以叠在另一种知识类型上面打开。它不会切换类型。Data Model 的关联报表链接会打开这个抽屉。描述编辑器和完整的 Report Context 库里一样。"),
       },
     },
   },

@@ -9,7 +9,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("Clickable / drag-and-drop file target. Clicking opens the native file picker; dragover adds the `is-dragover` visual state; selecting or dropping a file calls `onSelect` with the file name. `fileName` switches the hint to the selected-file message.\n\n**When to use.** Any step that asks the user to pick a file to upload. It only reports the chosen file name; the page decides what to do with it. **Used in:** Data Upload (bulk import dialog).", "可点击或拖放的文件目标区。点击会打开系统文件选择器；拖入时加上 `is-dragover` 视觉状态；选择或放入文件会以文件名调用 `onSelect`。传入 `fileName` 后提示文字切换为已选文件的消息。\n\n**何时使用。** 任何需要用户选择文件上传的步骤。它只回报所选文件名，如何处理由页面决定。**使用位置：** Data Upload（批量导入对话框）。"),
+          bi("This component is a file target. The user can click it or drop a file on it. A click opens the file picker. A drag over the target adds the `is-dragover` state. When the user selects or drops a file, `onSelect` runs. The result has `name`. Set `fileName` to show the selected-file message.\n\n**When to use.** Use this component when the user must pick a file to upload. The component only sends the file name. The page decides what to do with the file. **Used in:** Data Upload.", "这个组件是文件投放区。用户可以点击，也可以把文件拖进去。点击会打开文件选择器。拖到投放区时会加上 `is-dragover` 状态。用户选中或放入文件时，会调用 `onSelect`。结果里带有 `name`。设置 `fileName` 后，提示会改成已选文件的消息。\n\n**何时使用。** 需要用户选择文件上传时使用。组件只发出文件名，如何处理由页面决定。**使用位置：** Data Upload。"),
       },
     },
   },
@@ -20,16 +20,16 @@ export default {
     accept: ".xlsx,.xls",
   },
   argTypes: {
-    title: prop("string", { defaultValue: "Click or drag a file to upload here", description: bi("Headline inside the dropzone.", "拖放区内的标题文字。") }),
+    title: prop("string", { defaultValue: "Click or drag a file to upload here", description: bi("Headline inside the dropzone.", "投放区内的标题文字。") }),
     hint: prop("string", { description: bi("Hint line shown until a file is selected.", "未选择文件时显示的提示行。") }),
-    selectedPrefix: prop("string", { defaultValue: "Selected:", description: bi("Prefix before the chosen file name.", "显示在所选文件名之前的前缀。") }),
-    fileName: prop("string", { description: bi("Selected file name — switches the hint to the selected message.", "已选文件名；会将提示切换为已选择状态的消息。"), control: "text" }),
-    accept: prop("string", { defaultValue: ".xlsx,.xls", description: bi("Native file-input accept list.", "原生文件输入的 accept 列表。") }),
+    selectedPrefix: prop("string", { defaultValue: "Selected:", description: bi("Text before the chosen file name.", "显示在所选文件名之前的文字。") }),
+    fileName: prop("string", { description: bi("Selected file name. Set this to show the selected-file message.", "已选文件名。设置后会显示已选文件的消息。"), control: "text" }),
+    accept: prop("string", { defaultValue: ".xlsx,.xls", description: bi("HTML file-input accept list.", "HTML 文件输入的 accept 列表。") }),
     onSelect: callbackProp(
       "onSelect",
       "(file: { name: string }) => void",
       { name: "finance_pilot_city_2026Q3.xlsx" },
-      bi("Fired when a file is picked or dropped; carries the file name.", "选中或放入文件时触发，携带文件名。"),
+      bi("The function runs when the user picks or drops a file. The result has `name`. The result does not include the file object.", "用户选中或放入文件时会调用这个函数。结果里带有 `name`。结果里没有文件对象。"),
     ),
   },
   render: function FileDropzoneStory(args) {

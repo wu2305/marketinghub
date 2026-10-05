@@ -10,27 +10,27 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("P15 Skill Library. Semantic page props are driven by the same private deterministic hook in Storybook and the independent host. The inline form intentionally accepts blank Submit, matching the source's novalidate behavior.", "P15 Skill Library。语义化的页面 props 由 Storybook 与独立宿主共用的同一个私有确定性 hook 驱动。页内表单有意接受空白提交，与源页面的 novalidate 行为一致。") } } } };
+export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Skill Library. It lists skills in a table. To build this page, set search, status, the selected skill, and the inline create or edit form. Set `onClick` with `action: \"create\"` to open a blank form. The form accepts a blank Submit. That matches the Demo. Submit in this Demo saves the skill as Under Review. This page is not Scenario Detail, Skill Edit, or Scenario Reports.", "这是 Skill Library 页面。它用表格列出技能。组合页面时，设置搜索、状态、当前技能，以及页内创建或编辑表单。用 `onClick` 并带上 `action: \"create\"` 打开空白表单。表单接受空白 Submit，这与 Demo 一致。这个 Demo 里的 Submit 会把技能存成 Under Review。本页不是 Scenario Detail、Skill Edit 或 Scenario Reports。") } } } };
 
 export const ScenarioLibrary = {
   name: "Skill Library",
   args: { content: SKILL_LIBRARY, records: SKILL_LIBRARY.records, shell: SKILL_LIBRARY_SHELL, search: "", status: "all", mode: "list", initial: {} },
   argTypes: {
-    records: { control: "object", description: bi("Replaceable source-backed skill fixture.", "可替换的、以源页面为依据的技能夹具。") },
-    initial: { control: "object", description: bi("Selected id, preview, form and assistant starting state.", "选中 id、预览、表单与助手的起始状态。") },
-    status: enumProp(skillStatuses, "all", bi("Status filter controlled by the private demo hook.", "由私有 demo hook 控制的状态筛选。")),
-    mode: enumProp(skillLibraryModes, "list", bi("List, fresh create or populated inline edit.", "列表、全新创建或已填充的页内编辑。")),
-    search: { control: "text" },
-    onChange: callbackProp("onChange", "({key:string,value:string|boolean}) => void", { key: "search", value: "Emily Wang" }),
-    onSelect: callbackProp("onSelect", "({value:string}) => void", { value: "Draft" }),
-    onOpen: callbackProp("onOpen", "({id:string,action?:'edit'}) => void", { id: "city-comparison" }),
-    onClick: callbackProp("onClick", "({action:'create'|'delete',id?:string}) => void", { action: "create" }),
-    onAutoFill: callbackProp("onAutoFill", "({field:string}) => void; the demo fills the field with deterministic text", { field: "logic" }),
-    onRunPreview: callbackProp("onRunPreview", "({question:string,output:string}) => void", { question: "Explain the largest channel movement", output: "" }),
-    onSaveDraft: callbackProp("onSaveDraft", "({id:string,status:'Draft',values:object}) => void; the demo saves a Draft row and shows a Draft saved toast", { id: "skill-draft-1", status: "Draft", values: { name: "New scenario" } }),
-    onSubmit: callbackProp("onSubmit", "({id:string,status:'Under Review',values:object}) => void; the demo saves the skill as Under Review and shows a Submitted for review toast", { id: "skill-draft-1", status: "Under Review", values: { name: "" } }),
-    onCancel: callbackProp("onCancel", "({reason:string}) => void", { reason: "cancel" }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }),
+    records: { control: "object", description: bi("Skill records. A host can replace this list.", "技能记录。宿主可以替换这份列表。") },
+    initial: { control: "object", description: bi("Selected id, preview, form, and assistant starting state.", "选中 id、预览、表单和助手的起始状态。") },
+    status: enumProp(skillStatuses, "all", bi("Status filter.", "状态筛选。")),
+    mode: enumProp(skillLibraryModes, "list", bi("Page mode. Values are list, create, and edit.", "页面模式。取值是 list、create 和 edit。")),
+    search: { control: "text", description: bi("Search text.", "搜索文字。") },
+    onChange: callbackProp("onChange", "({key:string,value:string|boolean}) => void", { key: "search", value: "Emily Wang" }, bi("The function runs at each search change. The result has `key` and `value`.", "搜索每次变化都会调用这个函数。结果里有 `key` 和 `value`。")),
+    onSelect: callbackProp("onSelect", "({value:string}) => void", { value: "Draft" }, bi("The function runs when the user selects a status filter. The result has `value`.", "用户选择状态筛选时，会调用这个函数。结果里有 `value`。")),
+    onOpen: callbackProp("onOpen", "({id:string,action?:'edit'}) => void", { id: "city-comparison" }, bi("The function runs when the user opens a skill. The result has `id`. Edit also has `action: \"edit\"`.", "用户打开一项技能时，会调用这个函数。结果里有 `id`。编辑时还会有 `action: \"edit\"`。")),
+    onClick: callbackProp("onClick", "({action:'create'|'delete',id?:string}) => void", { action: "create" }, bi("The function runs for Create New Scenario or Delete. The result has `action`. Delete also has `id`.", "Create New Scenario 或 Delete 时，会调用这个函数。结果里有 `action`。删除时还会有 `id`。")),
+    onAutoFill: callbackProp("onAutoFill", "({field:string}) => void; the demo fills the field with deterministic text", { field: "logic" }, bi("The function runs when the user presses AI Auto-fill. The result has `field`. The demo fills that field with fixed text.", "用户按下 AI Auto-fill 时，会调用这个函数。结果里有 `field`。demo 会用固定文字填入该字段。")),
+    onRunPreview: callbackProp("onRunPreview", "({question:string,output:string}) => void", { question: "Explain the largest channel movement", output: "" }, bi("The function runs when the user runs the example preview. The result has `question` and `output`.", "用户运行示例预览时，会调用这个函数。结果里有 `question` 和 `output`。")),
+    onSaveDraft: callbackProp("onSaveDraft", "({id:string,status:'Draft',values:object}) => void; the demo saves a Draft row and shows a Draft saved toast", { id: "skill-draft-1", status: "Draft", values: { name: "New scenario" } }, bi("The function runs when the user saves a draft. The result has `id`, `status: \"Draft\"`, and `values`. The demo shows a Draft saved toast.", "用户保存草稿时，会调用这个函数。结果里有 `id`、`status: \"Draft\"` 和 `values`。demo 会显示 Draft saved Toast。")),
+    onSubmit: callbackProp("onSubmit", "({id:string,status:'Under Review',values:object}) => void; the demo saves the skill as Under Review and shows a Submitted for review toast", { id: "skill-draft-1", status: "Under Review", values: { name: "" } }, bi("The function runs when the user submits a skill. The result has `id`, `status: \"Under Review\"`, and `values`. The demo shows a Submitted for review toast.", "用户提交技能时，会调用这个函数。结果里有 `id`、`status: \"Under Review\"` 和 `values`。demo 会显示 Submitted for review Toast。")),
+    onCancel: callbackProp("onCancel", "({reason:string}) => void", { reason: "cancel" }, bi("The function runs when the user cancels the inline form. The result has `reason`.", "用户取消页内表单时，会调用这个函数。结果里有 `reason`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "interpreter", params: {}, href: "/assets/pages/knowledge.html", label: "Knowledge Management" }, bi("The function runs when a nav link opens another page. The result has `id`, `params`, `href`, and `label`.", "导航要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。")),
   },
   render: function SkillLibraryStory(args) {
     const initial = React.useMemo(() => ({ ...args.initial, search: args.search, status: args.status, mode: args.mode }), [args.initial, args.search, args.status, args.mode]);

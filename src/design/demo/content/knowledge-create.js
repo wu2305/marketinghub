@@ -101,7 +101,7 @@ export const KNOWLEDGE_CREATE = {
   businessTerm: {
     title: "Create Business Term", guidanceTitle: "Build a common language",
     guidance: "Clearly define the meaning, usage, and boundaries of this business term to help teams talk about data consistently.",
-    reminder: "Operation reminder: Save keeps this term in Draft. Submit publishes it for AI use.",
+    reminder: "Operation reminder: Save keeps this term in Draft. Submit sends it for review.",
     labels: { title: "Title", kind: "Term Type", description: "Description", synonyms: "Synonyms", scope: "Data Model", select: "Select one or more", cancel: "Cancel", save: "Save", submit: "Submit", required: "This field is required." },
     placeholders: { title: "Enter the business term title.", description: "Explain the meaning, usage, and boundary of this term.", synonyms: "Add aliases, abbreviations, or equivalent terms, separated by commas." },
   },

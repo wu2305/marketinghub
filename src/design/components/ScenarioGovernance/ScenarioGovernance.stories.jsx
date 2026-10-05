@@ -6,13 +6,13 @@ export default {
   title: "Organisms/Scenario governance",
   component: ScenarioGovernance,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: bi("Nine scenario governance facts, shared by the detail drawer and full workspace.", "九项场景治理信息，由详情抽屉与完整工作区共用。") } } },
+  parameters: { docs: { description: { component: bi("This component shows nine governance facts for one skill. The parent supplies the section heading and the frame. The Skill Library detail drawer uses a single column. Scenario Detail uses two columns.", "这个组件显示一项技能的九条治理信息。区块标题和外框由父级提供。Skill Library 的详情抽屉使用单列。Scenario Detail 使用两列。") } } },
   args: { record: SKILL_LIBRARY.records[0], fields: SKILL_LIBRARY.labels.governanceFields, layout: "stacked", userFallback: "Marketing Strategy Team" },
   argTypes: {
-    record: prop("ScenarioRecord", { description: bi("Governance values and call/accuracy counts.", "治理取值及调用/准确率计数。"), control: "object" }),
-    fields: prop("ScenarioGovernanceField[]", { description: bi("Nine source-backed field labels in display order.", "按显示顺序排列的九个源页面字段标签。"), control: "object" }),
-    layout: enumProp(scenarioGovernanceLayouts, "stacked", bi("Single-column drawer rows or two-column workspace grid.", "单列的抽屉行布局，或两列的工作区网格布局。"), "inline-radio"),
-    userFallback: prop("string", { defaultValue: "", description: bi("Visible fallback when record.user is blank.", "`record.user` 为空时显示的回退文字。") }),
+    record: prop("ScenarioRecord", { description: bi("Governance values, call counts, and the accuracy score.", "治理取值、调用次数和准确率。"), control: "object" }),
+    fields: prop("ScenarioGovernanceField[]", { description: bi("Nine field labels in display order.", "按显示顺序排列的九个字段标签。"), control: "object" }),
+    layout: enumProp(scenarioGovernanceLayouts, "stacked", bi("`stacked` is one column. `columns` is two columns.", "`stacked` 是单列。`columns` 是两列。"), "inline-radio"),
+    userFallback: prop("string", { defaultValue: "", description: bi("Visible text when `record.user` is empty.", "`record.user` 为空时显示的文字。") }),
   },
   render: (args) => <div style={{ maxWidth: args.layout === "columns" ? 1000 : 520, padding: 16, background: "var(--mh-surface-subtle)" }}><ScenarioGovernance {...args} /></div>,
 };

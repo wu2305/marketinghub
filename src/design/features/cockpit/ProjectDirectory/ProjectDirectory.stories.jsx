@@ -13,7 +13,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Project catalog mode: back link, project intro header and report list.", "项目目录模式：返回链接、项目介绍头部与报表列表。"),
+        component: bi("This component is the project report list on Marketing Cockpit. It shows a back link, a project image, the project title, and a list of reports. Pass `ReportRow` elements as `children`. The back control is `<a href>`. The function `onBack` runs on a plain click. The result has `href`.", "这是 Marketing Cockpit 上的项目报表列表。它显示返回链接、项目图片、项目标题和报表列表。把 `ReportRow` 作为 `children` 传入。返回控件是 `<a href>`。普通点击会调用 `onBack`。结果里带有 `href`。"),
       },
     },
   },

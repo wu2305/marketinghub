@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("Action button. Renders `<button type=\"button\">`; with `href` it renders a link with the same look, for actions that navigate.", "操作按钮。渲染为 `<button type=\"button\">`；传入 `href` 时渲染为外观相同的链接，用于导航类操作。"),
+        component: bi("The button starts one function. The element is `<button type=\"button\">`. Set `href` if the function opens a different page. The element then becomes a link. The link has the same appearance.", "这个按钮用来启动一次操作。元素是 `<button type=\"button\">`。如果这次操作会打开另一个页面，就设置 `href`。元素会变成链接，外观不变。"),
       },
     },
   },
@@ -33,7 +33,7 @@ export default {
       "onClick",
       "(event: { label: string }) => void",
       { label: "Create Campaign Task" },
-      bi("Fired on click. `label` is the `label` prop when set, otherwise the trimmed visible text.", "点击时触发。`label` 在设置了 `label` 属性时取该值，否则取去除首尾空白的可见文字。"),
+      bi("The function runs on click. `label` is the `label` prop when you set it. If you do not set `label`, `label` is the visible text with spaces trimmed.", "点击时会调用这个函数。如果你设置了 `label` 属性，结果里的 `label` 就是它。如果没有设置，`label` 是去掉首尾空白的可见文字。"),
     ),
   },
   render: (args) => <Button {...args} />,

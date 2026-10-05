@@ -12,15 +12,15 @@ import "./ScenarioEditPage.css";
 /**
  * Controlled Skill Edit page; stories and host supply all source-backed content and flow state.
  * @param {object} props
- * @param {object} props.content Hero, sidebar, form labels/options, and default values. // Hero、侧栏、表单标签/选项以及默认值。
+ * @param {object} props.content Header image area, sidebar, form labels and options, and default values. // 头图区、侧栏、表单标签和选项，以及默认值。
  * @param {object} props.logo Header logo. // 页头 Logo。
- * @param {object[]} [props.navigation=[]] Header destinations. // 页头目的地。
- * @param {object} [props.form={}] ScenarioEditForm values, validation, preview and named callbacks. // ScenarioEditForm 的值、校验、预览与具名回调。
- * @param {string} [props.toast=""] Acknowledgement after Save Draft (hidden when empty). // Save Draft 之后的确认信息（为空时隐藏）。
- * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant content/state/callbacks. // 轻量助手的内容/状态/回调。
- * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model-flow dialog content/state/callbacks. // 建模流程对话框的内容/状态/回调。
- * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
- * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
+ * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
+ * @param {object} [props.form={}] Form values, validation, preview, and named callbacks. // 表单的值、校验、预览和具名回调。
+ * @param {string} [props.toast=""] Message after Save Draft. Hidden when empty. // Save Draft 之后的消息。为空时隐藏。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state, and callbacks. // 轻量助手的文案、状态和回调。
+ * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog copy, state, and callbacks. // 建模对话框的文案、状态和回调。
+ * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor] Turns a route id into an href. // 把路由 id 转成 href。
+ * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate] The function runs when a link opens another page. The result has `id`, `params`, `href`, and `label`. // 链接要打开另一页时，会调用这个函数。结果里有 `id`、`params`、`href` 和 `label`。
  */
 export function ScenarioEditPage({ content, logo, navigation = [], form = {}, toast = "", assistant = {}, skillFlow, hrefFor, onNavigate }) {
   const { hero, sidebar, labels } = content;

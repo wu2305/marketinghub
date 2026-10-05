@@ -11,18 +11,18 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Features/Scenario Detail/ScenarioDetailWorkspace", component: ScenarioDetailWorkspace, tags: ["autodocs"], parameters: { docs: { description: { component: bi("The six actual Skill Detail panels as a controlled, content-driven feature. It owns no URL, record selection or assistant state.", "六个真实的 Skill Detail 面板，作为受控、内容驱动的功能模块。它不持有 URL、记录选择或助手状态。") } } } };
+export default { title: "Features/Scenario Detail/ScenarioDetailWorkspace", component: ScenarioDetailWorkspace, tags: ["autodocs"], parameters: { docs: { description: { component: bi("This component is the main workspace on Scenario Detail. It shows six panels: content, related, AI check, usage, version, and activity. Set `tab` for the open panel. The content panel shows the skill name, status, structure, governance, and example preview. It does not own the URL or the assistant.", "这是 Scenario Detail 页的主工作区。它显示六个面板：content、related、AI check、usage、version 和 activity。用 `tab` 设置当前打开的面板。content 面板显示技能名称、状态、结构、治理信息和示例预览。它不持有 URL，也不持有助手。") } } } };
 
 export const Default = {
   args: { record: SKILL_RECORDS.find((record) => record.id === "city-comparison"), labels: SCENARIO_DETAIL.labels, tab: "content", previewOpen: false },
   argTypes: {
-    record: { control: "object", description: bi("Replaceable skill record.", "可替换的技能记录。") },
-    labels: { control: "object", description: bi("Tab, field and static panel copy.", "标签页、字段与静态面板的文案。") },
-    tab: enumProp(scenarioDetailTabs, "content", bi("Selected panel.", "当前选中的面板。")),
-    previewOpen: { control: "boolean", description: bi("Content example output expanded.", "展开 Content 面板中的示例输出。") },
-    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "related" }),
-    onTogglePreview: callbackProp("onTogglePreview", "({open:boolean}) => void", { open: true }),
-    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "scenario-edit", params: { id: "city-comparison" }, href: "scenario-edit.html?id=city-comparison", label: "Edit Scenario" }),
+    record: { control: "object", description: bi("Skill record shown on Scenario Detail.", "Scenario Detail 上显示的技能记录。") },
+    labels: { control: "object", description: bi("Tab, field, and static panel copy.", "标签页、字段与静态面板的文案。") },
+    tab: enumProp(scenarioDetailTabs, "content", bi("Open panel.", "当前打开的面板。")),
+    previewOpen: { control: "boolean", description: bi("Set `true` to show the example output on the content panel.", "设为 `true` 时，content 面板显示示例输出。") },
+    onTabChange: callbackProp("onTabChange", "({value:string}) => void", { value: "related" }, bi("The function runs when the user selects a tab. The result has `value`.", "用户选择标签页时会调用这个函数。结果里带有 `value`。")),
+    onTogglePreview: callbackProp("onTogglePreview", "({open:boolean}) => void", { open: true }, bi("The function runs when the user shows or hides the example output. The result has `open`.", "用户显示或隐藏示例输出时会调用这个函数。结果里带有 `open`。")),
+    onNavigate: callbackProp("onNavigate", "({id:string,params:object,href:string,label:string}) => void", { id: "scenario-edit", params: { id: "city-comparison" }, href: "scenario-edit.html?id=city-comparison", label: "Edit Scenario" }, bi("The function runs when the user follows Edit Scenario or a related link. The result has `id`, `params`, `href`, and `label`.", "用户点击 Edit Scenario 或相关链接时会调用这个函数。结果里带有 `id`、`params`、`href` 和 `label`。")),
   },
   render: function WorkspaceStory(args) {
     const [tab, setTab] = React.useState(args.tab);
