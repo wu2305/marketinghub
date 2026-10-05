@@ -15,8 +15,8 @@ export default { title: "Features/Knowledge Create/Knowledge Create Fields", com
     invalid: prop("string[]", { description: bi("Invalid field names.", "无效的字段名。") }),
     menu: prop("string | null", { description: bi("Open multi-select name.", "已展开的多选字段名。") }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "Example" }, bi("The function runs at each change.", "每次变化都会调用这个函数。")),
-    onMenu: callbackProp("onMenu", "({name}) => void", { name: "businessDomain" }),
-    onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "preview" }),
+    onMenu: callbackProp("onMenu", "({name}) => void", { name: "businessDomain" }, bi("The function runs when a multi-select opens or closes. The result has `name`.", "多选打开或关闭时会调用这个函数。结果里有 `name`。")),
+    onDialog: callbackProp("onDialog", "({kind}) => void", { kind: "preview" }, bi("The function runs when a dialog opens. The result has `kind`.", "对话框打开时会调用这个函数。结果里有 `kind`。")),
   },
   render: (args) => <FieldsDemo key={`${args.type}:${args.mode}`} args={args} /> };
 function FieldsDemo({ args }) { const [values, setValues] = React.useState(args.values); const [menu, setMenu] = React.useState(args.menu); React.useEffect(() => setValues(args.values), [args.values]); return <KnowledgeCreateFields {...args} values={values} menu={menu} onChange={(event) => { setValues((prior) => ({ ...prior, [event.name]: event.value })); args.onChange?.(event); }} onMenu={(event) => { setMenu((prior) => prior === event.name ? null : event.name); args.onMenu?.(event); }} onDialog={args.onDialog} />; }

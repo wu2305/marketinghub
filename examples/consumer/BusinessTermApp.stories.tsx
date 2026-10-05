@@ -25,4 +25,15 @@ export default {
   },
 };
 
-export const Workspace = {};
+export const Workspace = {
+  parameters: {
+    docs: {
+      description: {
+        story: bi(
+          "The seed terms from `marketing-hub/demo` and this app's own Save, Submit, and governed actions.",
+          "种子词条来自 `marketing-hub/demo`。Save、Submit 和受治理操作都写在这个应用里。",
+        ),
+      },
+    },
+  },
+};

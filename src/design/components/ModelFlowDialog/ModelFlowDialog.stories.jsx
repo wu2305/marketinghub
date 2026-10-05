@@ -21,14 +21,14 @@ export default {
 export const Default = {
   args: { step: "history" },
   argTypes: {
-    step: { control: "inline-radio", options: modelFlowSteps },
-    onToggleMessage: { action: "onToggleMessage" },
-    onRuleChange: { action: "onRuleChange" },
-    onGenerate: { action: "onGenerate" },
-    onBack: { action: "onBack" },
-    onClose: { action: "onClose" },
-    onSave: { action: "onSave" },
-    onSubmit: { action: "onSubmit" },
+    step: { control: "inline-radio", options: modelFlowSteps, description: bi("`history` shows chat threads. `generated` shows the filled model form. `manual` shows the same form empty.", "`history` 显示聊天会话。`generated` 显示已填好的模型表单。`manual` 显示同一表单的空白版。") },
+    onToggleMessage: { action: "onToggleMessage", description: bi("The function runs when a message checkbox changes. The result has `threadIndex`, `messageIndex`, and `checked`.", "消息复选框变化时会调用这个函数。结果里有 `threadIndex`、`messageIndex` 和 `checked`。") },
+    onRuleChange: { action: "onRuleChange", description: bi("The function runs at each change in the generation rule. The result has `value`.", "生成规则每次变化都会调用这个函数。结果里有 `value`。") },
+    onGenerate: { action: "onGenerate", description: bi("The function runs on Generate. The result has `messages` and `rule`.", "点击 Generate 时会调用这个函数。结果里有 `messages` 和 `rule`。") },
+    onBack: { action: "onBack", description: bi("The function runs on Back. The result has `reason: \"back\"`.", "点击 Back 时会调用这个函数。结果里的 `reason` 是 `\"back\"`。") },
+    onClose: { action: "onClose", description: bi("The function runs when the dialog closes. The result has `reason`.", "对话框关闭时会调用这个函数。结果里有 `reason`。") },
+    onSave: { action: "onSave", description: bi("The function runs on Save. The result has `values`.", "点击 Save 时会调用这个函数。结果里有 `values`。") },
+    onSubmit: { action: "onSubmit", description: bi("The function runs on Submit. The result has `values`.", "点击 Submit 时会调用这个函数。结果里有 `values`。") },
   },
   render: function ModelFlowStory(args) {
     const [step, setStep] = React.useState(args.step);

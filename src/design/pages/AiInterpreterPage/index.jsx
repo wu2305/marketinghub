@@ -32,13 +32,13 @@ const typeViews = {
  * AI Interpreter knowledge workspace. A composing engineer sets the header,
  * the header image area, the metric blocks, the type list, and the assistant.
  * @param {object} props
- * @param {string} [props.current="interpreter"]
- * @param {object} props.logo
- * @param {Array<object>} [props.navigation=[]]
+ * @param {string} [props.current="interpreter"] Active nav id. AI Interpreter does not underline the current item. // 当前导航 id。AI Interpreter 不为当前项加下划线。
+ * @param {object} props.logo Header logo. // 页头 Logo。
+ * @param {Array<object>} [props.navigation=[]] Header links. // 页头链接。
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Function that turns a route id into an href. The story or host supplies it. // 把路由 id 转成 href 的函数。由故事或宿主提供。
  * @param {object} [props.hero={}] Header image area props. `stats` is an array of MetricStat props. // 头图区的 props。`stats` 是 MetricStat props 的数组。
- * @param {{ id: string, label: string, icon?: string }} props.overviewItem
- * @param {string} [props.sidebarTitle]
+ * @param {{ id: string, label: string, icon?: string }} props.overviewItem Overview item in the left sidebar. // 左侧侧栏里的概览项。
+ * @param {string} [props.sidebarTitle] Title above the knowledge types in the sidebar. // 侧栏知识类型列表上方的标题。
  * @param {Array<object>} [props.types=[]] Knowledge type entries (id, title, icon, summary, action, manageable, createLabel, stats, view). // 知识类型条目（id、title、icon、summary、action、manageable、createLabel、stats、view）。
  * @param {AiInterpreterView} [props.view] Props for the active registered type (`view` in its `types` entry). Other views ignore them. // 当前激活的已注册类型的 props（其 `types` 条目中的 `view`）。其他视图会忽略它们。
  * @param {React.ReactNode} [props.overlay] Overlay slot from the demo hook or host. // 由 demo hook 或宿主提供的覆盖层插槽。

@@ -22,9 +22,9 @@ export default {
     closeLabel: "Close",
   },
   argTypes: {
-    open: { control: "boolean" },
-    variant: { control: "inline-radio", options: modalVariants },
-    onClose: { action: "onClose" },
+    open: { control: "boolean", description: bi("Set true to show the dialog.", "设为 true 时显示对话框。") },
+    variant: { control: "inline-radio", options: modalVariants, description: bi("`modal` is the centered dialog. `sheet` is the borderless Self-Service panel. `drawer` is the full-height panel on the right.", "`modal` 是居中对话框。`sheet` 是 Self-Service 使用的无边框面板。`drawer` 是右侧全高面板。") },
+    onClose: { action: "onClose", description: bi("The function runs when the dialog closes. The result has `reason`: `\"scrim\"`, `\"escape\"`, or `\"button\"`.", "对话框关闭时会调用这个函数。结果里的 `reason` 是 `\"scrim\"`、`\"escape\"` 或 `\"button\"`。") },
   },
   render: function ModalStory(args) {
     const [open, setOpen] = useSynced(args.open);

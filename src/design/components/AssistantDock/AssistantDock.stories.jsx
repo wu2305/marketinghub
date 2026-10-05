@@ -19,12 +19,12 @@ export default {
     },
   },
   argTypes: {
-    variant: { control: "inline-radio", options: assistantVariants },
-    placement: { control: "inline-radio", options: assistantPlacements },
-    tone: { control: "inline-radio", options: [undefined, "home"] },
-    launcherLabel: { control: "text" },
-    launcherHidden: { control: "boolean" },
-    onLauncherOpen: { action: "onLauncherOpen" },
+    variant: { control: "inline-radio", options: assistantVariants, description: bi("Assistant panel preset. This value wins over `assistant.variant`.", "助手面板预设。这个值优先于 `assistant.variant`。") },
+    placement: { control: "inline-radio", options: assistantPlacements, description: bi("`drawer` is the full-height panel on the right. `modal` is a centered dialog. This value wins over `assistant.placement`.", "`drawer` 是右侧全高面板。`modal` 是居中对话框。这个值优先于 `assistant.placement`。") },
+    tone: { control: "inline-radio", options: [undefined, "home"], description: bi("Set `home` for the Home assistant tone. This value wins over `assistant.tone`.", "Home 助手用 `home`。这个值优先于 `assistant.tone`。") },
+    launcherLabel: { control: "text", description: bi("Corner button label. If empty, the dock uses `assistant.launcherLabel`.", "角落按钮的文字。为空时使用 `assistant.launcherLabel`。") },
+    launcherHidden: { control: "boolean", description: bi("Set true to hide the corner button while another overlay is open.", "设为 true 时，在其他覆盖层打开期间隐藏角落按钮。") },
+    onLauncherOpen: { action: "onLauncherOpen", description: bi("The function runs when the corner button opens the panel. The result has `reason: \"open\"`.", "角落按钮打开面板时会调用这个函数。结果里的 `reason` 是 `\"open\"`。") },
   },
   args: { variant: "campaign", placement: "drawer" },
   render: function DockStory({ assistant, initialFlow, onLauncherOpen, ...args }) {
