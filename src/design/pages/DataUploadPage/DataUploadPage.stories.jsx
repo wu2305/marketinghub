@@ -18,7 +18,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Data Upload. It sits under Self-Service Center. A composing engineer sets the header image area, the toolbar, the form fields, and the Template Import dialog. Submit disables the button and shows `submittingLabel`. The demo hook restores `submitting` after a short wait. Set `onSubmitForm` to receive the field values. Set `onOpenImport` to open Template Import.", "这是 Data Upload 页面，位于 Self-Service Center 之下。组合页面时，设置头图区、工具栏、表单字段和 Template Import 对话框。Submit 会禁用按钮，并显示 `submittingLabel`。demo hook 会在短暂等待后把 `submitting` 恢复为 false。用 `onSubmitForm` 接收字段值。用 `onOpenImport` 打开 Template Import。"),
+        component: bi("This page is Data Upload. It sits under Self-Service Center. To build this page, set the header image area, the toolbar, the form fields, and the Template Import dialog. Submit disables the button and shows `submittingLabel`. The demo hook restores `submitting` after a short wait. Set `onSubmitForm` to receive the field values. Set `onOpenImport` to open Template Import.", "这是 Data Upload 页面，位于 Self-Service Center 之下。组合页面时，设置头图区、工具栏、表单字段和 Template Import 对话框。Submit 会禁用按钮，并显示 `submittingLabel`。demo hook 会在短暂等待后把 `submitting` 恢复为 false。用 `onSubmitForm` 接收字段值。用 `onOpenImport` 打开 Template Import。"),
       },
     },
   },

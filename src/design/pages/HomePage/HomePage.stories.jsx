@@ -14,7 +14,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Home. It is the portal entry. A composing engineer sets the header, the header image area, the metric blocks, the workspace cards, and the assistant. Set `hrefFor` to turn a route id into an href. Set `onNavigate` when a card or a nav link opens another page. Set `onOpen` when a workspace card starts an action. The assistant is one `assistant` object. Set `skillFlow` when the skill menu opens the model dialog.", "这是 Home 页面，也是门户入口。组合页面时，设置页头、头图区、指标块、工作区卡片和助手。用 `hrefFor` 把路由 id 转成 href。卡片或导航要打开另一页时，设置 `onNavigate`。工作区卡片要启动一次操作时，设置 `onOpen`。助手的内容放在一个 `assistant` 对象里。技能菜单要打开建模对话框时，设置 `skillFlow`。"),
+        component: bi("This page is Home. It is the portal entry. To build this page, set the header, the header image area, the metric blocks, the workspace cards, and the assistant. Set `hrefFor` to turn a route id into an href. Set `onNavigate` when a card or a nav link opens another page. Set `onOpen` when a workspace card starts an action. The assistant is one `assistant` object. Set `skillFlow` when the skill menu opens the model dialog.", "这是 Home 页面，也是门户入口。组合页面时，设置页头、头图区、指标块、工作区卡片和助手。用 `hrefFor` 把路由 id 转成 href。卡片或导航要打开另一页时，设置 `onNavigate`。工作区卡片要启动一次操作时，设置 `onOpen`。助手的内容放在一个 `assistant` 对象里。技能菜单要打开建模对话框时，设置 `skillFlow`。"),
       },
     },
   },

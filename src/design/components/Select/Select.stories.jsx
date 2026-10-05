@@ -31,7 +31,7 @@ export default {
       description: bi("Options — objects or plain strings.", "选项：对象或纯字符串。"),
     }),
     placeholder: prop("string", {
-      description: bi("The value of the first option is the option text. This agrees with the Demo.", "第一项的值就是这段文字，和 Demo 里的写法一样。"),
+      description: bi("Text for an extra first option that works as a hint, such as \"Select one\". The value of that option is the same text.", "额外增加的第一个选项的文字，用作提示，例如 \"Select one\"。这个选项的值就是这段文字。"),
     }),
     autoComplete: prop("string", { description: bi("Native autocomplete attribute.", "原生 autocomplete 属性。") }),
     disabled: prop("boolean", { defaultValue: false, description: bi("Disables the field.", "禁用该字段。") }),

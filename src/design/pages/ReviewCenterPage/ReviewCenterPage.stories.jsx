@@ -10,7 +10,7 @@ const missingSuggestion = { ...restoration, id: "restore-fallback", title: "Rest
 const flowThreads = () => REVIEW_SHELL.modelFlow.threads.map((thread) => ({ ...thread, messages: thread.messages.map((message) => ({ ...message })) }));
 const selectedFlowMessages = () => flowThreads().flatMap((thread, threadIndex) => thread.messages.flatMap((message) => message.checked ? [{ ...message, threadIndex, conversation: thread.title }] : []));
 
-export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Review Center. It is a review queue. Tabs are Pending, Approved, and Rejected. A composing engineer sets the filters, the queue, the decision overlays, and the assistant. Set `onConfirmApprove` and `onConfirmReject` to finish a decision. A success toast shows after a decision.", "这是 Review Center 页面，也就是审核队列。标签是 Pending、Approved 和 Rejected。组合页面时，设置筛选、队列、决策覆盖层和助手。用 `onConfirmApprove` 和 `onConfirmReject` 完成一次决策。决策后会显示成功 Toast。") } } } };
+export default { title: "Pages", component: ReviewCenterPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Review Center. It is a review queue. Tabs are Pending, Approved, and Rejected. To build this page, set the filters, the queue, the decision overlays, and the assistant. Set `onConfirmApprove` and `onConfirmReject` to finish a decision. A success toast shows after a decision.", "这是 Review Center 页面，也就是审核队列。标签是 Pending、Approved 和 Rejected。组合页面时，设置筛选、队列、决策覆盖层和助手。用 `onConfirmApprove` 和 `onConfirmReject` 完成一次决策。决策后会显示成功 Toast。") } } } };
 
 export const ReviewCenter = {
   name: "Review Center",

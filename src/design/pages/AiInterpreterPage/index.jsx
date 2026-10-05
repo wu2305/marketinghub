@@ -29,7 +29,7 @@ const typeViews = {
 /** @typedef {Partial<Parameters<typeof PrinciplesView>[0]> | Partial<Parameters<typeof BusinessTermView>[0]> | Partial<Parameters<typeof DataModelView>[0]> | Partial<Parameters<typeof FieldLibraryView>[0]> | Partial<Parameters<typeof ScenarioReportsView>[0]>} AiInterpreterView Props of whichever registered view is active. */
 
 /**
- * AI Interpreter knowledge workspace. A composing engineer sets the header,
+ * AI Interpreter knowledge workspace. To build this page, set the header,
  * the header image area, the metric blocks, the type list, and the assistant.
  * @param {object} props
  * @param {string} [props.current="interpreter"] Active nav id. AI Interpreter does not underline the current item. // 当前导航 id。AI Interpreter 不为当前项加下划线。

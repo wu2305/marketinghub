@@ -12,7 +12,7 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Feedback & Quality. It lists assistant feedback. Tabs are All, Thumbs Up, and Thumbs Down. Feedback rows have no actions. They cannot change. A composing engineer sets the filters, the table, and the detail drawer. The original launcher did not open because a subtitle was missing. This page restores the intended assistant.", "这是 Feedback & Quality 页面。它列出助手反馈。标签是 All、Thumbs Up 和 Thumbs Down。反馈行没有操作，也不能改。组合页面时，设置筛选、表格和详情抽屉。原始启动器因为缺少 subtitle 而打不开。本页恢复了本应有的助手。") } } } };
+export default { title: "Pages", component: FeedbackQualityPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Feedback & Quality. It lists assistant feedback. Tabs are All, Thumbs Up, and Thumbs Down. Feedback rows have no actions. They cannot change. To build this page, set the filters, the table, and the detail drawer. The original launcher did not open because a subtitle was missing. This page restores the intended assistant.", "这是 Feedback & Quality 页面。它列出助手反馈。标签是 All、Thumbs Up 和 Thumbs Down。反馈行没有操作，也不能改。组合页面时，设置筛选、表格和详情抽屉。原始启动器因为缺少 subtitle 而打不开。本页恢复了本应有的助手。") } } } };
 
 export const FeedbackQuality = {
   name: "Feedback & Quality",

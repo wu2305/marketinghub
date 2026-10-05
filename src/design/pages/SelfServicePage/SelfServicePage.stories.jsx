@@ -11,7 +11,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Self-Service Center. It has Analysis and Data Upload tabs. A composing engineer sets the header image area, the tabs, the filter pills, and the action cards. Upload cards can open an upload-history dialog. Set `tab` to show Analysis or Data Upload. Set `onOpen` when a card opens a destination. The assistant is one `assistant` object.", "这是 Self-Service Center 页面。它有 Analysis 和 Data Upload 两个标签。组合页面时，设置头图区、标签、筛选胶囊和入口卡片。上传卡片可以打开上传历史对话框。用 `tab` 显示 Analysis 或 Data Upload。卡片要打开目的地时，设置 `onOpen`。助手的内容放在一个 `assistant` 对象里。"),
+        component: bi("This page is Self-Service Center. It has Analysis and Data Upload tabs. To build this page, set the header image area, the tabs, the filter pills, and the action cards. Upload cards can open an upload-history dialog. Set `tab` to show Analysis or Data Upload. Set `onOpen` when a card opens a destination. The assistant is one `assistant` object.", "这是 Self-Service Center 页面。它有 Analysis 和 Data Upload 两个标签。组合页面时，设置头图区、标签、筛选胶囊和入口卡片。上传卡片可以打开上传历史对话框。用 `tab` 显示 Analysis 或 Data Upload。卡片要打开目的地时，设置 `onOpen`。助手的内容放在一个 `assistant` 对象里。"),
       },
     },
   },

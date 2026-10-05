@@ -11,7 +11,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Campaign. It is the RedNote Campaign Tool. Five sections are overview, execution, assets, analytics, and accounts. A composing engineer sets the rail, the section data, the Create Campaign Task dialog, and the assistant. Set `section` to show one workspace. Set `channel` for the overview tabs. Douyin stays disabled. Set `onCreateTask` to open the task dialog. Set `onSubmitTask` when the user submits a task. The assistant is one `assistant` object.", "这是 Campaign 页面，也就是 RedNote Campaign Tool。五个分区是 overview、execution、assets、analytics 和 accounts。组合页面时，设置侧栏、各分区数据、Create Campaign Task 对话框和助手。用 `section` 显示一个工作区。用 `channel` 切换概览里的渠道标签。Douyin 保持禁用。用 `onCreateTask` 打开任务对话框。用户提交任务时，设置 `onSubmitTask`。助手的内容放在一个 `assistant` 对象里。"),
+        component: bi("This page is Campaign. It is the RedNote Campaign Tool. Five sections are overview, execution, assets, analytics, and accounts. To build this page, set the rail, the section data, the Create Campaign Task dialog, and the assistant. Set `section` to show one workspace. Set `channel` for the overview tabs. Douyin stays disabled. Set `onCreateTask` to open the task dialog. Set `onSubmitTask` when the user submits a task. The assistant is one `assistant` object.", "这是 Campaign 页面，也就是 RedNote Campaign Tool。五个分区是 overview、execution、assets、analytics 和 accounts。组合页面时，设置侧栏、各分区数据、Create Campaign Task 对话框和助手。用 `section` 显示一个工作区。用 `channel` 切换概览里的渠道标签。Douyin 保持禁用。用 `onCreateTask` 打开任务对话框。用户提交任务时，设置 `onSubmitTask`。助手的内容放在一个 `assistant` 对象里。"),
       },
     },
   },

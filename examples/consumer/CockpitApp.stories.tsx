@@ -11,7 +11,7 @@ export default {
     docs: {
       description: {
         component: bi(
-          "This example is a Marketing Cockpit. A composing engineer builds it from public package exports. The page is `MarketingCockpitPage`. State lives in the app. Two assistants can be on one page. The corner assistant is the workspace assistant. A live report also has Report Copilot. Each assistant has its own answers. Set `data` to supply projects, groups, knowledge, and Copilot copy.",
+          "This example is a Marketing Cockpit. An engineer builds it from public package exports. The page is `MarketingCockpitPage`. State lives in the app. Two assistants can be on one page. The corner assistant is the workspace assistant. A live report also has Report Copilot. Each assistant has its own answers. Set `data` to supply projects, groups, knowledge, and Copilot copy.",
           "这是一个 Marketing Cockpit 示例。组合页面时，使用包的公开导出。页面是 `MarketingCockpitPage`。状态写在这个应用里。同一页可以有两个助手。角落里的是工作区助手。实时报表上还有 Report Copilot。两个助手各自有自己的回答。通过 `data` 传入项目、分组、知识和 Copilot 文案。",
         ),
       },

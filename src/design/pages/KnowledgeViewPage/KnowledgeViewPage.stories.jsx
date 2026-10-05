@@ -18,7 +18,7 @@ export default {
   title: "Pages",
   component: KnowledgeViewPage,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Knowledge View. It shows one knowledge record. Types are Business Term, Scenario Reporting, Principles, and Data Model. A composing engineer sets `record` and `copy`. Set `hrefFor` for crumbs and edit links. Version drawers and Data Model action notices are overlays. Scenario Reporting here is a knowledge type. It is not the Scenario Detail page.", "这是 Knowledge View 页面。它显示一条知识记录。类型是 Business Term、Scenario Reporting、Principles 和 Data Model。组合页面时，设置 `record` 和 `copy`。面包屑和编辑链接用 `hrefFor`。版本抽屉和 Data Model 操作提示是覆盖层。这里的 Scenario Reporting 是一种知识类型，不是 Scenario Detail 页面。") } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Knowledge View. It shows one knowledge record. Types are Business Term, Scenario Reporting, Principles, and Data Model. To build this page, set `record` and `copy`. Set `hrefFor` for crumbs and edit links. Version drawers and Data Model action notices are overlays. Scenario Reporting here is a knowledge type. It is not the Scenario Detail page.", "这是 Knowledge View 页面。它显示一条知识记录。类型是 Business Term、Scenario Reporting、Principles 和 Data Model。组合页面时，设置 `record` 和 `copy`。面包屑和编辑链接用 `hrefFor`。版本抽屉和 Data Model 操作提示是覆盖层。这里的 Scenario Reporting 是一种知识类型，不是 Scenario Detail 页面。") } } },
   args: { recordId: "business-term-gmv", overlay: "none", collapsed: false, query: "", group: "entity", tab: "fields", tableId: "channel" },
   argTypes: {
     recordId: enumProp(recordIds, "business-term-gmv", bi("Detail record. Types are " + knowledgeDetailTypes.join(", ") + ".", "详情记录。类型是 " + knowledgeDetailTypes.join("、") + "。")),

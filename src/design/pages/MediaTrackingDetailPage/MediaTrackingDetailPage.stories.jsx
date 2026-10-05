@@ -9,7 +9,7 @@ export default {
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
-    docs: { description: { component: bi("This page is Media Tracking Detail. It sits under Self-Service Center. A composing engineer sets the period tabs, the filter grid, the notes, and the data table. The period tab does not filter the static table. The assistant is the lite drawer.", "这是 Media Tracking Detail 页面，位于 Self-Service Center 之下。组合页面时，设置周期标签、筛选网格、说明和数据表。周期标签不会筛选这张静态表。助手是轻量抽屉。") } },
+    docs: { description: { component: bi("This page is Media Tracking Detail. It sits under Self-Service Center. To build this page, set the period tabs, the filter grid, the notes, and the data table. The period tab does not filter the static table. The assistant is the lite drawer.", "这是 Media Tracking Detail 页面，位于 Self-Service Center 之下。组合页面时，设置周期标签、筛选网格、说明和数据表。周期标签不会筛选这张静态表。助手是轻量抽屉。") } },
   },
 };
 

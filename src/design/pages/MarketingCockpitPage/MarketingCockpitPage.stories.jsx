@@ -18,7 +18,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Marketing Cockpit. It lists project cards in groups. Open a project to see its reports. Open a live report to see the dashboard. A composing engineer sets `projects`, `groups`, `knowledge`, and copy. Set `cityInvest` for the City Invest dashboard. Two assistants can be on this page. The corner assistant is the workspace assistant. A live report also has Report Copilot. Set `hrefFor` to turn a route id into an href.", "这是 Marketing Cockpit 页面。它按分组列出项目卡片。打开一个项目可以看到它的报表。打开实时报表可以看到仪表盘。组合页面时，设置 `projects`、`groups`、`knowledge` 和文案。City Invest 仪表盘需要设置 `cityInvest`。同一页可以有两个助手。角落里的是工作区助手。实时报表上还有 Report Copilot。用 `hrefFor` 把路由 id 转成 href。"),
+        component: bi("This page is Marketing Cockpit. It lists project cards in groups. Open a project to see its reports. Open a live report to see the dashboard. To build this page, set `projects`, `groups`, `knowledge`, and copy. Set `cityInvest` for the City Invest dashboard. Two assistants can be on this page. The corner assistant is the workspace assistant. A live report also has Report Copilot. Set `hrefFor` to turn a route id into an href.", "这是 Marketing Cockpit 页面。它按分组列出项目卡片。打开一个项目可以看到它的报表。打开实时报表可以看到仪表盘。组合页面时，设置 `projects`、`groups`、`knowledge` 和文案。City Invest 仪表盘需要设置 `cityInvest`。同一页可以有两个助手。角落里的是工作区助手。实时报表上还有 Report Copilot。用 `hrefFor` 把路由 id 转成 href。"),
       },
     },
   },

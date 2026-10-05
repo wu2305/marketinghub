@@ -10,7 +10,7 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Skill Library. It lists skills in a table. A composing engineer sets search, status, the selected skill, and the inline create or edit form. Set `onClick` with `action: \"create\"` to open a blank form. The form accepts a blank Submit. That matches the Demo. Submit in this Demo saves the skill as Under Review. This page is not Scenario Detail, Skill Edit, or Scenario Reports.", "这是 Skill Library 页面。它用表格列出技能。组合页面时，设置搜索、状态、当前技能，以及页内创建或编辑表单。用 `onClick` 并带上 `action: \"create\"` 打开空白表单。表单接受空白 Submit，这与 Demo 一致。这个 Demo 里的 Submit 会把技能存成 Under Review。本页不是 Scenario Detail、Skill Edit 或 Scenario Reports。") } } } };
+export default { title: "Pages", component: ScenarioLibraryPage, tags: ["autodocs"], parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Skill Library. It lists skills in a table. To build this page, set search, status, the selected skill, and the inline create or edit form. Set `onClick` with `action: \"create\"` to open a blank form. The form accepts a blank Submit. That matches the Demo. Submit in this Demo saves the skill as Under Review. This page is not Scenario Detail, Skill Edit, or Scenario Reports.", "这是 Skill Library 页面。它用表格列出技能。组合页面时，设置搜索、状态、当前技能，以及页内创建或编辑表单。用 `onClick` 并带上 `action: \"create\"` 打开空白表单。表单接受空白 Submit，这与 Demo 一致。这个 Demo 里的 Submit 会把技能存成 Under Review。本页不是 Scenario Detail、Skill Edit 或 Scenario Reports。") } } } };
 
 export const ScenarioLibrary = {
   name: "Skill Library",

@@ -12,7 +12,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Metric Dictionary. It shows Basic and Derived metrics. A composing engineer sets the list, the selected metric, and the detail tabs. The tabs are Definition, Formula, and Dimensions. Set `derivedEditor` to open the Add derived drawer. The assistant is the lite drawer.", "这是 Metric Dictionary 页面。它列出 Basic 和 Derived 指标。组合页面时，设置列表、当前指标和详情标签。标签是 Definition、Formula 和 Dimensions。用 `derivedEditor` 打开 Add derived 抽屉。助手是轻量抽屉。"),
+        component: bi("This page is Metric Dictionary. It shows Basic and Derived metrics. To build this page, set the list, the selected metric, and the detail tabs. The tabs are Definition, Formula, and Dimensions. Set `derivedEditor` to open the Add derived drawer. The assistant is the lite drawer.", "这是 Metric Dictionary 页面。它列出 Basic 和 Derived 指标。组合页面时，设置列表、当前指标和详情标签。标签是 Definition、Formula 和 Dimensions。用 `derivedEditor` 打开 Add derived 抽屉。助手是轻量抽屉。"),
       },
     },
   },

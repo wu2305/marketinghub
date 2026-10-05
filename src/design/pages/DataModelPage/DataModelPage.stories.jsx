@@ -19,7 +19,7 @@ function Story(args) {
 
 export default {
   title: "Pages", component: DataModelPage, tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Data Model. It is a standalone page. It reuses the Data Model view from AI Interpreter. A composing engineer sets domains, search, the relationship graph, and the table detail dialog. A related-report click runs `onOpen`. It does not open a second drawer.", "这是 Data Model 页面。它是独立页面，复用 AI Interpreter 里的 Data Model 视图。组合页面时，设置域、搜索、关系图和表详情对话框。点击关联报表会调用 `onOpen`，不会再打开一个抽屉。") } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("This page is Data Model. It is a standalone page. It reuses the Data Model view from AI Interpreter. To build this page, set domains, search, the relationship graph, and the table detail dialog. A related-report click runs `onOpen`. It does not open a second drawer.", "这是 Data Model 页面。它是独立页面，复用 AI Interpreter 里的 Data Model 视图。组合页面时，设置域、搜索、关系图和表详情对话框。点击关联报表会调用 `onOpen`，不会再打开一个抽屉。") } } },
   args: { query: "", selectedDomainId: "business-data", activeTab: "basic", tableId: null, drawerTab: "fields" },
   argTypes: {
     query: prop("string", { defaultValue: "", description: bi("Initial sidebar search.", "侧栏搜索的初始文字。") }),
