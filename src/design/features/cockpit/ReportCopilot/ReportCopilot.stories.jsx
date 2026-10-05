@@ -104,20 +104,20 @@ export const Default = {
                 }
               : undefined
           }
-          onClose={() => {
+          onClose={(event) => {
             setOpen(false);
-            args.onClose?.();
+            args.onClose?.(event);
           }}
-          onBack={() => {
+          onBack={(event) => {
             setAnswer(null);
             setChat([]);
-            args.onBack?.();
+            args.onBack?.(event);
           }}
-          onNewSession={() => {
+          onNewSession={(event) => {
             setAnswer(null);
             setChat([]);
             setPrompt("");
-            args.onNewSession?.();
+            args.onNewSession?.(event);
           }}
           onMaximize={args.onMaximize}
           onHistorySelect={args.onHistorySelect}
