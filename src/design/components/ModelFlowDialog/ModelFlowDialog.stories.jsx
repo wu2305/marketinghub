@@ -62,9 +62,9 @@ export const Default = {
           setStep("generated");
           args.onGenerate?.(event);
         }}
-        onBack={() => {
+        onBack={(event) => {
           setStep("history");
-          args.onBack?.();
+          args.onBack?.(event);
         }}
         onClose={(event) => {
           setStep(null);
