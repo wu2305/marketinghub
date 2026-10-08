@@ -35,6 +35,16 @@ describe("consumer-built Business Term workspace", () => {
     expect(screen.getByRole("link", { name: /Add Business Term/ })).toBeTruthy();
   });
 
+  it("opens other knowledge types without crashing, including Data Models", () => {
+    render(<BusinessTermApp />);
+    for (const name of [/Principles/, /Data Models/, /Metric Dictionary/]) {
+      fireEvent.click(screen.getByRole("button", { name }));
+      expect(document.querySelector(".mh-interpreter__main--type")).toBeTruthy();
+    }
+    fireEvent.click(screen.getByRole("button", { name: /Data Models/ }));
+    expect(screen.getByRole("tab", { name: /Basic information/ })).toBeTruthy();
+  });
+
   it("searches and filters like the demo", () => {
     render(<BusinessTermApp />);
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "turnover" } });

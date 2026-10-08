@@ -1,4 +1,5 @@
 import React from "react";
+import { DATA_MODEL_VIEW_STRINGS } from "../features/interpreter/DataModelView/strings.js";
 import { DATA_MODEL_DOMAINS } from "./data-model-domains.js";
 
 /**
@@ -71,36 +72,7 @@ const matchesDomain = (domain, queryText) =>
     .toLowerCase()
     .includes(queryText);
 
-export const DATA_MODEL_STRINGS = {
-  searchLabel: "Search data model",
-  searchPlaceholder: "Search data model",
-  basicTab: "Basic information",
-  graphTab: "Relationship graph",
-  synonymsLabel: "Synonyms",
-  relatedReportsLabel: "Related reports",
-  enabled: "Enabled",
-  disabled: "Disabled",
-  emptyDomains: "No matching data models.",
-  tablesLabel: "Tables",
-  none: "None",
-  fact: "Fact",
-  dimension: "Dimension",
-  fieldDetails: "Field Details",
-  dataPreview: "Data Preview",
-  closeTable: "Close table detail",
-  zoomIn: "Zoom in",
-  zoomOut: "Zoom out",
-  fitGraph: "Fit graph",
-  fieldColumn: "Field",
-  nameColumn: "Name",
-  synonymsColumn: "Synonyms",
-  unitColumn: "Unit",
-  tabsAria: "Data model tabs",
-  listAria: "Data models",
-  graphToolsAria: "Relationship graph zoom controls",
-  tableTabsAria: "Table detail tabs",
-  relatedAria: (report) => `Open ${report} Report Context`,
-};
+export const DATA_MODEL_STRINGS = DATA_MODEL_VIEW_STRINGS;
 
 /**
  * @param {object} props
