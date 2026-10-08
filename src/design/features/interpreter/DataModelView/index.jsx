@@ -20,7 +20,7 @@ const FIT_ICON = "M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7";
  * @typedef {{ table: DataModelTable, isFact: boolean, tab: "fields" | "preview", fields: DataModelField[], previewRows: string[][] }} DataModelDrawer The open table dialog; the view renders `null` when it is absent.
  *
  * @typedef {object} DataModelViewProps
- * @property {Record<string, any>} strings visible copy (labels, aria text, `relatedAria(report)`)
+ * @property {Record<string, any>} [strings={}] visible copy (labels, aria text, `relatedAria(report)`)
  * @property {DataModelDomain[]} [domains=[]] domains shown in the sidebar
  * @property {DataModelDomain | null} [domain] the selected domain
  * @property {string} [query] domain search text
@@ -179,7 +179,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * @param {DataModelViewProps} props prepared by `useDataModelDemo`
  */
 export function DataModelView({
-  strings,
+  strings = {},
   domains = [],
   domain,
   query,
