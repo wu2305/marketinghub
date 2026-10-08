@@ -41,6 +41,8 @@ describe("consumer-built Business Term workspace", () => {
       fireEvent.click(screen.getByRole("button", { name }));
       expect(document.querySelector(".mh-interpreter__main--type")).toBeTruthy();
     }
+    fireEvent.click(screen.getByRole("button", { name: /Data Models/ }));
+    expect(screen.getByRole("tab", { name: /Basic information/ })).toBeTruthy();
   });
 
   it("searches and filters like the demo", () => {
