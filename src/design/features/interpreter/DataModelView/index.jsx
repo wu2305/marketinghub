@@ -8,6 +8,7 @@ import { SearchField } from "../../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import { cx } from "../../../cx.js";
 import "./DataModelView.css";
+import { DATA_MODEL_VIEW_STRINGS } from "./strings.js";
 
 const REPORT_ICON = "M7 3.5h6l4 4V20.5H7V3.5Zm6 0v5h5";
 const CLOSE_ICON = "M6 6l12 12M18 6 6 18";
@@ -20,7 +21,7 @@ const FIT_ICON = "M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7";
  * @typedef {{ table: DataModelTable, isFact: boolean, tab: "fields" | "preview", fields: DataModelField[], previewRows: string[][] }} DataModelDrawer The open table dialog; the view renders `null` when it is absent.
  *
  * @typedef {object} DataModelViewProps
- * @property {Record<string, any>} strings visible copy (labels, aria text, `relatedAria(report)`)
+ * @property {Record<string, any>} [strings={}] visible copy (labels, aria text, `relatedAria(report)`)
  * @property {DataModelDomain[]} [domains=[]] domains shown in the sidebar
  * @property {DataModelDomain | null} [domain] the selected domain
  * @property {string} [query] domain search text
@@ -179,7 +180,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
  * @param {DataModelViewProps} props prepared by `useDataModelDemo`
  */
 export function DataModelView({
-  strings,
+  strings: stringsProp,
   domains = [],
   domain,
   query,
@@ -203,6 +204,7 @@ export function DataModelView({
   fieldFormat,
   searchRef,
 }) {
+  const strings = { ...DATA_MODEL_VIEW_STRINGS, ...stringsProp };
   const canvasRef = React.useRef(null);
   const dragRef = React.useRef(null);
   const arrowId = React.useId();
