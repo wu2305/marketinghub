@@ -146,7 +146,7 @@ justify-self: end;
   max-width: 78%;
   padding: 8px 12px;
   border-radius: var(--mh-radius-lg);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
@@ -326,7 +326,7 @@ min-width: 86px;
 
 .mh-flow__btn--primary {
 border: 0;
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
 }
 

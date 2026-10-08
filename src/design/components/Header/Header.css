@@ -73,7 +73,7 @@ position: absolute;
   bottom: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   content: "";
   opacity: 0;
 }

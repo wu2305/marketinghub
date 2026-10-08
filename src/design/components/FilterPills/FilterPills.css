@@ -26,6 +26,6 @@ background: var(--mh-surface-muted);
 }
 
 .mh-pills__item.is-active {
-background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
 }

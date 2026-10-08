@@ -105,7 +105,7 @@ display: block;
   width: 64px;
   height: 8px;
   margin: 16px 0 0;
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
   content: "";
 }
