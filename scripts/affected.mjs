@@ -25,7 +25,7 @@ const SRC = "src/design";
 /* The consumer example imports the package by name; it maps to the public entries. */
 const CONSUMER = "examples/consumer";
 const PACKAGE = { "marketing-hub": `${SRC}/index.js`, "marketing-hub/demo": `${SRC}/demo/index.js` };
-const GLOBAL = [/^\.storybook\//, /^assets\//, /^index\.html$/, /^package(-lock)?\.json$/, /^vite[^/]*\.config\./, /^scripts\/(visual-check(\.config)?\.mjs|visual-check\/common\.mjs|fingerprint\.mjs|build-storybook\.mjs|font-probe\.mjs|affected\.mjs)$/];
+const GLOBAL = [/^\.storybook\//, /^assets\//, /^index\.html$/, /^package(-lock)?\.json$/, /^vite[^/]*\.config\./, /^scripts\/(visual-check(\.config)?\.mjs|visual-check-select\.mjs|visual-check\/common\.mjs|fingerprint\.mjs|build-storybook\.mjs|font-probe\.mjs|affected\.mjs)$/];
 const EXTENSIONS = ["", ".js", ".jsx", ".mjs", ".css", ".tsx", "/index.js", "/index.jsx"];
 const IMPORT = /(?:\bfrom|\bimport)\s*["']([^"']+)["']/g;
 const CSS_URL = /url\(\s*["']?([^"')]+)["']?\s*\)/g;
