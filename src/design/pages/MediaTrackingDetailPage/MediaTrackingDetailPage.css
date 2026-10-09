@@ -36,10 +36,14 @@ width: 14px;
   height: 14px;
 }
 
-.mh-tracking__back:hover,
+.mh-tracking__back:hover {
+  background: var(--mh-surface-page);
+}
+
 .mh-tracking__back:focus-visible {
-background: var(--mh-surface-page);
-  outline: 0;
+  background: var(--mh-surface-page);
+  outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
 }
 
 .mh-tracking__head {

@@ -149,6 +149,10 @@ display: flex;
   color: var(--mh-text-muted);
 }
 
+.mh-skill__search:focus-within {
+  box-shadow: 0 0 0 2px var(--mh-focus-ring);
+}
+
 .mh-skill__search svg {
 flex: 0 0 18px;
   width: 18px;
