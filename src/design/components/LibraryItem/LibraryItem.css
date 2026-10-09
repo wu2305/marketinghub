@@ -109,6 +109,11 @@ display: flex;
   margin: 0;
 }
 
+.mh-library-item__fields {
+  margin: 0;
+  min-width: 0;
+}
+
 .mh-library-item__field {
 display: flex;
   gap: var(--mh-space-3);
@@ -201,6 +206,12 @@ margin: 0;
   align-items: center;
   min-width: 0;
   height: var(--mh-space-7);
+  gap: var(--mh-space-3);
+}
+.mh-library-item--knowledge .mh-library-item__fields {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
   gap: var(--mh-space-3);
 }
 .mh-library-item--knowledge .mh-library-item__field {

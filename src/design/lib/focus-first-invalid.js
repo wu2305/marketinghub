@@ -14,6 +14,7 @@ export function useFocusFirstInvalid(rootRef, invalid) {
     previous.current = invalid;
     if (before === null || before === invalid || !invalid.length) return;
     if (invalid.length < before.length && invalid.every((name) => before.includes(name))) return;
-    rootRef.current?.querySelector('[aria-invalid="true"]')?.focus();
+    // aria-invalid marks form controls; a button-style picker cannot carry it and uses data-invalid
+    rootRef.current?.querySelector('[aria-invalid="true"], [data-invalid="true"]')?.focus();
   }, [invalid, rootRef]);
 }
