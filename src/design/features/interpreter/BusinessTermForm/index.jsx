@@ -1,6 +1,7 @@
 import React from "react";
 import { FormField } from "../../../components/FormField/index.jsx";
 import { Button } from "../../../components/Button/index.jsx";
+import { Icon } from "../../../icons.jsx";
 import "../../../tokens.css";
 import "./BusinessTermForm.css";
 
@@ -54,7 +55,7 @@ export function BusinessTermForm({
   const errors = Array.isArray(invalid) ? invalid : invalid ? ["title", "description"] : [];
   const set = (name, value) => onChange?.({ name, value });
   return <form className="mh-btform" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values }); }}>
-    <aside className="mh-btform__guidance"><span aria-hidden="true">☼</span><div><strong>{guidanceTitle}</strong><p>{guidance}</p></div></aside>
+    <aside className="mh-btform__guidance"><span aria-hidden="true"><Icon name="bulb-rays" /></span><div><strong>{guidanceTitle}</strong><p>{guidance}</p></div></aside>
     <div className="mh-btform__fields">
       <FormField label={labels.title} name="title" value={title} required invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
       <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds} required onChange={onChange} />

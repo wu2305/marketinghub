@@ -69,3 +69,8 @@
 .mh-metric-page button:focus-visible, .mh-metric-page a:focus-visible, .mh-metric-page input:focus-visible, .mh-metric-page textarea:focus-visible, .mh-metric-page select:focus-visible { outline: 2px solid var(--mh-accent); outline-offset: 2px; }
 @media (max-width: 900px) { .mh-metric-page { padding: 20px; } .mh-metric-page__header { flex-wrap: wrap; } .mh-metric-page__layout { grid-template-columns: 1fr; } }
 @media (max-width: 760px) { .mh-metric-page__banner, .mh-metric-page__detail-head { flex-wrap: wrap; } .mh-metric-page__definition-grid, .mh-metric-page__formula-grid, .mh-metric-page__dimension-grid { grid-template-columns: 1fr; } .mh-metric-page__card--wide { grid-column: auto; } .mh-metric-page__actions { flex-wrap: wrap; } }
+
+.mh-metric-page__action svg, .mh-metric-page__banner button svg, .mh-metric-page__preview svg { flex: none; width: 16px; height: 16px; margin-right: 6px; }
+.mh-metric-page__banner-icon svg { width: 20px; height: 20px; }
+.mh-metric-page__sidebar-foot p { display: flex; align-items: center; gap: 6px; }
+.mh-metric-page__sidebar-foot p svg { flex: none; width: 14px; height: 14px; }

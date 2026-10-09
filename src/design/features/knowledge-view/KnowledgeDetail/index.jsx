@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { SearchField } from "../../../components/SearchField/index.jsx";
+import { Icon } from "../../../icons.jsx";
 import "./KnowledgeDetail.css";
 
 /** @type {readonly ["Principles", "Business Term", "Data Model", "Scenario Reporting"]} */
@@ -85,7 +86,7 @@ function PrinciplesDetail({ record, copy, promptSections, collapsed, hrefFor, on
   ];
   return <div className="mh-kdetail mh-kdetail--principles"><Crumbs record={record} copy={copy} hrefFor={hrefFor} onNavigate={onNavigate} />
     <header className="mh-kdetail__head"><div><h1>{record.title}</h1><p>{record.summary || copy.principles.leadFallback}</p><div className="mh-kdetail__chips mh-kdetail__chips--gold"><span className="mh-kdetail__chip">{copy.principles.governedPrompt}</span><span className="mh-kdetail__chip">{record.source}</span></div></div><button type="button" className="mh-kdetail__outline" onClick={() => onOpen?.({ kind: "versions" })}>{copy.versionButton}</button></header>
-    <section className={`mh-kdetail__principle${collapsed ? " mh-kdetail__principle--collapsed" : ""}`}><header><span className="mh-kdetail__principle-index">01</span><div><strong>{first.title}</strong><small>{first.summary}</small></div><button type="button" aria-label={copy.principles.collapse(first.title)} aria-expanded={!collapsed} onClick={() => onToggle?.({ id: "prompt-first", expanded: collapsed })}>⌃</button></header>{!collapsed && <ul>{first.body.map((item) => <li key={item}>{item}</li>)}</ul>}</section>
+    <section className={`mh-kdetail__principle${collapsed ? " mh-kdetail__principle--collapsed" : ""}`}><header><span className="mh-kdetail__principle-index">01</span><div><strong>{first.title}</strong><small>{first.summary}</small></div><button type="button" aria-label={copy.principles.collapse(first.title)} aria-expanded={!collapsed} onClick={() => onToggle?.({ id: "prompt-first", expanded: collapsed })}><Icon name="chevron-up" /></button></header>{!collapsed && <ul>{first.body.map((item) => <li key={item}>{item}</li>)}</ul>}</section>
     <VersionPanel record={record} copy={copy} versions={versions} open={overlay === "versions"} onClose={onClose} />
   </div>;
 }
