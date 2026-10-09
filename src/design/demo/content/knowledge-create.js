@@ -75,7 +75,7 @@ export const KNOWLEDGE_CREATE = {
   reportHistory: { author: "Current User", priorAuthor: "Data Governance", priorDate: "Jul 24, 2026", priorDescription: "Updated parameter sources and reporting guardrails." },
   copy: {
     scopeDomain: "Applicable Business Domain", scopeReports: "Applicable Reports", relatedDatasets: "Related Datasets",
-    knowledgeEnabled: "Enable knowledge", selectMany: "Select one or more", required: "This field is required.",
+    knowledgeEnabled: "Enable knowledge", selectMany: "Select one or more", required: "This field is required.", requiredMark: "required",
     metricDomain: "Business Domain", metricName: "Metric Name", unit: "Unit", formula: "Formula Builder", formulaRequired: "Please build a formula first.",
     formulaHint: "Build the formula by clicking referenceable basic metrics and operators.", testRun: "Test Run", removeMetric: "Remove metric",
     testHint: "Test will execute the formula and return a single aggregated result.", test: "Test", description: "Description", synonyms: "Synonyms", metricStatus: "Status:", metricStatusOn: "Enable", metricStatusOff: "Disable", metricsHeading: "REFERENCEABLE BASIC METRICS",

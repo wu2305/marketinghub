@@ -1417,8 +1417,10 @@ export default [
     },
   },
   {
-    /* 390px: unexpanded drawer = min(40vw,100vw-80)=156px flush right;
-       expanded fills the viewport with a 12px inset. */
+    /* 390px: the original keeps a 156px drawer flush right, with the header and composer
+       running off it (an intentional difference, handover §3): the story's drawer fills the
+       screen with Close, history and the composer inside it. Expanded fills the viewport with
+       a 12px inset in both. */
     id: "p02-copilot-mobile",
     viewport: { width: 390, height: 844 },
     original: {
@@ -1449,8 +1451,15 @@ export default [
         { waitMs: 600 },
         {
           eval:
-            "(() => { const r = document.querySelector('.mh-copilot').getBoundingClientRect(); if (Math.abs(r.left - 234) > 2 || Math.abs(r.width - 156) > 2) throw new Error('drawer ' + JSON.stringify(r)); })()",
+            "(() => { const r = document.querySelector('.mh-copilot').getBoundingClientRect(); if (Math.abs(r.left) > 2 || Math.abs(r.width - 390) > 2) throw new Error('drawer ' + JSON.stringify(r)); const inside = (sel) => { const b = document.querySelector(sel).getBoundingClientRect(); if (b.left < -1 || b.right > 391) throw new Error(sel + ' off screen ' + JSON.stringify(b)); }; inside('.mh-copilot__close'); inside('.mh-copilot textarea'); inside('.mh-copilot__command-box'); })()",
         },
+        { click: "button[aria-label='History']" },
+        { wait: ".mh-copilot__history" },
+        {
+          eval:
+            "(() => { const b = document.querySelector('.mh-copilot__history').getBoundingClientRect(); if (b.left < -1 || b.right > 391) throw new Error('history popup off screen ' + JSON.stringify(b)); })()",
+        },
+        { click: ".mh-copilot__history-head button" },
         { click: "button[aria-label='Maximize']" },
         { waitMs: 600 },
         {

@@ -12,8 +12,11 @@ export const confirmDialogTokens = {
   cancelButton: { background: "#FFFFFF", border: "1px solid #D0D5DD", color: "#344054" },
 };
 
+// Default/warning gold is #A16B19, not the first-approved #CF8A20: white 14px bold text on
+// #CF8A20 is 2.87:1, under the 4.5:1 minimum. Same hue and saturation, darkened until
+// white text reaches 4.53:1; the icon on its wash is 4.15:1 (3:1 needed for graphics).
 export const confirmDialogVariants = {
-  default: { iconBackground: "#FFF3E7", iconColor: "#CF8A20", confirmBackground: "#CF8A20", confirmBorder: "#CF8A20", confirmColor: "#FFFFFF" },
-  warning: { iconBackground: "#FFF3E7", iconColor: "#CF8A20", confirmBackground: "#CF8A20", confirmBorder: "#CF8A20", confirmColor: "#FFFFFF" },
+  default: { iconBackground: "#FFF3E7", iconColor: "#A16B19", confirmBackground: "#A16B19", confirmBorder: "#A16B19", confirmColor: "#FFFFFF" },
+  warning: { iconBackground: "#FFF3E7", iconColor: "#A16B19", confirmBackground: "#A16B19", confirmBorder: "#A16B19", confirmColor: "#FFFFFF" },
   danger: { iconBackground: "#FFF0F0", iconColor: "#C93636", confirmBackground: "#C93636", confirmBorder: "#C93636", confirmColor: "#FFFFFF" },
 };

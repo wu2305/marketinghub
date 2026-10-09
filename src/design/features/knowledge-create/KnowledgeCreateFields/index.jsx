@@ -34,7 +34,7 @@ function Field({ name, label, value = "", onChange, invalid, required, placehold
  * search text is local. Escape, a click outside and tabbing away close the menu.
  * `searchable` adds a filter box and the `emptyText` / `noMatchText` messages.
  */
-function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, required = false, placeholder, help, disabled = false, invalid = false, errorText, searchable = false, searchPlaceholder, emptyText, noMatchText }) {
+function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, required = false, requiredLabel = "required", placeholder, help, disabled = false, invalid = false, errorText, searchable = false, searchPlaceholder, emptyText, noMatchText }) {
   const selected = Array.isArray(value) ? value : [];
   const [query, setQuery] = React.useState("");
   const rootRef = React.useRef(null);
@@ -68,8 +68,11 @@ function MultiPicker({ name, label, options, value = [], onChange, open, onMenu,
   };
   const message = query ? noMatchText : emptyText;
   return <div ref={rootRef} className={`mh-kcf__field mh-kcf__multi${invalid ? " is-invalid" : ""}`} onKeyDown={keyDown} onBlur={(event) => { if (open && event.relatedTarget && !rootRef.current?.contains(event.relatedTarget)) close(); }}>
-    <span className="mh-kcf__label"><span id={`${id}-label`}>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>{help}</span>
-    <button ref={triggerRef} type="button" className="mh-kcf__multi-trigger" aria-labelledby={`${id}-label`} aria-expanded={Boolean(open)} aria-controls={`${id}-menu`} aria-required={required || undefined} aria-invalid={invalid || undefined} aria-describedby={invalid ? `${id}-error` : undefined} disabled={disabled}
+    <span className="mh-kcf__label"><span id={`${id}-label`}>{label}{required && <><b className="mh-kcf__required" aria-hidden="true"> *</b><span className="mh-sr"> ({requiredLabel})</span></>}</span>{help}</span>
+    {/* A button has no required or invalid state of its own (aria-required and aria-invalid are not
+        supported on role=button), so "required" is part of its name, the error is its description and
+        data-invalid lets the form find it to focus. */}
+    <button ref={triggerRef} type="button" className="mh-kcf__multi-trigger" aria-labelledby={`${id}-label`} aria-expanded={Boolean(open)} aria-controls={`${id}-menu`} aria-describedby={invalid ? `${id}-error` : undefined} data-invalid={invalid || undefined} disabled={disabled}
       onClick={() => { setQuery(""); onMenu?.({ name }); }}>
       {selected.length ? selected.map((item) => <span className="mh-kcf__multi-value" key={item}>{item}</span>) : <em>{placeholder}</em>}
     </button>
@@ -94,7 +97,7 @@ function AnalysisFields({ content, values, invalid, menu, onChange, onMenu }) {
     {field("analysis_name", t.analysisName, { textarea: false, required: true, placeholder: content.placeholders.analysisName })}
     {field("description", t.description, { placeholder: content.placeholders.analysisDescription })}
     <div className="mh-kcf__analysis-scope">
-      <MultiPicker name="businessDomain" label={t.businessDomain} required options={a.domains} value={domains} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu}
+      <MultiPicker name="businessDomain" label={t.businessDomain} required requiredLabel={t.requiredMark} options={a.domains} value={domains} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu}
         invalid={invalid.includes("businessDomain")} errorText={a.errors.businessDomain} placeholder={a.picker.domains} />
       <MultiPicker name="metrics" label={t.referencedMetrics} help={<HelpTip label={`About ${t.referencedMetrics}`}>{a.metricsHelp}</HelpTip>} options={metrics} value={values.metrics} onChange={onChange}
         open={menu === "metrics"} onMenu={onMenu} disabled={!domains.length} placeholder={domains.length ? a.picker.metrics : a.picker.metricsLocked}
