@@ -83,7 +83,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] Category groups. // 分类分组。
  * @param {Record<string, CockpitProject>} [props.projects={}] Project records keyed by id. // 按 id 索引的项目记录。
  * @param {string} [props.project="all"] Active catalog project id, or `"all"`. // 当前目录项目的 id，或 `"all"`。
- * @param {"catalog"|"live"} [props.view="catalog"] Catalog or live view. A set `dashboard` opens the live report. // 目录或实时视图。设置了 `dashboard` 就会打开实时报表。
+ * @param {"catalog"|"live"} [props.view="catalog"] Not read by the page. The live report opens whenever `dashboard` is set, as in the original `?dashboard=` URL; a host may still pass the URL's `view` value through. // 页面不读取这个值。只要设置了 `dashboard` 就会打开实时报表，和原页面的 `?dashboard=` 一致；宿主仍可透传 URL 里的 `view`。
  * @param {number|string|null} [props.dashboard=null] Live report index. When this value is set, the live view opens. // 实时报表索引。设置了这个值就会打开实时视图。
  * @param {{ project: string, index: number }|null} [props.details=null] Open report details drawer. // 打开的报表详情抽屉。
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] Static drawer asset sections. // 抽屉里的静态资产分区。
@@ -94,7 +94,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange] The function runs at each change in catalog search. The result has `name` and `value`. // 目录搜索每次变化都会调用这个函数。结果里有 `name` 和 `value`。
  * @param {(target: { id: string, href: string }) => void} [props.onOpenProject] The function runs when the user opens a project directory. The result has `id` and `href`. // 用户打开项目目录时，会调用这个函数。结果里有 `id` 和 `href`。
  * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenReport] The function runs when the user opens a live report. The result has `project`, `index`, and `href`. // 用户打开实时报表时，会调用这个函数。结果里有 `project`、`index` 和 `href`。
- * @param {(target: { project: string, index: number, href: string }) => void} [props.onOpenDetails] The function runs when the user opens the report details drawer. The result has `project`, `index`, and `href`. // 用户打开报表详情抽屉时，会调用这个函数。结果里有 `project`、`index` 和 `href`。
+ * @param {(target: { project: string, index: number }) => void} [props.onOpenDetails] The function runs when the user opens the report details drawer. The result has `project` and `index`. It has no `href`. // 用户打开报表详情抽屉时，会调用这个函数。结果里有 `project` 和 `index`，没有 `href`。
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onCloseDetails] The function runs when the user closes the details drawer. The result has `reason`. // 用户关闭详情抽屉时，会调用这个函数。结果里有 `reason`。
  * @param {(target: { href?: string }) => void} [props.onOpenLive] The function runs when the details drawer opens the live report. // 详情抽屉要打开实时报表时，会调用这个函数。
  * @param {(target: { project: string, href: string }) => void} [props.onBack] The function runs when the live view returns to the catalog. The result has `project` and `href`. // 实时视图返回目录时，会调用这个函数。结果里有 `project` 和 `href`。

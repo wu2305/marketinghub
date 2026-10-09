@@ -18,9 +18,9 @@ import { ModelFlowDialog } from "../ModelFlowDialog/index.jsx";
  * @property {"home"|"cockpit"|"campaign"|"lite"} [variant="campaign"] AssistantPanel behavior preset; wins over `assistant.variant`
  * @property {"modal"|"drawer"} [placement="drawer"] AssistantPanel layout; wins over `assistant.placement`
  * @property {"home"} [tone] AssistantPanel tone; wins over `assistant.tone`
- * @property {string} [launcherLabel] launcher text; falls back to `assistant.launcherLabel`
+ * @property {string} [launcherLabel] launcher text; falls back to `assistant.launcherLabel` when omitted or `null` (an empty string is used as given)
  * @property {boolean} [launcherHidden=false] hide the launcher while another overlay is open
- * @property {(event: { reason: "open" }) => void} [onLauncherOpen] replaces `assistant.onOpen` when the launcher opens something else
+ * @property {(event: { reason: "open" }) => void} [onLauncherOpen] replaces `assistant.onOpen` (the launcher calls only this one when set), for a launcher that opens something else; call `assistant.onOpen` yourself if the panel must still open
  */
 
 /**

@@ -15,7 +15,8 @@ import "./DataUploadPage.css";
  * back/template-import toolbar, a carded multi-field form, and the Template
  * Import modal with a file dropzone and tips. Submit disables the button and
  * flashes `submittingLabel` — the demo hook owns the timer (original restores
- * after 1500ms).
+ * after 1500ms) and starts it only on a real form submission, not when
+ * `submitting` is set from outside.
  * @param {object} props
  * @param {string} [props.current="self-service"] Active nav id. This page marks Self-Service Center. // 当前导航 id。本页将 Self-Service Center 标为当前。
  * @param {object} props.logo Header logo. // 页头 Logo。
@@ -25,7 +26,7 @@ import "./DataUploadPage.css";
  * @param {Array<{ name: string, label: string, placeholder: string }>} [props.fields=[]] Form fields. Each field has `name`, `label`, and `placeholder`. // 表单字段。每个字段有 `name`、`label` 和 `placeholder`。
  * @param {string} props.submitLabel Label on the idle submit button. // 空闲提交按钮上的文字。
  * @param {string} props.submittingLabel Label on the submit button while `submitting` is true. // `submitting` 为 true 时提交按钮上的文字。
- * @param {boolean} [props.submitting=false] Set true to show the submitted button state. // 设为 true 时显示已提交的按钮状态。
+ * @param {boolean} [props.submitting=false] Set true to show the submitted button state. The demo hook restores false only after a real form submission. // 设为 true 时显示已提交的按钮状态。demo hook 只在真实提交表单后才会恢复为 false。
  * @param {{ title: string, dropzoneTitle: string, dropzoneHint: string, selectedPrefix: string, accept: string, templateLabel: string, templateHref?: string, tipsTitle: string, tips: string[] }} [props.bulkImport={}] Template Import copy and file limits. // Template Import 的文案和文件限制。
  * @param {boolean} [props.bulkImportOpen=false] Set true to open Template Import. // 设为 true 时打开 Template Import。
  * @param {string} [props.selectedFile] Selected file name shown in the dropzone. // 显示在拖放区中的已选文件名。

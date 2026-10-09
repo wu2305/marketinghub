@@ -20,12 +20,12 @@ export default {
   },
   argTypes: {
     project: { control: "select", options: Object.keys(COCKPIT.projects).filter((key) => key !== "city") },
-    index: { control: { type: "number", min: 0, max: 1 } },
+    index: { control: "inline-radio", options: [0, 1], description: bi("Report index inside the selected project. Choose 0 or 1: every project has two reports, and the story rounds any other value to the nearest report.", "所选项目里的报表序号。选 0 或 1：每个项目有两份报表，故事会把其他取值取整到最近的一份报表。") },
     onBack: { action: "onBack" },
   },
   render: (args) => {
     const project = COCKPIT.projects[args.project];
-    const report = project.reports[args.index];
+    const report = project.reports[Math.min(Math.max(Math.round(Number(args.index)) || 0, 0), project.reports.length - 1)];
     return (
       <div style={{ minHeight: 640, background: "#f3f5f7", padding: "0 0 40px" }}>
         <LiveReportView

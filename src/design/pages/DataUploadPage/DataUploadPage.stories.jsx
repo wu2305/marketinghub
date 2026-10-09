@@ -18,7 +18,7 @@ export default {
     layout: "fullscreen",
     docs: {
       description: {
-        component: bi("This page is Data Upload. It sits under Self-Service Center. To build this page, set the header image area, the toolbar, the form fields, and the Template Import dialog. Submit disables the button and shows `submittingLabel`. The demo hook restores `submitting` after a short wait. Set `onSubmitForm` to receive the field values. Set `onOpenImport` to open Template Import.", "这是 Data Upload 页面，位于 Self-Service Center 之下。组合页面时，设置头图区、工具栏、表单字段和 Template Import 对话框。Submit 会禁用按钮，并显示 `submittingLabel`。demo hook 会在短暂等待后把 `submitting` 恢复为 false。用 `onSubmitForm` 接收字段值。用 `onOpenImport` 打开 Template Import。"),
+        component: bi("This page is Data Upload. It sits under Self-Service Center. To build this page, set the header image area, the toolbar, the form fields, and the Template Import dialog. Submit disables the button and shows `submittingLabel`. The demo hook restores `submitting` after a short wait, but only after a real form submission. If you set `submitting` to true yourself (Controls or the Submitting story), it stays true until you set it to false. Set `onSubmitForm` to receive the field values. Set `onOpenImport` to open Template Import.", "这是 Data Upload 页面，位于 Self-Service Center 之下。组合页面时，设置头图区、工具栏、表单字段和 Template Import 对话框。Submit 会禁用按钮，并显示 `submittingLabel`。demo hook 只在真实提交表单后，才会在短暂等待后把 `submitting` 恢复为 false。如果你自己把 `submitting` 设为 true（用 Controls 或 Submitting 故事），它会一直保持 true，直到你把它设回 false。用 `onSubmitForm` 接收字段值。用 `onOpenImport` 打开 Template Import。"),
       },
     },
   },
@@ -39,7 +39,7 @@ export const DataUpload = {
     selectedFile: undefined,
   },
   argTypes: {
-    submitting: prop("boolean", { control: "boolean", defaultValue: false, description: bi("Set true to show the submitted button state. The demo hook restores false after a short wait.", "设为 true 时显示已提交的按钮状态。demo hook 会在短暂等待后恢复为 false。") }),
+    submitting: prop("boolean", { control: "boolean", defaultValue: false, description: bi("Set true to show the submitted button state. The demo hook restores false after a short wait only when the user submits the form. A value you set yourself stays until you change it.", "设为 true 时显示已提交的按钮状态。只有用户提交表单时，demo hook 才会在短暂等待后恢复为 false。你自己设置的值会一直保持，直到你修改它。") }),
     bulkImportOpen: prop("boolean", { control: "boolean", defaultValue: false, description: bi("Set true to open the Template Import dialog.", "设为 true 时打开 Template Import 对话框。") }),
     selectedFile: prop("string | undefined", { control: "text", description: bi("Selected file name shown in the dropzone.", "显示在拖放区中的已选文件名。") }),
     onNavigate: callbackProp("onNavigate", "({ href: string }) => void", { href: "/assets/pages/flexible.html?tab=upload" }, bi("The function runs when Back opens Self-Service Center. The result has `href`.", "点击 Back 打开 Self-Service Center 时，会调用这个函数。结果里有 `href`。")),

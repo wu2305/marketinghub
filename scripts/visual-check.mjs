@@ -44,8 +44,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sirv from "sirv";
 import { chromium } from "playwright";
-import scenarios, { BASELINE, CONSOLE_ALLOW } from "./visual-check.config.mjs";
-import negatives from "./visual-check.negative.mjs";
+import allScenarios, { BASELINE, CONSOLE_ALLOW } from "./visual-check.config.mjs";
+import allNegatives from "./visual-check.negative.mjs";
+import { splitRetired } from "./visual-check-select.mjs";
 import { ROOT, gitInfo, sourceFingerprint } from "./fingerprint.mjs";
 import { affectedStoryIds, changedFiles, changedScenarioPages, defaultBase, unreachedSources } from "./affected.mjs";
 
@@ -82,6 +83,11 @@ const ORIGINAL_CACHE = path.join(ROOT, "node_modules", ".cache", "mh-visual-orig
 
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 const pageOf = (id) => id.split("-")[0];
+
+// Scenarios of retired pages (.storybook/retired-pages.js) are skipped by name;
+// a story id that is missing for any other reason still fails below.
+const { scenarios, negatives, skipped } = splitRetired(allScenarios, allNegatives);
+console.log(`retired pages: ${skipped.scenarios.length} scenarios and ${skipped.negatives.length} negatives skipped`);
 
 function readJson(file) {
   return JSON.parse(readFileSync(file, "utf8"));
