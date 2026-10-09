@@ -514,6 +514,14 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 来自 `/design interaction` 报告的 A 项。报告的补丁按 16 个文件逐个追加 `@media` 块；对 main 7941699 重新测量（390px 宽、全部 story 的可见文本输入）发现仍有遗漏（Model Flow 对话框文本域、Skill 搜索框、Data Model 表单、Report Edit 文本域等），逐文件修补会随新组件继续漏。改为 `tokens.css` 的 `@scope` 重置块里一条 `@media (max-width: 760px)` 规则：除复选框/单选框/文件等不触发缩放的类型外，`input`、`select`、`textarea` 的 `font-size` 为 `--mh-font-size-xl` 并带 `!important`（组件规则优先级更高，且这是下限规则）。作用域与原重置相同：不影响宿主页面自己的控件，也不进入 `data-mh-slot` 内部。已登记有意差异。执行者：Claude。
 
+### 2026-10-09 — 新建表单校验失败后聚焦首个无效控件
+
+来自 `/design interaction` 报告的 C 项。对照 main 7941699：#118 只给 Analytical Model 加了“聚焦首个无效控件 + 错误文字 `aria-describedby`”，其余 Knowledge Create 表单（Business Term、Principles、Report Context、Scenario、Data Model、Metric Dictionary、Synonyms）失败后焦点不动。本次把 `useFocusFirstInvalid` 从 `KnowledgeCreateFields` 提到 `lib/focus-first-invalid.js`，由 `KnowledgeCreatePage` 对整张卡片使用，所有类型共用同一规则（失败提交才移动；改正字段或在别处输入不抢焦点；首次渲染不移动）。Metric 公式框补 `aria-invalid`、`aria-required`、`aria-describedby`（指向“请先构建公式”），Synonyms 在提交失败后给空的必填单元格标 `aria-invalid`，焦点即落在第一个空格。没有采用报告的 `role="alert"`：每个错误都已与控件关联，焦点移到首个无效控件时读出其错误，五个 alert 同时播报反而嘈杂。外观无变化。执行者：Claude。
+
+### 2026-10-09 — touch-action: manipulation
+
+来自 `/design interaction` 报告的 B 项（报告基于 9f7b41d，补丁在 #114 之后不再适用，已对 main 7941699 重新核对）。`tokens.css` 的 `@scope` 重置块里，`button, input, select, textarea` 与 `a` 加 `touch-action: manipulation`：触屏点按不再等待双击缩放判定，捏合缩放保留。外观无变化，不登记有意差异。`DataModelView` 画布是 `div`，保留自己的 `touch-action: none`（平移/缩放手势），不受影响。验证：lint、vitest、build-storybook；Playwright 在构建好的 Storybook 上读计算样式。执行者：Claude。
+
 ### 2026-10-09 — 用户确认撤下八个旧页面
 
 本轮用户取消 MetricDictionaryPage, PersonalMemoryPage, ReviewCenterPage, ScenarioDetailPage, ScenarioEditPage, ScenarioLibraryPage, KnowledgeViewPage, FeedbackQualityPage。从最新 origin/main 迁移已验收的清理：Storybook注册及 Pages Docs清单共用撤下名单，移除166个页面状态和8个文档；保留源码及共享组件。页面清单保留9页，最新构建331 stories + 87 docs，门槛同步调整（最新主版本另有既有新增示例）。此为明确产品范围缩减，不恢复旧页面。
