@@ -43,6 +43,12 @@ export const knowledgeActionIconPaths = {
  *   "more-vertical",
  *   "share",
  *   "info",
+ *   "edit-square",
+ *   "refresh",
+ *   "trash",
+ *   "backspace",
+ *   "chevron-up",
+ *   "bulb-rays",
  *   "close"
  * ]}
  */
@@ -85,6 +91,12 @@ export const iconNames = [
   "share",
   "info",
   "alert-triangle",
+  "edit-square",
+  "refresh",
+  "trash",
+  "backspace",
+  "chevron-up",
+  "bulb-rays",
   "close",
 ];
 
@@ -374,6 +386,24 @@ export function Icon({ name, path, className }) {
   }
   if (name === "alert-triangle") {
     return <svg {...common}><path d="M12 9v2m0 4h.01M10.268 4 3.34 16c-.77 1.333.192 3 1.732 3h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0Z" /></svg>;
+  }
+  if (name === "edit-square") {
+    return <svg {...common} strokeWidth="1.5"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>;
+  }
+  if (name === "refresh") {
+    return <svg {...common} strokeWidth="1.5"><path d="M23 4v6h-6M1 20v-6h6" /><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" /></svg>;
+  }
+  if (name === "trash") {
+    return <svg {...common} strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" /></svg>;
+  }
+  if (name === "backspace") {
+    return <svg {...common} strokeWidth="2"><path d="M21 4H8l-7 8 7 8h13a2 2 0 002-2V6a2 2 0 00-2-2z" /><path d="M18 9l-6 6M12 9l6 6" /></svg>;
+  }
+  if (name === "chevron-up") {
+    return <svg {...common} strokeWidth="2"><path d="M6 15l6-6 6 6" /></svg>;
+  }
+  if (name === "bulb-rays") {
+    return <svg {...common}><path d="M9 18h6" /><path d="M10 21h4" /><path d="M8.7 14.6A6.5 6.5 0 1 1 15.3 14.6c-.8.7-1.3 1.6-1.3 2.6h-4c0-1-.5-1.9-1.3-2.6Z" /><path d="M12 2V.8M4.9 4.9 4 4M19.1 4.9 20 4M2 12H.8M23.2 12H22M4.9 19.1 4 20M19.1 19.1 20 20" /></svg>;
   }
   return null;
 }
