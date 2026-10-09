@@ -15,8 +15,8 @@ const ROOT = path.resolve(__dirname);
 /**
  * Flat list of { selectors, body, reduced } for every rule. Native CSS nesting is resolved: a nested
  * rule's selectors have `&` replaced by (or are prefixed with) the enclosing selectors, `body` holds only
- * the rule's own declarations, and declarations inside a `@media (prefers-reduced-motion)` nested in a
- * rule count as that rule's reduced-motion declarations.
+ * the rule's own declarations, and declarations inside an at-rule nested in a rule (`@media`, `@supports`)
+ * count as that rule's, reduced-motion ones as its reduced-motion declarations.
  */
 function rulesOf(css) {
   const rules = [];
@@ -42,7 +42,7 @@ function rulesOf(css) {
       const reduced = reducedAt(open) || stack.some(reducedAt);
       const inKeyframes = stack.some((outer) => /^@(-\w+-)?keyframes/.test(outer.head)) || /^@(-\w+-)?keyframes/.test(open.head);
       const owner = open.selectors ? open : [...stack].reverse().find((item) => item.selectors);
-      if (!inKeyframes && owner && (open.selectors || reducedAt(open))) {
+      if (!inKeyframes && owner && (open.selectors || open.head.startsWith("@"))) {
         rules.push({ selectors: owner.selectors, body: open.direct, reduced });
       }
       const top = stack.at(-1);
@@ -86,6 +86,9 @@ describe("reduced motion", () => {
     expect(unguarded(`.a { .b { animation: spin 1s; } } @media (prefers-reduced-motion: reduce) { .a { .b { animation: none; } } }`)).toEqual([]);
     // a guard nested inside the rule counts for that rule
     expect(unguarded(".a { animation: spin 1s; @media (prefers-reduced-motion: reduce) { animation: none; } }")).toEqual([]);
+    // an animation inside any nested conditional counts, not only inside a reduced-motion one
+    expect(unguarded(".a { @media (min-width: 1px) { animation: spin 1s; } }")).toEqual([".a"]);
+    expect(unguarded(`.a { @media (min-width: 1px) { animation: spin 1s; } } @media (prefers-reduced-motion: reduce) { .a { animation: none; } }`)).toEqual([]);
     // keyframe steps are not rules
     expect(unguarded("@keyframes spin { 50% { opacity: 0; } to { animation-name: x; } }")).toEqual([]);
   });
