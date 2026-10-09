@@ -7,6 +7,7 @@
  */
 import React from "react";
 import { useSynced } from "./use-synced.js";
+import { useResetOnChange } from "./use-reset-on-change.js";
 import { demoHrefFor, demoTargetForHref } from "./navigation.js";
 import { useModelFlowState } from "./model-flow-state.js";
 import { buildModelDraft } from "../content.js";
@@ -66,6 +67,11 @@ export function useCockpitDemo(props) {
   const [wsAnswer, setWsAnswer] = React.useState(null);
   const [wsChat, setWsChat] = React.useState([]);
   const wsFlow = useModelFlowState();
+  const clearWorkspaceThread = () => {
+    setWsAnswer(null);
+    setWsChat([]);
+    setWsPrompt("");
+  };
 
   const submitAnswer = (text) => {
     const trimmed = String(text || "").trim();
@@ -82,6 +88,10 @@ export function useCockpitDemo(props) {
      internally. */
   const liveRawIndex = Number.isFinite(Number(dashboard)) ? Number(dashboard) : 0;
   const liveReport = liveProject?.reports?.[liveIndex];
+  /* The Copilot thread belongs to one report: an answer, chat or draft question
+     about report A must not stay on screen under report B's profile and sources.
+     Closing and reopening the Copilot on the same report keeps the thread. */
+  useResetOnChange(`${liveKey}:${liveRawIndex}`, clearWorkspaceThread);
   const wsProfile = copilotProfile(projects, copilot, liveKey, liveRawIndex);
   const wsAsk = ({ question }) => {
     /* showAiAnswer: appends only while the answer view is open, else clears
@@ -189,9 +199,7 @@ export function useCockpitDemo(props) {
         props.onWorkspaceBack?.(event);
       },
       onNewSession: (event) => {
-        setWsAnswer(null);
-        setWsChat([]);
-        setWsPrompt("");
+        clearWorkspaceThread();
         props.onNewSession?.(event);
       },
       onMaximize: props.onMaximize,
@@ -267,6 +275,7 @@ export function useCockpitDemo(props) {
       setProject(target.project);
       setDashboard(null);
       setView("catalog");
+      clearWorkspaceThread();
       props.onBack?.(target);
     },
     onOpenWorkspace: (event) => {

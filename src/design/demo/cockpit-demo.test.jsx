@@ -152,6 +152,43 @@ describe("useCockpitDemo + MarketingCockpitPage with replacement fixtures", () =
     expect(screen.getByText("Alt generic summary: the alt copilot would answer with alt sources.")).toBeTruthy();
   });
 
+  describe("Copilot thread belongs to one report", () => {
+    const openAnswer = (container) => fireEvent.click(container.querySelector(".mh-copilot__rec"));
+
+    it("starts over when the report changes, instead of keeping the old answer under the new report", () => {
+      const props = baseProps({ project: "alpha", view: "live", dashboard: 0, workspaceOpen: true });
+      const { container, rerender } = render(<Harness {...props} />);
+      openAnswer(container);
+      expect(screen.getByText("Alt Holistic Report — Metro Pilot")).toBeTruthy();
+      rerender(<Harness {...props} dashboard={1} />);
+      expect(screen.queryByText("Alt Holistic Report — Metro Pilot")).toBeNull();
+      // back on the start view of the second report, with its own recommendations
+      expect(screen.getByText("Alt digest pick")).toBeTruthy();
+    });
+
+    it("starts over when the user returns to the library and opens another report", () => {
+      const { container } = render(<Harness {...baseProps({ project: "alpha", view: "live", dashboard: 0, workspaceOpen: true })} />);
+      openAnswer(container);
+      fireEvent.change(screen.getByPlaceholderText("Alt composer placeholder..."), { target: { value: "half-typed question" } });
+      fireEvent.click(screen.getByText("Report library").closest("a"));
+      fireEvent.click(screen.getByText("Alt Weekly Digest").closest("a"));
+      expect(screen.queryByText("Alt Holistic Report — Metro Pilot")).toBeNull();
+      expect(screen.getByPlaceholderText("Alt composer placeholder...").value).toBe("");
+      expect(screen.getByText("Alt digest pick")).toBeTruthy();
+    });
+
+    it("keeps the thread when the Copilot is closed and reopened on the same report", () => {
+      const { container } = render(<Harness {...baseProps({ project: "alpha", view: "live", dashboard: 0, workspaceOpen: true })} />);
+      openAnswer(container);
+      const copilot = container.querySelector(".mh-copilot");
+      fireEvent.click(within(copilot).getByLabelText(/close/i));
+      expect(copilot.getAttribute("aria-hidden")).toBe("true");
+      fireEvent.click(container.querySelector(".mh-assistant-launcher, [class*='launcher']"));
+      expect(copilot.getAttribute("aria-hidden")).toBe("false");
+      expect(within(copilot).getByText("Alt Holistic Report — Metro Pilot")).toBeTruthy();
+    });
+  });
+
   it("leaks nothing from the real fixtures", () => {
     render(<Harness {...baseProps({ project: "alpha", view: "live", dashboard: 0, workspaceOpen: true })} />);
     const text = document.body.textContent;
