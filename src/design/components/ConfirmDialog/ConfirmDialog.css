@@ -144,7 +144,7 @@
 
 .mh-confirm--warning .mh-confirm__btn--primary {
   border: 0;
-  background: linear-gradient(135deg, var(--mh-accent-soft), var(--mh-accent));
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   font-weight: var(--mh-font-weight-bold);
 }

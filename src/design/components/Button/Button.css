@@ -60,7 +60,7 @@ border-color: color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface
 
 .mh-button--gold {
 border-color: var(--mh-accent);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   box-shadow: var(--mh-shadow-raised);
 }

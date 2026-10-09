@@ -13,7 +13,7 @@
 .mh-scenario-detail__tag--published{background:var(--mh-success-wash);color:var(--mh-success)}
 .mh-scenario-detail__tag--under-review{background:var(--mh-warning-wash);color:var(--mh-warning)}
 .mh-scenario-detail__tag--scope{background:var(--mh-info-wash);color:var(--mh-info)}.mh-scenario-detail__tag--version{background:var(--mh-surface-muted);color:var(--mh-text-muted)}
-.mh-scenario-detail__edit{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:40px;padding:0 18px;border:0;border-radius:var(--mh-radius-md);background:linear-gradient(135deg,var(--mh-accent-soft),var(--mh-accent));color:var(--mh-text-strong);text-decoration:none;font-size:var(--mh-font-size-md);font-weight:var(--mh-font-weight-bold)}
+.mh-scenario-detail__edit{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:40px;padding:0 18px;border:0;border-radius:var(--mh-radius-md);background:var(--mh-accent-fill);color:var(--mh-text-strong);text-decoration:none;font-size:var(--mh-font-size-md);font-weight:var(--mh-font-weight-bold)}
 .mh-scenario-detail__edit:hover{filter:brightness(.92)}
 .mh-scenario-detail__edit svg{width:16px;height:16px}
 .mh-scenario-detail__description{margin:24px 0;color:var(--mh-text);font-size:var(--mh-font-size-lg);line-height:1.6}

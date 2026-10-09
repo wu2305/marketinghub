@@ -102,7 +102,7 @@ display: grid;
   height: 30px;
   place-items: center;
   border-radius: var(--mh-radius-sm);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
@@ -360,7 +360,7 @@ display: inline-block;
   max-width: 80%;
   padding: 10px 14px;
   border-radius: var(--mh-radius-lg);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   font-size: var(--mh-font-size-md);
   font-weight: var(--mh-font-weight-bold);
@@ -490,7 +490,7 @@ padding: 6px 8px;
 }
 
 .mh-assistant__answer-actions a {
-background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
 }
 

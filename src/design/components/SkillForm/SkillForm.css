@@ -33,7 +33,7 @@
 .mh-skill-form__actions{display:flex;gap:10px}
 .mh-skill-form__actions :is(a,button){display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 18px;border:1px solid var(--mh-line);border-radius:var(--mh-radius-md);background:var(--mh-surface);color:var(--mh-text);cursor:pointer;font:inherit;font-size:var(--mh-font-size-md);font-weight:var(--mh-font-weight-bold);text-decoration:none}
 .mh-skill-form__actions :is(a,button):hover{border-color:var(--mh-accent);background:var(--mh-surface-subtle)}
-.mh-skill-form__actions .mh-skill-form__submit{border-color:var(--mh-accent);background:linear-gradient(135deg,var(--mh-accent-soft),var(--mh-accent));color:var(--mh-text-strong)}
+.mh-skill-form__actions .mh-skill-form__submit{border-color:var(--mh-accent);background:var(--mh-accent-fill);color:var(--mh-text-strong)}
 .mh-skill-form__actions .mh-skill-form__submit:hover{filter:brightness(.92)}
 .mh-skill-form__submit svg{transform:rotate(180deg)}
 .mh-skill-form :is(a,button,input,textarea,select):focus-visible{outline:2px solid var(--mh-accent);outline-offset:2px}

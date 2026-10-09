@@ -1464,7 +1464,7 @@ content: "";
   height: 12px;
   margin-right: 8px;
   border-radius: var(--mh-radius-sm);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   vertical-align: -1px;
 }
 
@@ -1549,7 +1549,7 @@ display: inline-flex;
   padding: 0 13px;
   border: 0;
   border-radius: var(--mh-radius-md);
-  background: linear-gradient(135deg, var(--mh-accent-soft) 0%, var(--mh-accent) 100%);
+  background: var(--mh-accent-fill);
   color: var(--mh-text-strong);
   font-family: inherit;
   font-size: var(--mh-font-size-sm);
