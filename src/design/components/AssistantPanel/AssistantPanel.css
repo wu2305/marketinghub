@@ -577,6 +577,21 @@ position: absolute;
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-shadow-overlay);
+  animation: mh-history-in 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes mh-history-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* Declared after the animation so the reduced-motion rule wins the cascade. */
+@media (prefers-reduced-motion: reduce) {
+  .mh-assistant__history-pop {
+    animation: none;
+  }
 }
 
 /* home-history-popup is fixed with JS-computed left = button.left − width − 8
