@@ -159,7 +159,7 @@ filter/count function, and one render test per new component.
 | Review Center | table + tabs | title, summary, submitter | type, submitted (time) | review actions instead (B14) | no | workflow + AI check | review detail, AI suggestions | approve/reject; risk dialog | literal Rejected count; no-op time filter; Rejected items vanish |
 | Feedback & Quality | table + tabs | question, answer, person | type, time | no | no | feedback type | question/answer detail | thumbs up/down tabs | — |
 | Skill Library | table | name, description | status | no | yes → edit page | workflow (read-only) | Skill detail drawer | — | click-to-advance status (A4) |
-| Personal Memory | cards (list + detail split) | title, description | category tabs | own items: edit, delete (no availability) | yes | — | inline detail/editor | split layout (personal workspace, not a shared library) | — |
+| Personal Memory | list (rows with `leading` initial badge + detail split) | title, description | category tabs | own items: edit, delete (no availability) | yes | — | inline detail/editor | split layout (personal workspace, not a shared library) | — |
 
 Personal Memory keeps its split workspace; only its list column, empty state, delete confirm and toast use
 the pattern parts. Data Model uses only `LibraryItem` for its domain cards; its browser/graph stays as is.

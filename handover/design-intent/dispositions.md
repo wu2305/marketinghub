@@ -230,7 +230,7 @@ Source: `assets/js/governance/skills.js`, `assets/pages/scenario-library.html` (
 
 ### Personal Memory — WP7i
 
-Source: `assets/js/governance/memory.js`, `assets/pages/personal-memory.html` (list column, create drawer, delete confirm). React before: the list column of `features/personal-memory/MemoryWorkspace`, `pages/PersonalMemoryPage`, `demo/personal-memory-demo.js`. The detail aside (view/edit/Share/Delete Memory), the category tabs, the AI banner and the assistant stay as they are; only the list column, the empty state, the delete confirm and toast, and the create form's auto-fill move to the pattern (`patterns/library.md` §5: "Personal Memory keeps its split workspace"). `MemoryWorkspace` becomes the split layout (list slot + detail aside); the page composes the list from `LibraryList layout="cards"`.
+Source: `assets/js/governance/memory.js`, `assets/pages/personal-memory.html` (list column, create drawer, delete confirm). React before: the list column of `features/personal-memory/MemoryWorkspace`, `pages/PersonalMemoryPage`, `demo/personal-memory-demo.js`. The detail aside (view/edit/Share/Delete Memory), the category tabs, the AI banner and the assistant stay as they are; only the list column, the empty state, the delete confirm and toast, and the create form's auto-fill move to the pattern (`patterns/library.md` §5: "Personal Memory keeps its split workspace"). `MemoryWorkspace` becomes the split layout (list slot + detail aside); the page composes the list from `LibraryList layout="list"`.
 
 | # | behaviour | evidence (source file:line) | disposition | React behaviour | story / scenario change |
 |---|---|---|---|---|---|
