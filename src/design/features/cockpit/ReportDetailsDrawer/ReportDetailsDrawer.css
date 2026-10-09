@@ -28,9 +28,16 @@ position: fixed;
   }
 }
 
+/* Reduced motion keeps the appearance cue but drops the 540px travel. */
+@keyframes mh-details-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mh-details {
-    animation: none;
+    animation: mh-details-fade 150ms ease;
   }
 }
 

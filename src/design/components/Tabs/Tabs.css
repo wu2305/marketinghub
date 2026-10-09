@@ -15,6 +15,10 @@ padding: 8px 4px;
   font-size: var(--mh-font-size-lg);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .mh-tabs__tab.is-active {
