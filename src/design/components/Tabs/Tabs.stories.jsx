@@ -13,7 +13,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component is a tab strip. The element has role `tablist`. A tab can be disabled.\n\n**When to use.** Use this component to switch between sibling views on the same page. Exactly one view is visible at a time. To filter a list by one choice, use FilterPills. **Used in:** Media Tracking Detail, Campaign, and Self-Service Center. **Retired pages (source kept, not in Storybook):** Review Center and Feedback & Quality.", "这个组件是标签页条。元素的 role 是 `tablist`。标签页可以禁用。\n\n**何时使用。** 在同一页面的并列视图之间切换，同一时间只显示一个视图。若只是按单一选项筛选列表，请用 FilterPills。**使用位置：** Media Tracking Detail、Campaign 与 Self-Service Center。**已撤下的页面（源码保留，不在 Storybook 中）：**Review Center 与 Feedback & Quality。"),
+        component: bi("This component is a tab strip. The element has role `tablist`. A tab can be disabled. The selected tab is the only Tab stop; the arrow keys, Home and End move between tabs and select them.\n\n**When to use.** Use this component to switch between sibling views on the same page. Exactly one view is visible at a time. To filter a list by one choice, use FilterPills. **Used in:** Media Tracking Detail, Campaign, and Self-Service Center. **Retired pages (source kept, not in Storybook):** Review Center and Feedback & Quality.", "这个组件是标签页条。元素的 role 是 `tablist`。标签页可以禁用。已选中的标签页是唯一的 Tab 停靠点；方向键、Home 和 End 在标签页之间移动并选中它们。\n\n**何时使用。** 在同一页面的并列视图之间切换，同一时间只显示一个视图。若只是按单一选项筛选列表，请用 FilterPills。**使用位置：** Media Tracking Detail、Campaign 与 Self-Service Center。**已撤下的页面（源码保留，不在 Storybook 中）：**Review Center 与 Feedback & Quality。"),
       },
     },
   },
@@ -30,7 +30,7 @@ export default {
       "onChange",
       "(event: { id: string, label: string }) => void",
       { id: "upload", label: "Data Upload" },
-      bi("The function runs when the user clicks a tab. The result has `id` and `label`.", "用户点击标签页时会调用这个函数。结果里带有 `id` 和 `label`。"),
+      bi("The function runs when a tab becomes selected: a click (or Enter or Space on the focused tab), or a keyboard move: the arrow keys, Home and End select the tab they land on and skip disabled tabs. The result has `id` and `label`.", "标签页被选中时会调用这个函数：点击（或在获得焦点的标签页上按 Enter 或空格），或键盘移动：方向键、Home 和 End 会选中落到的标签页，并跳过禁用的标签页。结果里带有 `id` 和 `label`。"),
     ),
   },
   render: function TabsStory(args) {
