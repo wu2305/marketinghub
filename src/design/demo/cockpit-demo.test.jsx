@@ -79,6 +79,20 @@ describe("useCockpitDemo + MarketingCockpitPage with replacement fixtures", () =
     expect(params).toEqual({ project: "alpha", dashboard: "1", view: "live" });
   });
 
+  it("Back from a live report returns to the project directory, and a report can be reopened", () => {
+    const onBack = vi.fn();
+    render(<Harness {...baseProps({ onBack })} />);
+    fireEvent.click(screen.getByText("Alpha Portfolio").closest("a"));
+    fireEvent.click(screen.getByText("Alt Weekly Digest").closest("a"));
+    expect(screen.getByText("Report library")).toBeTruthy();
+    fireEvent.click(screen.getByText("Report library").closest("a"));
+    expect(onBack).toHaveBeenCalledWith(expect.objectContaining({ project: "alpha" }));
+    expect(screen.queryByText("Report library")).toBeNull();
+    expect(screen.getByText("Alt Weekly Digest")).toBeTruthy();
+    fireEvent.click(screen.getByText("Alt Metro Uplift Study").closest("a"));
+    expect(screen.getByText("Report library")).toBeTruthy();
+  });
+
   it("project view shows the resolved knowledge-asset count per report", () => {
     const { container } = render(<Harness {...baseProps({ project: "alpha" })} />);
     // report 0 resolves 2 linked assets; report 1 resolves 1
