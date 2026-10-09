@@ -399,12 +399,19 @@ describe("P08 demo flow", () => {
     const trigger = container.querySelector('[name="trigger_when"]');
     const domain = screen.getByRole("button", { name: /Business Domain/ });
     // required controls say so, and nothing is invalid or described yet
-    for (const control of [name, trigger, domain]) expect(control.required || control.getAttribute("aria-required") === "true", control.outerHTML.slice(0, 60)).toBe(true);
+    for (const control of [name, trigger]) expect(control.required, control.outerHTML.slice(0, 60)).toBe(true);
+    // the Business Domain trigger is a button, which has no required state: it says so in its name instead
+    expect(domain.getAttribute("aria-required")).toBeNull();
+    expect(domain.getAttribute("aria-invalid")).toBeNull();
+    expect(domain.getAttribute("data-invalid")).toBeNull();
+    expect(domain.getAttribute("aria-labelledby")).toBeTruthy();
+    expect(document.getElementById(domain.getAttribute("aria-labelledby")).textContent).toBe("Business Domain * (required)");
     expect(name.getAttribute("aria-describedby")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
     expect(document.activeElement).toBe(name);
     for (const control of [name, trigger, domain, container.querySelector('[name="output_requirements"]')]) {
-      expect(control.getAttribute("aria-invalid")).toBe("true");
+      // aria-invalid goes on form controls only; the button is described by its error message
+      expect(control.getAttribute("aria-invalid")).toBe(control === domain ? null : "true");
       const message = document.getElementById(control.getAttribute("aria-describedby"));
       expect(message?.classList.contains("mh-kcf__error")).toBe(true);
     }
@@ -454,6 +461,20 @@ describe("P08 demo flow", () => {
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
     expect(document.activeElement).toBe(screen.getByRole("textbox", { name: "Synonyms" }));
     expect(screen.getByDisplayValue("Revenue").getAttribute("aria-invalid")).toBeNull();
+  });
+
+  it("aria-required / aria-invalid sit only on elements whose role supports them", () => {
+    // a native button has neither state; a presence check on the attribute cannot show that, the host element can
+    const supports = (el) => el.matches("input, select, textarea") || ["textbox", "combobox", "listbox", "radiogroup", "spinbutton", "checkbox", "switch"].includes(el.getAttribute("role"));
+    for (const type of ["Business Term", "Principles", "Report Context", "Scenario Reporting", "Data Model", "Metric Dictionary", "Analytical Model", "Email Reports"]) {
+      function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type })} />; }
+      const { container, unmount } = render(<Test />);
+      const submit = screen.queryAllByRole("button", { name: /^(Submit|Save Draft|Save)$/ }).at(-1);
+      if (submit) fireEvent.click(submit);
+      const offenders = [...container.querySelectorAll("[aria-required], [aria-invalid]")].filter((el) => !supports(el));
+      expect(offenders.map((el) => `${type}: ${el.tagName.toLowerCase()}.${el.className}`)).toEqual([]);
+      unmount();
+    }
   });
 
   it("Analytical Model: Save Draft says the model stays disabled", () => {

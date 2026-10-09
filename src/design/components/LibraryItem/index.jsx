@@ -48,18 +48,22 @@ export function LibraryItem({ variant = "default", id, title, draft = false, sel
       {children ? <div className="mh-library-item__extra">{children}</div> : null}
       {meta.length || actions ? (
         <footer className="mh-library-item__foot">
-          <dl className="mh-library-item__meta">
+          {/* One <dl> per row: <dl> > <div> > <dt>/<dd> is the only grouping HTML allows, and the
+              actions button sits beside the last row's fields, so it cannot live inside a <dl>. */}
+          <div className="mh-library-item__meta">
             {meta.map((entry, index) => (
               <div className={cx("mh-library-item__row", entry.secondary && "mh-library-item__row--pair")} key={entry.label}>
-                <div className="mh-library-item__field">
-                  <dt>{entry.label}</dt>
-                  <dd title={typeof entry.value === "string" ? entry.value : undefined}>{entry.value}</dd>
-                </div>
-                {entry.secondary ? <div className="mh-library-item__field"><dt>{entry.secondary.label}</dt><dd title={String(entry.secondary.value)}>{entry.secondary.value}</dd></div> : null}
+                <dl className="mh-library-item__fields">
+                  <div className="mh-library-item__field">
+                    <dt>{entry.label}</dt>
+                    <dd title={typeof entry.value === "string" ? entry.value : undefined}>{entry.value}</dd>
+                  </div>
+                  {entry.secondary ? <div className="mh-library-item__field"><dt>{entry.secondary.label}</dt><dd title={String(entry.secondary.value)}>{entry.secondary.value}</dd></div> : null}
+                </dl>
                 {variant === "knowledge" && actions && index === meta.length - 1 ? <ItemActions {...actions} id={id} name={title} onAction={onAction} /> : null}
               </div>
             ))}
-          </dl>
+          </div>
           {actions && (variant !== "knowledge" || !meta.length) ? <ItemActions {...actions} id={id} name={title} onAction={onAction} /> : null}
         </footer>
       ) : null}
