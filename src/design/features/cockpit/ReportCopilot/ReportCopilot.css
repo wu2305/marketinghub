@@ -74,6 +74,15 @@
       }
     }
   }
+
+  /* The original keeps the 40vw drawer on phones, leaving a 156px strip at 390px
+     whose header and composer run off the screen. Like the assistant panel,
+     the docked drawer fills the screen under 760px. */
+  @media (max-width: 760px) {
+    width: 100vw;
+    max-width: 100vw;
+    border-left: 0;
+  }
 }
 
 .mh-copilot--expanded .mh-copilot__head {
@@ -194,6 +203,14 @@
   border-radius: var(--mh-radius-md);
   background: var(--mh-surface);
   box-shadow: var(--mh-shadow-overlay);
+
+  /* Keep the 360px popup on screen when the drawer fills a phone: its right
+     edge stays 18px (the head padding) from the drawer, and the width leaves
+     room for that edge in the expanded 12px-inset panel too. */
+  @media (max-width: 760px) {
+    right: 0;
+    width: min(360px, calc(100vw - 48px));
+  }
 }
 
 .mh-copilot__history-head {
@@ -1517,7 +1534,7 @@
 
   & textarea {
     width: auto;
-    min-width: 380px;
+    min-width: min(380px, 100%);
     max-width: 100%;
     min-height: 44px;
     max-height: 96px;
