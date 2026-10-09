@@ -18,12 +18,17 @@ display: inline-flex;
     background 160ms ease,
     border-color 160ms ease,
     filter 160ms ease,
-    color 160ms ease;
+    color 160ms ease,
+    transform 120ms ease;
 }
 
 .mh-button:focus-visible {
 outline: 2px solid var(--mh-focus-ring);
   outline-offset: 2px;
+}
+
+.mh-button:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(0.98);
 }
 
 .mh-button--sm {
@@ -131,4 +136,14 @@ border-color: var(--mh-line-strong);
 
 a.mh-button {
 text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mh-button {
+    transition-property: background, border-color, filter, color;
+  }
+
+  .mh-button:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
 }
