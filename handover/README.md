@@ -12,7 +12,7 @@
 | 设计系统位置 | `src/design`：通用组件 `components/<Name>/`、单页功能 `features/<page>/<Name>/`、页面 `pages/<Page>/`、共享私有模块 `lib/`（每目录 `index.jsx`+`<Name>.css`+`<Name>.stories.jsx`；`index.js` 唯一公共入口） |
 | 最新独立审核 | 2026-09-26 积压集成 integrate/drain（85a5066）：21个本地未合分支按序合入，逐个 lint/测试，全套门禁见下；这些分支合入前未做独立对抗审核，列入§4。上一次独立审核仍为 PR #25 |
 | Storybook | 10.6.1（2026-10-02 自 8.6.18 升级；构建器 Vite 8.3 + Rolldown，2026-10-03），`@storybook/react-vite` + `@storybook/addon-docs`；`addon-essentials` 与 `@storybook/blocks` 已移除（文档块改自 `@storybook/addon-docs/blocks`），`.storybook/preview.jsx` 的 `restoreInferredTypes` 补回 v10 丢失的参数类型名 |
-| 故事数 | 492 stories + 94 docs（2026-09-30 v22 设计同步：`Pages` 新增 6 个 Analytical Model 故事 `pages--knowledge-create-analysis-{domains,metrics,no-metrics,discard,saved,published}`，下限升为 492；此前 486 + 94；下限见 `src/design/storybook-budget.json`，`build-storybook` 低于下限即失败；2026-09-30 Phase 3 WP5 第 3 项 `examples/consumer/CockpitApp.stories.tsx` 新增 Cockpit 使用方故事及其 docs，本次核对 `storybook-static/index.json`；此前 484 stories + 93 docs，2026-09-29 Phase 3 WP5 第 1 项：新增 `Examples/Consumer business term` Workspace 故事及其 docs；此前 2026-09-29 Phase 3 ScenarioPreview 并入 ExamplePreview：删 `Organisms/ScenarioPreview`、新增 `Molecules/ExamplePreview` View 故事；此前 WP2：新增 `Organisms/Assistant dock` 3 个故事，483 + 93） |
+| 故事数 | 331 stories + 87 docs（2026-10-09 用户取消八个旧页面；166个页面状态及8个文档撤下，详见§5） |
 | 测试 | `npm test`：40 文件 457 条通过（2026-09-30 v22 设计同步：`knowledge-create-demo.test.jsx` 新增 4 例——域→指标过滤/搜索/裁剪、Save Draft·Publish 校验与结果框、Cancel 放弃确认，并改 4 例旧断言；此前 README 记 452：2026-09-30，客户演示工作流新增 2 文件 9 条；此前 Pass E 审核整改：`dom-props.test.jsx` 覆盖 93 个 stories 文件（含根目录与 `examples/consumer`）并新增 React 警告匹配测试；`NODE_ENV=production` 下也通过；同日 Pass B 审核整改：`AssistantDock` 优先级、焦点回归与故事断言测试（+3）；同日 Pass D 审核整改：`css-budget.test.js` 新增 4 例——token 引用可解析、自引用检测、design-sync conventions 只写现存 token、探针；删去已排空的豁免基线测试并改为断言豁免为空；此前 431：Pass A 第二批审核整改：新增反馈页可见标签测试；此前 Pass A 审核整改：新增 Cockpit 路由参数字符串测试；此前 2026-09-29 Phase 3 WP5 第 1 项：`examples/consumer` 行为与导入边界测试；`build:lib` 另在 dist 上重跑 examples/consumer） |
 | lint | `npm run lint`：0 errors / 0 warnings（2026-09-29，WP8 全量门禁） |
 | 构建验证 | 2026-09-29 WP8 全量未过滤门禁（main 1ececf4 上仅改文档）：`build-storybook`、`build:host`、`build:lib` 通过；host-check 31/31；字体探针 33 条，均为既有公式/代码等宽字体，无其他字体命中（2026-09-30 起探针把等宽视为允许字体，有其他命中即退出码 1；当前构建 0 条）。本环境 Playwright 期望的浏览器版本未安装，改用预装 Chromium 1194（scratchpad 符号链接并设 `PLAYWRIGHT_BROWSERS_PATH`；脚本未改） |
@@ -503,6 +503,190 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 分支 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）建在已删除的 `src/assembled` 与 `scripts/compose_portal.py` 上，与 `main` 互斥，应关闭。
 
 ## 5. 维护日志
+
+### 2026-10-09 — 用户确认撤下八个旧页面
+
+本轮用户取消 MetricDictionaryPage, PersonalMemoryPage, ReviewCenterPage, ScenarioDetailPage, ScenarioEditPage, ScenarioLibraryPage, KnowledgeViewPage, FeedbackQualityPage。从最新 origin/main 迁移已验收的清理：Storybook注册及 Pages Docs清单共用撤下名单，移除166个页面状态和8个文档；保留源码及共享组件。页面清单保留9页，最新构建331 stories + 87 docs，门槛同步调整（最新主版本另有既有新增示例）。此为明确产品范围缩减，不恢复旧页面。
+
+移除入口：
+
+- `pages--feedback-quality`
+- `pages--feedback-quality-empty`
+- `pages--feedback-quality-negative-detail`
+- `pages--feedback-quality-positive-detail`
+- `pages--feedback-quality-assistant`
+- `pages--feedback-quality-assistant-filled`
+- `pages--feedback-quality-assistant-answer`
+- `pages--feedback-quality-assistant-history`
+- `pages--feedback-quality-assistant-maximized`
+- `pages--feedback-quality-assistant-skills`
+- `pages--feedback-quality-assistant-skill-search`
+- `pages--feedback-quality-assistant-selected`
+- `pages--feedback-quality-model-history`
+- `pages--feedback-quality-model-manual`
+- `pages--feedback-quality-model-generated`
+- `pages--feedback-quality-model-error`
+- `pages--feedback-quality-model-empty`
+- `pages--knowledge-view-business-term`
+- `pages--knowledge-view-business-term-versions`
+- `pages--knowledge-view-business-term-empty`
+- `pages--knowledge-view-scenario`
+- `pages--knowledge-view-scenario-review`
+- `pages--knowledge-view-scenario-versions`
+- `pages--knowledge-view-principles`
+- `pages--knowledge-view-principles-collapsed`
+- `pages--knowledge-view-principles-versions`
+- `pages--knowledge-view-data-model`
+- `pages--knowledge-view-data-model-search`
+- `pages--knowledge-view-data-model-basic`
+- `pages--knowledge-view-data-model-event`
+- `pages--knowledge-view-data-model-table`
+- `pages--knowledge-view-data-model-preview`
+- `pages--knowledge-view-data-model-smart`
+- `pages--knowledge-view-data-model-export`
+- `pages--knowledge-view-data-model-edit`
+- `pages--feedbackqualitypage`
+- `pages--knowledgeviewpage`
+- `pages--metric-dictionary`
+- `pages--metric-dictionary-derived`
+- `pages--metric-dictionary-formula`
+- `pages--metric-dictionary-dimensions`
+- `pages--metric-dictionary-derived-detail`
+- `pages--metric-dictionary-add-derived`
+- `pages--metric-dictionary-formula-tokens`
+- `pages--metric-dictionary-constant`
+- `pages--metric-dictionary-name-required`
+- `pages--metric-dictionary-test-empty`
+- `pages--metric-dictionary-test-result`
+- `pages--metric-dictionary-saved`
+- `pages--metric-dictionary-assistant`
+- `pages--metric-dictionary-assistant-prompt`
+- `pages--metric-dictionary-assistant-answer`
+- `pages--metric-dictionary-assistant-history`
+- `pages--metric-dictionary-assistant-history-pick`
+- `pages--metric-dictionary-assistant-expanded`
+- `pages--metric-dictionary-assistant-skill-menu`
+- `pages--metric-dictionary-assistant-skill-selected`
+- `pages--metric-dictionary-model-history`
+- `pages--metric-dictionary-model-manual`
+- `pages--metric-dictionary-model-generated`
+- `pages--metric-dictionary-qa-disabled`
+- `pages--metric-dictionary-dimension-disabled`
+- `pages--personal-memory`
+- `pages--personal-memory-category`
+- `pages--personal-memory-empty`
+- `pages--personal-memory-banner-closed`
+- `pages--personal-memory-detail`
+- `pages--personal-memory-edit`
+- `pages--personal-memory-create`
+- `pages--personal-memory-auto-filled`
+- `pages--personal-memory-create-errors`
+- `pages--personal-memory-cross-category`
+- `pages--personal-memory-delete-confirm`
+- `pages--personal-memory-assistant`
+- `pages--personal-memory-assistant-filled`
+- `pages--personal-memory-assistant-answer`
+- `pages--personal-memory-assistant-history`
+- `pages--personal-memory-assistant-maximized`
+- `pages--personal-memory-assistant-skills`
+- `pages--personal-memory-assistant-skill-search`
+- `pages--personal-memory-assistant-selected`
+- `pages--personal-memory-model-history`
+- `pages--personal-memory-model-manual`
+- `pages--personal-memory-model-generated`
+- `pages--personal-memory-model-error`
+- `pages--personal-memory-model-empty`
+- `pages--review-center`
+- `pages--review-center-approved`
+- `pages--review-center-empty`
+- `pages--review-center-direct-pass`
+- `pages--review-center-pending-detail`
+- `pages--review-center-pending-plain`
+- `pages--review-center-approved-detail`
+- `pages--review-center-reject`
+- `pages--review-center-reject-fallback`
+- `pages--review-center-risk-reviewing`
+- `pages--review-center-risk-warning`
+- `pages--review-center-assistant`
+- `pages--review-center-assistant-filled`
+- `pages--review-center-assistant-answer`
+- `pages--review-center-assistant-history`
+- `pages--review-center-assistant-maximized`
+- `pages--review-center-assistant-skills`
+- `pages--review-center-assistant-skill-search`
+- `pages--review-center-assistant-selected`
+- `pages--review-center-model-history`
+- `pages--review-center-model-manual`
+- `pages--review-center-model-generated`
+- `pages--review-center-model-error`
+- `pages--review-center-model-empty`
+- `pages--scenario-detail`
+- `pages--scenario-detail-known`
+- `pages--scenario-detail-unknown`
+- `pages--scenario-detail-related`
+- `pages--scenario-detail-ai-check`
+- `pages--scenario-detail-usage`
+- `pages--scenario-detail-version`
+- `pages--scenario-detail-activity`
+- `pages--scenario-detail-preview`
+- `pages--scenario-detail-assistant`
+- `pages--scenario-detail-assistant-filled`
+- `pages--scenario-detail-assistant-answer`
+- `pages--scenario-detail-assistant-history`
+- `pages--scenario-detail-assistant-maximized`
+- `pages--scenario-detail-assistant-skills`
+- `pages--scenario-detail-assistant-skill-search`
+- `pages--scenario-detail-assistant-selected`
+- `pages--scenario-detail-model-history`
+- `pages--scenario-detail-model-manual`
+- `pages--scenario-detail-model-generated`
+- `pages--scenario-detail-model-error`
+- `pages--scenario-detail-model-empty`
+- `pages--scenario-edit`
+- `pages--scenario-edit-known`
+- `pages--scenario-edit-report-changed`
+- `pages--scenario-edit-report-empty`
+- `pages--scenario-edit-preview`
+- `pages--scenario-edit-preview-empty`
+- `pages--scenario-edit-required`
+- `pages--scenario-edit-assistant`
+- `pages--scenario-edit-assistant-filled`
+- `pages--scenario-edit-assistant-answer`
+- `pages--scenario-edit-assistant-history`
+- `pages--scenario-edit-assistant-maximized`
+- `pages--scenario-edit-assistant-skills`
+- `pages--scenario-edit-assistant-skill-search`
+- `pages--scenario-edit-assistant-selected`
+- `pages--scenario-edit-model-history`
+- `pages--scenario-edit-model-manual`
+- `pages--scenario-edit-model-generated`
+- `pages--scenario-edit-model-error`
+- `pages--scenario-edit-model-empty`
+- `pages--scenario-library`
+- `pages--scenario-library-owner-search`
+- `pages--scenario-library-empty`
+- `pages--scenario-library-detail`
+- `pages--scenario-library-draft-detail`
+- `pages--scenario-library-preview`
+- `pages--scenario-library-delete-confirm`
+- `pages--scenario-library-create`
+- `pages--scenario-library-edit`
+- `pages--scenario-library-create-after-edit`
+- `pages--scenario-library-blank-submit`
+- `pages--scenario-library-assistant`
+- `pages--scenario-library-assistant-answer`
+- `pages--scenario-library-assistant-history`
+- `pages--scenario-library-assistant-skills`
+- `pages--scenario-library-model-history`
+- `pages--metricdictionarypage`
+- `pages--personalmemorypage`
+- `pages--reviewcenterpage`
+- `pages--scenariodetailpage`
+- `pages--scenarioeditpage`
+- `pages--scenariolibrarypage`
+
+验证：lint通过、46个测试文件546条通过、Storybook构建通过；产物331 stories + 87 docs，Pages为9页。发布：待PR合并与Cloudflare自动发布。
+
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
