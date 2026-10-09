@@ -28,6 +28,7 @@ export {
   statusBadgeTones,
   statusBadgeVariants,
 } from "./components/StatusBadge/index.jsx";
+export { Switch } from "./components/Switch/index.jsx";
 export {
   SearchField,
   searchIconPositions,

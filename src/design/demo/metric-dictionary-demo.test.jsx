@@ -123,7 +123,7 @@ describe("P10 metric dictionary process", () => {
     const { container } = render(<Harness />);
     const name = screen.getByRole("textbox", { name: "Metric Name" });
     fireEvent.change(name, { target: { value: "Edited in place" } });
-    const qa = screen.getByRole("checkbox", { name: "Participate in Q&A" });
+    const qa = screen.getByRole("switch", { name: "Participate in Q&A" });
     fireEvent.click(qa);
     fireEvent.click(screen.getByRole("button", { name: "Dimensions · 3" }));
     const dimension = container.querySelector(".mh-metric-page__dimension-grid input");

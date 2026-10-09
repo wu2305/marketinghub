@@ -56,7 +56,7 @@
 .mh-metric-page__hint { margin: 6px 0 0; color: var(--mh-text-faint); font-size: var(--mh-font-size-xs); }
 .mh-metric-page__toggle { display: flex; align-items: center; justify-content: space-between; }
 .mh-metric-page__toggle strong { color: var(--mh-text-muted); font-size: var(--mh-font-size-sm); }
-.mh-metric-page__toggle input, .mh-metric-page__data-row input { height: 22px; width: 40px; accent-color: var(--mh-success); cursor: pointer; }
+.mh-metric-page__data-row input { height: 22px; width: 40px; accent-color: var(--mh-success); cursor: pointer; }
 .mh-metric-page__card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; color: var(--mh-text-muted); text-transform: uppercase; font-size: var(--mh-font-size-sm); }
 .mh-metric-page__card-head button { border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); padding: 6px 10px; background: var(--mh-surface); color: var(--mh-text); cursor: pointer; font-size: var(--mh-font-size-sm); text-transform: none; }
 .mh-metric-page__formula { display: block; padding: 12px 14px; border-radius: var(--mh-radius-md); color: var(--mh-surface); background: var(--mh-text-strong); font-size: var(--mh-font-size-md); overflow-wrap: anywhere; }

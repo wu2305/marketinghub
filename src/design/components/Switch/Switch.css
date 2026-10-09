@@ -1,0 +1,10 @@
+.mh-switch { position: relative; display: inline-block; flex: none; width: 44px; height: 24px; }
+.mh-switch input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.mh-switch__track { position: absolute; inset: 0; border-radius: var(--mh-radius-pill); background: var(--mh-line-strong); pointer-events: none; transition: background 200ms ease; }
+.mh-switch__track::before { content: ""; position: absolute; left: 3px; bottom: 3px; width: 18px; height: 18px; border-radius: var(--mh-radius-pill); background: var(--mh-surface); box-shadow: var(--mh-shadow-raised); transition: transform 200ms ease; }
+.mh-switch input:checked + .mh-switch__track { background: var(--mh-success); }
+.mh-switch input:checked + .mh-switch__track::before { transform: translateX(20px); }
+.mh-switch input:focus-visible + .mh-switch__track { outline: 2px solid var(--mh-focus-ring); outline-offset: 2px; }
+.mh-switch input:disabled { cursor: not-allowed; }
+.mh-switch input:disabled + .mh-switch__track { opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) { .mh-switch__track, .mh-switch__track::before { transition: none; } }
