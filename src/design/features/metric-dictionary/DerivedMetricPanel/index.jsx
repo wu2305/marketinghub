@@ -1,11 +1,12 @@
 import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { useOverlayLayer } from "../../../lib/overlay.js";
+import { Icon } from "../../../icons.jsx";
 import "./DerivedMetricPanel.css";
 
 /** @type {readonly ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"]} */
 export const formulaOperators = ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"];
-const symbol = { "*": "×", "/": "÷", const: "123", clear: "▤", backspace: "⌫" };
+const symbol = { "*": "×", "/": "÷", const: "123", clear: <Icon name="trash" />, backspace: <Icon name="backspace" /> };
 
 /**
  * P10's derived metric drawer and formula builder.
