@@ -255,6 +255,7 @@ export function ModelFlowDialog({
               <textarea
                 ref={ruleRef}
                 className="mh-flow__rule"
+                aria-label={copy.ruleLabel}
                 rows={3}
                 defaultValue={rule}
                 placeholder={copy.rulePlaceholder}

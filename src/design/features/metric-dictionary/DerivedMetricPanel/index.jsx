@@ -81,7 +81,7 @@ export function DerivedMetricPanel({
               <label>{copy.descriptionLabel}<textarea value={draft.description || ""} placeholder={copy.descriptionPlaceholder} onChange={(event) => change("description", event.target.value)} /></label>
               <label>{copy.synonyms}<input value={draft.synonyms || ""} placeholder={copy.synonymsPlaceholder} onChange={(event) => change("synonyms", event.target.value)} /></label>
               <div className="mh-derived-panel__toggle"><span><strong>{copy.enable}</strong><small>{copy.enableHint}</small></span><Switch label={copy.enable} checked={draft.enabled !== false} onChange={({ checked }) => change("enabled", checked)} /></div>
-              <div className="mh-derived-panel__test"><span><strong>{copy.testTitle}</strong><small>{copy.testHint}</small></span><button type="button" onClick={onTest}>{copy.test}</button></div>
+              <div className="mh-derived-panel__test"><span><strong>{copy.testTitle}</strong><small>{copy.testHint}</small></span><button type="button" onClick={() => onTest?.()}>{copy.test}</button></div>
               {notice ? <p className="mh-derived-panel__notice" role="status">{notice}</p> : null}
             </form>
             <aside className="mh-derived-panel__references">
@@ -89,7 +89,7 @@ export function DerivedMetricPanel({
               {references.map((metric) => <button type="button" key={metric.id} className="mh-derived-panel__reference" onClick={() => onReference?.({ metric })}><strong>{metric.name}</strong><small>{metric.source}</small></button>)}
             </aside>
           </div>
-          <footer className="mh-derived-panel__foot"><button type="button" onClick={() => onCancel?.({ reason: "button" })}>{copy.cancel}</button><button type="button" className="mh-derived-panel__save" onClick={onSave}>{copy.save}</button></footer>
+          <footer className="mh-derived-panel__foot"><button type="button" onClick={() => onCancel?.({ reason: "button" })}>{copy.cancel}</button><button type="button" className="mh-derived-panel__save" onClick={() => onSave?.()}>{copy.save}</button></footer>
         </aside>
       </div>
       <Modal open={constantOpen} title={copy.constantTitle} titleId={constantId} onClose={onConstantCancel}>
