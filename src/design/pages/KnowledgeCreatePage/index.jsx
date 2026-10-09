@@ -4,6 +4,7 @@ import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import { Header } from "../../components/Header/index.jsx";
 import { Button } from "../../components/Button/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
+import { OperationReminder } from "../../lib/OperationReminder/index.jsx";
 import { Modal } from "../../components/Modal/index.jsx";
 import { BusinessTermForm } from "../../features/interpreter/BusinessTermForm/index.jsx";
 import { KnowledgeCreateFields } from "../../features/knowledge-create/KnowledgeCreateFields/index.jsx";
@@ -86,7 +87,7 @@ export function KnowledgeCreatePage({
             {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
             <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : submit(); }}>
               <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
-              <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={cancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={save}>{isAnalysis ? analysis.saveLabel : labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{isAnalysis ? analysis.submitLabel : labels.submit}</Button></div>{isAnalysis && <p>ⓘ {analysis.reminder}</p>}{isScenario && <p>ⓘ {content.scenario.reminder}</p>}</footer>
+              <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={cancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={save}>{isAnalysis ? analysis.saveLabel : labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{isAnalysis ? analysis.submitLabel : labels.submit}</Button></div>{isAnalysis && <OperationReminder>{analysis.reminder}</OperationReminder>}{isScenario && <OperationReminder>{content.scenario.reminder}</OperationReminder>}</footer>
             </form>
           </>}
       </section>

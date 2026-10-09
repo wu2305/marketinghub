@@ -1,6 +1,7 @@
 import React from "react";
 import { FormField } from "../../../components/FormField/index.jsx";
 import { Button } from "../../../components/Button/index.jsx";
+import { OperationReminder } from "../../../lib/OperationReminder/index.jsx";
 import { Icon } from "../../../icons.jsx";
 import "../../../tokens.css";
 import "./BusinessTermForm.css";
@@ -63,6 +64,6 @@ export function BusinessTermForm({
       <FormField label={labels.synonyms} name="synonyms" value={synonymField} placeholder={placeholders.synonyms} onChange={({ value }) => { setSynonymText(value); set("synonyms", parseSynonyms(value)); }} />
       {kind === "Business Term" && <div className="mh-btform__scope" ref={scopeRef}><span>{labels.scope}</span><button type="button" aria-expanded={scopeOpen} onClick={() => setScopeOpen((x) => !x)}>{scope.length ? scope.map((item) => <i key={item}>{item}</i>) : <em>{labels.select}</em>}</button>{scopeOpen && <div className="mh-btform__scope-menu">{scopeOptions.map((item) => <label key={item}><input type="checkbox" checked={scope.includes(item)} onChange={() => set("scope", scope.includes(item) ? scope.filter((x) => x !== item) : [...scope, item])} />{item}</label>)}</div>}</div>}
     </div>
-    <footer className="mh-btform__footer"><div><Button variant="secondary" onClick={() => onCancel?.({ values })}>{labels.cancel}</Button><Button variant="secondary" onClick={() => onSave?.({ values })}>{labels.save}</Button><Button variant="gold" type="submit">{labels.submit}</Button></div><p>ⓘ {reminder}</p></footer>
+    <footer className="mh-btform__footer"><div><Button variant="secondary" onClick={() => onCancel?.({ values })}>{labels.cancel}</Button><Button variant="secondary" onClick={() => onSave?.({ values })}>{labels.save}</Button><Button variant="gold" type="submit">{labels.submit}</Button></div><OperationReminder>{reminder}</OperationReminder></footer>
   </form>;
 }
