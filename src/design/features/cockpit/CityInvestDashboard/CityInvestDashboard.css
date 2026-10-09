@@ -363,7 +363,7 @@ position: absolute;
 
 @media (max-width: 1180px) {
   .mh-sc-kpi-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   }
 
   .mh-sc-chart-grid {
@@ -372,11 +372,5 @@ position: absolute;
 
   .mh-sc-filters {
   flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 760px) {
-  .mh-sc-kpi-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

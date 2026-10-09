@@ -96,6 +96,7 @@ width: 16px;
 .mh-details__fullscreen:focus-visible {
 background: var(--mh-surface-page);
   color: var(--mh-text-strong);
+  outline: 0;
 }
 
 .mh-details__close {
@@ -216,6 +217,7 @@ margin-left: auto;
 .mh-details__view-more:hover,
 .mh-details__view-more:focus-visible {
 color: var(--mh-text-strong);
+  outline: 0;
 }
 
 .mh-details__assets {
@@ -245,9 +247,11 @@ display: inline-flex;
     color 0.15s ease;
 }
 
-.mh-details__pill:hover {
+.mh-details__pill:hover,
+.mh-details__pill:focus-visible {
 background: var(--mh-accent-wash);
   color: var(--mh-accent-ink);
+  outline: 0;
 }
 
 .mh-details__scenarios {
@@ -281,7 +285,6 @@ display: grid;
   padding: 12px 14px;
   border: 0;
   background: transparent;
-  border-radius: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
@@ -331,16 +334,6 @@ border-color: var(--mh-accent);
 .mh-details__scenarios li.is-active > button::after,
 .mh-details__scenarios li:hover > button::after {
 color: var(--mh-accent-ink);
-}
-
-.mh-details__fullscreen:focus-visible,
-.mh-details__close:focus-visible,
-.mh-details__view-more:focus-visible,
-.mh-details__pill:focus-visible,
-.mh-details__scenarios li > button:focus-visible,
-.mh-details__live:focus-visible {
-outline: 2px solid var(--mh-focus-ring);
-  outline-offset: 2px;
 }
 
 .mh-details__footer {

@@ -336,7 +336,6 @@
 
 .mh-rules-hint__trigger {
   display: grid;
-  position: relative;
   width: 21px;
   height: 21px;
   place-items: center;
@@ -351,12 +350,6 @@
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
   cursor: help;
-
-  &::before {
-    position: absolute;
-    inset: -3px;
-    content: "";
-  }
 
   &:focus-visible {
     outline: 2px solid var(--mh-surface);

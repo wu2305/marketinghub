@@ -39,11 +39,7 @@ width: 14px;
 .mh-tracking__back:hover,
 .mh-tracking__back:focus-visible {
 background: var(--mh-surface-page);
-}
-
-.mh-tracking__back:focus-visible {
-outline: 2px solid var(--mh-focus-ring);
-  outline-offset: 2px;
+  outline: 0;
 }
 
 .mh-tracking__head {
