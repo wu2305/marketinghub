@@ -87,3 +87,25 @@ function DataModelStoryView({ args }) {
   }, [onGraphPan]);
   return <DataModelView {...viewProps} onGraphFit={fit} onGraphZoom={zoom} onGraphPan={pan} />;
 }
+
+export const Default = {};
+
+/** Search matches name/description/business description/synonyms —
+    "growth" isolates… nothing here (Customer Growth is hidden). */
+export const FilteredEmpty = {
+  args: { query: "inventory" },
+};
+
+export const GraphTab = {
+  args: { activeTab: "graph" },
+};
+
+/** Node click — the centered Field Details dialog for the fact table. */
+export const TableDrawer = {
+  args: { activeTab: "graph", tableId: "fact_sales_order" },
+};
+
+/** Data Preview — 10 deterministic rows generated from the field types. */
+export const TableDrawerPreview = {
+  args: { activeTab: "graph", tableId: "fact_sales_order", drawerTab: "preview" },
+};
