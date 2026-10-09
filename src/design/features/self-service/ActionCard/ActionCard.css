@@ -68,7 +68,11 @@ width: 16px;
 .mh-action-card__history:hover,
 .mh-action-card__history:focus-visible {
 color: var(--mh-text-strong);
-  outline: 0;
+}
+
+.mh-action-card__history:focus-visible {
+  outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
 }
 
 @media (max-width: 760px) {

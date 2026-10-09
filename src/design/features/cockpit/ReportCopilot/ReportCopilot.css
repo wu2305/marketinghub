@@ -1632,4 +1632,8 @@ outline: 2px solid var(--mh-focus-ring);
   .mh-copilot {
   transition: none;
   }
+
+  .mh-stream-cursor {
+  animation: none;
+  }
 }
