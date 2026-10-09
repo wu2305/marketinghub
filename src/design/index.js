@@ -83,6 +83,7 @@ export {
 } from "./components/LibraryEmpty/index.jsx";
 export {
   LibraryItem,
+  libraryItemVariants,
 } from "./components/LibraryItem/index.jsx";
 export {
   LibraryList,
@@ -216,6 +217,9 @@ export {
 export {
   ConfirmDialog,
   confirmDialogPurposes,
+  confirmDialogTokens,
+  confirmDialogVariants,
+  confirmDialogVariantNames,
 } from "./components/ConfirmDialog/index.jsx";
 export {
   HomePage,

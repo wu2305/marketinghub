@@ -42,8 +42,8 @@ display: flex;
   border: 0;
   background: transparent;
   color: var(--mh-text);
-  font-size: var(--mh-font-size-xs);
-  font-weight: var(--mh-font-weight-bold);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
   line-height: 1.2;
   list-style: none;
   cursor: pointer;
@@ -143,3 +143,5 @@ font-size: var(--mh-font-size-xs);
 :is(.mh-btview, .mh-flview) .mh-check-filter__options {
 min-width: 240px;
 }
+
+.mh-check-filter__summary b { font: inherit; }

@@ -152,7 +152,7 @@ export function normalizeFieldRecord(asset) {
       asset.business_domain !== undefined ? list(asset.business_domain) : list(domain).length ? list(domain) : ["Marketing"],
     updated_at: asset.updated_at || asset.updated || "Not recorded",
     /* One availability vocabulary (domain-model §3.1); drafts are offline (R3). */
-    status: legacyDisabled || availabilityOf(asset) === "disabled" ? "Disable" : "Enable",
+    status: legacyDisabled || availabilityOf({ ...asset, stage: asset.typeId === "Analytical Model" || asset.type === "Analytical Model" ? undefined : asset.stage }) === "disabled" ? "Disable" : "Enable",
   };
   if (asset.typeId === "Report Context" || asset.type === "Report Context") {
     const project = (asset.projects || []).find((key) => REPORT_CONTEXTS[key]);
@@ -188,11 +188,6 @@ export function normalizeFieldRecord(asset) {
     const model = {
       ...common,
       type: "Analytical Model",
-      stage: ["Draft", "Under Review", "Published"].includes(asset.stage)
-        ? asset.stage
-        : asset.published
-          ? "Published"
-          : "Draft",
       analysis_name: asset.analysis_name ?? asset.title,
       visibility_scope: asset.visibility_scope || "Public",
       trigger_when:
@@ -221,9 +216,9 @@ export function normalizeFieldRecord(asset) {
       created_at: asset.created_at || asset.created || "Not recorded",
       references: asset.references ?? (asset.connections || []).map((x) => x.name),
     };
-    /* R3: a draft is offline even when stored as enabled (the source's
-       Draft + Enable record could be neither edited nor disabled). */
-    if (model.stage === "Draft") Object.assign(model, { status: "Disable", availability: "disabled" });
+    // Analytical Model has availability only; it has no draft lifecycle.
+    delete model.stage;
+    model.availability = model.status === "Disable" ? "disabled" : "enabled";
     delete model.workflow_status;
     delete model.statusDisplay;
     return model;
@@ -341,11 +336,8 @@ export function useFieldLibraryDemo(props) {
 
   if (props.active === false && !props.peek) return null;
 
-  const isOwner = (record) => record.created_by === currentUser;
   const typeRecords = all.filter((record) => record.type === type);
-  const visible = typeRecords.filter(
-    (record) => type !== "Analytical Model" || record.stage !== "Draft" || isOwner(record),
-  );
+  const visible = typeRecords;
 
   /* field-library.js rows() — the status/domain/metric-type/creator checks
      plus a whole-record JSON substring search. RC has no status filter in

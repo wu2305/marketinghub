@@ -1,0 +1,44 @@
+import { Meta, Canvas, Source } from "@storybook/addon-docs/blocks";
+import * as Stories from "./ConfirmDialog.stories.jsx";
+import { confirmDialogTokens, confirmDialogVariants } from "./index.jsx";
+
+<Meta of={Stories} name="Parameters" />
+
+# Confirm dialog parameters · 通用确认弹窗参数
+
+Deletion and taking knowledge offline share this surface. Semantic color is controlled by `variant`; `purpose` preserves existing confirmation / notice behavior. When no variant is supplied, danger purpose uses red, warning uses orange, and other purposes use default orange. / 删除与下线共用同一弹窗结构。`variant` 控制语义配色，`purpose` 保留现有确认或通知行为。省略 variant 时，danger 为红色，warning 及其他用途默认使用橙色。
+
+| Area 区域 | Approved value 已确认数值 |
+| --- | --- |
+| Overlay 遮罩 | fixed; inset 0; grid; place-items center; padding 16px; z-index 1000; rgba(48,56,68,.5) |
+| Surface 外壳 | 440px; max-width calc(100vw - 32px); white; border #E4E7EC; radius 12px; shadow 0 16px 40px rgba(32,42,56,.20) |
+| Content 内容 | padding 24px 24px 12px; gap 12px |
+| Icon 图标 | 32px circular background; 16px glyph / 32px 圆形底、16px 图形 |
+| Title 标题 | DIN 2014; 16px; 700; line-height 1.35; #252F3E |
+| Description 描述 | DIN 2014; 13px; 400; line-height 1.5; margin-top 6px; #667085 |
+| Footer 底部 | padding 12px 24px 24px; gap 8px; align right / 右对齐 |
+| Button 按钮 | height 36px; inline padding 16px; radius 8px; DIN 2014 14px / 700 |
+| Cancel 取消 | white; border #D0D5DD; text #344054 |
+| default / warning | #FFF3E7 icon background; #CF8A20 icon and primary button; white button text / 橙色图标与主按钮 |
+| danger | #FFF0F0 icon background; #C93636 icon and primary button; white button text / 红色图标与主按钮 |
+
+On short screens, the content scrolls within the dialog while its footer remains visible. On narrow screens, the surface keeps at least 16px space on each side. The shared layer manager raises overlapping dialogs as necessary; 1000 is the standalone overlay's base. / 矮屏时内容区可滚动，底部操作保持可见；窄屏时弹窗两侧至少留 16px。多弹窗重叠时共用层管理器会提升上层弹窗，1000 是独立弹窗的基础层级。
+
+## Default · 默认
+
+<Canvas of={Stories.Default} story={{ inline: false, height: "360px" }} />
+
+## Warning / Offline · 下线确认
+
+<Canvas of={Stories.Warning} story={{ inline: false, height: "360px" }} />
+
+## Danger / Delete · 删除确认
+
+<Canvas of={Stories.Danger} story={{ inline: false, height: "360px" }} />
+
+## Exported parameters · 导出的参数
+
+These exports drive the rendered component, not a separate documentation copy. / 下列导出直接驱动组件外观，文档没有另一份参数副本。
+
+<Source code={`export const confirmDialogTokens = ${JSON.stringify(confirmDialogTokens, null, 2)};`} language="javascript" />
+<Source code={`export const confirmDialogVariants = ${JSON.stringify(confirmDialogVariants, null, 2)};`} language="javascript" />

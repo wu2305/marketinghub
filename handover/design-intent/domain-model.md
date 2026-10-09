@@ -220,3 +220,7 @@ recommendation below is now the rule.
 | A4 | Skill click-to-advance status: keep or drop? | drop the click; show status read-only |
 | A5 | Rejected review items: add a list, or drop the static count? | add a Rejected tab — the count implies the view |
 
+
+### 2026-10-09 Analytical Model clarification
+
+User explicitly states Analytical Model has no Draft state. Its availability is Enabled/Disabled only; ignore legacy stage metadata when normalizing it. Existing Draft rules still apply to other types that actually support drafts. Business Terms, Analytical Model and Scenario Reports share the availability/permission action rules.

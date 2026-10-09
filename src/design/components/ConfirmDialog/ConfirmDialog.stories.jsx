@@ -1,5 +1,5 @@
 import { Button } from "../Button/index.jsx";
-import { ConfirmDialog, confirmDialogPurposes } from "./index.jsx";
+import { ConfirmDialog, confirmDialogPurposes, confirmDialogVariantNames } from "./index.jsx";
 import { callbackProp, enumProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 export default {
@@ -10,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is a confirmation dialog or a notice dialog. `confirm` is a neutral confirm. `info` has one Close action. `warning` marks risk. `danger` marks deletion. Overlay, focus, and Escape come from Modal. `open` is host state: the dialog only calls `onCancel` or `onConfirm`, and the host sets `open` to false. In these stories the story host closes the dialog on every callback and shows an Open dialog button to bring it back.", "这个组件是确认对话框或通知对话框。`confirm` 是中性确认。`info` 只有一个 Close 操作。`warning` 强调风险。`danger` 强调删除。遮罩、焦点和 Escape 由 Modal 提供。`open` 是宿主的状态：对话框只会调用 `onCancel` 或 `onConfirm`，由宿主把 `open` 设为 false。在这些故事里，由故事宿主在每次回调时关闭对话框，并显示一个 Open dialog 按钮用来重新打开。"),
+          bi("This component is a confirmation dialog or a notice dialog. `confirm` is a neutral confirm. `info` has one Close action. `warning` marks risk. `danger` marks deletion. The approved 440px surface uses a centered 50% scrim, 12px radius, 32px icon, 16px title, 13px description and 36px buttons. Focus, Escape, scroll locking and layer ordering use the shared overlay lifecycle. Exported confirmDialogTokens and confirmDialogVariants are the appearance source. `open` is host state: the dialog only calls `onCancel` or `onConfirm`, and the host sets `open` to false. In these stories the story host closes the dialog on every callback and shows an Open dialog button to bring it back.", "这个组件是确认对话框或通知对话框。`confirm` 是中性确认。`info` 只有一个 Close 操作。`warning` 强调风险。`danger` 强调删除。使用已确认的 440px 居中弹窗、50% 遮罩、12px 圆角、32px 图标、16px 标题、13px 描述和 36px 按钮。焦点、Escape、滚动锁及层叠顺序共用覆盖层生命周期。外观参数由 confirmDialogTokens 与 confirmDialogVariants 导出。`open` 是宿主的状态：对话框只会调用 `onCancel` 或 `onConfirm`，由宿主把 `open` 设为 false。在这些故事里，由故事宿主在每次回调时关闭对话框，并显示一个 Open dialog 按钮用来重新打开。"),
       },
     },
   },
@@ -24,6 +24,7 @@ export default {
     closeLabel: "Close",
   },
   argTypes: {
+    variant: enumProp(confirmDialogVariantNames, "default", bi("Semantic color: default and warning are amber; danger is red. If omitted, purpose selects the color. Purpose still controls confirmation versus notice behavior.", "语义配色：default 与 warning 为橙色，danger 为红色。省略时由 purpose 推导；purpose 仍负责确认或通知行为。")),
     open: prop("boolean", { defaultValue: false, description: bi("Whether the dialog is visible.", "对话框是否可见。") }),
     purpose: enumProp(confirmDialogPurposes, "confirm", bi("Action purpose. `confirm` is neutral. `info` is a notice. `warning` marks risk. `danger` marks deletion.", "操作用途。`confirm` 是中性确认。`info` 是通知。`warning` 强调风险。`danger` 强调删除。")),
     title: prop("string", { description: bi("Dialog title.", "对话框标题。") }),
@@ -67,4 +68,12 @@ export const Info = {
     title: "Permission denied",
     message: "You do not have permission to edit knowledge created by another user.",
   },
+};
+
+export const Default = { args: { variant: "default" } };
+export const Warning = {
+  args: { purpose: "warning", variant: "warning", title: "Take knowledge offline?", message: "This knowledge will no longer be available for AI interpretation.", confirmLabel: "Confirm Offline" },
+};
+export const Danger = {
+  args: { purpose: "danger", variant: "danger", title: "Delete knowledge?", message: "This action permanently deletes the selected knowledge.", confirmLabel: "Confirm Delete" },
 };

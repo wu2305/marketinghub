@@ -119,3 +119,17 @@
   border: 1px solid currentColor;
   background: var(--mh-surface);
 }
+
+/* Workflow capsule shares the availability slot, with no dot. */
+.mh-badge--process {
+  flex: 0 0 auto;
+  max-width: 100%;
+  min-height: 20px;
+  padding: 0 var(--mh-space-3);
+  border-radius: var(--mh-radius-sm);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

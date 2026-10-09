@@ -917,3 +917,11 @@ Correction (2026-10-09): `--mh-reports-card-edge` (`linear-gradient(180deg, #fcf
 - corrected in WP2b: `--mh-surface-action-slate` `--mh-surface-inverse` → `color-mix(in srgb, var(--mh-surface-inverse) 86%, var(--mh-surface))` because every use is primary-button hover/focus fill or border (`components/Button/Button.css:55–58`); the resting fill is already inverse, so a direct merge removes hover feedback. Original `#39444e` → sRGB `(63.22, 68.38, 73.54)`, approximately `#3f444a`. N=86 minimizes squared sRGB channel distance over whole percentages 0–100, correcting the old #31 candidate's unmeasured 85%.
 - corrected in WP2b: `--mh-launcher-line` `--mh-surface-inverse` → `--mh-line-inverse` because its only use is a border on the dark launcher (`components/AssistantLauncher/AssistantLauncher.css:19`); inverse fill would hide the border. Preserves the justified correction from old PR #31.
 - corrected in WP2b: `--mh-live-bar` `--mh-surface-muted` → `--mh-line-strong` because its only use fills neutral data bars on the light chart panel (`features/cockpit/LiveOverview/LiveOverview.css:119–125`); the muted surface washes out the data. Preserves the justified correction from old PR #31.
+
+### 2026-10-09 shared surface radius
+
+Designer explicitly unified the six knowledge card types to 12px radius / 16px padding. Added `--mh-radius-surface: 12px` for library surfaces, preserving the existing 8px control radius and 14px large-container radius. The former scale has no 12px surface step. This user-authorized addition raises the token count and budget from 67 to 68; no raw component values or component-named tokens were added.
+
+### 2026-10-09 compact heading size
+
+User requested Overview cards match the static Demo typography, including 18px titles. Added `--mh-font-size-heading: 18px` for compact surface headings between the 16px and 20px steps; the existing scale has no exact match. User-authorized token count/budget is now 69. Overview surfaces use the existing 12px surface radius and shared colors/shadow.

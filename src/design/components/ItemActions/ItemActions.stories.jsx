@@ -13,7 +13,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component shows Edit, Delete, and Disable for one library item. Pass the output of `governedActions()`. A blocked action stays focusable. A blocked action stays clickable. The button has `aria-disabled`. Each click sends `action`, `id`, `blocked`, and `reason`. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed.", "这个组件显示一条库记录的 Edit、Delete 和 Disable。传入 `governedActions()` 的结果。被阻止的操作仍可聚焦，也可点击。按钮带 `aria-disabled`。每次点击都会发出 `action`、`id`、`blocked` 和 `reason`。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。"),
+          bi("This component shows Edit, Delete, and Disable for one library item. Pass the output of `governedActions()`. A blocked action stays focusable. A blocked action stays clickable. The button has `aria-disabled`. Each click sends `action`, `id`, `blocked`, and `reason`. Disable knowledge before you edit or delete it. Only knowledge created by you can be managed. Available icons have an accent-colored stroke; blocked icons are gray. Enabled items allow Disable; disabled items allow Edit and Delete. Permission restrictions keep all three icons gray.", "这个组件显示一条库记录的 Edit、Delete 和 Disable。传入 `governedActions()` 的结果。被阻止的操作仍可聚焦，也可点击。按钮带 `aria-disabled`。每次点击都会发出 `action`、`id`、`blocked` 和 `reason`。编辑或删除前要先 Disable。只有你自己创建的知识才能管理。可操作图标为彩色描边，被阻止的图标为灰色。Enabled 时仅下线有颜色；Disabled 时编辑和删除有颜色。无操作权限时三个图标均为灰色。"),
       },
     },
   },
@@ -28,7 +28,18 @@ export default {
   },
 };
 
-export const Allowed = { name: "Allowed (own, disabled item)" };
-export const DisableFirst = { name: "Blocked: disable first", args: { actions: actionsFor({ creator: me, status: "Enable" }) } };
+export const Allowed = { name: "Disabled: Edit and Delete available" };
+export const DisableFirst = { name: "Enabled: Disable available", args: { actions: actionsFor({ creator: me, status: "Enable" }) } };
 export const AlreadyDisabled = { name: "Blocked: already disabled (draft)", args: { actions: actionsFor({ creator: me, status: "Enable", stage: "Draft" }) } };
 export const Permission = { name: "Blocked: created by others", args: { actions: actionsFor({ creator: "Emily Wang", status: "Disable" }) } };
+
+export const AvailabilityComparison = {
+  name: "Enabled / Disabled comparison",
+  render: args => <div style={{ display: "grid", gap: "var(--mh-space-5)", fontFamily: "var(--mh-font-sans)" }}>
+    {["Enable", "Disable"].map(status => <div key={status} style={{ display: "flex", alignItems: "center", gap: "var(--mh-space-5)" }}>
+      <span style={{ minWidth: 76, color: "var(--mh-text)" }}>{status === "Enable" ? "Enabled" : "Disabled"}</span>
+      <ItemActions {...args} actions={actionsFor({ creator: me, status })} />
+    </div>)}
+  </div>,
+  parameters: { docs: { description: { story: bi("Compare the same item's icon strokes in both availability states. Enabled: Disable is colored. Disabled: Edit and Delete are colored. Gray actions retain their explanation tooltips.", "对比同一条目两种可用状态的图标描边。Enabled 时下线有颜色；Disabled 时编辑和删除有颜色。灰色操作保留原因提示。") } } },
+};

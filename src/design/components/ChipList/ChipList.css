@@ -55,3 +55,19 @@ background: var(--mh-accent-wash);
 color: var(--mh-text-faint);
   font-size: var(--mh-font-size-sm);
 }
+
+/* Card synonyms and recipients: preserve the 32px field row. */
+.mh-chip-list--single-line { align-items: center; width: 100%; }
+.mh-chip-list--single-line ul { flex-wrap: nowrap; gap: var(--mh-space-2); overflow: hidden; }
+.mh-chip-list--single-line li {
+  display: block;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  height: var(--mh-space-7);
+  padding: 0 calc(var(--mh-space-3) + var(--mh-space-1));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: var(--mh-space-7);
+  color: var(--mh-text-muted);
+}

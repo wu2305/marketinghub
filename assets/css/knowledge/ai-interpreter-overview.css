@@ -3231,3 +3231,87 @@ body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main.busine
 body:has(.knowledge-v4 .knowledge-main[data-active-type]) .knowledge-main.business-overview-page {
   background: #f6f7f8 !important;
 }
+
+/* 2026-10-09 designer decision: six knowledge card types share 12px / 16px. */
+body:has(.knowledge-main[data-active-type]) #fmLibrary :is(.fm-report-card, .fm-metric-card, .fm-email-card, .fm-analysis-card),
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card,
+body:has(.knowledge-main[data-active-type="Scenario Reporting"]) #scenarioReportOverview .scenario-report-card {
+  border-radius: 12px !important;
+  padding: 16px !important;
+}
+
+/* Reserve the existing absolute footer inside the content area instead of
+   using a larger card bottom padding. */
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-main {
+  margin-bottom: 34px;
+}
+body:has(.knowledge-main[data-active-type="Business Term"]) #businessTermOverview .bt-term-card-meta .bt-term-card-field:first-child {
+  left: 16px;
+}
+
+/* Four-part knowledge card rhythm, approved 2026-10-09. */
+body:has(.knowledge-main[data-active-type]) :is(#fmLibrary, #businessTermOverview, #scenarioReportOverview) .knowledge-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+  padding: 16px !important;
+  border-radius: 12px !important;
+}
+body:has(.knowledge-main[data-active-type]) :is(#fmLibrary, #businessTermOverview, #scenarioReportOverview) .knowledge-card-head {
+  display: flex !important;
+  align-items: center !important;
+  height: 24px !important;
+  gap: 12px;
+}
+body:has(.knowledge-main[data-active-type]) :is(#fmLibrary, #businessTermOverview, #scenarioReportOverview) .knowledge-card-head h3 {
+  display: block !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  font-size: 16px !important;
+  line-height: 24px !important;
+}
+body:has(.knowledge-main[data-active-type]) :is(#fmLibrary, #businessTermOverview, #scenarioReportOverview) .knowledge-card-description {
+  display: -webkit-box !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  overflow: hidden;
+  font-size: 12px !important;
+  line-height: 18px !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.knowledge-card-fields { display: flex; flex-direction: column; gap: 8px; margin: 0; min-width: 0; }
+.knowledge-card-row { display: flex; align-items: center; gap: 8px; height: 32px; min-width: 0; }
+.knowledge-card-field { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 0; overflow: hidden; }
+.knowledge-card-field dt { flex: 0 0 auto; color: #68727c; font-size: 12px; line-height: 18px; font-weight: 700; }
+.knowledge-card-field dd { margin: 0; flex: 1 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: #68727c; font-size: 12px; line-height: 18px; }
+.knowledge-card-field dd a { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.knowledge-card-status, .knowledge-card-process { display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex: 0 0 auto; height: 20px; padding: 0 8px; border-radius: 4px; background: #fff8df; color: #986525; font-size: 12px; line-height: 20px; font-weight: 400; }
+.knowledge-card-status { width: 76px; }
+.knowledge-card-status.is-disabled { background: #f0f2f4; color: #68727c; }
+.knowledge-card-status i { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+.knowledge-card-process { max-width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.knowledge-card-process[data-process="Building"] { background: #f0f5f9; color: #3f73a6; }
+.knowledge-card-process[data-process="Published"] { background: #ebf1ee; color: #34765b; }
+.knowledge-card-process[data-process="Draft"] { background: #f0f2f4; color: #68727c; }
+.knowledge-card-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 4px; }
+.knowledge-card-actions .fm-icon-action { width: 30px !important; height: 30px !important; min-height: 30px !important; padding: 0 !important; border: 1px solid transparent !important; background: transparent !important; }
+.knowledge-card-actions svg { width: 16px; height: 16px; }
+
+/* Synonym and recipient capsules retain the unified single-line field rhythm. */
+.knowledge-card-pills { display: flex; align-items: center; gap: 4px; min-width: 0; width: 100%; overflow: hidden; }
+.knowledge-card-pills > span { display: block; flex: 0 1 auto; min-width: 0; max-width: 100%; height: 24px; padding: 0 10px; border-radius: 999px; background: #f1efeb; color: #403e3b; font-size: 12px; font-weight: 400; line-height: 24px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* Compact metadata pitch: 40px → 26.67px; action footer keeps its icon space. */
+.knowledge-card-fields { gap: calc(8px / 3); }
+.knowledge-card-row { height: 24px; }
+.knowledge-card-row:has(.knowledge-card-actions) { height: 32px; }
+body:has(.knowledge-main[data-active-type]) :is(.overview-global-search input, .business-filter-field summary, .business-filter-field summary b, .scenario-report-filter select, .business-filter-field select) { font-family: "DIN 2014", Arial, sans-serif !important; font-size: 12px !important; font-weight: 400 !important; }
+body:has(.knowledge-main[data-active-type]) .overview-global-search input::placeholder { font: inherit !important; }

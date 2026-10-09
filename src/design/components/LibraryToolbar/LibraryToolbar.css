@@ -48,3 +48,5 @@ margin: 0;
     margin-left: 0;
   }
 }
+
+.mh-library-toolbar__facet select { font-family: var(--mh-font-sans); font-size: var(--mh-font-size-sm); font-weight: var(--mh-font-weight-regular); }

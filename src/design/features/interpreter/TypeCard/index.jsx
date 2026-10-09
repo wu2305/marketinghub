@@ -36,7 +36,7 @@ export function TypeCard({ title, count, summary, action, manageable = false, ar
       onClick={() => onSelect?.({ title })}
     >
       <span className="mh-type-card__heading">
-        <strong>{title}</strong>
+        <strong title={title}>{title}</strong>
         <span className="mh-type-card__count">{count}</span>
       </span>
       <small>{summary}</small>

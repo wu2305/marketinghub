@@ -1,7 +1,7 @@
 .mh-type-grid {
 display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--mh-space-4);
 }
 
 @media (max-width: 1180px) {

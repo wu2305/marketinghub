@@ -11,7 +11,7 @@ import { Toast } from "../../../components/Toast/index.jsx";
 import "./ScenarioReportsView.css";
 import { availabilityOf } from "../../../lib/governance.js";
 
-const workflowBadge = (status) => <StatusBadge status={String(status || "").toLowerCase()}>{status}</StatusBadge>;
+const workflowBadge = (status) => <StatusBadge variant="process" status={String(status || "").toLowerCase()}>{status}</StatusBadge>;
 
 /**
  * Scenario Reporting library (scenario-reports.js) on the governed-library
@@ -83,13 +83,14 @@ export function ScenarioReportsView({
   const reportValue = (record) => (record.reportHref ? <a className="mh-srview__report" href={record.reportHref}>{record.report || "—"}</a> : record.report || "—");
   const items = records.map((record) => ({
     id: record.id,
+    variant: "knowledge",
     title: record.title,
     description: record.description,
     status: availability(record),
     meta: [
       { label: strings.reportLabel || "Report", value: reportValue(record) },
-      { label: strings.creatorLabel || "Creator", value: record.creator },
       { label: strings.processLabel || "Process", value: workflowBadge(record.workflow_status) },
+      { label: strings.creatorLabel || "Creator", value: record.creator },
     ],
     actions: { actions: record.actions, labels: strings.actions, messages: strings.tooltips },
   }));

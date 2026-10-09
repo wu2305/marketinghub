@@ -463,32 +463,7 @@
                 ${visibleRows
                   .map(
                     (item) => `
-                  <article class="scenario-report-card" data-sr-id="${esc(item.id)}" tabindex="0">
-                    <div class="scenario-report-card-main">
-                      <h3>${esc(item.title)}</h3>
-                      <p title="${esc(item.description)}">${esc(item.description)}</p>
-                      <div class="scenario-report-card-meta">
-                        <span>Report</span>
-                        ${item.reportHref ? `<a class="scenario-report-link" href="${esc(item.reportHref)}">${esc(item.report || "—")}</a>` : `<strong>${esc(item.report || "—")}</strong>`}
-                      </div>
-                      <div class="scenario-report-card-meta">
-                        <span>Creator</span>
-                        <strong>${esc(item.creator)}</strong>
-                      </div>
-                      <div class="scenario-report-card-meta scenario-report-process">
-                        <span>Process</span>
-                        <strong class="bt-flow-status" data-flow-status="${esc(item.workflow_status)}">${esc(item.workflow_status)}</strong>
-                      </div>
-                    </div>
-                    <div class="scenario-report-card-pills">
-                      <span class="fm-state ${item.ai_interpreter_enabled ? "" : "off"}">${item.ai_interpreter_enabled ? "Enabled" : "Disabled"}</span>
-                    </div>
-                    <div class="scenario-report-card-actions">
-                      <div class="fm-actions">
-                        ${actions(item)}
-                      </div>
-                    </div>
-                  </article>
+                  <article class="scenario-report-card knowledge-card" data-sr-id="${esc(item.id)}" tabindex="0">${window.renderKnowledgeCard({title:item.title,description:item.description,enabled:item.ai_interpreter_enabled,rows:[{label:"Report",value:item.report || "—",html:item.reportHref ? `<a class="scenario-report-link" href="${esc(item.reportHref)}">${esc(item.report || "—")}</a>` : ""},{label:"Process",value:item.workflow_status,html:`<span class="knowledge-card-process" data-process="${esc(item.workflow_status)}">${esc(item.workflow_status)}</span>`},{label:"Creator",value:item.creator}],actions:actions(item)})}</article>
                 `,
                   )
                   .join("")}

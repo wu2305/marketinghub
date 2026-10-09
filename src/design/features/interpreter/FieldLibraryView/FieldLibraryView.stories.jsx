@@ -107,9 +107,8 @@ export const AnalyticalModelDetail = {
   args: { type: "Analytical Model", detail: AM_ID },
 };
 
-/* The seeded model is a draft, so it is offline (R3). These two stories use
-   a published copy to show the enabled → disabled flow. */
-const published = (status) => INTERPRETER.records.map((record) => (record.id === AM_ID ? { ...record, stage: "Published", status } : record));
+/* Analytical Models have availability only, no Draft state. */
+const published = (status) => INTERPRETER.records.map((record) => (record.id === AM_ID ? { ...record, status } : record));
 
 export const AnalyticalModelDisabled = {
   args: { type: "Analytical Model", records: published("Disable") },
