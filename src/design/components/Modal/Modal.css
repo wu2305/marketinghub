@@ -207,7 +207,7 @@ flex: 1;
 }
 
 .mh-modal--drawer .mh-modal__foot {
-padding: 16px 24px;
+padding: 16px 24px calc(16px + env(safe-area-inset-bottom));
   display: flex;
   gap: 9px;
   justify-content: flex-end;

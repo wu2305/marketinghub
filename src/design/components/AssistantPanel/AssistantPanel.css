@@ -35,7 +35,7 @@ top: 0;
   right: 0;
   bottom: 0;
   left: auto;
-  width: min(40vw, calc(100vw - 80px));
+  width: min(40vw, 576px, calc(100vw - 80px));
   max-width: calc(100vw - 80px);
   height: 100vh;
   min-height: 0;
@@ -168,6 +168,13 @@ display: grid;
   padding: 12px 20px 14px;
   border-bottom: 1px solid var(--mh-line);
   background: var(--mh-surface-subtle);
+}
+
+/* Full-height drawer and full-screen sheet end at the screen edge: keep the
+   composer clear of the home-indicator area on devices rendered with
+   viewport-fit=cover (the inset is 0 elsewhere). */
+.mh-assistant--drawer .mh-assistant__ask {
+  padding-bottom: calc(14px + env(safe-area-inset-bottom));
 }
 
 /* home-ask-panel override: the Home drawer keeps a white borderless strip */
@@ -322,6 +329,10 @@ animation-name: mhAssistantModalEnter;
 
   .mh-assistant:not(.mh-assistant--home) .mh-assistant__suggestions {
   gap: 6px;
+  }
+
+  .mh-assistant__ask {
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
 }
 
