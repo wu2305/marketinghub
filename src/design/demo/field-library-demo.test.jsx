@@ -108,12 +108,13 @@ describe("FieldLibraryView", () => {
     expect(screen.getAllByText("Updated description.").length).toBeGreaterThan(0);
   });
 
-  it("renders Metric Dictionary cards with unit/type/data-model meta and the synonym overflow chip", () => {
+  it("renders ordered metric fields and pairs Unit/Type without dropping synonym content", () => {
     renderView({ type: "Metric Dictionary" });
     expect(cardTitles()).toEqual(["Member conversion", "Campaign ROI", "Promotion lift"]);
-    /* D07: three aliases shown, the fourth counted in a "+1" chip. */
-    expect(screen.getAllByLabelText(/^More synonyms:/).length).toBe(3);
-    expect(cards()[0].querySelectorAll(".mh-chip-list li").length).toBe(4);
+    expect([...cards()[0].querySelectorAll("dt")].map(e => e.textContent)).toEqual(["Synonyms", "Data model", "Unit", "Type"]);
+    expect(cards()[0].querySelector(".mh-library-item__row--pair").querySelectorAll("dt").length).toBe(2);
+    expect(cards()[0].querySelectorAll(".mh-chip-list--single-line li").length).toBe(4);
+    expect(cards()[0].querySelector(".mh-chip-list li").getAttribute("title")).toBe(cards()[0].querySelector(".mh-chip-list li").textContent);
     /* Metric-type filter narrows to Base only. */
     fireEvent.click(screen.getByLabelText("Base"));
     expect(cardTitles()).toEqual(["Member conversion"]);
@@ -167,12 +168,20 @@ describe("FieldLibraryView", () => {
     expect(within(blocked).getByText(/City Strategy Dashboard/)).toBeTruthy();
   });
 
-  it("shows the seeded draft model as offline: disabled status, Draft marker, edit allowed", () => {
-    renderView({ type: "Analytical Model" });
+  it("uses disabled availability consistently even with an obsolete enabled flag", () => {
+    renderView({ type: "Analytical Model", records: INTERPRETER.records.map(record => record.id === AM_ID ? { ...record, status: "Disable", availability: "enabled" } : record) });
     expect(cards()[0].querySelector(".mh-library-item__head > .mh-badge").textContent).toBe("Disabled");
-    expect(cards()[0].querySelector(".mh-library-item__draft")).toBeTruthy();
     expect(listButton(`Edit ${AM_NAME}`).hasAttribute("aria-disabled")).toBe(false);
-    expect(listButton(`Disable ${AM_NAME}`).getAttribute("title")).toBe("This knowledge is already disabled.");
+    expect(listButton(`Delete ${AM_NAME}`).hasAttribute("aria-disabled")).toBe(false);
+    expect(listButton(`Disable ${AM_NAME}`).getAttribute("aria-disabled")).toBe("true");
+  });
+
+  it("ignores obsolete draft metadata on Analytical Model and uses availability", () => {
+    renderView({ type: "Analytical Model" });
+    expect(cards()[0].querySelector(".mh-library-item__head > .mh-badge").textContent).toBe("Enabled");
+    expect(cards()[0].querySelector(".mh-library-item__draft")).toBeNull();
+    expect(listButton(`Edit ${AM_NAME}`).getAttribute("aria-disabled")).toBe("true");
+    expect(listButton(`Disable ${AM_NAME}`).hasAttribute("aria-disabled")).toBe(false);
   });
 
   it("disables an Analytical Model after confirmation and shows a toast", () => {
@@ -185,7 +194,7 @@ describe("FieldLibraryView", () => {
     expect(within(screen.getByRole("dialog")).getByText("Knowledge already disabled")).toBeTruthy();
   });
 
-  it("renders Email Reports cards with send time, recipient chips and data model", () => {
+  it("renders Email Reports with ordered model, recipients and send time", () => {
     renderView({ type: "Email Reports" });
     expect(cardTitles()).toEqual([
       "Weekly Marketing Performance",
@@ -196,9 +205,10 @@ describe("FieldLibraryView", () => {
     /* Every card's Data Model value is "All models" (the filter summary is a
        separate element with the same text). */
     expect(
-      cards().map((card) => card.querySelector(".mh-library-item__meta > div:last-child dd").textContent),
+      cards().map((card) => card.querySelector(".mh-library-item__meta > div:first-child dd").textContent),
     ).toEqual(["All models", "All models", "All models"]);
-    expect(cards()[0].querySelectorAll(".mh-chip-list li").length).toBe(3);
+    expect([...cards()[0].querySelectorAll("dt")].map(e => e.textContent)).toEqual(["Data Model", "Recipients", "Send time"]);
+    expect(cards()[0].querySelectorAll(".mh-chip-list--single-line li").length).toBe(3);
   });
 
   it("opens the Email Reports drawer with subject/trigger/recipients sections", () => {

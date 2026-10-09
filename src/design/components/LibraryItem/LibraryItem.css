@@ -1,16 +1,20 @@
 .mh-library-item {
 display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto 1fr;
   gap: var(--mh-space-4);
   min-width: 0;
-  padding: var(--mh-space-6);
+  padding: var(--mh-space-5);
   border: 1px solid var(--mh-line);
-  border-radius: var(--mh-radius-md);
+  border-radius: var(--mh-radius-surface);
   background: var(--mh-surface);
   box-shadow: var(--mh-shadow-raised);
   font-family: var(--mh-font-sans);
   cursor: pointer;
   transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.mh-library-item:has(.mh-library-item__extra) {
+  grid-template-rows: auto auto auto 1fr;
 }
 
 .mh-library-item:hover {
@@ -30,7 +34,7 @@ border-color: var(--mh-accent);
 
 .mh-library-item__head {
 display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--mh-space-4);
 }
 
@@ -76,8 +80,8 @@ display: inline-block;
 display: -webkit-box;
   margin: 0;
   overflow: hidden;
-  color: var(--mh-text);
-  font-size: var(--mh-font-size-md);
+  color: var(--mh-text-muted);
+  font-size: var(--mh-font-size-sm);
   line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -90,6 +94,7 @@ align-self: start;
 
 .mh-library-item__foot {
 display: flex;
+  align-self: end;
   align-items: center;
   justify-content: space-between;
   gap: var(--mh-space-4);
@@ -98,13 +103,13 @@ display: flex;
 
 .mh-library-item__meta {
 display: flex;
-  flex-wrap: wrap;
-  gap: var(--mh-space-3) var(--mh-space-6);
+  flex-direction: column;
+  gap: var(--mh-space-4);
   min-width: 0;
   margin: 0;
 }
 
-.mh-library-item__meta div {
+.mh-library-item__field {
 display: flex;
   gap: var(--mh-space-3);
   min-width: 0;
@@ -152,3 +157,74 @@ margin: 0;
     transition: none;
   }
 }
+
+/* Knowledge composition: shared rhythm without padding absent metadata fields. */
+.mh-library-item--knowledge {
+  display: flex;
+  flex-direction: column;
+}
+.mh-library-item--knowledge .mh-library-item__head {
+  height: var(--mh-space-7);
+  flex: 0 0 auto;
+}
+.mh-library-item--knowledge .mh-library-item__title {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  line-height: 1.5;
+}
+.mh-library-item--knowledge .mh-library-item__title button {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.mh-library-item--knowledge .mh-library-item__draft {
+  flex: 0 0 auto;
+}
+.mh-library-item--knowledge .mh-library-item__description {
+  height: 3em;
+  min-height: 3em;
+  flex: 0 0 auto;
+}
+.mh-library-item--knowledge .mh-library-item__foot {
+  width: 100%;
+  align-self: stretch;
+}
+.mh-library-item--knowledge .mh-library-item__meta {
+  width: 100%;
+  gap: calc(var(--mh-space-3) / 3);
+}
+.mh-library-item--knowledge .mh-library-item__row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: var(--mh-space-7);
+  gap: var(--mh-space-3);
+}
+.mh-library-item--knowledge .mh-library-item__field {
+  flex: 1 1 0;
+  align-items: center;
+  overflow: hidden;
+}
+.mh-library-item--knowledge .mh-library-item__field dt {
+  flex: 0 0 auto;
+  line-height: 1.5;
+}
+.mh-library-item--knowledge .mh-library-item__field dd {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+.mh-library-item--knowledge .mh-library-item__field dd a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mh-library-item--knowledge .mh-library-item__row:has(.mh-item-actions) { height: var(--mh-space-8); }

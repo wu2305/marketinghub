@@ -10,9 +10,9 @@ const colorGroups = [
   ["Status", ["success", "warning", "danger", "info"]],
   ["Data", ["data-teal", "data-violet", "data-rose"]],
 ];
-const sizes = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "display"];
+const sizes = ["xs", "sm", "md", "lg", "xl", "heading", "2xl", "3xl", "display"];
 const weights = ["light", "regular", "bold"];
-const radii = ["sm", "md", "lg", "pill"];
+const radii = ["sm", "md", "surface", "lg", "pill"];
 const shadows = ["raised", "overlay", "modal"];
 const spaces = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 

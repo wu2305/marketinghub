@@ -14,7 +14,7 @@ display: grid;
   border: 1px solid transparent;
   border-radius: var(--mh-radius-md);
   background: transparent;
-  color: var(--mh-text-muted);
+  color: var(--mh-accent-ink);
   cursor: pointer;
   transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }

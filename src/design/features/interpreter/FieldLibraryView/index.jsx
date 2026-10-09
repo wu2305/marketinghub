@@ -27,56 +27,41 @@ const availabilityStatus = (enabled, labels = {}) =>
 function toItem(type, record, strings) {
   const labels = strings.cardLabels || {};
   const states = strings.statusLabels || {};
-  if (type === "Report Context") {
-    return {
-      id: record.id,
-      title: record.report_name,
-      description: record.report_description,
-      status: availabilityStatus(record.ai_interpretation_enabled, states),
-      meta: [{ label: labels.project || "Project", value: (record.projectLabels || []).join(", ") || "—" }],
-    };
-  }
-  if (type === "Metric Dictionary") {
-    return {
-      id: record.id,
-      title: record.metric_name,
-      description: record.business_definition || "—",
-      status: availabilityStatus(availabilityOf(record) === "enabled", states),
-      meta: [
-        { label: labels.unit || "Unit", value: record.unit || "—" },
-        { label: labels.type || "Type", value: record.metric_type || "Base" },
-        { label: labels.dataModel || "Data model", value: (record.business_domain || []).join(", ") || "General" },
-      ],
-      children: <ChipList label={labels.synonyms || "Synonyms"} values={record.metric_aliases || []} moreLabel={labels.moreSynonyms || "More synonyms"} />,
-    };
-  }
-  if (type === "Analytical Model") {
-    const domains = (record.business_domain || []).length ? record.business_domain : ["General"];
-    return {
-      id: record.id,
-      title: record.analysis_name,
-      draft: record.stage === "Draft",
-      draftLabel: labels.draft || "Draft",
-      description: record.applicable_scenarios || record.trigger_when || record.summary || "—",
-      status: availabilityStatus(availabilityOf(record) === "enabled", states),
-      meta: [
-        { label: labels.dataModelTitle || "Data Model", value: domains.join(", ") },
-        { label: labels.creator || "Creator", value: record.created_by || "—" },
-      ],
-      children: <ChipList label={labels.referencedMetrics || "Referenced Metrics"} values={record.referenced_metrics || []} moreLabel={labels.moreReferenced || "More referenced metrics"} />,
-      actions: { actions: record.actions, labels: strings.actions, messages: strings.tooltips },
-    };
-  }
-  const sendTime = String(record.trigger_type || record.schedule || record.sent_at || "Not configured").replace(/^Scheduled\s*·\s*/, "");
-  return {
-    id: record.id,
-    title: record.title || record.email_subject,
+  const base = { id: record.id, variant: "knowledge" };
+  if (type === "Report Context") return {
+    ...base, title: record.report_name, description: record.report_description,
+    status: availabilityStatus(record.ai_interpretation_enabled, states),
+    meta: [{ label: labels.project || "Project", value: (record.projectLabels || []).join(", ") || "—" }],
+  };
+  if (type === "Metric Dictionary") return {
+    ...base, title: record.metric_name, description: record.business_definition || "—",
     status: availabilityStatus(availabilityOf(record) === "enabled", states),
     meta: [
-      { label: labels.sendTime || "Send time", value: sendTime },
-      { label: labels.dataModelTitle || "Data Model", value: record.data_model || "All models" },
+      { label: labels.synonyms || "Synonyms", value: <ChipList singleLine values={record.metric_aliases || []} max={Infinity} /> },
+      { label: labels.dataModel || "Data model", value: (record.business_domain || []).join(", ") || "General" },
+      { label: labels.unit || "Unit", value: record.unit || "—", secondary: { label: labels.type || "Type", value: record.metric_type || "Base" } },
     ],
-    children: <ChipList label={labels.recipients || "Recipients"} values={record.recipients || []} moreLabel={labels.moreRecipients || "More recipients"} />,
+  };
+  if (type === "Analytical Model") return {
+    ...base, title: record.analysis_name,
+    description: record.applicable_scenarios || record.trigger_when || record.summary || "—",
+    status: availabilityStatus(availabilityOf(record) === "enabled", states),
+    meta: [
+      { label: labels.dataModelTitle || "Data Model", value: (record.business_domain || []).join(", ") || "General" },
+      { label: labels.referencedMetrics || "Referenced Metrics", value: (record.referenced_metrics || []).join(", ") || "—" },
+      { label: labels.creator || "Creator", value: record.created_by || "—" },
+    ],
+    actions: { actions: record.actions, labels: strings.actions, messages: strings.tooltips },
+  };
+  return {
+    ...base, title: record.title || record.email_subject,
+    description: record.description || record.summary || "",
+    status: availabilityStatus(availabilityOf(record) === "enabled", states),
+    meta: [
+      { label: labels.dataModelTitle || "Data Model", value: record.data_model || "All models" },
+      { label: labels.recipients || "Recipients", value: <ChipList singleLine values={record.recipients || []} max={Infinity} /> },
+      { label: labels.sendTime || "Send time", value: String(record.trigger_type || record.schedule || record.sent_at || "Not configured").replace(/^Scheduled\s*·\s*/, "") },
+    ],
   };
 }
 

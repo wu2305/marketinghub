@@ -71,7 +71,8 @@ height: 100%;
   border: 0;
   background: transparent;
   box-shadow: none;
-  font-size: var(--mh-font-size-lg);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
 }
 
 .mh-search--plain .mh-input {

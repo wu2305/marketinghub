@@ -113,11 +113,13 @@
   --mh-font-size-md: 13px;
   --mh-font-size-lg: 14px;
   --mh-font-size-xl: 16px;
+  --mh-font-size-heading: 18px;
   --mh-font-size-2xl: 20px;
   --mh-font-size-3xl: 24px;
   --mh-font-size-display: clamp(40px, 5vw, 56px);
   --mh-radius-sm: 4px;
   --mh-radius-md: 8px;
+  --mh-radius-surface: 12px;
   --mh-radius-lg: 14px;
   --mh-radius-pill: 999px;
   --mh-shadow-raised: 0 2px 8px rgba(31, 41, 55, 0.06);

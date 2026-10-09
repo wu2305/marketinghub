@@ -159,10 +159,13 @@ describe("useBusinessTermDemo", () => {
     expect(cards().length).toBe(7);
   });
 
-  it("shows three synonyms and counts the rest", () => {
+  it("keeps all synonyms in individual single-line capsules", () => {
     renderView({ records: [{ id: "s", title: "Many", description: "d", synonyms: ["a", "b", "c", "d", "e"], scope: [], kind: "Business Term", creator: "Current User", status: "Enable" }], drafts: [] });
-    const chips = [...cards()[0].querySelectorAll(".mh-chip-list li")].map((li) => li.textContent);
-    expect(chips).toEqual(["a", "b", "c", "+2"]);
+    const row = cards()[0].querySelector(".mh-library-item__meta dd");
+    const pills = [...row.querySelectorAll(".mh-chip-list--single-line li")];
+    expect(pills.map(p => p.textContent)).toEqual(["a", "b", "c", "d", "e"]);
+    expect(pills.every(p => p.getAttribute("title") === p.textContent)).toBe(true);
+    expect(cards()[0].querySelector(".mh-library-item__row:last-child .mh-item-actions")).toBeTruthy();
   });
 
   it("opens the drawer from the title and closes on Escape", () => {

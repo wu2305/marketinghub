@@ -124,31 +124,7 @@
         return `<button type="button" class="fm-button fm-icon-action ${action === "delete" ? "danger" : ""} ${disabled ? "is-action-disabled" : ""}" data-bt-action="${action}" data-bt-target="${esc(item.id)}" aria-disabled="${disabled}" aria-label="${text} ${esc(item.title)}" title="${title}">${icons[action]}</button>`;
       })
       .join("");
-  const card = (item) => `
-    <article class="bt-term-card" data-bt-id="${esc(item.id)}" tabindex="0">
-      <div class="bt-term-card-main">
-        <h3 title="${esc(item.title)}">${esc(item.title)}${item.stage === "Draft" ? '<sup class="fm-draft-badge">Draft</sup>' : ""}</h3>
-        <p title="${esc(item.description)}">${esc(item.description)}</p>
-        <div class="bt-term-card-meta">
-          <div class="bt-term-card-field">
-            <span>Creator</span>
-            <strong title="${esc(item.creator)}">${esc(item.creator)}</strong>
-          </div>
-        </div>
-        <div class="bt-term-card-field bt-term-card-synonyms">
-          <span>Synonyms</span>
-          <div class="bt-tags">${item.synonyms.map((value) => `<span class="bt-tag">${esc(value)}</span>`).join("")}</div>
-        </div>
-      </div>
-      <div class="bt-term-card-pills">
-        <span class="fm-state ${item.status === "Disable" ? "off" : ""}">${statusLabel(item.status)}</span>
-        ${domainTags(item)}
-      </div>
-      <div class="bt-term-card-actions">
-        <div class="fm-actions">${actions(item)}</div>
-      </div>
-    </article>
-  `;
+  const card = (item) => `<article class="bt-term-card knowledge-card" data-bt-id="${esc(item.id)}" tabindex="0">${window.renderKnowledgeCard({title:item.title, description:item.description, enabled:item.status !== "Disable", draft:item.stage === "Draft", rows:[{label:"Synonyms",value:item.synonyms.join(", "),html:window.renderKnowledgePills(item.synonyms)},...(item.scope?.length ? [{label:"Data Model",value:item.kind === "Global Synonym" || item.scope[0] === "Global" ? "All models" : item.scope[0]}] : []),{label:"Creator",value:item.creator}],actions:actions(item)})}</article>`;
 
   function dialog(title, message, onConfirm) {
     if (!onConfirm && /knowledge (disabled|deleted)/i.test(title)) {

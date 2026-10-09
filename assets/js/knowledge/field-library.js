@@ -108,19 +108,7 @@
       .join("");
   }
   function reportContextCard(record) {
-    const dataModel = reportContextProjectLabels(record).join(", ") || "—";
-    return `<article class="fm-report-card" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(record.report_name)}">
-      <div class="fm-report-card-body">
-        <div class="fm-report-card-head">
-          <div class="fm-report-card-title-row"><h3>${esc(record.report_name)}</h3><span class="fm-report-card-status ${record.ai_interpretation_enabled ? "" : "is-disabled"}"><i aria-hidden="true"></i>${record.ai_interpretation_enabled ? "Enabled" : "Disabled"}</span></div>
-          <p>${esc(record.report_description)}</p>
-          <dl class="fm-report-card-meta">
-            <div><dt>Project</dt><dd>${esc(dataModel)}</dd></div>
-          </dl>
-        </div>
-      </div>
-      <div class="fm-report-card-actions">${actions(record)}</div>
-    </article>`;
+    return `<article class="fm-report-card knowledge-card" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(record.report_name)}">${window.renderKnowledgeCard({title:record.report_name, description:record.report_description, enabled:record.ai_interpretation_enabled, rows:[{label:"Project",value:reportContextProjectLabels(record).join(", ")} ]})}</article>`;
   }
   function filter(label, name, options) {
     const defaultSummary = ["status", "summary-status"].includes(name)
@@ -170,50 +158,13 @@
     return record.status === "Disable" ? "Disabled" : "Enabled";
   }
   function emailCard(record) {
-    const disabled = record.status === "Disable";
-    const title = record.title || record.email_subject || "Untitled email report";
-    const sendTime = (record.trigger_type || record.schedule || record.sent_at || "Not configured").replace(/^Scheduled\s*·\s*/, "");
-    const recipients = data.list(record.recipients);
-    const dataModel = record.data_model || "All models";
-    const recipientTags = recipients.length
-      ? recipients.map((recipient) => `<span>${esc(recipient)}</span>`).join("")
-      : "<em>—</em>";
-    return `<article class="fm-email-card ${disabled ? "is-disabled" : "is-enabled"}" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(title)}"><header class="fm-email-card-head"><div class="fm-email-titleline"><h3 title="${esc(title)}">${esc(title)}</h3></div></header><div class="fm-email-meta"><div><span>Send time</span><strong title="${esc(sendTime)}">${esc(sendTime)}</strong></div><div class="fm-email-recipients"><span>Recipients</span><div class="fm-email-recipient-tags">${recipientTags}</div></div><div><span>Data Model</span><strong title="${esc(dataModel)}">${esc(dataModel)}</strong></div></div></article>`;
+    return `<article class="fm-email-card knowledge-card" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(record.title || record.email_subject)}">${window.renderKnowledgeCard({title:record.title || record.email_subject, description:record.description || record.summary || "", enabled:record.status !== "Disable", rows:[{label:"Data Model",value:record.data_model || "All models"},{label:"Recipients",value:data.list(record.recipients).join(", "),html:window.renderKnowledgePills(data.list(record.recipients))},{label:"Send time",value:String(record.trigger_type || record.schedule || record.sent_at || "Not configured").replace(/^Scheduled\s*·\s*/, "")} ]})}</article>`;
   }
   function analysisCard(record) {
-    const disabled = record.status === "Disable";
-    const title = record.analysis_name || record.title || "Untitled analysis";
-    const description = record.applicable_scenarios || record.trigger_when || record.summary || "—";
-    const creator = record.created_by || record.owner || "Current User";
-    const dataModel = data.list(record.business_domain).join(", ") || "General";
-    const referencedMetricList = data.list(record.referenced_metrics);
-    const referencedMetrics = referencedMetricList.join(", ") || "—";
-    const firstReferencedMetric = referencedMetricList[0] || "";
-    const referencedMetricTags = referencedMetricList.length
-      ? `<div class="fm-analysis-reference-tags"><span class="fm-analysis-reference-chip">${esc(firstReferencedMetric)}</span>${referencedMetricList.length > 1 ? '<span class="fm-analysis-reference-chip fm-analysis-reference-more" aria-label="More referenced metrics">…</span>' : ""}</div>`
-      : `<strong title="${esc(referencedMetrics)}">${esc(referencedMetrics)}</strong>`;
-    const analysisStatusBadge = state(record.status);
-    const modelTags = data
-      .list(record.business_domain)
-      .map((domain) => `<span class="fm-analysis-domain">${esc(domain)}</span>`)
-      .join("") || '<span class="fm-analysis-domain">General</span>';
-    return `<article class="fm-analysis-card ${disabled ? "is-disabled" : "is-enabled"}" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(title)}"><header class="fm-analysis-card-head"><div class="fm-analysis-title-wrap"><h3 title="${esc(title)}">${esc(title)}</h3></div><div class="fm-analysis-pills"><div class="fm-analysis-domains">${modelTags}</div>${analysisStatusBadge}</div></header><p class="fm-analysis-description" title="${esc(description)}">${esc(description)}</p><div class="fm-analysis-meta"><div><span>Data Model</span><strong title="${esc(dataModel)}">${esc(dataModel)}</strong></div><div class="fm-analysis-referenced"><span>Referenced Metrics</span>${referencedMetricTags}</div></div><footer class="fm-analysis-card-footer"><div class="fm-analysis-creator"><span>Creator</span><strong title="${esc(creator)}">${esc(creator)}</strong></div><div class="fm-analysis-card-actions">${actions(record)}</div></footer></article>`;
+    return `<article class="fm-analysis-card knowledge-card" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(record.analysis_name)}">${window.renderKnowledgeCard({title:record.analysis_name || record.title, description:record.applicable_scenarios || record.trigger_when || record.summary || "", enabled:record.status !== "Disable",  rows:[{label:"Data Model",value:data.list(record.business_domain).join(", ") || "General"},{label:"Referenced Metrics",value:data.list(record.referenced_metrics).join(", ")},{label:"Creator",value:record.created_by || record.owner || "Current User"}], actions:actions(record)})}</article>`;
   }
   function metricCard(record) {
-    const disabled = record.status === "Disable";
-    const title = record.metric_name || record.title || "Untitled metric";
-    const definition = record.business_definition || record.summary || "—";
-    const aliases = data.list(record.metric_aliases);
-    const firstAlias = aliases[0] || "";
-    const synonyms =
-      firstAlias && firstAlias.length <= 24
-        ? `<span class="fm-metric-synonym">${esc(firstAlias)}</span>`
-        : "";
-    const remainingAliases = aliases.length > 1 || firstAlias.length > 24
-      ? '<span class="fm-metric-synonym fm-metric-more" aria-label="More synonyms">…</span>'
-      : "";
-    const dataModel = data.list(record.business_domain).join(", ") || "General";
-    return `<article class="fm-metric-card ${disabled ? "is-disabled" : "is-enabled"}" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(title)}"><header class="fm-metric-card-head"><h3 title="${esc(title)}">${esc(title)}</h3><span class="fm-metric-status ${disabled ? "is-disabled" : ""}"><i aria-hidden="true"></i>${disabled ? "Disabled" : "Enabled"}</span></header><p class="fm-metric-definition" title="${esc(definition)}">${esc(definition)}</p><dl class="fm-metric-meta"><div><dt>Unit</dt><dd>${esc(record.unit || "—")}</dd></div><div><dt>Type</dt><dd>${esc(record.metric_type || "Base")}</dd></div><div class="fm-metric-data-model"><dt>Data model</dt><dd>${esc(dataModel)}</dd></div></dl>${synonyms || remainingAliases ? `<div class="fm-metric-synonyms"><span>Synonyms</span><div>${synonyms}${remainingAliases}</div></div>` : ""}</article>`;
+    return `<article class="fm-metric-card knowledge-card" tabindex="0" data-fm-id="${esc(record.id)}" aria-label="View ${esc(record.metric_name)}">${window.renderKnowledgeCard({title:record.metric_name || record.title, description:record.business_definition || record.summary || "", enabled:record.status !== "Disable", rows:[{label:"Synonyms",value:data.list(record.metric_aliases).join(", "),html:window.renderKnowledgePills(data.list(record.metric_aliases))},{label:"Data model",value:data.list(record.business_domain).join(", ") || "General"},{label:"Unit",value:record.unit,secondary:{label:"Type",value:record.metric_type || "Base"}}]})}</article>`;
   }
   function renderRows() {
     const records = rows(),

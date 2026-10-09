@@ -84,7 +84,6 @@ export function BusinessTermView({
     createLabel = "Add Business Term",
     creatorLabel = "Creator",
     synonymsLabel = "Synonyms",
-    moreSynonymsLabel = "More synonyms",
     statusLabels = { Enable: "Enabled", Disable: "Disabled" },
     draftLabel = "Draft",
     emptyTitle = "No matching records",
@@ -108,14 +107,19 @@ export function BusinessTermView({
   };
   const items = records.map((record) => ({
     id: record.id,
+    variant: "knowledge",
     title: record.title,
     draft: record.stage === "Draft",
     draftLabel,
     description: record.description,
     status: statusOf(record),
-    meta: [{ label: creatorLabel, value: record.creator }],
+    meta: [
+      { label: synonymsLabel, value: <ChipList singleLine values={record.synonyms || []} max={Infinity} /> },
+      ...(record.scope?.length ? [{ label: sections.dataModel || "Data Model", value: record.kind === "Global Synonym" || record.scope[0] === "Global" ? "All models" : record.scope[0] }] : []),
+      { label: creatorLabel, value: record.creator },
+    ],
     actions: { actions: record.actions, labels: actionLabels, messages: tooltips },
-    children: <ChipList label={synonymsLabel} values={record.synonyms} moreLabel={moreSynonymsLabel} />,
+
   }));
   return (
     <section className="mh-btview" aria-label="Business Term library">
