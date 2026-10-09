@@ -1,9 +1,10 @@
 /**
- * Every rule that plays an animation must have a matching
- * `animation: none` rule inside a prefers-reduced-motion block in the same
- * stylesheet (the long-travel drawer slide, toast rise and blinking cursor
- * included). Rules are matched per element: the last compound selector, so
- * `.a .b` and `.a--x .b` are covered by a guard on `.b`.
+ * Every rule that plays an animation must have a matching rule inside a
+ * prefers-reduced-motion block in the same stylesheet that either sets
+ * `animation: none` or swaps in an opacity-only keyframe (the long-travel
+ * drawer slide, toast rise and blinking cursor included). Rules are matched
+ * per element: the last compound selector, so `.a .b` and `.a--x .b` are
+ * covered by a guard on `.b`.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -59,10 +60,22 @@ const target = (selector) => selector.split(/\s+|>|\+|~/).filter(Boolean).pop();
 const playsAnimation = (body) => /(^|[\s;])animation(-name)?:\s*(?!none\b)[^;]+/.test(body);
 const stopsAnimation = (body) => /(^|[\s;])animation(-name)?:\s*none\b/.test(body);
 
-/** Selectors that play an animation but have no `animation: none` guard under prefers-reduced-motion. */
+/** Keyframe names whose steps only touch opacity: the reduced-motion replacement for a movement animation. */
+function fadeOnlyKeyframes(css) {
+  const names = new Set();
+  for (const match of css.matchAll(/@(?:-\w+-)?keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)) {
+    const declared = [...match[2].matchAll(/([\w-]+)\s*:/g)].map((item) => item[1]);
+    if (declared.length && declared.every((property) => property === "opacity")) names.add(match[1]);
+  }
+  return names;
+}
+
+/** Selectors that play an animation but have neither `animation: none` nor an opacity-only replacement under prefers-reduced-motion. */
 function unguarded(css) {
   const rules = rulesOf(css);
-  const guarded = new Set(rules.filter((rule) => rule.reduced && stopsAnimation(rule.body)).flatMap((rule) => rule.selectors.map(target)));
+  const fades = fadeOnlyKeyframes(css);
+  const fadesOnly = (body) => [...body.matchAll(/(^|[\s;])animation(?:-name)?:\s*([\w-]+)/g)].some((match) => fades.has(match[2]));
+  const guarded = new Set(rules.filter((rule) => rule.reduced && (stopsAnimation(rule.body) || fadesOnly(rule.body))).flatMap((rule) => rule.selectors.map(target)));
   return rules
     .filter((rule) => !rule.reduced && playsAnimation(rule.body))
     .flatMap((rule) => rule.selectors)
@@ -89,6 +102,10 @@ describe("reduced motion", () => {
     // an animation inside any nested conditional counts, not only inside a reduced-motion one
     expect(unguarded(".a { @media (min-width: 1px) { animation: spin 1s; } }")).toEqual([".a"]);
     expect(unguarded(`.a { @media (min-width: 1px) { animation: spin 1s; } } @media (prefers-reduced-motion: reduce) { .a { animation: none; } }`)).toEqual([]);
+    // an opacity-only keyframe is an accepted replacement; one that still moves is not
+    const fade = "@keyframes fade { from { opacity: 0; } } @keyframes slide { from { transform: translateX(9px); } }";
+    expect(unguarded(`${fade} .a { animation: slide 1s; } @media (prefers-reduced-motion: reduce) { .a { animation: fade 1s ease; } }`)).toEqual([]);
+    expect(unguarded(`${fade} .a { animation: slide 1s; } @media (prefers-reduced-motion: reduce) { .a { animation: slide 1s; } }`)).toEqual([".a"]);
     // keyframe steps are not rules
     expect(unguarded("@keyframes spin { 50% { opacity: 0; } to { animation-name: x; } }")).toEqual([]);
   });
