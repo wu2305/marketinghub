@@ -24,3 +24,22 @@ describe("Report Copilot at phone width", () => {
     expect(css).not.toContain("min-width: 380px;");
   });
 });
+
+/* Same for the shared overlays (`ModelFlowDialog`, skill menu): the paired `p02-copilot-skill-flow-mobile`
+   scenario measures them at 390px; these keep the two rules it depends on. */
+const flowCss = withoutComments(fs.readFileSync(path.resolve(__dirname, "components/ModelFlowDialog/ModelFlowDialog.css"), "utf8")).replace(/\s+/g, " ");
+const skillCss = withoutComments(fs.readFileSync(path.resolve(__dirname, "lib/SkillMenu/SkillMenu.css"), "utf8")).replace(/\s+/g, " ");
+
+describe("Model dialog and skill menu at phone width", () => {
+  it("sizes the dialog card's single column to the card, not to its widest button row", () => {
+    expect(flowCss).toMatch(/\.mh-flow__card \{[^{}]*?grid-template-columns: minmax\(0, 1fr\);/);
+  });
+
+  it("lets the dialog footer buttons wrap", () => {
+    expect(flowCss).toMatch(/\.mh-flow__foot \{[^{}]*?flex-wrap: wrap;/);
+  });
+
+  it("lets the skill menu footer actions shrink to the panel", () => {
+    expect(skillCss).toMatch(/\.mh-skill__footer \{[^{}]*?grid-template-columns: minmax\(0, 1fr\);/);
+  });
+});

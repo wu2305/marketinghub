@@ -1471,6 +1471,35 @@ export default [
     },
   },
   {
+    /* 390px: the skill menu and the New Analytical Model dialog stay inside the screen. The original's
+       Copilot is a 156px strip there (see p02-copilot-mobile), so only the story is driven. */
+    id: "p02-copilot-skill-flow-mobile",
+    viewport: { width: 390, height: 844 },
+    original: {
+      url: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
+      actions: [{ click: "#aiEntry" }, { wait: "#aiWorkspace.open" }],
+      expect: [{ sel: "#aiWorkspace.open", text: "Data Analysis Assistant" }],
+    },
+    story: {
+      id: "pages--marketing-cockpit-copilot-skills",
+      actions: [
+        {
+          eval:
+            "(() => { for (const el of document.querySelectorAll('.mh-skill, .mh-skill__detail, .mh-skill__action')) { const b = el.getBoundingClientRect(); if (b.left < -1 || b.right > 391) throw new Error(el.className + ' off screen ' + JSON.stringify(b)); } if (document.documentElement.scrollWidth > 390) throw new Error('page scrolls sideways'); })()",
+        },
+        { click: ".mh-skill__action >> nth=0" },
+        { wait: ".mh-flow__card--history" },
+        { click: ".mh-flow__foot .mh-flow__btn--primary" },
+        { wait: ".mh-flow__card--form" },
+        {
+          eval:
+            "(() => { for (const el of document.querySelectorAll('.mh-flow__card--form, .mh-flow__head button, .mh-flow__foot button')) { const b = el.getBoundingClientRect(); if (b.left < -1 || b.right > 391) throw new Error(el.className + ' off screen ' + JSON.stringify(b)); } if (document.documentElement.scrollWidth > 390) throw new Error('page scrolls sideways'); })()",
+        },
+      ],
+      expect: [{ sel: ".mh-flow__card--form", text: "New Analytical Model" }],
+    },
+  },
+  {
     /* Non-city report keeps the shared chrome with the default profile hint. */
     id: "p02-copilot-generic",
     original: {
