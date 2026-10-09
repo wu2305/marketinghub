@@ -1,10 +1,10 @@
 .mh-empty--unknown {
-border-style: dashed;
+  border-style: dashed;
   background: var(--mh-surface-subtle);
 }
 
 .mh-interpreter {
-display: grid;
+  display: grid;
   width: min(1500px, calc(100% - 88px));
   margin: 0 auto;
   grid-template-columns: 240px minmax(0, 1fr);
@@ -16,8 +16,27 @@ display: grid;
    padding, so the card grid runs to the column's right edge. */
 
 .mh-interpreter__main {
-min-width: 0;
+  min-width: 0;
   padding: 28px 0 42px 34px;
+
+  & .mh-heading {
+    margin: 2px 0 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--mh-line);
+
+    & h2 {
+      font-family: var(--mh-font-sans);
+      font-size: var(--mh-font-size-3xl);
+      font-style: normal;
+      font-weight: var(--mh-font-weight-bold);
+    }
+  }
+
+  & .mh-heading__kicker {
+    margin-bottom: 6px;
+    color: var(--mh-accent-ink);
+    letter-spacing: 0.08em;
+  }
 }
 
 /* Type pages flush the library toolbar to the hero edge
@@ -26,30 +45,30 @@ min-width: 0;
    to var(--mh-surface-subtle) on every interpreter state. */
 
 .mh-interpreter__main--type {
-/* column 1 is reserved for the (now fixed) sidebar rail, same as the
+  /* column 1 is reserved for the (now fixed) sidebar rail, same as the
      original's `.knowledge-main.business-type-page { grid-column: 2 }`. */
   grid-column: 2;
   padding: 0 44px 42px;
   background: var(--mh-surface-subtle);
-}
 
-/* ai-interpreter-overview.css gives the Data Model main an extra 20px top
-   padding (`body:has(.business-type-page)` for the dm overview only). */
-.mh-interpreter__main--type[data-active-type="Data Model"] {
-  padding-top: 20px;
-}
-
-@media (max-width: 1180px) {
-  .mh-interpreter__main--type {
-  padding-right: 32px;
-      padding-left: 32px;
+  @media (max-width: 1180px) {
+    padding-right: 32px;
+    padding-left: 32px;
   }
-}
 
-@media (max-width: 760px) {
-  .mh-interpreter__main--type {
-  padding-right: 20px;
-      padding-left: 20px;
+  @media (max-width: 760px) {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  @media (max-width: 1180px) {
+    grid-column: 1;
+  }
+
+  /* ai-interpreter-overview.css gives the Data Model main an extra 20px top
+     padding (`body:has(.business-type-page)` for the dm overview only). */
+  &[data-active-type="Data Model"] {
+    padding-top: 20px;
   }
 }
 
@@ -57,132 +76,266 @@ min-width: 0;
    below that the document scrolls horizontally instead of reflowing. */
 
 .mh-page--interpreter {
-min-width: 1180px;
+  min-width: 1180px;
+
+  /* Below the original 1180px canvas, keep navigation and the active view in
+     the viewport. The type-page rail returns to the grid flow. */
+  @media (max-width: 1180px) {
+    min-width: 0;
+  }
+
+  /* Sidebar rows inherit the page's 14px font and the type-page padding on all
+     interpreter states (the original's data-active-type rules are global). */
+
+  & .mh-sidebar-item {
+    padding: 10px 12px;
+    font-size: inherit;
+  }
+
+  /* Original sidebar rhythm: brand 12/16/18 margin at lh 1.2, the Overview row
+     carries margin-bottom 10, and `.business-knowledge-nav` has no top border —
+     just 8px top / 12px bottom padding with a 2px item pitch. */
+
+  & .mh-sidebar__brand {
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+
+  & .mh-sidebar > .mh-sidebar-item {
+    margin-bottom: 10px;
+  }
+
+  & .mh-sidebar__group {
+    display: grid;
+    gap: 2px;
+    margin: 0;
+    padding: 8px 0 12px;
+    border-top: 0;
+  }
+
+  & .mh-sidebar__title {
+    padding-bottom: 10px;
+  }
+
+  /* types.js renderManagementRulesHint — the "!" Operation Reminder trigger hangs
+     7px below the hero stats' right edge; the tooltip opens above it on
+     hover/focus (ai-interpreter-overview.css .knowledge-management-rules-*). */
+
+  & .mh-hero__aside {
+    position: relative;
+
+    /* The original's ≤1100 hero-stats rule applies to every interpreter state. */
+
+    @media (max-width: 1180px) {
+      flex-basis: 420px;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      width: 100%;
+      flex: 0 1 auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    & .mh-metric {
+      @media (max-width: 1180px) {
+        min-height: 112px;
+        padding: 18px;
+      }
+
+      @media (max-width: 900px) {
+        min-height: 0;
+        padding: 12px;
+      }
+    }
+  }
+
+  & .mh-interpreter {
+    @media (max-width: 1180px) {
+      width: calc(100% - 64px);
+    }
+
+    @media (max-width: 760px) {
+      width: calc(100% - 40px);
+    }
+
+    @media (max-width: 1180px) {
+      width: calc(100% - 64px);
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      width: calc(100% - 32px);
+    }
+  }
+
+  & .mh-interpreter__main {
+    @media (max-width: 900px) {
+      padding: 20px 0 42px;
+    }
+  }
+
+  & .mh-hero {
+    @media (max-width: 900px) {
+      box-sizing: border-box;
+      height: auto !important;
+      min-height: 0 !important;
+      padding: 28px 0 36px;
+    }
+  }
+
+  & .mh-hero__layout {
+    @media (max-width: 900px) {
+      width: calc(100% - 32px);
+      flex-direction: column;
+      align-items: stretch;
+      gap: 22px;
+    }
+  }
+
+  & .mh-hero__copy {
+    @media (max-width: 900px) {
+      min-width: 0;
+      max-width: none;
+    }
+  }
 }
 
-/* Type pages (ai-interpreter-overview.css `body:has(.business-type-page)`
-   overrides): the sidebar leaves the flow and becomes a fixed 240px rail from
-   under the 56px header to the viewport bottom; the hero compresses into the
-   content column. The grid still reserves column 1 so `.mh-interpreter__main`
-   stays aligned with the hero's left edge. */
+.mh-page--interpreter-type {
+  /* The original's `.knowledge-library`/`#fmLibrary` shells are flat on type
+     pages — no white panel, no border; only the pagination strip stays white. */
 
-.mh-page--interpreter-type .mh-hero {
-width: min(1260px, calc(100% - 328px));
-  margin-left: max(284px, calc((100vw - 1500px) / 2 + 240px));
-}
+  & .mh-principles,
+  & .mh-library {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
 
-/* The original's `.knowledge-layout` keeps `min-height: calc(100vh - 24px)`
-   (business-term-reference.css) so the canvas always runs to the page foot. */
+  /* Type pages (ai-interpreter-overview.css `body:has(.business-type-page)`
+     overrides): the sidebar leaves the flow and becomes a fixed 240px rail from
+     under the 56px header to the viewport bottom; the hero compresses into the
+     content column. The grid still reserves column 1 so `.mh-interpreter__main`
+     stays aligned with the hero's left edge. */
 
-.mh-page--interpreter-type .mh-interpreter {
-min-height: calc(100vh - 24px);
-}
+  & .mh-hero {
+    width: min(1260px, calc(100% - 328px));
+    margin-left: max(284px, calc((100vw - 1500px) / 2 + 240px));
 
-.mh-page--interpreter-type .mh-hero .mh-hero__eyebrow {
-font-size: var(--mh-font-size-xs);
-}
+    @media (max-width: 1180px) {
+      width: calc(100% - 304px);
+      margin-left: 272px;
+    }
 
-.mh-page--interpreter-type .mh-hero .mh-hero__copy h1 {
-font-size: var(--mh-font-size-display);
-}
+    @media (max-width: 760px) {
+      width: calc(100% - 280px);
+      margin-left: 260px;
+    }
 
-.mh-page--interpreter-type .mh-hero .mh-hero__copy h1::after {
-width: 51px;
-  height: 6px;
-  margin-top: 13px;
-}
+    @media (max-width: 1180px) {
+      width: 100%;
+      margin-left: 0;
+    }
 
-.mh-page--interpreter-type .mh-hero .mh-hero__copy > p:last-of-type {
-max-width: 384px;
-  margin-top: 11px;
-  font-size: var(--mh-font-size-lg);
-}
+    & .mh-hero__eyebrow {
+      font-size: var(--mh-font-size-xs);
+    }
 
-.mh-page--interpreter-type .mh-sidebar {
-position: fixed;
-  z-index: 2;
-  top: var(--mh-layout-header-height);
-  bottom: 0;
-  left: max(44px, calc((100vw - 1500px) / 2));
-  width: 240px;
-  height: auto;
-  min-height: 0;
-  padding: 24px 12px 40px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  border-right-color: var(--mh-line-subtle);
-  background: var(--mh-surface);
-}
+    & .mh-hero__copy {
+      & h1 {
+        font-size: var(--mh-font-size-display);
+      }
 
-/* Sidebar rows inherit the page's 14px font and the type-page padding on all
-   interpreter states (the original's data-active-type rules are global). */
+      & h1::after {
+        width: 51px;
+        height: 6px;
+        margin-top: 13px;
+      }
 
-.mh-page--interpreter .mh-sidebar-item {
-padding: 10px 12px;
-  font-size: inherit;
-}
+      & > p:last-of-type {
+        max-width: 384px;
+        margin-top: 11px;
+        font-size: var(--mh-font-size-lg);
+      }
+    }
+  }
 
-/* Original sidebar rhythm: brand 12/16/18 margin at lh 1.2, the Overview row
-   carries margin-bottom 10, and `.business-knowledge-nav` has no top border —
-   just 8px top / 12px bottom padding with a 2px item pitch. */
+  /* The original's `.knowledge-layout` keeps `min-height: calc(100vh - 24px)`
+     (business-term-reference.css) so the canvas always runs to the page foot. */
 
-.mh-page--interpreter .mh-sidebar__brand {
-margin-bottom: 18px;
-  line-height: 1.2;
-}
+  & .mh-interpreter {
+    min-height: calc(100vh - 24px);
 
-.mh-page--interpreter .mh-sidebar > .mh-sidebar-item {
-margin-bottom: 10px;
-}
+    @media (max-width: 1180px) {
+      min-height: 0;
+    }
+  }
 
-.mh-page--interpreter .mh-sidebar__group {
-display: grid;
-  gap: 2px;
-  margin: 0;
-  padding: 8px 0 12px;
-  border-top: 0;
-}
+  & .mh-sidebar {
+    position: fixed;
+    z-index: 2;
+    top: var(--mh-layout-header-height);
+    bottom: 0;
+    left: max(44px, calc((100vw - 1500px) / 2));
+    width: 240px;
+    height: auto;
+    min-height: 0;
+    padding: 24px 12px 40px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-right-color: var(--mh-line-subtle);
+    background: var(--mh-surface);
 
-.mh-page--interpreter .mh-sidebar__title {
-padding-bottom: 10px;
-}
+    @media (max-width: 1180px) {
+      left: 32px;
+    }
 
-/* On type pages the type list indents 16px from the rail's right edge
-   (`.business-knowledge-nav` margin-right) while Overview stays full-width. */
+    @media (max-width: 760px) {
+      left: 20px;
+    }
 
-.mh-page--interpreter-type .mh-sidebar__group {
-margin-right: 16px;
-}
+    @media (max-width: 1180px) {
+      position: static;
+      z-index: auto;
+      width: auto;
+      height: auto;
+      min-height: 0;
+      padding: 16px 20px 20px;
+      overflow: visible;
+      border-right: 0;
+    }
+  }
 
-/* The original's `.knowledge-library`/`#fmLibrary` shells are flat on type
-   pages — no white panel, no border; only the pagination strip stays white. */
+  /* On type pages the type list indents 16px from the rail's right edge
+     (`.business-knowledge-nav` margin-right) while Overview stays full-width. */
 
-.mh-page--interpreter-type .mh-principles,
-.mh-page--interpreter-type .mh-library {
-overflow: visible;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
+  & .mh-sidebar__group {
+    margin-right: 16px;
 
-/* types.js renderManagementRulesHint — the "!" Operation Reminder trigger hangs
-   7px below the hero stats' right edge; the tooltip opens above it on
-   hover/focus (ai-interpreter-overview.css .knowledge-management-rules-*). */
-
-.mh-page--interpreter .mh-hero__aside {
-position: relative;
+    @media (max-width: 1180px) {
+      margin-right: 0;
+    }
+  }
 }
 
 .mh-rules-hint {
-position: absolute;
+  position: absolute;
   z-index: 20;
   top: calc(100% + 7px);
   right: 0;
+
+  &:hover .mh-rules-hint__tooltip,
+  &:focus-within .mh-rules-hint__tooltip {
+    display: block;
+  }
 }
 
 .mh-rules-hint__trigger {
-display: grid;
+  display: grid;
   width: 21px;
   height: 21px;
   place-items: center;
@@ -197,15 +350,15 @@ display: grid;
   font-weight: var(--mh-font-weight-bold);
   line-height: 1;
   cursor: help;
-}
 
-.mh-rules-hint__trigger:focus-visible {
-outline: 2px solid var(--mh-surface);
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid var(--mh-surface);
+    outline-offset: 2px;
+  }
 }
 
 .mh-rules-hint__tooltip {
-position: absolute;
+  position: absolute;
   right: 0;
   bottom: 25px;
   display: none;
@@ -220,190 +373,41 @@ position: absolute;
   color: color-mix(in srgb, var(--mh-text-inverse) 96%, transparent);
   font-size: var(--mh-font-size-xs);
   line-height: 1.25;
-}
 
-.mh-rules-hint__tooltip::before {
-position: absolute;
-  right: 7px;
-  bottom: -6px;
-  width: 10px;
-  height: 10px;
-  border-right: 1px solid color-mix(in srgb, var(--mh-text-inverse) 32%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--mh-text-inverse) 32%, transparent);
-  background: color-mix(in srgb, var(--mh-text-inverse) 16%, transparent);
-  content: "";
-  transform: rotate(45deg);
-}
-
-.mh-rules-hint__tooltip h3 {
-margin: 0 0 7px;
-  color: var(--mh-surface);
-  font-size: var(--mh-font-size-xs);
-  font-weight: var(--mh-font-weight-bold);
-  line-height: 1.2;
-}
-
-.mh-rules-hint__tooltip ol {
-margin: 0;
-  padding-left: 18px;
-}
-
-.mh-rules-hint__tooltip li + li {
-margin-top: 4px;
-}
-
-.mh-rules-hint:hover .mh-rules-hint__tooltip,
-.mh-rules-hint:focus-within .mh-rules-hint__tooltip {
-display: block;
-}
-
-/* The original's ≤1100 hero-stats rule applies to every interpreter state. */
-
-@media (max-width: 1180px) {
-  .mh-page--interpreter .mh-hero__aside {
-  flex-basis: 420px;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
-      gap: 12px;
+  &::before {
+    position: absolute;
+    right: 7px;
+    bottom: -6px;
+    width: 10px;
+    height: 10px;
+    border-right: 1px solid color-mix(in srgb, var(--mh-text-inverse) 32%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--mh-text-inverse) 32%, transparent);
+    background: color-mix(in srgb, var(--mh-text-inverse) 16%, transparent);
+    content: "";
+    transform: rotate(45deg);
   }
 
-  .mh-page--interpreter .mh-hero__aside .mh-metric {
-  min-height: 112px;
-      padding: 18px;
-  }
-}
-
-@media (max-width: 1180px) {
-  .mh-page--interpreter .mh-interpreter {
-  width: calc(100% - 64px);
+  & h3 {
+    margin: 0 0 7px;
+    color: var(--mh-surface);
+    font-size: var(--mh-font-size-xs);
+    font-weight: var(--mh-font-weight-bold);
+    line-height: 1.2;
   }
 
-  .mh-page--interpreter-type .mh-sidebar {
-  left: 32px;
+  & ol {
+    margin: 0;
+    padding-left: 18px;
   }
 
-  .mh-page--interpreter-type .mh-hero {
-  width: calc(100% - 304px);
-      margin-left: 272px;
-  }
-}
-
-@media (max-width: 760px) {
-  .mh-page--interpreter .mh-interpreter {
-  width: calc(100% - 40px);
-  }
-
-  .mh-page--interpreter-type .mh-sidebar {
-  left: 20px;
-  }
-
-  .mh-page--interpreter-type .mh-hero {
-  width: calc(100% - 280px);
-      margin-left: 260px;
-  }
-}
-
-.mh-interpreter__main .mh-heading {
-margin: 2px 0 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--mh-line);
-}
-
-.mh-interpreter__main .mh-heading h2 {
-font-family: var(--mh-font-sans);
-  font-size: var(--mh-font-size-3xl);
-  font-style: normal;
-  font-weight: var(--mh-font-weight-bold);
-}
-
-.mh-interpreter__main .mh-heading__kicker {
-margin-bottom: 6px;
-  color: var(--mh-accent-ink);
-  letter-spacing: 0.08em;
-}
-
-/* Below the original 1180px canvas, keep navigation and the active view in
-   the viewport. The type-page rail returns to the grid flow. */
-@media (max-width: 1180px) {
-  .mh-page--interpreter {
-    min-width: 0;
-  }
-
-  .mh-page--interpreter .mh-interpreter {
-    width: calc(100% - 64px);
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .mh-page--interpreter-type .mh-interpreter {
-    min-height: 0;
-  }
-
-  .mh-page--interpreter-type .mh-sidebar {
-    position: static;
-    z-index: auto;
-    width: auto;
-    height: auto;
-    min-height: 0;
-    padding: 16px 20px 20px;
-    overflow: visible;
-    border-right: 0;
-  }
-
-  .mh-page--interpreter-type .mh-sidebar__group {
-    margin-right: 0;
-  }
-
-  .mh-page--interpreter-type .mh-hero {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .mh-interpreter__main--type {
-    grid-column: 1;
+  & li + li {
+    margin-top: 4px;
   }
 }
 
 @media (max-width: 900px) {
-  .mh-page--interpreter .mh-interpreter {
-    width: calc(100% - 32px);
-  }
-
-  .mh-page--interpreter .mh-interpreter__main {
-    padding: 20px 0 42px;
-  }
-
-  .mh-page--interpreter .mh-hero {
-    box-sizing: border-box;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 28px 0 36px;
-  }
-
-  .mh-page--interpreter .mh-hero__layout {
-    width: calc(100% - 32px);
-    flex-direction: column;
-    align-items: stretch;
-    gap: 22px;
-  }
-
-  .mh-page--interpreter .mh-hero__copy {
-    min-width: 0;
-    max-width: none;
-  }
-
   .mh-page--interpreter .mh-hero__copy h1,
   .mh-page--interpreter-type .mh-hero .mh-hero__copy h1 {
     font-size: var(--mh-font-size-display);
-  }
-
-  .mh-page--interpreter .mh-hero__aside {
-    width: 100%;
-    flex: 0 1 auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .mh-page--interpreter .mh-hero__aside .mh-metric {
-    min-height: 0;
-    padding: 12px;
   }
 }

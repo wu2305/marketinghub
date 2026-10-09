@@ -12,24 +12,43 @@ import { cssFiles, withoutComments } from "../../scripts/css-metrics.mjs";
 
 const ROOT = path.resolve(__dirname);
 
-/** Flat list of { selectors, body, reduced } for every rule, nesting-aware. */
+/**
+ * Flat list of { selectors, body, reduced } for every rule. Native CSS nesting is resolved: a nested
+ * rule's selectors have `&` replaced by (or are prefixed with) the enclosing selectors, `body` holds only
+ * the rule's own declarations, and declarations inside an at-rule nested in a rule (`@media`, `@supports`)
+ * count as that rule's, reduced-motion ones as its reduced-motion declarations.
+ */
 function rulesOf(css) {
   const rules = [];
   const stack = [];
   let start = 0;
+  const frame = (head, bodyStart) => {
+    const outer = [...stack].reverse().find((item) => item.selectors);
+    const selectors = head.startsWith("@") ? null : head.split(",").map((item) => item.trim()).flatMap((part) => (
+      outer ? outer.selectors.map((parent) => (part.includes("&") ? part.replaceAll("&", parent) : `${parent} ${part}`)) : [part]
+    ));
+    return { head, selectors, direct: "", from: bodyStart };
+  };
   for (let i = 0; i < css.length; i += 1) {
     if (css[i] === "{") {
-      stack.push({ head: css.slice(start, i).trim(), bodyStart: i + 1 });
+      const top = stack.at(-1);
+      if (top) top.direct += css.slice(top.from, start);
+      stack.push(frame(css.slice(start, i).trim(), i + 1));
       start = i + 1;
     } else if (css[i] === "}") {
       const open = stack.pop();
-      if (open && !open.head.startsWith("@")) {
-        const reduced = stack.some((outer) => /^@media[^{]*prefers-reduced-motion:\s*reduce/.test(outer.head));
-        const inKeyframes = stack.some((outer) => /^@(-\w+-)?keyframes/.test(outer.head));
-        if (!inKeyframes) rules.push({ selectors: open.head.split(",").map((item) => item.trim()), body: css.slice(open.bodyStart, i), reduced });
+      open.direct += css.slice(open.from, i);
+      const reducedAt = (item) => /^@media[^{]*prefers-reduced-motion:\s*reduce/.test(item.head);
+      const reduced = reducedAt(open) || stack.some(reducedAt);
+      const inKeyframes = stack.some((outer) => /^@(-\w+-)?keyframes/.test(outer.head)) || /^@(-\w+-)?keyframes/.test(open.head);
+      const owner = open.selectors ? open : [...stack].reverse().find((item) => item.selectors);
+      if (!inKeyframes && owner && (open.selectors || open.head.startsWith("@"))) {
+        rules.push({ selectors: owner.selectors, body: open.direct, reduced });
       }
+      const top = stack.at(-1);
+      if (top) top.from = i + 1;
       start = i + 1;
-    } else if (css[i] === ";" && stack.length === 0) {
+    } else if (css[i] === ";") {
       start = i + 1;
     }
   }
@@ -40,19 +59,37 @@ const target = (selector) => selector.split(/\s+|>|\+|~/).filter(Boolean).pop();
 const playsAnimation = (body) => /(^|[\s;])animation(-name)?:\s*(?!none\b)[^;]+/.test(body);
 const stopsAnimation = (body) => /(^|[\s;])animation(-name)?:\s*none\b/.test(body);
 
+/** Selectors that play an animation but have no `animation: none` guard under prefers-reduced-motion. */
+function unguarded(css) {
+  const rules = rulesOf(css);
+  const guarded = new Set(rules.filter((rule) => rule.reduced && stopsAnimation(rule.body)).flatMap((rule) => rule.selectors.map(target)));
+  return rules
+    .filter((rule) => !rule.reduced && playsAnimation(rule.body))
+    .flatMap((rule) => rule.selectors)
+    .filter((selector) => !guarded.has(target(selector)));
+}
+
 describe("reduced motion", () => {
   it("every animated element has an animation: none guard in prefers-reduced-motion", () => {
     const missing = [];
     for (const file of cssFiles(ROOT)) {
-      const rules = rulesOf(withoutComments(fs.readFileSync(file, "utf8")));
-      const guarded = new Set(rules.filter((rule) => rule.reduced && stopsAnimation(rule.body)).flatMap((rule) => rule.selectors.map(target)));
-      for (const rule of rules) {
-        if (rule.reduced || !playsAnimation(rule.body)) continue;
-        for (const selector of rule.selectors) {
-          if (!guarded.has(target(selector))) missing.push(`${path.relative(ROOT, file)}: ${selector}`);
-        }
-      }
+      for (const selector of unguarded(withoutComments(fs.readFileSync(file, "utf8")))) missing.push(`${path.relative(ROOT, file)}: ${selector}`);
     }
     expect(missing).toEqual([]);
+  });
+
+  it("follows native CSS nesting", () => {
+    const guard = "@media (prefers-reduced-motion: reduce) { .a::after { animation: none; } }";
+    // a nested animated rule is attributed to its resolved selector, not to the parent that merely contains it
+    expect(unguarded(".a { color: red; &::after { animation: spin 1s infinite; } }")).toEqual([".a::after"]);
+    expect(unguarded(`.a { color: red; &::after { animation: spin 1s infinite; } } ${guard}`)).toEqual([]);
+    expect(unguarded(`.a { .b { animation: spin 1s; } } @media (prefers-reduced-motion: reduce) { .a { .b { animation: none; } } }`)).toEqual([]);
+    // a guard nested inside the rule counts for that rule
+    expect(unguarded(".a { animation: spin 1s; @media (prefers-reduced-motion: reduce) { animation: none; } }")).toEqual([]);
+    // an animation inside any nested conditional counts, not only inside a reduced-motion one
+    expect(unguarded(".a { @media (min-width: 1px) { animation: spin 1s; } }")).toEqual([".a"]);
+    expect(unguarded(`.a { @media (min-width: 1px) { animation: spin 1s; } } @media (prefers-reduced-motion: reduce) { .a { animation: none; } }`)).toEqual([]);
+    // keyframe steps are not rules
+    expect(unguarded("@keyframes spin { 50% { opacity: 0; } to { animation-name: x; } }")).toEqual([]);
   });
 });
