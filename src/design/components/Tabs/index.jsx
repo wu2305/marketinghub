@@ -9,7 +9,7 @@ const TAB_STEPS = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
 
 /**
  * Tab strip (role=tablist). Items may be disabled. The selected tab is the only
- * Tab stop; arrow keys, Home and End move focus and select, skipping disabled items.
+ * Tab stop (the first enabled tab when the selected one is disabled); arrow keys, Home and End move focus and select, skipping disabled items.
  * @param {object} props
  * @param {string} props.label tablist aria-label
  * @param {Array<{ id: string, label: string, disabled?: boolean, title?: string }>} [props.items=[]]
@@ -19,7 +19,9 @@ const TAB_STEPS = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
  */
 export function Tabs({ label, items = [], value, variant = "underline", onChange }) {
   const selected = items.findIndex((item) => item.id === value);
-  const tabStop = selected >= 0 ? selected : items.findIndex((item) => !item.disabled);
+  /* The Tab stop is the selected tab, unless that one is disabled (a disabled
+     button cannot take focus): then it falls to the first enabled tab. */
+  const tabStop = selected >= 0 && !items[selected].disabled ? selected : items.findIndex((item) => !item.disabled);
   const onKeyDown = (event, index) => {
     const step = TAB_STEPS[event.key] ?? (event.key === "Home" ? 1 : event.key === "End" ? -1 : 0);
     if (!step) return;
