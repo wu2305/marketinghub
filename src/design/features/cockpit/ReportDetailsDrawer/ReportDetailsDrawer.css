@@ -49,12 +49,12 @@ display: flex;
   border-bottom: 1px solid var(--mh-line);
 }
 
-.mh-details__head > div {
+.mh-details__titles {
 display: grid;
   gap: 3px;
 }
 
-.mh-details__head > div > span {
+.mh-details__titles > span {
 color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
