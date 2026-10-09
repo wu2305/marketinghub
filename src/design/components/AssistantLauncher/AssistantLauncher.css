@@ -5,7 +5,7 @@ display: none;
 .mh-launcher {
 position: fixed;
   right: 24px;
-  bottom: 22px;
+  bottom: calc(22px + env(safe-area-inset-bottom));
   z-index: var(--mh-z-launcher);
   display: inline-flex;
   width: auto;

@@ -2,7 +2,7 @@
   font-family: var(--mh-font-sans);
 position: fixed;
   right: 28px;
-  bottom: 78px;
+  bottom: calc(78px + env(safe-area-inset-bottom));
   z-index: 120;
   min-width: 250px;
   padding: 12px 14px;

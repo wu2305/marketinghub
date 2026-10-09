@@ -16,7 +16,7 @@
 .mh-skill-detail .mh-modal__title{color:var(--mh-text-strong);font-size:var(--mh-font-size-lg);line-height:1.2}
 .mh-skill-detail .mh-modal__close{width:32px;padding:0;border:1px solid var(--mh-line-subtle);color:var(--mh-text-muted);font-size:var(--mh-font-size-2xl)}
 .mh-skill-detail .mh-modal__close:hover{border-color:var(--mh-line);background:var(--mh-surface-subtle)}
-.mh-skill-detail .mh-modal__foot{padding:16px 24px;border-color:var(--mh-line-subtle)}
+.mh-skill-detail .mh-modal__foot{padding:16px 24px calc(16px + env(safe-area-inset-bottom));border-color:var(--mh-line-subtle)}
 .mh-skill-detail__intro{padding:24px 0 20px}
 .mh-skill-detail__governance{margin-top:20px!important;padding:16px;border-color:var(--mh-line-subtle);background:var(--mh-surface-subtle)}
 .mh-skill-detail__governance h3{margin-bottom:12px;font-size:var(--mh-font-size-xs);text-transform:uppercase;letter-spacing:.02em}
