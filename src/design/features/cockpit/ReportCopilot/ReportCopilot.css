@@ -1591,7 +1591,6 @@
   &:hover:not(:disabled),
   &:focus-visible:not(:disabled) {
     filter: brightness(0.92);
-    outline: 0;
   }
 
   &:disabled {
@@ -1626,6 +1625,17 @@
   .mh-ra-channels,
   .mh-ra-explore {
     grid-template-columns: 1fr;
+  }
+
+  /* Keep the 12px text look; grow only the tap area to 44px high. */
+  .mh-copilot__view-more {
+    position: relative;
+
+    &::before {
+      position: absolute;
+      inset: -14px -8px;
+      content: "";
+    }
   }
 }
 

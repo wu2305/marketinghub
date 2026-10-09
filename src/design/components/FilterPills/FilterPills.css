@@ -18,6 +18,9 @@ display: inline-flex;
   font-weight: var(--mh-font-weight-bold);
   text-transform: uppercase;
   cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .mh-pills__item:hover,

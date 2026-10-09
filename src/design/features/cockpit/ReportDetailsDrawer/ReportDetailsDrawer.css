@@ -28,9 +28,16 @@ position: fixed;
   }
 }
 
+/* Reduced motion keeps the appearance cue but drops the 540px travel. */
+@keyframes mh-details-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mh-details {
-    animation: none;
+    animation: mh-details-fade 150ms ease;
   }
 }
 
@@ -49,12 +56,12 @@ display: flex;
   border-bottom: 1px solid var(--mh-line);
 }
 
-.mh-details__head > div {
+.mh-details__titles {
 display: grid;
   gap: 3px;
 }
 
-.mh-details__head > div > span {
+.mh-details__titles > span {
 color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
@@ -96,7 +103,6 @@ width: 16px;
 .mh-details__fullscreen:focus-visible {
 background: var(--mh-surface-page);
   color: var(--mh-text-strong);
-  outline: 0;
 }
 
 .mh-details__close {
@@ -217,7 +223,6 @@ margin-left: auto;
 .mh-details__view-more:hover,
 .mh-details__view-more:focus-visible {
 color: var(--mh-text-strong);
-  outline: 0;
 }
 
 .mh-details__assets {
@@ -247,11 +252,9 @@ display: inline-flex;
     color 0.15s ease;
 }
 
-.mh-details__pill:hover,
-.mh-details__pill:focus-visible {
+.mh-details__pill:hover {
 background: var(--mh-accent-wash);
   color: var(--mh-accent-ink);
-  outline: 0;
 }
 
 .mh-details__scenarios {
@@ -284,6 +287,7 @@ display: grid;
   gap: 10px;
   padding: 12px 14px;
   border: 0;
+  border-radius: inherit;
   background: transparent;
   font: inherit;
   text-align: left;
@@ -334,6 +338,16 @@ border-color: var(--mh-accent);
 .mh-details__scenarios li.is-active > button::after,
 .mh-details__scenarios li:hover > button::after {
 color: var(--mh-accent-ink);
+}
+
+.mh-details__fullscreen:focus-visible,
+.mh-details__close:focus-visible,
+.mh-details__view-more:focus-visible,
+.mh-details__pill:focus-visible,
+.mh-details__scenarios li > button:focus-visible,
+.mh-details__live:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
 }
 
 .mh-details__footer {
