@@ -10,7 +10,7 @@ display: grid;
   border-radius: var(--mh-radius-md);
   background:
     linear-gradient(var(--mh-surface), var(--mh-surface)) padding-box,
-    var(--mh-accent-fill) border-box;
+    linear-gradient(180deg, var(--mh-accent-wash) 0%, var(--mh-accent-soft) 100%) border-box;
   box-shadow: var(--mh-shadow-raised);
   transition:
     border-color 160ms ease,

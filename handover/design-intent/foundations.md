@@ -161,7 +161,7 @@ glance, because every anchor is the original's own dominant value.
 | text (6) | `--mh-text-strong` · `--mh-text` · `--mh-text-muted` · `--mh-text-faint` · `--mh-text-inverse` · `--mh-text-inverse-muted` | `#16191d` · `#3f4852` · `#68727c` · `#8b949d` · `#ffffff` · `rgba(255,255,255,.7)` | headings/values · body · secondary/meta · placeholder, disabled, large captions only (3.1:1 on white — not for body text) · on dark · secondary on dark |
 | surface (6) | `--mh-surface-page` · `--mh-surface` · `--mh-surface-subtle` · `--mh-surface-muted` · `--mh-surface-inverse` · `--mh-scrim` | `#f4f6f8` · `#ffffff` · `#f7f9fa` · `#f0f2f4` · `#20262c` · `rgba(31,41,55,.3)` | canvas · cards/panels · table heads, hover rows, soft panels · neutral chips, disabled fills · hero/launcher/tooltip · behind overlays |
 | line (4) | `--mh-line-subtle` · `--mh-line` · `--mh-line-strong` · `--mh-line-inverse` | `#e8ecef` · `#dce1e6` · `#c8d0d8` · `rgba(255,255,255,.12)` | dividers inside a surface · card and control borders · hover/emphasis borders · lines on dark |
-| accent (5) | `--mh-accent-soft` · `--mh-accent` · `--mh-accent-ink` · `--mh-accent-wash` · `--mh-accent-fill` | `#f2d185` · `#daa860` · `#986525` · `#fff8df` · `linear-gradient(135deg, #f2d185, #daa860)` | light gold · active borders, selected markers · gold text/links/toggles (5.0:1 on white) · selected/highlighted backgrounds · brand gold gradient fill · primary actions and the matching gold accents (active indicators, bubbles, selected pills) |
+| accent (5) | `--mh-accent-soft` · `--mh-accent` · `--mh-accent-ink` · `--mh-accent-wash` · `--mh-accent-fill` | `#f2d185` · `#daa860` · `#986525` · `#fff8df` · `linear-gradient(135deg, #f2d185, #daa860)` | light gold · active borders, selected markers · gold text/links/toggles (5.0:1 on white) · selected/highlighted backgrounds · brand gold gradient fill · primary actions and the matching gold accents (active indicators, bubbles, selected pills). The 1 px **card edge** on the gold-framed cards (Project card, Report row, Action card, Workspace card) is not a role of its own: it is `linear-gradient(180deg, var(--mh-accent-wash), var(--mh-accent-soft))` on the border box, written at the use site from existing roles (the original's `#fcf5e6 → #f2d185`). |
 | status (4) | `--mh-success` · `--mh-warning` · `--mh-danger` · `--mh-info` | `#34765b` · `#b45309` · `#9b1230` · `#3f73a6` | status ink/icon/border |
 | status wash (4, outside the 63) | `--mh-info-wash` · `--mh-success-wash` · `--mh-warning-wash` · `--mh-danger-wash` | `color-mix(in srgb, <status> 8%, var(--mh-surface))` for info and danger, 10 % for success and warning | tinted background of a status badge, banner or row. One wash per status hue; other tints and tinted borders are still derived at the use site with `color-mix()` |
 | data (3) | `--mh-data-teal` · `--mh-data-violet` · `--mh-data-rose` | `#2d7972` · `#6941c6` · `#c2185b` | categorical identity (feedback/memory categories, chart series) beyond the four status hues |
@@ -510,12 +510,13 @@ Actions: **keep** (already the role token) · **rename** · **merge** (replace r
 | `--mh-ink-scenario-hover` | `#6f3f12` | 1 | 1 | merge |
 | `--mh-indicator-like` | `#f59e0b` | 0 | 0 | remove (unused) |
 
-### → `--mh-accent-fill` (2)
+### → `--mh-accent-fill` (1) and the card edge
 
 | token | value | refs | owners | action |
 |---|---|---:|---:|---|
-| `--mh-reports-card-edge` | `linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%)` | 4 | 3 | merge |
 | `--mh-reports-gold-btn` | `linear-gradient(135deg, #f2d185 0%, #daa860 100%)` | 7 | 3 | merge |
+
+Correction (2026-10-09): `--mh-reports-card-edge` (`linear-gradient(180deg, #fcf5e6 0%, #f2d185 100%)`, 4 refs, 3 owners) was first planned to merge into `--mh-accent-fill`. That gave Project card and Report row a full-strength gold frame while Action card and Workspace card kept the soft one, and the original uses the soft edge on all of them (`assets/css/reports/catalog.css:167,501`, `home/home.css:425`, `self-service/tabs.css:132,201`). All four now use the soft edge, built from `--mh-accent-wash` → `--mh-accent-soft`; no token added.
 
 ### → `--mh-surface` (3)
 
