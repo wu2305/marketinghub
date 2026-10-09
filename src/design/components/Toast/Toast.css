@@ -26,8 +26,14 @@ position: fixed;
   }
 }
 
+@keyframes mh-toast-fade {
+  from {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mh-toast {
-    animation: none;
+    animation: mh-toast-fade 160ms ease both;
   }
 }
