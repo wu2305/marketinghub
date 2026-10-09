@@ -420,6 +420,42 @@ describe("P08 demo flow", () => {
     expect(document.activeElement).toBe(domain);
   });
 
+  it("Every create form moves focus to its first invalid control after a failed submit", () => {
+    const focused = (type, initial, click) => {
+      function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type, initial })} />; }
+      const { container, unmount } = render(<Test />);
+      fireEvent.click(screen.getByRole("button", { name: click }));
+      const control = document.activeElement;
+      return { container, control, unmount };
+    };
+    // Business Term: the title input
+    let result = focused("Business Term", undefined, "Submit");
+    expect(result.control.getAttribute("aria-invalid")).toBe("true");
+    expect(result.control.getAttribute("name")).toBe("title");
+    result.unmount();
+    // Principles (generic form): the title input
+    result = focused("Principles", undefined, "Submit");
+    expect(result.control.getAttribute("name")).toBe("title");
+    expect(result.control.getAttribute("aria-invalid")).toBe("true");
+    result.unmount();
+    // Metric Dictionary: the name first, then the formula, which is described by its error
+    result = focused("Metric Dictionary", undefined, "Save");
+    expect(result.control.getAttribute("name")).toBe("metricName");
+    fireEvent.change(result.control, { target: { value: "Sales" } });
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    const formula = screen.getByRole("textbox", { name: "Formula Builder" });
+    expect(document.activeElement).toBe(formula);
+    expect(formula.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById(formula.getAttribute("aria-describedby")).textContent).toBe("Please build a formula first.");
+    result.unmount();
+    // Synonyms: the first empty required cell of the new row
+    function Synonyms() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Synonyms", initial: { synonymRows: [{ term: "Revenue", synonym: "", kind: "", domain: [], reports: [], dataset: [], status: "Enabled" }] } })} />; }
+    render(<Synonyms />);
+    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    expect(document.activeElement).toBe(screen.getByRole("textbox", { name: "Synonyms" }));
+    expect(screen.getByDisplayValue("Revenue").getAttribute("aria-invalid")).toBeNull();
+  });
+
   it("Analytical Model: Save Draft says the model stays disabled", () => {
     const save = vi.fn();
     function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", businessDomain: ["4P"], trigger_when: "T", output_requirements: "O" }, onSave: save })} />; }

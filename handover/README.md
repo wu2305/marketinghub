@@ -394,6 +394,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Project card、Report row、Action card、Workspace card 卡片边缘（原 `assets/css/reports/catalog.css:167,501`、`home/home.css:425`、`self-service/tabs.css:132,201`） | 原页 1px 浅金渐变边起点为 `#fcf5e6`；React 版四张卡统一为 `linear-gradient(180deg, var(--mh-accent-wash), var(--mh-accent-soft))`，起点为 `--mh-accent-wash`（`#fff8df`），终点同为 `#f2d185` | 按同一设计用途归并到基础层现有角色，不为 `#fcf5e6` 新增 token（67 个定义已是预算上限，`foundations.md` §3） | #109 |
 | `PersonalMemoryPage` 列表 | 原 Demo 是单列行（圆形首字母头像 + 标题 + 一行描述 + “来源 · 时间”）；改为 `LibraryList layout="list"` 并经 `LibraryItem` 新增的 `leading` 槽显示首字母徽标，不再是两列卡片。头像用统一的金色 `--mh-accent-wash`，不复刻原 Demo 按条目变化的紫/金色；原 Demo 的 ⋮ 菜单仍由 edit/delete 图标按钮代替；描述最多两行（原为单行截断）。 | 面向客户的演示页需与原始 HTML 相近（Wu 2026-10-09 选择“只改 Personal Memory”）；Review Center / Feedback / Skill Library 保持共享库布局 | 本 PR |
 | 明细/元数据标签颜色（`LibraryItem` meta `dt`、`BusinessTermView` / `ScenarioReportsView` 明细 `dt`、`FieldLibraryView` 明细 `dt`、Report Context 元数据标签与分节标题、`ChipList` 的 “Synonyms” 等标签） | 原页这些 11–13px 标签用浅灰 `#8b949d`（白底约 3.1:1）；React 版改用 `--mh-text-muted`（`#68727c`，约 4.9:1） | `foundations.md` §3 把 `--mh-text-faint` 限定为占位符、禁用态与大号说明文字，可读的元数据用 `--mh-text-muted`；不新增灰色 token。其余 faint 用法（占位符、禁用、图标、徽标说明、kicker）不动（Codex 审阅 #115 第 9 项） | 本 PR |
+| 所有文本输入、下拉与多行输入（`input`、`select`、`textarea`，复选框/单选框除外）在 ≤760px 宽度 | 原 Demo 手机端控件字号为 11–14px（在 iOS Safari 聚焦时会自动放大页面）；React 版统一为 16px（`--mh-font-size-xl`），宽度与行高不变 | iOS Safari 只对小于 16px 的输入聚焦缩放，页面在输入中途被放大会错位；`tokens.css` 一条规则覆盖所有组件和新增组件。手机端的人工审图需重做 | /design interaction 报告 A 项 |
 | 覆盖层入场与按钮按压（`Modal` 居中/抽屉、`SkillMenu`、`ModelFlowDialog`、`AssistantPanel` 历史弹层、`Button`） | 新增入场动效：Modal 居中对话框 250ms 上浮并缩放、抽屉 300ms 右滑入，技能菜单 160ms 上浮，建模对话框 250ms，历史弹层 150ms 下落（均用既有曲线 `cubic-bezier(0.22, 1, 0.36, 1)`，`prefers-reduced-motion` 下无动画）；`Button` 按下 `scale(0.98)`（120ms，reduce 下去掉）。退出仍是即时卸载 | 原 Demo 的通用弹窗、技能菜单、建模对话框、历史弹层均无入场动画（`assets/css` 里只有 `.assistant-modal` 的 `modalIn` 与助手面板自己的入场）；原 Demo 仅在个别按钮上有 `scale(0.98)`（如 `.create-knowledge-btn:active`，`assets/css/knowledge/workspace.css:665`），这里统一到共享 `Button`。目的是让同族覆盖层行为一致（助手面板、抽屉、Toast 本来就有动效）。属于新增动效而非对齐原稿，Wu 可单独拒绝本 PR，其他动效改动不受影响 | 本 PR |
 
 ## 4. 已知缺口
@@ -508,6 +509,18 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 分支 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）建在已删除的 `src/assembled` 与 `scripts/compose_portal.py` 上，与 `main` 互斥，应关闭。
 
 ## 5. 维护日志
+
+### 2026-10-09 — 手机端文本输入 16px
+
+来自 `/design interaction` 报告的 A 项。报告的补丁按 16 个文件逐个追加 `@media` 块；对 main 7941699 重新测量（390px 宽、全部 story 的可见文本输入）发现仍有遗漏（Model Flow 对话框文本域、Skill 搜索框、Data Model 表单、Report Edit 文本域等），逐文件修补会随新组件继续漏。改为 `tokens.css` 的 `@scope` 重置块里一条 `@media (max-width: 760px)` 规则：除复选框/单选框/文件等不触发缩放的类型外，`input`、`select`、`textarea` 的 `font-size` 为 `--mh-font-size-xl` 并带 `!important`（组件规则优先级更高，且这是下限规则）。作用域与原重置相同：不影响宿主页面自己的控件，也不进入 `data-mh-slot` 内部。已登记有意差异。执行者：Claude。
+
+### 2026-10-09 — 新建表单校验失败后聚焦首个无效控件
+
+来自 `/design interaction` 报告的 C 项。对照 main 7941699：#118 只给 Analytical Model 加了“聚焦首个无效控件 + 错误文字 `aria-describedby`”，其余 Knowledge Create 表单（Business Term、Principles、Report Context、Scenario、Data Model、Metric Dictionary、Synonyms）失败后焦点不动。本次把 `useFocusFirstInvalid` 从 `KnowledgeCreateFields` 提到 `lib/focus-first-invalid.js`，由 `KnowledgeCreatePage` 对整张卡片使用，所有类型共用同一规则（失败提交才移动；改正字段或在别处输入不抢焦点；首次渲染不移动）。Metric 公式框补 `aria-invalid`、`aria-required`、`aria-describedby`（指向“请先构建公式”），Synonyms 在提交失败后给空的必填单元格标 `aria-invalid`，焦点即落在第一个空格。没有采用报告的 `role="alert"`：每个错误都已与控件关联，焦点移到首个无效控件时读出其错误，五个 alert 同时播报反而嘈杂。外观无变化。执行者：Claude。
+
+### 2026-10-09 — touch-action: manipulation
+
+来自 `/design interaction` 报告的 B 项（报告基于 9f7b41d，补丁在 #114 之后不再适用，已对 main 7941699 重新核对）。`tokens.css` 的 `@scope` 重置块里，`button, input, select, textarea` 与 `a` 加 `touch-action: manipulation`：触屏点按不再等待双击缩放判定，捏合缩放保留。外观无变化，不登记有意差异。`DataModelView` 画布是 `div`，保留自己的 `touch-action: none`（平移/缩放手势），不受影响。验证：lint、vitest、build-storybook；Playwright 在构建好的 Storybook 上读计算样式。执行者：Claude。
 
 ### 2026-10-09 — 用户确认撤下八个旧页面
 
