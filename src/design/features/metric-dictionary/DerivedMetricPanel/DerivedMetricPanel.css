@@ -43,3 +43,5 @@
 .mh-derived-panel__constant div { display: flex; justify-content: flex-end; gap: 8px; }
 .mh-derived-panel button:focus-visible, .mh-derived-panel input:focus-visible, .mh-derived-panel select:focus-visible, .mh-derived-panel textarea:focus-visible, .mh-derived-panel__constant button:focus-visible, .mh-derived-panel__constant input:focus-visible { outline: 2px solid var(--mh-accent); outline-offset: 2px; }
 @media (max-width: 760px) { .mh-derived-panel__body { grid-template-columns: 1fr; } .mh-derived-panel__references { border-left: 0; border-top: 1px solid var(--mh-line); padding: 16px 0 0; } }
+
+.mh-derived-panel__operators button svg { display: block; width: 14px; height: 14px; margin: 0 auto; }
