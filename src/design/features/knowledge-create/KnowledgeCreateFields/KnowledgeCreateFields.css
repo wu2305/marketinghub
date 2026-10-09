@@ -110,4 +110,11 @@
 .mh-kcf__analysis { display: grid; gap: 22px; }
 .mh-kcf__analysis-scope { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--mh-space-6); }
 .mh-kcf__analysis .mh-kcf__label, .mh-kcf__analysis .mh-kcf__error { font-size: var(--mh-font-size-sm); }
-@media (max-width: 760px) { .mh-kcf__analysis-scope { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .mh-kcf__analysis-scope { grid-template-columns: minmax(0, 1fr); }
+  /* Anchor the help tip to the whole label row so it opens inside the field
+     instead of running past the screen edge. */
+  .mh-kcf__label { position: relative; }
+  .mh-kcf__help-wrap { position: static; }
+  .mh-kcf__help-tip { left: 0; max-width: 100%; }
+}

@@ -49,9 +49,13 @@ cursor: pointer;
 }
 
 /* Library tables open from their first column, which carries a title and
-   often a summary: let it wrap so the other columns keep their width. */
+   often a summary: let it wrap so the other columns keep their width, and
+   floor it so a narrow table scrolls instead of crushing the title. The floor
+   stays below the narrowest width at which a table still fits without
+   scrolling, so wide layouts are unchanged. */
 .mh-table--openable td:first-child {
 white-space: normal;
+  min-width: 160px;
   padding-top: var(--mh-space-3);
   padding-bottom: var(--mh-space-3);
 }
