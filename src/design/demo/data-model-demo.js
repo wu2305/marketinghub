@@ -89,7 +89,8 @@ export const DATA_MODEL_STRINGS = DATA_MODEL_VIEW_STRINGS;
  *   Report Context drawer without changing the active type).
  * @param {(domain: object) => void} [props.onSelectDomain]
  * @param {(tab: string) => void} [props.onTabChange]
- * @param {(table: object) => void} [props.onOpenTable] / [props.onCloseTable]
+ * @param {(table: object) => void} [props.onOpenTable] receives the table object
+ * @param {(event?: { reason: string }) => void} [props.onCloseTable] receives the view's close event
  * @param {(tab: string) => void} [props.onDrawerTab]
  */
 export function useDataModelDemo(props = {}) {
@@ -158,9 +159,9 @@ export function useDataModelDemo(props = {}) {
     props.onOpenTable?.(domain?.tables?.find((item) => item.id === id) || null);
   };
 
-  const closeTable = () => {
+  const closeTable = (event) => {
     setTableId(null);
-    props.onCloseTable?.();
+    props.onCloseTable?.(event);
   };
 
   /* Graph contents — central fact node + up to 5 other tables, relations

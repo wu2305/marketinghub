@@ -66,9 +66,10 @@ const MODEL_FLOW_SECTIONS = [
  * "Generate Analytical Model" flow dialog reached from the skill menu.
  * `step="history"` replays chat threads with per-message checkboxes and a
  * generation-rule textarea; Generate requires at least one ticked message.
- * `step="generated"` shows the drafted model form (Back returns to the history
- * step with ticks and rule preserved); `step="manual"` shows the same form
- * empty. Save/Submit validate required fields, then flash Saved/Submitted and
+ * `step="generated"` and `step="manual"` show the same model form with
+ * different titles; only `generated` has Back (it returns to the history step
+ * with ticks and rule preserved). Neither step fills or clears the fields, the
+ * initial values come from `draft`. Save/Submit validate required fields, then flash Saved/Submitted and
  * close after ~450ms — matching the demo's deterministic simulation.
  * @param {object} props
  * @param {typeof modelFlowSteps[number]} [props.step] falsy renders nothing

@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the Generate Analytical Model dialog. It opens from the assistant skill menu. Set `step` to `history` to show chat threads. Each message has a checkbox. A text area holds the generation rule. Generate needs at least one checked message. Set `step` to `generated` to show the filled model form. Set `step` to `manual` to show the same form empty. Save and Submit check required fields. The dialog then shows Saved or Submitted, and closes. Escape closes only this dialog. Focus returns to the opener.", "这个组件是 Generate Analytical Model 对话框。它从助手的技能菜单打开。`step` 设为 `history` 时，显示聊天会话。每条消息有复选框。文本域保存生成规则。Generate 至少需要勾选一条消息。`step` 设为 `generated` 时，显示已填好的模型表单。`step` 设为 `manual` 时，显示同一表单的空白版。Save 和 Submit 会检查必填字段。对话框随后显示 Saved 或 Submitted，然后关闭。Escape 只关闭这个对话框。焦点回到打开它的元素。"),
+          bi("This component is the Generate Analytical Model dialog. It opens from the assistant skill menu. Set `step` to `history` to show chat threads. Each message has a checkbox. A text area holds the generation rule. Generate needs at least one checked message. Set `step` to `generated` or `manual` to show the model form. The two steps differ in title, subtitle, and a Back button that only `generated` has. Neither step fills or clears the fields: the initial values come from `draft`, so the host passes a filled `draft` for a generated model and an empty one for a manual model. Save and Submit check required fields. The dialog then shows Saved or Submitted, and closes. Escape closes only this dialog. Focus returns to the opener.", "这个组件是 Generate Analytical Model 对话框。它从助手的技能菜单打开。`step` 设为 `history` 时，显示聊天会话。每条消息有复选框。文本域保存生成规则。Generate 至少需要勾选一条消息。`step` 设为 `generated` 或 `manual` 时，显示模型表单。两个步骤的标题、副标题不同，只有 `generated` 有 Back 按钮。两个步骤都不会自己填充或清空字段：初始值来自 `draft`，所以宿主为生成的模型传入填好的 `draft`，为手动创建传入空的 `draft`。Save 和 Submit 会检查必填字段。对话框随后显示 Saved 或 Submitted，然后关闭。Escape 只关闭这个对话框。焦点回到打开它的元素。"),
       },
     },
   },
@@ -21,7 +21,7 @@ export default {
 export const Default = {
   args: { step: "history" },
   argTypes: {
-    step: { control: "inline-radio", options: modelFlowSteps, description: bi("`history` shows chat threads. `generated` shows the filled model form. `manual` shows the same form empty.", "`history` 显示聊天会话。`generated` 显示已填好的模型表单。`manual` 显示同一表单的空白版。") },
+    step: { control: "inline-radio", options: modelFlowSteps, description: bi("`history` shows chat threads. `generated` and `manual` show the model form with different titles; only `generated` has Back. Field values come from `draft`, not from the step. In this story Generate fills `draft`, so choosing `generated` in Controls before you press Generate shows an empty form.", "`history` 显示聊天会话。`generated` 和 `manual` 显示模型表单，标题不同，只有 `generated` 有 Back。字段值来自 `draft`，而不是 `step`。本故事里由 Generate 填充 `draft`，所以在 Controls 里先选 `generated` 而没按 Generate 时，表单是空的。") },
     onToggleMessage: { action: "onToggleMessage", description: bi("The function runs when a message checkbox changes. The result has `threadIndex`, `messageIndex`, and `checked`.", "消息复选框变化时会调用这个函数。结果里有 `threadIndex`、`messageIndex` 和 `checked`。") },
     onRuleChange: { action: "onRuleChange", description: bi("The function runs at each change in the generation rule. The result has `value`.", "生成规则每次变化都会调用这个函数。结果里有 `value`。") },
     onGenerate: { action: "onGenerate", description: bi("The function runs on Generate. The result has `messages` and `rule`.", "点击 Generate 时会调用这个函数。结果里有 `messages` 和 `rule`。") },

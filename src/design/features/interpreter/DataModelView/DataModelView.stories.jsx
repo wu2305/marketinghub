@@ -1,3 +1,4 @@
+import React from "react";
 import { DATA_MODEL_DOMAINS } from "../../../demo/data-model-domains.js";
 import { useDataModelDemo } from "../../../demo/data-model-demo.js";
 import { callbackProp, prop, bi } from "../../../lib/story-helpers.js";
@@ -12,7 +13,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the Data Model view on AI Interpreter. The left side lists domains. The user can search names, descriptions, and synonyms. Basic information shows the domain name, Enabled or Disabled, synonym chips, and related reports. A related report calls `onOpenReportContext` with a Report Context id. The page can open the Report Context drawer without leaving Data Model. Relationship graph shows fact and dimension tables as nodes. Dashed curves join the nodes. The user can pan and zoom the canvas. A click on a node opens the table dialog. Field Details includes a Unit column on fact tables. Data Preview shows ten generated rows.", "这是 AI Interpreter 上的 Data Model 视图。左侧列出各个域。用户可以搜索名称、说明和同义词。Basic information 显示域名、Enabled 或 Disabled、同义词标签和关联报表。关联报表会调用 `onOpenReportContext`，参数是 Report Context 的 id。页面可以打开 Report Context 抽屉，而不离开 Data Model。Relationship graph 把事实表和维度表显示为节点。虚线曲线连接这些节点。用户可以平移和缩放画布。点击节点会打开表对话框。Field Details 在事实表上包含 Unit 列。Data Preview 显示十行生成的数据。"),
+          bi("This component is the Data Model view on AI Interpreter. The left side lists domains. The user can search names, descriptions, and synonyms. Basic information shows the domain name, Enabled or Disabled, synonym chips, and related reports. A related report calls `onOpenReportContext` with a Report Context id. The page can open the Report Context drawer without leaving Data Model. Relationship graph shows fact and dimension tables as nodes. Dashed curves join the nodes. The user can pan and zoom the canvas. A click on a node opens the table dialog. Field Details includes a Unit column on fact tables. Data Preview shows ten generated rows. In this story the demo hook owns the state (search, selected domain, tab, open table). Controls set only the starting values, so changing a Control starts a fresh view. The Actions panel logs the payloads the view sends: ids and strings, not the hook's objects.", "这是 AI Interpreter 上的 Data Model 视图。左侧列出各个域。用户可以搜索名称、说明和同义词。Basic information 显示域名、Enabled 或 Disabled、同义词标签和关联报表。关联报表会调用 `onOpenReportContext`，参数是 Report Context 的 id。页面可以打开 Report Context 抽屉，而不离开 Data Model。Relationship graph 把事实表和维度表显示为节点。虚线曲线连接这些节点。用户可以平移和缩放画布。点击节点会打开表对话框。Field Details 在事实表上包含 Unit 列。Data Preview 显示十行生成的数据。在本故事里，状态（搜索、选中的域、标签页、打开的表）由 demo hook 持有。Controls 只设置起始值，所以修改 Control 会重新创建视图。Actions 面板记录的是视图发出的参数：id 和字符串，而不是 hook 里的对象。"),
       },
     },
   },
@@ -47,29 +48,42 @@ export default {
     onOpenReportContext: callbackProp("onOpenReportContext", "(id: string) => void", "city-report-context", bi("The function runs when the user clicks a related report. The argument is the Report Context id. The page can open the Report Context drawer without leaving Data Model.", "用户点击关联报表时会调用这个函数。参数是 Report Context 的 id。页面可以打开 Report Context 抽屉，而不离开 Data Model。")),
   },
   render: function DataModelStory(args) {
-    const viewProps = useDataModelDemo(args);
-    return <DataModelView {...viewProps} />;
+    /* The demo hook reads query, domain, tab and table settings only when it
+       starts, so a Control change starts a fresh view (the standalone Data
+       Model page story does the same). */
+    const key = [args.query, args.selectedDomainId, args.activeTab, args.tableId, args.drawerTab].join("|");
+    return <DataModelStoryView key={key} args={args} />;
   },
 };
 
-export const Default = {};
-
-/** Search matches name/description/business description/synonyms —
-    "growth" isolates… nothing here (Customer Growth is hidden). */
-export const FilteredEmpty = {
-  args: { query: "inventory" },
-};
-
-export const GraphTab = {
-  args: { activeTab: "graph" },
-};
-
-/** Node click — the centered Field Details dialog for the fact table. */
-export const TableDrawer = {
-  args: { activeTab: "graph", tableId: "fact_sales_order" },
-};
-
-/** Data Preview — 10 deterministic rows generated from the field types. */
-export const TableDrawerPreview = {
-  args: { activeTab: "graph", tableId: "fact_sales_order", drawerTab: "preview" },
-};
+/* The hook's own callbacks carry objects ({ value }, a domain, a table). The
+   story maps them back to the view's documented payloads so the Actions panel
+   shows exactly what the view sends, and forwards the graph gestures the hook
+   handles itself. */
+function DataModelStoryView({ args }) {
+  const argsRef = React.useRef(args);
+  argsRef.current = args;
+  const viewProps = useDataModelDemo({
+    ...args,
+    onQueryChange: ({ value }) => args.onQueryChange?.(value),
+    onSelectDomain: (domain) => args.onSelectDomain?.(domain?.id),
+    onOpenTable: (table) => args.onOpenTable?.(table?.id),
+  });
+  /* The view fits the graph in an effect that depends on `onGraphFit`, so the
+     wrappers must keep their identity between renders (the hook's own are
+     stable). */
+  const { onGraphFit, onGraphZoom, onGraphPan } = viewProps;
+  const fit = React.useCallback((width) => {
+    onGraphFit(width);
+    argsRef.current.onGraphFit?.(width);
+  }, [onGraphFit]);
+  const zoom = React.useCallback((delta, center) => {
+    onGraphZoom(delta, center);
+    argsRef.current.onGraphZoom?.(delta, center);
+  }, [onGraphZoom]);
+  const pan = React.useCallback((dx, dy) => {
+    onGraphPan(dx, dy);
+    argsRef.current.onGraphPan?.(dx, dy);
+  }, [onGraphPan]);
+  return <DataModelView {...viewProps} onGraphFit={fit} onGraphZoom={zoom} onGraphPan={pan} />;
+}

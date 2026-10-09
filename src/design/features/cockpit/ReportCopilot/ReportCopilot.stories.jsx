@@ -25,7 +25,7 @@ export const Default = {
   args: { open: true, stream: true, project: "city", index: 0, contextHref: demoHrefFor("interpreter") },
   argTypes: {
     project: { control: "select", options: Object.keys(COCKPIT.projects), description: bi("Cockpit project key for this Copilot.", "这个 Copilot 所用的 Cockpit 项目键。") },
-    index: { control: { type: "number", min: 0, max: 1 }, description: bi("Report index inside the selected project.", "所选项目里的报表序号。") },
+    index: { control: "inline-radio", options: [0, 1], description: bi("Report index inside the selected project. Choose 0 or 1: every project has two reports, and the story rounds any other value to the nearest report.", "所选项目里的报表序号。选 0 或 1：每个项目有两份报表，故事会把其他取值取整到最近的一份报表。") },
     contextHref: { control: "text", description: bi("Fallback link for a chat entry that has no linked source.", "没有关联来源的对话条目所使用的回退链接。") },
     onClose: { action: "onClose", description: bi("The function runs when the drawer closes. The result has `reason`: `\"scrim\"`, `\"escape\"`, or `\"button\"`.", "抽屉关闭时会调用这个函数。结果里的 `reason` 是 `\"scrim\"`、`\"escape\"` 或 `\"button\"`。") },
     onBack: { action: "onBack", description: bi("The function runs when the user returns to the start view. The result has `reason: \"back\"`.", "用户回到起始视图时会调用这个函数。结果里的 `reason` 是 `\"back\"`。") },
@@ -47,7 +47,7 @@ export const Default = {
   },
   render: function ReportCopilotStory(args) {
     const projectKey = COCKPIT.projects[args.project] ? args.project : "city";
-    const reportIndex = Math.min(Math.max(Number(args.index) || 0, 0), COCKPIT.projects[projectKey].reports.length - 1);
+    const reportIndex = Math.min(Math.max(Math.round(Number(args.index)) || 0, 0), COCKPIT.projects[projectKey].reports.length - 1);
     const report = COCKPIT.projects[projectKey].reports[reportIndex];
     const profile = copilotProfile(COCKPIT.projects, COPILOT, projectKey, reportIndex);
     const [open, setOpen] = useSynced(args.open);

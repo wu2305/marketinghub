@@ -35,7 +35,7 @@ export const SelfService = {
   argTypes: {
     hrefFor: { control: false, description: bi("Set `hrefFor` to turn a route id into an href. The story and the host each supply this function.", "用 `hrefFor` 把路由 id 转成 href。故事和宿主各自提供这个函数。") },
     tab: enumProp(SELF_SERVICE.tabs.map(({ id }) => id), "analysis", bi("Active section. Values are analysis and upload.", "当前分区。取值是 analysis 和 upload。"), "inline-radio"),
-    category: { control: "inline-radio", options: ["all", "dg", "dc"], description: bi("Active filter pill. `all` shows every card in the tab.", "当前筛选胶囊。`all` 显示该标签下的全部卡片。") },
+    category: { control: "inline-radio", options: ["all", "dg", "dc"], description: bi("Active filter pill. `all` shows every card in the tab. In this story the arg sets the Analysis tab only. The Upload tab keeps its own filter, which starts at `all`.", "当前筛选胶囊。`all` 显示该标签下的全部卡片。本故事里这个 arg 只设置 Analysis 标签；Upload 标签有自己的筛选，初始为 `all`。") },
     onNavigate: { action: "onNavigate", description: bi("The function runs when a link opens another page. The result has `id`, `params`, and `href`.", "链接要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。") },
     onTabChange: { action: "onTabChange", description: bi("The function runs when the user selects Analysis or Data Upload. The result has `id` and `label`.", "用户选择 Analysis 或 Data Upload 时，会调用这个函数。结果里有 `id` 和 `label`。") },
     onCategoryChange: { action: "onCategoryChange", description: bi("The function runs when the user selects a filter pill. The result has `id` and `label`.", "用户选择筛选胶囊时，会调用这个函数。结果里有 `id` 和 `label`。") },

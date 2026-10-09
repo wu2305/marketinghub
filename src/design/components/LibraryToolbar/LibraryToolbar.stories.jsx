@@ -1,16 +1,55 @@
+import React from "react";
 import { LibraryToolbar } from "./index.jsx";
-import { callbackProp, prop, bi } from "../../lib/story-helpers.js";
+import { callbackProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 const facets = [
   { id: "status", label: "Status", allLabel: "All statuses", options: [{ id: "Enable", label: "Enabled" }, { id: "Disable", label: "Disabled" }, { id: "Draft", label: "Draft" }], selected: [] },
   { id: "domain", label: "Domain", allLabel: "All domains", options: [{ id: "Sales", label: "Sales" }, { id: "CRM", label: "CRM" }, { id: "Retail", label: "Retail" }], selected: [] },
 ];
 
+/* The toolbar is controlled: it shows only the values it is given. This story
+   host keeps them in state, so typing, ticking a box, choosing an option and
+   switching a tab all stick. The Actions panel still logs every change. The
+   host would also recompute `count` from its filtered data; here it stays as
+   the story arg. Changing a Control resets the state. */
+function ToolbarStory(args) {
+  const [search, setSearch] = useSynced(args.search?.value ?? "");
+  const initialSelected = React.useMemo(
+    () => Object.fromEntries((args.facets || []).map((facet) => [facet.id, facet.selected ?? (facet.kind === "single" ? "" : [])])),
+    [args.facets],
+  );
+  const [selected, setSelected] = useSynced(initialSelected);
+  const [tab, setTab] = useSynced(args.tabs?.value);
+  const handleChange = (event) => {
+    if (event.field === "search") setSearch(event.value);
+    else if (event.field === "tab") setTab(event.value);
+    else {
+      setSelected((current) => ({
+        ...current,
+        [event.field]: event.checked === undefined
+          ? event.value
+          : event.checked ? [...(current[event.field] || []), event.value] : (current[event.field] || []).filter((id) => id !== event.value),
+      }));
+    }
+    args.onChange?.(event);
+  };
+  return (
+    <LibraryToolbar
+      {...args}
+      search={{ ...args.search, value: search }}
+      facets={(args.facets || []).map((facet) => ({ ...facet, selected: selected[facet.id] ?? facet.selected }))}
+      tabs={args.tabs ? { ...args.tabs, value: tab } : undefined}
+      onChange={handleChange}
+    />
+  );
+}
+
 export default {
   title: "Organisms/Library/LibraryToolbar",
   component: LibraryToolbar,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: bi("This component is the find row of a governed library. It can show search, filters, a count, a create link, and tabs. Every control change runs `onChange`. The result has `field` and `value`. A checkbox change also has `checked`.", "这个组件是受治理库的查找行。它可以显示搜索、筛选、数量、创建链接和标签。每次控件变化都会调用 `onChange`。结果里有 `field` 和 `value`。复选框变化时还有 `checked`。") } } },
+  parameters: { docs: { description: { component: bi("This component is the find row of a governed library. It can show search, filters, a count, a create link, and tabs. Every control change runs `onChange`. The result has `field` and `value`. A checkbox change also has `checked`. The toolbar is controlled: it shows only the values you pass in. In these stories a small story host keeps the values, so changes stay on screen, and the Actions panel logs each event. A real host also filters its data and updates `count`.", "这个组件是受治理库的查找行。它可以显示搜索、筛选、数量、创建链接和标签。每次控件变化都会调用 `onChange`。结果里有 `field` 和 `value`。复选框变化时还有 `checked`。工具栏是受控组件：它只显示你传入的值。在这些故事里，由一个小的故事宿主保存这些值，所以修改会留在画面上，Actions 面板会记录每个事件。真实的宿主还要筛选数据并更新 `count`。") } } },
+  render: (args) => <ToolbarStory {...args} />,
   args: {
     search: { label: "Search business terms", placeholder: "Search terms or synonyms", value: "" },
     facets,
