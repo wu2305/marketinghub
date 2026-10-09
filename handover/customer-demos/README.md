@@ -21,6 +21,15 @@ to it is a different job (`handover/design-sync/README.md`); do that first if bo
   way they do in Storybook's `Pages` stories. The business behind them is simulated with fixed, local
   answers (the `useXxxDemo` hooks from `marketing-hub/demo`). Nothing is saved or sent anywhere.
 
+## The all-pages demo
+
+`examples/demos/showcase/` is the whole product as one demo site: all 17 pages, wired as in the standalone host.
+Build it with `npm run demo build showcase` to see (or show) every page working together. It is also the quickest
+starting point for a customer demo that needs most pages: `npm run demo new <name>`, then copy the `XxxRoute`
+functions and route lines you need from `showcase/App.jsx` instead of from `examples/host/main.jsx`.
+`showcase/showcase.test.jsx` opens every page, every Cockpit project and dashboard, every Interpreter type and every
+create form, and runs one assistant exchange, so a page that crashes on open or after one click fails `npm test`.
+
 ## Commands
 
 ```

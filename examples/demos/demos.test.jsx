@@ -36,7 +36,8 @@ describe.each(Object.entries(apps))("%s", (_file, { App }) => {
     const hrefs = [...new Set([...container.querySelectorAll("nav a[href^='#/']")].map((a) => a.getAttribute("href")))];
     for (const href of hrefs) {
       await go(href);
-      expect(container.querySelector("h1")?.textContent, href).toBeTruthy();
+      /* A page names itself with a top heading; the Campaign workspace has no h1, its rail title is an h2. */
+      expect(container.querySelector("h1, h2")?.textContent, href).toBeTruthy();
       expect(container.textContent, href).not.toContain("not part of this demo");
     }
   });
