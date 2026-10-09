@@ -9,7 +9,7 @@ display: flex;
 .mh-chip-list__label {
 flex: 0 0 auto;
   padding-top: var(--mh-space-1);
-  color: var(--mh-text-faint);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }
