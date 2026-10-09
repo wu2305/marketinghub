@@ -1,7 +1,7 @@
 import React from "react";
 import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { SearchField } from "../../components/SearchField/index.jsx";
-import { Switch } from "../../components/Switch/index.jsx";
+import { Switch } from "../../features/metric-dictionary/Switch/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";

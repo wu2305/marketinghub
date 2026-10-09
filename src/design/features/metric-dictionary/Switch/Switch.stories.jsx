@@ -1,17 +1,17 @@
 import React from "react";
 import { Switch } from "./index.jsx";
-import { prop, callbackProp, bi } from "../../lib/story-helpers.js";
+import { prop, callbackProp, bi } from "../../../lib/story-helpers.js";
 
 export default {
-  title: "Atoms/Switch",
+  title: "Features/Metric Dictionary/Switch",
   component: Switch,
   tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
         component: bi(
-          "A switch turns one setting on or off, and the change applies right away. It is a native checkbox with a switch track on top, so the keyboard and screen readers work as they do for any checkbox. The visible text sits next to the switch in your own markup. Pass `label` for the accessible name.\n\n**When to use.** Use it for a setting such as \"Participate in Q&A\" or \"Enable Metric\". Use a checkbox when the choice only counts after a Submit. **Used in:** Metric Dictionary and the Derived Metric drawer.",
-          "开关用来打开或关闭一项设置，改变立即生效。它是原生复选框，上面叠了一层开关轨道，所以键盘和读屏行为与普通复选框一致。可见文字由你自己的标记放在开关旁边，用 `label` 提供可访问名称。\n\n**何时使用。** 用于“Participate in Q&A”“Enable Metric”这类设置。如果选择要提交后才生效，请用复选框。**使用位置：** Metric Dictionary 与 Derived Metric 抽屉。",
+          "A switch turns one setting on or off, and the change applies right away. It is a native checkbox with a switch track on top, so the keyboard and screen readers work as they do for any checkbox. The visible text sits next to the switch in your own markup. Pass `label` for the accessible name.\n\n**When to use.** Use it for a setting such as \"Participate in Q&A\" or \"Enable Metric\". Use a checkbox when the choice only counts after a Submit. **Used in:** the Metric Dictionary page and the Derived Metric drawer. It lives with this page until a second page needs it.",
+          "开关用来打开或关闭一项设置，改变立即生效。它是原生复选框，上面叠了一层开关轨道，所以键盘和读屏行为与普通复选框一致。可见文字由你自己的标记放在开关旁边，用 `label` 提供可访问名称。\n\n**何时使用。** 用于“Participate in Q&A”“Enable Metric”这类设置。如果选择要提交后才生效，请用复选框。**使用位置：** Metric Dictionary 页面与 Derived Metric 抽屉。第二个页面需要它之前，它留在本页的功能目录中。",
         ),
       },
     },

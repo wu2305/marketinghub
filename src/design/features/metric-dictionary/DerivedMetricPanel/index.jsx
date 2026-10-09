@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
-import { Switch } from "../../../components/Switch/index.jsx";
+import { Switch } from "../Switch/index.jsx";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import "./DerivedMetricPanel.css";
 
