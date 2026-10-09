@@ -83,33 +83,14 @@ function MultiPicker({ name, label, options, value = [], onChange, open, onMenu,
 }
 
 function Toggle({ name, label, checked, onChange }) { return <label className="mh-kcf__toggle"><input type="checkbox" checked={Boolean(checked)} onChange={(e) => onChange?.({ name, value: e.target.checked })} /><i aria-hidden="true" /><span>{label}</span></label>; }
-/**
- * A failed Save or Publish moves focus to the first invalid control, as the
- * original analytical-model-form.js does. Fixing a field (the list only
- * shrinks) or typing elsewhere (the host keeps the same list) leaves focus
- * alone, and the first render never moves it.
- */
-function useFocusFirstInvalid(rootRef, invalid) {
-  const previous = React.useRef(null);
-  React.useEffect(() => {
-    const before = previous.current;
-    previous.current = invalid;
-    if (before === null || before === invalid || !invalid.length) return;
-    if (invalid.length < before.length && invalid.every((name) => before.includes(name))) return;
-    rootRef.current?.querySelector('[aria-invalid="true"]')?.focus();
-  }, [invalid, rootRef]);
-}
-
 /** Flat Analytical Model form: metrics offered depend on the chosen business domains. */
 function AnalysisFields({ content, values, invalid, menu, onChange, onMenu }) {
-  const rootRef = React.useRef(null);
-  useFocusFirstInvalid(rootRef, invalid);
   const t = content.copy;
   const a = content.analysis;
   const domains = Array.isArray(values.businessDomain) ? values.businessDomain : [];
   const metrics = a.metrics.filter((metric) => metric.domains.some((domain) => domains.includes(domain))).map((metric) => metric.name);
   const field = (name, label, extra) => <Field errorText={a.errors[name]} name={name} label={label} value={values[name] || ""} onChange={onChange} textarea wide invalid={invalid.includes(name)} {...extra} />;
-  return <div className="mh-kcf__analysis" ref={rootRef}>
+  return <div className="mh-kcf__analysis">
     {field("analysis_name", t.analysisName, { textarea: false, required: true, placeholder: content.placeholders.analysisName })}
     {field("description", t.description, { placeholder: content.placeholders.analysisDescription })}
     <div className="mh-kcf__analysis-scope">
@@ -134,6 +115,8 @@ function SharedFields({ type, content, values, onChange, menu, onMenu }) { const
 
 function MetricFields({ content, values, invalid, onChange, onDialog }) {
   const t = content.copy;
+  const formulaErrorId = `${React.useId()}-formula-error`;
+  const formulaInvalid = invalid.includes("metricFormula");
   // The last source renderer locks its contentEditable formula surface. Metrics
   // are whole tokens, including names with spaces such as "Visit Count".
   const tokens = values.metricTokens ?? (values.metricFormula ? [{ kind: "operator", value: values.metricFormula }] : []);
@@ -145,7 +128,7 @@ function MetricFields({ content, values, invalid, onChange, onDialog }) {
   return <div className="mh-kcf__metric"><div>
     <Field errorText={t.required} name="metricDomain" label={t.metricDomain} value={values.metricDomain || ""} onChange={onChange} select={[{ value: "", label: content.placeholders.metricDomain }, ...content.options.metricDomains]} />
     <div className="mh-kcf__grid"><Field errorText={t.required} name="metricName" label={t.metricName} value={values.metricName || ""} onChange={onChange} required invalid={invalid.includes("metricName")} placeholder={content.placeholders.metricName} /><Field errorText={t.required} name="unit" label={t.unit} value={values.unit || ""} onChange={onChange} placeholder={content.placeholders.unit} /></div>
-    <div className="mh-kcf__field"><span>{t.formula} <b className="mh-kcf__required">*</b></span><div className="mh-kcf__formula" role="textbox" aria-label={t.formula} aria-readonly="true" tabIndex={-1}>{tokens.length ? tokens.map((token, index) => <span className={token.kind === "metric" ? "mh-kcf__formula-token" : "mh-kcf__formula-operator"} key={`${index}:${token.value}`}>{token.value}{token.kind === "metric" && <button type="button" aria-label={`${t.removeMetric} ${token.value}`} onClick={() => setTokens(tokens.filter((_, i) => i !== index))}>×</button>}</span>) : <em>{content.placeholders.formula}</em>}</div>{invalid.includes("metricFormula") && <small className="mh-kcf__error">{t.formulaRequired}</small>}</div>
+    <div className="mh-kcf__field"><span>{t.formula} <b className="mh-kcf__required">*</b></span><div className="mh-kcf__formula" role="textbox" aria-label={t.formula} aria-readonly="true" aria-required="true" aria-invalid={formulaInvalid || undefined} aria-describedby={formulaInvalid ? formulaErrorId : undefined} tabIndex={-1}>{tokens.length ? tokens.map((token, index) => <span className={token.kind === "metric" ? "mh-kcf__formula-token" : "mh-kcf__formula-operator"} key={`${index}:${token.value}`}>{token.value}{token.kind === "metric" && <button type="button" aria-label={`${t.removeMetric} ${token.value}`} onClick={() => setTokens(tokens.filter((_, i) => i !== index))}>×</button>}</span>) : <em>{content.placeholders.formula}</em>}</div>{formulaInvalid && <small className="mh-kcf__error" id={formulaErrorId}>{t.formulaRequired}</small>}</div>
     <div className="mh-kcf__formula-tools">{content.metricOperators.map((op) => <button type="button" key={op} onClick={() => append(op, "operator")}>{op}</button>)}<button type="button" aria-label="Clear formula" onClick={() => setTokens([])}>⌫</button><button type="button" aria-label="Delete last token" onClick={() => setTokens(tokens.slice(0, -1))}>←</button></div>
     <small>{t.formulaHint}</small>
     <div className="mh-kcf__test"><b>{t.testRun}</b><p>{t.testHint}</p><button type="button" onClick={() => onDialog?.({ kind: "test" })}>{t.test}</button></div>
@@ -204,15 +187,17 @@ function SynonymFields({ content, values, invalid, onChange }) {
   const rows = values.synonymRows || [];
   const { existing, kinds, headers, choices } = content.synonyms;
   const t = content.copy;
+  /* Once a submit failed, the empty required cells are the invalid ones. */
+  const missing = (cell) => (invalid.includes("synonymRows") && !cell?.trim() ? true : undefined);
   const changeRow = (index, key, value) => onChange?.({ name: "synonymRows", value: rows.map((row, i) => i === index ? { ...row, [key]: value } : row) });
   const addRow = () => onChange?.({ name: "synonymRows", value: [{ term: "", synonym: "", kind: "", domain: [], reports: [], dataset: [], status: content.options.synonymStatuses[0] }, ...rows] });
   return <section className="mh-kcf__synonyms">
     <header><div><h2>{t.synonymManagement}</h2><p>{t.synonymIntro}</p></div><button type="button" onClick={addRow}>+ {t.addSynonym}</button></header>
     <div className="mh-kcf__table-scroll"><table><thead><tr>{headers.map((head) => <th key={head}>{head}</th>)}</tr></thead><tbody>
       {rows.map((row, index) => <tr key={index} className={invalid.includes("synonymRows") ? "is-invalid" : ""}>
-        <td><input aria-label={t.standardTerm} required placeholder={t.standardTerm} value={row.term} onChange={(e) => changeRow(index, "term", e.target.value)} /></td>
-        <td><input aria-label={t.synonyms} required placeholder={t.synonyms} value={row.synonym} onChange={(e) => changeRow(index, "synonym", e.target.value)} /></td>
-        <td><select aria-label={t.termType} required value={row.kind} onChange={(e) => changeRow(index, "kind", e.target.value)}><option value="">{t.select}</option>{kinds.map((kind) => <option key={kind}>{kind}</option>)}</select></td>
+        <td><input aria-label={t.standardTerm} required aria-invalid={missing(row.term)} placeholder={t.standardTerm} value={row.term} onChange={(e) => changeRow(index, "term", e.target.value)} /></td>
+        <td><input aria-label={t.synonyms} required aria-invalid={missing(row.synonym)} placeholder={t.synonyms} value={row.synonym} onChange={(e) => changeRow(index, "synonym", e.target.value)} /></td>
+        <td><select aria-label={t.termType} required aria-invalid={missing(row.kind)} value={row.kind} onChange={(e) => changeRow(index, "kind", e.target.value)}><option value="">{t.select}</option>{kinds.map((kind) => <option key={kind}>{kind}</option>)}</select></td>
         <td><SynonymScope label={t.applicableDomain} options={choices.domain} value={row.domain} onChange={(value) => changeRow(index, "domain", value)} placeholder={t.selectMany} /></td>
         <td><SynonymScope label={t.scopeReports} options={choices.reports} value={row.reports} onChange={(value) => changeRow(index, "reports", value)} placeholder={t.selectMany} /></td>
         <td><SynonymScope label={t.relatedDatasets} options={choices.dataset} value={row.dataset} onChange={(value) => changeRow(index, "dataset", value)} placeholder={t.selectMany} /></td>

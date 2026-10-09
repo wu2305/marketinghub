@@ -505,6 +505,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-09 — 新建表单校验失败后聚焦首个无效控件
+
+来自 `/design interaction` 报告的 C 项。对照 main 7941699：#118 只给 Analytical Model 加了“聚焦首个无效控件 + 错误文字 `aria-describedby`”，其余 Knowledge Create 表单（Business Term、Principles、Report Context、Scenario、Data Model、Metric Dictionary、Synonyms）失败后焦点不动。本次把 `useFocusFirstInvalid` 从 `KnowledgeCreateFields` 提到 `lib/focus-first-invalid.js`，由 `KnowledgeCreatePage` 对整张卡片使用，所有类型共用同一规则（失败提交才移动；改正字段或在别处输入不抢焦点；首次渲染不移动）。Metric 公式框补 `aria-invalid`、`aria-required`、`aria-describedby`（指向“请先构建公式”），Synonyms 在提交失败后给空的必填单元格标 `aria-invalid`，焦点即落在第一个空格。没有采用报告的 `role="alert"`：每个错误都已与控件关联，焦点移到首个无效控件时读出其错误，五个 alert 同时播报反而嘈杂。外观无变化。执行者：Claude。
+
 ### 2026-10-09 — 用户确认撤下八个旧页面
 
 本轮用户取消 MetricDictionaryPage, PersonalMemoryPage, ReviewCenterPage, ScenarioDetailPage, ScenarioEditPage, ScenarioLibraryPage, KnowledgeViewPage, FeedbackQualityPage。从最新 origin/main 迁移已验收的清理：Storybook注册及 Pages Docs清单共用撤下名单，移除166个页面状态和8个文档；保留源码及共享组件。页面清单保留9页，最新构建331 stories + 87 docs，门槛同步调整（最新主版本另有既有新增示例）。此为明确产品范围缩减，不恢复旧页面。
