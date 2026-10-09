@@ -3,6 +3,7 @@ import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { SearchField } from "../../components/SearchField/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
+import { Icon } from "../../icons.jsx";
 import { DerivedMetricPanel } from "../../features/metric-dictionary/DerivedMetricPanel/index.jsx";
 import { Shell } from "../Shell/index.jsx";
 import "./MetricDictionaryPage.css";
@@ -70,14 +71,14 @@ export function MetricDictionaryPage({
           </div>
           <div className="mh-metric-page__actions">
             {metric?.status ? <StatusBadge status={metric.status} size="lg" tone={metric.status === "Draft" ? "warning" : "auto"} /> : null}
-            <button type="button" className="mh-metric-page__action">✎ {header.edit}</button>
-            <button type="button" className="mh-metric-page__action mh-metric-page__action--primary" onClick={onOpen}>＋ {header.add}</button>
+            <button type="button" className="mh-metric-page__action"><Icon name="edit-square" />{header.edit}</button>
+            <button type="button" className="mh-metric-page__action mh-metric-page__action--primary" onClick={onOpen}><Icon name="plus" />{header.add}</button>
           </div>
         </header>
         <section className="mh-metric-page__banner">
-          <div className="mh-metric-page__banner-icon" aria-hidden="true">◇</div>
+          <div className="mh-metric-page__banner-icon" aria-hidden="true"><Icon name="layers" /></div>
           <div className="mh-metric-page__banner-copy"><div><strong>{header.bannerTitle}</strong><span>{header.beta}</span></div><p>{header.bannerDescription}</p></div>
-          <button type="button">◇ {header.smartDefinition}</button>
+          <button type="button"><Icon name="layers" />{header.smartDefinition}</button>
         </section>
         <div className="mh-metric-page__layout">
           <aside className="mh-metric-page__sidebar">
@@ -88,14 +89,14 @@ export function MetricDictionaryPage({
             <div className="mh-metric-page__list">
               {visible.length ? visible.map((entry) => <button type="button" key={entry.id} className={entry.id === metric?.id ? "is-active" : ""} onClick={() => onSelect?.({ id: entry.id })}><strong>{entry.name}</strong><small>{entry.owner} · {entry.unit}</small></button>) : <div className="mh-metric-page__empty">{sidebar.empty}</div>}
             </div>
-            <footer className="mh-metric-page__sidebar-foot"><small>{sidebar.sourceLabel}</small><div><strong>{sidebar.sourceName}</strong><span>{sidebar.sourceStatus}</span></div><p>⟳ {sidebar.sync}</p></footer>
+            <footer className="mh-metric-page__sidebar-foot"><small>{sidebar.sourceLabel}</small><div><strong>{sidebar.sourceName}</strong><span>{sidebar.sourceStatus}</span></div><p><Icon name="refresh" />{sidebar.sync}</p></footer>
           </aside>
           <section className="mh-metric-page__detail" aria-label={metric?.name}>
             <header className="mh-metric-page__detail-head">
               <div className="mh-metric-page__detail-tabs">
                 {metricDetailTabs.map((item) => <button key={item} type="button" className={tab === item ? "is-active" : ""} aria-pressed={tab === item} onClick={() => onTabChange?.({ tab: item })}>{detail.tabs[item]}{item === "formula" ? ` · ${detail.formulaCount}` : item === "dimensions" ? ` · ${detail.dimensions.length}` : ""}</button>)}
               </div>
-              <button type="button" className="mh-metric-page__preview">◎ {detail.preview}</button>
+              <button type="button" className="mh-metric-page__preview"><Icon name="eye" />{detail.preview}</button>
             </header>
             <div className="mh-metric-page__content" hidden={tab !== "definition"}>
               <div className="mh-metric-page__definition-grid">
