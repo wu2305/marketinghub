@@ -16,12 +16,16 @@ function Field({ name, label, value = "", onChange, invalid, required, placehold
      with one is a div and its control carries the label text itself. */
   const Wrap = help ? "div" : "label";
   const accessible = help ? label : undefined;
+  /* The error text is tied to its control (aria-describedby), and a required
+     control says so to assistive technology, as the original form does. */
+  const errorId = React.useId();
+  const describedBy = invalid ? errorId : undefined;
   return <Wrap className={`mh-kcf__field${wide ? " mh-kcf__field--wide" : ""}${invalid ? " is-invalid" : ""}`}>
     <span className="mh-kcf__label"><span>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>{help}</span>
-    {select ? <Select name={name} value={value} options={select} onChange={onChange} invalid={invalid} />
-      : textarea ? <TextArea name={name} rows={rows || 3} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} label={accessible} />
-      : <TextInput name={name} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} label={accessible} />}
-    {children}{invalid && <small className="mh-kcf__error">{errorText}</small>}
+    {select ? <Select name={name} value={value} options={select} onChange={onChange} invalid={invalid} required={required} describedBy={describedBy} />
+      : textarea ? <TextArea name={name} rows={rows || 3} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} required={required} describedBy={describedBy} label={accessible} />
+      : <TextInput name={name} value={value} placeholder={placeholder} onChange={onChange} invalid={invalid} required={required} describedBy={describedBy} label={accessible} />}
+    {children}{invalid && <small className="mh-kcf__error" id={errorId}>{errorText}</small>}
   </Wrap>;
 }
 
@@ -65,7 +69,7 @@ function MultiPicker({ name, label, options, value = [], onChange, open, onMenu,
   const message = query ? noMatchText : emptyText;
   return <div ref={rootRef} className={`mh-kcf__field mh-kcf__multi${invalid ? " is-invalid" : ""}`} onKeyDown={keyDown} onBlur={(event) => { if (open && event.relatedTarget && !rootRef.current?.contains(event.relatedTarget)) close(); }}>
     <span className="mh-kcf__label"><span id={`${id}-label`}>{label}{required && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span>{help}</span>
-    <button ref={triggerRef} type="button" className="mh-kcf__multi-trigger" aria-labelledby={`${id}-label`} aria-expanded={Boolean(open)} aria-controls={`${id}-menu`} aria-invalid={invalid || undefined} disabled={disabled}
+    <button ref={triggerRef} type="button" className="mh-kcf__multi-trigger" aria-labelledby={`${id}-label`} aria-expanded={Boolean(open)} aria-controls={`${id}-menu`} aria-required={required || undefined} aria-invalid={invalid || undefined} aria-describedby={invalid ? `${id}-error` : undefined} disabled={disabled}
       onClick={() => { setQuery(""); onMenu?.({ name }); }}>
       {selected.length ? selected.map((item) => <span className="mh-kcf__multi-value" key={item}>{item}</span>) : <em>{placeholder}</em>}
     </button>
@@ -74,19 +78,38 @@ function MultiPicker({ name, label, options, value = [], onChange, open, onMenu,
       <div className="mh-kcf__multi-options">{shown.map((option) => <label key={option}><input type="checkbox" checked={selected.includes(option)} onChange={() => toggle(option)} />{option}</label>)}</div>
       {!shown.length && message && <p className="mh-kcf__multi-empty" role="status">{message}</p>}
     </div>}
-    {invalid && <small className="mh-kcf__error">{errorText}</small>}
+    {invalid && <small className="mh-kcf__error" id={`${id}-error`}>{errorText}</small>}
   </div>;
 }
 
 function Toggle({ name, label, checked, onChange }) { return <label className="mh-kcf__toggle"><input type="checkbox" checked={Boolean(checked)} onChange={(e) => onChange?.({ name, value: e.target.checked })} /><i aria-hidden="true" /><span>{label}</span></label>; }
+/**
+ * A failed Save or Publish moves focus to the first invalid control, as the
+ * original analytical-model-form.js does. Fixing a field (the list only
+ * shrinks) or typing elsewhere (the host keeps the same list) leaves focus
+ * alone, and the first render never moves it.
+ */
+function useFocusFirstInvalid(rootRef, invalid) {
+  const previous = React.useRef(null);
+  React.useEffect(() => {
+    const before = previous.current;
+    previous.current = invalid;
+    if (before === null || before === invalid || !invalid.length) return;
+    if (invalid.length < before.length && invalid.every((name) => before.includes(name))) return;
+    rootRef.current?.querySelector('[aria-invalid="true"]')?.focus();
+  }, [invalid, rootRef]);
+}
+
 /** Flat Analytical Model form: metrics offered depend on the chosen business domains. */
 function AnalysisFields({ content, values, invalid, menu, onChange, onMenu }) {
+  const rootRef = React.useRef(null);
+  useFocusFirstInvalid(rootRef, invalid);
   const t = content.copy;
   const a = content.analysis;
   const domains = Array.isArray(values.businessDomain) ? values.businessDomain : [];
   const metrics = a.metrics.filter((metric) => metric.domains.some((domain) => domains.includes(domain))).map((metric) => metric.name);
   const field = (name, label, extra) => <Field errorText={a.errors[name]} name={name} label={label} value={values[name] || ""} onChange={onChange} textarea wide invalid={invalid.includes(name)} {...extra} />;
-  return <div className="mh-kcf__analysis">
+  return <div className="mh-kcf__analysis" ref={rootRef}>
     {field("analysis_name", t.analysisName, { textarea: false, required: true, placeholder: content.placeholders.analysisName })}
     {field("description", t.description, { placeholder: content.placeholders.analysisDescription })}
     <div className="mh-kcf__analysis-scope">

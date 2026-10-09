@@ -16,6 +16,8 @@ import "./Select.css";
  * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false]
+ * @param {boolean} [props.required=false] native required attribute
+ * @param {string} [props.describedBy] id of the element that describes the field, for example its error message
  * @param {"sm"|"md"|"lg"} [props.size="md"]
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {(event: { name: string, value: string }) => void} [props.onChange]
@@ -29,6 +31,8 @@ export function Select({
   autoComplete,
   disabled = false,
   invalid = false,
+  required = false,
+  describedBy,
   size = "md",
   label,
   onChange,
@@ -44,7 +48,9 @@ export function Select({
       value={current}
       autoComplete={autoComplete}
       disabled={disabled}
+      required={required || undefined}
       aria-invalid={invalid || undefined}
+      aria-describedby={describedBy}
       aria-label={label}
       onChange={(event) => {
         if (!controlled) setUncontrolled(event.target.value);

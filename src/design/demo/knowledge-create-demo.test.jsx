@@ -392,6 +392,34 @@ describe("P08 demo flow", () => {
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ id: "interpreter", params: { type: "Analytical Model" } }));
   });
 
+  it("Analytical Model: a failed submit focuses the first invalid control and ties each error to its field", () => {
+    function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model" })} />; }
+    const { container } = render(<Test />);
+    const name = container.querySelector('[name="analysis_name"]');
+    const trigger = container.querySelector('[name="trigger_when"]');
+    const domain = screen.getByRole("button", { name: /Business Domain/ });
+    // required controls say so, and nothing is invalid or described yet
+    for (const control of [name, trigger, domain]) expect(control.required || control.getAttribute("aria-required") === "true", control.outerHTML.slice(0, 60)).toBe(true);
+    expect(name.getAttribute("aria-describedby")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
+    expect(document.activeElement).toBe(name);
+    for (const control of [name, trigger, domain, container.querySelector('[name="output_requirements"]')]) {
+      expect(control.getAttribute("aria-invalid")).toBe("true");
+      const message = document.getElementById(control.getAttribute("aria-describedby"));
+      expect(message?.classList.contains("mh-kcf__error")).toBe(true);
+    }
+    expect(document.getElementById(name.getAttribute("aria-describedby")).textContent).toBe("Analysis name is required.");
+    // fixing the first field, or typing in one that was fine, does not move focus
+    fireEvent.change(name, { target: { value: "Revenue Drop" } });
+    trigger.focus();
+    fireEvent.change(container.querySelector('[name="description"]'), { target: { value: "Notes" } });
+    expect(document.activeElement).toBe(trigger);
+    expect(name.getAttribute("aria-describedby")).toBeNull();
+    // a second failed submit moves focus to the first field that is still invalid
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
+    expect(document.activeElement).toBe(domain);
+  });
+
   it("Analytical Model: Save Draft says the model stays disabled", () => {
     const save = vi.fn();
     function Test() { return <KnowledgeCreatePage {...useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Analytical Model", initial: { analysis_name: "A", businessDomain: ["4P"], trigger_when: "T", output_requirements: "O" }, onSave: save })} />; }

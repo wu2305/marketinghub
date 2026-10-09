@@ -1,7 +1,7 @@
 # Page recipes: adding a page to a customer demo
 
-`examples/host/main.jsx` wires all 17 pages and is checked by `scripts/host-check.mjs`. A demo reuses that
-wiring. To add a page, copy the route function named below from `examples/demos/showcase/App.jsx` (already converted; or from `examples/host/main.jsx`, then convert it with this table) into the demo's `App.jsx`
+`examples/host/main.jsx` wires every page the repository builds (17, nine current and eight retired, see the
+table) and is checked by `scripts/host-check.mjs`. A demo reuses that wiring. To add a page, copy the route function named below from `examples/demos/showcase/App.jsx` (already converted; or from `examples/host/main.jsx`, then convert it with this table) into the demo's `App.jsx`
 and change these, everywhere they appear:
 
 | in `examples/host/main.jsx` | in a demo |
@@ -20,36 +20,36 @@ Get `router` with `const router = useRouter();` (imported from `../_kit/router.j
 function. The route function receives `{ params }` (the query of the URL) when it has parameters.
 `examples/demos/_template/App.jsx` has three finished examples.
 
-| page id | page component | demo hook | route function in the host | URL params |
-|---|---|---|---|---|
-| `home` | `HomePage` | `useHomeDemo` | `HomeRoute` | |
-| `cockpit` | `MarketingCockpitPage` | `useCockpitDemo` | `CockpitRoute` | `project`, `view` (`catalog`/`live`), `dashboard` |
-| `self-service` | `SelfServicePage` | `useSelfServiceDemo` | `SelfServiceRoute` | `tab` (`analysis`/`upload`) |
-| `data-upload` | `DataUploadPage` | `useDataUploadDemo` | `DataUploadRoute` | |
-| `media-tracking-detail` | `MediaTrackingDetailPage` | `useMediaTrackingDemo` | `MediaTrackingRoute` | |
-| `campaign` | `CampaignPage` | `useCampaignDemo` | `CampaignRoute` | |
-| `interpreter` | `AiInterpreterPage` | `useInterpreterDemo` | `InterpreterRoute` | `type`, `detail`, `notice` |
-| `knowledge-create` | `KnowledgeCreatePage` | `useKnowledgeCreateDemo` | `KnowledgeCreateRoute` | `type`, `mode`, `id`, `copy` |
-| `knowledge-view` | `KnowledgeViewPage` | `useKnowledgeViewDemo` | `KnowledgeViewRoute` | `id` |
-| `metric-dictionary` | `MetricDictionaryPage` | `useMetricDictionaryDemo` | `MetricDictionaryRoute` | |
-| `data-model` | `DataModelPage` | `useDataModelPageDemo` | `DataModelRoute` | see the route |
-| `review-center` | `ReviewCenterPage` | `useReviewCenterDemo` | `ReviewCenterRoute` | |
-| `feedback-quality` | `FeedbackQualityPage` | `useFeedbackQualityDemo` | `FeedbackQualityRoute` | |
-| `personal-memory` | `PersonalMemoryPage` | `usePersonalMemoryDemo` | `PersonalMemoryRoute` | |
-| `scenario-library` | `ScenarioLibraryPage` | `useSkillLibraryDemo` | `ScenarioLibraryRoute` | `notice` |
-| `scenario-detail` | `ScenarioDetailPage` | `useScenarioDetailDemo` | `ScenarioDetailRoute` | `id` |
-| `scenario-edit` | `ScenarioEditPage` | `useScenarioEditDemo` | `ScenarioEditRoute` | `id` |
+| page id | page component | demo hook | route function in the host | URL params | status |
+|---|---|---|---|---|---|
+| `home` | `HomePage` | `useHomeDemo` | `HomeRoute` | | current |
+| `cockpit` | `MarketingCockpitPage` | `useCockpitDemo` | `CockpitRoute` | `project`, `dashboard` (set: the live report opens; `view` is carried in the URL but not read) | current |
+| `self-service` | `SelfServicePage` | `useSelfServiceDemo` | `SelfServiceRoute` | `tab` (`analysis`/`upload`) | current |
+| `data-upload` | `DataUploadPage` | `useDataUploadDemo` | `DataUploadRoute` | | current |
+| `media-tracking-detail` | `MediaTrackingDetailPage` | `useMediaTrackingDemo` | `MediaTrackingRoute` | | current |
+| `campaign` | `CampaignPage` | `useCampaignDemo` | `CampaignRoute` | | current |
+| `interpreter` | `AiInterpreterPage` | `useInterpreterDemo` | `InterpreterRoute` | `type`, `detail`, `notice` | current |
+| `knowledge-create` | `KnowledgeCreatePage` | `useKnowledgeCreateDemo` | `KnowledgeCreateRoute` | `type`, `mode`, `id`, `copy` | current |
+| `knowledge-view` | `KnowledgeViewPage` | `useKnowledgeViewDemo` | `KnowledgeViewRoute` | `id` | retired, no story |
+| `metric-dictionary` | `MetricDictionaryPage` | `useMetricDictionaryDemo` | `MetricDictionaryRoute` | | retired, no story |
+| `data-model` | `DataModelPage` | `useDataModelPageDemo` | `DataModelRoute` | see the route | current |
+| `review-center` | `ReviewCenterPage` | `useReviewCenterDemo` | `ReviewCenterRoute` | | retired, no story |
+| `feedback-quality` | `FeedbackQualityPage` | `useFeedbackQualityDemo` | `FeedbackQualityRoute` | | retired, no story |
+| `personal-memory` | `PersonalMemoryPage` | `usePersonalMemoryDemo` | `PersonalMemoryRoute` | | retired, no story |
+| `scenario-library` | `ScenarioLibraryPage` | `useSkillLibraryDemo` | `ScenarioLibraryRoute` | `notice` | retired, no story |
+| `scenario-detail` | `ScenarioDetailPage` | `useScenarioDetailDemo` | `ScenarioDetailRoute` | `id` | retired, no story |
+| `scenario-edit` | `ScenarioEditPage` | `useScenarioEditDemo` | `ScenarioEditRoute` | `id` | retired, no story |
 
 The `knowledge-view` and `data-model` route functions also fix up the URL (`replaceState`). In a demo, pass the `id`
 from `params` and skip the redirect code unless a link you include needs it.
 
 The governance pages (`review-center`, `feedback-quality`, `personal-memory`, `scenario-library`, `scenario-detail`,
-`scenario-edit`) carry their own secondary links to each other and to `interpreter`. Include the whole family, or accept that
+`scenario-edit`) are retired (no Storybook story, not part of the current product). If a brief still needs one, they carry their own secondary links to each other and to `interpreter`. Include the whole family, or accept that
 those links show "This page is not part of this demo".
 
 ## Where to look things up
 
-- What a page or component accepts and emits: its story in Storybook (`Pages`, `Organisms`, `Features/...`:
+- What a page or component accepts and emits: its story in Storybook (`Pages` for the nine current pages; `Organisms`, `Features/...`:
   Controls and Actions), the JSDoc above the component in `src/design/**`, and the exports of
   `src/design/index.js`.
 - What content looks like: the default constants in `src/design/content.js` and `src/design/demo/content/*.js`

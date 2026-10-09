@@ -8,7 +8,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component is one metric block. It shows a label and a number. It can also show a supporting line.\n\n**When to use.** Use this component for one headline figure. `glass` sits on the header image. `card` sits on a plain surface. **Used in:** the header image area of Home, AI Interpreter, Review Center, Feedback & Quality, Skill Library, Scenario Detail, and Skill Edit. Also used in Campaign.", "这个组件是一个指标块。它显示标签和数值，也可以显示一行说明。\n\n**何时使用。** 需要一个核心数字时用这个组件。`glass` 放在头图上。`card` 放在普通底色上。**使用位置：** Home、AI Interpreter、Review Center、Feedback & Quality、Skill Library、Scenario Detail、Skill Edit 的头图区，以及 Campaign。"),
+        component: bi("This component is one metric block. It shows a label and a number. It can also show a supporting line.\n\n**When to use.** Use this component for one headline figure. `glass` sits on the header image. `card` sits on a plain surface. **Used in:** the header image area of Home and AI Interpreter. Also used in Campaign. **Retired pages (source kept, not in Storybook):** the header image area of Review Center, Feedback & Quality, Skill Library, Scenario Detail, and Skill Edit.", "这个组件是一个指标块。它显示标签和数值，也可以显示一行说明。\n\n**何时使用。** 需要一个核心数字时用这个组件。`glass` 放在头图上。`card` 放在普通底色上。**使用位置：** Home 与 AI Interpreter 的头图区，以及 Campaign。**已撤下的页面（源码保留，不在 Storybook 中）：**Review Center、Feedback & Quality、Skill Library、Scenario Detail 与 Skill Edit 的头图区。"),
       },
     },
   },

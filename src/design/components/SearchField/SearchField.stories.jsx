@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component is a labelled search field. The icon can sit at the start, at the end, or be omitted.\n\n**When to use.** Use this component for free-text search over a list or a page. The container filters the data at each change. **Used in:** Marketing Cockpit, Campaign, Metric Dictionary, Data Model, Knowledge View, Review Center, Feedback & Quality, Skill Library, and the knowledge libraries on AI Interpreter.", "这个组件是带标签的搜索框。图标可以放在前面、后面，也可以不显示。\n\n**何时使用。** 对列表或页面做自由文本搜索。容器在每次变化时过滤数据。**使用位置：** Marketing Cockpit、Campaign、Metric Dictionary、Data Model、Knowledge View、Review Center、Feedback & Quality、Skill Library，以及 AI Interpreter 上的各知识库。"),
+        component: bi("This component is a labelled search field. The icon can sit at the start, at the end, or be omitted.\n\n**When to use.** Use this component for free-text search over a list or a page. The container filters the data at each change. **Used in:** Marketing Cockpit, Campaign, Data Model, and the knowledge libraries on AI Interpreter. **Retired pages (source kept, not in Storybook):** Metric Dictionary, Knowledge View, Review Center, Feedback & Quality, and Skill Library.", "这个组件是带标签的搜索框。图标可以放在前面、后面，也可以不显示。\n\n**何时使用。** 对列表或页面做自由文本搜索。容器在每次变化时过滤数据。**使用位置：** Marketing Cockpit、Campaign、Data Model，以及 AI Interpreter 上的各知识库。**已撤下的页面（源码保留，不在 Storybook 中）：**Metric Dictionary、Knowledge View、Review Center、Feedback & Quality 与 Skill Library。"),
       },
     },
   },

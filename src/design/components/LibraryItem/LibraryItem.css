@@ -111,7 +111,7 @@ display: flex;
 }
 
 .mh-library-item__meta dt {
-color: var(--mh-text-faint);
+color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }

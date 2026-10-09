@@ -15,6 +15,8 @@ import "./TextInput.css";
  * @param {string} [props.autoComplete]
  * @param {boolean} [props.disabled=false]
  * @param {boolean} [props.invalid=false] adds aria-invalid and error styling
+ * @param {boolean} [props.required=false] native required attribute
+ * @param {string} [props.describedBy] id of the element that describes the field, for example its error message
  * @param {"sm"|"md"|"lg"} [props.size="md"]
  * @param {string} [props.label] accessible label (visually hidden)
  * @param {React.Ref<HTMLInputElement>} [props.inputRef] forwarded to the input
@@ -29,6 +31,8 @@ export function TextInput({
   autoComplete,
   disabled = false,
   invalid = false,
+  required = false,
+  describedBy,
   size = "md",
   label,
   inputRef,
@@ -47,7 +51,9 @@ export function TextInput({
       placeholder={placeholder}
       autoComplete={autoComplete}
       disabled={disabled}
+      required={required || undefined}
       aria-invalid={invalid || undefined}
+      aria-describedby={describedBy}
       aria-label={label}
       onChange={(event) => {
         if (!controlled) setUncontrolled(event.target.value);

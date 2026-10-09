@@ -57,7 +57,7 @@ const pageNames = Object.keys(import.meta.glob("../src/design/pages/*/*.docs.mdx
 function DocumentationPage() {
   const { preparedMeta } = useOf("meta", ["meta"]);
   if (preparedMeta.title !== "Pages") return <DocsPage />;
-  return <><h1>Page components · 页面组件</h1><p>Open a page to see its inputs, callbacks, and a working preview. Named states stay in the Pages story list.</p><p>打开一个页面，查看它的输入、回调和可运行的预览。各命名状态仍在 Pages 故事列表中。</p><ul>{pageNames.map((name) => <li key={name}><a href={`./?path=/docs/pages--${name.toLowerCase()}`} target="_top">{name}</a></li>)}</ul></>;
+  return <><h1>Page components · 页面组件</h1><p>Open a page to see its inputs, callbacks, and a working preview. Named states stay in the Pages story list.</p><p>打开一个页面，查看它的输入、回调和可运行的预览。各命名状态仍在 Pages 故事列表中。</p><ul>{pageNames.map((name) => <li key={name}><a href={`./?path=/docs/pages--${name.toLowerCase()}`} target="_top">{name}</a></li>)}</ul><p>Building a demo for a customer? Read the <a href="https://github.com/wu2305/marketinghub/blob/main/handover/customer-demos/designer-guide.md" target="_blank" rel="noreferrer">designer guide</a>. · 要为客户做演示？请阅读<a href="https://github.com/wu2305/marketinghub/blob/main/handover/customer-demos/designer-guide.md" target="_blank" rel="noreferrer">设计师指南</a>。</p></>;
 }
 
 /** @type { import('@storybook/react-vite').Preview } */

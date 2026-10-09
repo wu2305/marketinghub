@@ -56,7 +56,7 @@ const initialValues = {
  * exception to Submit → Under Review: its form says "Publish & Enable", so Submit
  * is `Published` and enabled (v22 bundle; see change note 2026-09-30-v22-bundle Q1).
  * Its Save Draft / Publish show a result dialog whose dismissal returns to the
- * library, and Cancel with unsaved changes asks to discard first.
+ * library, and Cancel returns to the list; only Analytical Model asks to discard unsaved changes first.
  * @param {Record<string, any>} options
  */
 export function useKnowledgeCreateDemo({
@@ -86,7 +86,8 @@ export function useKnowledgeCreateDemo({
       /* Referenced metrics must belong to a chosen business domain. */
       ...(name === "businessDomain" && type === "Analytical Model" ? { metrics: (prior.metrics || []).filter((metric) => availableMetrics(value).includes(metric)) } : {}),
     }));
-    setInvalid((prior) => prior.filter((item) => item !== name));
+    /* Keep the same list when the field was not invalid, so only a real change (or a new failed submit) looks different to the form. */
+    setInvalid((prior) => prior.includes(name) ? prior.filter((item) => item !== name) : prior);
   };
   const selectType = ({ value }) => {
     setType(value); setValues({ ...initialValues }); setInvalid([]); setResult(null); setDialog(null);

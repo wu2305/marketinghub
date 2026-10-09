@@ -15,7 +15,7 @@ display: grid;
 
 .mh-btview__detail dt {
 margin-top: var(--mh-space-4);
-  color: var(--mh-text-faint);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
