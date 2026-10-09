@@ -68,6 +68,24 @@ describe("consumer-built Marketing Cockpit", () => {
     expect(copilotOpen()).toBe(false);
   });
 
+  it("the Copilot thread follows its report: kept across close and reopen, gone when another report opens", () => {
+    render(<CockpitApp data={altData} />);
+    openLive();
+    fireEvent.click(launcher());
+    fireEvent.click([...document.querySelectorAll(".mh-copilot__rec")][1]);
+    expect(screen.getByText("Alt standard answer title")).toBeTruthy();
+    fireEvent.click(within(copilot()).getByRole("button", { name: /Close AI workspace/i }));
+    fireEvent.click(launcher());
+    expect(screen.getByText("Alt standard answer title")).toBeTruthy();
+    // leave for the library and open the project's other report
+    fireEvent.click(screen.getByRole("link", { name: /Report library/i }));
+    fireEvent.click(screen.getAllByRole("link", { name: /Alt Weekly Digest/ })[0]);
+    expect(copilotOpen()).toBe(false);
+    fireEvent.click(launcher());
+    expect(screen.queryByText("Alt standard answer title")).toBeNull();
+    expect(screen.getByText("Alt digest pick")).toBeTruthy();
+  });
+
   it("the two assistants keep separate state: an answer in one never shows in the other", () => {
     render(<CockpitApp data={altData} />);
     // ask the workspace assistant on the catalog, then open a live report
