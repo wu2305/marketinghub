@@ -25,3 +25,9 @@ position: fixed;
     transform: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .mh-toast {
+    animation: none;
+  }
+}

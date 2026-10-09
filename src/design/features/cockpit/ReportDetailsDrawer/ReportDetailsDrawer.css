@@ -28,6 +28,12 @@ position: fixed;
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .mh-details {
+    animation: none;
+  }
+}
+
 .mh-details.is-fullscreen {
 width: 100vw;
   max-width: 100vw;
