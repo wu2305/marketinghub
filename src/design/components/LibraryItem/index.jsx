@@ -16,6 +16,7 @@ import "./LibraryItem.css";
  * @param {boolean} [props.selected=false] the item the surrounding view currently shows (pattern §6 selected/active); sets `aria-current` on the title button
  * @param {string} [props.draftLabel="Draft"]
  * @param {string} [props.description] clamped to two lines
+ * @param {React.ReactNode} [props.leading] a small mark before the content (an avatar or initial), for list rows such as Personal Memory
  * @param {Array<{ label: string, value: React.ReactNode }>} [props.meta=[]]
  * @param {{ status: string, tone?: string, label?: string }} [props.status] StatusBadge content
  * @param {object} [props.actions] ItemActions props without `id`/`name`/`onAction` (omit to hide)
@@ -23,15 +24,16 @@ import "./LibraryItem.css";
  * @param {(event: { id: string }) => void} [props.onOpen]
  * @param {(event: { action: string, id: string, blocked: boolean, reason: string|null }) => void} [props.onAction]
  */
-export function LibraryItem({ id, title, draft = false, selected = false, draftLabel = "Draft", description, meta = [], status, actions, children, onOpen, onAction }) {
+export function LibraryItem({ id, title, draft = false, selected = false, draftLabel = "Draft", description, leading, meta = [], status, actions, children, onOpen, onAction }) {
   return (
     <article
-      className={cx("mh-library-item", selected && "mh-library-item--selected")}
+      className={cx("mh-library-item", selected && "mh-library-item--selected", leading && "mh-library-item--leading")}
       onClick={(event) => {
         if (event.target.closest("a, button, input, select, textarea, label, summary")) return;
         onOpen?.({ id });
       }}
     >
+      {leading ? <span className="mh-library-item__leading" aria-hidden="true">{leading}</span> : null}
       <header className="mh-library-item__head">
         <h3 className="mh-library-item__title">
           <button type="button" aria-current={selected || undefined} onClick={() => onOpen?.({ id })}>{title}</button>

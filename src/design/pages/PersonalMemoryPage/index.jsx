@@ -42,6 +42,7 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
   const items = (memory.items || []).map((item) => ({
     id: item.id,
     title: item.title,
+    leading: item.title?.[0]?.toUpperCase(),
     description: item.description,
     selected: memory.selected?.id === item.id,
     meta: [{ label: labels.source, value: item.source }, { label: labels.updated, value: item.updated }],
@@ -56,7 +57,7 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
         {memory.bannerOpen && <div className="mh-memory-page__banner"><span className="mh-memory-page__banner-icon"><Icon name="info" /></span><div><strong>{labels.bannerTitle}</strong><span>{labels.bannerDescription}</span></div><button type="button" aria-label={labels.closeBanner} onClick={() => memory.onCloseBanner?.()}><Icon name="close" /></button></div>}
         <div className="mh-memory-page__tabs" role="tablist" aria-label={labels.listAria}>{categories.map((option) => <button key={option.value} type="button" role="tab" aria-selected={memory.category === option.value} onClick={() => memory.onCategoryChange?.({ value: option.value })}>{option.label} <span>{memory.counts?.[option.value] ?? 0}</span></button>)}<button ref={createButtonRef} type="button" className="mh-memory-page__new" onClick={() => create.onOpen?.()}><Icon name="plus" />{labels.newMemory}</button></div>
         <MemoryWorkspace selected={memory.selected} editing={memory.editing} draft={memory.draft} labels={labels} onEdit={memory.onEdit} onDelete={memory.onDelete} onDraftChange={memory.onDraftChange} onCancelEdit={memory.onCancelEdit} onSaveEdit={memory.onSaveEdit} onShare={memory.onShare}>
-          <LibraryList label={labels.listAria} layout="cards" items={items} empty={{ kind: "empty", title: labels.emptyList, message: labels.emptyListPrompt }} onOpen={memory.onSelect} onAction={({ action, id }) => (action === "edit" ? memory.onEdit : memory.onDelete)?.({ id })} />
+          <LibraryList label={labels.listAria} layout="list" items={items} empty={{ kind: "empty", title: labels.emptyList, message: labels.emptyListPrompt }} onOpen={memory.onSelect} onAction={({ action, id }) => (action === "edit" ? memory.onEdit : memory.onDelete)?.({ id })} />
         </MemoryWorkspace>
       </main>
     </div>
