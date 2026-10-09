@@ -512,6 +512,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-09 — Codex 复核：故事示例与回调说明（第 6 项）
+
+对 main 181d6ac 核实，两条都成立。(1) `LibraryItem` 的 With leading badge 故事继承了 meta 级的 `variant: "knowledge"`，而 knowledge 变体是纵向 flex 布局，左侧徽标无处可放；左侧徽标是列表行（Personal Memory，默认变体）的用法。故事显式使用 `variant: "default"`，`leading` 的中英文说明补上“与 default 变体一起使用”；不去支持 knowledge + leading 组合（没有真实使用者）。(2) Tabs 的 `onChange` 说明只写“点击”，但 #121 起方向键、Home、End 也会选中并触发；中英文改为说明点击（或在获得焦点的标签上按 Enter/空格）和键盘移动都会调用，组件说明也补了键盘模型。新增 `story-contracts.test.js`：断言 Tabs 说明含键盘移动（中英文），并断言每个带 `leading` 的 LibraryItem 故事解析后都是 default 变体。受影响故事（人工审图已推迟）：Organisms/Library/LibraryItem（With leading badge）、Molecules/Tabs。执行者：Claude。
+
 ### 2026-10-09 — 手机端文本输入 16px
 
 来自 `/design interaction` 报告的 A 项。报告的补丁按 16 个文件逐个追加 `@media` 块；对 main 7941699 重新测量（390px 宽、全部 story 的可见文本输入）发现仍有遗漏（Model Flow 对话框文本域、Skill 搜索框、Data Model 表单、Report Edit 文本域等），逐文件修补会随新组件继续漏。改为 `tokens.css` 的 `@scope` 重置块里一条 `@media (max-width: 760px)` 规则：除复选框/单选框/文件等不触发缩放的类型外，`input`、`select`、`textarea` 的 `font-size` 为 `--mh-font-size-xl` 并带 `!important`（组件规则优先级更高，且这是下限规则）。作用域与原重置相同：不影响宿主页面自己的控件，也不进入 `data-mh-slot` 内部。已登记有意差异。执行者：Claude。

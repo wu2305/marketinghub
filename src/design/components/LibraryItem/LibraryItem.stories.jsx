@@ -33,7 +33,7 @@ Styles: \`src/design/components/LibraryItem/LibraryItem.css\`. Shared values: \`
     title: prop("string", { description: bi("Item name. It is also the open button.", "条目名称。它也是打开按钮。") }),
     draft: prop("boolean", { defaultValue: false, description: bi("Set this if the Draft marker shows.", "如果要显示 Draft 标记，就设置这个值。") }),
     selected: prop("boolean", { defaultValue: false, description: bi("Set this if this item is the one the view currently shows. Data Model uses this for the current domain.", "如果这是视图当前展示的条目，就设置这个值。Data Model 用它表示当前域。") }),
-    leading: prop("React.ReactNode", { description: bi("Short mark shown in a round badge at the left of the card, such as the initial of the title. Personal Memory uses it.", "显示在卡片左侧圆形徽标里的简短标记，例如标题的首字母。Personal Memory 使用它。") }),
+    leading: prop("React.ReactNode", { description: bi("Short mark shown in a round badge at the left of the card, such as the initial of the title. Personal Memory uses it. Use it with the `default` variant: the `knowledge` variant stacks the card in a column and has no room for a left badge.", "显示在卡片左侧圆形徽标里的简短标记，例如标题的首字母。Personal Memory 使用它。请与 `default` 变体一起使用：`knowledge` 变体把卡片竖向排列，没有放置左侧徽标的位置。") }),
     description: prop("string", { description: bi("Text under the title. The text is limited to two lines.", "标题下方的文字。最多显示两行。") }),
     meta: prop("Array<{ label, value, secondary? }>", { description: bi("Ordered label/value rows; secondary places another field in the same row.", "描述下方有序排列的标签和值；secondary 将另一字段放在同一行。") }),
     status: prop("{ status, tone?, label? }", { description: bi("Content for the status label.", "状态标签的内容。") }),
@@ -49,7 +49,8 @@ export const Enabled = {};
 export const Disabled = { args: toItem(records[0]) };
 export const Draft = { args: toItem(records[2]) };
 export const OtherCreator = { name: "Created by others", args: toItem(records[3]) };
-export const WithLeadingBadge = { name: "With leading badge", args: { ...toItem(records[1]), leading: "A" } };
+// The badge belongs to list rows (Personal Memory) in the default variant; the knowledge variant stacks the card in a column.
+export const WithLeadingBadge = { name: "With leading badge", args: { ...toItem(records[1]), variant: "default", leading: "A" } };
 export const Selected = { args: { ...toItem(records[1]), actions: undefined, selected: true } };
 export const ReadOnly = { name: "Without actions", args: { ...toItem(records[1]), actions: undefined } };
 export const WithExtraContent = {
