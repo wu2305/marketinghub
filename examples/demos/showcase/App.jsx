@@ -1,7 +1,9 @@
-/* The whole product as one demo site: all 17 pages, wired the way the
- * standalone host wires them (examples/host/main.jsx). Use it to see every page
- * working together, or copy it as the starting point of a customer demo that
- * needs most of the pages; remove the routes the story does not visit.
+/* Reference site with every page the repository still builds, wired the way the
+ * standalone host wires them (examples/host/main.jsx): the nine current pages
+ * plus the eight pages retired on 2026-10-09 (knowledge-view, metric-dictionary,
+ * review-center, feedback-quality, personal-memory, scenario-library,
+ * scenario-detail, scenario-edit), which have no Storybook story. Copy it as the
+ * starting point of a customer demo and keep the current pages the story needs.
  * Which pages exist: handover/customer-demos/page-recipes.md. */
 import React from "react";
 import {

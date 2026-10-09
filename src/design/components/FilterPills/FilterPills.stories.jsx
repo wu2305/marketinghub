@@ -14,7 +14,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component is a group of filter pills. The user can select one pill.\n\n**When to use.** Use this component for a short, always-visible choice that filters what is shown. One pill is active at a time. For a longer list, or for more than one choice, use CheckboxFilter. **Used in:** Self-Service Center.", "这个组件是一组筛选胶囊。用户只能选中其中一个。\n\n**何时使用。** 用于筛选当前显示内容的、简短且始终可见的单选项。同一时间只有一个胶囊处于选中。选项较多或需要多选时，请用 CheckboxFilter。**使用位置：** Self-Service Center。"),
+        component: bi("This component is a group of filter pills. The user can select one pill.\n\n**When to use.** Use this component for a short, always-visible choice that filters what is shown. One pill is active at a time. For a longer single-choice list, use Select. When users may select several options, use CheckboxFilter. **Used in:** Self-Service Center.", "这个组件是一组筛选胶囊。用户只能选中其中一个。\n\n**何时使用。** 用于筛选当前显示内容的、简短且始终可见的单选项。同一时间只有一个胶囊处于选中。单选项较多时用 Select；允许同时选择多项时用 CheckboxFilter。**使用位置：** Self-Service Center。"),
       },
     },
   },

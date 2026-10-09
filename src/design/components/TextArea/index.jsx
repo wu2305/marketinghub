@@ -15,6 +15,7 @@ import "./TextArea.css";
  * @property {boolean} [disabled=false]
  * @property {boolean} [invalid=false]
  * @property {boolean} [required=false] native required attribute
+ * @property {string} [describedBy] id of the element that describes the field, for example its error message
  * @property {string} [label] accessible label (visually hidden)
  * @property {(event: { name: string, value: string }) => void} [onChange]
  * @property {(event: React.KeyboardEvent<HTMLTextAreaElement>) => void} [onKeyDown]
@@ -35,6 +36,7 @@ export const TextArea = React.forwardRef(function TextArea({
   disabled = false,
   invalid = false,
   required = false,
+  describedBy,
   label,
   onChange,
   onKeyDown,
@@ -54,6 +56,7 @@ export const TextArea = React.forwardRef(function TextArea({
       disabled={disabled}
       required={required}
       aria-invalid={invalid || undefined}
+      aria-describedby={describedBy}
       aria-label={label}
       onKeyDown={onKeyDown}
       onChange={(event) => {

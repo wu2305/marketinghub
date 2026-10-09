@@ -13,7 +13,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component is a tab strip. The element has role `tablist`. A tab can be disabled.\n\n**When to use.** Use this component to switch between sibling views on the same page. Exactly one view is visible at a time. To filter a list by one choice, use FilterPills. **Used in:** Media Tracking Detail, Campaign, Self-Service Center, Review Center, and Feedback & Quality.", "这个组件是标签页条。元素的 role 是 `tablist`。标签页可以禁用。\n\n**何时使用。** 在同一页面的并列视图之间切换，同一时间只显示一个视图。若只是按单一选项筛选列表，请用 FilterPills。**使用位置：** Media Tracking Detail、Campaign、Self-Service Center、Review Center 与 Feedback & Quality。"),
+        component: bi("This component is a tab strip. The element has role `tablist`. A tab can be disabled.\n\n**When to use.** Use this component to switch between sibling views on the same page. Exactly one view is visible at a time. To filter a list by one choice, use FilterPills. **Used in:** Media Tracking Detail, Campaign, and Self-Service Center. **Retired pages (source kept, not in Storybook):** Review Center and Feedback & Quality.", "这个组件是标签页条。元素的 role 是 `tablist`。标签页可以禁用。\n\n**何时使用。** 在同一页面的并列视图之间切换，同一时间只显示一个视图。若只是按单一选项筛选列表，请用 FilterPills。**使用位置：** Media Tracking Detail、Campaign 与 Self-Service Center。**已撤下的页面（源码保留，不在 Storybook 中）：**Review Center 与 Feedback & Quality。"),
       },
     },
   },

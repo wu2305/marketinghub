@@ -21,7 +21,7 @@ display: grid;
 .mh-flview__section h3,
 .mh-flview__rc-heading {
 margin: 0 0 var(--mh-space-3);
-  color: var(--mh-text-faint);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-xs);
   font-weight: var(--mh-font-weight-bold);
   letter-spacing: 0.04em;
@@ -57,7 +57,7 @@ display: flex;
 }
 
 .mh-flview__detail-meta dt {
-color: var(--mh-text-faint);
+color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }
@@ -161,7 +161,7 @@ display: flex;
 
 .mh-flview__rc-meta > div > span:first-child {
 min-width: 150px;
-  color: var(--mh-text-faint);
+  color: var(--mh-text-muted);
   font-size: var(--mh-font-size-sm);
   font-weight: var(--mh-font-weight-bold);
 }

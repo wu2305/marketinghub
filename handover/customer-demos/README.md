@@ -23,10 +23,15 @@ to it is a different job (`handover/design-sync/README.md`); do that first if bo
 
 ## The all-pages demo
 
-`examples/demos/showcase/` is the whole product as one demo site: all 17 pages, wired as in the standalone host.
-Build it with `npm run demo build showcase` to see (or show) every page working together. It is also the quickest
-starting point for a customer demo that needs most pages: `npm run demo new <name>`, then copy the `XxxRoute`
-functions and route lines you need from `showcase/App.jsx` instead of from `examples/host/main.jsx`.
+`examples/demos/showcase/` is a reference site with every page the repository still builds: the nine current pages
+and eight pages the product owner retired on 2026-10-09 (`knowledge-view`, `metric-dictionary`, `review-center`,
+`feedback-quality`, `personal-memory`, `scenario-library`, `scenario-detail`, `scenario-edit`). The retired pages
+keep their source and tests but have no Storybook story, and they are not part of the current product. Build the
+showcase with `npm run demo build showcase` to see every page working together. For a customer demo, start from
+the **nine current pages** (`home`, `cockpit`, `self-service`, `data-upload`, `media-tracking-detail`, `campaign`,
+`interpreter`, `knowledge-create`, `data-model`): `npm run demo new <name>`, then copy the `XxxRoute` functions and
+route lines you need from `showcase/App.jsx` instead of from `examples/host/main.jsx`. Add a retired page only when
+the designer's brief asks for it and she confirms it.
 `showcase/showcase.test.jsx` opens every page, every Cockpit project and dashboard, every Interpreter type and every
 create form, and runs one assistant exchange, so a page that crashes on open or after one click fails `npm test`.
 

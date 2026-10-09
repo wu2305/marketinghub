@@ -10,8 +10,8 @@ export default {
     docs: {
       description: {
         component: bi(
-          "A switch turns one setting on or off, and the change applies right away. It is a native checkbox with a switch track on top, so the keyboard and screen readers work as they do for any checkbox. The visible text sits next to the switch in your own markup. Pass `label` for the accessible name.\n\n**When to use.** Use it for a setting such as \"Participate in Q&A\" or \"Enable Metric\". Use a checkbox when the choice only counts after a Submit. **Used in:** the Metric Dictionary page and the Derived Metric drawer. It lives with this page until a second page needs it.",
-          "开关用来打开或关闭一项设置，改变立即生效。它是原生复选框，上面叠了一层开关轨道，所以键盘和读屏行为与普通复选框一致。可见文字由你自己的标记放在开关旁边，用 `label` 提供可访问名称。\n\n**何时使用。** 用于“Participate in Q&A”“Enable Metric”这类设置。如果选择要提交后才生效，请用复选框。**使用位置：** Metric Dictionary 页面与 Derived Metric 抽屉。第二个页面需要它之前，它留在本页的功能目录中。",
+          "A switch turns one setting on or off, and the change applies right away. It is a native checkbox with a switch track on top, so the keyboard and screen readers work as they do for any checkbox. The visible text sits next to the switch in your own markup. Pass `label` for the accessible name.\n\n**When to use.** Use it for a setting such as \"Participate in Q&A\" or \"Enable Metric\". Use a checkbox when the choice only counts after a Submit. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** the Metric Dictionary page and the Derived Metric drawer. It lives with that page until a second page needs it.",
+          "开关用来打开或关闭一项设置，改变立即生效。它是原生复选框，上面叠了一层开关轨道，所以键盘和读屏行为与普通复选框一致。可见文字由你自己的标记放在开关旁边，用 `label` 提供可访问名称。\n\n**何时使用。** 用于“Participate in Q&A”“Enable Metric”这类设置。如果选择要提交后才生效，请用复选框。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：** Metric Dictionary 页面与 Derived Metric 抽屉。第二个页面需要它之前，它留在该页的功能目录中。",
         ),
       },
     },

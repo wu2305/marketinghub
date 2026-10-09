@@ -28,7 +28,7 @@ request (simplest: Claude Code on the web). If your agent can't run `npm` comman
 
 - **A demo shows the product, it is not the product.** Everything is simulated: the assistant gives fixed
   answers, nothing is saved, and numbers don't come from real data. That's on purpose.
-- **Pages look and behave exactly as in Storybook.** The demo is assembled from existing components, so it
+- **Pages look and behave exactly as in Storybook.** This covers the nine current pages. Eight pages were retired on 2026-10-09 and have no Storybook story any more (Review Center, Feedback & Quality, Personal Memory, Skill Library, Skill Detail, Skill Edit, Metric Dictionary and Knowledge View); the agent only adds one if you ask for it. The demo is assembled from existing components, so it
   can't be restyled one-off. If the customer needs a look we don't have, the agent writes it down as a gap,
   and Wu decides whether to add it to the components. Change it there once and every demo gets it.
 - **Only the pages you pick exist.** The top menu and the Home cards show just those.
