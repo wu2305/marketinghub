@@ -1,4 +1,6 @@
 import "../../tokens.css";
+import React from "react";
+import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import { Header } from "../../components/Header/index.jsx";
 import { Button } from "../../components/Button/index.jsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog/index.jsx";
@@ -42,6 +44,8 @@ export function KnowledgeCreatePage({
   hrefFor, onNavigate, onTypeChange, onChange, onSave, onSubmit, onCancel, onDiscard, onResultClose, onDialog, onDialogClose, onMenu,
 }) {
   const labels = content.labels;
+  const cardRef = React.useRef(null);
+  useFocusFirstInvalid(cardRef, invalid);
   const isTerm = type === "Business Term";
   const isAnalysis = type === "Analytical Model";
   const isScenario = type === "Scenario Reporting";
@@ -76,7 +80,7 @@ export function KnowledgeCreatePage({
         <b>{isAnalysis && mode === "edit" ? values.analysis_name || title : title}</b>
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
-      <section className="mh-kcreate__card">
+      <section className="mh-kcreate__card" ref={cardRef}>
         {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={Array.isArray(values.synonyms) ? values.synonyms : []} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={cancel} onSave={save} onSubmit={submit} />
           : <>
             {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
