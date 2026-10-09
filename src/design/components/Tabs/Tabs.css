@@ -3,6 +3,7 @@ display: flex;
   align-items: center;
   gap: 24px;
   border-bottom: 1px solid var(--mh-line);
+  overflow-x: auto;
 }
 
 .mh-tabs__tab {
@@ -15,6 +16,7 @@ padding: 8px 4px;
   font-size: var(--mh-font-size-lg);
   font-weight: var(--mh-font-weight-bold);
   cursor: pointer;
+  flex: none;
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
