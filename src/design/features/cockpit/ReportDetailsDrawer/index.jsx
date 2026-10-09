@@ -67,7 +67,7 @@ export function ReportDetailsDrawer({
       <div data-mh-overlay-scrim className="mh-details-scrim" onClick={() => onClose?.({ reason: "scrim" })} />
       <aside data-mh-overlay-surface ref={layerRef} className={cx("mh-details", fullscreen && "is-fullscreen")} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
         <header className="mh-details__head">
-          <div>
+          <div className="mh-details__titles">
             <span>{eyebrow}</span>
             <strong>{projectLabel}</strong>
           </div>
