@@ -1,5 +1,6 @@
+import { Button } from "../Button/index.jsx";
 import { ConfirmDialog, confirmDialogPurposes } from "./index.jsx";
-import { callbackProp, enumProp, prop, bi } from "../../lib/story-helpers.js";
+import { callbackProp, enumProp, prop, useSynced, bi } from "../../lib/story-helpers.js";
 
 export default {
   title: "Organisms/Confirm dialog",
@@ -9,7 +10,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is a confirmation dialog or a notice dialog. `confirm` is a neutral confirm. `info` has one Close action. `warning` marks risk. `danger` marks deletion. Overlay, focus, and Escape come from Modal.", "这个组件是确认对话框或通知对话框。`confirm` 是中性确认。`info` 只有一个 Close 操作。`warning` 强调风险。`danger` 强调删除。遮罩、焦点和 Escape 由 Modal 提供。"),
+          bi("This component is a confirmation dialog or a notice dialog. `confirm` is a neutral confirm. `info` has one Close action. `warning` marks risk. `danger` marks deletion. Overlay, focus, and Escape come from Modal. `open` is host state: the dialog only calls `onCancel` or `onConfirm`, and the host sets `open` to false. In these stories the story host closes the dialog on every callback and shows an Open dialog button to bring it back.", "这个组件是确认对话框或通知对话框。`confirm` 是中性确认。`info` 只有一个 Close 操作。`warning` 强调风险。`danger` 强调删除。遮罩、焦点和 Escape 由 Modal 提供。`open` 是宿主的状态：对话框只会调用 `onCancel` 或 `onConfirm`，由宿主把 `open` 设为 false。在这些故事里，由故事宿主在每次回调时关闭对话框，并显示一个 Open dialog 按钮用来重新打开。"),
       },
     },
   },
@@ -34,7 +35,27 @@ export default {
     onCancel: callbackProp("onCancel", "(event: { reason: string }) => void", { reason: "cancel" }, bi("The function runs when the dialog closes. Cancel, Close, the dimmed area, or Escape all close it. `reason` is `cancel`, `close`, `scrim`, or `escape`.", "对话框关闭时调用这个函数。Cancel、Close、点击遮罩或 Escape 都会关闭。`reason` 是 `cancel`、`close`、`scrim` 或 `escape`。")),
   },
   render: function ConfirmDialogStory(args) {
-    return <ConfirmDialog {...args} />;
+    /* `open` is host state: the dialog only reports why it wants to close.
+       This story host closes it on every callback and offers a button to open
+       it again. The `open` Control sets the starting value. */
+    const [open, setOpen] = useSynced(args.open);
+    return (
+      <>
+        <Button variant="secondary" onClick={() => setOpen(true)}>Open dialog</Button>
+        <ConfirmDialog
+          {...args}
+          open={open}
+          onConfirm={(event) => {
+            setOpen(false);
+            args.onConfirm?.(event);
+          }}
+          onCancel={(event) => {
+            setOpen(false);
+            args.onCancel?.(event);
+          }}
+        />
+      </>
+    );
   },
 };
 

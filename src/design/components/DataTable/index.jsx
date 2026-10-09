@@ -13,7 +13,8 @@ const cellLabel = (column) => (typeof column.header === "string" ? column.header
  * @param {React.ReactNode} [props.caption] note under the table
  * @param {React.ReactNode} [props.emptyState] shown in place of the rows when `rows` is empty
  * @param {(event: { id: string|number }) => void} [props.onOpen] makes rows openable: the first
- *   cell becomes a button, and a click anywhere on the row outside other controls opens it
+ *   cell becomes a button, and a click anywhere on the row outside other controls opens it;
+ *   the event carries `row.id`, so give each row a stable `id` (the row index is only a React key)
  */
 export function DataTable({ columns = [], rows = [], caption, emptyState, onOpen }) {
   return (

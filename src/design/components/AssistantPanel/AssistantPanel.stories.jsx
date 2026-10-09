@@ -28,6 +28,7 @@ export const AskPanel = {
     onSubmit: { action: "onSubmit", description: bi("The function runs when the user sends a prompt. The result has `prompt`.", "用户发送提示时会调用这个函数。结果里有 `prompt`。") },
     onPromptChange: { action: "onPromptChange", description: bi("The function runs at each change in the composer. The result has `name` and `value`.", "输入框每次变化都会调用这个函数。结果里有 `name` 和 `value`。") },
     onSuggestion: { action: "onSuggestion", description: bi("The function runs when the user selects a suggestion. The result has `prompt`.", "用户选择一条建议时会调用这个函数。结果里有 `prompt`。") },
+    onHistorySelect: { action: "onHistorySelect", description: bi("The function runs when the user picks a history item. The result has `label` and `prompt`. This story puts the prompt into the composer.", "用户选择一条历史记录时会调用这个函数。结果里有 `label` 和 `prompt`。本故事会把这条提示词放进输入框。") },
   },
   render: function AskPanelStory(args) {
     const [open, setOpen] = useSynced(args.open);
@@ -57,6 +58,10 @@ export const AskPanel = {
         onSuggestion={(event) => {
           setPrompt(event.prompt);
           args.onSuggestion?.(event);
+        }}
+        onHistorySelect={(event) => {
+          setPrompt(event.prompt);
+          args.onHistorySelect?.(event);
         }}
         onSubmit={(event) => {
           setPrompt("");
