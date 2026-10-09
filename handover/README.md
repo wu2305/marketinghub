@@ -513,6 +513,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-09 — Codex 复核：报告 Copilot 的对话随报告重置、Tabs 选中项被禁用时的 Tab 停靠点
+
+来自 Codex 对 #116–#128 的复核（第 2、3 项，对 main 181d6ac 逐条核实）。(1) `useCockpitDemo` 与 ReportCopilot 故事把回答、对话和输入草稿放在状态里，换报告（Controls 改 project/index，或 Cockpit 回到报告库再打开另一份）后仍显示上一份报告的回答，却配着新报告的档案和来源。新增私有 `demo/use-reset-on-change.js`：报告身份（项目键 + 序号）变化时在渲染期清空这三项；Cockpit 的 Back 也清空；同一份报告里关闭再打开 Copilot 仍保留对话。(2) `Tabs` 的唯一 Tab 停靠点原来给选中项，即使它被禁用（禁用按钮无法聚焦，其余 tab 都是 `tabindex=-1`，键盘到不了）；现在选中项被禁用时落到第一个可用项。回归测试：`cockpit-demo.test.jsx` 三例（改 dashboard、Back 后开另一份、同一份关闭重开），`Tabs.test.jsx` 一例；已确认去掉修复后会失败。受影响故事（人工审图已推迟）：Features/Cockpit/Report Copilot workspace、Pages/Marketing Cockpit（Copilot）、Molecules/Tabs。执行者：Claude。
+
 ### 2026-10-09 — 手机端文本输入 16px
 
 来自 `/design interaction` 报告的 A 项。报告的补丁按 16 个文件逐个追加 `@media` 块；对 main 7941699 重新测量（390px 宽、全部 story 的可见文本输入）发现仍有遗漏（Model Flow 对话框文本域、Skill 搜索框、Data Model 表单、Report Edit 文本域等），逐文件修补会随新组件继续漏。改为 `tokens.css` 的 `@scope` 重置块里一条 `@media (max-width: 760px)` 规则：除复选框/单选框/文件等不触发缩放的类型外，`input`、`select`、`textarea` 的 `font-size` 为 `--mh-font-size-xl` 并带 `!important`（组件规则优先级更高，且这是下限规则）。作用域与原重置相同：不影响宿主页面自己的控件，也不进入 `data-mh-slot` 内部。已登记有意差异。执行者：Claude。

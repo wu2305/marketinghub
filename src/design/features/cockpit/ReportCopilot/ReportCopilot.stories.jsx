@@ -5,6 +5,7 @@ import { COPILOT, KNOWLEDGE_ASSETS } from "../../../demo/report-fixtures.js";
 import { buildCopilotChatEntry, copilotProfile, copilotSkillItems, copilotSources, resolveCopilotAnswer } from "../../../demo/report-demo.js";
 import { buildReportModelDraft } from "../lib/report-logic.js";
 import { useSynced, bi } from "../../../lib/story-helpers.js";
+import { useResetOnChange } from "../../../demo/use-reset-on-change.js";
 import { demoHrefFor } from "../../../demo/navigation.js";
 
 export default {
@@ -55,6 +56,12 @@ export const Default = {
     const [answer, setAnswer] = React.useState(null);
     const [chat, setChat] = React.useState([]);
     const [flow, setFlow] = React.useState(null);
+    // The thread belongs to one report: changing the Controls' project or index starts it over.
+    useResetOnChange(`${projectKey}:${reportIndex}`, () => {
+      setAnswer(null);
+      setChat([]);
+      setPrompt("");
+    });
     return (
       <div style={{ minHeight: 720, background: "#eef1f4" }}>
         <ReportCopilot
