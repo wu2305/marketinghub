@@ -262,7 +262,10 @@ export function useCockpitDemo(props) {
       props.onOpenLive?.(target);
     },
     onBack: (target) => {
+      /* The page opens the live report whenever `dashboard` is set (the
+         original's `?dashboard=`), so Back has to clear it, not just `view`. */
       setProject(target.project);
+      setDashboard(null);
       setView("catalog");
       props.onBack?.(target);
     },

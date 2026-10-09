@@ -51,7 +51,7 @@ export const MarketingCockpit = {
   argTypes: {
     hrefFor: { control: false, description: bi("Set `hrefFor` to turn a route id into an href. The story and the host each supply this function.", "用 `hrefFor` 把路由 id 转成 href。故事和宿主各自提供这个函数。") },
     project: { control: "select", options: ["all", ...Object.keys(args.projects)], description: bi("Active catalog project id, or `\"all\"` for the grouped catalog.", "当前目录项目的 id。分组目录用 `\"all\"`。") },
-    view: enumProp(cockpitViews, "catalog", bi("Catalog or live view. A dashboard index opens the live report.", "目录或实时视图。带仪表盘索引时会打开实时报表。")),
+    view: enumProp(cockpitViews, "catalog", bi("Not read by the page. The live report opens whenever `dashboard` is set, as in the original `?dashboard=` URL, so change `dashboard` to switch views. A host may still pass the URL's `view` value through.", "页面不读取这个值。只要设置了 `dashboard` 就会打开实时报表，和原页面的 `?dashboard=` 一致，所以要切换视图请改 `dashboard`。宿主仍可透传 URL 里的 `view`。"), false),
     dashboard: { control: { type: "number", min: 0, max: 1 }, description: bi("Live report index. When this value is set, the live view opens.", "实时报表索引。设置了这个值就会打开实时视图。") },
     knowledge: { control: false, description: bi("Knowledge assets used for counts, search text, and context links.", "用于计数、搜索文字和上下文链接的知识资产。") },
     cityInvest: { control: false, description: bi("City Invest dashboard data. Required for reports with `embed: \"city-invest\"`.", "City Invest 仪表盘数据。带 `embed: \"city-invest\"` 的报表需要它。") },

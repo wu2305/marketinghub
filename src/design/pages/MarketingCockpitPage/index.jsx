@@ -83,7 +83,7 @@ export const cockpitViews = ["catalog", "live"];
  * @param {Array<{ id: string, label: string }>} [props.groups=[]] Category groups. // 分类分组。
  * @param {Record<string, CockpitProject>} [props.projects={}] Project records keyed by id. // 按 id 索引的项目记录。
  * @param {string} [props.project="all"] Active catalog project id, or `"all"`. // 当前目录项目的 id，或 `"all"`。
- * @param {"catalog"|"live"} [props.view="catalog"] Catalog or live view. A set `dashboard` opens the live report. // 目录或实时视图。设置了 `dashboard` 就会打开实时报表。
+ * @param {"catalog"|"live"} [props.view="catalog"] Not read by the page. The live report opens whenever `dashboard` is set, as in the original `?dashboard=` URL; a host may still pass the URL's `view` value through. // 页面不读取这个值。只要设置了 `dashboard` 就会打开实时报表，和原页面的 `?dashboard=` 一致；宿主仍可透传 URL 里的 `view`。
  * @param {number|string|null} [props.dashboard=null] Live report index. When this value is set, the live view opens. // 实时报表索引。设置了这个值就会打开实时视图。
  * @param {{ project: string, index: number }|null} [props.details=null] Open report details drawer. // 打开的报表详情抽屉。
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.detailsSections=[]] Static drawer asset sections. // 抽屉里的静态资产分区。
