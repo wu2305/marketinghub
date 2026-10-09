@@ -154,3 +154,5 @@
 .mh-kdetail--business .mh-kdetail__table :is(th,td) { padding: 10px; font-size: var(--mh-font-size-xs); }
 .mh-kdetail--scenario .mh-kdetail__field:first-child .mh-kdetail__value { width: 100%; }
 .mh-modal--drawer .mh-kdetail__versions .mh-modal__header { padding: 26px 24px; }
+
+.mh-kdetail__principle header button svg { display: block; width: 18px; height: 18px; margin: 0 auto; }
