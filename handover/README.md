@@ -391,6 +391,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | Project card、Report row、Action card、Workspace card 卡片边缘（原 `assets/css/reports/catalog.css:167,501`、`home/home.css:425`、`self-service/tabs.css:132,201`） | 原页 1px 浅金渐变边起点为 `#fcf5e6`；React 版四张卡统一为 `linear-gradient(180deg, var(--mh-accent-wash), var(--mh-accent-soft))`，起点为 `--mh-accent-wash`（`#fff8df`），终点同为 `#f2d185` | 按同一设计用途归并到基础层现有角色，不为 `#fcf5e6` 新增 token（67 个定义已是预算上限，`foundations.md` §3） | #109 |
 | `PersonalMemoryPage` 列表 | 原 Demo 是单列行（圆形首字母头像 + 标题 + 一行描述 + “来源 · 时间”）；改为 `LibraryList layout="list"` 并经 `LibraryItem` 新增的 `leading` 槽显示首字母徽标，不再是两列卡片。头像用统一的金色 `--mh-accent-wash`，不复刻原 Demo 按条目变化的紫/金色；原 Demo 的 ⋮ 菜单仍由 edit/delete 图标按钮代替；描述最多两行（原为单行截断）。 | 面向客户的演示页需与原始 HTML 相近（Wu 2026-10-09 选择“只改 Personal Memory”）；Review Center / Feedback / Skill Library 保持共享库布局 | 本 PR |
 | 明细/元数据标签颜色（`LibraryItem` meta `dt`、`BusinessTermView` / `ScenarioReportsView` 明细 `dt`、`FieldLibraryView` 明细 `dt`、Report Context 元数据标签与分节标题、`ChipList` 的 “Synonyms” 等标签） | 原页这些 11–13px 标签用浅灰 `#8b949d`（白底约 3.1:1）；React 版改用 `--mh-text-muted`（`#68727c`，约 4.9:1） | `foundations.md` §3 把 `--mh-text-faint` 限定为占位符、禁用态与大号说明文字，可读的元数据用 `--mh-text-muted`；不新增灰色 token。其余 faint 用法（占位符、禁用、图标、徽标说明、kicker）不动（Codex 审阅 #115 第 9 项） | 本 PR |
+| 所有文本输入、下拉与多行输入（`input`、`select`、`textarea`，复选框/单选框除外）在 ≤760px 宽度 | 原 Demo 手机端控件字号为 11–14px（在 iOS Safari 聚焦时会自动放大页面）；React 版统一为 16px（`--mh-font-size-xl`），宽度与行高不变 | iOS Safari 只对小于 16px 的输入聚焦缩放，页面在输入中途被放大会错位；`tokens.css` 一条规则覆盖所有组件和新增组件。手机端的人工审图需重做 | /design interaction 报告 A 项 |
 
 ## 4. 已知缺口
 
@@ -504,6 +505,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - 分支 `cursor/storybook-design-e61c`（#1）与 `cursor/component-ablation-e61c`（#5）建在已删除的 `src/assembled` 与 `scripts/compose_portal.py` 上，与 `main` 互斥，应关闭。
 
 ## 5. 维护日志
+
+### 2026-10-09 — 手机端文本输入 16px
+
+来自 `/design interaction` 报告的 A 项。报告的补丁按 16 个文件逐个追加 `@media` 块；对 main 7941699 重新测量（390px 宽、全部 story 的可见文本输入）发现仍有遗漏（Model Flow 对话框文本域、Skill 搜索框、Data Model 表单、Report Edit 文本域等），逐文件修补会随新组件继续漏。改为 `tokens.css` 的 `@scope` 重置块里一条 `@media (max-width: 760px)` 规则：除复选框/单选框/文件等不触发缩放的类型外，`input`、`select`、`textarea` 的 `font-size` 为 `--mh-font-size-xl` 并带 `!important`（组件规则优先级更高，且这是下限规则）。作用域与原重置相同：不影响宿主页面自己的控件，也不进入 `data-mh-slot` 内部。已登记有意差异。执行者：Claude。
 
 ### 2026-10-09 — 用户确认撤下八个旧页面
 
