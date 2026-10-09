@@ -47,6 +47,7 @@
   :is(button, input, select, textarea) {
     font: inherit;
     color: inherit;
+    touch-action: manipulation;
   }
 
   button {
@@ -56,6 +57,16 @@
   a {
     color: inherit;
     text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  /* Phone floor for text entry: iOS Safari zooms the page when a focused
+     field is under 16px. !important because component rules set their own
+     sizes at higher specificity. Checkboxes, radios and the like never zoom. */
+  @media (max-width: 760px) {
+    :is(:scope, :scope *):is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="hidden"], [type="button"], [type="submit"], [type="reset"], [type="image"]), select, textarea) {
+      font-size: var(--mh-font-size-xl) !important;
+    }
   }
 }
 
