@@ -713,6 +713,7 @@ display: inline-flex;
 
 .mh-assistant__chip button {
 display: grid;
+  position: relative;
   width: 18px;
   height: 18px;
   place-items: center;
@@ -726,8 +727,17 @@ display: grid;
   cursor: pointer;
 }
 
-.mh-assistant__chip button:hover,
-.mh-assistant__chip button:focus-visible {
+.mh-assistant__chip button::before {
+position: absolute;
+  inset: -3px;
+  content: "";
+}
+
+.mh-assistant__chip button:hover {
 background: var(--mh-accent-wash);
-  outline: 0;
+}
+
+.mh-assistant__chip button:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 1px;
 }

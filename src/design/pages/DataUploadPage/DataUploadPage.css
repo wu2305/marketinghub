@@ -32,7 +32,11 @@ width: 14px;
 .mh-upload__back:hover,
 .mh-upload__back:focus-visible {
 background: var(--mh-surface-subtle);
-  outline: 0;
+}
+
+.mh-upload__back:focus-visible {
+outline: 2px solid var(--mh-focus-ring);
+  outline-offset: 2px;
 }
 
 .mh-upload__toolbar .mh-button {

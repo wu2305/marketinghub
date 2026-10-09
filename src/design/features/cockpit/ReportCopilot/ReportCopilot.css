@@ -1591,7 +1591,6 @@
   &:hover:not(:disabled),
   &:focus-visible:not(:disabled) {
     filter: brightness(0.92);
-    outline: 0;
   }
 
   &:disabled {

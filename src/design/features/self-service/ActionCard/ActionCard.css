@@ -46,6 +46,7 @@ display: flex;
 
 .mh-action-card__history {
 display: inline-flex;
+  position: relative;
   width: 22px;
   height: 22px;
   align-items: center;
@@ -58,6 +59,12 @@ display: inline-flex;
   cursor: pointer;
   vertical-align: middle;
   transition: color 0.18s ease;
+}
+
+.mh-action-card__history::before {
+position: absolute;
+  inset: -11px;
+  content: "";
 }
 
 .mh-action-card__history svg {

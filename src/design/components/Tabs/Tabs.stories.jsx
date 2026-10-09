@@ -30,7 +30,7 @@ export default {
       "onChange",
       "(event: { id: string, label: string }) => void",
       { id: "upload", label: "Data Upload" },
-      bi("The function runs when the user clicks a tab. The result has `id` and `label`.", "用户点击标签页时会调用这个函数。结果里带有 `id` 和 `label`。"),
+      bi("The function runs when the user clicks a tab or moves to it with the Left, Right, Home or End key. The result has `id` and `label`.", "用户点击标签页，或用左右方向键、Home、End 键切换到它时会调用这个函数。结果里带有 `id` 和 `label`。"),
     ),
   },
   render: function TabsStory(args) {
