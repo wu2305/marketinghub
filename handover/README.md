@@ -505,6 +505,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-09 — touch-action: manipulation
+
+来自 `/design interaction` 报告的 B 项（报告基于 9f7b41d，补丁在 #114 之后不再适用，已对 main 7941699 重新核对）。`tokens.css` 的 `@scope` 重置块里，`button, input, select, textarea` 与 `a` 加 `touch-action: manipulation`：触屏点按不再等待双击缩放判定，捏合缩放保留。外观无变化，不登记有意差异。`DataModelView` 画布是 `div`，保留自己的 `touch-action: none`（平移/缩放手势），不受影响。验证：lint、vitest、build-storybook；Playwright 在构建好的 Storybook 上读计算样式。执行者：Claude。
+
 ### 2026-10-09 — 用户确认撤下八个旧页面
 
 本轮用户取消 MetricDictionaryPage, PersonalMemoryPage, ReviewCenterPage, ScenarioDetailPage, ScenarioEditPage, ScenarioLibraryPage, KnowledgeViewPage, FeedbackQualityPage。从最新 origin/main 迁移已验收的清理：Storybook注册及 Pages Docs清单共用撤下名单，移除166个页面状态和8个文档；保留源码及共享组件。页面清单保留9页，最新构建331 stories + 87 docs，门槛同步调整（最新主版本另有既有新增示例）。此为明确产品范围缩减，不恢复旧页面。
