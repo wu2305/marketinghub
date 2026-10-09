@@ -1,6 +1,7 @@
+import { Button } from "../../../components/Button/index.jsx";
 import { INTERPRETER } from "../../../content.js";
 import { useFieldLibraryDemo } from "../../../demo/field-library-demo.js";
-import { callbackProp, prop, bi } from "../../../lib/story-helpers.js";
+import { callbackProp, prop, useSynced, bi } from "../../../lib/story-helpers.js";
 import { FieldLibraryDrawer } from "./index.jsx";
 
 const bundle = INTERPRETER.fieldLibrary;
@@ -14,7 +15,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the Report Context drawer. It can open over another knowledge type. It does not switch the type. Data Model related-report links open this drawer. The description editor works the same as in the full Report Context library.", "这个组件是 Report Context 抽屉。它可以叠在另一种知识类型上面打开。它不会切换类型。Data Model 的关联报表链接会打开这个抽屉。描述编辑器和完整的 Report Context 库里一样。"),
+          bi("This component is the Report Context drawer. It can open over another knowledge type. It does not switch the type. Data Model related-report links open this drawer. The description editor works the same as in the full Report Context library. In this story the story host owns `peek` (the record id to show). Close, Escape, or the dimmed area clears it, and a Reopen button sets it again.", "这个组件是 Report Context 抽屉。它可以叠在另一种知识类型上面打开。它不会切换类型。Data Model 的关联报表链接会打开这个抽屉。描述编辑器和完整的 Report Context 库里一样。在本故事里，由故事宿主持有 `peek`（要显示的记录 id）。点击关闭、按 Escape 或点击遮罩都会清除它，之后可用 Reopen 按钮重新打开。"),
       },
     },
   },
@@ -42,9 +43,19 @@ export default {
     onDescriptionCancel: callbackProp("onDescriptionCancel", "(event: { reason }) => void", { reason: "escape" }),
   },
   render: function FieldLibraryDrawerStory(args) {
-    const viewProps = useFieldLibraryDemo(args);
+    /* The host owns which record is peeked. Closing the drawer clears it and
+       the button below sets it again. */
+    const [peekId, setPeekId] = useSynced(args.peek);
+    const viewProps = useFieldLibraryDemo({
+      ...args,
+      peek: peekId,
+      onCloseDetail: (event) => {
+        setPeekId(null);
+        args.onCloseDetail?.(event);
+      },
+    });
     const peek = viewProps.peek;
-    return peek ? <FieldLibraryDrawer {...viewProps} type={peek.type} detail={peek.detail} /> : null;
+    return peek ? <FieldLibraryDrawer {...viewProps} type={peek.type} detail={peek.detail} /> : <Button variant="secondary" onClick={() => setPeekId(args.peek)}>Reopen drawer</Button>;
   },
 };
 

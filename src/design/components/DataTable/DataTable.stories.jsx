@@ -26,10 +26,10 @@ export default {
   },
   argTypes: {
     columns: prop("Array<{ key: string, header: React.ReactNode }>", { defaultValue: [], description: bi("Column list. Each column has `key` and `header`.", "列列表。每列有 `key` 和 `header`。") }),
-    rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: bi("Row objects. Each field matches a column `key`.", "行对象。每个字段对应一个列 `key`。") }),
+    rows: prop("Array<{ id?: string|number, [key: string]: React.ReactNode }>", { defaultValue: [], description: bi("Row objects. Each field matches a column `key`. Add a stable `id` to every row if you set `onOpen`.", "行对象。每个字段对应一个列 `key`。设置 `onOpen` 时，请给每一行加一个稳定的 `id`。") }),
     caption: prop("React.ReactNode", { description: bi("Note under the table.", "表格下方的备注。"), control: "text" }),
     emptyState: prop("React.ReactNode", { description: bi("Content shown in place of the rows when `rows` is empty.", "`rows` 为空时代替行显示的内容。"), control: "text" }),
-    onOpen: callbackProp("onOpen", "(event: { id: string|number }) => void", { id: "1" }, bi("Set this if a row should open. The first cell becomes a button. A click elsewhere on the row, outside other controls, also opens it. The result has `id` from the row.", "某一行需要打开时设置。第一个单元格会变成按钮。点击行内其他位置（其他控件之外）同样会打开。结果里带有该行的 `id`。")),
+    onOpen: callbackProp("onOpen", "(event: { id: string|number }) => void", { id: "1" }, bi("Set this if a row should open. The first cell becomes a button. A click elsewhere on the row, outside other controls, also opens it. The result has `id` from the row. Give each row a stable `id` when you use `onOpen`: without one the result has `id: undefined` (the row position is only React's key).", "某一行需要打开时设置。第一个单元格会变成按钮。点击行内其他位置（其他控件之外）同样会打开。结果里带有该行的 `id`。用 `onOpen` 时请给每一行一个稳定的 `id`：没有 `id` 时结果里的 `id` 是 `undefined`（行位置只用作 React 的 key）。")),
   },
   render: (args) => <DataTable {...args} />,
 };
