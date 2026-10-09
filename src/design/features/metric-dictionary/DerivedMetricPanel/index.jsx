@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
+import { Switch } from "../Switch/index.jsx";
 import { useOverlayLayer } from "../../../lib/overlay.js";
 import { Icon } from "../../../icons.jsx";
 import "./DerivedMetricPanel.css";
@@ -79,7 +80,7 @@ export function DerivedMetricPanel({
               </div>
               <label>{copy.descriptionLabel}<textarea value={draft.description || ""} placeholder={copy.descriptionPlaceholder} onChange={(event) => change("description", event.target.value)} /></label>
               <label>{copy.synonyms}<input value={draft.synonyms || ""} placeholder={copy.synonymsPlaceholder} onChange={(event) => change("synonyms", event.target.value)} /></label>
-              <label className="mh-derived-panel__toggle"><span><strong>{copy.enable}</strong><small>{copy.enableHint}</small></span><input type="checkbox" checked={draft.enabled !== false} onChange={(event) => change("enabled", event.target.checked)} /></label>
+              <div className="mh-derived-panel__toggle"><span><strong>{copy.enable}</strong><small>{copy.enableHint}</small></span><Switch label={copy.enable} checked={draft.enabled !== false} onChange={({ checked }) => change("enabled", checked)} /></div>
               <div className="mh-derived-panel__test"><span><strong>{copy.testTitle}</strong><small>{copy.testHint}</small></span><button type="button" onClick={onTest}>{copy.test}</button></div>
               {notice ? <p className="mh-derived-panel__notice" role="status">{notice}</p> : null}
             </form>

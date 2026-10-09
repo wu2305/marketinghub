@@ -1,6 +1,7 @@
 import React from "react";
 import { AssistantDock } from "../../components/AssistantDock/index.jsx";
 import { SearchField } from "../../components/SearchField/index.jsx";
+import { Switch } from "../../features/metric-dictionary/Switch/index.jsx";
 import { StatusBadge } from "../../components/StatusBadge/index.jsx";
 import { Header } from "../../components/Header/index.jsx";
 import { Icon } from "../../icons.jsx";
@@ -117,7 +118,7 @@ export function MetricDictionaryPage({
                   <div className="mh-metric-page__synonyms">{(metric?.synonyms || []).map((name) => <span key={name}>{name} <b>×</b></span>)}<button type="button">+</button></div>
                   <p className="mh-metric-page__hint">{detail.synonymHint}</p>
                 </div>
-                <div className="mh-metric-page__card mh-metric-page__card--wide mh-metric-page__toggle"><div><strong>{detail.fields.qa}</strong><p className="mh-metric-page__hint">{detail.qaHint}</p></div><input type="checkbox" defaultChecked aria-label={detail.fields.qa} /></div>
+                <div className="mh-metric-page__card mh-metric-page__card--wide mh-metric-page__toggle"><div><strong>{detail.fields.qa}</strong><p className="mh-metric-page__hint">{detail.qaHint}</p></div><Switch label={detail.fields.qa} defaultChecked /></div>
               </div>
             </div>
             <div className="mh-metric-page__content mh-metric-page__formula-grid" hidden={tab !== "formula"}>
