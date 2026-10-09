@@ -1,7 +1,7 @@
 # Page recipes: adding a page to a customer demo
 
 `examples/host/main.jsx` wires all 17 pages and is checked by `scripts/host-check.mjs`. A demo reuses that
-wiring. To add a page, copy the route function named below from `examples/host/main.jsx` into the demo's `App.jsx`
+wiring. To add a page, copy the route function named below from `examples/demos/showcase/App.jsx` (already converted; or from `examples/host/main.jsx`, then convert it with this table) into the demo's `App.jsx`
 and change these, everywhere they appear:
 
 | in `examples/host/main.jsx` | in a demo |
