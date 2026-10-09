@@ -47,6 +47,12 @@
   :is(button, input, select, textarea) {
     font: inherit;
     color: inherit;
+  }
+
+  /* Taps respond at once (no double-tap-zoom wait); pinch zoom stays. Includes
+     the scope root: a standalone Button or Link is its own root, which the
+     descendant-only resets above never reach. */
+  :is(:scope, :scope *):is(button, input, select, textarea, a) {
     touch-action: manipulation;
   }
 
@@ -57,7 +63,6 @@
   a {
     color: inherit;
     text-decoration: none;
-    touch-action: manipulation;
   }
 
   /* Phone floor for text entry: iOS Safari zooms the page when a focused

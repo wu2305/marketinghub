@@ -343,8 +343,11 @@ animation-name: mhAssistantModalEnter;
   scroll-behavior: auto;
   }
 
-  .mh-assistant__dialog {
-  animation: none;
+  /* The variants set animation-name at 0,2,0, so the guard has to name them too. */
+  .mh-assistant__dialog,
+  .mh-assistant--drawer .mh-assistant__dialog,
+  .mh-assistant--expanded .mh-assistant__dialog {
+    animation: none;
   }
 }
 
