@@ -1,4 +1,5 @@
 import React from "react";
+import { retiredPages } from "./retired-pages.js";
 import { DocsPage, useOf } from "@storybook/addon-docs/blocks";
 import "../src/design/tokens.css";
 
@@ -48,7 +49,8 @@ const restoreInferredTypes = ({ argTypes, initialArgs = {} }) => Object.fromEntr
 restoreInferredTypes.secondPass = true;
 
 const pageNames = Object.keys(import.meta.glob("../src/design/pages/*/*.docs.mdx"))
-  .map((file) => file.split("/").at(-2)).sort();
+  .map((file) => file.split("/").at(-2))
+  .filter((name) => !retiredPages.includes(name)).sort();
 
 // Shared Pages metadata has one automatic docs id. Keep that stable entry as
 // an index; each attached MDX page documents its own module and existing story.

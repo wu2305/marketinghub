@@ -1,11 +1,12 @@
 import { fileURLToPath } from "node:url";
 import { mergeConfig } from "vite";
+import { retiredPages } from "./retired-pages.js";
 
 const entry = (file) => fileURLToPath(new URL(file, import.meta.url));
 
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
-  stories: ["../src/design/**/*.stories.jsx", "../src/design/**/*.docs.mdx", "../examples/consumer/*.stories.tsx"],
+  stories: [`../src/design/**/!(${retiredPages.join("|")}).stories.jsx`, `../src/design/**/!(${retiredPages.join("|")}).docs.mdx`, "../examples/consumer/*.stories.tsx"],
   addons: ["@storybook/addon-docs"],
   framework: {
     name: "@storybook/react-vite",
