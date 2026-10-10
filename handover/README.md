@@ -543,6 +543,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-10 — 使用方 Business Term 工作区故事文档与实际行为对齐
+
+`examples/consumer/BusinessTermApp.stories.tsx` 的组件说明仍写旧规则（Save / Submit，Submit 为 Disable + Under Review，toast “Submitted for review”）。应用实际按 v22 设计（#95）：Save Draft → Disable + Draft；Publish & Enable → Enable + Published，toast “Published and enabled”（`KNOWLEDGE_CREATE.businessTerm.publishedNotice`）。中英文说明与 Workspace 故事说明已改为实际按钮名和结果；代码未改。在 Storybook（本地 6006 与线上）对该故事跑了资料库、详情、禁用确认、编辑、新建（空提交与发布）、八种知识类型切换、助手提问与 390px：无页面报错、无控制台错误（仅 favicon 404）。非 Business Term 类型在该使用方里显示空列表是示例的既定范围，未改。执行者：Claude。
+
 ### 2026-10-10 — 表单校验矩阵：每种带校验的表单按同一契约测试并补齐缺口
 
 Codex 复核推荐顺序第 2 步“全表单类型校验矩阵”。新增 `src/design/forms.test.jsx`（23 例）：Knowledge Create 的 7 个会拒绝提交的类型（Principles、Report Context、Data Model、Metric Dictionary、Business Term 含 Global Synonym、Analytical Model、Scenario Reporting）加 Synonyms 行、编辑/复制模式，单独组合的 `BusinessTermForm`，Skill Edit，Personal Memory（新建抽屉、行内编辑），Model Flow 手动表单（Save、Submit），Derived Metric 抽屉（名称、常数），逐一走同一契约：提交前无无效项且 Submit 未禁用；失败后恰好标出缺失的必填控件，每个有 `aria-invalid`（按钮式选择器用 `data-invalid`）、被读作必填、由 `aria-describedby` 指向各自可见消息（消息不带责备措辞）；焦点移到文档顺序中第一个无效控件，并在每次再失败时回到那里（即使无效集合没变）；改好一个只清除它自己的标记且不抢焦点；全部改好后提交恰好成功一次。另有一个“表单清单”测试：库里每个 `<form>` 必须在 `FORMS` 表里登记为“已覆盖”或写明为什么无可拒绝（聊天输入框、无必填项的 Campaign / Data Upload），新增表单不登记会失败。旧代码上 22 例中 12 例失败，其余 10 例（七个 Knowledge Create 类型、Save 草稿规则等）本来就符合。
