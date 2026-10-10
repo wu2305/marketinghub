@@ -663,7 +663,7 @@ export const INTERPRETER = {
     emptyTitle: "No matching principles.",
     emptyMessage: "Change the category or search.",
     clearFiltersLabel: "Clear filters",
-    rowsPerPageLabel: "Rows per page",
+    rowsPerPageLabel: "Items per page",
     previousLabel: "Previous",
     nextLabel: "Next",
     expandLabel: "Expand description",
@@ -680,7 +680,7 @@ export const INTERPRETER = {
     currentUser: "Current User",
     createHref: "knowledge-create.html?type=Business%20Term",
     editHref: (id) => `knowledge-create.html?type=Business%20Term&mode=edit&id=${id}`,
-    pageSizes: [5, 10, 20],
+    pageSizes: [6, 12, 24],
     records: [
       {
         id: "business-term-gmv",
@@ -762,7 +762,7 @@ export const INTERPRETER = {
       emptyTitle: "No matching records",
       countLabel: "Showing {shown} of {total} terms",
       units: ["records", "records"],
-      rowsPerPageLabel: "Rows per page",
+      rowsPerPageLabel: "Items per page",
       previousLabel: "Previous",
       nextLabel: "Next",
       detailEyebrow: "Business Term",
@@ -797,7 +797,7 @@ export const INTERPRETER = {
      selected option labels in the filter summary ("Enabled", "All models"). */
   fieldLibrary: {
     currentUser: "Current User",
-    pageSizes: [5, 10, 20],
+    pageSizes: [6, 12, 24],
     createHref: "knowledge-create.html?type=Analytical%20Model",
     editHref: (id) => `knowledge-create.html?type=Analytical%20Model&mode=edit&id=${id}`,
     dashboardHref: "reports.html",
@@ -814,7 +814,7 @@ export const INTERPRETER = {
         "Email Reports": "reports",
       },
       units: ["records", "records"],
-      rowsPerPageLabel: "Rows per page",
+      rowsPerPageLabel: "Items per page",
       previousLabel: "Previous",
       nextLabel: "Next",
       detailCloseLabel: "Close details",

@@ -242,6 +242,7 @@ export function DataModelView({
         <aside className="mh-dmview__sidebar">
           <div className="mh-dmview__search">
             <SearchField
+              variant="plain"
               label={strings.searchLabel}
               placeholder={strings.searchPlaceholder}
               value={query || ""}

@@ -52,7 +52,7 @@ export function filterPrinciples(items, { query = "", selectedCategories = [] } 
 }
 
 /** Shared page clamp + slice used by every paginated type view. */
-export function paginateRows(rows, { page = 1, pageSize = 10 } = {}) {
+export function paginateRows(rows, { page = 1, pageSize = 6 } = {}) {
   const pages = Math.max(1, Math.ceil((rows || []).length / pageSize));
   const current = Math.min(Math.max(1, page), pages);
   const first = (current - 1) * pageSize;
