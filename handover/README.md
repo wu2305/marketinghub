@@ -543,6 +543,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-10 — Storybook 新增 Examples/Product walkthrough（九个现行页面的可点击站点）
+
+用户提问：线上 Storybook 的 Examples 只有三个页面（Consumer business term / cockpit / report copilot），是否应按原始 HTML 页面清单补示例。核对：Pages 已有九个现行页面（八个旧页面 2026-10-09 撤下，不恢复）；Examples 三项是“只用公开导出”的使用方证明，不是页面目录。真正缺的是跨页导航：Pages 故事每页独立，导航只触发 action。新增 `examples/consumer/ProductWalkthrough.stories.tsx`：九个故事（Home、Marketing Cockpit、Self-Service Center、Data Upload、Media Tracking Detail、RedNote Campaign Tool、AI Interpreter、Knowledge Create、Data Model）各从一页起步，站点由 `examples/demos/showcase/App.jsx` 新导出的 `CurrentPagesSite`（九个现行页面，`currentRoutes`/`retiredRoutes` 拆分，`App` 仍含全部 17 页）经 hash 路由连接，导航、卡片与链接像产品一样打开其他页面；使用 demo hook，故事文档说明它不属于“只用公开导出”的 consumer 示例。验收套件把带 `parameters.wholeSite` 的故事当页面故事处理（整站不适合“每个控件连用两次”的组件级遍历）。验证：lint、`npm test`（1100 条）、`build-storybook`（430→440 条目，+9 故事 +1 文档）通过；浏览器中核对九个故事起始页与 Home→Cockpit 导航。八个旧页面不在其中。人工视觉审图延后。执行者：Claude。
+
 ### 2026-10-10 — 表单校验矩阵：每种带校验的表单按同一契约测试并补齐缺口
 
 Codex 复核推荐顺序第 2 步“全表单类型校验矩阵”。新增 `src/design/forms.test.jsx`（23 例）：Knowledge Create 的 7 个会拒绝提交的类型（Principles、Report Context、Data Model、Metric Dictionary、Business Term 含 Global Synonym、Analytical Model、Scenario Reporting）加 Synonyms 行、编辑/复制模式，单独组合的 `BusinessTermForm`，Skill Edit，Personal Memory（新建抽屉、行内编辑），Model Flow 手动表单（Save、Submit），Derived Metric 抽屉（名称、常数），逐一走同一契约：提交前无无效项且 Submit 未禁用；失败后恰好标出缺失的必填控件，每个有 `aria-invalid`（按钮式选择器用 `data-invalid`）、被读作必填、由 `aria-describedby` 指向各自可见消息（消息不带责备措辞）；焦点移到文档顺序中第一个无效控件，并在每次再失败时回到那里（即使无效集合没变）；改好一个只清除它自己的标记且不抢焦点；全部改好后提交恰好成功一次。另有一个“表单清单”测试：库里每个 `<form>` 必须在 `FORMS` 表里登记为“已覆盖”或写明为什么无可拒绝（聊天输入框、无必填项的 Campaign / Data Upload），新增表单不登记会失败。旧代码上 22 例中 12 例失败，其余 10 例（七个 Knowledge Create 类型、Save 草稿规则等）本来就符合。
