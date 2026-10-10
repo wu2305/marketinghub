@@ -15,6 +15,7 @@ position: fixed;
 display: grid;
   width: min(620px, calc(100vw - 48px));
   max-height: calc(100vh - 48px);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid var(--mh-line);
@@ -45,6 +46,7 @@ display: flex;
 
 .mh-flow__foot {
 justify-content: flex-end;
+  flex-wrap: wrap;
   border-top: 1px solid var(--mh-line);
   border-bottom: 0;
 }
