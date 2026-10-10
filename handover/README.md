@@ -543,6 +543,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 5. 维护日志
 
+### 2026-10-10 — 使用方 Business Term 工作区故事文档与实际行为对齐
+
+`examples/consumer/BusinessTermApp.stories.tsx` 的组件说明仍写旧规则（Save / Submit，Submit 为 Disable + Under Review，toast “Submitted for review”）。应用实际按 v22 设计（#95）：Save Draft → Disable + Draft；Publish & Enable → Enable + Published，toast “Published and enabled”（`KNOWLEDGE_CREATE.businessTerm.publishedNotice`）。中英文说明与 Workspace 故事说明已改为实际按钮名和结果；代码未改。在 Storybook（本地 6006 与线上）对该故事跑了资料库、详情、禁用确认、编辑、新建（空提交与发布）、八种知识类型切换、助手提问与 390px：无页面报错、无控制台错误（仅 favicon 404）。非 Business Term 类型在该使用方里显示空列表是示例的既定范围，未改。执行者：Claude。
+
 ### 2026-10-10 — Storybook 新增 Examples/Product walkthrough（九个现行页面的可点击站点）
 
 用户提问：线上 Storybook 的 Examples 只有三个页面（Consumer business term / cockpit / report copilot），是否应按原始 HTML 页面清单补示例。核对：Pages 已有九个现行页面（八个旧页面 2026-10-09 撤下，不恢复）；Examples 三项是“只用公开导出”的使用方证明，不是页面目录。真正缺的是跨页导航：Pages 故事每页独立，导航只触发 action。新增 `examples/consumer/ProductWalkthrough.stories.tsx`：九个故事（Home、Marketing Cockpit、Self-Service Center、Data Upload、Media Tracking Detail、RedNote Campaign Tool、AI Interpreter、Knowledge Create、Data Model）各从一页起步，站点由 `examples/demos/showcase/App.jsx` 新导出的 `CurrentPagesSite`（九个现行页面，`currentRoutes`/`retiredRoutes` 拆分，`App` 仍含全部 17 页）经 hash 路由连接，导航、卡片与链接像产品一样打开其他页面；使用 demo hook，故事文档说明它不属于“只用公开导出”的 consumer 示例。验收套件把带 `parameters.wholeSite` 的故事当页面故事处理（整站不适合“每个控件连用两次”的组件级遍历）。验证：lint、`npm test`（1100 条）、`build-storybook`（430→440 条目，+9 故事 +1 文档）通过；浏览器中核对九个故事起始页与 Home→Cockpit 导航。八个旧页面不在其中。人工视觉审图延后。执行者：Claude。
