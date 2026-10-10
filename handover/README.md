@@ -29,6 +29,30 @@ npm run storybook      # 127.0.0.1:6006
 npm test               # vitest 行为测试
 ```
 
+2026-10-10 搜索与下拉字体统一：按用户要求，SearchField 输入及提示、Select 当前值及选项、CheckboxFilter 选项、Pagination 页容量选择统一 DIN 2014 / 12px / 400；显式覆盖嵌套组件作用域的 font 继承。验证：Storybook 构建及故事数量门禁、lint 通过；本地浏览器实测搜索输入/placeholder、Project 当前值/展开选项、Status/Process 当前值/option、Rows per page 当前值/option 均 DIN 2014 / 12px / 400。线上 Worker 尚未发布；未运行全量配对视觉。 复查补齐 CheckboxFilter 标签 11→12px、LibraryToolbar 筛选标签 700→400；六类列表复核。颜色现状：搜索输入/原生 Select 为 text-strong；CheckboxFilter 当前值及分页选项为 text；placeholder 与 Status/Process 标签为 text-muted；CheckboxFilter 标签为 text-faint；已选选项为 accent-ink。用户已确认：搜索输入、下拉当前值与普通选项统一 text（#3F4852）；提示、标签、已选高亮保留各自角色色。
+
+2026-10-10 下拉列表等宽：CheckboxFilter 展开面板移除 260/240px 最小宽度，左右边缘与触发框外边缘对齐；长选项单行省略，避免撑宽。验证：Project 框与面板实测均 180px，左右位置均 16/196px；Storybook 构建、lint、19 项相关测试通过。线上未发布。
+
+2026-10-10 多选摘要溢出修复：CheckboxFilter 的名称摘要在多选时显示数量（如 3 selected），单选显示名称；摘要单行省略，title 提供完整选择。
+
+2026-10-10 搜索图标对齐：plain/Business Term 搜索图标 20→16px，左侧内边距 18→13px，与 CheckboxFilter 一致；图标与文字间距采用 space-3，垂直居中。
+
+2026-10-10 新增/编辑表单：Business Term 改为 Cancel / Save Draft / Publish & Enable，发布动作设 Published、enabled=true；Scenario Reporting 改为 Cancel / Save Draft / Submit for Review，沿用 Queued 流程。问号提示右上展开，底部与图标底部对齐。文本框透明背景、无发光阴影，保留中性焦点轮廓。浏览器核对六页按钮与输入背景，提示与问号底部同为368px；全量552/552测试通过，lint与Storybook构建通过。consumer同步发布启用语义；线上未发布。
+
+2026-10-10 Creator 行：知识卡片的 Creator 行从32→24px，操作按钮缩至24×24px、图标保持16px；对照文档同步。
+
+2026-10-10 描述自适应：knowledge 卡片描述取消固定36px，实际一/两行按内容占高；Grid按排最高项统一卡片高度，元信息底部对齐。
+
+2026-10-10 六类筛选统一：single筛选标签放入44px高、14px圆角的180px框内；筛选标签、分页标签与搜索placeholder统一text-faint（#8B949D），值/普通选项保持text。
+
+2026-10-10 Scenario筛选展开菜单统一：LibraryToolbar single facets改用CheckboxFilter单选radio模式，共用等宽面板、选项样式和字体；选择后关闭，保留单选与All选项。
+
+2026-10-10 Principles/Data Model 控件：Principles已通过LibraryToolbar复用统一搜索和CheckboxFilter；DataModelView搜索改为plain，采用44px高、14px圆角、16px图标、DIN2014/12px/400、输入text/提示text-faint。
+
+2026-10-10 分页统一：所有共用分页及业务默认配置改为Items per page，6/12/24，默认6；故事与consumer默认状态同步。
+
+2026-10-10 分页补充：compact上一页/下一页改为‹/›，保留aria-label和title；Principles单独10/20/50，默认10，其他列表6/12/24。
+
 ## 2. 阶段进度表
 
 ### 2.1 当前里程碑（取代旧 A–E 执行顺序）
@@ -399,6 +423,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 | 超宽屏抽屉宽度（`AssistantPanel` 抽屉形态与 `ReportCopilot` 右侧抽屉；原 `assets/css/components/assistant-panel.css:105`、`reports/report-core.css:2558` 等的 `width: min(40vw, calc(100vw - 80px))`） | 宽度改为 `min(40vw, 576px, calc(100vw - 80px))`：≤1440px 与原页完全相同（40vw 在 1440px 即 576px），1920px 与 2560px 停在 576px（原页分别为 768px 与 1024px，段落行长约 150 字符）。报告详情抽屉本来就是固定 540px，不受影响 | 原页没有上限，超宽屏上抽屉随视口变宽、正文行长失控；576px 恰是 1440px 基线宽度，所以只冻结基线之上的行为（`/design responsive` 报告 C 项） | 本 PR |
 | 底部安全区（`AssistantLauncher` 启动按钮、`Toast`、`ReportCopilot` 命令条、`ReportDetailsDrawer` 页脚、`Modal` 抽屉页脚与 `SkillDetail` 页脚、`AssistantPanel` 抽屉与 ≤760px 全屏形态的输入条；原页均无） | 上述位置的底部间距加上 `env(safe-area-inset-bottom)`：在设置了 `viewport-fit=cover` 的页面上，被固定在屏幕底边的控件会避开 iOS 的 Home 指示条区域；没有 `viewport-fit=cover` 或没有刘海的设备上该值为 0，间距与原来完全相同（Chromium `Emulation.setSafeAreaInsetsOverride` 注入 34px 时启动按钮 22→56px、Toast 78→112px、输入条与页脚 14→48px、抽屉页脚 16→50px，注入 0 时不变）。本仓库的宿主页没有设置 `viewport-fit=cover`，由使用方决定是否启用 | 原页完全没有安全区处理；组件库被放进带刘海的手机全屏页时，底边控件会压到 Home 指示条上（`/design responsive` 报告 D 项）。左右与顶部安全区（横屏、固定页头）未做，需要时单独评估 | 本 PR |
 | `ReportCopilot` 手机宽度（原 `assets/css/reports/report-core.css:2558` `.ai-workspace` 的 `width: min(40vw, calc(100vw - 80px))`） | ≤760px 时停靠的抽屉占满屏幕（`100vw`），不再是 390px 下 156px 的窄条；“最近对话”弹层改为 `right: 0; width: min(360px, calc(100vw - 48px))`，输入框的 `min-width: 380px` 改为 `min(380px, 100%)`。最大化仍是 12px 内缩的全屏，>760px 与原页完全相同 | 原页在手机上抽屉只有 156px，页头的关闭按钮、历史弹层和输入框都跑出屏幕，无法使用；助手面板（`AssistantPanel`）本来就在 ≤760px 全屏，Copilot 与它一致（Codex 审阅第 1 项、`/design responsive` 报告 C/D 之后发现） | 本 PR |
+| 建模对话框与技能菜单手机宽度（`ModelFlowDialog`；`SkillMenu` 底部动作；原 `assets/css/components/assistant-panel.css:1235` `.ai-flow-card`、`#assistantPanel .ai-skill-menu` 同样写法） | 对话框卡片的单列用 `minmax(0, 1fr)`，页脚按钮允许换行；技能菜单底部动作所在的网格同样 `minmax(0, 1fr)`，长文案按原有省略号截断。页脚按钮一行放得下时布局与原页完全相同（不换行） | 原页的卡片列宽跟随最宽的一行（页脚四个按钮 86px×4 约 416px），390px 下卡片内容与最后一个按钮（337–423px）跑出屏幕，320px 下手动创建步骤的三个按钮也超出；技能菜单底部动作按钮 201px 宽，超出 165px 的面板（Codex 审阅第 1 项扫描时发现，Copilot 全屏后单列处理） | 本 PR |
 
 ## 4. 已知缺口
 
@@ -727,6 +752,7 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 | 日期 | 变更 | 执行者 |
 |---|---|---|
+| 2026-10-09 | 手机宽度下的建模对话框与技能菜单（#131 扫描时发现、当时未处理）。**根因**：①`.mh-flow__card` 只声明了行轨道，单列按内容定宽，页脚四个 `min-width: 86px` 按钮（“新建 Analytical Model”步骤）把列撑到 416px，页头关闭按钮和表单都跟着溢出 390px；320px 下“手动创建”的三个按钮（282px）也比 272px 的卡片宽；②`.mh-skill__footer` 同样是单列网格，“Add from Chat History / Create Analytical Model Manually”按钮按内容宽 201px 超出 165px 的详情面板（390px 下超出 4px，Cockpit 的 Copilot 里超出屏幕）。**改动**：`ModelFlowDialog.css` 的卡片 `grid-template-columns: minmax(0, 1fr)`、页脚 `flex-wrap: wrap`；`SkillMenu.css` 的页脚 `grid-template-columns: minmax(0, 1fr)`，按钮里原有的省略号随之生效。**核验**（Playwright，构建后的 Storybook）：对 79 个模型/技能相关故事在 390/360/320px 逐个量 `.mh-flow__card`、页头/页脚按钮、表单、`.mh-skill*` 的包围盒，修复前 47 个组合有元素超出屏幕（对话框 generated 步骤 25–441px，320px manual 步骤按钮 −5px，技能菜单底部动作 201px 宽），修复后 0 个，整页宽恒等于视口；新增 `visual-check` 场景 `p02-copilot-skill-flow-mobile`（390px：技能菜单、详情、底部动作和 New Analytical Model 步骤的卡片/页头按钮/页脚按钮都在屏幕内，且页面不横向滚动；原页侧只打开 Copilot，因为它在手机上是 156px 窄条，见 `p02-copilot-mobile`），已确认在旧 CSS 上失败（`mh-skill__action off screen`）；`responsive-overlays.test.js` 新增三条规则断言（去掉修复会失败，已确认）。lint、vitest 53 文件 588 条通过。受影响故事（人工审图延后）：`Organisms/Model Flow Dialog`、`Organisms/Assistant Dock`（Model dialog）、各助手页面的 Model history/generated/manual 与 Skills 状态（Home、Campaign、Media Tracking Detail、Interpreter、Self Service、Marketing Cockpit Copilot）。 | Claude |
 | 2026-10-01 | Cloudflare 首次部署成功：通过插件从 PR 提交 `22ca53c` 启动生产构建（未修改 main），lint/tests/build/deploy 均通过，线上 HTTP/索引/构建戳检查通过；证据见 §1。PR 的分支 preview 继承了创建时空 build command，也已补全；随后确认 `wrangler preview` 需要 `previews: {}`，已补入配置并重跑生产 dry-run 通过，云 preview `7c9bae57-f86f-45dc-8367-7cbb7a1d5fd2` 与 GitHub CI 在 `f7094d5` 上均 success。 | Codex |
 | 2026-10-01 | 用户取消 tag 部署，仅保留 main merge 刷新；PR #98 删除 GitHub 部署 workflow，使用既有 Cloudflare Workers Builds/token，无需 GitHub secret。配置与文档改为最终 Worker 方案。 | Codex |
 | 2026-10-01 | 用户确认改用新建 `marketinghub` Worker。Cloudflare 插件核实旧失败 build 初始化前终止、旧 trigger 关联 ID 已不存在；新 Worker trigger 原构建命令为空，已补全 lint/test/Storybook build。PR #98 新增 wrangler 静态资源配置，GitHub workflow 改为 tag/manual，main 由 Workers Builds 处理。组件与视觉无改动，验证继续。 | Codex |
@@ -1053,3 +1079,29 @@ User explicitly accepted the current round and authorized commit, push, merge an
 ### 2026-10-09 Deslop report check (reminder mark)
 
 Verified an external /design deslop report against main. Already on main: horizontal drawer header (#120) and the Icon-set replacements for the Metric Dictionary page, derived-metric panel clear/backspace, Knowledge Detail collapse chevron and Business Term guidance bulb (#110). Remaining: the three footer reminders still used the `ⓘ` glyph, whereas the original draws a 15px bordered `i` mark (`assets/css/knowledge/business-term.css` `.knowledge-operation-reminder`). Added private `lib/OperationReminder` (one implementation shared by BusinessTermForm and KnowledgeCreatePage analysis and scenario footers); removed the two now-redundant footer `p` rules. Kept verbatim-in-original glyphs: v20 formula keys (`⌫ ← 123`), Data Model `◇`/`◉`/`＋`/`⇧` marks. No intentional difference (fidelity restoration). Affected stories: Pages/KnowledgeCreate (default, analysis, scenario), Features/Interpreter/BusinessTermForm. Lint, 557 tests and Storybook build pass; manual visual review postponed.
+
+### 2026-10-09 Consumer checkpoint: host-owned Report Copilot (Codex review step 4)
+
+`examples/consumer/CockpitApp` already owned a Report Copilot (open, composer, answer, chat, reset on navigation) but only its answer and close path were tested. Added `examples/consumer/ReportCopilotApp` (story `Examples/Consumer report copilot`): a report desk with its own layout (report picker, summary) that mounts the public `ReportCopilot` with all state in the app. The thread is emptied in the same render in which the selected report changes (the #130 rule, written with plain React state), kept across close/reopen on the same report, and empty again when you return to a report. The thread rules both consumers share (recommendation answer, follow-up append, cited sources) moved to the pure `examples/consumer/copilotThread.ts`; the Cockpit app now uses it, behaviour unchanged. 10 new tests (9 desk, 1 Cockpit); removing the reset fails two desk tests. No public contract change was needed: `ReportCopilot` props and callbacks were enough, `build:lib` type-checks and runs the new app on `dist`. Findings: a host needs no `returnFocusRef` when the opener is the focused element at open (the overlay restores it); the drawer is modal, so the report picker cannot be changed with a pointer while it is open, only between sessions. No visual-check scenario (the desk has no original to pair with); manual visual review postponed.
+
+- 2026-10-10：按用户反馈放宽 compact 分页器布局：箭头按钮与页数选择框统一36px高，控制间距16px，页码至少48px居中；保留已确认的分页选项。
+
+- 2026-10-10：按用户视觉反馈再次收敛 compact 分页：移除箭头外框，按钮/选择框32px高，页码40px宽，导航间距8px；数量选择区与导航保留16px间隔。
+
+- 2026-10-10：所有 Pagination 数量选择改用共享 CheckboxFilter 单选菜单，取消浏览器原生蓝色菜单；64px等宽菜单、12px/400字体、普通项#3F4852，选中项沿用浅金样式。
+
+- 2026-10-10：分页按用户附件调整为箭头/24px页码框/箭头/数量选择；数量移入框内显示「6 / page」，菜单等宽、选中项加粗浅蓝背景；保留数量配置与完整页码无障碍说明。
+
+- 2026-10-10：分页数量文案按用户要求改为「6 items/page」及对应选项，选择框/菜单等宽112px以完整容纳文案。
+
+- 2026-10-10：分页数量数字与 items/page 的空格额外增加4px，选择框与菜单选项同步。
+
+- 2026-10-10：分页数量下拉框箭头距右边框由9px缩至6px。
+
+- 2026-10-10：分页数量选择框及菜单宽度由112px增至132px，容纳两位数、items/page及额外字间距，避免省略截断。
+
+- 2026-10-10：分页数量框/菜单宽度收敛至120px，减少文字尾部至箭头的留白，同时验证两位数不截断。
+
+### 2026-10-10 Accepted Interpreter controls release
+
+User accepted the current round and authorized commit, push, PR merge and production Storybook publication through main → Cloudflare Workers Builds. Integrated origin/main f747711, retaining its focus-first-invalid behavior and OperationReminder component. Scope: unified list search/filter typography and menus, adaptive card descriptions and 24px Creator rows, form footer actions/help placement/unfilled text inputs, shared custom items/page pagination (6/12/24; Principles10/20/50). Latest pagination is120px wide,24px high; blue current-page box and selected-menu emphasis follow the user reference. Production status remains pending until PR merge and live build-stamp verification.

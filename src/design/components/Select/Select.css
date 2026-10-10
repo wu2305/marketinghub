@@ -44,3 +44,15 @@ cursor: not-allowed;
 border-color: var(--mh-danger);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--mh-danger) 12%, transparent);
 }
+
+.mh-select.mh-select,
+.mh-select option {
+  font-family: var(--mh-font-sans);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
+}
+
+.mh-select.mh-select,
+.mh-select option {
+  color: var(--mh-text);
+}

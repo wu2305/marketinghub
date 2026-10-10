@@ -66,14 +66,14 @@ describe("FieldLibraryView", () => {
     expect(screen.queryByRole("button", { name: "Edit" })).toBeNull();
   });
 
-  it("filters Report Context by the Project checkbox set and joins selected labels", () => {
+  it("filters Report Context by the Project checkbox set and summarizes multiple selections", () => {
     renderView({ type: "Report Context" });
     fireEvent.click(screen.getByLabelText("D2C Insights"));
     expect(cards().length).toBe(3); // city + fourp + customer
     expect(screen.getByText("D2C Insights", { selector: "summary b" })).toBeTruthy();
     fireEvent.click(screen.getByLabelText("DC Media Performance"));
     expect(cards().length).toBe(4); // + abo
-    expect(screen.getByText("D2C Insights, DC Media Performance")).toBeTruthy();
+    expect(screen.getByText("2 selected")).toBeTruthy();
   });
 
   it("opens the Report Context drawer with description, AI flags, scenario chips and scope", () => {
@@ -236,12 +236,12 @@ describe("FieldLibraryView", () => {
   it("paginates compact style and resets to page 1 on query/filter changes", () => {
     renderView({ type: "Report Context", pageSize: 5 });
     expect(cards().length).toBe(5);
-    expect(screen.getByText("1 / 2")).toBeTruthy();
+    expect(screen.getByLabelText("Page 1 of 2")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
     expect(cards().length).toBe(1);
-    expect(screen.getByText("2 / 2")).toBeTruthy();
+    expect(screen.getByLabelText("Page 2 of 2")).toBeTruthy();
     fireEvent.change(screen.getByLabelText("Search knowledge"), { target: { value: "4P" } });
-    expect(screen.getByText("1 / 1")).toBeTruthy();
+    expect(screen.getByLabelText("Page 1 of 1")).toBeTruthy();
   });
 
   it("seeds an open dialog for stories via the dialog prop", () => {

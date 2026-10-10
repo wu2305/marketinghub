@@ -136,12 +136,12 @@ describe("useBusinessTermDemo", () => {
     const own = (id) => ({ id, title: `Term ${id}`, description: `Desc ${id}`, synonyms: [], scope: [], kind: "Business Term", creator: "Current User", status: "Disable" });
     renderView({ records: ["a", "b", "c", "d", "e", "f"].map(own), pageSize: 5, drafts: [] });
     expect(cards().length).toBe(5);
-    expect(screen.getByText("1 / 2")).toBeTruthy();
+    expect(screen.getByLabelText("Page 1 of 2")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Next" }));
     expect(cardTitles()).toEqual(["Term f"]);
     fireEvent.click(cardAction("Delete Term f"));
     fireEvent.click(screen.getByRole("button", { name: "Confirm Delete" }));
-    expect(screen.getByText("1 / 1")).toBeTruthy();
+    expect(screen.getByLabelText("Page 1 of 1")).toBeTruthy();
     expect(cards().length).toBe(5);
   });
 
@@ -156,7 +156,7 @@ describe("useBusinessTermDemo", () => {
     expect(cardTitles()[0]).toBe("My Staged Term");
     expect(cards()[0].querySelector(".mh-library-item__draft").textContent).toBe("Draft");
     expect(cardTitles().some((title) => title.includes("Other Staged") || title.includes("Stageless"))).toBe(false);
-    expect(cards().length).toBe(7);
+    expect(cards().length).toBe(6);
   });
 
   it("keeps all synonyms in individual single-line capsules", () => {

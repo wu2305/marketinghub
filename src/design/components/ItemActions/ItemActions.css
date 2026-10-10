@@ -57,3 +57,9 @@ outline: 2px solid var(--mh-focus-ring);
     transition: none;
   }
 }
+
+/* Knowledge metadata uses a 24px row, including its action targets. */
+.mh-library-item--knowledge .mh-item-actions__button {
+  width: var(--mh-space-7);
+  height: var(--mh-space-7);
+}

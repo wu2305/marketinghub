@@ -11,13 +11,11 @@
 import React from "react";
 import { MarketingCockpitPage } from "marketing-hub";
 import { ASSISTANT_SKILL_MENU, COCKPIT, COPILOT, KNOWLEDGE_ASSETS, LOGO, NAV } from "marketing-hub/demo";
+import { EMPTY_THREAD, answerThread, askThread, chatEntry, sourcesFor, type Asset, type Projects, type Report, type Thread, type Workspace } from "./copilotThread";
 
 type Props = React.ComponentProps<typeof MarketingCockpitPage>;
-type Copilot = NonNullable<Props["workspace"]>;
+type Copilot = Workspace;
 type Answer = NonNullable<NonNullable<Props["assistant"]>["answers"]>[number];
-type Projects = NonNullable<Props["projects"]>;
-type Asset = NonNullable<Props["knowledge"]>[number];
-type Report = Projects[string]["reports"][number];
 type Route = { project: string; dashboard: number | null };
 
 export type CockpitData = {
@@ -61,15 +59,11 @@ export function CockpitApp({ data = demoData }: { data?: CockpitData }) {
   /* Workspace assistant (the corner launcher). */
   const [assistant, setAssistant] = React.useState<{ open: boolean; prompt: string; answers: Answer[] }>({ open: false, prompt: "", answers: [] });
   /* Report Copilot (live report only): its own open flag, prompt, answer and chat. */
-  const [copilot, setCopilot] = React.useState<{ open: boolean; prompt: string; answer: Copilot["answer"]; chat: NonNullable<Copilot["chat"]> }>({ open: false, prompt: "", answer: null, chat: [] });
+  const [copilot, setCopilot] = React.useState<Thread & { open: boolean }>({ open: false, ...EMPTY_THREAD });
 
   const liveProject = data.projects[route.project] ?? Object.values(data.projects)[0];
   const report: Report | undefined = route.dashboard === null ? undefined : liveProject?.reports[route.dashboard] ?? liveProject?.reports[0];
-  const sources = (report?.knowledgeIds ?? [])
-    .map((id) => data.knowledge.find((asset) => asset.id === id))
-    .filter((asset): asset is Asset => Boolean(asset))
-    .slice(0, 4)
-    .map((asset) => ({ id: asset.id, title: asset.title, href: hrefFor("interpreter", { type: asset.type }) }));
+  const sources = sourcesFor(report, data.knowledge, (type) => hrefFor("interpreter", { type }));
 
   const askAssistant = (prompt: string) => {
     if (!prompt.trim()) return;
@@ -84,9 +78,8 @@ export function CockpitApp({ data = demoData }: { data?: CockpitData }) {
 
   const askCopilot = ({ question }: { question: string }) => {
     if (!question.trim()) return;
-    const entry = { kind: "standard" as const, question, summary: `From "${report?.title ?? "this report"}": ${data.copilot.eyebrow} answers use the sources listed below.`, sources };
-    /* A question over an open answer appends below it; otherwise it starts a fresh thread. */
-    setCopilot((prior) => ({ ...prior, prompt: "", answer: prior.answer ? prior.answer : null, chat: prior.answer || prior.chat.length ? [...prior.chat, entry] : [entry] }));
+    const entry = chatEntry(question, report, data.copilot.eyebrow, sources);
+    setCopilot((prior) => ({ ...prior, ...askThread(prior, question, entry) }));
   };
 
   const recommendations = report?.recommendations ?? [];
@@ -107,16 +100,8 @@ export function CockpitApp({ data = demoData }: { data?: CockpitData }) {
     answerLabel: data.copilot.answerLabel,
     onClose: () => setCopilot((prior) => ({ ...prior, open: false })),
     onBack: () => setCopilot((prior) => ({ ...prior, answer: null, chat: [] })),
-    onNewSession: () => setCopilot((prior) => ({ ...prior, answer: null, chat: [], prompt: "" })),
-    onRecommendation: ({ index }) => {
-      const item = recommendations[index] ?? recommendations[0];
-      if (!item) return;
-      setCopilot((prior) => ({
-        ...prior,
-        chat: [],
-        answer: { kind: "answer", title: item.answerTitle ?? item.title, summary: item.summary, findings: (item.findings ?? []).map(([label, text]) => ({ label, text })) },
-      }));
-    },
+    onNewSession: () => setCopilot((prior) => ({ ...prior, ...EMPTY_THREAD })),
+    onRecommendation: ({ index }) => setCopilot((prior) => ({ ...prior, ...answerThread(prior, report, index) })),
     onAsk: askCopilot,
     onPromptChange: ({ value }) => setCopilot((prior) => ({ ...prior, prompt: value })),
     onHistorySelect: ({ prompt }) => setCopilot((prior) => ({ ...prior, prompt })),
@@ -141,7 +126,7 @@ export function CockpitApp({ data = demoData }: { data?: CockpitData }) {
       onNavigate={({ id, params }) => {
         if (id !== "cockpit") return;
         setRoute({ project: params.project ?? "all", dashboard: params.dashboard === undefined ? null : Number(params.dashboard) });
-        setCopilot((prior) => ({ ...prior, open: false, answer: null, chat: [], prompt: "" }));
+        setCopilot({ open: false, ...EMPTY_THREAD });
       }}
       onOpenDetails={({ project, index }) => setDetails({ project, index })}
       onCloseDetails={() => setDetails(null)}

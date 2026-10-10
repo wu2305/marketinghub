@@ -104,9 +104,9 @@ export function useKnowledgeCreateDemo({
     const persistedValues = { ...values };
     /* Save keeps knowledge offline; Submit keeps the form's availability (R4). Nothing is published here: Submit sends it to review (A1). */
     if (action === "save" && ["Business Term", "Analytical Model"].includes(type)) persistedValues.status = persistedValues.enabled = false;
-    if (action === "submit" && type === "Analytical Model") persistedValues.status = persistedValues.enabled = true;
+    if (action === "submit" && ["Business Term", "Analytical Model"].includes(type)) persistedValues.status = persistedValues.enabled = true;
     if (type === "Scenario Reporting") persistedValues.status = persistedValues.enabled = false;
-    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : type === "Analytical Model" ? "Published" : reportEditAvailable ? undefined : "Under Review";
+    const stage = action === "save" ? "Draft" : type === "Scenario Reporting" ? "Queued" : ["Business Term", "Analytical Model"].includes(type) ? "Published" : reportEditAvailable ? undefined : "Under Review";
     const payload = { type, mode, id, values: persistedValues, ...(stage ? { stage } : {}) };
     (action === "save" ? onSave : onSubmit)?.(payload);
     if (["Business Term", "Scenario Reporting"].includes(type) || reportEditAvailable) {

@@ -99,10 +99,11 @@ export const KNOWLEDGE_CREATE = {
     scenarioName: "Enter scenario reporting name", relatedReport: "Select a report", scenarioDescription: "Describe this scenario report's use case and main purpose, so it is easy to reference later.", principlesTitle: "Enter knowledge title", principlesDescription: "Describe the principle and rule details",
   },
   businessTerm: {
+    publishedNotice: "Published and enabled",
     title: "Create Business Term", guidanceTitle: "Build a common language",
     guidance: "Clearly define the meaning, usage, and boundaries of this business term to help teams talk about data consistently.",
-    reminder: "Operation reminder: Save keeps this term in Draft. Submit sends it for review.",
-    labels: { title: "Title", kind: "Term Type", description: "Description", synonyms: "Synonyms", scope: "Data Model", select: "Select one or more", cancel: "Cancel", save: "Save", submit: "Submit", required: "This field is required." },
+    reminder: "Save Draft keeps this term disabled in Draft. Publish & Enable publishes it for AI use.",
+    labels: { title: "Title", kind: "Term Type", description: "Description", synonyms: "Synonyms", scope: "Data Model", select: "Select one or more", cancel: "Cancel", save: "Save Draft", submit: "Publish & Enable", required: "This field is required." },
     placeholders: { title: "Enter the business term title.", description: "Explain the meaning, usage, and boundary of this term.", synonyms: "Add aliases, abbreviations, or equivalent terms, separated by commas." },
   },
   analysis: {
@@ -133,9 +134,10 @@ export const KNOWLEDGE_CREATE = {
     discard: { title: "Discard changes?", text: "Your unsaved changes will be lost.", keep: "Keep Editing", confirm: "Discard" },
   },
   scenario: {
+    saveLabel: "Save Draft", submitLabel: "Submit for Review",
     title: "Create Scenario Reporting", description: "Use a related report, supporting materials, and a structure note to define how this report should be written.",
     guidance: "Describe the report structure, what each section should cover, and any chart, table, or style requirements.\n\nFor example:\n1. An executive summary.\n2. Show sales and traffic trends by city with a line chart for the reporting period and a bar chart for city comparison. Include a compact table with clear column headers, right-aligned numeric values, and rankings by sales, conversion rate, and traffic.\n3. Explain abnormal cities and give action recommendations.\n4. Conclusions or recommendations.",
-    reminder: "Operation reminder: Save keeps this scenario in Draft. Submit sends it to Queued first, then Building.",
+    reminder: "Save Draft keeps this scenario in Draft. Submit for Review sends it to Queued first, then Building.",
   },
   records: {
     "investment-principles": { type: "Principles", title: "Campaign investment decision principles", description: "Shared guardrails for evaluating investment pressure, conversion efficiency, and the confidence required before recommending action.", businessDomain: [], enabled: true },
