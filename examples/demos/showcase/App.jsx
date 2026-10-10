@@ -331,29 +331,36 @@ function ScenarioEditRoute({ params }) {
   return <ScenarioEditPage {...props} logo={router.logo} navigation={router.navigation} />;
 }
 
+/* The nine pages the product still has, in the order of the top navigation. */
+export const currentRoutes = {
+  home: HomeRoute,
+  cockpit: CockpitRoute,
+  "self-service": SelfServiceRoute,
+  "data-upload": DataUploadRoute,
+  "media-tracking-detail": MediaTrackingRoute,
+  campaign: CampaignRoute,
+  interpreter: InterpreterRoute,
+  "knowledge-create": KnowledgeCreateRoute,
+  "data-model": DataModelRoute,
+};
+
+/* The eight pages retired on 2026-10-09: source and tests stay, Storybook has no story for them. */
+export const retiredRoutes = {
+  "knowledge-view": KnowledgeViewRoute,
+  "metric-dictionary": MetricDictionaryRoute,
+  "review-center": ReviewCenterRoute,
+  "feedback-quality": FeedbackQualityRoute,
+  "personal-memory": PersonalMemoryRoute,
+  "scenario-library": ScenarioLibraryRoute,
+  "scenario-detail": ScenarioDetailRoute,
+  "scenario-edit": ScenarioEditRoute,
+};
+
+/** The nine current pages, linked as in the product. Storybook's Examples/Product walkthrough renders this. */
+export function CurrentPagesSite() {
+  return <DemoSite brand={brand} routes={currentRoutes} />;
+}
+
 export function App() {
-  return (
-    <DemoSite
-      brand={brand}
-      routes={{
-        home: HomeRoute,
-        cockpit: CockpitRoute,
-        "self-service": SelfServiceRoute,
-        "data-upload": DataUploadRoute,
-        "media-tracking-detail": MediaTrackingRoute,
-        campaign: CampaignRoute,
-        interpreter: InterpreterRoute,
-        "knowledge-create": KnowledgeCreateRoute,
-        "knowledge-view": KnowledgeViewRoute,
-        "metric-dictionary": MetricDictionaryRoute,
-        "data-model": DataModelRoute,
-        "review-center": ReviewCenterRoute,
-        "feedback-quality": FeedbackQualityRoute,
-        "personal-memory": PersonalMemoryRoute,
-        "scenario-library": ScenarioLibraryRoute,
-        "scenario-detail": ScenarioDetailRoute,
-        "scenario-edit": ScenarioEditRoute,
-      }}
-    />
-  );
+  return <DemoSite brand={brand} routes={{ ...currentRoutes, ...retiredRoutes }} />;
 }

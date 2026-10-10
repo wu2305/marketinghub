@@ -36,7 +36,7 @@ export function loadStories() {
         name: Story.storyName ?? exportName,
         key: `${file.replace(/^\.\.\//, "")}#${exportName}`,
         Story,
-        isPage: module.default.title === "Pages",
+        isPage: module.default.title === "Pages" || module.default.parameters?.wholeSite === true,
       })),
     );
 }
