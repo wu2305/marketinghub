@@ -95,16 +95,16 @@ describe("consumer-built Business Term workspace", () => {
     render(<BusinessTermApp />);
     addTerm();
     expect(document.querySelector('.mh-kcreate[data-kc-type="Business Term"][data-kc-mode="create"]')).toBeTruthy();
-    press("Save");
+    press("Save Draft");
     expect(document.querySelectorAll('[aria-invalid="true"]').length).toBe(2);
     fill("title", "Repeat Buyer");
     fill("description", "A customer with two or more paid orders in the period.");
     fill("synonyms", "Returning Customer, Loyal Buyer");
-    press("Save");
+    press("Save Draft");
     expect(titles()[0]).toBe("Repeat Buyer");
     expect(card("Repeat Buyer").querySelector(".mh-library-item__draft")?.textContent).toBe("Draft");
     expect(card("Repeat Buyer").textContent).toContain("Returning Customer");
-    expect(titles()).toHaveLength(7);
+    expect(titles()).toHaveLength(6);
   });
 
   it("Edit → Save updates that card without duplicating it", () => {
@@ -116,7 +116,7 @@ describe("consumer-built Business Term workspace", () => {
     expect(title.value).toBe("GMV (Gross Merchandise Value)");
     expect((document.querySelector('[name="synonyms"]') as HTMLInputElement).value).toBe("Gross Sales, Merchandise Value, Gross Merchandise Sales");
     fill("description", "Edited description.");
-    press("Save");
+    press("Save Draft");
     expect(titles()).toHaveLength(6);
     expect(titles().filter((item) => item === "GMV (Gross Merchandise Value)")).toHaveLength(1);
     expect(card("GMV (Gross Merchandise Value)").textContent).toContain("Edited description.");
@@ -131,14 +131,14 @@ describe("consumer-built Business Term workspace", () => {
     expect(titles()).toEqual(before);
   });
 
-  it("Submit keeps the record and announces the review", () => {
+  it("Publish & Enable keeps the record and announces publication", () => {
     render(<BusinessTermApp />);
     addTerm();
     fill("title", "Submitted term");
     fill("description", "Goes to review.");
-    press("Submit");
+    press("Publish & Enable");
     expect(titles()).toContain("Submitted term");
-    expect(toast()).toContain("Submitted for review");
+    expect(toast()).toContain("Published and enabled");
   });
 
   it("keeps two instances independent", () => {

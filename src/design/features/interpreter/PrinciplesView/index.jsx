@@ -71,7 +71,7 @@ function PrincipleText({ text, expanded, labels, onToggle }) {
  * @param {Array<string>} [props.selectedCategories=[]]
  * @param {number} [props.page=1]
  * @param {number} [props.pageSize=10]
- * @param {Array<number>} [props.pageSizes=[5, 10, 20]]
+ * @param {Array<number>} [props.pageSizes=[10, 20, 50]]
  * @param {Array<string>} [props.expanded=[]] ids of expanded descriptions
  * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, categoryLabel, allCategoriesLabel, selectedCategoriesLabel, categoryMetaLabel, countLabel ("{shown}", "{total}"), countUnit, emptyTitle, emptyMessage, clearFiltersLabel, rowsPerPageLabel, previousLabel, nextLabel, expandLabel, collapseLabel, expandTitle, collapseTitle
  * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" shortcut)
@@ -90,7 +90,7 @@ export function PrinciplesView({
   selectedCategories = [],
   page = 1,
   pageSize = 10,
-  pageSizes = [5, 10, 20],
+  pageSizes = [10, 20, 50],
   expanded = [],
   strings = {},
   searchRef,
@@ -113,7 +113,7 @@ export function PrinciplesView({
     emptyTitle = "No matching principles.",
     emptyMessage = "Change the category or search.",
     clearFiltersLabel = "Clear filters",
-    rowsPerPageLabel = "Rows per page",
+    rowsPerPageLabel = "Items per page",
     previousLabel = "Previous",
     nextLabel = "Next",
     expandLabel = "Expand description",

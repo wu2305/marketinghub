@@ -28,7 +28,7 @@ export default {
       options: INTERPRETER.principles.map((item) => item.category),
       description: bi("Selected Category values. The host stores this list.", "已选的 Category 值。这个列表由宿主保存。"),
     },
-    pageSize: { control: "inline-radio", options: [5, 10, 20], description: bi("Rows per page.", "每页条数。") },
+    pageSize: { control: "inline-radio", options: [10, 20, 50], description: bi("Items per page.", "每页条数。") },
     onQueryChange: callbackProp("onQueryChange", "({name, value}) => void", { name: "search", value: "guardrail" }, bi("The function runs when search text changes. The result has `name` and `value`.", "搜索文字变化时会调用这个函数。结果里有 `name` 和 `value`。")),
     onToggleCategory: callbackProp("onToggleCategory", "({id, checked}) => void", { id: "System", checked: true }, bi("The function runs when a Category checkbox changes. The result has `id` and `checked`.", "Category 复选框变化时会调用这个函数。结果里有 `id` 和 `checked`。")),
     onClearFilters: callbackProp("onClearFilters", "({reason}) => void", { reason: "empty-state" }, bi("The function runs when Clear filters runs from the empty state. The result has `reason`.", "在空状态下点击 Clear filters 时会调用这个函数。结果里有 `reason`。")),

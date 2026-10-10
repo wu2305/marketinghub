@@ -93,7 +93,7 @@ describe("LibraryToolbar", () => {
     );
     fireEvent.change(screen.getByRole("searchbox", { name: "Search terms" }), { target: { value: "gmv" } });
     expect(onChange).toHaveBeenLastCalledWith({ field: "search", value: "gmv" });
-    fireEvent.change(screen.getByRole("combobox"), { target: { value: "PR" } });
+    fireEvent.click(screen.getByLabelText("Principles"));
     expect(onChange).toHaveBeenLastCalledWith({ field: "type", value: "PR" });
     fireEvent.click(screen.getByRole("tab", { name: "Rejected" }));
     expect(onChange).toHaveBeenLastCalledWith({ field: "tab", value: "rejected" });

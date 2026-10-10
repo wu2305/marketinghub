@@ -189,13 +189,13 @@ margin: 0;
   flex: 0 0 auto;
 }
 .mh-library-item--knowledge .mh-library-item__description {
-  height: 3em;
-  min-height: 3em;
+  min-height: 0;
   flex: 0 0 auto;
 }
 .mh-library-item--knowledge .mh-library-item__foot {
   width: 100%;
   align-self: stretch;
+  margin-top: auto;
 }
 .mh-library-item--knowledge .mh-library-item__meta {
   width: 100%;
@@ -237,5 +237,3 @@ margin: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.mh-library-item--knowledge .mh-library-item__row:has(.mh-item-actions) { height: var(--mh-space-8); }

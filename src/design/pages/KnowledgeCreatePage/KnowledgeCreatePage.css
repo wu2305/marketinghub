@@ -10,3 +10,20 @@
 
 /* Analytical Model: actions sit directly under the fields, without a divider. */
 .mh-kcreate--analysis .mh-kcreate__footer { margin-top: var(--mh-space-7); padding-top: 0; border-top: 0; }
+
+/* Text fields stay neutral in create/edit forms, including focus and errors. */
+.mh-kcreate input:not([type="checkbox"]):not([type="file"]),
+.mh-kcreate textarea {
+  background: transparent;
+  box-shadow: none;
+}
+.mh-kcreate input:not([type="checkbox"]):not([type="file"]):focus,
+.mh-kcreate textarea:focus {
+  box-shadow: none;
+  border-color: var(--mh-line-strong);
+}
+.mh-kcreate input:not([type="checkbox"]):not([type="file"]):focus-visible,
+.mh-kcreate textarea:focus-visible {
+  outline: 2px solid var(--mh-line-strong);
+  outline-offset: 2px;
+}
