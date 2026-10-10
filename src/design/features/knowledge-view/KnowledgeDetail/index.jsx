@@ -31,7 +31,7 @@ function Crumbs({ record, copy, hrefFor, onNavigate, model = false }) {
 
 function VersionPanel({ copy, versions, open, onClose }) {
   return <Modal open={open} variant="drawer" className="mh-kdetail__versions" eyebrow={copy.versionEyebrow} title={copy.versionButton} closeLabel={copy.closeVersions} onClose={onClose}>
-    <div className="mh-kdetail__version-list">{versions.map((version) => <article className={`mh-kdetail__version${version.current ? " mh-kdetail__version--current" : ""}`} key={version.number}>
+    <div className="mh-kdetail__version-list">{versions.map((version, index) => <article className={`mh-kdetail__version${version.current ? " mh-kdetail__version--current" : ""}`} key={`${version.number}-${index}`}>
       <div className="mh-kdetail__version-number">{version.number}</div><div><strong>{version.label}</strong><span>{version.editor} · {version.date}</span><p>{version.description}</p></div>
     </article>)}</div>
   </Modal>;

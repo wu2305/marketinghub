@@ -107,7 +107,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
               key={id}
               type="button"
               className={cx("mh-dmview__dialog-tab", tab === id && "is-active")}
-              aria-selected={tab === id}
+              aria-current={tab === id ? "true" : undefined}
               onClick={() => onTab?.(id)}
             >
               {label}
