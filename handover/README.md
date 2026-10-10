@@ -1105,3 +1105,8 @@ Verified an external /design deslop report against main. Already on main: horizo
 ### 2026-10-10 Accepted Interpreter controls release
 
 User accepted the current round and authorized commit, push, PR merge and production Storybook publication through main → Cloudflare Workers Builds. Integrated origin/main f747711, retaining its focus-first-invalid behavior and OperationReminder component. Scope: unified list search/filter typography and menus, adaptive card descriptions and 24px Creator rows, form footer actions/help placement/unfilled text inputs, shared custom items/page pagination (6/12/24; Principles10/20/50). Latest pagination is120px wide,24px high; blue current-page box and selected-menu emphasis follow the user reference. Production status remains pending until PR merge and live build-stamp verification.
+
+
+### 2026-10-10 Acceptance sweep: drawers kept mounted count as closed
+
+Merging #134 before #136 made the sweep fail on `Examples/Consumer report copilot` (ReportDesk, ReplacementData): the host keeps `ReportCopilot` mounted and closes it with `aria-hidden`, and the sweep only accepted a dialog as closed when it left the DOM. The product behaviour is correct (Escape and Close hide it, the opener reopens it). Fixed the harness (`acceptance/exercises.jsx`): a dialog is gone when it is disconnected or hidden. Reopen still requires a second visible overlay, so a drawer that never closes still fails.

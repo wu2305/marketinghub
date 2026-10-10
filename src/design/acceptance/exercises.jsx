@@ -1,5 +1,5 @@
 import { fireEvent } from "@testing-library/react";
-import { controls, describe as nameElement, dismissers, isDisabled, nameOf, overlays, reachable, roleOf } from "./dom.js";
+import { controls, describe as nameElement, dismissers, isDisabled, isHidden, nameOf, overlays, reachable, roleOf } from "./dom.js";
 import { mountStory } from "./harness.jsx";
 import { check } from "./invariants.js";
 
@@ -94,6 +94,9 @@ function repeatedActions(run, story, shell, afterUse) {
 const pressEscape = () => fireEvent.keyDown(document.activeElement ?? body(), { key: "Escape", code: "Escape" });
 const closeCallback = /close|cancel|dismiss|back/i;
 
+/* A dialog is gone when it left the DOM or, for a drawer the host keeps mounted, when it was hidden from the page. */
+const gone = (overlay) => !overlay.isConnected || isHidden(overlay);
+
 function openAndClose(run, story, shell, afterUse) {
   const found = [];
   try {
@@ -109,11 +112,11 @@ function openAndClose(run, story, shell, afterUse) {
       const opened = overlays(document).filter((overlay) => !before.includes(overlay));
       if (opened.length) {
         pressEscape();
-        let closed = opened.every((overlay) => !overlay.isConnected);
+        let closed = opened.every(gone);
         if (!closed) {
           const dismiss = dismissers(opened[0])[0];
           if (dismiss) operate(dismiss);
-          closed = opened.every((overlay) => !overlay.isConnected);
+          closed = opened.every(gone);
         }
         const asked = run.calls.slice(callsBefore).some((call) => closeCallback.test(call.name));
         if (!closed && !asked) found.push(`${label}: opened a dialog that neither Escape nor its dismiss control closes or reports`);
