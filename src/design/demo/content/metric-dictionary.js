@@ -90,6 +90,7 @@ export const METRIC_DICTIONARY = {
     constantTitle: "Add Constant",
     constantPrompt: "Enter a constant value (e.g. 100, 0.5):",
     constantAdd: "Add",
+    constantError: "Enter a number, for example 100 or 0.5.",
     nameError: "Please enter a metric name.",
     formulaError: "Please build a formula first.",
     testResult: "Test running formula... Result: 42.86 (simulated)",

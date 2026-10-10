@@ -10,6 +10,8 @@ import { BusinessTermForm } from "../../features/interpreter/BusinessTermForm/in
 import { KnowledgeCreateFields } from "../../features/knowledge-create/KnowledgeCreateFields/index.jsx";
 import "./KnowledgeCreatePage.css";
 
+const NO_INVALID = [];
+
 /**
  * Knowledge create page. It creates or edits one knowledge record.
  * `content` supplies visible copy. `type` selects the form. `mode` is create, edit, or copy.
@@ -46,7 +48,8 @@ export function KnowledgeCreatePage({
 }) {
   const labels = content.labels;
   const cardRef = React.useRef(null);
-  useFocusFirstInvalid(cardRef, invalid);
+  /* Business Term's own form moves focus itself (a host can compose it alone), so the page leaves it that one. */
+  useFocusFirstInvalid(cardRef, type === "Business Term" ? NO_INVALID : invalid);
   const isTerm = type === "Business Term";
   const isAnalysis = type === "Analytical Model";
   const isScenario = type === "Scenario Reporting";

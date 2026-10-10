@@ -40,7 +40,12 @@ export function useScenarioEditDemo(props) {
   const { toast, showToast } = useToast();
   React.useEffect(() => { setValues({ ...seed, ...initial.values }); setErrors(initial.errors || {}); setPreview(initial.preview || null); }, [seed, initial]);
 
-  const onChange = ({ field, value }) => { setValues((current) => ({ ...current, [field]: value })); props.onChange?.({ field, value }); };
+  /* Fixing a field drops its own error at once; an untouched field keeps the same errors object, so only a failed submit refocuses. */
+  const onChange = ({ field, value }) => {
+    setValues((current) => ({ ...current, [field]: value }));
+    setErrors((current) => (current[field] ? { ...current, [field]: false } : current));
+    props.onChange?.({ field, value });
+  };
   const onSubmit = ({ values: submittedValues }) => {
     const nextErrors = Object.fromEntries(REQUIRED.map((field) => [field, !String(submittedValues[field] || "").trim()]));
     setErrors(nextErrors);

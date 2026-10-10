@@ -32,8 +32,8 @@ export function ScenarioEditForm({ content, values, errors = {}, preview = null,
   const fill = (field, tone, icon, placeholder) => <SkillFormFillCard tone={tone} icon={icon} label={labels[field]} value={values[field] || ""} placeholder={placeholder} autoFillLabel={labels.autoFill} onChange={({ value }) => onChange?.({ field, value })} onAutoFill={() => onAutoFill?.({ field })} />;
   return <SkillForm labels={labels} values={values} scopes={scopes} errors={errors} preview={preview} cancelHref={cancelHref} onChange={onChange} onRunPreview={onRunPreview} onSaveDraft={onSaveDraft} onSubmit={onSubmit} onCancel={({ href }) => onNavigate?.({ id: "scenario-library", params: {}, href, label: labels.cancel })}>
     <SkillFormCard tone="info" icon="file" label={labels.report} htmlFor={`${id}-report`}>
-      <select id={`${id}-report`} value={values.report || ""} required aria-invalid={Boolean(errors.report)} onChange={(event) => onChange?.({ field: "report", value: event.target.value })}><option value="">{labels.selectReport}</option>{reports.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
-      {errors.report && <small role="alert">{labels.required}</small>}
+      <select id={`${id}-report`} value={values.report || ""} required aria-invalid={errors.report ? true : undefined} aria-describedby={errors.report ? `${id}-report-error` : undefined} onChange={(event) => onChange?.({ field: "report", value: event.target.value })}><option value="">{labels.selectReport}</option>{reports.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
+      {errors.report && <small id={`${id}-report-error`} role="alert">{labels.required}</small>}
       {report && <a className="mh-scenario-edit-form__report-link" href={reportHref} onClick={(event) => plainPrimary(event) && onNavigate?.({ id: "cockpit", params: reportParams, href: reportHref, label: `${labels.openReportPrefix}${report.label}` })}>{labels.openReportPrefix}{report.label}</a>}
     </SkillFormCard>
     {fill("logic", "success", "bulb", labels.logicPlaceholder)}

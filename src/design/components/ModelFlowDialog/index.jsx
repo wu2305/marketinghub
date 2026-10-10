@@ -2,6 +2,7 @@ import "../../tokens.css";
 import React from "react";
 import { cx } from "../../cx.js";
 import { useOverlayLayer } from "../../lib/overlay.js";
+import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import "./ModelFlowDialog.css";
 
 
@@ -113,6 +114,9 @@ export function ModelFlowDialog({
   const [error, setError] = React.useState(false);
   const [invalid, setInvalid] = React.useState({});
   const [done, setDone] = React.useState(null);
+  const errorId = React.useId();
+  const invalidKeys = React.useMemo(() => Object.keys(invalid), [invalid]);
+  useFocusFirstInvalid(formRef, invalidKeys);
   useOverlayLayer({ open: Boolean(step), onClose, layerRef, initialFocusRef: closeRef });
   React.useEffect(() => () => window.clearTimeout(doneTimer.current), []);
   React.useEffect(() => {
@@ -161,10 +165,7 @@ export function ModelFlowDialog({
       }),
     );
     setInvalid(missing);
-    if (Object.keys(missing).length) {
-      formRef.current?.querySelector(".is-invalid")?.focus();
-      return;
-    }
+    if (Object.keys(missing).length) return;
     (kind === "save" ? onSave : onSubmit)?.({ values });
     setDone(kind);
     window.clearTimeout(doneTimer.current);
@@ -264,7 +265,7 @@ export function ModelFlowDialog({
             </section>
           </div>
         ) : (
-          <form className="mh-flow__form" ref={formRef} onSubmit={(event) => event.preventDefault()}>
+          <form className="mh-flow__form" ref={formRef} noValidate onSubmit={(event) => event.preventDefault()}>
             {sections.map((section) => (
               <section key={section.title} className="mh-flow__section">
                 <h4>{section.title}</h4>
@@ -282,6 +283,10 @@ export function ModelFlowDialog({
                       </span>
                       <Tag
                         name={field.key}
+                        aria-label={field.label}
+                        required={field.required || undefined}
+                        aria-invalid={invalid[field.key] ? true : undefined}
+                        aria-describedby={invalid[field.key] ? `${errorId}-${field.key}` : undefined}
                         defaultValue={draft[field.key] ?? ""}
                         placeholder={field.placeholder}
                         className={cx(invalid[field.key] && "is-invalid", field.tall && "mh-flow__tall")}
@@ -295,7 +300,7 @@ export function ModelFlowDialog({
                           }
                         }}
                       />
-                      {invalid[field.key] ? <span className="mh-flow__field-error">{invalid[field.key]}</span> : null}
+                      {invalid[field.key] ? <span id={`${errorId}-${field.key}`} className="mh-flow__field-error">{invalid[field.key]}</span> : null}
                     </label>
                   );
                 })}

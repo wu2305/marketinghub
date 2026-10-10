@@ -1,4 +1,5 @@
 import "../../tokens.css";
+import React from "react";
 import { Select } from "../../components/Select/index.jsx";
 import { TextArea } from "../../components/TextArea/index.jsx";
 import { TextInput } from "../../components/TextInput/index.jsx";
@@ -14,9 +15,9 @@ export const formFieldControls = ["text", "textarea", "select"];
  * @param {string} props.label
  * @param {string} [props.name]
  * @param {typeof formFieldControls[number]} [props.control="text"]
- * @param {boolean} [props.required=false] renders the required marker
- * @param {boolean} [props.invalid=false]
- * @param {string} [props.hint]
+ * @param {boolean} [props.required=false] renders the required marker and sets the native `required` attribute on the control
+ * @param {boolean} [props.invalid=false] sets aria-invalid and the error style
+ * @param {string} [props.hint] helper or error line under the control; the control is described by it (aria-describedby), so it is read after the label
  * @param {string} [props.value] pass to control the field
  * @param {string} [props.defaultValue] initial uncontrolled value
  * @param {string} [props.placeholder]
@@ -42,20 +43,24 @@ export function FormField({
   className,
   onChange,
 }) {
+  /* The hint sits inside the label element so the layout stays one grid, which would fold it into the control's name.
+     The control is named from the label text alone and described by the hint instead. */
+  const hintId = React.useId();
+  const describedBy = hint ? hintId : undefined;
   return (
     <label className={cx("mh-field", className, invalid && "is-invalid")}>
       <span>
         {label}
-        {required ? <i className="mh-field__required"> *</i> : null}
+        {required ? <i className="mh-field__required" aria-hidden="true"> *</i> : null}
       </span>
       {control === "textarea" ? (
-        <TextArea name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} rows={rows} invalid={invalid} onChange={onChange} />
+        <TextArea name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} rows={rows} invalid={invalid} required={required} describedBy={describedBy} label={label} onChange={onChange} />
       ) : control === "select" ? (
-        <Select name={name} value={value} defaultValue={defaultValue} options={options} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} onChange={onChange} />
+        <Select name={name} value={value} defaultValue={defaultValue} options={options} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} required={required} describedBy={describedBy} label={label} onChange={onChange} />
       ) : (
-        <TextInput name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} onChange={onChange} />
+        <TextInput name={name} value={value} defaultValue={defaultValue} placeholder={placeholder} autoComplete={autoComplete} invalid={invalid} required={required} describedBy={describedBy} label={label} onChange={onChange} />
       )}
-      {hint ? <small className="mh-field__hint">{hint}</small> : null}
+      {hint ? <small id={hintId} className="mh-field__hint">{hint}</small> : null}
     </label>
   );
 }

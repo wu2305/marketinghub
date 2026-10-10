@@ -3,6 +3,7 @@ import { FormField } from "../../../components/FormField/index.jsx";
 import { Button } from "../../../components/Button/index.jsx";
 import { OperationReminder } from "../../../lib/OperationReminder/index.jsx";
 import { Icon } from "../../../icons.jsx";
+import { useFocusFirstInvalid } from "../../../lib/focus-first-invalid.js";
 import "../../../tokens.css";
 import "./BusinessTermForm.css";
 
@@ -26,7 +27,7 @@ const sameList = (a, b) => a.length === b.length && a.every((item, index) => ite
  * @param {string} props.reminder
  * @param {object} props.labels Visible field and action labels.
  * @param {object} props.placeholders Input hints.
- * @param {string[]} props.invalid Required field names in error state.
+ * @param {string[]} props.invalid Required field names in error state. The form moves focus to the first invalid field when a failed submit changes this list, so a host only has to set it; drop a name from it when the field changes.
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
  * @param {(event:{values:object}) => void} [props.onCancel]
  * @param {(event:{values:object}) => void} [props.onSave]
@@ -39,6 +40,7 @@ export function BusinessTermForm({
   placeholders = { title: "Enter the business term title.", description: "Explain the meaning, usage, and boundary of this term.", synonyms: "Add aliases, abbreviations, or equivalent terms, separated by commas." },
   invalid = [], onChange, onCancel, onSave, onSubmit,
 }) {
+  const formRef = React.useRef(null);
   const [scopeOpen, setScopeOpen] = React.useState(false);
   const scopeRef = React.useRef(null);
   React.useEffect(() => {
@@ -53,9 +55,10 @@ export function BusinessTermForm({
   const [synonymText, setSynonymText] = React.useState(() => synonyms.join(", "));
   const synonymField = sameList(parseSynonyms(synonymText), synonyms) ? synonymText : synonyms.join(", ");
   const values = { title, kind, description, synonyms, scope };
-  const errors = Array.isArray(invalid) ? invalid : invalid ? ["title", "description"] : [];
+  const errors = React.useMemo(() => (Array.isArray(invalid) ? invalid : invalid ? ["title", "description"] : []), [invalid]);
+  useFocusFirstInvalid(formRef, errors);
   const set = (name, value) => onChange?.({ name, value });
-  return <form className="mh-btform" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values }); }}>
+  return <form ref={formRef} className="mh-btform" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values }); }}>
     <aside className="mh-btform__guidance"><span aria-hidden="true"><Icon name="bulb-rays" /></span><div><strong>{guidanceTitle}</strong><p>{guidance}</p></div></aside>
     <div className="mh-btform__fields">
       <FormField label={labels.title} name="title" value={title} required invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
