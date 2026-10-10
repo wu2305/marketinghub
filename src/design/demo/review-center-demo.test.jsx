@@ -48,12 +48,12 @@ describe("Review Center demo", () => {
     expect(count("APPROVED THIS WEEK")).toBe("21");
     expect(count("REJECTED THIS WEEK")).toBe("0");
     expect(screen.getByRole("tab", { name: "Rejected 0" })).toBeTruthy();
-    fireEvent.change(screen.getByLabelText("Submitted"), { target: { value: "today" } });
-    expect(screen.getByLabelText("Submitted").value).toBe("today");
+    fireEvent.click(screen.getByLabelText("Today"));
+    expect(screen.getByLabelText("Today").checked).toBe(true);
     expect(rows()).toHaveLength(3);
     expect(screen.getByText("3 items")).toBeTruthy();
-    fireEvent.change(screen.getByLabelText("Submitted"), { target: { value: "" } });
-    fireEvent.change(screen.getByLabelText("Type"), { target: { value: "Data Model" } });
+    fireEvent.click(screen.getByLabelText("All time"));
+    fireEvent.click(screen.getByLabelText("Data Model"));
     expect(rows()).toHaveLength(2);
     fireEvent.change(screen.getByRole("searchbox", { name: "Search review items" }), { target: { value: "Rednote" } });
     expect(rows()).toHaveLength(1);

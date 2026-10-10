@@ -194,8 +194,8 @@ function DetailBody({ type, record, strings, onAction }) {
  * @param {Array<object>} [props.filters=[]] CheckboxFilter descriptors (fm order)
  * @param {string} [props.query=""]
  * @param {number} [props.page=1]
- * @param {number} [props.pageSize=10]
- * @param {Array<number>} [props.pageSizes=[5,10,20]]
+ * @param {number} [props.pageSize=6]
+ * @param {Array<number>} [props.pageSizes=[6, 12, 24]]
  * @param {object} [props.strings={}] copy bundle — searchLabel, searchPlaceholder,
  *   selectedLabel ("{labels}" joins selected option labels), emptyMessage,
  *   units, rowsPerPageLabel, previousLabel, nextLabel, detailCloseLabel,
@@ -241,8 +241,8 @@ export function FieldLibraryView({
   filters = [],
   query = "",
   page = 1,
-  pageSize = 10,
-  pageSizes = [5, 10, 20],
+  pageSize = 6,
+  pageSizes = [6, 12, 24],
   strings = {},
   countUnit = "records",
   createHref,
@@ -276,7 +276,7 @@ export function FieldLibraryView({
     clearFiltersLabel = "Clear filters",
     countLabel = "Showing {shown} of {total} {unit}",
     units = ["records", "records"],
-    rowsPerPageLabel = "Rows per page",
+    rowsPerPageLabel = "Items per page",
     previousLabel = "Previous",
     nextLabel = "Next",
   } = strings;

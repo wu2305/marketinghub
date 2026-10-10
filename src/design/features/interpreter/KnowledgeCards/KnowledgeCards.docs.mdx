@@ -16,8 +16,8 @@ One shared card foundation, six business compositions. The canvases below reuse 
 The designer approved the four-part structure on 2026-10-09. Static Demo and Storybook use the same field order. / 用户于 2026-10-09 确认以下四部分结构，静态 Demo 与 Storybook 按同一顺序实现。
 
 1. **Title + Enabled/Disabled:** one 24px line; title truncates with ellipsis. / 标题与可用状态同行，行高 24px；标题超长省略。
-2. **Description:** two 18px lines, reserving 36px even for an empty description. / 描述每行 18px，固定占两行共 36px；没有描述时保留空白位置。
-3. **Metadata:** each existing field takes one 24px row, with 2.67px between rows; Creator rows with action icons remain 32px high. Long values stay on one line with ellipsis; full text is available on hover. Missing fields have no placeholder rows. / 每个已有字段占一行，行高 24px、行间距约 2.67px，带操作图标的 Creator 行保持 32px；内容单行省略，悬停可查看完整文字。没有的字段不占行。
+2. **Description:** up to two 18px lines, with height based on content. Cards in the same grid row stretch to the tallest card. / 描述每行 18px，最多两行，按实际内容占高；同排卡片以该排最高卡片统一高度。
+3. **Metadata:** each existing field takes one 24px row, with 2.67px between rows; Creator rows with action icons also use 24px. Long values stay on one line with ellipsis; full text is available on hover. Missing fields have no placeholder rows. / 每个已有字段占一行，行高 24px、行间距约 2.67px，带操作图标的 Creator 行同样为 24px；内容单行省略，悬停可查看完整文字。没有的字段不占行。
 4. **Actions:** Business Terms, Analytical Model and Scenario Reports put action icons on the right of the final Creator row. / 术语、分析模型、场景报表的操作图标位于最后一行 Creator 右侧。
 
 Field order: Synonyms → Project / Domain / Data Model → Unit + Type (two equal columns in one row) → Recipients → Send time → Referenced Metrics / Report → Process → Creator. Synonyms and Recipients render each value as a rounded capsule in one non-wrapping row; long pill text uses ellipsis and the full value is available on hover. Process uses a status capsule without the availability dot. / 字段顺序：同义词 → 项目或域或数据模型 → 单位与类型（同行等宽两列）→ 收件人 → 发送时间 → 引用指标或关联报表 → 流程状态 → 创建者。Synonyms 与 Recipients 的每个值分别显示为圆角胶囊，保持单行不换行，长胶囊文字省略，悬停可查看完整内容。Process 使用胶囊标签，内部无圆点。
@@ -53,7 +53,7 @@ Definition plus structured metric metadata and synonyms. / 定义、结构化指
 
 ## Email Reports · 邮件报表
 
-Delivery information follows the shared two-line description slot; empty descriptions reserve that space. / 发送信息位于统一的两行描述区域之后；没有描述时保留该区域。
+Delivery information follows the shared two-line description slot; empty descriptions do not reserve two lines. / 发送信息位于统一的两行描述区域之后；没有描述时不预留两行高度。
 
 <Canvas of={Field.EmailReports} story={{ inline: false, height: "440px" }} />
 

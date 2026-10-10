@@ -2,7 +2,6 @@ import "../../tokens.css";
 import { Button } from "../Button/index.jsx";
 import { CheckboxFilter } from "../CheckboxFilter/index.jsx";
 import { SearchField } from "../SearchField/index.jsx";
-import { Select } from "../Select/index.jsx";
 import { Tabs } from "../Tabs/index.jsx";
 import "./LibraryToolbar.css";
 
@@ -42,15 +41,17 @@ export function LibraryToolbar({ search, searchRef, facets = [], count, create, 
         </div>
         {facets.map((facet) =>
           facet.kind === "single" ? (
-            <label key={facet.id} className="mh-library-toolbar__facet">
-              <span>{facet.label}</span>
-              <Select
+            <div key={facet.id} className="mh-library-toolbar__facet">
+              <CheckboxFilter
+                single
                 label={facet.label}
-                value={facet.selected ?? ""}
-                options={[{ value: "", label: facet.allLabel ?? "All" }, ...facet.options.map((option) => ({ value: option.id, label: option.label }))]}
-                onChange={({ value }) => onChange?.({ field: facet.id, value })}
+                allLabel={facet.allLabel ?? "All"}
+                selectedLabel="{labels}"
+                selected={[facet.selected ?? ""]}
+                options={[{ id: "", label: facet.allLabel ?? "All" }, ...facet.options]}
+                onToggle={({ id }) => onChange?.({ field: facet.id, value: id })}
               />
-            </label>
+            </div>
           ) : (
             <div key={facet.id} className="mh-library-toolbar__facet">
               <CheckboxFilter

@@ -34,9 +34,9 @@ position: absolute;
 .mh-search--plain {
 display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--mh-space-3);
   height: 44px;
-  padding: 0 13px 0 18px;
+  padding: 0 13px;
   border: 1px solid var(--mh-accent);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
@@ -45,9 +45,9 @@ display: flex;
 
 .mh-search--plain .mh-search__icon {
 position: static;
-  width: 20px;
-  height: 20px;
-  flex: 0 0 20px;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
   transform: none;
   color: var(--mh-text-muted);
 }
@@ -60,9 +60,9 @@ border-color: var(--mh-accent);
 .mh-btview__search .mh-search {
 display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--mh-space-3);
   height: 44px;
-  padding: 0 13px 0 18px;
+  padding: 0 13px;
   border: 1px solid var(--mh-accent);
   border-radius: var(--mh-radius-lg);
   background: var(--mh-surface);
@@ -75,8 +75,22 @@ border-color: var(--mh-accent);
   box-shadow: var(--mh-shadow-raised); outline: 2px solid var(--mh-focus-ring); outline-offset: 2px;}
 
 .mh-btview__search .mh-search__icon {
-flex: 0 0 20px;
-  width: 20px;
-  height: 20px;
+flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
   color: var(--mh-text-muted);
 }
+
+/* Keep search text and its placeholder identical inside nested component scopes. */
+.mh-search .mh-input.mh-input,
+.mh-search .mh-input::placeholder {
+  font-family: var(--mh-font-sans);
+  font-size: var(--mh-font-size-sm);
+  font-weight: var(--mh-font-weight-regular);
+}
+
+.mh-search .mh-input.mh-input {
+  color: var(--mh-text);
+}
+
+.mh-search .mh-input::placeholder { color: var(--mh-text-faint); }

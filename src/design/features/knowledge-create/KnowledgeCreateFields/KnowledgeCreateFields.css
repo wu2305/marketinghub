@@ -70,7 +70,7 @@
 }
 .mh-kcf__help:focus-visible { outline: 2px solid var(--mh-accent-ink); outline-offset: 2px; }
 .mh-kcf__help-tip {
-  display: none; position: absolute; z-index: 10; top: calc(100% + var(--mh-space-2)); left: calc(var(--mh-space-3) * -1);
+  display: none; position: absolute; z-index: 10; bottom: 0; left: calc(100% + var(--mh-space-2));
   width: max-content; max-width: min(480px, calc(100vw - 48px)); padding: var(--mh-space-3) var(--mh-space-4);
   border: 1px solid var(--mh-line); border-radius: var(--mh-radius-md); background: var(--mh-surface); box-shadow: var(--mh-shadow-overlay);
   color: var(--mh-text); font-size: var(--mh-font-size-sm); font-weight: var(--mh-font-weight-regular); line-height: 1.5; white-space: pre-line;
