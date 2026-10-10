@@ -20,7 +20,7 @@ export type Term = {
   scope: string[];
   creator: string;
   status: "Enable" | "Disable";
-  stage?: "Draft" | "Under Review";
+  stage?: "Draft" | "Published";
 };
 
 type FormValues = { title: string; kind: string; description: string; synonyms: string[]; scope: string[] };
@@ -52,7 +52,7 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   const [query, setQuery] = React.useState("");
   const [selected, setSelected] = React.useState<Record<string, string[]>>({ status: [], creator: [] });
   const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(10);
+  const [pageSize, setPageSize] = React.useState(6);
   const [detailId, setDetailId] = React.useState<string | null>(null);
   const [values, setValues] = React.useState<FormValues>(BLANK);
   const [invalid, setInvalid] = React.useState<string[]>([]);
@@ -90,12 +90,12 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
       synonyms: values.synonyms,
       scope: values.kind === "Global Synonym" ? [] : values.scope,
       creator: editing ? find(editing)?.creator || currentUser : currentUser,
-      status: "Disable",
-      stage: submit ? "Under Review" : "Draft",
+      status: submit ? "Enable" : "Disable",
+      stage: submit ? "Published" : "Draft",
     };
     setRecords((all) => (editing ? all.map((record) => (record.id === editing ? term : record)) : [term, ...all]));
     toLibrary();
-    if (submit) flash(setPageToast, INTERPRETER.notices.submitted);
+    if (submit) flash(setPageToast, KNOWLEDGE_CREATE.businessTerm.publishedNotice);
   };
 
   /* The blocked-reason / dialog / confirm / toast sequence is the package's `useGovernedFlow`;

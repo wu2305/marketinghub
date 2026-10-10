@@ -29,8 +29,8 @@ const workflowBadge = (status) => <StatusBadge variant="process" status={String(
  * @param {number} [props.total] filtered count
  * @param {number} [props.totalAll] unfiltered count
  * @param {number} [props.page=1]
- * @param {number} [props.pageSize=10]
- * @param {Array<number>} [props.pageSizeOptions=[5, 10, 20]]
+ * @param {number} [props.pageSize=6]
+ * @param {Array<number>} [props.pageSizeOptions=[6, 12, 24]]
  * @param {string} [props.createHref]
  * @param {React.Ref<HTMLInputElement>} [props.searchRef]
  * @param {object|null} [props.detail] record in the drawer, with `actions`
@@ -58,8 +58,8 @@ export function ScenarioReportsView({
   total = 0,
   totalAll = 0,
   page = 1,
-  pageSize = 10,
-  pageSizeOptions = [5, 10, 20],
+  pageSize = 6,
+  pageSizeOptions = [6, 12, 24],
   createHref,
   searchRef,
   detail = null,

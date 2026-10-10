@@ -54,7 +54,7 @@ describe("useScenarioDemo + ScenarioReportsView", () => {
 
   it("filters by the Status select", () => {
     render(<Harness />);
-    fireEvent.change(screen.getAllByRole("combobox")[0], { target: { value: "Enabled" } });
+    fireEvent.click(screen.getByLabelText("Enabled"));
     expect(cardTitles()).toEqual(["Campaign Review Reporting"]);
   });
 

@@ -31,8 +31,8 @@ const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => St
  * @param {Array<{ id: string, label: string, allLabel?: string, selectedLabel?: string, options: Array<{ id: string, label: string }>, selected: Array<string> }>} [props.filters=[]] multi-select facets (OR within, AND across)
  * @param {string} [props.query=""]
  * @param {number} [props.page=1]
- * @param {number} [props.pageSize=10]
- * @param {Array<number>} [props.pageSizes=[5, 10, 20]]
+ * @param {number} [props.pageSize=6]
+ * @param {Array<number>} [props.pageSizes=[6, 12, 24]]
  * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, selectedLabel, createLabel, creatorLabel, synonymsLabel, moreSynonymsLabel, statusLabels { Enable, Disable }, draftLabel, emptyTitle, emptyMessage, clearFiltersLabel, countLabel ("Showing {shown} of {total} terms"), units, rowsPerPageLabel, previousLabel, nextLabel, detailEyebrow, detailCloseLabel, sections { termType, description, synonyms, dataModel, creator }, actions { edit, delete, disable }, tooltips { permission, "disable-first", "already-disabled" }
  * @param {string} [props.createHref] "Add Business Term" link target
  * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" and Cmd/Ctrl+K shortcuts)
@@ -57,8 +57,8 @@ export function BusinessTermView({
   filters = [],
   query = "",
   page = 1,
-  pageSize = 10,
-  pageSizes = [5, 10, 20],
+  pageSize = 6,
+  pageSizes = [6, 12, 24],
   strings = {},
   createHref,
   searchRef,
@@ -91,7 +91,7 @@ export function BusinessTermView({
     clearFiltersLabel = "Clear filters",
     countLabel = "Showing {shown} of {total} terms",
     units = ["record", "records"],
-    rowsPerPageLabel = "Rows per page",
+    rowsPerPageLabel = "Items per page",
     previousLabel = "Previous",
     nextLabel = "Next",
     detailEyebrow = "Business Term",

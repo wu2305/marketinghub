@@ -79,7 +79,7 @@ export function useBusinessTermDemo(props) {
   const [query, setQuery] = useSynced(props.query || "");
   const [selected, setSelected] = useSynced(props.selected || EMPTY_SELECTED);
   const [page, setPage] = useSynced(props.page || 1);
-  const [pageSize, setPageSize] = useSynced(props.pageSize || 10);
+  const [pageSize, setPageSize] = useSynced(props.pageSize || 6);
   const [detailId, setDetailId] = useSynced(props.detail ?? null);
   const { toast, showToast } = useToast();
   /* Keep both availability spellings in step; lib/governance.js reads `availability` first. */
@@ -159,7 +159,7 @@ export function useBusinessTermDemo(props) {
     query,
     page: currentPage,
     pageSize,
-    pageSizes: props.pageSizes || [5, 10, 20],
+    pageSizes: props.pageSizes || [6, 12, 24],
     strings: { ...strings, tooltips },
     createHref: props.createHref,
     detail: detail ? withActions(detail) : null,

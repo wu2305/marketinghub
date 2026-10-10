@@ -9,7 +9,7 @@ export const ALT_BUSINESS_TERMS = {
   currentUser: "Fixture User",
   createHref: "fixture-create.html?type=Alt%20Term",
   editHref: (id) => `fixture-create.html?type=Alt%20Term&mode=edit&id=${id}`,
-  pageSizes: [5, 10, 20],
+  pageSizes: [6, 12, 24],
   records: [
     {
       id: "alt-alpha",

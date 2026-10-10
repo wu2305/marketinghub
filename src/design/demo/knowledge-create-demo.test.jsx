@@ -23,13 +23,13 @@ describe("P08 demo flow", () => {
     const navigate = vi.fn();
     function Test() { const props = useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, onSave: saved, onNavigate: navigate }); return <KnowledgeCreatePage {...props} />; }
     render(<Test />);
-    fireEvent.click(screen.getByRole("button", { name: "Submit" }));
+    fireEvent.click(screen.getByRole("button", { name: "Publish & Enable" }));
     expect(screen.getAllByText("This field is required.")).toHaveLength(2);
     fireEvent.change(screen.getByRole("textbox", { name: /Title/ }), { target: { value: "Local term" } });
     fireEvent.change(screen.getByRole("textbox", { name: /Description/ }), { target: { value: "Meaning and boundary" } });
     fireEvent.click(screen.getByRole("button", { name: "Select one or more" }));
     fireEvent.click(screen.getByRole("checkbox", { name: "Marketing" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
     expect(saved).toHaveBeenCalledWith(expect.objectContaining({ type: "Business Term", stage: "Draft", values: expect.objectContaining({ title: "Local term", scope: ["Marketing"] }) }));
     expect(saved.mock.calls[0][0].values.status).toBe(false);
     expect(saved.mock.calls[0][0].values.enabled).toBe(false);
@@ -41,7 +41,7 @@ describe("P08 demo flow", () => {
       const events = { onSave: vi.fn(), onSubmit: vi.fn(), onCancel: vi.fn() };
       const values = { title: "Probe", description: "Probe text" };
       const { unmount } = render(<KnowledgeCreatePage {...demoPropsFor(type)} values={values} {...events} />);
-      const analysis = type === "Analytical Model";
+      const analysis = ["Business Term", "Analytical Model"].includes(type);
       fireEvent.click(screen.getByRole("button", { name: analysis ? "Save Draft" : "Save" }));
       fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
       fireEvent.click(screen.getByRole("button", { name: analysis ? "Publish & Enable" : "Submit" }));
@@ -89,7 +89,7 @@ describe("P08 demo flow", () => {
     expect(screen.getByRole("checkbox", { name: "Regional Model" })).toBeTruthy();
     expect(screen.queryByRole("checkbox", { name: "Marketing" })).toBeNull();
     fireEvent.click(screen.getByRole("checkbox", { name: "Regional Model" }));
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save Draft" }));
     expect(saved).toHaveBeenCalledWith(expect.objectContaining({ values: expect.objectContaining({ title: "Regional GMV", scope: ["Regional Model"] }) }));
   });
 
@@ -311,12 +311,12 @@ describe("P08 demo flow", () => {
     generic.unmount();
   });
 
-  it("Submit sends Business Terms and Analytical Models to review and keeps the form's availability", () => {
+  it("Publish & Enable publishes and enables Business Terms", () => {
     const navigate = vi.fn();
     const submit = vi.fn();
     const term = renderHook(() => useKnowledgeCreateDemo({ content: KNOWLEDGE_CREATE, type: "Business Term", initial: { title: "T", description: "D", scope: ["Marketing"], enabled: false, status: false }, onSubmit: submit, onNavigate: navigate }));
     act(() => term.result.current.onSubmit());
-    expect(submit.mock.calls[0][0]).toMatchObject({ stage: "Under Review", values: { enabled: false, status: false } });
+    expect(submit.mock.calls[0][0]).toMatchObject({ stage: "Published", values: { enabled: true, status: true } });
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ params: { type: "Business Term", notice: "submitted" } }));
     term.unmount();
   });
@@ -436,7 +436,7 @@ describe("P08 demo flow", () => {
       return { container, control, unmount };
     };
     // Business Term: the title input
-    let result = focused("Business Term", undefined, "Submit");
+    let result = focused("Business Term", undefined, "Publish & Enable");
     expect(result.control.getAttribute("aria-invalid")).toBe("true");
     expect(result.control.getAttribute("name")).toBe("title");
     result.unmount();

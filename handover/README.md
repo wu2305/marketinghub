@@ -29,6 +29,30 @@ npm run storybook      # 127.0.0.1:6006
 npm test               # vitest 行为测试
 ```
 
+2026-10-10 搜索与下拉字体统一：按用户要求，SearchField 输入及提示、Select 当前值及选项、CheckboxFilter 选项、Pagination 页容量选择统一 DIN 2014 / 12px / 400；显式覆盖嵌套组件作用域的 font 继承。验证：Storybook 构建及故事数量门禁、lint 通过；本地浏览器实测搜索输入/placeholder、Project 当前值/展开选项、Status/Process 当前值/option、Rows per page 当前值/option 均 DIN 2014 / 12px / 400。线上 Worker 尚未发布；未运行全量配对视觉。 复查补齐 CheckboxFilter 标签 11→12px、LibraryToolbar 筛选标签 700→400；六类列表复核。颜色现状：搜索输入/原生 Select 为 text-strong；CheckboxFilter 当前值及分页选项为 text；placeholder 与 Status/Process 标签为 text-muted；CheckboxFilter 标签为 text-faint；已选选项为 accent-ink。用户已确认：搜索输入、下拉当前值与普通选项统一 text（#3F4852）；提示、标签、已选高亮保留各自角色色。
+
+2026-10-10 下拉列表等宽：CheckboxFilter 展开面板移除 260/240px 最小宽度，左右边缘与触发框外边缘对齐；长选项单行省略，避免撑宽。验证：Project 框与面板实测均 180px，左右位置均 16/196px；Storybook 构建、lint、19 项相关测试通过。线上未发布。
+
+2026-10-10 多选摘要溢出修复：CheckboxFilter 的名称摘要在多选时显示数量（如 3 selected），单选显示名称；摘要单行省略，title 提供完整选择。
+
+2026-10-10 搜索图标对齐：plain/Business Term 搜索图标 20→16px，左侧内边距 18→13px，与 CheckboxFilter 一致；图标与文字间距采用 space-3，垂直居中。
+
+2026-10-10 新增/编辑表单：Business Term 改为 Cancel / Save Draft / Publish & Enable，发布动作设 Published、enabled=true；Scenario Reporting 改为 Cancel / Save Draft / Submit for Review，沿用 Queued 流程。问号提示右上展开，底部与图标底部对齐。文本框透明背景、无发光阴影，保留中性焦点轮廓。浏览器核对六页按钮与输入背景，提示与问号底部同为368px；全量552/552测试通过，lint与Storybook构建通过。consumer同步发布启用语义；线上未发布。
+
+2026-10-10 Creator 行：知识卡片的 Creator 行从32→24px，操作按钮缩至24×24px、图标保持16px；对照文档同步。
+
+2026-10-10 描述自适应：knowledge 卡片描述取消固定36px，实际一/两行按内容占高；Grid按排最高项统一卡片高度，元信息底部对齐。
+
+2026-10-10 六类筛选统一：single筛选标签放入44px高、14px圆角的180px框内；筛选标签、分页标签与搜索placeholder统一text-faint（#8B949D），值/普通选项保持text。
+
+2026-10-10 Scenario筛选展开菜单统一：LibraryToolbar single facets改用CheckboxFilter单选radio模式，共用等宽面板、选项样式和字体；选择后关闭，保留单选与All选项。
+
+2026-10-10 Principles/Data Model 控件：Principles已通过LibraryToolbar复用统一搜索和CheckboxFilter；DataModelView搜索改为plain，采用44px高、14px圆角、16px图标、DIN2014/12px/400、输入text/提示text-faint。
+
+2026-10-10 分页统一：所有共用分页及业务默认配置改为Items per page，6/12/24，默认6；故事与consumer默认状态同步。
+
+2026-10-10 分页补充：compact上一页/下一页改为‹/›，保留aria-label和title；Principles单独10/20/50，默认10，其他列表6/12/24。
+
 ## 2. 阶段进度表
 
 ### 2.1 当前里程碑（取代旧 A–E 执行顺序）
@@ -1053,3 +1077,25 @@ Verified an external /design deslop report against main. Already on main: horizo
 ### 2026-10-09 Consumer checkpoint: host-owned Report Copilot (Codex review step 4)
 
 `examples/consumer/CockpitApp` already owned a Report Copilot (open, composer, answer, chat, reset on navigation) but only its answer and close path were tested. Added `examples/consumer/ReportCopilotApp` (story `Examples/Consumer report copilot`): a report desk with its own layout (report picker, summary) that mounts the public `ReportCopilot` with all state in the app. The thread is emptied in the same render in which the selected report changes (the #130 rule, written with plain React state), kept across close/reopen on the same report, and empty again when you return to a report. The thread rules both consumers share (recommendation answer, follow-up append, cited sources) moved to the pure `examples/consumer/copilotThread.ts`; the Cockpit app now uses it, behaviour unchanged. 10 new tests (9 desk, 1 Cockpit); removing the reset fails two desk tests. No public contract change was needed: `ReportCopilot` props and callbacks were enough, `build:lib` type-checks and runs the new app on `dist`. Findings: a host needs no `returnFocusRef` when the opener is the focused element at open (the overlay restores it); the drawer is modal, so the report picker cannot be changed with a pointer while it is open, only between sessions. No visual-check scenario (the desk has no original to pair with); manual visual review postponed.
+
+- 2026-10-10：按用户反馈放宽 compact 分页器布局：箭头按钮与页数选择框统一36px高，控制间距16px，页码至少48px居中；保留已确认的分页选项。
+
+- 2026-10-10：按用户视觉反馈再次收敛 compact 分页：移除箭头外框，按钮/选择框32px高，页码40px宽，导航间距8px；数量选择区与导航保留16px间隔。
+
+- 2026-10-10：所有 Pagination 数量选择改用共享 CheckboxFilter 单选菜单，取消浏览器原生蓝色菜单；64px等宽菜单、12px/400字体、普通项#3F4852，选中项沿用浅金样式。
+
+- 2026-10-10：分页按用户附件调整为箭头/24px页码框/箭头/数量选择；数量移入框内显示「6 / page」，菜单等宽、选中项加粗浅蓝背景；保留数量配置与完整页码无障碍说明。
+
+- 2026-10-10：分页数量文案按用户要求改为「6 items/page」及对应选项，选择框/菜单等宽112px以完整容纳文案。
+
+- 2026-10-10：分页数量数字与 items/page 的空格额外增加4px，选择框与菜单选项同步。
+
+- 2026-10-10：分页数量下拉框箭头距右边框由9px缩至6px。
+
+- 2026-10-10：分页数量选择框及菜单宽度由112px增至132px，容纳两位数、items/page及额外字间距，避免省略截断。
+
+- 2026-10-10：分页数量框/菜单宽度收敛至120px，减少文字尾部至箭头的留白，同时验证两位数不截断。
+
+### 2026-10-10 Accepted Interpreter controls release
+
+User accepted the current round and authorized commit, push, PR merge and production Storybook publication through main → Cloudflare Workers Builds. Integrated origin/main f747711, retaining its focus-first-invalid behavior and OperationReminder component. Scope: unified list search/filter typography and menus, adaptive card descriptions and 24px Creator rows, form footer actions/help placement/unfilled text inputs, shared custom items/page pagination (6/12/24; Principles10/20/50). Latest pagination is120px wide,24px high; blue current-page box and selected-menu emphasis follow the user reference. Production status remains pending until PR merge and live build-stamp verification.

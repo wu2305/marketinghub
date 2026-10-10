@@ -281,15 +281,13 @@ describe("AI Interpreter type contract", () => {
   it("filters scenario records by process stage and AI availability independently", () => {
     render(<Harness activeType="Scenario Reporting" />);
     const cardTitles = () => [...document.querySelectorAll(".mh-srview .mh-library-item__title button")].map((el) => el.textContent);
-    const process = screen.getByLabelText("Process");
-    fireEvent.change(process, { target: { value: "Queued" } });
+    fireEvent.click(screen.getByLabelText("Queued"));
     let titles = cardTitles();
     expect(titles.length).toBe(1);
     expect(titles[0]).toContain("Channel Exception Watch");
 
-    fireEvent.change(process, { target: { value: "" } });
-    const status = screen.getByLabelText("Status");
-    fireEvent.change(status, { target: { value: "Disabled" } });
+    fireEvent.click(screen.getAllByLabelText("All statuses")[1]);
+    fireEvent.click(screen.getByLabelText("Disabled"));
     titles = cardTitles();
     expect(titles.length).toBe(2);
     expect(titles.some((text) => text.includes("Channel Performance Analysis"))).toBe(true);

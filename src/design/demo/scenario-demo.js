@@ -131,7 +131,7 @@ const DEFAULT_STRINGS = {
   closeLabel: "Close",
   empty: "No matching records",
   recordsLabel: "records",
-  rowsPerPage: "Rows per page",
+  rowsPerPage: "Items per page",
   previous: "Previous",
   next: "Next",
   relatedReport: "Related Report",
@@ -165,12 +165,12 @@ const EMPTY_SELECTED = {};
  * @param {Array<object>} [props.records] raw records — normalized internally
  * @param {string} [props.currentUser="Current User"] owner identity for the action gate
  * @param {object} [props.strings] copy overrides (defaults reproduce the original copy)
- * @param {Array<number>} [props.pageSizes=[5,10,20]]
+ * @param {Array<number>} [props.pageSizes=[6, 12, 24]]
  * @param {string} [props.createHref] knowledge-create.html?type=Scenario Reporting
  * @param {string} [props.query] initial search text
  * @param {Object<string,string>} [props.filterValues] initial `status`/`process` selections
  * @param {number} [props.page=1]
- * @param {number} [props.pageSize=10]
+ * @param {number} [props.pageSize=6]
  * @param {string|object|null} [props.detail] record id (or record) open in the drawer
  * @param {object} [props.dialog] seeded dialog `{ kind, record }` — kinds:
  *   `"disable-first"`, `"delete-confirm"`, `"disable-confirm"`
@@ -191,14 +191,14 @@ export function useScenarioDemo(props = {}) {
   const strings = { ...DEFAULT_STRINGS, ...(props.strings || {}) };
   const tooltips = { ...governanceMessages, permission: strings.permissionTitle, "already-disabled": strings.alreadyDisabled, ...(strings.tooltips || {}) };
   const actionLabels = { edit: strings.editLabel, delete: strings.deleteLabel, disable: strings.disableLabel };
-  const pageSizes = props.pageSizes || [5, 10, 20];
+  const pageSizes = props.pageSizes || [6, 12, 24];
   const currentUser = props.currentUser || "Current User";
   const all = React.useMemo(() => props.active === false ? [] : (props.records || []).map(normalizeScenarioRecord), [props.records, props.active]);
 
   const [query, setQuery] = useSynced(props.query || "");
   const [selected, setSelected] = useSynced(props.filterValues || EMPTY_SELECTED);
   const [page, setPage] = useSynced(props.page ?? 1);
-  const [pageSize, setPageSize] = useSynced(props.pageSize ?? 10);
+  const [pageSize, setPageSize] = useSynced(props.pageSize ?? 6);
   const [detailId, setDetailId] = useSynced(
     typeof props.detail === "string" ? props.detail : props.detail?.id ?? null,
   );
