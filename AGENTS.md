@@ -74,6 +74,7 @@ PR #1、#3、#4、#5 采用“DOM 复刻”路线：`scripts/compose_portal.py` 
 - 同一设计概念只保留一个组件。区分形态用 `variant` / `tone` / `size`，不新建同义组件。
 - 回调统一命名：`onClick`、`onChange`、`onNavigate`、`onOpen`、`onSelect`、`onSubmit`、`onSave`、`onCancel`。回调参数为带具名字段的对象，不直接传 DOM event。
 - 可导航元素渲染为 `<a href>`；触发动作的元素渲染为 `<button type="button">`。不得用 `<button>` 代替导航，也不得对所有 `<a>` 无条件 `preventDefault`。
+- 会拒绝提交的表单遵守 `src/design/forms.test.jsx` 的同一契约：必填控件被读作必填，失败后只标出缺失的控件，各自带 `aria-invalid` 与 `aria-describedby` 指向的字段本地消息，焦点移到第一个无效控件（每次再失败都回到那里），改好一个只清除它自己，Submit 在提交前不禁用。库里每个 `<form>` 必须在该文件的 `FORMS` 清单登记；新增或修改带校验的表单时，先让它通过这个矩阵。
 - 组件内不得写死 `id`。需要 `aria-labelledby` 时由调用方传入或使用 `React.useId()`。
 - 页面级组件（`src/design/pages/<Page>/`）必须通过 props 接收全部数据与文案。`content.js` 只作为故事的默认 args，不得被页面组件直接 import。
 

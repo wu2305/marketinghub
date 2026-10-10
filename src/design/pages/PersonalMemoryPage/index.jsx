@@ -11,6 +11,7 @@ import { LibraryList } from "../../components/LibraryList/index.jsx";
 import { Toast } from "../../components/Toast/index.jsx";
 import { MemoryWorkspace } from "../../features/personal-memory/MemoryWorkspace/index.jsx";
 import { Icon } from "../../icons.jsx";
+import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import "./PersonalMemoryPage.css";
 
 const MEMORY_ACTIONS = [{ action: "edit", blocked: false, reason: null }, { action: "delete", blocked: false, reason: null }];
@@ -24,7 +25,7 @@ export const memoryCategories = ["all", "analysis", "meeting", "findings", "refe
  * @param {object} props.content Header image area, sidebar, category options, and all visible labels. // 头图区、侧栏、分类选项和全部可见标签。
  * @param {object} props.logo Header logo. // 页头 Logo。
  * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
- * @param {{items:object[],counts:object,category:typeof memoryCategories[number],bannerOpen:boolean,selected:object|null,editing:boolean,draft:object}} [props.memory={}] Workspace state and named action callbacks. // 工作区状态和具名操作回调。
+ * @param {{items:object[],counts:object,category:typeof memoryCategories[number],bannerOpen:boolean,selected:object|null,editing:boolean,draft:object,errors?:{title?:boolean,description?:boolean}}} [props.memory={}] Workspace state and named action callbacks. // 工作区状态和具名操作回调。
  * @param {{open:boolean,draft:{title:string,category:string,description:string},errors:{title?:boolean,description?:boolean},onOpen?:Function,onClose?:(event:{reason:string})=>void,onChange?:(event:{field:string,value:string})=>void,onAutoFill?:(event:{field:"description"})=>void,onSave?:Function}} [props.create={}] Create drawer state and actions. // 创建抽屉的状态和操作。
  * @param {{target:object|null,onCancel?:(event:{reason:string})=>void,onConfirm?:(event:{confirmed:true})=>void}} [props.deletion={}] Delete confirmation state and actions. // 删除确认的状态和操作。
  * @param {string} [props.toast=""] Success message after a delete. Hidden when empty. // 删除后的成功消息。为空时隐藏。
@@ -37,8 +38,10 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
   const { labels, hero, categories, sidebar } = content;
   const createButtonRef = React.useRef(null);
   const titleRef = React.useRef(null);
-  const descriptionRef = React.useRef(null);
-  React.useEffect(() => { if (create.open && create.errors?.title) titleRef.current?.focus(); else if (create.open && create.errors?.description) descriptionRef.current?.focus(); }, [create.open, create.errors?.title, create.errors?.description]);
+  const formRef = React.useRef(null);
+  const errorId = React.useId();
+  const createInvalid = React.useMemo(() => ["title", "description"].filter((field) => create.errors?.[field]), [create.errors]);
+  useFocusFirstInvalid(formRef, createInvalid);
   const items = (memory.items || []).map((item) => ({
     id: item.id,
     title: item.title,
@@ -56,14 +59,14 @@ export function PersonalMemoryPage({ content, logo, navigation = [], memory = {}
       <main className="mh-memory-page__main">
         {memory.bannerOpen && <div className="mh-memory-page__banner"><span className="mh-memory-page__banner-icon"><Icon name="info" /></span><div><strong>{labels.bannerTitle}</strong><span>{labels.bannerDescription}</span></div><button type="button" aria-label={labels.closeBanner} onClick={() => memory.onCloseBanner?.()}><Icon name="close" /></button></div>}
         <div className="mh-memory-page__tabs" role="tablist" aria-label={labels.listAria}>{categories.map((option) => <button key={option.value} type="button" role="tab" aria-selected={memory.category === option.value} onClick={() => memory.onCategoryChange?.({ value: option.value })}>{option.label} <span>{memory.counts?.[option.value] ?? 0}</span></button>)}<button ref={createButtonRef} type="button" className="mh-memory-page__new" onClick={() => create.onOpen?.()}><Icon name="plus" />{labels.newMemory}</button></div>
-        <MemoryWorkspace selected={memory.selected} editing={memory.editing} draft={memory.draft} labels={labels} onEdit={memory.onEdit} onDelete={memory.onDelete} onDraftChange={memory.onDraftChange} onCancelEdit={memory.onCancelEdit} onSaveEdit={memory.onSaveEdit} onShare={memory.onShare}>
+        <MemoryWorkspace selected={memory.selected} editing={memory.editing} draft={memory.draft} errors={memory.errors} labels={labels} onEdit={memory.onEdit} onDelete={memory.onDelete} onDraftChange={memory.onDraftChange} onCancelEdit={memory.onCancelEdit} onSaveEdit={memory.onSaveEdit} onShare={memory.onShare}>
           <LibraryList label={labels.listAria} layout="list" items={items} empty={{ kind: "empty", title: labels.emptyList, message: labels.emptyListPrompt }} onOpen={memory.onSelect} onAction={({ action, id }) => (action === "edit" ? memory.onEdit : memory.onDelete)?.({ id })} />
         </MemoryWorkspace>
       </main>
     </div>
     <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     <Modal open={Boolean(create.open)} variant="drawer" className="mh-memory-page__create" eyebrow={labels.createEyebrow} title={labels.createTitle} closeLabel={labels.closeCreate} initialFocus={titleRef} onClose={create.onClose} footer={<div className="mh-memory-page__create-actions"><button type="button" onClick={() => create.onClose?.({ reason: "cancel" })}>{labels.cancel}</button><button type="button" onClick={() => create.onSave?.()}>{labels.saveMemory}</button></div>}>
-      <div className="mh-memory-page__form"><label><span><span className="mh-memory-page__required">* </span>{labels.title}</span><input ref={titleRef} type="text" value={create.draft?.title || ""} placeholder={labels.titlePlaceholder} aria-invalid={Boolean(create.errors?.title)} onChange={(event) => create.onChange?.({ field: "title", value: event.target.value })} />{create.errors?.title && <small>{labels.cannotBeEmpty}</small>}</label><label>{labels.category}<select value={create.draft?.category || "analysis"} onChange={(event) => create.onChange?.({ field: "category", value: event.target.value })}>{categories.filter((option) => option.value !== "all").map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label><label><span><span className="mh-memory-page__required">* </span>{labels.description}</span><AutoFillTextarea textareaRef={descriptionRef} rows={5} value={create.draft?.description || ""} placeholder={labels.descriptionPlaceholder} autoFillLabel={labels.autoFill} invalid={Boolean(create.errors?.description)} onChange={({ value }) => create.onChange?.({ field: "description", value })} onAutoFill={() => create.onAutoFill?.({ field: "description" })} />{create.errors?.description && <small>{labels.cannotBeEmpty}</small>}</label></div>
+      <div className="mh-memory-page__form" ref={formRef}><label><span><span className="mh-memory-page__required" aria-hidden="true">* </span>{labels.title}</span><input ref={titleRef} type="text" value={create.draft?.title || ""} placeholder={labels.titlePlaceholder} aria-label={labels.title} required aria-invalid={create.errors?.title ? true : undefined} aria-describedby={create.errors?.title ? `${errorId}-title` : undefined} onChange={(event) => create.onChange?.({ field: "title", value: event.target.value })} />{create.errors?.title && <small id={`${errorId}-title`}>{labels.cannotBeEmpty}</small>}</label><label>{labels.category}<select value={create.draft?.category || "analysis"} onChange={(event) => create.onChange?.({ field: "category", value: event.target.value })}>{categories.filter((option) => option.value !== "all").map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label><label><span><span className="mh-memory-page__required" aria-hidden="true">* </span>{labels.description}</span><AutoFillTextarea rows={5} value={create.draft?.description || ""} placeholder={labels.descriptionPlaceholder} label={labels.description} autoFillLabel={labels.autoFill} required invalid={Boolean(create.errors?.description)} describedBy={create.errors?.description ? `${errorId}-description` : undefined} onChange={({ value }) => create.onChange?.({ field: "description", value })} onAutoFill={() => create.onAutoFill?.({ field: "description" })} />{create.errors?.description && <small id={`${errorId}-description`}>{labels.cannotBeEmpty}</small>}</label></div>
     </Modal>
     <Toast open={Boolean(toast)} message={toast} />
     <ConfirmDialog open={Boolean(deletion.target)} purpose="danger" title={labels.deleteTitle} message={deletion.target ? <>{labels.deleteBefore}<strong>{deletion.target.title}</strong>{labels.deleteAfter}</> : ""} cancelLabel={labels.cancel} confirmLabel={labels.delete} onCancel={deletion.onCancel} onConfirm={deletion.onConfirm} />

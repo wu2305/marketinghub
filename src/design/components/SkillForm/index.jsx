@@ -3,6 +3,7 @@ import React from "react";
 import { Icon } from "../../icons.jsx";
 import { normalizeOptions } from "../../lib/options.js";
 import { ExamplePreview } from "../ExamplePreview/index.jsx";
+import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import "./SkillForm.css";
 
 function plainPrimary(event) { return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.currentTarget.target; }
@@ -11,7 +12,7 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * Scenario Configuration form frame shared by the Skill Library inline form and the standalone Skill Edit page:
  * header, the four basics (name, purpose, scope, owner), a structure section that takes the caller's cards,
  * the runnable example preview and the Cancel / Save Draft / Submit footer. Validation is the container's: pass `errors`
- * and the first invalid control is focused.
+ * (a new object for each failed submit, with a field's entry dropped when it changes) and the first invalid control is focused.
  * @param {object} props
  * @param {object} props.labels Form copy: formTitle, saved, name, namePlaceholder, purpose, purposePlaceholder, scope, selectScope, owner, ownerPlaceholder, structure, required, preview, runPreview, question, questionPlaceholder, cancel, saveDraft, submit.
  * @param {{name?:string,purpose?:string,scope?:string,owner?:string,question?:string}} [props.values={}] A scope outside `scopes` is kept as an extra option.
@@ -29,12 +30,13 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
 export function SkillForm({ labels, values = {}, scopes = [], errors = {}, preview = null, cancelHref, onChange, onRunPreview, onSaveDraft, onSubmit, onCancel, children }) {
   const rootId = React.useId();
   const formRef = React.useRef(null);
-  React.useEffect(() => { if (Object.values(errors).some(Boolean)) formRef.current?.querySelector('[aria-invalid="true"]')?.focus(); }, [errors]);
+  const invalid = React.useMemo(() => Object.keys(errors).filter((key) => errors[key]), [errors]);
+  useFocusFirstInvalid(formRef, invalid);
   const update = (field) => (event) => onChange?.({ field, value: event.target.value });
   const options = normalizeOptions(scopes);
   const extraScope = values.scope && !options.some((option) => option.value === values.scope) ? [{ value: values.scope, label: values.scope }] : [];
-  const field = (key, control) => <div className="mh-skill-form__field"><label htmlFor={`${rootId}-${key}`}><span aria-hidden="true">*</span>{labels[key]}</label>{control}{errors[key] && <small role="alert">{labels.required}</small>}</div>;
-  const common = (key) => ({ id: `${rootId}-${key}`, required: true, value: values[key] || "", "aria-invalid": Boolean(errors[key]), onChange: update(key) });
+  const field = (key, control) => <div className="mh-skill-form__field"><label htmlFor={`${rootId}-${key}`}><span aria-hidden="true">*</span>{labels[key]}</label>{control}{errors[key] && <small id={`${rootId}-${key}-error`} role="alert">{labels.required}</small>}</div>;
+  const common = (key) => ({ id: `${rootId}-${key}`, required: true, value: values[key] || "", "aria-invalid": errors[key] ? true : undefined, "aria-describedby": errors[key] ? `${rootId}-${key}-error` : undefined, onChange: update(key) });
   return <form ref={formRef} className="mh-skill-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values: { ...values } }); }}>
     <header className="mh-skill-form__head"><h2>{labels.formTitle}</h2><span><Icon name="clock" />{labels.saved}</span></header>
     <div className="mh-skill-form__body">

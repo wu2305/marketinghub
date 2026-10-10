@@ -44,3 +44,7 @@
 @media (max-width: 760px) { .mh-derived-panel__body { grid-template-columns: 1fr; } .mh-derived-panel__references { border-left: 0; border-top: 1px solid var(--mh-line); padding: 16px 0 0; } }
 
 .mh-derived-panel__operators button svg { display: block; width: 14px; height: 14px; margin: 0 auto; }
+
+/* A refused field marks itself and says why right under the input. */
+.mh-derived-panel__form input[aria-invalid="true"]:not([type="checkbox"]), .mh-derived-panel__constant [aria-invalid="true"] { border-color: var(--mh-danger); }
+.mh-derived-panel__error { color: var(--mh-danger); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-regular); }

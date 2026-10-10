@@ -2,12 +2,15 @@ import React from "react";
 import { Modal } from "../../../components/Modal/index.jsx";
 import { Switch } from "../Switch/index.jsx";
 import { useOverlayLayer } from "../../../lib/overlay.js";
+import { useFocusFirstInvalid } from "../../../lib/focus-first-invalid.js";
 import { Icon } from "../../../icons.jsx";
 import "./DerivedMetricPanel.css";
 
 /** @type {readonly ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"]} */
 export const formulaOperators = ["+", "-", "*", "/", "(", ")", "const", "clear", "backspace"];
 const symbol = { "*": "×", "/": "÷", const: "123", clear: <Icon name="trash" />, backspace: <Icon name="backspace" /> };
+
+const NO_INVALID = [];
 
 /**
  * P10's derived metric drawer and formula builder.
@@ -19,6 +22,7 @@ const symbol = { "*": "×", "/": "÷", const: "123", clear: <Icon name="trash" /
  * @param {Array<{type:string,value:string|number,label:string}>} props.tokens
  * @param {boolean} props.constantOpen
  * @param {string} props.notice
+ * @param {string[]} [props.invalid=[]] Required fields the last Save refused (`"name"`); each shows `copy.nameError` under it and the first is focused. Send a new list for each failed save and drop a field when it changes.
  * @param {(event:{reason:string})=>void} props.onCancel
  * @param {(event:{field:string,value:string|boolean})=>void} props.onChange
  * @param {(event:{operator:string})=>void} props.onOperator
@@ -30,16 +34,21 @@ const symbol = { "*": "×", "/": "÷", const: "123", clear: <Icon name="trash" /
  * @param {()=>void} props.onSave
  */
 export function DerivedMetricPanel({
-  open = false, copy, references = [], draft = {}, tokens = [], constantOpen = false, notice = "",
+  open = false, copy, references = [], draft = {}, tokens = [], constantOpen = false, notice = "", invalid = NO_INVALID,
   onCancel, onChange, onOperator, onReference, onRemoveToken, onConstantAdd, onConstantCancel, onTest, onSave,
 }) {
   const panelRef = React.useRef(null);
+  const formRef = React.useRef(null);
+  const nameErrorId = React.useId();
   const closeRef = React.useRef(null);
   const titleId = React.useId();
   const constantId = React.useId();
   const [constantValue, setConstantValue] = React.useState("");
-  React.useEffect(() => { if (!constantOpen) setConstantValue(""); }, [constantOpen]);
+  const [constantInvalid, setConstantInvalid] = React.useState(false);
+  const constantInputRef = React.useRef(null);
+  React.useEffect(() => { if (!constantOpen) { setConstantValue(""); setConstantInvalid(false); } }, [constantOpen]);
   useOverlayLayer({ open, onClose: onCancel, layerRef: panelRef, initialFocusRef: closeRef });
+  useFocusFirstInvalid(formRef, invalid);
   if (!open) return null;
   const change = (field, value) => onChange?.({ field, value });
   return (
@@ -52,7 +61,7 @@ export function DerivedMetricPanel({
             <button ref={closeRef} type="button" className="mh-derived-panel__close" aria-label={copy.close} onClick={() => onCancel?.({ reason: "button" })}>×</button>
           </header>
           <div className="mh-derived-panel__body">
-            <form className="mh-derived-panel__form" onSubmit={(event) => { event.preventDefault(); onSave?.(); }}>
+            <form ref={formRef} className="mh-derived-panel__form" noValidate onSubmit={(event) => { event.preventDefault(); onSave?.(); }}>
               <label>{copy.domain}
                 <select value={draft.domain || ""} onChange={(event) => change("domain", event.target.value)}>
                   <option value="">{copy.domainPlaceholder}</option>
@@ -60,7 +69,7 @@ export function DerivedMetricPanel({
                 </select>
               </label>
               <div className="mh-derived-panel__field-row">
-                <label>{copy.name}<input value={draft.name || ""} placeholder={copy.namePlaceholder} onChange={(event) => change("name", event.target.value)} /></label>
+                <label>{copy.name}<input aria-label={copy.name} required aria-invalid={invalid.includes("name") ? true : undefined} aria-describedby={invalid.includes("name") ? nameErrorId : undefined} value={draft.name || ""} placeholder={copy.namePlaceholder} onChange={(event) => change("name", event.target.value)} />{invalid.includes("name") && <small id={nameErrorId} className="mh-derived-panel__error">{copy.nameError}</small>}</label>
                 <label>{copy.unit}<input value={draft.unit || ""} placeholder={copy.unitPlaceholder} onChange={(event) => change("unit", event.target.value)} /></label>
               </div>
               <div className="mh-derived-panel__builder">
@@ -93,9 +102,15 @@ export function DerivedMetricPanel({
         </aside>
       </div>
       <Modal open={constantOpen} title={copy.constantTitle} titleId={constantId} onClose={onConstantCancel}>
-        <form className="mh-derived-panel__constant" onSubmit={(event) => { event.preventDefault(); onConstantAdd?.({ value: constantValue }); setConstantValue(""); }}>
+        <form className="mh-derived-panel__constant" noValidate onSubmit={(event) => {
+          event.preventDefault();
+          /* A constant is a number; anything else stays in the dialog with a message instead of being dropped. */
+          if (!constantValue.trim() || !Number.isFinite(Number(constantValue))) { setConstantInvalid(true); constantInputRef.current?.focus(); return; }
+          onConstantAdd?.({ value: constantValue }); setConstantValue("");
+        }}>
           <label htmlFor={`${constantId}-value`}>{copy.constantPrompt}</label>
-          <input id={`${constantId}-value`} autoFocus inputMode="decimal" value={constantValue} onChange={(event) => setConstantValue(event.target.value)} />
+          <input id={`${constantId}-value`} ref={constantInputRef} autoFocus required inputMode="decimal" value={constantValue} aria-invalid={constantInvalid ? true : undefined} aria-describedby={constantInvalid ? `${constantId}-error` : undefined} onChange={(event) => { setConstantValue(event.target.value); setConstantInvalid(false); }} />
+          {constantInvalid && <small id={`${constantId}-error`} className="mh-derived-panel__error">{copy.constantError}</small>}
           <div><button type="button" onClick={onConstantCancel}>{copy.cancel}</button><button type="submit">{copy.constantAdd}</button></div>
         </form>
       </Modal>

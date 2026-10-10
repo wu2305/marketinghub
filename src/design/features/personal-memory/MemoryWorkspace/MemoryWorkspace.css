@@ -5,3 +5,8 @@
 .mh-memory-workspace__actions svg { width:14px; height:14px; flex:none; }
 .mh-memory-workspace :is(button,input,textarea):focus-visible { outline:2px solid var(--mh-focus-ring); outline-offset:2px; }
 @media(max-width:1180px){.mh-memory-workspace{grid-template-columns:1fr}.mh-memory-workspace__detail{position:static}}
+
+/* The edit fields share one wrapper so a failed save can find the first invalid one; it must not change the layout. */
+.mh-memory-workspace__edit { display: contents; }
+.mh-memory-workspace__field small { color: var(--mh-danger); font-size: var(--mh-font-size-xs); font-weight: var(--mh-font-weight-regular); letter-spacing: 0; text-transform: none; }
+.mh-memory-workspace__field [aria-invalid="true"] { border-color: var(--mh-danger); }

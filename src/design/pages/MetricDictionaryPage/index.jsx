@@ -24,7 +24,7 @@ export const metricDetailTabs = ["definition", "formula", "dimensions"];
  * @param {typeof metricCategories[number]} [props.category="Basic"] Metric list. Values are Basic and Derived. // 指标列表。取值是 Basic 和 Derived。
  * @param {string} props.metricId Selected metric id. // 当前指标的 id。
  * @param {typeof metricDetailTabs[number]} [props.tab="definition"] Detail tab. Values are definition, formula, and dimensions. // 详情标签。取值是 definition、formula 和 dimensions。
- * @param {object} [props.derivedEditor={}] Add derived drawer. Includes `open`, `draft`, `tokens`, `constantOpen`, `notice`, and editor callbacks. // Add derived 抽屉。包含 `open`、`draft`、`tokens`、`constantOpen`、`notice` 以及编辑器回调。
+ * @param {object} [props.derivedEditor={}] Add derived drawer. Includes `open`, `draft`, `tokens`, `constantOpen`, `notice`, `invalid`, and editor callbacks. // Add derived 抽屉。包含 `open`、`draft`、`tokens`、`constantOpen`、`notice` 以及编辑器回调。
  * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state, and callbacks. // 轻量助手的文案、状态和回调。
  * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog props for the assistant skill actions. // 助手技能操作用的建模对话框 props。
  * @param {(id:string,params?: Record<string,string>)=>string} props.hrefFor Turns a route id into an href. // 把路由 id 转成 href。
@@ -38,7 +38,7 @@ export function MetricDictionaryPage({
   derivedEditor = {}, assistant = {}, skillFlow, hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
 }) {
   const {
-    open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "",
+    open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "", invalid,
     onOpen, onCancel, onDraftChange, onOperator, onReference, onRemoveToken,
     onConstantAdd, onConstantCancel, onTest, onSave,
   } = derivedEditor;
@@ -133,7 +133,7 @@ export function MetricDictionaryPage({
           </section>
         </div>
       </main>
-      <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
+      <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} invalid={invalid} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
       {!panelOpen && notice ? <div className="mh-metric-page__toast" role="status">{notice}</div> : null}
       <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     </Shell>

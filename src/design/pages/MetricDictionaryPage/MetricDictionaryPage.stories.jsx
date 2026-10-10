@@ -52,7 +52,7 @@ export default {
       initial: {
         category: args.category, tab: args.tab, panelOpen: args.panelOpen,
         constantOpen: args.constantOpen, metricId: args.metricId,
-        tokens: args.tokens, draft: args.draft, notice: args.notice, extraMetrics: args.extraMetrics,
+        tokens: args.tokens, draft: args.draft, notice: args.notice, invalid: args.invalid, extraMetrics: args.extraMetrics,
         assistantOpen: args.assistantOpen, assistantPrompt: args.assistantPrompt,
         assistantAnswers: args.assistantAnswers, selectedSkill: args.selectedSkill, flow: args.flow,
       },
@@ -69,7 +69,7 @@ export default {
       onRemoveToken: (event) => { demo.derivedEditor.onRemoveToken(event); args.onRemoveToken?.(event); },
       onConstantAdd: (event) => { demo.derivedEditor.onConstantAdd(event); args.onConstantAdd?.(event); },
       onTest: () => { demo.derivedEditor.onTest(); args.onTest?.(); },
-      onSave: () => { demo.derivedEditor.onSave(); args.onSave?.(); },
+      onSave: () => { if (demo.derivedEditor.onSave() !== false) args.onSave?.(); },
     };
     return <MetricDictionaryPage {...args} {...demo} derivedEditor={derivedEditor} assistant={{ ...args.assistant, ...demo.assistant }} onCategoryChange={(event) => { demo.onCategoryChange(event); args.onCategoryChange?.(event); }} onSelect={(event) => { demo.onSelect(event); args.onSelect?.(event); }} onTabChange={(event) => { demo.onTabChange(event); args.onTabChange?.(event); }} />;
   },
@@ -83,7 +83,7 @@ export const MetricDictionaryDerivedDetail = { name: "Metric Dictionary · Deriv
 export const MetricDictionaryAddDerived = { name: "Metric Dictionary · Add derived", args: { panelOpen: true } };
 export const MetricDictionaryFormulaTokens = { name: "Metric Dictionary · Formula tokens", args: { panelOpen: true, tokens: [{ type: "metric", value: "fact_promotion_daily.exposure_count", label: "Exposure Count" }, { type: "operator", value: "+", label: "+" }] } };
 export const MetricDictionaryConstant = { name: "Metric Dictionary · Add constant", args: { panelOpen: true, constantOpen: true } };
-export const MetricDictionaryNameRequired = { name: "Metric Dictionary · Name required", args: { panelOpen: true, notice: METRIC_DICTIONARY.derivedPanel.nameError } };
+export const MetricDictionaryNameRequired = { name: "Metric Dictionary · Name required", args: { panelOpen: true, invalid: ["name"] } };
 export const MetricDictionaryTestEmpty = { name: "Metric Dictionary · Test without formula", args: { panelOpen: true, notice: METRIC_DICTIONARY.derivedPanel.formulaError } };
 export const MetricDictionaryTestResult = { name: "Metric Dictionary · Test result", args: { panelOpen: true, tokens: [{ type: "metric", value: "fact_promotion_daily.exposure_count", label: "Exposure Count" }], notice: METRIC_DICTIONARY.derivedPanel.testResult } };
 export const MetricDictionarySaved = { name: "Metric Dictionary · Saved Draft", args: { category: "Derived", metricId: "derived-local-10", extraMetrics: [{ id: "derived-local-10", name: "New metric", category: "Derived", desc: "New metric", owner: "Current User", unit: "Count", precision: "2 decimals", status: "Draft", formula: "", synonyms: [] }], notice: METRIC_DICTIONARY.derivedPanel.savedMetric("New metric") } };

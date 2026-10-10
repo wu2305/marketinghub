@@ -16,8 +16,10 @@ export default {
     tokens: [],
     constantOpen: false,
     notice: "",
+    invalid: [],
   },
   argTypes: {
+    invalid: { control: "object", description: bi("Fields the last Save refused. `[\"name\"]` marks the metric name invalid, shows `copy.nameError` under it and moves focus to it. Send a new list for each failed save and drop `\"name\"` when the name changes.", "上一次保存被拒绝的字段。`[\"name\"]` 会把指标名称标为无效，在其下方显示 `copy.nameError`，并把焦点移到它。每次保存失败都传一个新的列表；名称一变化就去掉 `\"name\"`。") },
     onCancel: { action: "onCancel" },
     onChange: { action: "onChange" },
     onOperator: { action: "onOperator" },

@@ -44,8 +44,14 @@ describe("P10 metric dictionary process", () => {
     render(<Harness />);
     fireEvent.click(screen.getByRole("button", { name: /Add Derived Metric/ }));
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
-    expect(screen.getByRole("status").textContent).toContain("Please enter a metric name.");
-    fireEvent.change(screen.getByPlaceholderText("Enter metric name..."), { target: { value: "New metric" } });
+    const nameField = screen.getByPlaceholderText("Enter metric name...");
+    /* The refusal belongs to the name field: marked, described by its own message and focused, not a panel notice. */
+    expect(nameField.getAttribute("aria-invalid")).toBe("true");
+    expect(document.getElementById(nameField.getAttribute("aria-describedby")).textContent).toBe("Please enter a metric name.");
+    expect(document.activeElement).toBe(nameField);
+    expect(screen.queryByRole("status")).toBeNull();
+    fireEvent.change(nameField, { target: { value: "New metric" } });
+    expect(nameField.getAttribute("aria-invalid")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Save" }));
     expect(screen.getByRole("heading", { name: "New metric" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Derived · 3" })).toBeTruthy();

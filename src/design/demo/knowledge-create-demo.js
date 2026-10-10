@@ -86,8 +86,10 @@ export function useKnowledgeCreateDemo({
       /* Referenced metrics must belong to a chosen business domain. */
       ...(name === "businessDomain" && type === "Analytical Model" ? { metrics: (prior.metrics || []).filter((metric) => availableMetrics(value).includes(metric)) } : {}),
     }));
-    /* Keep the same list when the field was not invalid, so only a real change (or a new failed submit) looks different to the form. */
-    setInvalid((prior) => prior.includes(name) ? prior.filter((item) => item !== name) : prior);
+    /* Keep the same list when the field was not invalid, so only a real change (or a new failed submit) looks different to the form.
+       The synonym rows are one name for many cells: they stay invalid until every required cell has a value. */
+    const stillInvalid = name === "synonymRows" && validateKnowledgeCreate("Synonyms", { synonymRows: value }).includes("synonymRows");
+    setInvalid((prior) => prior.includes(name) && !stillInvalid ? prior.filter((item) => item !== name) : prior);
   };
   const selectType = ({ value }) => {
     setType(value); setValues({ ...initialValues }); setInvalid([]); setResult(null); setDialog(null);

@@ -2,6 +2,7 @@ import React from "react";
 import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 const EMPTY_ANSWERS = [];
+const NO_INVALID = [];
 
 const paths = {
   home: "/index.html",
@@ -41,6 +42,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   const [tokens, setTokens] = React.useState(() => initial.tokens || []);
   const [constantOpen, setConstantOpen] = React.useState(Boolean(initial.constantOpen));
   const [notice, setNotice] = React.useState(initial.notice || "");
+  const [invalid, setInvalid] = React.useState(initial.invalid || NO_INVALID);
   const noticeTimer = React.useRef(null);
   const clearNoticeTimer = () => {
     window.clearTimeout(noticeTimer.current);
@@ -86,6 +88,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     setDraft(emptyDraft());
     setTokens([]);
     setConstantOpen(false);
+    setInvalid(NO_INVALID);
     showNotice("");
   };
   const addToken = ({ type, value, label }) => {
@@ -107,9 +110,12 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
   const onSave = () => {
     const name = draft.name.trim();
     if (!name) {
-      showNotice(content.derivedPanel.nameError);
-      return;
+      /* The name field says so itself (a new list refocuses it each time); the notice stays for formula messages. */
+      showNotice("");
+      setInvalid(["name"]);
+      return false;
     }
+    setInvalid(NO_INVALID);
     const newMetric = {
       id: `derived-local-${metrics.length + 1}`,
       name,
@@ -127,6 +133,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     setCategory("Derived");
     closePanel();
     showNotice(content.derivedPanel.savedMetric(name), true);
+    return true;
   };
   const handleNavigate = ({ id, params = {}, href }) => onNavigate?.({ id, params, href: href || hrefFor(id, params) });
 
@@ -137,10 +144,10 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     onCategoryChange: ({ category: next }) => setCategory(next),
     onTabChange: ({ tab: next }) => setTab(next),
     derivedEditor: {
-      open: panelOpen, draft, tokens, constantOpen, notice,
+      open: panelOpen, draft, tokens, constantOpen, notice, invalid,
       onOpen: () => { setPanelOpen(true); showNotice(""); },
       onCancel: closePanel,
-      onDraftChange: ({ field, value }) => setDraft((current) => ({ ...current, [field]: value })),
+      onDraftChange: ({ field, value }) => { setDraft((current) => ({ ...current, [field]: value })); setInvalid((current) => (current.includes(field) ? current.filter((item) => item !== field) : current)); },
       onOperator,
       onReference,
       onRemoveToken: ({ index }) => setTokens((current) => current.filter((_, i) => i !== index)),
