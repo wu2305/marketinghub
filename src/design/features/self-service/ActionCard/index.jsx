@@ -13,10 +13,11 @@ import "./ActionCard.css";
  * @param {string} [props.actionLabel]
  * @param {string} [props.href] navigation target; renders a real link instead of a button
  * @param {Array<object>} [props.history] upload-history rows; truthy shows the history affordance
+ * @param {string} [props.historyLabel="View upload history"] accessible name of the history button
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
  * @param {(target: { title: string }) => void} [props.onShowHistory]
  */
-export function ActionCard({ title, description, actionLabel, href, history, onOpen, onShowHistory }) {
+export function ActionCard({ title, description, actionLabel, href, history, historyLabel = "View upload history", onOpen, onShowHistory }) {
   return (
     <article className="mh-action-card">
       <div className="mh-action-card__copy">
@@ -26,7 +27,7 @@ export function ActionCard({ title, description, actionLabel, href, history, onO
             <button
               className="mh-action-card__history"
               type="button"
-              aria-label="View upload history"
+              aria-label={historyLabel}
               onClick={() => onShowHistory?.({ title })}
             >
               <Icon name="history" />

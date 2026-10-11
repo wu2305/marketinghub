@@ -12,6 +12,9 @@ export default {
   title: "Features/Cockpit/Report Copilot workspace",
   component: ReportCopilot,
   tags: ["autodocs"],
+  argTypes: {
+    copy: { description: bi("Fixed texts and accessible names: feedback buttons, source labels, tool tabs, composer label, header control names. Pass any subset. Functions (`groundedSources`, `toggleSection`, `useSkill`) build texts that include a number or title.", "固定文字和无障碍名称：反馈按钮、来源标签、工具标签、输入框标签、头部控件名称。可以只传一部分。带数字或标题的文字由函数生成（`groundedSources`、`toggleSection`、`useSkill`）。"), control: false },
+  },
   parameters: {
     docs: {
       description: {

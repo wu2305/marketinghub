@@ -34,6 +34,9 @@ export default {
     variant: enumProp(paginationVariants, "numbered", bi("`numbered` shows page buttons (‹ 1 2 3 ›). `compact` shows Previous, the current page and the total, and Next.", "`numbered` 显示页码按钮（‹ 1 2 3 ›）。`compact` 显示 Previous、当前页与总页数、以及 Next。")),
     previousLabel: prop("string", { defaultValue: "Previous", description: bi("Previous button label. Use this with `compact`.", "上一页按钮文字。与 `compact` 一起使用。") }),
     nextLabel: prop("string", { defaultValue: "Next", description: bi("Next button label. Use this with `compact`.", "下一页按钮文字。与 `compact` 一起使用。") }),
+    ariaLabel: prop("string", { defaultValue: "Knowledge pagination", description: bi("Accessible name of the pagination navigation.", "分页导航的无障碍名称。") }),
+    sizeLabel: prop("(size: number) => string", { defaultValue: "(size) => `${size} items/page`", description: bi("Text of one rows-per-page option. Replace it to localize the list.", "每页条数选项的文字。替换它即可本地化该列表。"), control: false }),
+    pageLabel: prop("(position: { page: number, pages: number }) => string", { defaultValue: "({ page, pages }) => `Page ${page} of ${pages}`", description: bi("Name of the current page in the `compact` variant. Replace it to localize.", "`compact` 变体中当前页的名称。替换它即可本地化。"), control: false }),
     onPage: callbackProp("onPage", "(event: { page: number }) => void", { page: 2 }, bi("The function runs when the user selects a page. The result has `page`.", "用户选择某一页时会调用这个函数。结果里带有 `page`。")),
     onPageSize: callbackProp(
       "onPageSize",

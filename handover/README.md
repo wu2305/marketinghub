@@ -431,6 +431,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+- 2026-10-11 产品级中文开关（Examples/Localized business term）的缺口：①`copy-in-props.test.js` 只看 JSX 里的文字与朗读属性，看不到对象值或函数调用里的文字，例如 `Header` 的 `onNavigate` 载荷里的 "Home"，以及其他页面（非 AiInterpreter、KnowledgeCreate、MetricDictionary）头部的 aria 名称，这些仍是英文默认；②示例只实现 Business Term，其他知识类型在示例里仍是空列表；③示例未覆盖助手建模对话框；④中文文案是草稿，需母语者审校；⑤“Current User” 作为身份字符串保持英文，记录数据不随开关翻译（开关只换界面文案，种子记录由 `initialLocale` 在挂载时决定）。
+
 - 2026-10-09 Campaign 页没有 `h1`：原始 `campaign.html:35` 的 `<h1>Trading Desk</h1>` 在 React 的 `CampaignRail` 中渲染为 `<h2>`（`features/campaign/CampaignRail/index.jsx:21`），页标题层级与读屏顺序因此与原始不同；视觉无差异。改为 `h1` 前需确认 `CampaignRail.css` 与 `CampaignPage.css` 没有按 `h2` 选择的规则。`examples/demos/demos.test.jsx` 的标题断言为此放宽到 `h1, h2`。
 
 - 2026-09-30 v22 设计同步已完成 P08 Analytical Model 重建与 P17 参照物修复（见 §3、[变更说明](design-sync/changes/2026-09-30-v22-bundle.md)、`dispositions.md` AF-01–AF-11）；待设计师确认 5 个问题（Q1 发布是否直接上线 vs Review Center、Q2 其他知识表单是否同样改、Q3 帮助气泡样式、Q4 编辑时域外指标、Q5 场景 Category，问题清单 `design-sync/designer-questions/2026-09-30-v22.md`，GitHub Issue 同步），Storybook 当前按各题标注的“现状”选项。附件带来的 `docs/cleanup-manifest.json` 本机路径与 `docs/demo/README.md` 的 v20.11 标题已在后续文档 PR 中清除/更新（见维护日志 2026-09-30 最后一条）。
@@ -542,6 +544,10 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - **表单校验矩阵（`src/design/forms.test.jsx`）遗留的待决项，均为原始行为，未自行更改**：(1) Synonyms 类型一行都不加就 Submit 会成功（原始页没有输入框可校验），提交的是空表；是否要求“至少一行”待设计师决定。(2) Save（草稿）只对 Business Term、Analytical Model、Metric Dictionary 校验必填，其余类型的草稿可不完整；Skill Edit 的 Save Draft 则从不校验（SF-06）。两种“草稿”规则并存，是否统一待决定。(3) Skill Library 的内联表单有 `*` 标记却不校验（SF-10，原始行为如此，登记为 Intent）；Skill Edit 页同样的字段则校验。(4) Report Copilot 与助手面板的输入框带原生 `required` 且表单未 `noValidate`，浏览器里空发送会弹原生气泡，各浏览器文案不同；空消息本身是静默不发送。
 
 ## 5. 维护日志
+
+### 2026-10-11 — 界面文案全部走 props，新增 Examples/Localized business term（中英文开关）
+
+用户要求把“双语开关”做成组件，并选择“Steps 1-3”：①把组件里写死的可见文字与 aria 名称移入 props（英文默认不变）；②不引入 i18n provider，开关只是宿主状态；③一个 Examples 故事（Business Term）带英文与中文两套内容和可用的开关。实际范围大于评估时的预估：约 190 条文字，涉及 27 个文件（AssistantPanel、AssistantLauncher、Pagination、ModelFlowDialog、ReportCopilot、LiveOverview、ReportDetailsDrawer、ReportRow、ProjectCard、WorkspaceCard、CampaignRail、SummaryStrip、ActionCard、UploadHistory、各 interpreter 视图、KnowledgeCreateFields、KnowledgeDetail、DerivedMetricPanel、AssistantShell、SkillMenu、三个页面等）。做法：单个标签用带英文默认的 prop；成组文案用 `DEFAULT_COPY` 与 `copy` prop（`{...DEFAULT_COPY, ...copy}`），带插值的用函数（如 `groundedSources(count)`）；ReportCopilot 内部子组件通过 `CopilotCopyContext` 取文案；已有 `strings` 对象补新键。新增 `src/design/copy-in-props.test.js`（acorn-jsx 解析 components/features/pages/lib，禁止 JSX 文字、子表达式字符串和 `aria-label`/`title`/`placeholder`/`alt`/`label` 的字面量；`x || "English"` 视为带默认的 prop；无豁免清单）。示例：`examples/consumer/BusinessTermApp.tsx` 新增 `content`（`BusinessTermContent`，默认 `englishContent`），`LocalizedBusinessTermApp.tsx` 用公开的 `FilterPills` 做开关（底部居中固定，避免窄屏盖住侧栏），`localized/zh.ts` 以 `localize(base, patch)` 深合并生成中文包；5 条测试覆盖切换不重挂载、已输入的搜索与记录保留、`initialLocale="zh"` 的中文种子、各界面（列表、详情、被阻止弹窗、助手、表单、确认框、Toast）无残留英文。`scripts/build-library.mjs` 把新示例纳入 dist 类型检查。AGENTS §2.4“文案”与 §3.1 同步改写。无视觉变化（英文默认未变）。验证：eslint 干净；vitest 全量通过；build-storybook 通过；build:lib 通过（含 examples/consumer 在 dist 上重跑）。受影响故事：Examples/Localized business term（新增 English、Chinese 两个故事）及上述组件的故事（仅新增 argTypes 文档）。人工视觉审图按用户 2026-09-29 的决定暂缓。中文文案为草稿，待母语者审校。执行者：Claude。
 
 ### 2026-10-10 — 使用方 Business Term 工作区故事文档与实际行为对齐
 

@@ -13,15 +13,17 @@ import "./ReportRow.css";
  * @param {Array<{ label: string, value: React.ReactNode }>} [props.meta=[]] Owner/Cadence/Updated/Knowledge cells
  * @param {string} [props.detailsLabel="Knowledge"]
  * @param {string} [props.openLabel="Open Dashboard"]
+ * @param {string} [props.indexLabel="REPORT"] word above the index number
+ * @param {(title: string) => string} [props.detailsAriaLabel] accessible name of the details button; defaults to "Open knowledge for <title>"
  * @param {string} [props.href] live-report link target
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen]
  * @param {(target: { title: string }) => void} [props.onDetails] opens report details without navigation
  */
-export function ReportRow({ index, path, title, description, meta = [], detailsLabel = "Knowledge", openLabel = "Open Dashboard", href, onOpen, onDetails }) {
+export function ReportRow({ index, path, title, description, meta = [], detailsLabel = "Knowledge", openLabel = "Open Dashboard", indexLabel = "REPORT", detailsAriaLabel = (name) => `Open knowledge for ${name}`, href, onOpen, onDetails }) {
   return (
     <article className="mh-report-row">
       <div className="mh-report-row__index">
-        <span>REPORT</span>
+        <span>{indexLabel}</span>
         <strong>{String(index + 1).padStart(2, "0")}</strong>
       </div>
       <div className="mh-report-row__main">
@@ -42,7 +44,7 @@ export function ReportRow({ index, path, title, description, meta = [], detailsL
         ))}
       </dl>
       <div className="mh-report-row__actions">
-        <button className="mh-report-row__details" type="button" aria-label={`Open knowledge for ${title}`} onClick={() => onDetails?.({ title })}>
+        <button className="mh-report-row__details" type="button" aria-label={detailsAriaLabel(title)} onClick={() => onDetails?.({ title })}>
           {detailsLabel}
         </button>
         <a className="mh-report-row__open" href={href || "#"} onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}>

@@ -8,6 +8,9 @@ export default {
   title: "Features/Cockpit/Live overview",
   component: LiveOverview,
   tags: ["autodocs"],
+  argTypes: {
+    copy: { description: bi("Card eyebrows, titles and the chart legend and rank column heads. Pass any subset.", "卡片小标题、标题，以及图例和排名列标题。可以只传一部分。"), control: false },
+  },
   parameters: {
     docs: {
       description: {

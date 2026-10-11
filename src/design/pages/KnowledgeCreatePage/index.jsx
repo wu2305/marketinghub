@@ -17,7 +17,7 @@ const NO_INVALID = [];
  * `content` supplies visible copy. `type` selects the form. `mode` is create, edit, or copy.
  * Cancel does not save. The page sends `{type, mode, values}` on Save and Submit. The demo hook sets status and stage.
  * @param {object} props
- * @param {object} props.content All visible labels and form fixtures. // 全部可见标签与表单夹具。
+ * @param {object} props.content All visible labels and form fixtures. `typeLabels` optionally maps a type id to its display name. // 全部可见标签与表单夹具。
  * @param {object} props.logo Header logo model. // 页头 Logo 模型。
  * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
  * @param {string} props.type One of knowledgeCreateTypes. // knowledgeCreateTypes 之一。
@@ -74,20 +74,20 @@ export function KnowledgeCreatePage({
   const analysis = content.analysis;
   const submitDisabled = isReportEdit && String(values.description || "").trim() === String(values.originalDescription || "").trim();
   return <div data-kc-type={type} data-kc-mode={mode} className={`mh-kcreate mh-kcreate--${isTerm ? "term" : isAnalysis ? "analysis" : isScenario ? "scenario" : isReportEdit ? "report-edit" : "generic"}`}>
-    <Header logo={logo} items={navigation} current="interpreter" highlightCurrent={false} position="sticky" onNavigate={({ id: targetId }) => route(targetId)} />
+    <Header navigationAriaLabel={labels.navigationAria} logoAriaLabel={labels.logoAria} logo={logo} items={navigation} current="interpreter" highlightCurrent={false} position="sticky" onNavigate={({ id: targetId }) => route(targetId)} />
     <main className="mh-kcreate__main">
       <div className="mh-kcreate__breadcrumb" aria-label={labels.breadcrumb}>
         {(isTerm || isAnalysis || isScenario) && <><a href={hrefFor("home")} onClick={(event) => followLink(event, "home")}>{labels.home}</a><span>/</span></>}
         <a href={hrefFor("interpreter")} onClick={(event) => followLink(event, "interpreter")}>{labels.interpreter}</a><span>/</span>
         <a href={hrefFor("interpreter")} onClick={(event) => followLink(event, "interpreter")}>{labels.management}</a><span>/</span>
-        {(isTerm || isAnalysis || isScenario) && <><a href={hrefFor("interpreter", typeParam)} onClick={(event) => followLink(event, "interpreter", typeParam)}>{type}</a><span>/</span></>}
+        {(isTerm || isAnalysis || isScenario) && <><a href={hrefFor("interpreter", typeParam)} onClick={(event) => followLink(event, "interpreter", typeParam)}>{content.typeLabels?.[type] ?? type}</a><span>/</span></>}
         <b>{isAnalysis && mode === "edit" ? values.analysis_name || title : title}</b>
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
       <section className="mh-kcreate__card" ref={cardRef}>
         {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={Array.isArray(values.synonyms) ? values.synonyms : []} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={cancel} onSave={save} onSubmit={submit} />
           : <>
-            {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
+            {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item} value={item}>{content.typeLabels?.[item] ?? item}</option>)}</select></label>}
             <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : submit(); }}>
               <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
               <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={cancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={save}>{isAnalysis ? analysis.saveLabel : isScenario ? content.scenario.saveLabel : labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{isAnalysis ? analysis.submitLabel : isScenario ? content.scenario.submitLabel : labels.submit}</Button></div>{isAnalysis && <OperationReminder>{analysis.reminder}</OperationReminder>}{isScenario && <OperationReminder>{content.scenario.reminder}</OperationReminder>}</footer>

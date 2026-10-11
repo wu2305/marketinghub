@@ -16,7 +16,10 @@ export default {
     },
   },
   args: { title: cityProject.title, description: cityProject.description },
-  argTypes: { onOpen: { action: "onOpen" } },
+  argTypes: {
+    onOpen: { action: "onOpen" },
+    imageLabel: { description: bi("Builds the accessible name of the image link from the title. Default `View <title> reports`.", "根据标题生成图片链接的无障碍名称。默认是 `View <title> reports`。"), control: false },
+  },
   render: (args) => (
     <div style={{ width: 360 }}>
       <ProjectCard

@@ -8,6 +8,8 @@ import "./KnowledgeSidebar.css";
  * @param {object} props
  * @param {string} [props.brand="AI Interpreter"]
  * @param {{ id: string, label: string, icon?: string }} [props.overview]
+ * @param {string} [props.ariaLabel="Knowledge navigation"] accessible name of the sidebar
+ * @param {string} [props.manageLabel="Manage"] badge on types the user can manage
  * @param {string} [props.title] group label, e.g. "Knowledge · 8 types"
  * @param {Array<{ id: string, title: string, icon?: string, manageable?: boolean, stats?: { total: number }, navCount?: number }>} [props.types=[]]
  *   `navCount` feeds the "label · count" tooltip; the count chip itself is
@@ -17,9 +19,9 @@ import "./KnowledgeSidebar.css";
  * @param {string} [props.overviewHref] true Overview navigation target
  * @param {(event: { id: string, label: string }) => void} [props.onSelect]
  */
-export function KnowledgeSidebar({ brand = "AI Interpreter", overview, overviewHref, title, types = [], activeId, onSelect }) {
+export function KnowledgeSidebar({ brand = "AI Interpreter", overview, overviewHref, title, types = [], activeId, ariaLabel = "Knowledge navigation", manageLabel = "Manage", onSelect }) {
   return (
-    <aside className="mh-sidebar" aria-label="Knowledge navigation">
+    <aside className="mh-sidebar" aria-label={ariaLabel}>
       <div className="mh-sidebar__brand">{brand}</div>
       {overview ? (
         <SidebarItem {...overview} href={overviewHref} active={overview.id === activeId} onSelect={() => onSelect?.({ id: overview.id, label: overview.label })} />
@@ -32,7 +34,7 @@ export function KnowledgeSidebar({ brand = "AI Interpreter", overview, overviewH
               key={type.id}
               label={type.title}
               icon={type.icon}
-              badge={type.manageable ? "Manage" : undefined}
+              badge={type.manageable ? manageLabel : undefined}
               count={type.navCount ?? type.stats?.total}
               active={type.id === activeId}
               onSelect={() => onSelect?.({ id: type.id, label: type.title })}

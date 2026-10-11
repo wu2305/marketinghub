@@ -21,7 +21,7 @@ const workflowBadge = (status) => <StatusBadge variant="process" status={String(
  * a success Toast. `useScenarioDemo` owns normalization, filters and
  * lib/governance.js rules.
  * @param {object} props
- * @param {object} props.strings copy: searchLabel, searchPlaceholder, createLabel, empty, clearFiltersLabel, countLabel, rowsPerPage, previous, next, eyebrow, closeDetailLabel, relatedReport, description, structureGuidance, supportingFiles, workflowNote, createdBy, createdAt, updatedAt, enabled, disabled, reportLabel, creatorLabel, processLabel, actions, tooltips
+ * @param {object} props.strings copy: libraryLabel, listLabel, paginationLabel, sizeLabel, pageLabel, searchLabel, searchPlaceholder, createLabel, empty, clearFiltersLabel, countLabel, rowsPerPage, previous, next, eyebrow, closeDetailLabel, relatedReport, description, structureGuidance, supportingFiles, workflowNote, createdBy, createdAt, updatedAt, enabled, disabled, reportLabel, creatorLabel, processLabel, actions, tooltips
  * @param {Array<{ id: string, label: string, allLabel: string, options: Array<{ id: string, label: string }> }>} [props.filters=[]] single-choice facets
  * @param {Object<string, string>} [props.filterValues={}] selected option id per facet ("" = all)
  * @param {string} [props.query=""]
@@ -96,7 +96,7 @@ export function ScenarioReportsView({
   }));
   const count = (strings.countLabel || "Showing {shown} of {total} scenarios").replace("{shown}", total).replace("{total}", totalAll);
   return (
-    <section className="mh-srview" aria-label="Scenario Reporting library">
+    <section className="mh-srview" aria-label={strings.libraryLabel || "Scenario Reporting library"}>
       <LibraryToolbar
         search={{ label: strings.searchLabel || "Search knowledge", placeholder: strings.searchPlaceholder, value: query }}
         searchRef={searchRef}
@@ -110,7 +110,7 @@ export function ScenarioReportsView({
         onCreate={onCreate}
       />
       <LibraryList
-        label="Scenario reports"
+        label={strings.listLabel || "Scenario reports"}
         items={items}
         empty={{ kind: totalAll ? "no-results" : "empty", title: strings.empty || "No matching records", clearLabel: strings.clearFiltersLabel }}
         onOpen={onOpen}
@@ -127,6 +127,9 @@ export function ScenarioReportsView({
         rowsLabel={strings.rowsPerPage}
         previousLabel={strings.previous}
         nextLabel={strings.next}
+        ariaLabel={strings.paginationLabel}
+        sizeLabel={strings.sizeLabel}
+        pageLabel={strings.pageLabel}
         onPage={onPage}
         onPageSize={onPageSize}
       />

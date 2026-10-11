@@ -78,8 +78,16 @@ function Section({ title, children }) {
 }
 const SectionParagraph = ({ text }) => <p className="mh-flview__prewrap">{text || "—"}</p>;
 
+/** English defaults for the names that carry a record's title; `strings` / `strings.drawer` override any of them. */
+const NAMES = {
+  thumbnailAlt: (name) => `${name} thumbnail`,
+  scenarioLinkLabel: (title) => `Open ${title} scenario reporting detail`,
+  libraryLabel: (type) => `${type} library`,
+  listLabel: (type) => `${type} records`,
+};
+
 function DetailBody({ type, record, strings, onAction }) {
-  const drawer = strings.drawer || {};
+  const drawer = { ...NAMES, ...strings.drawer };
   const sections = drawer.sections || {};
   const metaLabels = drawer.metaLabels || {};
   if (type === "Report Context") {
@@ -87,7 +95,7 @@ function DetailBody({ type, record, strings, onAction }) {
       <>
         <div className="mh-flview__rc-thumb">
           {record.report_thumbnail ? (
-            <img src={record.report_thumbnail} alt={`${record.report_name} thumbnail`} />
+            <img src={record.report_thumbnail} alt={drawer.thumbnailAlt(record.report_name)} />
           ) : (
             <span>{drawer.previewUnavailable || "Report preview unavailable"}</span>
           )}
@@ -126,7 +134,7 @@ function DetailBody({ type, record, strings, onAction }) {
           <div className="mh-flview__tags">
             {(record.scenarioLinks || []).length ? (
               record.scenarioLinks.map((link) => (
-                <a key={link.id} className="mh-flview__chip mh-flview__scenario-link" href={link.href} aria-label={`Open ${link.title} scenario reporting detail`}>
+                <a key={link.id} className="mh-flview__chip mh-flview__scenario-link" href={link.href} aria-label={drawer.scenarioLinkLabel(link.title)}>
                   {link.title} &gt;
                 </a>
               ))
@@ -282,7 +290,7 @@ export function FieldLibraryView({
   } = strings;
   const count = countLabel.replace("{shown}", totals.shown).replace("{total}", totals.total).replace("{unit}", countUnit);
   return (
-    <section className="mh-flview" data-fl-type={type} aria-label={`${type} library`}>
+    <section className="mh-flview" data-fl-type={type} aria-label={(strings.libraryLabel || NAMES.libraryLabel)(type)}>
       <LibraryToolbar
         search={{ label: searchLabel, placeholder: searchPlaceholder, value: query }}
         searchRef={searchRef}
@@ -296,7 +304,7 @@ export function FieldLibraryView({
         onCreate={onCreate}
       />
       <LibraryList
-        label={`${type} records`}
+        label={(strings.listLabel || NAMES.listLabel)(type)}
         items={records.map((record) => toItem(type, record, strings))}
         empty={{ kind: totals.total ? "no-results" : "empty", title: emptyMessage, clearLabel: clearFiltersLabel }}
         onOpen={onOpen}

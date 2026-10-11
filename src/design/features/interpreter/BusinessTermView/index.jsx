@@ -12,8 +12,8 @@ import "./BusinessTermView.css";
 import { availabilityOf } from "../../../lib/governance.js";
 
 /** Data-model pill text — business-term-library.js:104-105 domainTags(). */
-function scopeLabel(record) {
-  return record.kind === "Global Synonym" || record.scope?.[0] === "Global" ? "All models" : record.scope?.[0] || "—";
+function scopeLabel(record, allModels) {
+  return record.kind === "Global Synonym" || record.scope?.[0] === "Global" ? allModels : record.scope?.[0] || "—";
 }
 
 const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
@@ -33,7 +33,7 @@ const fill = (template, values) => template.replace(/\{(\w+)\}/g, (_, key) => St
  * @param {number} [props.page=1]
  * @param {number} [props.pageSize=6]
  * @param {Array<number>} [props.pageSizes=[6, 12, 24]]
- * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, selectedLabel, createLabel, creatorLabel, synonymsLabel, moreSynonymsLabel, statusLabels { Enable, Disable }, draftLabel, emptyTitle, emptyMessage, clearFiltersLabel, countLabel ("Showing {shown} of {total} terms"), units, rowsPerPageLabel, previousLabel, nextLabel, detailEyebrow, detailCloseLabel, sections { termType, description, synonyms, dataModel, creator }, actions { edit, delete, disable }, tooltips { permission, "disable-first", "already-disabled" }
+ * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, selectedLabel, createLabel, creatorLabel, synonymsLabel, moreSynonymsLabel, statusLabels { Enable, Disable }, draftLabel, emptyTitle, emptyMessage, clearFiltersLabel, libraryLabel, listLabel, paginationLabel, sizeLabel, pageLabel, allModelsLabel, kindLabels { "Business Term", "Global Synonym" } (display names for the term types), countLabel ("Showing {shown} of {total} terms"), units, rowsPerPageLabel, previousLabel, nextLabel, detailEyebrow, detailCloseLabel, sections { termType, description, synonyms, dataModel, creator }, actions { edit, delete, disable }, tooltips { permission, "disable-first", "already-disabled" }
  * @param {string} [props.createHref] "Add Business Term" link target
  * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" and Cmd/Ctrl+K shortcuts)
  * @param {object|null} [props.detail] record shown in the drawer (null = closed)
@@ -99,6 +99,13 @@ export function BusinessTermView({
     sections = { termType: "Term Type", description: "Description", synonyms: "Synonyms", dataModel: "Data Model", creator: "Creator" },
     actions: actionLabels,
     tooltips,
+    libraryLabel = "Business Term library",
+    listLabel = "Business terms",
+    paginationLabel,
+    sizeLabel,
+    pageLabel,
+    allModelsLabel = "All models",
+    kindLabels = {},
   } = strings;
   const availability = (record) => (availabilityOf(record) === "enabled" ? "Enable" : "Disable");
   const statusOf = (record) => {
@@ -115,14 +122,14 @@ export function BusinessTermView({
     status: statusOf(record),
     meta: [
       { label: synonymsLabel, value: <ChipList singleLine values={record.synonyms || []} max={Infinity} /> },
-      ...(record.scope?.length ? [{ label: sections.dataModel || "Data Model", value: record.kind === "Global Synonym" || record.scope[0] === "Global" ? "All models" : record.scope[0] }] : []),
+      ...(record.scope?.length ? [{ label: sections.dataModel || "Data Model", value: scopeLabel(record, allModelsLabel) }] : []),
       { label: creatorLabel, value: record.creator },
     ],
     actions: { actions: record.actions, labels: actionLabels, messages: tooltips },
 
   }));
   return (
-    <section className="mh-btview" aria-label="Business Term library">
+    <section className="mh-btview" aria-label={libraryLabel}>
       <LibraryToolbar
         search={{ label: searchLabel, placeholder: searchPlaceholder, value: query }}
         searchRef={searchRef}
@@ -136,7 +143,7 @@ export function BusinessTermView({
         onCreate={onCreate}
       />
       <LibraryList
-        label="Business terms"
+        label={listLabel}
         items={items}
         empty={{ kind: totals.total ? "no-results" : "empty", title: emptyTitle, message: emptyMessage, clearLabel: clearFiltersLabel }}
         onOpen={onOpen}
@@ -153,6 +160,9 @@ export function BusinessTermView({
         rowsLabel={rowsPerPageLabel}
         previousLabel={previousLabel}
         nextLabel={nextLabel}
+        ariaLabel={paginationLabel}
+        sizeLabel={sizeLabel}
+        pageLabel={pageLabel}
         onPage={onPage}
         onPageSize={onPageSize}
       />
@@ -169,7 +179,7 @@ export function BusinessTermView({
         {detail ? (
           <dl className="mh-btview__detail">
             <dt>{sections.termType}</dt>
-            <dd>{detail.kind}</dd>
+            <dd>{kindLabels[detail.kind] ?? detail.kind}</dd>
             <dt>{sections.description}</dt>
             <dd>{detail.description}</dd>
             <dt>{sections.synonyms}</dt>
@@ -177,7 +187,7 @@ export function BusinessTermView({
               <ChipList values={detail.synonyms || []} max={Infinity} />
             </dd>
             <dt>{sections.dataModel}</dt>
-            <dd><ChipList values={[scopeLabel(detail)]} tone="success" /></dd>
+            <dd><ChipList values={[scopeLabel(detail, allModelsLabel)]} tone="success" /></dd>
             <dt>{sections.creator}</dt>
             <dd>{detail.creator}</dd>
           </dl>

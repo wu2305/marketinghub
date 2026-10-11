@@ -7,6 +7,9 @@ export default {
   title: "Organisms/Assistant panel",
   component: AssistantPanel,
   tags: ["autodocs"],
+  argTypes: {
+    copy: { description: bi("Names and short texts: feedback buttons, source labels, composer label and placeholder, header control names, and `openAssistant` for the launcher. Pass any subset. A host that wants another language passes it here. `groundedSources(count)` builds the source count.", "名称和短文本：反馈按钮、来源标签、输入框标签与占位符、头部控件名称，以及启动器用的 `openAssistant`。可以只传一部分。想换语言的宿主在这里传入。`groundedSources(count)` 生成来源数量文字。"), control: false },
+  },
   parameters: {
     layout: "fullscreen",
     docs: {

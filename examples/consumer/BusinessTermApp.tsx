@@ -27,14 +27,71 @@ type FormValues = { title: string; kind: string; description: string; synonyms: 
 type Answer = NonNullable<React.ComponentProps<typeof AiInterpreterPage>["assistant"]>["answers"] extends (infer A)[] | undefined ? A : never;
 type Route = { page: "library"; type: string } | { page: "form"; mode: "create" | "edit"; id?: string };
 
-const LIBRARY = INTERPRETER.businessTermLibrary;
-const DIALOGS = LIBRARY.strings.dialogs;
-const TOOLTIPS = governanceMessages;
+/**
+ * Everything this app shows that is not a record: page copy, form copy, the governance
+ * messages and the assistant's canned answer. Swap the object to change the language;
+ * `englishContent` is the demo's. See `localized/` for a second language.
+ */
+type Copy = Record<string, string | ((...args: any[]) => string)>;
+/** The demo content plus the optional keys a translation sets (all fall back to English). */
+type InterpreterContent = typeof INTERPRETER & {
+  copy: { sidebar?: { brand?: string; ariaLabel?: string; manageLabel?: string }; header?: { navigationAriaLabel?: string; logoAriaLabel?: string } };
+  assistant: { copy?: Copy; launcherLabel?: string; skillMenu: { menuLabel?: string } };
+  businessTermLibrary: {
+    strings: {
+      libraryLabel?: string;
+      listLabel?: string;
+      paginationLabel?: string;
+      sizeLabel?: (size: number) => string;
+      pageLabel?: (position: { page: number; pages: number }) => string;
+      allModelsLabel?: string;
+      kindLabels?: Record<string, string>;
+    };
+  };
+};
+type KnowledgeCreateContent = typeof KNOWLEDGE_CREATE & {
+  typeLabels?: Record<string, string>;
+  labels: { navigationAria?: string; logoAria?: string };
+  businessTerm: { labels: { kinds?: Record<string, string> } };
+};
+
+export type BusinessTermContent = {
+  interpreter: InterpreterContent;
+  knowledgeCreate: KnowledgeCreateContent;
+  logo: typeof LOGO;
+  navigation: typeof NAV;
+  governance: typeof governanceMessages;
+  ask: {
+    banner: string;
+    context: string;
+    body: (count: number) => string;
+    matchingLabel: string;
+    noMatch: string;
+    source: string;
+  };
+};
+
+export const englishContent: BusinessTermContent = {
+  interpreter: INTERPRETER,
+  knowledgeCreate: KNOWLEDGE_CREATE,
+  logo: LOGO,
+  navigation: NAV,
+  governance: governanceMessages,
+  ask: {
+    banner: "AI Response",
+    context: "Context: Business Terms",
+    body: (count) => `${count} business terms are in this workspace.`,
+    matchingLabel: "Matching terms",
+    noMatch: "None by title.",
+    source: "Business Term library",
+  },
+};
+
 const BLANK: FormValues = { title: "", kind: "Business Term", description: "", synonyms: [], scope: [] };
 const TOAST_MS = 3000;
 
 /** Seed terms from the demo content; any list of `Term`s works. */
-export const seedTerms: Term[] = LIBRARY.records.map((record) => ({ ...record, status: record.status === "Disable" ? "Disable" : "Enable" }));
+export const seedTerms: Term[] = englishContent.interpreter.businessTermLibrary.records.map((record) => ({ ...record, status: record.status === "Disable" ? "Disable" : "Enable" }));
 
 /** Links stay real `<a href>`s; this app routes on their callbacks, the hash is cosmetic. */
 const hrefFor = (id: string, params: Record<string, string> = {}) => {
@@ -45,8 +102,13 @@ const hrefFor = (id: string, params: Record<string, string> = {}) => {
 /**
  * @param props.terms initial records (defaults to the demo seed)
  * @param props.currentUser who "owns" records for the edit/delete/disable rules
+ * @param props.content the app's language: page and form copy, governance messages, assistant answer
  */
-export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.currentUser }: { terms?: Term[]; currentUser?: string }) {
+export function BusinessTermApp({ terms = seedTerms, currentUser, content = englishContent }: { terms?: Term[]; currentUser?: string; content?: BusinessTermContent }) {
+  const { interpreter, knowledgeCreate, ask: askCopy } = content;
+  const library = interpreter.businessTermLibrary;
+  const dialogs = library.strings.dialogs;
+  const owner = currentUser ?? library.currentUser;
   const [records, setRecords] = React.useState<Term[]>(terms);
   const [route, setRoute] = React.useState<Route>({ page: "library", type: "Business Term" });
   const [query, setQuery] = React.useState("");
@@ -89,40 +151,40 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
       description: values.description.trim(),
       synonyms: values.synonyms,
       scope: values.kind === "Global Synonym" ? [] : values.scope,
-      creator: editing ? find(editing)?.creator || currentUser : currentUser,
+      creator: editing ? find(editing)?.creator || owner : owner,
       status: submit ? "Enable" : "Disable",
       stage: submit ? "Published" : "Draft",
     };
     setRecords((all) => (editing ? all.map((record) => (record.id === editing ? term : record)) : [term, ...all]));
     toLibrary();
-    if (submit) flash(setPageToast, KNOWLEDGE_CREATE.businessTerm.publishedNotice);
+    if (submit) flash(setPageToast, knowledgeCreate.businessTerm.publishedNotice);
   };
 
   /* The blocked-reason / dialog / confirm / toast sequence is the package's `useGovernedFlow`;
    * what "disable", "delete" and "edit" do to this app's records stays here. */
   const flow = useGovernedFlow({
     find,
-    copy: DIALOGS,
-    tooltips: TOOLTIPS,
+    copy: dialogs,
+    tooltips: content.governance,
     onEdit: (record: Term) => openForm("edit", record.id),
     onDisable: (record: Term) => {
       update(record.id, { status: "Disable" });
-      flash(setToast, DIALOGS.disabledToast);
+      flash(setToast, dialogs.disabledToast);
       return { ...record, status: "Disable" };
     },
     onDelete: (record: Term) => {
       setRecords((all) => all.filter((item) => item.id !== record.id));
       setDetailId(null);
-      flash(setToast, DIALOGS.deletedToast);
+      flash(setToast, dialogs.deletedToast);
     },
   });
 
   if (route.page === "form") {
     return (
       <KnowledgeCreatePage
-        content={KNOWLEDGE_CREATE}
-        logo={{ ...LOGO, href: hrefFor("home") }}
-        navigation={NAV.map((item) => ({ ...item, href: hrefFor(item.id) }))}
+        content={knowledgeCreate}
+        logo={{ ...content.logo, href: hrefFor("home") }}
+        navigation={content.navigation.map((item) => ({ ...item, href: hrefFor(item.id) }))}
         type="Business Term"
         mode={route.mode}
         values={values}
@@ -146,13 +208,13 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
   /* ---- library ---- */
   const text = query.trim().toLowerCase();
   const visible = records
-    .filter((record) => record.stage !== "Draft" || record.creator === currentUser)
+    .filter((record) => record.stage !== "Draft" || record.creator === owner)
     .filter((record) => !selected.status.length || selected.status.includes(record.status))
     .filter((record) => !selected.creator.length || selected.creator.includes(record.creator))
     .filter((record) => !text || [record.title, record.description, ...record.synonyms, ...record.scope, record.creator].some((field) => field.toLowerCase().includes(text)));
   const pages = Math.max(1, Math.ceil(visible.length / pageSize));
   const current = Math.min(page, pages);
-  const withActions = (record: Term) => ({ ...record, actions: governedActions(record, { currentUser }) });
+  const withActions = (record: Term) => ({ ...record, actions: governedActions(record, { currentUser: owner }) });
   const detail = detailId ? find(detailId) : undefined;
 
   const facet = (id: "status" | "creator", label: string, allLabel: string, options: { id: string; label: string }[]) => ({ id, label, allLabel, options, selected: selected[id] });
@@ -160,14 +222,14 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
     records: visible.slice((current - 1) * pageSize, current * pageSize).map(withActions),
     totals: { shown: visible.length, total: records.length },
     filters: [
-      facet("status", LIBRARY.strings.statusLabel, LIBRARY.strings.statusAll, LIBRARY.strings.statusOptions),
-      facet("creator", LIBRARY.strings.creatorLabel, LIBRARY.strings.creatorAll, [...new Set(records.map((record) => record.creator))].map((creator) => ({ id: creator, label: creator }))),
+      facet("status", library.strings.statusLabel, library.strings.statusAll, library.strings.statusOptions),
+      facet("creator", library.strings.creatorLabel, library.strings.creatorAll, [...new Set(records.map((record) => record.creator))].map((creator) => ({ id: creator, label: creator }))),
     ],
     query,
     page: current,
     pageSize,
-    pageSizes: LIBRARY.pageSizes,
-    strings: { ...LIBRARY.strings, tooltips: TOOLTIPS },
+    pageSizes: library.pageSizes,
+    strings: { ...library.strings, tooltips: content.governance },
     createHref: hrefFor("knowledge-create", { type: "Business Term" }),
     detail: detail ? withActions(detail) : null,
     dialog: flow.dialog,
@@ -194,16 +256,16 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
     const answer: Answer = {
       query: prompt,
       variant: "workspace",
-      banner: "AI Response",
-      context: "Context: Business Terms",
-      body: `${records.length} business terms are in this workspace.`,
-      findings: [{ label: "Matching terms", detail: records.filter((record) => prompt.toLowerCase().includes(record.title.toLowerCase())).map((record) => record.title).join(", ") || "None by title." }],
-      sources: ["Business Term library"],
+      banner: askCopy.banner,
+      context: askCopy.context,
+      body: askCopy.body(records.length),
+      findings: [{ label: askCopy.matchingLabel, detail: records.filter((record) => prompt.toLowerCase().includes(record.title.toLowerCase())).map((record) => record.title).join(", ") || askCopy.noMatch }],
+      sources: [askCopy.source],
     };
     setAssistant((prior) => ({ ...prior, prompt: "", answers: [...prior.answers, answer] }));
   };
   const assistantProps = {
-    ...INTERPRETER.assistant,
+    ...interpreter.assistant,
     open: assistant.open,
     prompt: assistant.prompt,
     answers: assistant.answers,
@@ -221,14 +283,14 @@ export function BusinessTermApp({ terms = seedTerms, currentUser = LIBRARY.curre
 
   return (
     <AiInterpreterPage
-      logo={LOGO}
-      navigation={NAV}
+      logo={content.logo}
+      navigation={content.navigation}
       hrefFor={hrefFor}
-      hero={INTERPRETER.hero}
-      overviewItem={INTERPRETER.overview}
-      sidebarTitle={INTERPRETER.sidebarTitle}
-      copy={INTERPRETER.copy}
-      types={INTERPRETER.types}
+      hero={interpreter.hero}
+      overviewItem={interpreter.overview}
+      sidebarTitle={interpreter.sidebarTitle}
+      copy={interpreter.copy}
+      types={interpreter.types}
       activeType={route.type}
       view={route.type === "Business Term" ? view : {}}
       toast={pageToast}

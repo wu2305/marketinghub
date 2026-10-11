@@ -13,7 +13,10 @@ export default {
       },
     },
   },
-  render: () => <SummaryStrip items={CAMPAIGN.executionSummary} />,
+  argTypes: {
+    ariaLabel: { description: bi("Accessible name of the strip. Default `Execution status`.", "状态条的无障碍名称。默认是 `Execution status`。"), control: false },
+  },
+  render: (args) => <SummaryStrip items={CAMPAIGN.executionSummary} {...args} />,
 };
 
 export const Default = {};

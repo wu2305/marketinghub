@@ -17,6 +17,47 @@ import "./ReportCopilot.css";
    ============================================================ */
 
 const COPILOT_STREAM_MS = { holistic: 110, rich: 140 };
+
+/** English copy; the `copy` prop overrides any of it. Nested pieces read it through context. */
+const DEFAULT_COPY = {
+  helpful: "Helpful",
+  notHelpful: "Not helpful",
+  copy: "Copy",
+  copyAnswer: "Copy answer",
+  sources: "Sources",
+  sourcesUsed: "Sources used",
+  groundedSources: (count) => `${count} grounded sources`,
+  relatedActions: "Related actions",
+  trendLabel: "Monthly uplift trend",
+  salesUplift: "Sales uplift",
+  connectedView: "Connected report view",
+  nextMove: "Recommended next move.",
+  openContext: "Open report context",
+  compareMovement: "Compare movement",
+  saveLearning: "Save learning",
+  toggleSection: (heading) => `Toggle ${heading}`,
+  viewMore: "view more",
+  recentChats: "Recent Chats",
+  closeRecentChats: "Close recent chats",
+  closeWorkspace: "Close AI workspace",
+  workspaceLabel: "Report AI workspace",
+  shortcutsLabel: "Report context shortcuts",
+  summaryTool: "AI summary",
+  scenariosTool: "Scenario reports",
+  suggestedQuestions: "Suggested questions",
+  wasHelpful: "Was this answer helpful?",
+  thanksHelpful: "Thanks. This answer was marked helpful.",
+  thanksNotHelpful: "Thanks. This answer was marked not helpful.",
+  composerLabel: "Ask the report copilot",
+  sendLabel: "Send question",
+  askButton: "ASK",
+  useSkill: (title) => `Use ${title} to interpret this report.`,
+  newSession: "New session",
+  restore: "Restore",
+  maximize: "Maximize",
+  history: "History",
+};
+const CopilotCopyContext = React.createContext(DEFAULT_COPY);
 const copilotShellClasses = {
   header: "mh-copilot__head",
   actions: "mh-copilot__head-actions",
@@ -27,7 +68,6 @@ const copilotShellClasses = {
   historyList: "mh-copilot__history-list",
   historyItem: "mh-copilot__history-item",
   close: "mh-copilot__close",
-  closeLabel: "Close AI workspace",
 };
 
 /** Inline segment renderer shared by copilot content (text/bold/signed value/badge/break). */
@@ -107,6 +147,7 @@ function HrInsight({ label, segments }) {
 const HR_SERIES_TONES = { ink: "var(--mh-text-strong)", pos: "var(--mh-success)", neg: "var(--mh-danger)" };
 
 function HrTrendChart({ chart }) {
+  const copy = React.useContext(CopilotCopyContext);
   const { periods, min, max, ticks, series } = chart;
   const W = 520;
   const H = 170;
@@ -117,7 +158,7 @@ function HrTrendChart({ chart }) {
   const X = (i) => padL + (W - padL - padR) * (i / (periods.length - 1));
   const Y = (v) => padT + (H - padT - padB) * (1 - (v - min) / (max - min));
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" className="mh-hr-chart-svg" role="img" aria-label="Monthly uplift trend">
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet" className="mh-hr-chart-svg" role="img" aria-label={copy.trendLabel}>
       {ticks.map((tick) => (
         <g key={tick}>
           <line
@@ -302,6 +343,7 @@ function HolisticReport({ data, stream = true }) {
 }
 
 function PilotSalesBody({ data, sources, stream = true, trailing, onExplore }) {
+  const copy = React.useContext(CopilotCopyContext);
   const blocks = [
     <p className="mh-ra-lead" key="lead">
       <CopilotSegments segments={data.lead} />
@@ -327,7 +369,7 @@ function PilotSalesBody({ data, sources, stream = true, trailing, onExplore }) {
                 </i>
               </span>
             </div>
-            <div className="mh-ra-ch-label">Sales uplift</div>
+            <div className="mh-ra-ch-label">{copy.salesUplift}</div>
             <div className="mh-ra-ch-stats">
               {channel.stats.map((stat) => (
                 <span className="mh-ra-stat" key={stat.label}>
@@ -363,8 +405,8 @@ function PilotSalesBody({ data, sources, stream = true, trailing, onExplore }) {
     </React.Fragment>,
     <React.Fragment key="sources">
       <div className="mh-ra-divider" />
-      <div className="mh-ra-source-line" aria-label="Sources">
-        <span className="mh-ra-source-label">Sources used</span>
+      <div className="mh-ra-source-line" aria-label={copy.sources}>
+        <span className="mh-ra-source-label">{copy.sourcesUsed}</span>
         {sources.slice(0, 3).map((source) => (
           <span className="mh-ra-source-chip" key={source.id}>
             {source.title}
@@ -388,6 +430,7 @@ function PilotSalesBody({ data, sources, stream = true, trailing, onExplore }) {
 }
 
 function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, onCopy, onExplore }) {
+  const copy = React.useContext(CopilotCopyContext);
   const [feedback, setFeedback] = React.useState(null);
   const cardRef = React.useRef(null);
   const entryRef = React.useRef(null);
@@ -415,7 +458,7 @@ function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, o
         onClick={() => pick("helpful")}
       >
         <Icon name="thumb-up" />
-        <span>Helpful</span>
+        <span>{copy.helpful}</span>
       </button>
       <button
         type="button"
@@ -424,11 +467,11 @@ function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, o
         onClick={() => pick("not-helpful")}
       >
         <Icon name="thumb-down" />
-        <span>Not helpful</span>
+        <span>{copy.notHelpful}</span>
       </button>
-      <button type="button" className="mh-copilot__fb mh-copilot__copy" aria-label="Copy answer" onClick={copyCard}>
+      <button type="button" className="mh-copilot__fb mh-copilot__copy" aria-label={copy.copyAnswer} onClick={copyCard}>
         <Icon name="copy" />
-        <span>Copy</span>
+        <span>{copy.copy}</span>
       </button>
     </div>
   );
@@ -439,8 +482,8 @@ function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, o
       </div>
       <article className={cx("mh-copilot__card", rich && "mh-copilot__card--rich")} ref={cardRef}>
         <div className="mh-copilot__card-head">
-          <span>Connected report view</span>
-          <small>{headCount} grounded sources</small>
+          <span>{copy.connectedView}</span>
+          <small>{copy.groundedSources(headCount)}</small>
         </div>
         {rich ? (
           <PilotSalesBody
@@ -452,17 +495,17 @@ function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, o
           />
         ) : (
           <React.Fragment>
-            <h3>Recommended next move.</h3>
+            <h3>{copy.nextMove}</h3>
             <p>{entry.summary}</p>
-            <div className="mh-copilot__source-line" aria-label="Sources">
+            <div className="mh-copilot__source-line" aria-label={copy.sources}>
               {entry.sources.slice(0, 3).map((source) => (
                 <span key={source.id}>{source.title}</span>
               ))}
             </div>
-            <div className="mh-copilot__card-actions" aria-label="Related actions">
-              <a href={entry.sources[0]?.href || contextHref}>Open report context</a>
-              <span>Compare movement</span>
-              <span>Save learning</span>
+            <div className="mh-copilot__card-actions" aria-label={copy.relatedActions}>
+              <a href={entry.sources[0]?.href || contextHref}>{copy.openContext}</a>
+              <span>{copy.compareMovement}</span>
+              <span>{copy.saveLearning}</span>
             </div>
             {feedbackRow}
           </React.Fragment>
@@ -474,6 +517,7 @@ function CopilotChatEntry({ entry, contextHref, stream = true, onChatFeedback, o
 
 /** Collapsible workspace section (summary drawer / scenario start view), also used docked in the answer view. */
 function CopilotSection({ index, className, heading, chevron = false, extra, collapsed = false, docked = false, onToggle, children }) {
+  const copy = React.useContext(CopilotCopyContext);
   const headingId = React.useId();
   const toggleFromHeading = (event) => {
     if (event.target.closest("button, a, input, select, textarea")) return;
@@ -507,7 +551,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
             type="button"
             className="mh-copilot__collapse"
             aria-expanded={!collapsed}
-            aria-label={`Toggle ${heading}`}
+            aria-label={copy.toggleSection(heading)}
             onClick={(event) => {
               event.stopPropagation();
               onToggle?.();
@@ -549,6 +593,7 @@ function CopilotSection({ index, className, heading, chevron = false, extra, col
  * @param {object} [props.skillMenu] SkillMenu config; renders the "+" menu when set
  * @param {object} [props.flow] ModelFlowDialog props; renders the flow dialog when set
  * @param {boolean} [props.stream=true]
+ * @param {Partial<typeof DEFAULT_COPY>} [props.copy] fixed texts and accessible names: feedback buttons, source labels, tool tabs, composer label, header control names. Functions build texts that include a number or title.
  * @param {(event: { reason: "scrim"|"escape"|"button" }) => void} [props.onClose]
  * @param {React.RefObject<HTMLElement>} [props.returnFocusRef] opener kept when the launcher is hidden during this workspace
  * @param {(event: { reason: "back" }) => void} [props.onBack] back to the start/context view
@@ -585,6 +630,7 @@ export function ReportCopilot({
   skillMenu,
   flow,
   stream = true,
+  copy: copyProp,
   onClose,
   returnFocusRef,
   onBack,
@@ -602,6 +648,7 @@ export function ReportCopilot({
   onSelectSkill,
   onSkillAction,
 }) {
+  const copy = React.useMemo(() => ({ ...DEFAULT_COPY, ...copyProp }), [copyProp]);
   const [dock, setDock] = React.useState(null);
   const [collapsed, setCollapsed] = React.useState({});
   const [showAll, setShowAll] = React.useState(false);
@@ -726,7 +773,7 @@ export function ReportCopilot({
             if (!showAll) setShowAll(true);
           }}
         >
-          view more
+          {copy.viewMore}
         </button>
       }
     >
@@ -754,6 +801,7 @@ export function ReportCopilot({
 
   return (
     <CopilotStreamContext.Provider value={streamRegistry}>
+      <CopilotCopyContext.Provider value={copy}>
       <AssistantShell
         open={open}
         layerRef={layerRef}
@@ -764,9 +812,10 @@ export function ReportCopilot({
         title={<div className="mh-copilot__head-title"><span>{eyebrow}</span><h2>{title}</h2></div>}
         classes={copilotShellClasses}
         history={history.map((item) => ({ id: item.id, title: item.title, subtitle: item.prompt, source: item }))}
-        historyHeading={<strong>Recent Chats</strong>}
-        historyAriaLabel="Recent Chats"
-        historyCloseLabel="Close recent chats"
+        historyHeading={<strong>{copy.recentChats}</strong>}
+        historyAriaLabel={copy.recentChats}
+        historyCloseLabel={copy.closeRecentChats}
+        labels={{ close: copy.closeWorkspace, newSession: copy.newSession, restore: copy.restore, maximize: copy.maximize, history: copy.history }}
         shortMaximizeLabel
         onClose={onClose}
         onNewSession={newSession}
@@ -778,7 +827,7 @@ export function ReportCopilot({
         renderSurface={({ header, body, composer, expanded }) => (
           <React.Fragment>
             <div data-mh-overlay-scrim className="mh-copilot__scrim" hidden={!open} onClick={() => onClose?.({ reason: "scrim" })} />
-            <aside ref={layerRef} data-mh-overlay-surface className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")} aria-hidden={!open} aria-label="Report AI workspace" role="dialog" aria-modal={open} tabIndex={-1}>
+            <aside ref={layerRef} data-mh-overlay-surface className={cx("mh-copilot", open && "is-open", expanded && "mh-copilot--expanded")} aria-hidden={!open} aria-label={copy.workspaceLabel} role="dialog" aria-modal={open} tabIndex={-1}>
               {header}{body}{composer}
             </aside>
           </React.Fragment>
@@ -786,20 +835,20 @@ export function ReportCopilot({
         body={
           <React.Fragment>
         {answerOpen ? (
-          <div className="mh-copilot__tools" aria-label="Report context shortcuts">
+          <div className="mh-copilot__tools" aria-label={copy.shortcutsLabel}>
             <button
               type="button"
               className={cx("mh-copilot__tool", dock === "summary" && "is-active")}
               onClick={() => toggleDock("summary")}
             >
-              AI summary
+              {copy.summaryTool}
             </button>
             <button
               type="button"
               className={cx("mh-copilot__tool", dock === "scenarios" && "is-active")}
               onClick={() => toggleDock("scenarios")}
             >
-              Scenario reports
+              {copy.scenariosTool}
             </button>
           </div>
         ) : null}
@@ -812,7 +861,7 @@ export function ReportCopilot({
         {answerOpen ? (
           <section className={cx("mh-copilot__answer", chatMode && "is-chat-mode")} aria-live="polite" ref={answerRef}>
             <button type="button" className="mh-copilot__back" onClick={backToStart}>
-              <span aria-hidden="true">←</span> Suggested questions
+              <span aria-hidden="true">←</span> {copy.suggestedQuestions}
             </button>
             <div className="mh-copilot__dock">
               {dock === "summary" ? summarySection(true) : null}
@@ -843,7 +892,7 @@ export function ReportCopilot({
                   </React.Fragment>
                 )}
                 <div className="mh-copilot__sources">
-                  <span>Sources used</span>
+                  <span>{copy.sourcesUsed}</span>
                   <div>
                     {sources.map((source) => (
                       <a key={source.id} href={source.href}>
@@ -874,7 +923,7 @@ export function ReportCopilot({
             ) : null}
             {!chatMode && answer ? (
               <div className="mh-copilot__feedback">
-                <span>Was this answer helpful?</span>
+                <span>{copy.wasHelpful}</span>
                 <div>
                   <button
                     type="button"
@@ -884,7 +933,7 @@ export function ReportCopilot({
                       onFeedback?.({ value: "helpful" });
                     }}
                   >
-                    Helpful
+                    {copy.helpful}
                   </button>
                   <button
                     type="button"
@@ -894,13 +943,11 @@ export function ReportCopilot({
                       onFeedback?.({ value: "not-helpful" });
                     }}
                   >
-                    Not helpful
+                    {copy.notHelpful}
                   </button>
                 </div>
                 <small className="mh-copilot__feedback-status" hidden={!feedback} aria-live="polite">
-                  {feedback === "helpful"
-                    ? "Thanks. This answer was marked helpful."
-                    : "Thanks. This answer was marked not helpful."}
+                  {feedback === "helpful" ? copy.thanksHelpful : copy.thanksNotHelpful}
                 </small>
               </div>
             ) : null}
@@ -914,7 +961,7 @@ export function ReportCopilot({
           <div className="mh-copilot__command-box">
             <TextArea
               ref={inputRef}
-              label="Ask the report copilot"
+              label={copy.composerLabel}
               rows={2}
               required
               placeholder={inputPlaceholder}
@@ -932,14 +979,14 @@ export function ReportCopilot({
                     composerRef={inputRef}
                     onAttach={onAttach}
                     onSelectSkill={(event) => {
-                      fillPrompt("Use " + event.title + " to interpret this report.");
+                      fillPrompt(copy.useSkill(event.title));
                       onSelectSkill?.(event);
                     }}
                     onAction={onSkillAction}
                   />
                 ) : null}
-                <button type="submit" className="mh-copilot__send" aria-label="Send question" disabled={!prompt.trim()}>
-                  <span>ASK</span>
+                <button type="submit" className="mh-copilot__send" aria-label={copy.sendLabel} disabled={!prompt.trim()}>
+                  <span>{copy.askButton}</span>
                 </button>
               </div>
             </div>
@@ -948,6 +995,7 @@ export function ReportCopilot({
         }
       />
       {flow ? <ModelFlowDialog {...flow} /> : null}
+      </CopilotCopyContext.Provider>
     </CopilotStreamContext.Provider>
   );
 }

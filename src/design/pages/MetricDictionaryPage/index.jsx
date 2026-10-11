@@ -62,7 +62,7 @@ export function MetricDictionaryPage({
       <main className="mh-metric-page">
         <header className="mh-metric-page__header">
           <div>
-            <nav className="mh-metric-page__breadcrumb" aria-label="Breadcrumb">
+            <nav className="mh-metric-page__breadcrumb" aria-label={header.breadcrumbLabel}>
               <a href={hrefFor("interpreter")} onClick={(event) => handleBreadcrumb(event, "interpreter")}>{header.breadcrumb[0]}</a><span>/</span>
               <a href={hrefFor("interpreter", { type: "Metric Dictionary" })} onClick={(event) => handleBreadcrumb(event, "interpreter", { type: "Metric Dictionary" })}>{header.breadcrumb[1]}</a><span>/</span>
               <strong>{metric?.name}</strong>

@@ -24,6 +24,9 @@ import "./ReportDetailsDrawer.css";
  * @param {Array<{ label: string, pills: Array<{ label: string, href: string }> }>} [props.sections=[]]
  * @param {Array<{ title: string, meta?: string }>} [props.scenarios=[]] first 3 shown until view-more
  * @param {string} [props.viewMoreLabel="view more"]
+ * @param {string} [props.scenariosLabel="AI ANALYSIS SCENARIOS"] heading of the scenario list
+ * @param {string} [props.fullscreenLabel="Toggle fullscreen"] accessible name of the fullscreen toggle
+ * @param {string} [props.closeLabel="Close report details"] accessible name of the close button
  * @param {string} [props.liveHref] footer "Open Dashboard" link target
  * @param {string} [props.liveLabel="Open Dashboard"]
  * @param {string|number} [props.resetKey] change to reset scenario/fullscreen state
@@ -43,6 +46,9 @@ export function ReportDetailsDrawer({
   sections = [],
   scenarios = [],
   viewMoreLabel = "view more",
+  scenariosLabel = "AI ANALYSIS SCENARIOS",
+  fullscreenLabel = "Toggle fullscreen",
+  closeLabel = "Close report details",
   liveHref,
   liveLabel = "Open Dashboard",
   resetKey,
@@ -75,12 +81,12 @@ export function ReportDetailsDrawer({
             <button
               className="mh-details__fullscreen"
               type="button"
-              aria-label="Toggle fullscreen"
+              aria-label={fullscreenLabel}
               onClick={() => setFullscreen((value) => !value)}
             >
               <Icon name="expand" />
             </button>
-            <button ref={closeRef} className="mh-details__close" type="button" aria-label="Close report details" onClick={() => onClose?.({ reason: "button" })}>
+            <button ref={closeRef} className="mh-details__close" type="button" aria-label={closeLabel} onClick={() => onClose?.({ reason: "button" })}>
               ×
             </button>
           </div>
@@ -117,7 +123,7 @@ export function ReportDetailsDrawer({
           {scenarios.length ? (
             <section className="mh-details__section">
               <header>
-                <span>AI ANALYSIS SCENARIOS</span>
+                <span>{scenariosLabel}</span>
                 <button
                   className="mh-details__view-more"
                   type="button"

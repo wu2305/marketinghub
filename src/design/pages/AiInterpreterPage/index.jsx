@@ -46,7 +46,7 @@ const typeViews = {
  * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog state and callbacks for skill menu actions. // 技能菜单操作所用的建模对话框状态和回调。
  * @param {string} [props.toast=""] Short success message. Empty hides it. // 简短成功消息。为空则隐藏。
  * @param {string} [props.activeType="overview"] "overview", a type id, or an unknown id. An unknown id shows an empty state. // "overview"、某个类型 id，或未知 id。未知 id 会显示空状态。
- * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string}} props.copy Shell copy from the host. // 由宿主提供的页壳文案。
+ * @param {{unknown: {typeTitle: string, typeDescription: Function, viewTitle: string}, stats: {fallbackUnit: string, publishedLabel: string, monthlyLabel: string, governedCaption: Function, addedCaption: Function}, heroAsideLabel: Function, management: {triggerLabel: string, title: string, rules: string[]}, assistantLabel: string, sidebar?: {brand?: string, ariaLabel?: string, manageLabel?: string}, header?: {navigationAriaLabel?: string, logoAriaLabel?: string}}} props.copy Shell copy from the host. // 由宿主提供的页壳文案。
  * @param {(target: { id:string, params: Record<string,string>, href:string, typeId:string }) => void} [props.onNavigate] The function runs when a link opens another page. // 链接要打开另一页时会调用这个函数。
  * @param {(event: { id: string, label?: string, title?: string, typeId: string }) => void} [props.onSelectType] The function runs when a knowledge type is selected. The result has `id` and `typeId`. It also has `label` when the sidebar was used, or `title` when an overview card was used. // 选中一种知识类型时会调用这个函数。结果里有 `id` 和 `typeId`；用侧栏选择时还有 `label`，用概览卡片选择时还有 `title`。
  */
@@ -105,7 +105,7 @@ export function AiInterpreterPage({
        from under the header to the viewport bottom and the hero compresses
        into the content column (170px, right of the rail). */
     <Shell tone="interpreter" className={type ? "mh-page--interpreter-type" : undefined}>
-      <Header logo={{ ...logo, href: hrefFor("home", {}) }} items={navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }))} current={current} highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {}, typeId: activeType })} />
+      <Header navigationAriaLabel={copy.header?.navigationAriaLabel} logoAriaLabel={copy.header?.logoAriaLabel} logo={{ ...logo, href: hrefFor("home", {}) }} items={navigation.map((item) => ({ ...item, href: hrefFor(item.id, {}) }))} current={current} highlightCurrent={false} onNavigate={(event) => onNavigate?.({ ...event, params: {}, typeId: activeType })} />
       <div className="mh-page__offset" aria-hidden="true" />
       <Hero {...heroProps} height={type ? 170 : 260} variant="knowledge" scrim="knowledge" asideLabel={copy.heroAsideLabel({ typeTitle: type?.title })}>
         {heroStats.map((stat) => (
@@ -129,6 +129,9 @@ export function AiInterpreterPage({
         <KnowledgeSidebar
           overview={overviewItem}
           overviewHref={hrefFor("interpreter", {})}
+          brand={copy.sidebar?.brand}
+          ariaLabel={copy.sidebar?.ariaLabel}
+          manageLabel={copy.sidebar?.manageLabel}
           title={sidebarTitle}
           types={types}
           activeId={activeType}

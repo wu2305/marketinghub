@@ -34,7 +34,36 @@ const panelShellClasses = {
   historyList: "mh-assistant__history-list",
   historyItem: "mh-assistant__history-item",
   close: "mh-assistant__close",
-  closeLabel: "Close assistant",
+};
+
+/** English copy; the `copy` prop overrides any of it. */
+const DEFAULT_COPY = {
+  mark: "AI",
+  openAssistant: "Open AI assistant",
+  helpful: "Helpful",
+  notHelpful: "Not helpful",
+  copy: "Copy",
+  copied: "Copied!",
+  copyAnswer: "Copy answer",
+  sources: "Sources",
+  sourcesUsed: "Sources used",
+  groundedSources: (count) => `${count} grounded sources`,
+  relatedActions: "Related actions",
+  liteLabel: "AI Interpreter",
+  closeAssistant: "Close assistant",
+  clearSkill: "Clear selected skill",
+  composerLabel: "Ask AI Interpreter AI",
+  placeholder: "Type your question or upload Excel/CSV files for data analysis",
+  askLabel: "Ask",
+  askButton: "ASK",
+  historyAria: "Recent conversations",
+  historyClose: "Close",
+  newSession: "New session",
+  restore: "Restore",
+  maximize: "Maximize",
+  restorePanel: "Restore AI Interpreter panel",
+  maximizePanel: "Maximize AI Interpreter panel",
+  history: "History",
 };
 
 /**
@@ -46,9 +75,10 @@ const panelShellClasses = {
  * with sources, related actions and feedback buttons.
  * @param {object} props
  * @param {AssistantAnswerEntry} props.answer
+ * @param {typeof DEFAULT_COPY} props.copy
  * @param {(event: { query: string, feedback: "helpful"|"not-helpful"|"copy"|null }) => void} [props.onFeedback]
  */
-function AssistantAnswer({ answer, onFeedback }) {
+function AssistantAnswer({ answer, copy: text, onFeedback }) {
   const [feedback, setFeedback] = React.useState(null);
   const [copied, setCopied] = React.useState(false);
   const cardRef = React.useRef(null);
@@ -84,15 +114,15 @@ function AssistantAnswer({ answer, onFeedback }) {
     <div className="mh-assistant__feedback">
       <button type="button" data-kind="helpful" aria-pressed={feedback === "helpful"} onClick={() => pick("helpful")}>
         <Icon name="thumb-up" />
-        <span>Helpful</span>
+        <span>{text.helpful}</span>
       </button>
       <button type="button" data-kind="not-helpful" aria-pressed={feedback === "not-helpful"} onClick={() => pick("not-helpful")}>
         <Icon name="thumb-down" />
-        <span>Not helpful</span>
+        <span>{text.notHelpful}</span>
       </button>
-      <button type="button" data-kind="copy" aria-label="Copy answer" onClick={copy}>
+      <button type="button" data-kind="copy" aria-label={text.copyAnswer} onClick={copy}>
         <Icon name="copy" />
-        <span>{copied ? "Copied!" : "Copy"}</span>
+        <span>{copied ? text.copied : text.copy}</span>
       </button>
     </div>
   );
@@ -117,7 +147,7 @@ function AssistantAnswer({ answer, onFeedback }) {
             ))}
           </div>
           {answer.sources?.length ? (
-            <div className="mh-assistant__sources" aria-label="Sources">
+            <div className="mh-assistant__sources" aria-label={text.sources}>
               {answer.sources.map((source) => (
                 <span key={source}>{source}</span>
               ))}
@@ -137,8 +167,8 @@ function AssistantAnswer({ answer, onFeedback }) {
         <article className="mh-assistant__answer" ref={cardRef}>
           <p>{answer.body}</p>
           {answer.sources?.length ? (
-            <div className="mh-assistant__sources-row" aria-label="Sources">
-              <span>Sources used</span>
+            <div className="mh-assistant__sources-row" aria-label={text.sources}>
+              <span>{text.sourcesUsed}</span>
               <div>
                 {answer.sources.map((source) => (
                   <span key={source}>{source}</span>
@@ -159,19 +189,19 @@ function AssistantAnswer({ answer, onFeedback }) {
       <article className="mh-assistant__answer" ref={cardRef}>
         <div className="mh-assistant__answer-head">
           <span>{answer.kicker}</span>
-          <small>{answer.sources?.length || 0} grounded sources</small>
+          <small>{text.groundedSources(answer.sources?.length || 0)}</small>
         </div>
         <h3>{answer.title}</h3>
         <p>{answer.body}</p>
         {answer.sources?.length ? (
-          <div className="mh-assistant__sources" aria-label="Sources">
+          <div className="mh-assistant__sources" aria-label={text.sources}>
             {answer.sources.map((source) => (
               <span key={source}>{source}</span>
             ))}
           </div>
         ) : null}
         {answer.actions?.length ? (
-          <div className="mh-assistant__answer-actions" aria-label="Related actions">
+          <div className="mh-assistant__answer-actions" aria-label={text.relatedActions}>
             {answer.actions.map((action) =>
               action.href ? (
                 <a key={action.label} href={action.href}>
@@ -212,6 +242,7 @@ function AssistantAnswer({ answer, onFeedback }) {
  * @param {AssistantAnswerEntry[]} [props.answers=[]] answers, oldest first
  * @param {Array<{ id?: string, label: string, prompt: string }>} [props.history=[]] recent prompts in the history popover
  * @param {string} [props.historyTitle="Recent"]
+ * @param {Partial<typeof DEFAULT_COPY>} [props.copy] names and short texts: feedback buttons, source labels, composer placeholder and label, header control names. `groundedSources(count)` builds the source count.
  * @param {React.ReactNode} [props.historyCount] e.g. "(121)"
  * @param {object} [props.skillMenu] renders the composer "+" skill menu when provided; `{ triggerLabel?, attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
  * @param {{ id?: string, type: string, title: string }} [props.selectedSkill] chip shown inside the composer when a skill is selected
@@ -244,6 +275,7 @@ export function AssistantPanel({
   history = [],
   historyTitle = "Recent",
   historyCount,
+  copy: copyProp,
   skillMenu,
   selectedSkill,
   onAttach,
@@ -262,6 +294,7 @@ export function AssistantPanel({
   onFeedback,
 }) {
   const { enterToSubmit, hideStageOnAnswers, shortMaximizeLabel } = variantSettings[variant] || variantSettings.campaign;
+  const text = { ...DEFAULT_COPY, ...copyProp };
   const titleId = React.useId();
   const layerRef = React.useRef(null);
   const mainRef = React.useRef(null);
@@ -285,13 +318,14 @@ export function AssistantPanel({
   return (
     <AssistantShell
       open={open}
-      title={<div className="mh-assistant__identity"><span className="mh-assistant__mark">AI</span><h2 id={titleId}>{title}</h2></div>}
+      title={<div className="mh-assistant__identity"><span className="mh-assistant__mark">{text.mark}</span><h2 id={titleId}>{title}</h2></div>}
       classes={panelShellClasses}
       shortMaximizeLabel={shortMaximizeLabel}
       history={history.map((item) => ({ id: item.id, title: item.title ?? item.label, subtitle: item.label, source: item }))}
       historyHeading={<h4>{historyTitle}{historyCount != null ? <span className="mh-assistant__history-count"> {historyCount}</span> : null}</h4>}
-      historyAriaLabel="Recent conversations"
-      historyCloseLabel="Close"
+      historyAriaLabel={text.historyAria}
+      historyCloseLabel={text.historyClose}
+      labels={{ close: text.closeAssistant, newSession: text.newSession, restore: text.restore, maximize: text.maximize, restorePanel: text.restorePanel, maximizePanel: text.maximizePanel, history: text.history }}
       layerRef={layerRef}
       initialFocusRef={promptRef}
       returnFocusRef={returnFocusRef}
@@ -301,8 +335,8 @@ export function AssistantPanel({
       onHistory={onHistory}
       onHistorySelect={(item) => onHistorySelect?.({ label: item.label, prompt: item.prompt })}
       renderSurface={({ header, body, composer, expanded }) => open ? (
-        <section ref={layerRef} data-mh-overlay-surface className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")} aria-label={variant === "lite" ? "AI Interpreter" : title} tabIndex={-1}>
-          <button className="mh-assistant__backdrop" type="button" tabIndex={-1} aria-label="Close assistant" onClick={() => onClose?.({ reason: "backdrop" })} />
+        <section ref={layerRef} data-mh-overlay-surface className={cx("mh-assistant", placement === "drawer" && "mh-assistant--drawer", tone === "home" && "mh-assistant--home", expanded && "mh-assistant--expanded")} aria-label={variant === "lite" ? text.liteLabel : title} tabIndex={-1}>
+          <button className="mh-assistant__backdrop" type="button" tabIndex={-1} aria-label={text.closeAssistant} onClick={() => onClose?.({ reason: "backdrop" })} />
           <div className="mh-assistant__dialog" role="dialog" aria-modal="true" aria-labelledby={titleId}>{header}{body}{composer}</div>
         </section>
       ) : null}
@@ -332,7 +366,7 @@ export function AssistantPanel({
           {answers.length ? (
             <div className="mh-assistant__feed">
               {answers.map((answer, index) => (
-                <AssistantAnswer key={answer.id ?? `${index}-${answer.query}`} answer={answer} onFeedback={onFeedback} />
+                <AssistantAnswer key={answer.id ?? `${index}-${answer.query}`} answer={answer} copy={text} onFeedback={onFeedback} />
               ))}
             </div>
           ) : null}
@@ -341,7 +375,7 @@ export function AssistantPanel({
       composer={
         <form
           className="mh-assistant__ask"
-          aria-label="Ask AI Interpreter AI"
+          aria-label={text.composerLabel}
           onSubmit={(event) => {
             event.preventDefault();
             onSubmit?.({ prompt });
@@ -356,7 +390,7 @@ export function AssistantPanel({
                 </span>
                 <button
                   type="button"
-                  aria-label="Clear selected skill"
+                  aria-label={text.clearSkill}
                   onClick={() => {
                     onClearSkill?.();
                     promptRef.current?.focus();
@@ -367,10 +401,10 @@ export function AssistantPanel({
               </span>
             ) : null}
             <TextArea
-              label="Ask AI Interpreter AI"
+              label={text.composerLabel}
               rows={1}
               value={prompt}
-              placeholder="Type your question or upload Excel/CSV files for data analysis"
+              placeholder={text.placeholder}
               onChange={onPromptChange}
               onKeyDown={(event) => {
                 if (enterToSubmit && event.key === "Enter" && !event.shiftKey) {
@@ -392,8 +426,8 @@ export function AssistantPanel({
                 />
               ) : null}
               <span className="mh-assistant__send">
-                <Button variant="gold" size="sm" type="submit" label="Ask" disabled={!String(prompt).trim()}>
-                  ASK
+                <Button variant="gold" size="sm" type="submit" label={text.askLabel} disabled={!String(prompt).trim()}>
+                  {text.askButton}
                 </Button>
               </span>
             </div>

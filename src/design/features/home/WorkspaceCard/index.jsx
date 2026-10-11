@@ -11,10 +11,11 @@ import "./WorkspaceCard.css";
  * @param {string} props.description
  * @param {string} props.image
  * @param {Array<{ id: string, label: string, href: string }>} [props.links=[]]
+ * @param {(title: string) => string} [props.openLabel] accessible name of the full-card link; defaults to "Open <title>"
  * @param {(target: { title: string, href?: string }) => void} [props.onOpen] card-level open action
  * @param {(target: { id: string, href: string, label: string }) => void} [props.onNavigate] capability links
  */
-export function WorkspaceCard({ title, href, description, image, links = [], onOpen, onNavigate }) {
+export function WorkspaceCard({ title, href, description, image, links = [], openLabel = (name) => `Open ${name}`, onOpen, onNavigate }) {
   return (
     <article className="mh-workspace-card">
       <div className="mh-workspace-card__image">
@@ -36,7 +37,7 @@ export function WorkspaceCard({ title, href, description, image, links = [], onO
       <a
         className="mh-workspace-card__open"
         href={href || "#"}
-        aria-label={`Open ${title}`}
+        aria-label={openLabel(title)}
         onClick={(event) => isPlainPrimaryLink(event) && onOpen?.({ title, href })}
       />
     </article>

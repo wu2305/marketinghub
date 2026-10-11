@@ -13,13 +13,14 @@ import "./ProjectCard.css";
  * @param {string} [props.updated] freshness text in the footer
  * @param {string} [props.href] project catalog link target for all three links
  * @param {string} [props.actionLabel="View Dashboards"]
+ * @param {(title: string) => string} [props.imageLabel] accessible name of the image link; defaults to "View <title> reports"
  * @param {(target: { title: string, href?: string, part: string }) => void} [props.onOpen]
  */
-export function ProjectCard({ title, kicker, description, image, updated, href, actionLabel = "View Dashboards", onOpen }) {
+export function ProjectCard({ title, kicker, description, image, updated, href, actionLabel = "View Dashboards", imageLabel = (name) => `View ${name} reports`, onOpen }) {
   const open = (part) => (event) => isPlainPrimaryLink(event) && onOpen?.({ title, href, part });
   return (
     <article className="mh-project-card">
-      <a className="mh-project-card__image" href={href || "#"} aria-label={`View ${title} reports`} onClick={open("image")}>
+      <a className="mh-project-card__image" href={href || "#"} aria-label={imageLabel(title)} onClick={open("image")}>
         <img src={image} alt="" />
       </a>
       <div className="mh-project-card__body">

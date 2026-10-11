@@ -15,6 +15,8 @@ export default {
   },
   args: { current: "overview" },
   argTypes: {
+    ariaLabel: { description: bi("Accessible name of the rail.", "侧栏的无障碍名称。"), control: false },
+    viewsLabel: { description: bi("Accessible name of the view list.", "视图列表的无障碍名称。"), control: false },
     current: { control: "select", options: CAMPAIGN.rail.items.map((item) => item.id) },
     onSelect: { action: "onSelect" },
   },

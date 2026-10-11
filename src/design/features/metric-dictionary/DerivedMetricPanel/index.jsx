@@ -16,7 +16,7 @@ const NO_INVALID = [];
  * P10's derived metric drawer and formula builder.
  * @param {object} props
  * @param {boolean} props.open
- * @param {object} props.copy all visible drawer copy
+ * @param {object} props.copy all visible drawer copy, including `removeToken(label)`, the accessible name of a token's remove button
  * @param {Array<object>} props.references referenceable basic metric records
  * @param {object} props.draft form values
  * @param {Array<{type:string,value:string|number,label:string}>} props.tokens
@@ -78,7 +78,7 @@ export function DerivedMetricPanel({
                   {tokens.length ? tokens.map((token, index) => (
                     <span key={index} className={`mh-derived-panel__token mh-derived-panel__token--${token.type}`} title={String(token.value)}>
                       {token.type === "operator" && symbol[token.value] ? symbol[token.value] : token.label}
-                      {(token.type === "metric" || token.type === "constant") ? <button type="button" aria-label={`Remove ${token.label}`} onClick={() => onRemoveToken?.({ index })}>×</button> : null}
+                      {(token.type === "metric" || token.type === "constant") ? <button type="button" aria-label={copy.removeToken(token.label)} onClick={() => onRemoveToken?.({ index })}>×</button> : null}
                     </span>
                   )) : <span className="mh-derived-panel__placeholder">{copy.formulaPlaceholder}</span>}
                 </div>
