@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("This component shows four governance links. The links are real anchors. Review Center, Feedback & Quality, Personal Memory, Skill Library, Scenario Detail, and Skill Edit use the same links.", "这个组件显示四个治理链接。这些链接是真实锚点。Review Center、Feedback & Quality、Personal Memory、Skill Library、Scenario Detail 和 Skill Edit 使用同一组链接。"),
+        component: bi("This component shows four governance links. The links are real anchors. Review Center, Feedback & Quality, Personal Memory, Skill Library, Scenario Detail, and Skill Edit use the same links. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** Review Center, Feedback & Quality, Personal Memory, Skill Library, Scenario Detail, and Skill Edit.", "这个组件显示四个治理链接。这些链接是真实锚点。Review Center、Feedback & Quality、Personal Memory、Skill Library、Scenario Detail 和 Skill Edit 使用同一组链接。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Review Center、Feedback & Quality、Personal Memory、Skill Library、Scenario Detail 与 Skill Edit。"),
       },
     },
   },

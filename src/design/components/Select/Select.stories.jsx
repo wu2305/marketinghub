@@ -36,6 +36,8 @@ export default {
     autoComplete: prop("string", { description: bi("Native autocomplete attribute.", "原生 autocomplete 属性。") }),
     disabled: prop("boolean", { defaultValue: false, description: bi("Disables the field.", "禁用该字段。") }),
     invalid: prop("boolean", { defaultValue: false, description: bi("Adds aria-invalid and error styling.", "添加 aria-invalid 与错误样式。") }),
+    required: prop("boolean", { defaultValue: false, description: bi("Native required attribute. Use it with `invalid` and `describedBy` when a submit is refused.", "原生 required 属性。提交被拒绝时与 `invalid`、`describedBy` 一起使用。") }),
+    describedBy: prop("string", { description: bi("`id` of the element that describes the field, for example its error message. It becomes `aria-describedby`.", "描述该字段的元素的 `id`，例如它的错误提示。会写入 `aria-describedby`。"), control: "text" }),
     size: enumProp(controlSizes, "md", bi("Control height.", "控件高度。"), "inline-radio"),
     onChange: callbackProp(
       "onChange",

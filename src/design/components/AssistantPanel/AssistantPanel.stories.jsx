@@ -12,7 +12,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the assistant dialog. Set `placement` to `drawer` for the full-height panel on the right. Home uses that layout. Set `placement` to `modal` for a centered dialog. If `open` is false, the component shows nothing. A suggestion or a history item fills the prompt. Submit sends the prompt. The expand control switches the drawer to a centered dialog. The history control opens a list. Escape closes the panel. When the panel closes, focus returns to the opener.", "这个组件是助手对话框。`placement` 设为 `drawer` 时，是右侧全高面板。Home 使用这种布局。`placement` 设为 `modal` 时，是居中对话框。`open` 为 false 时，组件不显示任何内容。建议或历史条目会填入提示词。提交会送出提示词。展开控件把抽屉换成居中对话框。历史控件打开列表。Escape 关闭面板。面板关闭后，焦点回到打开它的元素。"),
+          bi("This component is the assistant dialog. Set `placement` to `drawer` for the full-height panel on the right. Home uses that layout. The drawer is 40% of the screen wide, up to 576px, and fills the screen under 760px. Users who prefer reduced motion get no slide-in. Set `placement` to `modal` for a centered dialog. If `open` is false, the component shows nothing. A suggestion or a history item fills the prompt. Submit sends the prompt. The expand control switches the drawer to a centered dialog. The history control opens a list. Escape closes the panel. When the panel closes, focus returns to the opener.", "这个组件是助手对话框。`placement` 设为 `drawer` 时，是右侧全高面板。Home 使用这种布局。抽屉宽度为屏幕的 40%，最宽 576px，屏幕窄于 760px 时占满屏幕。偏好减少动态效果的用户看不到滑入动画。`placement` 设为 `modal` 时，是居中对话框。`open` 为 false 时，组件不显示任何内容。建议或历史条目会填入提示词。提交会送出提示词。展开控件把抽屉换成居中对话框。历史控件打开列表。Escape 关闭面板。面板关闭后，焦点回到打开它的元素。"),
       },
     },
   },

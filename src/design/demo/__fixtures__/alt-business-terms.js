@@ -53,7 +53,6 @@ export const ALT_BUSINESS_TERMS = {
     creatorAll: "All alt creators",
     createLabel: "Add Alt Term",
     synonymsLabel: "Alt synonyms",
-    moreSynonymsLabel: "Alt more synonyms",
     statusLabels: { Enable: "Alt On", Disable: "Alt Off" },
     statusOptions: [
       { id: "Enable", label: "Alt on option" },

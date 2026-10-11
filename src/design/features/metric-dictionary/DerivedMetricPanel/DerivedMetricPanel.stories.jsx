@@ -7,7 +7,7 @@ export default {
   title: "Features/Metric Dictionary/Derived Metric Panel",
   component: DerivedMetricPanel,
   tags: ["autodocs"],
-  parameters: { layout: "fullscreen", docs: { description: { component: bi("This component is the derived metric drawer on Metric Dictionary. The user can edit domain, name, unit, description, synonyms, and whether the metric is enabled. The user can add basic metrics and operators to a formula. Test and Save are callbacks. The host owns the formula tokens. Set `constantOpen` to show the constant dialog.", "这是 Metric Dictionary 上的派生指标抽屉。用户可以编辑域、名称、单位、说明、同义词，以及该指标是否启用。用户可以把基础指标和运算符加入公式。Test 和 Save 都是回调。公式 token 由宿主保存。设置 `constantOpen` 可打开常量对话框。") } } },
+  parameters: { layout: "fullscreen", docs: { description: { component: bi("This component is the derived metric drawer on Metric Dictionary. The user can edit domain, name, unit, description, synonyms, and whether the metric is enabled. The user can add basic metrics and operators to a formula. Test and Save are callbacks. The host owns the formula tokens. Set `constantOpen` to show the constant dialog. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** the Metric Dictionary page.", "这是 Metric Dictionary 上的派生指标抽屉。用户可以编辑域、名称、单位、说明、同义词，以及该指标是否启用。用户可以把基础指标和运算符加入公式。Test 和 Save 都是回调。公式 token 由宿主保存。设置 `constantOpen` 可打开常量对话框。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Metric Dictionary 页。") } } },
   args: {
     open: true,
     copy: METRIC_DICTIONARY.derivedPanel,

@@ -94,6 +94,29 @@ describe("bilingual Storybook docs", () => {
     expect(missing, `wrap these descriptions in bi(en, zh):\n${missing.join("\n")}`).toEqual([]);
   });
 
+  it("the English and 中文 halves of a description name the same code tokens", () => {
+    // A `code` token is an identifier, value or key. Both halves must write the
+    // same ones, so a change made to only one language shows up as a failure.
+    const tokens = (text) => new Set([...text.matchAll(/`([^`]+)`/g)].flatMap((match) => match[1].match(/[\w$.-]+/g) ?? []));
+    const mismatched = [];
+    const seen = new Set();
+    for (const module of Object.values(storyModules)) {
+      for (const [where, text] of docsStrings(module)) {
+        if (seen.has(text)) continue;
+        seen.add(text);
+        const paragraphs = text.split("\n\n");
+        const split = paragraphs.findIndex((paragraph) => hasChinese(paragraph));
+        if (split <= 0) continue;
+        const en = tokens(paragraphs.slice(0, split).join("\n\n"));
+        const zh = tokens(paragraphs.slice(split).join("\n\n"));
+        const onlyEn = [...en].filter((token) => !zh.has(token));
+        const onlyZh = [...zh].filter((token) => !en.has(token));
+        if (onlyEn.length || onlyZh.length) mismatched.push(`${where}: only English ${JSON.stringify(onlyEn)}, only 中文 ${JSON.stringify(onlyZh)}`);
+      }
+    }
+    expect(mismatched, `make both halves use the same \`code\` tokens:\n${mismatched.join("\n")}`).toEqual([]);
+  });
+
   it("every page JSDoc @param props.* row has English // 中文", () => {
     let checked = 0;
     const missing = [];
