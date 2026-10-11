@@ -6,7 +6,7 @@ export default {
   title: "Organisms/Scenario structure",
   component: ScenarioStructure,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: bi("This component shows five parts of one skill. The parts are trigger, input, logic, output, and boundary. The parent supplies the section heading and the placement. Skill Library and Scenario Detail use this component.", "这个组件显示一项技能的五个部分。这五部分是触发、输入、逻辑、输出和边界。区块标题和位置由父级提供。Skill Library 与 Scenario Detail 使用这个组件。") } } },
+  parameters: { docs: { description: { component: bi("This component shows five parts of one skill. The parts are trigger, input, logic, output, and boundary. The parent supplies the section heading and the placement. Skill Library and Scenario Detail use this component. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** Skill Library and Scenario Detail.", "这个组件显示一项技能的五个部分。这五部分是触发、输入、逻辑、输出和边界。区块标题和位置由父级提供。Skill Library 与 Scenario Detail 使用这个组件。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Skill Library 与 Scenario Detail。") } } },
   args: { record: SKILL_LIBRARY.records[0], fields: SKILL_LIBRARY.labels.structureFields },
   argTypes: {
     record: prop("ScenarioRecord", { description: bi("Values for the five parts.", "五个部分的取值。"), control: "object" }),

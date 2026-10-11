@@ -207,7 +207,7 @@ function DetailBody({ type, record, strings, onAction }) {
  * @param {object} [props.strings={}] copy bundle — searchLabel, searchPlaceholder,
  *   selectedLabel ("{labels}" joins selected option labels), emptyMessage,
  *   units, rowsPerPageLabel, previousLabel, nextLabel, detailCloseLabel,
- *   cardLabels {project,unit,type,dataModel,synonyms,moreSynonyms,sendTime,
+ *   cardLabels {project,unit,type,dataModel,synonyms,sendTime,
  *   recipients,dataModelTitle,referencedMetrics,moreReferenced,creator},
  *   createLabels, drawer {reportDescription, editDescription, project,
  *   aiInterpreterStatus, aiSummary, scenarioReportings, noScenarios,

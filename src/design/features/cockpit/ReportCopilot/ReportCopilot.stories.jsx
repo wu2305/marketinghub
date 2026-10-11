@@ -19,7 +19,7 @@ export default {
     docs: {
       description: {
         component:
-          bi("This component is the report Copilot on Marketing Cockpit. It is a drawer on the right of the live report. The start view shows an AI summary card and scenario recommendations. After the user opens an answer or sends a question, the drawer shows the answer view. Chat and answer text come from props. The host supplies that text. Set `stream` if the answer should appear in steps.", "这是 Marketing Cockpit 上的报表 Copilot。它是实时报表右侧的抽屉。起始视图显示一张 AI 摘要卡片和场景推荐。用户打开某个回答或发出问题后，抽屉切到回答视图。对话和回答的文字来自 props。这些文字由宿主提供。如果回答需要逐步出现，就设置 `stream`。"),
+          bi("This component is the report Copilot on Marketing Cockpit. It is a drawer on the right of the live report. The start view shows an AI summary card and scenario recommendations. After the user opens an answer or sends a question, the drawer shows the answer view. Chat and answer text come from props. The host supplies that text. Set `stream` to show the answer in steps.", "这是 Marketing Cockpit 上的报表 Copilot。它是实时报表右侧的抽屉。起始视图显示一张 AI 摘要卡片和场景推荐。用户打开某个回答或发出问题后，抽屉切到回答视图。对话和回答的文字来自 props。这些文字由宿主提供。如果回答需要逐步出现，就设置 `stream`。"),
       },
     },
   },

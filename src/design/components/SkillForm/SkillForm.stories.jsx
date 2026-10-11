@@ -10,7 +10,7 @@ export default {
   component: SkillForm,
   tags: ["autodocs"],
   subcomponents: { SkillFormCard, SkillFormFillCard },
-  parameters: { layout: "padded", docs: { description: { component: bi("This component is the Scenario Configuration form. Skill Library uses it as the inline form. Skill Edit uses the same form as a full page. The form has basics, structure cards as `children`, an example preview, and a footer. A `SkillFormCard` holds its own controls. A `SkillFormFillCard` holds a textarea with AI Auto-fill. Tones are " + skillFormTones.join(", ") + ".", "这个组件是 Scenario Configuration 表单。Skill Library 用它作为页内表单。Skill Edit 用同一表单作为整页。表单包含基本信息、作为 `children` 传入的结构卡片、示例预览和页脚。`SkillFormCard` 自带控件。`SkillFormFillCard` 是带 AI Auto-fill 的文本域。色调是 " + skillFormTones.join("、") + "。") } } },
+  parameters: { layout: "padded", docs: { description: { component: bi("This component is the Scenario Configuration form. Skill Library uses it as the inline form. Skill Edit uses the same form as a full page. The form has basics, structure cards as `children`, an example preview, and a footer. A `SkillFormCard` holds its own controls. A `SkillFormFillCard` holds a textarea with AI Auto-fill. Tones are " + skillFormTones.join(", ") + ". **Used in:** no active page. **Retired pages (source kept, not in Storybook):** Skill Library and Skill Edit.", "这个组件是 Scenario Configuration 表单。Skill Library 用它作为页内表单。Skill Edit 用同一表单作为整页。表单包含基本信息、作为 `children` 传入的结构卡片、示例预览和页脚。`SkillFormCard` 自带控件。`SkillFormFillCard` 是带 AI Auto-fill 的文本域。色调是 " + skillFormTones.join("、") + "。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Skill Library 与 Skill Edit。") } } },
 };
 
 export const Default = {

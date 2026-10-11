@@ -753,7 +753,6 @@ export const INTERPRETER = {
       creatorAll: "All creators",
       createLabel: "Add Business Term",
       synonymsLabel: "Synonyms",
-      moreSynonymsLabel: "More synonyms",
       statusLabels: { Enable: "Enabled", Disable: "Disabled" },
       statusOptions: [
         { id: "Enable", label: "Enabled" },
@@ -838,7 +837,6 @@ export const INTERPRETER = {
         type: "Type",
         dataModel: "Data model",
         synonyms: "Synonyms",
-        moreSynonyms: "More synonyms",
         sendTime: "Send time",
         recipients: "Recipients",
         dataModelTitle: "Data Model",

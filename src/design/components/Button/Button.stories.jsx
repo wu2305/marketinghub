@@ -9,7 +9,7 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: bi("The button starts one function. The element is `<button type=\"button\">`. Set `href` if the function opens a different page. The element then becomes a link. The link has the same appearance.", "这个按钮用来启动一次操作。元素是 `<button type=\"button\">`。如果这次操作会打开另一个页面，就设置 `href`。元素会变成链接，外观不变。"),
+        component: bi("The button starts one function. The element is `<button type=\"button\">`. Set `href` if the function opens a different page. The element then becomes a link. The link has the same appearance. While pressed, the button scales to 98%. Users who prefer reduced motion get no scaling.", "这个按钮用来启动一次操作。元素是 `<button type=\"button\">`。如果这次操作会打开另一个页面，就设置 `href`。元素会变成链接，外观不变。按下时按钮缩小到 98%；偏好减少动态效果的用户不会看到缩放。"),
       },
     },
   },
