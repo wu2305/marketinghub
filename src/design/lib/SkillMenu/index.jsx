@@ -15,7 +15,7 @@ const SKILL_HOVER_CLOSE_MS = 120;
  * search field, and leaving the menu unpinned closes the detail after a
  * short delay. Escape or an outside click closes the whole menu.
  * @param {object} props
- * @param {object} props.config `{ attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
+ * @param {object} props.config `{ menuLabel?, attachAccept?, categories, searchPlaceholder, emptyLabel, items, historyLabel, manualLabel }`
  * @param {{ id?: string, type: string, title: string }} [props.selectedSkill]
  * @param {React.RefObject<HTMLElement>} [props.composerRef] composer input refocused after selection
  * @param {(event: { names: string[] }) => void} [props.onAttach]
@@ -156,7 +156,7 @@ export function SkillMenu({ config, selectedSkill, composerRef, onAttach, onSele
         <div
           className="mh-skill"
           role="menu"
-          aria-label="AI skills"
+          aria-label={config.menuLabel || "AI skills"}
           onMouseEnter={() => {
             window.clearTimeout(hoverTimer.current);
             hoverTimer.current = null;

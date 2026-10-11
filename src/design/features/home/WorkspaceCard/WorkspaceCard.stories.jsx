@@ -16,6 +16,7 @@ export default {
   },
   args: { title: HOME.cards[0].title, description: HOME.cards[0].description },
   argTypes: {
+    openLabel: { description: bi("Builds the accessible name of the full-card link from the title. Default `Open <title>`.", "根据标题生成整卡链接的无障碍名称。默认是 `Open <title>`。"), control: false },
     onOpen: { action: "onOpen" },
     onNavigate: { action: "onNavigate" },
   },

@@ -12,7 +12,11 @@ export default {
       },
     },
   },
-  argTypes: { onOpen: { action: "onOpen" } },
+  argTypes: {
+    onOpen: { action: "onOpen" },
+    ariaLabel: { description: bi("Accessible name of the button. Default `Open AI assistant`.", "按钮的无障碍名称。默认是 `Open AI assistant`。"), control: false },
+    mark: { description: bi("Short text inside the round badge. Default `AI`.", "圆形徽标内的短文字。默认是 `AI`。"), control: false },
+  },
   render: (args) => (
     <div style={{ height: 120 }}>
       <AssistantLauncher {...args} />

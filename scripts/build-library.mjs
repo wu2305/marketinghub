@@ -54,6 +54,7 @@ const consumerFiles = [
   path.join(root, "examples", "types", "consumer.tsx"),
   path.join(root, "examples", "consumer", "BusinessTermApp.tsx"),
   path.join(root, "examples", "consumer", "CockpitApp.tsx"),
+  path.join(root, "examples", "consumer", "LocalizedBusinessTermApp.tsx"),
 ];
 const consumer = ts.createProgram(consumerFiles, {
   strict: true,

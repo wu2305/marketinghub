@@ -11,17 +11,19 @@ import "./CampaignRail.css";
  * @param {string} [props.description]
  * @param {Array<{ id: string, label: string, index: string, caption?: string }>} [props.items=[]]
  * @param {string} [props.current] active item id
+ * @param {string} [props.ariaLabel="RedNote Campaign Tool navigation"] accessible name of the rail
+ * @param {string} [props.viewsLabel="Trading Desk views"] accessible name of the view list
  * @param {(event: { id: string, label: string }) => void} [props.onSelect]
  */
-export function CampaignRail({ eyebrow, title, description, items = [], current, onSelect }) {
+export function CampaignRail({ eyebrow, title, description, items = [], current, ariaLabel = "RedNote Campaign Tool navigation", viewsLabel = "Trading Desk views", onSelect }) {
   return (
-    <aside className="mh-rail" aria-label="RedNote Campaign Tool navigation">
+    <aside className="mh-rail" aria-label={ariaLabel}>
       <header className="mh-rail__head">
         <p>{eyebrow}</p>
         <h2>{title}</h2>
         <span>{description}</span>
       </header>
-      <nav className="mh-rail__nav" aria-label="Trading Desk views">
+      <nav className="mh-rail__nav" aria-label={viewsLabel}>
         {items.map((item) => (
           <button
             key={item.id}

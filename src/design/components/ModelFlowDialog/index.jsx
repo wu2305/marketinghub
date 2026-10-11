@@ -31,6 +31,9 @@ const MODEL_FLOW_LABELS = {
   submitLabel: "Submit",
   savedLabel: "Saved",
   submittedLabel: "Submitted",
+  closeLabel: "Close",
+  selectedCount: ({ selected, total }) => `Selected ${selected} / ${total} messages`,
+  groundedSources: (count) => `${count} grounded sources`,
 };
 
 const MODEL_FLOW_SECTIONS = [
@@ -78,7 +81,7 @@ const MODEL_FLOW_SECTIONS = [
  * @param {string} [props.rule=""] persisted generation rule (survives Back)
  * @param {object} [props.draft={}] field values for generated/manual steps, keyed by field key
  * @param {Array<{ title: string, fields: Array<{ key: string, label: string, required?: boolean, textarea?: boolean, tall?: boolean, placeholder?: string }> }>} [props.sections]
- * @param {object} [props.labels={}] copy overrides merged over the demo strings
+ * @param {object} [props.labels={}] copy overrides merged over the demo strings; includes `closeLabel`, `selectedCount({ selected, total })` and `groundedSources(count)`
  * @param {(event: { threadIndex: number, messageIndex: number, checked: boolean }) => void} [props.onToggleMessage]
  * @param {(event: { value: string }) => void} [props.onRuleChange]
  * @param {(event: { messages: Array<object>, rule: string }) => void} [props.onGenerate]
@@ -194,7 +197,7 @@ export function ModelFlowDialog({
             <strong id={titleId}>{title}</strong>
             <span>{subtitle}</span>
           </div>
-          <button ref={closeRef} type="button" aria-label="Close" onClick={() => onClose?.({ reason: "button" })}>
+          <button ref={closeRef} type="button" aria-label={copy.closeLabel} onClick={() => onClose?.({ reason: "button" })}>
             ×
           </button>
         </header>
@@ -204,7 +207,7 @@ export function ModelFlowDialog({
               <div className="mh-flow__block-head">
                 <span>{copy.selectLabel}</span>
                 <span className="mh-flow__count">
-                  Selected {selectedCount} / {totalCount} messages
+                  {copy.selectedCount({ selected: selectedCount, total: totalCount })}
                 </span>
               </div>
               <div className="mh-flow__thread">
@@ -227,7 +230,7 @@ export function ModelFlowDialog({
                       ) : (
                         <span className="mh-flow__answer">
                           <span className="mh-flow__answer-head">
-                            {message.label} · {message.sources?.length || 0} grounded sources
+                            {message.label} · {copy.groundedSources(message.sources?.length || 0)}
                           </span>
                           <strong>{message.title}</strong>
                           <small>{message.text}</small>

@@ -6,7 +6,7 @@ import { ModelFlowDialog } from "../ModelFlowDialog/index.jsx";
 
 /**
  * @typedef {Parameters<typeof AssistantPanel>[0] & { launcherLabel?: string, onOpen?: (event: { reason: "open" }) => void }} AssistantDockState
- * Everything AssistantPanel takes (`open`, `prompt`, `answers`, copy, callbacks), plus `launcherLabel` and `onOpen` for the launcher.
+ * Everything AssistantPanel takes (`open`, `prompt`, `answers`, copy, callbacks), plus `launcherLabel` and `onOpen` for the launcher. `copy.openAssistant` and `copy.mark` also name the launcher.
  */
 
 /** @typedef {NonNullable<AssistantDockProps["skillFlow"]>} AssistantSkillFlow ModelFlowDialog props for a page's `skillFlow`. */
@@ -53,6 +53,8 @@ export const AssistantDock = React.forwardRef(function AssistantDock({
       <AssistantLauncher
         ref={setLauncher}
         label={launcherLabel ?? assistantLauncherLabel}
+        ariaLabel={panel.copy?.openAssistant}
+        mark={panel.copy?.mark}
         hidden={Boolean(panel.open) || launcherHidden}
         onOpen={onLauncherOpen ?? onOpen}
       />

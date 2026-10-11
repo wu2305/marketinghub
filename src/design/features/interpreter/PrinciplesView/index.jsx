@@ -73,7 +73,7 @@ function PrincipleText({ text, expanded, labels, onToggle }) {
  * @param {number} [props.pageSize=10]
  * @param {Array<number>} [props.pageSizes=[10, 20, 50]]
  * @param {Array<string>} [props.expanded=[]] ids of expanded descriptions
- * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, categoryLabel, allCategoriesLabel, selectedCategoriesLabel, categoryMetaLabel, countLabel ("{shown}", "{total}"), countUnit, emptyTitle, emptyMessage, clearFiltersLabel, rowsPerPageLabel, previousLabel, nextLabel, expandLabel, collapseLabel, expandTitle, collapseTitle
+ * @param {object} [props.strings={}] copy: searchLabel, searchPlaceholder, categoryLabel, allCategoriesLabel, selectedCategoriesLabel, categoryMetaLabel, countLabel ("{shown}", "{total}"), countUnit, emptyTitle, emptyMessage, clearFiltersLabel, rowsPerPageLabel, previousLabel, nextLabel, expandLabel, collapseLabel, expandTitle, collapseTitle, libraryLabel, listLabel, paginationLabel, sizeLabel, pageLabel
  * @param {React.Ref<HTMLInputElement>} [props.searchRef] forwarded to the search input ("/" shortcut)
  * @param {(event: { name: string, value: string }) => void} [props.onQueryChange]
  * @param {(event: { id: string, checked: boolean }) => void} [props.onToggleCategory]
@@ -120,6 +120,11 @@ export function PrinciplesView({
     collapseLabel = "Collapse description",
     expandTitle = "Expand",
     collapseTitle = "Collapse",
+    libraryLabel = "Principles library",
+    listLabel = "Principles",
+    paginationLabel,
+    sizeLabel,
+    pageLabel,
   } = strings;
   const counts = totals ?? { shown: items.length, total: items.length };
   const labels = { expand: expandLabel, collapse: collapseLabel, expandTitle, collapseTitle };
@@ -131,7 +136,7 @@ export function PrinciplesView({
     children: <PrincipleText text={item.description} expanded={expanded.includes(item.id)} labels={labels} onToggle={() => toggle(item.id)} />,
   }));
   return (
-    <section className="mh-principles" aria-label="Principles library">
+    <section className="mh-principles" aria-label={libraryLabel}>
       <LibraryToolbar
         search={{ label: searchLabel, placeholder: searchPlaceholder, value: query }}
         searchRef={searchRef}
@@ -152,7 +157,7 @@ export function PrinciplesView({
         }}
       />
       <LibraryList
-        label="Principles"
+        label={listLabel}
         layout="list"
         items={cards}
         empty={{ kind: counts.total ? "no-results" : "empty", title: emptyTitle, message: emptyMessage, clearLabel: clearFiltersLabel }}
@@ -169,6 +174,9 @@ export function PrinciplesView({
         rowsLabel={rowsPerPageLabel}
         previousLabel={previousLabel}
         nextLabel={nextLabel}
+        ariaLabel={paginationLabel}
+        sizeLabel={sizeLabel}
+        pageLabel={pageLabel}
         onPage={onPage}
         onPageSize={onPageSize}
       />

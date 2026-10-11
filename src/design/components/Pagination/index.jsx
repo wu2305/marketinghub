@@ -20,11 +20,14 @@ export const paginationVariants = ["numbered", "compact"];
  * @param {string} [props.rowsLabel="Items per page"]
  * @param {typeof paginationVariants[number]} [props.variant="numbered"]
  * @param {string} [props.previousLabel="Previous"] compact variant only
+ * @param {string} [props.ariaLabel="Knowledge pagination"] accessible name of the navigation
  * @param {string} [props.nextLabel="Next"] compact variant only
+ * @param {(size: number) => string} [props.sizeLabel] label of one rows-per-page option; defaults to "<size> items/page"
+ * @param {(position: { page: number, pages: number }) => string} [props.pageLabel] compact variant: name of the current page; defaults to "Page <page> of <pages>"
  * @param {(event: { page: number }) => void} [props.onPage]
  * @param {(event: { pageSize: number }) => void} [props.onPageSize]
  */
-export function Pagination({ total, units = ["asset", "assets"], page = 1, pageSize = 6, pageSizes = [6, 12, 24], rowsLabel = "Items per page", variant = "numbered", previousLabel = "Previous", nextLabel = "Next", onPage, onPageSize }) {
+export function Pagination({ total, units = ["asset", "assets"], page = 1, pageSize = 6, pageSizes = [6, 12, 24], rowsLabel = "Items per page", variant = "numbered", previousLabel = "Previous", nextLabel = "Next", ariaLabel = "Knowledge pagination", sizeLabel = (size) => `${size} items/page`, pageLabel = ({ page: at, pages: count }) => `Page ${at} of ${count}`, onPage, onPageSize }) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const current = Math.min(Math.max(1, page), pages);
   /* fm-pagination always pluralizes ("3 records"); the numbered variant
@@ -37,7 +40,7 @@ export function Pagination({ total, units = ["asset", "assets"], page = 1, pageS
         ariaLabel={rowsLabel}
         single
         selectedLabel="{labels}"
-        options={pageSizes.map((size) => ({ id: String(size), label: `${size} items/page` }))}
+        options={pageSizes.map((size) => ({ id: String(size), label: sizeLabel(size) }))}
         selected={[String(pageSize)]}
         onToggle={({ id }) => onPageSize?.({ pageSize: Number(id) })}
       />
@@ -45,13 +48,13 @@ export function Pagination({ total, units = ["asset", "assets"], page = 1, pageS
   );
   if (variant === "compact") {
     return (
-      <nav className="mh-pagination mh-pagination--compact" aria-label="Knowledge pagination">
+      <nav className="mh-pagination mh-pagination--compact" aria-label={ariaLabel}>
         <span className="mh-pagination__total">{totalLabel}</span>
         <div className="mh-pagination__controls">
           <button type="button" className="mh-pagination__prev" aria-label={previousLabel} title={previousLabel} disabled={current === 1} onClick={() => onPage?.({ page: Math.max(1, current - 1) })}>
             <span aria-hidden="true">‹</span>
           </button>
-          <span className="mh-pagination__page" aria-label={`Page ${current} of ${pages}`} title={`Page ${current} of ${pages}`}>
+          <span className="mh-pagination__page" aria-label={pageLabel({ page: current, pages })} title={pageLabel({ page: current, pages })}>
             {current}
           </span>
           <button type="button" className="mh-pagination__next" aria-label={nextLabel} title={nextLabel} disabled={current === pages} onClick={() => onPage?.({ page: Math.min(pages, current + 1) })}>
@@ -63,7 +66,7 @@ export function Pagination({ total, units = ["asset", "assets"], page = 1, pageS
     );
   }
   return (
-    <nav className="mh-pagination" aria-label="Knowledge pagination">
+    <nav className="mh-pagination" aria-label={ariaLabel}>
       <span className="mh-pagination__total">{totalLabel}</span>
       {sizeSelect}
       <div className="mh-pagination__pages">

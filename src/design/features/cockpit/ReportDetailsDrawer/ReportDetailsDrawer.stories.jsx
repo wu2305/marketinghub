@@ -16,6 +16,9 @@ export default {
   },
   args: { open: true },
   argTypes: {
+    scenariosLabel: { description: bi("Heading of the scenario list. Default `AI ANALYSIS SCENARIOS`.", "场景列表的标题。默认是 `AI ANALYSIS SCENARIOS`。"), control: false },
+    fullscreenLabel: { description: bi("Accessible name of the fullscreen toggle.", "全屏切换按钮的无障碍名称。"), control: false },
+    closeLabel: { description: bi("Accessible name of the close button.", "关闭按钮的无障碍名称。"), control: false },
     open: { control: "boolean" },
     onClose: callbackProp("onClose", '({reason}) => void', { reason: "button" }, bi("The function runs when the drawer closes. `reason` is `scrim`, `escape`, or `button`.", "抽屉关闭时会调用这个函数。`reason` 是 `scrim`、`escape` 或 `button`。")),
     onOpenLive: callbackProp("onOpenLive", '({href}) => void', { href: "/live-report" }, bi("The function runs when the user clicks Open Dashboard with a plain primary click. `href` is the live report link, or `undefined` when none is set.", "用户用普通主键点击 Open Dashboard 时会调用这个函数。`href` 是实时报表链接，未设置时为 `undefined`。")),

@@ -46,9 +46,9 @@ const FIT_ICON = "M15 3h6v6M14 10l7-7M9 21H3v-6M10 14l-7 7";
  * @property {React.Ref<HTMLInputElement>} [searchRef] forwarded to the domain search input ("/" shortcut)
  */
 
-function DmTagList({ values, className = "mh-dmview__tag" }) {
+function DmTagList({ values, none, className = "mh-dmview__tag" }) {
   const items = (values || []).filter(Boolean);
-  if (!items.length) return <span className="mh-dmview__none">None</span>;
+  if (!items.length) return <span className="mh-dmview__none">{none}</span>;
   return (
     <div className="mh-dmview__tags">
       {items.map((item) => (
@@ -94,7 +94,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
             </div>
             <small>{table.description}</small>
           </div>
-          <button className="mh-dmview__icon-btn" type="button" aria-label={strings.closeTable} title="Close" onClick={() => onClose?.({ reason: "button" })}>
+          <button className="mh-dmview__icon-btn" type="button" aria-label={strings.closeTable} title={strings.closeTable} onClick={() => onClose?.({ reason: "button" })}>
             <Icon path={CLOSE_ICON} />
           </button>
         </header>
@@ -155,7 +155,7 @@ function TableDialog({ drawer, strings, onTab, onClose }) {
                       </td>
                       <td>{field.name}</td>
                       <td>
-                        <DmTagList values={field.synonyms} className="mh-dmview__field-tag" />
+                        <DmTagList values={field.synonyms} none={strings.none} className="mh-dmview__field-tag" />
                       </td>
                       {isFact ? <td>{field.unit}</td> : null}
                     </tr>
@@ -310,7 +310,7 @@ export function DataModelView({
                     <span className="mh-dmview__basic-label">
                       {strings.synonymsLabel} <em>{domain.synonyms?.length || 0}</em>
                     </span>
-                    <DmTagList values={domain.synonyms} className="mh-dmview__tag mh-dmview__synonym" />
+                    <DmTagList values={domain.synonyms} none={strings.none} className="mh-dmview__tag mh-dmview__synonym" />
                   </section>
                   <section className="mh-dmview__basic-section">
                     <span className="mh-dmview__basic-label">

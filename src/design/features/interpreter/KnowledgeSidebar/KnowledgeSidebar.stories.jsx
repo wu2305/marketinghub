@@ -15,6 +15,8 @@ export default {
   },
   args: { active: "overview" },
   argTypes: {
+    ariaLabel: { description: bi("Accessible name of the sidebar.", "侧栏的无障碍名称。"), control: false },
+    manageLabel: { description: bi("Badge on types the user can manage. Default `Manage`.", "用户可管理的类型上的徽标。默认是 `Manage`。"), control: false },
     active: { control: "select", options: ["overview", ...INTERPRETER.types.map((type) => type.id)] },
     onSelect: { action: "onSelect" },
   },

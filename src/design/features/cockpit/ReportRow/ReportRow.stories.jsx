@@ -32,6 +32,8 @@ export default {
     href: "/assets/pages/reports.html?project=city&dashboard=0&view=live",
   },
   argTypes: {
+    indexLabel: prop("string", { defaultValue: "REPORT", description: bi("The word above the index number. Default `REPORT`.", "序号上方的文字。默认是 `REPORT`。") }),
+    detailsAriaLabel: prop("(title: string) => string", { defaultValue: "(title) => `Open knowledge for ${title}`", description: bi("Builds the accessible name of the details button from the title. Default `Open knowledge for <title>`.", "根据标题生成详情按钮的无障碍名称。默认是 `Open knowledge for <title>`。"), control: false }),
     index: prop("number", { description: bi("Zero-based report index. The label shows REPORT 01, REPORT 02, and so on.", "从 0 开始的报表序号。标签显示为 REPORT 01、REPORT 02，依此类推。"), control: { type: "number", min: 0 } }),
     path: prop("string", { description: bi("Category / Project / Type breadcrumb.", "Category / Project / Type 面包屑。") }),
     title: prop("string", { description: bi("Report title. It is a link.", "报表标题。它是一个链接。") }),

@@ -1,0 +1,291 @@
+/* The Business Term workspace in Chinese. Same shape as `englishContent`: this file is
+ * data, so a second language adds no component, provider or build step. Wording is a
+ * draft for a native speaker of the team to review. Ids, field names and proper nouns
+ * (Tapestry, Data Model names such as D2C Insight) stay as they are. */
+import type { BusinessTermContent, Term } from "../BusinessTermApp";
+import { englishContent } from "../BusinessTermApp";
+import { localize, type DeepPartial } from "./localize";
+
+const en = englishContent;
+type Patch = DeepPartial<BusinessTermContent>;
+
+const zhNavigation: Record<string, string> = { home: "首页", cockpit: "营销驾驶舱", "self-service": "自助服务中心", interpreter: "AI 解读", campaign: "小红书营销工具" };
+
+const zhTypes: Record<string, { title: string; summary: string; action: string; createLabel?: string; unit: string }> = {
+  Principles: { title: "原则", summary: "AI 回答规则与治理原则。", action: "查看原则", unit: "原则" },
+  "Report Context": { title: "报告上下文", summary: "报告解读与业务背景。", action: "查看上下文", unit: "报告上下文" },
+  "Data Model": { title: "数据模型", summary: "实体、属性与关系。", action: "查看模型", unit: "数据模型" },
+  "Metric Dictionary": { title: "指标词典", summary: "受治理的指标定义与计算方式。", action: "查看指标", unit: "指标" },
+  "Business Term": { title: "业务术语", summary: "业务术语的定义与同义词。", action: "管理术语", createLabel: "新增业务术语", unit: "业务术语" },
+  "Analytical Model": { title: "分析模型", summary: "可复用的分析框架与方法。", action: "管理模型", createLabel: "新增分析模型", unit: "分析模型" },
+  "Scenario Reporting": { title: "场景报告", summary: "受治理的报告场景与模板。", action: "管理场景", createLabel: "新增场景报告", unit: "场景报告" },
+  "Email Reports": { title: "邮件报告", summary: "定期推送的洞察与分发。", action: "查看报告", unit: "邮件报告" },
+};
+
+const interpreter: Patch["interpreter"] = {
+  notices: { submitted: "已提交审核" },
+  assistant: {
+    title: "向 AI 解读提问",
+    headline: "请提问",
+    description: "覆盖各类营销任务的 AI 伙伴",
+    suggestions: [
+      { label: "归因 ROI 的定义", prompt: "“归因 ROI”的受治理定义是什么？哪些报告用到了它？" },
+      { label: "城市投放策略知识", prompt: "显示与城市投放策略相关的知识资产。" },
+      { label: "存在数据质量问题的指标", prompt: "哪些指标的数据回流不完整，需要做数据质量复核？" },
+    ],
+    historyTitle: "最近对话",
+    history: [
+      { title: "活动 ROI 下降", label: "上周活动 ROI 为什么下降？", prompt: "上周活动 ROI 为什么下降？" },
+      { title: "转化下降", label: "按客户分群分析转化下降。", prompt: "按客户分群分析转化下降。" },
+      { title: "数据质量问题", label: "汇总存在数据质量问题的指标。", prompt: "汇总存在数据质量问题的指标。" },
+    ],
+    skillMenu: {
+      menuLabel: "AI 技能",
+      triggerLabel: "选择 AI 技能",
+      categories: [
+        { id: "upload", label: "上传文件", icon: "upload" },
+        { id: "model", label: "分析模型", icon: "spokes" },
+      ],
+      searchPlaceholder: "搜索分析模型",
+      emptyLabel: "没有匹配的技能",
+      items: [{ id: "playbook-opportunity-scan", title: "机会扫描手册", note: "当用户的请求符合这种分析方法及其支持的业务场景时使用。" }],
+      historyLabel: "从聊天记录添加",
+      manualLabel: "手动创建分析模型",
+    },
+    copy: {
+      mark: "AI",
+      openAssistant: "打开 AI 助手",
+      helpful: "有帮助",
+      notHelpful: "没有帮助",
+      copy: "复制",
+      copied: "已复制！",
+      copyAnswer: "复制回答",
+      sources: "来源",
+      sourcesUsed: "引用来源",
+      groundedSources: (count: number) => `${count} 个依据来源`,
+      relatedActions: "相关操作",
+      liteLabel: "AI 解读",
+      closeAssistant: "关闭助手",
+      clearSkill: "清除所选技能",
+      composerLabel: "向 AI 解读提问",
+      placeholder: "输入你的问题，或上传 Excel/CSV 文件进行数据分析",
+      askLabel: "提问",
+      askButton: "提问",
+      historyAria: "最近的对话",
+      historyClose: "关闭",
+      newSession: "新对话",
+      restore: "还原",
+      maximize: "最大化",
+      restorePanel: "还原 AI 解读面板",
+      maximizePanel: "最大化 AI 解读面板",
+      history: "历史记录",
+    },
+    launcherLabel: "AI 解读",
+  },
+  copy: {
+    unknown: {
+      typeTitle: "未知的知识类型",
+      typeDescription: ({ typeId, count }: { typeId: string; count: number }) => `“${typeId}”不是 ${count} 类知识之一。请从导航中选择一个类型。`,
+      viewTitle: "未知的知识视图",
+    },
+    stats: {
+      fallbackUnit: "知识资产",
+      publishedLabel: "已发布知识",
+      monthlyLabel: "本月新增",
+      governedCaption: ({ unit }: { unit: string }) => `${unit}已纳入 AI 治理`,
+      addedCaption: ({ unit }: { unit: string }) => `${unit}近期新增`,
+    },
+    heroAsideLabel: ({ typeTitle }: { typeTitle?: string }) => `${typeTitle || "全部类型"}知识统计`,
+    management: {
+      triggerLabel: "管理规则",
+      title: "操作提醒",
+      rules: [
+        "只能管理由你创建的知识。",
+        "编辑或删除知识前，请先将其停用。",
+        "删除是永久性的，无法撤销。",
+        "停用的知识不可用于 AI，可以重新启用。",
+      ],
+    },
+    assistantLabel: "AI 解读",
+    sidebar: { brand: "AI 解读", ariaLabel: "知识导航", manageLabel: "可管理" },
+    header: { navigationAriaLabel: "营销门户导航", logoAriaLabel: "Tapestry 营销门户首页" },
+  },
+  hero: {
+    eyebrow: "知识管理",
+    title: "AI 解读",
+    description: "探索并治理驱动 AI 解读的可信知识。",
+    stats: [
+      { label: "已发布知识", value: "35", caption: "知识资产已纳入 AI 治理" },
+      { label: "本月新增", value: "13", caption: "知识资产近期新增" },
+    ],
+  },
+  heading: { eyebrow: "AI 解读基础", title: "知识概览", description: "浏览 AI 解读可使用的知识。" },
+  overview: { label: "概览" },
+  sidebarTitle: "知识 · 8 类",
+  types: en.interpreter.types.map((type) => {
+    const zh = zhTypes[type.id];
+    return {
+      ...type,
+      title: zh.title,
+      summary: zh.summary,
+      action: zh.action,
+      ...(zh.createLabel ? { createLabel: zh.createLabel } : {}),
+      stats: { ...type.stats, units: [zh.unit, zh.unit] as [string, string] },
+    };
+  }),
+  businessTermLibrary: {
+    strings: {
+      searchLabel: "搜索知识",
+      searchPlaceholder: "搜索知识…",
+      selectedLabel: "已选 {count} 项",
+      statusLabel: "状态",
+      statusAll: "全部状态",
+      creatorLabel: "创建人",
+      creatorAll: "全部创建人",
+      createLabel: "新增业务术语",
+      synonymsLabel: "同义词",
+      statusLabels: { Enable: "已启用", Disable: "已停用" },
+      statusOptions: [
+        { id: "Enable", label: "已启用" },
+        { id: "Disable", label: "已停用" },
+      ],
+      emptyTitle: "没有匹配的记录",
+      countLabel: "显示 {shown} / {total} 条术语",
+      units: ["条记录", "条记录"] as [string, string],
+      rowsPerPageLabel: "每页条数",
+      previousLabel: "上一页",
+      nextLabel: "下一页",
+      detailEyebrow: "业务术语",
+      detailCloseLabel: "关闭详情",
+      sections: { termType: "术语类型", description: "描述", synonyms: "同义词", dataModel: "数据模型", creator: "创建人" },
+      actions: { edit: "编辑", delete: "删除", disable: "停用" },
+      draftLabel: "草稿",
+      clearFiltersLabel: "清除筛选",
+      libraryLabel: "业务术语库",
+      listLabel: "业务术语",
+      paginationLabel: "知识分页",
+      sizeLabel: (size: number) => `${size} 条/页`,
+      pageLabel: ({ page, pages }: { page: number; pages: number }) => `第 ${page} 页，共 ${pages} 页`,
+      allModelsLabel: "全部模型",
+      kindLabels: { "Business Term": "业务术语", "Global Synonym": "全局同义词" },
+      dialogs: {
+        permissionDeniedTitle: "没有权限",
+        offlineFirstTitle: "请先将该知识下线",
+        offlineFirstMessage: "要编辑或删除这条知识，请先将其下线。下线后，用户暂时无法访问。",
+        offlineFirstConfirm: "去下线",
+        disabledToast: "已成功停用",
+        deletedToast: "已成功删除",
+        confirmTitle: "确认操作",
+        offlineMessage: "请确认是否将这条知识下线。",
+        offlineConfirm: "确认下线",
+        deleteMessage: "请确认是否删除这条知识。删除后无法撤销。",
+        deleteConfirm: "确认删除",
+        alreadyDisabledTitle: "知识已停用",
+        alreadyDisabledMessage: "这条知识已经停用。",
+        cancelLabel: "取消",
+        closeLabel: "关闭",
+      },
+    },
+  },
+};
+
+const knowledgeCreate: Patch["knowledgeCreate"] = {
+  typeLabels: { ...Object.fromEntries(Object.entries(zhTypes).map(([id, type]) => [id, type.title])), Synonyms: "同义词" },
+  labels: {
+    management: "知识管理",
+    eyebrow: "知识管理",
+    create: "创建新知识",
+    genericDescription: "使用结构化表单创建受治理的知识。",
+    draft: "草稿",
+    type: "知识类型",
+    cancel: "取消",
+    save: "保存",
+    submit: "提交",
+    required: "此项为必填。",
+    savedTitle: "保存成功",
+    savedText: "你的知识草稿已保存。",
+    submittedTitle: "提交成功",
+    submittedText: "你的知识已提交审核。",
+    back: "返回知识管理",
+    invalid: "请先填写必填项再继续。",
+    edit: "编辑知识",
+    editReport: "编辑",
+    copy: "复制知识",
+    enabled: "启用知识",
+    home: "首页",
+    interpreter: "AI 解读",
+    breadcrumb: "面包屑",
+    editTerm: "编辑",
+    editAnalysis: "编辑分析",
+    editScenario: "编辑场景报告",
+    close: "关闭",
+    navigationAria: "营销门户导航",
+    logoAria: "Tapestry 营销门户首页",
+  },
+  copy: {
+    selectMany: "可多选",
+    required: "此项为必填。",
+    requiredMark: "必填",
+    enabled: "已启用",
+    disabled: "已停用",
+  },
+  businessTerm: {
+    publishedNotice: "已发布并启用",
+    title: "创建业务术语",
+    guidanceTitle: "建立统一的语言",
+    guidance: "清楚定义这个业务术语的含义、用法和边界，帮助团队用一致的方式谈论数据。",
+    reminder: "保存草稿会让这条术语保持停用，处于草稿状态。发布并启用会将它发布给 AI 使用。",
+    labels: {
+      title: "标题",
+      kind: "术语类型",
+      kinds: { "Business Term": "业务术语", "Global Synonym": "全局同义词" },
+      description: "描述",
+      synonyms: "同义词",
+      scope: "数据模型",
+      select: "可多选",
+      cancel: "取消",
+      save: "保存草稿",
+      submit: "发布并启用",
+      required: "此项为必填。",
+    },
+    placeholders: {
+      title: "输入业务术语的标题。",
+      description: "说明这条术语的含义、用法和边界。",
+      synonyms: "添加别名、缩写或等义词，用逗号分隔。",
+    },
+  },
+};
+
+export const zhContent: BusinessTermContent = localize(en, {
+  navigation: en.navigation.map((item) => ({ ...item, label: zhNavigation[item.id] })),
+  interpreter,
+  knowledgeCreate,
+  governance: {
+    permission: "无法操作他人创建的知识。",
+    "disable-first": "请先停用该知识",
+    "already-disabled": "这条知识已经停用。",
+    dialogs: {
+      permission: { title: "没有权限", message: "无法操作他人创建的知识。" },
+      "disable-first": { title: "请先停用该知识", message: "要编辑或删除这条知识，请先将其下线。下线后，用户暂时无法访问。" },
+      "already-disabled": { title: "知识已停用", message: "这条知识已经停用。" },
+    },
+  },
+  ask: {
+    banner: "AI 回答",
+    context: "上下文：业务术语",
+    body: (count) => `这个工作区共有 ${count} 条业务术语。`,
+    matchingLabel: "匹配的术语",
+    noMatch: "标题中没有匹配项。",
+    source: "业务术语库",
+  },
+});
+
+/** Seed records for a Chinese start. Records are data: switching language later does not rewrite them. */
+export const zhSeedTerms: Term[] = [
+  { id: "business-term-gmv", title: "GMV（商品交易总额）", description: "通过平台售出的商品在扣除前的总价值。", synonyms: ["总销售额", "商品价值", "商品交易总额"], scope: ["D2C Insight", "Revenue Dashboard", "Sales Performance"], kind: "Business Term", creator: "Current User", status: "Enable" },
+  { id: "business-term-paid-customer", title: "付费客户", description: "在所选周期内至少完成过一笔有效付费订单的客户。", synonyms: ["付费用户", "已转化客户"], scope: ["D2C Insight", "Customer 360", "Conversion Overview"], kind: "Business Term", creator: "Emily Wang", status: "Enable" },
+  { id: "business-term-active-member", title: "活跃会员", description: "在报告周期内有合格访问或交易的注册会员。", synonyms: ["高参与会员"], scope: ["D2C Insight", "Member Performance"], kind: "Business Term", creator: "Sophie Taylor", status: "Enable" },
+  { id: "global-synonym-revenue", title: "收入", description: "用于识别受治理的收入类问题的全局别名。", synonyms: ["销售额", "营业额", "进账"], scope: ["全部模型", "全部报告"], kind: "Global Synonym", creator: "Current User", status: "Enable" },
+  { id: "global-synonym-customer", title: "客户", description: "客户和购买会员的全局别名。", synonyms: ["买家", "消费者", "顾客"], scope: ["全部模型", "全部报告"], kind: "Global Synonym", creator: "Marco Li", status: "Enable" },
+  { id: "global-synonym-campaign", title: "活动", description: "营销活动的全局别名。", synonyms: ["促销", "激活"], scope: ["全部模型", "全部报告"], kind: "Global Synonym", creator: "Sophie Chen", status: "Enable" },
+];

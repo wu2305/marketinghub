@@ -22,6 +22,7 @@ export default {
     emptyMessage: SELF_SERVICE.uploadHistory.emptyMessage,
   },
   argTypes: {
+    copy: { description: bi("Column heads, action labels and the per-file names `previewLabel(file)` and `downloadLabel(file)`. Pass any subset.", "列标题、操作文字，以及按文件生成的名称 `previewLabel(file)` 和 `downloadLabel(file)`。可以只传一部分。"), control: false },
     open: { control: "boolean" },
     onClose: { action: "onClose" },
     onPreview: { action: "onPreview" },

@@ -25,7 +25,7 @@ const sameList = (a, b) => a.length === b.length && a.every((item, index) => ite
  * @param {string} props.guidanceTitle
  * @param {string} props.guidance
  * @param {string} props.reminder
- * @param {object} props.labels Visible field and action labels.
+ * @param {object} props.labels Visible field and action labels. `kinds` optionally maps each term type value to its display name.
  * @param {object} props.placeholders Input hints.
  * @param {string[]} props.invalid Required field names in error state. The form moves focus to the first invalid field when a failed submit changes this list, so a host only has to set it; drop a name from it when the field changes.
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
@@ -62,7 +62,7 @@ export function BusinessTermForm({
     <aside className="mh-btform__guidance"><span aria-hidden="true"><Icon name="bulb-rays" /></span><div><strong>{guidanceTitle}</strong><p>{guidance}</p></div></aside>
     <div className="mh-btform__fields">
       <FormField label={labels.title} name="title" value={title} required invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
-      <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds} required onChange={onChange} />
+      <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds.map((value) => ({ value, label: labels.kinds?.[value] ?? value }))} required onChange={onChange} />
       <FormField label={labels.description} name="description" control="textarea" rows={3} value={description} required invalid={errors.includes("description")} hint={errors.includes("description") ? labels.required : undefined} placeholder={placeholders.description} onChange={onChange} />
       <FormField label={labels.synonyms} name="synonyms" value={synonymField} placeholder={placeholders.synonyms} onChange={({ value }) => { setSynonymText(value); set("synonyms", parseSynonyms(value)); }} />
       {kind === "Business Term" && <div className="mh-btform__scope" ref={scopeRef}><span>{labels.scope}</span><button type="button" aria-expanded={scopeOpen} onClick={() => setScopeOpen((x) => !x)}>{scope.length ? scope.map((item) => <i key={item}>{item}</i>) : <em>{labels.select}</em>}</button>{scopeOpen && <div className="mh-btform__scope-menu">{scopeOptions.map((item) => <label key={item}><input type="checkbox" checked={scope.includes(item)} onChange={() => set("scope", scope.includes(item) ? scope.filter((x) => x !== item) : [...scope, item])} />{item}</label>)}</div>}</div>}

@@ -21,6 +21,7 @@ export default {
     history: undefined,
   },
   argTypes: {
+    historyLabel: { description: bi("Accessible name of the upload-history button. Default `View upload history`.", "上传历史按钮的无障碍名称。默认是 `View upload history`。"), control: false },
     onOpen: { action: "onOpen" },
     onShowHistory: { action: "onShowHistory" },
   },

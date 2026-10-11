@@ -10,6 +10,7 @@ export const METRIC_ASSISTANT = {
 export const METRIC_DICTIONARY = {
   header: {
     breadcrumb: ["AI Interpreter", "Metric Dictionary"],
+    breadcrumbLabel: "Breadcrumb",
     edit: "Edit Metric",
     add: "Add Derived Metric",
     bannerTitle: "AI Metric Assistant",
@@ -88,6 +89,7 @@ export const METRIC_DICTIONARY = {
     cancel: "Cancel",
     save: "Save",
     constantTitle: "Add Constant",
+    removeToken: (label) => `Remove ${label}`,
     constantPrompt: "Enter a constant value (e.g. 100, 0.5):",
     constantAdd: "Add",
     constantError: "Enter a number, for example 100 or 0.5.",

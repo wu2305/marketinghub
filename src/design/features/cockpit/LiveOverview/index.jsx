@@ -2,6 +2,15 @@ import "../../../tokens.css";
 import "./LiveOverview.css";
 
 
+const DEFAULT_COPY = {
+  performanceEyebrow: "PERFORMANCE",
+  performanceTitle: "Current period versus baseline",
+  performanceLegend: "Primary / comparison",
+  priorityEyebrow: "PRIORITY",
+  priorityTitle: "Leading views",
+  priorityColumn: "Index",
+};
+
 /**
  * Generic live overview: KPI cards, primary/comparison bar chart, and the
  * "Leading views" rank list (first five chart rows, original chart order).
@@ -9,8 +18,10 @@ import "./LiveOverview.css";
  * @param {Array<[string, string, string]>} [props.metrics=[]] [name, value, delta]
  * @param {Array<[string, number, number]>} [props.chart=[]] [label, primary, comparison]
  * @param {string} [props.accent] project accent color for rank bars
+ * @param {Partial<typeof DEFAULT_COPY>} [props.copy] card eyebrows, titles and column heads
  */
-export function LiveOverview({ metrics = [], chart = [], accent }) {
+export function LiveOverview({ metrics = [], chart = [], accent, copy: copyProp }) {
+  const copy = { ...DEFAULT_COPY, ...copyProp };
   return (
     <div className="mh-live-dashboard">
       <div className="mh-live-kpis">
@@ -26,10 +37,10 @@ export function LiveOverview({ metrics = [], chart = [], accent }) {
         <section className="mh-live-card">
           <header className="mh-live-card__head">
             <div>
-              <span>PERFORMANCE</span>
-              <h2>Current period versus baseline</h2>
+              <span>{copy.performanceEyebrow}</span>
+              <h2>{copy.performanceTitle}</h2>
             </div>
-            <span>Primary / comparison</span>
+            <span>{copy.performanceLegend}</span>
           </header>
           <div className="mh-live-chart">
             {chart.map((item) => (
@@ -44,10 +55,10 @@ export function LiveOverview({ metrics = [], chart = [], accent }) {
         <section className="mh-live-card">
           <header className="mh-live-card__head">
             <div>
-              <span>PRIORITY</span>
-              <h2>Leading views</h2>
+              <span>{copy.priorityEyebrow}</span>
+              <h2>{copy.priorityTitle}</h2>
             </div>
-            <span>Index</span>
+            <span>{copy.priorityColumn}</span>
           </header>
           <div className="mh-live-ranks">
             {chart.slice(0, 5).map((item, index) => (
