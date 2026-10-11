@@ -144,7 +144,6 @@ const interpreter: Patch["interpreter"] = {
       creatorAll: "全部创建人",
       createLabel: "新增业务术语",
       synonymsLabel: "同义词",
-      moreSynonymsLabel: "更多同义词",
       statusLabels: { Enable: "已启用", Disable: "已停用" },
       statusOptions: [
         { id: "Enable", label: "已启用" },
