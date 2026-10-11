@@ -11,7 +11,7 @@ const hrefFor = (id, params = {}) => {
   return path && query ? `${path}?${query}` : path;
 };
 
-export default { title: "Features/Scenario Detail/ScenarioDetailWorkspace", component: ScenarioDetailWorkspace, tags: ["autodocs"], parameters: { docs: { description: { component: bi("This component is the main workspace on Scenario Detail. It shows six panels: content, related, AI check, usage, version, and activity. Set `tab` for the open panel. The content panel shows the skill name, status, structure, governance, and example preview. It does not own the URL or the assistant.", "这是 Scenario Detail 页的主工作区。它显示六个面板：content、related、AI check、usage、version 和 activity。用 `tab` 设置当前打开的面板。content 面板显示技能名称、状态、结构、治理信息和示例预览。它不持有 URL，也不持有助手。") } } } };
+export default { title: "Features/Scenario Detail/ScenarioDetailWorkspace", component: ScenarioDetailWorkspace, tags: ["autodocs"], parameters: { docs: { description: { component: bi("This component is the main workspace on Scenario Detail. It shows six panels: content, related, AI check, usage, version, and activity. Set `tab` for the open panel. The content panel shows the skill name, status, structure, governance, and example preview. It does not own the URL or the assistant. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** the Scenario Detail page.", "这是 Scenario Detail 页的主工作区。它显示六个面板：content、related、AI check、usage、version 和 activity。用 `tab` 设置当前打开的面板。content 面板显示技能名称、状态、结构、治理信息和示例预览。它不持有 URL，也不持有助手。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Scenario Detail 页。") } } } };
 
 export const Default = {
   args: { record: SKILL_RECORDS.find((record) => record.id === "city-comparison"), labels: SCENARIO_DETAIL.labels, tab: "content", previewOpen: false },

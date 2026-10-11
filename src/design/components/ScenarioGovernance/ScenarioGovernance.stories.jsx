@@ -6,7 +6,7 @@ export default {
   title: "Organisms/Scenario governance",
   component: ScenarioGovernance,
   tags: ["autodocs"],
-  parameters: { docs: { description: { component: bi("This component shows nine governance facts for one skill. The parent supplies the section heading and the frame. The Skill Library detail drawer uses a single column. Scenario Detail uses two columns.", "这个组件显示一项技能的九条治理信息。区块标题和外框由父级提供。Skill Library 的详情抽屉使用单列。Scenario Detail 使用两列。") } } },
+  parameters: { docs: { description: { component: bi("This component shows nine governance facts for one skill. The parent supplies the section heading and the frame. The Skill Library detail drawer uses a single column. Scenario Detail uses two columns. **Used in:** no active page. **Retired pages (source kept, not in Storybook):** Skill Library and Scenario Detail.", "这个组件显示一项技能的九条治理信息。区块标题和外框由父级提供。Skill Library 的详情抽屉使用单列。Scenario Detail 使用两列。**使用位置：** 目前没有在用的页面。**已撤下的页面（源码保留，不在 Storybook 中）：**Skill Library 与 Scenario Detail。") } } },
   args: { record: SKILL_LIBRARY.records[0], fields: SKILL_LIBRARY.labels.governanceFields, layout: "stacked", userFallback: "Marketing Strategy Team" },
   argTypes: {
     record: prop("ScenarioRecord", { description: bi("Governance values, call counts, and the accuracy score.", "治理取值、调用次数和准确率。"), control: "object" }),

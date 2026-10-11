@@ -39,7 +39,7 @@ export const SelfService = {
     onNavigate: { action: "onNavigate", description: bi("The function runs when a link opens another page. The result has `id`, `params`, and `href`.", "链接要打开另一页时，会调用这个函数。结果里有 `id`、`params` 和 `href`。") },
     onTabChange: { action: "onTabChange", description: bi("The function runs when the user selects Analysis or Data Upload. The result has `id` and `label`.", "用户选择 Analysis 或 Data Upload 时，会调用这个函数。结果里有 `id` 和 `label`。") },
     onCategoryChange: { action: "onCategoryChange", description: bi("The function runs when the user selects a filter pill. The result has `id` and `label`.", "用户选择筛选胶囊时，会调用这个函数。结果里有 `id` 和 `label`。") },
-    onOpen: { action: "onOpen", description: bi("The function runs when a card opens a destination. The result has `title` and may have `href`.", "卡片要打开目的地时，会调用这个函数。结果里有 `title`，也可能有 `href`。") },
+    onOpen: { action: "onOpen", description: bi("The function runs when a card opens a destination. The result has `title` and can have `href`.", "卡片要打开目的地时，会调用这个函数。结果里有 `title`，也可能有 `href`。") },
     onOpenHistory: { action: "onOpenHistory", description: bi("The function runs when the user opens upload history. The result has `item`.", "用户打开上传历史时，会调用这个函数。结果里有 `item`。") },
     onCloseHistory: { action: "onCloseHistory", description: bi("The function runs when the user closes upload history. The result has `reason`.", "用户关闭上传历史时，会调用这个函数。结果里有 `reason`。") },
     onPreviewFile: { action: "onPreviewFile", description: bi("The function runs when the user previews a history file. The result is the row.", "用户预览历史上的文件时，会调用这个函数。结果就是该行。") },

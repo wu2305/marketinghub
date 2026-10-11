@@ -30,6 +30,7 @@ export default {
     rows: prop("number", { defaultValue: 4, description: bi("Visible row count.", "可见行数。") }),
     disabled: prop("boolean", { defaultValue: false, description: bi("Disables the field.", "禁用该字段。") }),
     invalid: prop("boolean", { defaultValue: false, description: bi("Adds aria-invalid and error styling.", "添加 aria-invalid 与错误样式。") }),
+    describedBy: prop("string", { description: bi("`id` of the element that describes the field, for example its error message. It becomes `aria-describedby`.", "描述该字段的元素的 `id`，例如它的错误提示。会写入 `aria-describedby`。"), control: "text" }),
     required: prop("boolean", { defaultValue: false, description: bi("Native required attribute.", "原生 required 属性。") }),
     ref: prop("React.Ref<HTMLTextAreaElement>", { description: bi("Forwarded to the textarea element.", "转发给 textarea 元素。"), control: false }),
     onChange: callbackProp(

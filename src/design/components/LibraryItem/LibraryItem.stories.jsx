@@ -25,7 +25,7 @@ Styles: \`src/design/components/LibraryItem/LibraryItem.css\`. Shared values: \`
 | Title | font-size-xl / font-weight-bold | 16px / 700 |
 | Description and metadata | font-size-sm | 12px |
 | Typeface | font-sans | DIN 2014 |`,
-    "这个组件是库列表中的一张卡片。点击标题或卡片会打开条目，其他控件执行各自的操作。`children` 是额外内容的插槽。\n\n### 外观参数在哪里看\n\n上表列出当前外观参数。卡片样式在 `src/design/components/LibraryItem/LibraryItem.css`，具体数值在 `src/design/tokens.css`；Foundations 页面可查看统一设计参数。Controls 用于修改内容和状态。"
+    "这个组件是库列表中的一张卡片。点击标题或卡片会打开条目，其他控件执行各自的操作。`children` 是额外内容的插槽。\n\n六种业务组合、参考参数和当前实现差距见 [Knowledge card comparison](?path=/docs/features-interpreter-knowledge-card-comparison--docs)。\n\n### 外观参数在哪里看\n\n上表列出当前外观参数。卡片样式在 `src/design/components/LibraryItem/LibraryItem.css`，具体数值在 `src/design/tokens.css`；Foundations 页面可查看统一设计参数。Controls 用于修改内容和状态。"
   ) } } },
   args: { ...toItem(records[1]), variant: "knowledge" },
   argTypes: {

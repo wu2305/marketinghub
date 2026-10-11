@@ -51,7 +51,7 @@ export const MarketingCockpit = {
   argTypes: {
     hrefFor: { control: false, description: bi("Set `hrefFor` to turn a route id into an href. The story and the host each supply this function.", "用 `hrefFor` 把路由 id 转成 href。故事和宿主各自提供这个函数。") },
     project: { control: "select", options: ["all", ...Object.keys(args.projects)], description: bi("Active catalog project id, or `\"all\"` for the grouped catalog.", "当前目录项目的 id。分组目录用 `\"all\"`。") },
-    view: enumProp(cockpitViews, "catalog", bi("Not read by the page. The live report opens whenever `dashboard` is set, as in the original `?dashboard=` URL, so change `dashboard` to switch views. A host may still pass the URL's `view` value through.", "页面不读取这个值。只要设置了 `dashboard` 就会打开实时报表，和原页面的 `?dashboard=` 一致，所以要切换视图请改 `dashboard`。宿主仍可透传 URL 里的 `view`。"), false),
+    view: enumProp(cockpitViews, "catalog", bi("Not read by the page. The live report opens whenever `dashboard` is set, as in the original `?dashboard=` URL, so change `dashboard` to switch views. A host can still pass the URL's `view` value through.", "页面不读取这个值。只要设置了 `dashboard` 就会打开实时报表，和原页面的 `?dashboard=` 一致，所以要切换视图请改 `dashboard`。宿主仍可透传 URL 里的 `view`。"), false),
     dashboard: { control: { type: "number", min: 0, max: 1 }, description: bi("Live report index. When this value is set, the live view opens.", "实时报表索引。设置了这个值就会打开实时视图。") },
     knowledge: { control: false, description: bi("Knowledge assets used for counts, search text, and context links.", "用于计数、搜索文字和上下文链接的知识资产。") },
     cityInvest: { control: false, description: bi("City Invest dashboard data. Required for reports with `embed: \"city-invest\"`.", "City Invest 仪表盘数据。带 `embed: \"city-invest\"` 的报表需要它。") },
@@ -63,7 +63,7 @@ export const MarketingCockpit = {
     onOpenReport: { action: "onOpenReport", description: bi("The function runs when the user opens a live report. The result has `project`, `index`, and `href`.", "用户打开实时报表时，会调用这个函数。结果里有 `project`、`index` 和 `href`。") },
     onOpenDetails: { action: "onOpenDetails", description: bi("The function runs when the user opens the report details drawer. The result has `project` and `index`. It has no `href`.", "用户打开报表详情抽屉时，会调用这个函数。结果里有 `project` 和 `index`，没有 `href`。") },
     onCloseDetails: { action: "onCloseDetails", description: bi("The function runs when the user closes the details drawer. The result has `reason`.", "用户关闭详情抽屉时，会调用这个函数。结果里有 `reason`。") },
-    onOpenLive: { action: "onOpenLive", description: bi("The function runs when the details drawer opens the live report. The result may have `href`.", "详情抽屉要打开实时报表时，会调用这个函数。结果里可能有 `href`。") },
+    onOpenLive: { action: "onOpenLive", description: bi("The function runs when the details drawer opens the live report. The result can have `href`.", "详情抽屉要打开实时报表时，会调用这个函数。结果里可能有 `href`。") },
     onBack: { action: "onBack", description: bi("The function runs when the live view returns to the catalog. The result has `project` and `href`.", "实时视图返回目录时，会调用这个函数。结果里有 `project` 和 `href`。") },
     onOpenWorkspace: { action: "onOpenWorkspace", description: bi("The function runs when the user opens Report Copilot. The result has `reason: \"open\"`.", "用户打开 Report Copilot 时，会调用这个函数。结果里的 `reason` 是 `\"open\"`。") },
     onWorkspaceClose: { action: "onWorkspaceClose", description: bi("The function runs when the user closes Report Copilot. The result has `reason`.", "用户关闭 Report Copilot 时，会调用这个函数。结果里有 `reason`。") },

@@ -431,6 +431,8 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 
 ## 4. 已知缺口
 
+- 2026-10-11 内容评审（main cc611ef，Wu 转贴）中属于文案、示例数据与语气的条目，不属于工程修复，待设计师回答，答案前保持现状："下线"一词的多种叫法（Disable / offline / Go Offline）、确认框默认文案（Confirm Operation）、Scenario 在知识类型与 Skill Library 中的多重含义和 "Scenario Reportings" 标题、Home 27 与 Interpreter 35 的计数不一致、示例数据（Campaign 助手 "12% average ROI"、反馈示例的 TikTok 与美元、渠道写法 Rednote / RedNote / XHS / Tiktok、"Lead capture"、`DISLPLAY` 拼写、"Under review" 大小写）、Home 与各助手的产品语气（"Marketing Portal"、"Your AI partner for every marketing task"、"Trading Desk"）、Analytical Model 创建表单仍有 Save Draft 而卡片已无 Draft、助手输入框名称 "Ask AI Interpreter AI"。双语问题草稿在项目文件夹 `reviews/designer-issue-draft-2026-10-11.md`，由用户确认后提交为 GitHub Issue。
+
 - 2026-10-09 Campaign 页没有 `h1`：原始 `campaign.html:35` 的 `<h1>Trading Desk</h1>` 在 React 的 `CampaignRail` 中渲染为 `<h2>`（`features/campaign/CampaignRail/index.jsx:21`），页标题层级与读屏顺序因此与原始不同；视觉无差异。改为 `h1` 前需确认 `CampaignRail.css` 与 `CampaignPage.css` 没有按 `h2` 选择的规则。`examples/demos/demos.test.jsx` 的标题断言为此放宽到 `h1, h2`。
 
 - 2026-09-30 v22 设计同步已完成 P08 Analytical Model 重建与 P17 参照物修复（见 §3、[变更说明](design-sync/changes/2026-09-30-v22-bundle.md)、`dispositions.md` AF-01–AF-11）；待设计师确认 5 个问题（Q1 发布是否直接上线 vs Review Center、Q2 其他知识表单是否同样改、Q3 帮助气泡样式、Q4 编辑时域外指标、Q5 场景 Category，问题清单 `design-sync/designer-questions/2026-09-30-v22.md`，GitHub Issue 同步），Storybook 当前按各题标注的“现状”选项。附件带来的 `docs/cleanup-manifest.json` 本机路径与 `docs/demo/README.md` 的 v20.11 标题已在后续文档 PR 中清除/更新（见维护日志 2026-09-30 最后一条）。
@@ -542,6 +544,12 @@ M0 在本节内逐页增加以下行，后续随实现维护；不要另建平�
 - **表单校验矩阵（`src/design/forms.test.jsx`）遗留的待决项，均为原始行为，未自行更改**：(1) Synonyms 类型一行都不加就 Submit 会成功（原始页没有输入框可校验），提交的是空表；是否要求“至少一行”待设计师决定。(2) Save（草稿）只对 Business Term、Analytical Model、Metric Dictionary 校验必填，其余类型的草稿可不完整；Skill Edit 的 Save Draft 则从不校验（SF-06）。两种“草稿”规则并存，是否统一待决定。(3) Skill Library 的内联表单有 `*` 标记却不校验（SF-10，原始行为如此，登记为 Intent）；Skill Edit 页同样的字段则校验。(4) Report Copilot 与助手面板的输入框带原生 `required` 且表单未 `noValidate`，浏览器里空发送会弹原生气泡，各浏览器文案不同；空消息本身是静默不发送。
 
 ## 5. 维护日志
+
+### 2026-10-11 — 内容评审（main cc611ef）中的文档与契约问题
+
+对用户转贴的评审逐条在 main b6bd90f 上复核。已修复：①Pages/Knowledge Create 的故事宿主把 `onCancel` 载荷缩成 `{type}`，与页面实际发出的 `{type, mode, values}` 及 JSDoc 不符；宿主现在原样转发，说明与示例载荷同步，并新增 `story-contracts.test.jsx` 用例点 Cancel 校验载荷（还原旧宿主即失败；该文件由 `.js` 改名为 `.jsx`）。②同一页 `onSubmit` 的说明仍写 "Business Term Submit 设为 Under Review"，实际 Business Term 与 Analytical Model 的 Publish & Enable 写成 Enabled + Published；说明与示例 stage 已改。③已撤下页面的功能组件仍被写成在用页面：KnowledgeDetail、ScenarioDetailWorkspace、MemoryWorkspace、DerivedMetricPanel、ScenarioEditForm、SkillDetail、SkillInlineForm、ScenarioGovernance、ScenarioStructure、SkillForm、GovernanceNav 的组件说明现与 Switch 一致，写明 "Used in: no active page" 与对应已撤下页面。④MemoryWorkspace 的唯一故事为 #113 之前的卡片布局且无首字母徽标，改为 `layout="list"` 加 `leading`，故事导出名 `CardsAndDetail` → `ListAndDetail`（story id `features-personalmemory-memoryworkspace--cards-and-detail` → `--list-and-detail`，该页已撤下，仅此一处引用）。⑤TextInput / Select / TextArea 补上 `required` 与 `describedBy` 的 Controls 说明（#125 起已实现）；Modal 与 AssistantPanel 的抽屉宽度、入场动画与减弱动效、Button 按下缩放补入说明；ReportDetailsDrawer 的 `onClose({reason})`、`onOpenLive({href})` 补载荷说明。⑥已删除无人使用的 `moreSynonymsLabel`（`content.js`、BusinessTermView JSDoc、替换夹具）与 `cardLabels.moreSynonyms`（`content.js`、FieldLibraryView JSDoc）。⑦中文错词：FileDropzone 的 "投放区" 改为 "拖放区"。⑧中英文漂移：StatusBadge 中文补上 `process`，LibraryItem 中文补上 Knowledge card comparison 链接，ModelFlowDialog 英文改用 `step`；`docs-bilingual.test.js` 新增用例，要求每条描述的英文与中文两半写出同一批 `代码` 词（按去重后的描述检查，StatusBadge 漂移现在会失败）。⑨残留 may / should 改为 can / 直述（DataTable、FilterPills、ReportCopilot、SelfService、Marketing Cockpit 页）。⑩`AGENTS.md` §2.4 把 ConfirmDialog 归在 Modal 之下，改为独立的 440px 确认面板（#119 起不基于 Modal，但仍在同一层栈）。
+
+复核后判定已修复、无需再改：Tabs 的 `onChange` 说明只写点击（#133 已改，含键盘移动，并有 `story-contracts` 断言）。未改动：界面文案、示例数据与语气（见 §4 同日条目，转设计师）。验证：lint 通过，vitest 61 个文件 1102 通过，`build-storybook` 通过（440 条目，数量不变）。受影响故事（只有文档与 Controls 说明变化，人工审图已推迟）：Pages/Knowledge Create，Features/PersonalMemory/MemoryWorkspace（画布变化），Button、Text input、Select、Text area、Modal、Assistant Panel、File dropzone、Status badge、Library item、Model flow dialog、Data table、Filter pills、Skill form、Governance nav、Scenario governance、Scenario structure 的文档页，以及第③项所列功能组件的文档页。执行者：Claude。
 
 ### 2026-10-10 — 使用方 Business Term 工作区故事文档与实际行为对齐
 
