@@ -4,6 +4,9 @@ import { SkillForm } from "../../../components/SkillForm/index.jsx";
 import { SkillFormCard, SkillFormFillCard } from "../../../components/SkillForm/cards.jsx";
 import "./ScenarioEditForm.css";
 
+/** The fields the Demo requires; a host passes its own list through `required`. */
+const defaultRequired = ["name", "purpose", "scope", "owner", "report"];
+
 function plainPrimary(event) { return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.currentTarget.target; }
 
 /**
@@ -11,6 +14,7 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {object} props
  * @param {object} props.content Visible labels, scope/report options and static attachment names.
  * @param {{name:string,purpose:string,scope:string,owner:string,report:string,logic:string,output:string,question:string}} props.values
+ * @param {string[]} [props.required=["name","purpose","scope","owner","report"]] Fields the host requires: each shows the required marker and is announced as required. The host validates against the same list.
  * @param {Record<string,boolean>} [props.errors] Validation state for name/purpose/scope/owner/report.
  * @param {string|null} [props.preview] Null hides preview; string is the generated or empty-question output.
  * @param {(event:{field:string,value:string})=>void} [props.onChange]
@@ -22,7 +26,7 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {(id:string,params?: Record<string,string>)=>string} [props.hrefFor]
  * @param {(event:{id:string,params: Record<string,string>,href:string,label:string})=>void} [props.onNavigate]
  */
-export function ScenarioEditForm({ content, values, errors = {}, preview = null, onChange, onRunPreview, onAutoFill, onSelectFiles, onSaveDraft, onSubmit, hrefFor, onNavigate }) {
+export function ScenarioEditForm({ content, values, required = defaultRequired, errors = {}, preview = null, onChange, onRunPreview, onAutoFill, onSelectFiles, onSaveDraft, onSubmit, hrefFor, onNavigate }) {
   const { labels, reports, scopes, attachments, attachmentAccept } = content;
   const id = React.useId();
   const report = reports.find((item) => item.value === values.report);
@@ -30,9 +34,9 @@ export function ScenarioEditForm({ content, values, errors = {}, preview = null,
   const reportHref = report ? (hrefFor?.("cockpit", reportParams) || report.href) : undefined;
   const cancelHref = hrefFor?.("scenario-library", {}) || "scenario-library.html";
   const fill = (field, tone, icon, placeholder) => <SkillFormFillCard tone={tone} icon={icon} label={labels[field]} value={values[field] || ""} placeholder={placeholder} autoFillLabel={labels.autoFill} onChange={({ value }) => onChange?.({ field, value })} onAutoFill={() => onAutoFill?.({ field })} />;
-  return <SkillForm labels={labels} values={values} scopes={scopes} errors={errors} preview={preview} cancelHref={cancelHref} onChange={onChange} onRunPreview={onRunPreview} onSaveDraft={onSaveDraft} onSubmit={onSubmit} onCancel={({ href }) => onNavigate?.({ id: "scenario-library", params: {}, href, label: labels.cancel })}>
+  return <SkillForm labels={labels} values={values} scopes={scopes} required={required} errors={errors} preview={preview} cancelHref={cancelHref} onChange={onChange} onRunPreview={onRunPreview} onSaveDraft={onSaveDraft} onSubmit={onSubmit} onCancel={({ href }) => onNavigate?.({ id: "scenario-library", params: {}, href, label: labels.cancel })}>
     <SkillFormCard tone="info" icon="file" label={labels.report} htmlFor={`${id}-report`}>
-      <select id={`${id}-report`} value={values.report || ""} required aria-invalid={errors.report ? true : undefined} aria-describedby={errors.report ? `${id}-report-error` : undefined} onChange={(event) => onChange?.({ field: "report", value: event.target.value })}><option value="">{labels.selectReport}</option>{reports.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
+      <select id={`${id}-report`} value={values.report || ""} required={required.includes("report") || undefined} aria-invalid={errors.report ? true : undefined} aria-describedby={errors.report ? `${id}-report-error` : undefined} onChange={(event) => onChange?.({ field: "report", value: event.target.value })}><option value="">{labels.selectReport}</option>{reports.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select>
       {errors.report && <small id={`${id}-report-error`} role="alert">{labels.required}</small>}
       {report && <a className="mh-scenario-edit-form__report-link" href={reportHref} onClick={(event) => plainPrimary(event) && onNavigate?.({ id: "cockpit", params: reportParams, href: reportHref, label: `${labels.openReportPrefix}${report.label}` })}>{labels.openReportPrefix}{report.label}</a>}
     </SkillFormCard>

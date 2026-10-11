@@ -11,6 +11,7 @@ import { KnowledgeCreateFields } from "../../features/knowledge-create/Knowledge
 import "./KnowledgeCreatePage.css";
 
 const NO_INVALID = [];
+const NO_REQUIRED = [];
 
 /**
  * Knowledge create page. It creates or edits one knowledge record.
@@ -23,6 +24,7 @@ const NO_INVALID = [];
  * @param {string} props.type One of knowledgeCreateTypes. // knowledgeCreateTypes 之一。
  * @param {string} [props.mode="create"] One of knowledgeCreateModes. // knowledgeCreateModes 之一。
  * @param {object} [props.values={}] Controlled field values. // 受控的字段值。
+ * @param {string[]} [props.required=[]] Field names this form requires; each shows the required marker and is announced as required. The host validates against the same list. // 此表单要求必填的字段名；各自显示必填标记并被读作必填，主机用同一份清单校验。
  * @param {string[]} [props.invalid=[]] Required field names to mark invalid. // 需要标记为无效的必填字段名。
  * @param {object|null} props.result Save or Submit confirmation state. // Save 或 Submit 后的确认状态。
  * @param {string|null} props.dialog Active guidance, history, test, confirm, or discard dialog. // 当前打开的引导、历史、测试、确认或放弃对话框。
@@ -43,7 +45,7 @@ const NO_INVALID = [];
  * @param {(event:{name:string}) => void} [props.onMenu] The function runs when a picker opens or closes. // 选择器打开或关闭时会调用这个函数。
  */
 export function KnowledgeCreatePage({
-  content, logo, navigation = [], type, mode = "create", values = {}, invalid = [], result, dialog, menu, unavailable = false, reportEditAvailable = false,
+  content, logo, navigation = [], type, mode = "create", values = {}, required = NO_REQUIRED, invalid = [], result, dialog, menu, unavailable = false, reportEditAvailable = false,
   hrefFor, onNavigate, onTypeChange, onChange, onSave, onSubmit, onCancel, onDiscard, onResultClose, onDialog, onDialogClose, onMenu,
 }) {
   const labels = content.labels;
@@ -85,11 +87,11 @@ export function KnowledgeCreatePage({
       </div>
       <header className="mh-kcreate__head"><div><p>{labels.eyebrow}</p><h1>{title}</h1>{subtitle && <span>{subtitle}</span>}</div>{!isTerm && !isAnalysis && !isScenario && <strong>{labels.draft}</strong>}</header>
       <section className="mh-kcreate__card" ref={cardRef}>
-        {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={Array.isArray(values.synonyms) ? values.synonyms : []} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} invalid={invalid} onChange={onChange} onCancel={cancel} onSave={save} onSubmit={submit} />
+        {unavailable ? <p className="mh-kcreate__unavailable">{content.analysis.unavailable}</p> : isTerm ? <BusinessTermForm title={values.title || ""} kind={values.kind || "Business Term"} description={values.description || ""} synonyms={Array.isArray(values.synonyms) ? values.synonyms : []} scope={values.scope || []} scopeOptions={content.shared.scope} guidanceTitle={content.businessTerm.guidanceTitle} guidance={content.businessTerm.guidance} reminder={content.businessTerm.reminder} labels={content.businessTerm.labels} placeholders={content.businessTerm.placeholders} required={required} invalid={invalid} onChange={onChange} onCancel={cancel} onSave={save} onSubmit={submit} />
           : <>
             {!isAnalysis && !isScenario && !isReportEdit && <label className="mh-kcreate__type">{labels.type}<select value={type} onChange={(e) => onTypeChange?.({ value: e.target.value })}>{content.types.map((item) => <option key={item}>{item}</option>)}</select></label>}
             <form noValidate onSubmit={(event) => { event.preventDefault(); isReportEdit ? onDialog?.({ kind: "confirm" }) : submit(); }}>
-              <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
+              <KnowledgeCreateFields type={type} mode={isReportEdit ? "edit" : "create"} content={content} values={values} required={required} invalid={invalid} menu={menu} onChange={onChange} onMenu={onMenu} onDialog={onDialog} />
               <footer className="mh-kcreate__footer"><div><Button variant="secondary" onClick={cancel}>{labels.cancel}</Button>{!isReportEdit && <Button variant="secondary" onClick={save}>{isAnalysis ? analysis.saveLabel : isScenario ? content.scenario.saveLabel : labels.save}</Button>}<Button variant={isAnalysis || isScenario ? "gold" : "primary"} type="submit" disabled={submitDisabled}>{isAnalysis ? analysis.submitLabel : isScenario ? content.scenario.submitLabel : labels.submit}</Button></div>{isAnalysis && <OperationReminder>{analysis.reminder}</OperationReminder>}{isScenario && <OperationReminder>{content.scenario.reminder}</OperationReminder>}</footer>
             </form>
           </>}

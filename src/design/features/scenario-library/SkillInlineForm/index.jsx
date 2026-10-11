@@ -10,6 +10,7 @@ const structureCards = { triggerWhen: { tone: "info", icon: "clock" }, input: { 
  * @param {object} props
  * @param {object} props.labels Source-backed form and field copy.
  * @param {object} props.values Controlled name, purpose, scope, owner, five structure fields and the example question.
+ * @param {string[]} [props.required] Basics the host requires (name, purpose, scope, owner); omitted keeps the form default. The form never blocks a submit on them.
  * @param {string|null} [props.preview=null] Null hides the example question and output; a string shows them.
  * @param {(event:{field:string,value:string})=>void} [props.onChange]
  * @param {(event:{values:object})=>void} [props.onSubmit]
@@ -18,8 +19,8 @@ const structureCards = { triggerWhen: { tone: "info", icon: "clock" }, input: { 
  * @param {(event:{question:string})=>void} [props.onRunPreview] Run Preview pressed with the current question.
  * @param {(event:{values:object})=>void} [props.onSaveDraft] Save Draft pressed; the demo container saves and acknowledges it.
  */
-export function SkillInlineForm({ labels, values = {}, preview = null, onChange, onSubmit, onCancel, onAutoFill, onRunPreview, onSaveDraft }) {
-  return <SkillForm labels={labels} values={values} scopes={labels.scopeOptions} preview={preview} onChange={onChange} onSubmit={onSubmit} onCancel={onCancel} onRunPreview={onRunPreview} onSaveDraft={onSaveDraft}>
+export function SkillInlineForm({ labels, values = {}, required, preview = null, onChange, onSubmit, onCancel, onAutoFill, onRunPreview, onSaveDraft }) {
+  return <SkillForm labels={labels} values={values} scopes={labels.scopeOptions} required={required} preview={preview} onChange={onChange} onSubmit={onSubmit} onCancel={onCancel} onRunPreview={onRunPreview} onSaveDraft={onSaveDraft}>
     {labels.structureFields.map((item) => <SkillFormFillCard key={item.key} {...structureCards[item.key]} label={item.label} value={values[item.key] || ""} placeholder={item.placeholder} autoFillLabel={labels.autoFill} onChange={({ value }) => onChange?.({ field: item.key, value })} onAutoFill={() => onAutoFill?.({ field: item.key })} />)}
   </SkillForm>;
 }

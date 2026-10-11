@@ -69,7 +69,7 @@ export function useScenarioEditDemo(props) {
   });
   return {
     content: props.content, logo: props.logo, navigation: props.navigation, hrefFor: props.hrefFor, onNavigate: props.onNavigate,
-    form: { values, errors, preview, onChange, onSubmit,
+    form: { values, required: REQUIRED, errors, preview, onChange, onSubmit,
       onRunPreview: ({ question }) => { const output = scenarioEditPreviewFor({ ...values, question }, props.content.labels); setPreview(output); props.onRunPreview?.({ question: question.trim(), output }); },
       onAutoFill: ({ field }) => { const text = props.content.labels.autoFillText?.[field]; if (text === undefined) return; setValues((current) => ({ ...current, [field]: text })); props.onAutoFill?.({ field }); },
       /* A draft may be partial, so nothing is validated; it stays Draft (R4). */

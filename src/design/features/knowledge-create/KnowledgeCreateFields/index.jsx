@@ -6,14 +6,20 @@ import { StatusBadge } from "../../../components/StatusBadge/index.jsx";
 import "../../../tokens.css";
 import "./KnowledgeCreateFields.css";
 
+/* Which fields the host requires: every marker, native `required` and aria-required below reads this, so the rule lives in one place (the host). */
+const NO_REQUIRED = [];
+const RequiredContext = React.createContext(NO_REQUIRED);
+const useRequired = (name) => React.useContext(RequiredContext).includes(name);
+
 /** Circled "?" beside a label; the tip opens on hover or keyboard focus. */
 function HelpTip({ label, children }) {
   return <span className="mh-kcf__help-wrap"><button type="button" className="mh-kcf__help" aria-label={label}>?</button><span role="tooltip" className="mh-kcf__help-tip">{children}</span></span>;
 }
 
-function Field({ name, label, value = "", onChange, invalid, required, placeholder, textarea = false, select, children, wide = false, rows, errorText, help }) {
+function Field({ name, label, value = "", onChange, invalid, placeholder, textarea = false, select, children, wide = false, rows, errorText, help }) {
   /* A help tip must not become part of the control's accessible name, so a field
      with one is a div and its control carries the label text itself. */
+  const required = useRequired(name);
   const Wrap = help ? "div" : "label";
   const accessible = help ? label : undefined;
   /* The error text is tied to its control (aria-describedby), and a required
@@ -34,7 +40,8 @@ function Field({ name, label, value = "", onChange, invalid, required, placehold
  * search text is local. Escape, a click outside and tabbing away close the menu.
  * `searchable` adds a filter box and the `emptyText` / `noMatchText` messages.
  */
-function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, required = false, requiredLabel = "required", placeholder, help, disabled = false, invalid = false, errorText, searchable = false, searchPlaceholder, emptyText, noMatchText }) {
+function MultiPicker({ name, label, options, value = [], onChange, open, onMenu, requiredLabel = "required", placeholder, help, disabled = false, invalid = false, errorText, searchable = false, searchPlaceholder, emptyText, noMatchText }) {
+  const required = useRequired(name);
   const selected = Array.isArray(value) ? value : [];
   const [query, setQuery] = React.useState("");
   const rootRef = React.useRef(null);
@@ -94,17 +101,17 @@ function AnalysisFields({ content, values, invalid, menu, onChange, onMenu }) {
   const metrics = a.metrics.filter((metric) => metric.domains.some((domain) => domains.includes(domain))).map((metric) => metric.name);
   const field = (name, label, extra) => <Field errorText={a.errors[name]} name={name} label={label} value={values[name] || ""} onChange={onChange} textarea wide invalid={invalid.includes(name)} {...extra} />;
   return <div className="mh-kcf__analysis">
-    {field("analysis_name", t.analysisName, { textarea: false, required: true, placeholder: content.placeholders.analysisName })}
+    {field("analysis_name", t.analysisName, { textarea: false, placeholder: content.placeholders.analysisName })}
     {field("description", t.description, { placeholder: content.placeholders.analysisDescription })}
     <div className="mh-kcf__analysis-scope">
-      <MultiPicker name="businessDomain" label={t.businessDomain} required requiredLabel={t.requiredMark} options={a.domains} value={domains} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu}
+      <MultiPicker name="businessDomain" label={t.businessDomain} requiredLabel={t.requiredMark} options={a.domains} value={domains} onChange={onChange} open={menu === "businessDomain"} onMenu={onMenu}
         invalid={invalid.includes("businessDomain")} errorText={a.errors.businessDomain} placeholder={a.picker.domains} />
       <MultiPicker name="metrics" label={t.referencedMetrics} help={<HelpTip label={`About ${t.referencedMetrics}`}>{a.metricsHelp}</HelpTip>} options={metrics} value={values.metrics} onChange={onChange}
         open={menu === "metrics"} onMenu={onMenu} disabled={!domains.length} placeholder={domains.length ? a.picker.metrics : a.picker.metricsLocked}
         searchable searchPlaceholder={a.picker.search} emptyText={a.picker.noMetrics} noMatchText={a.picker.noMatch} />
     </div>
-    {field("trigger_when", t.triggerWhen, { required: true, placeholder: content.placeholders.triggerWhen })}
-    {field("output_requirements", t.analysisLogic, { required: true, rows: 8, placeholder: a.guidance, help: <HelpTip label={`About ${t.analysisLogic}`}>{a.guidance}</HelpTip> })}
+    {field("trigger_when", t.triggerWhen, { placeholder: content.placeholders.triggerWhen })}
+    {field("output_requirements", t.analysisLogic, { rows: 8, placeholder: a.guidance, help: <HelpTip label={`About ${t.analysisLogic}`}>{a.guidance}</HelpTip> })}
     {field("analysis_constraints", t.notesGuardrails, { placeholder: content.placeholders.constraints })}
   </div>;
 }
@@ -120,6 +127,7 @@ function MetricFields({ content, values, invalid, onChange, onDialog }) {
   const t = content.copy;
   const formulaErrorId = `${React.useId()}-formula-error`;
   const formulaInvalid = invalid.includes("metricFormula");
+  const formulaRequired = useRequired("metricFormula");
   // The last source renderer locks its contentEditable formula surface. Metrics
   // are whole tokens, including names with spaces such as "Visit Count".
   const tokens = values.metricTokens ?? (values.metricFormula ? [{ kind: "operator", value: values.metricFormula }] : []);
@@ -130,8 +138,8 @@ function MetricFields({ content, values, invalid, onChange, onDialog }) {
   const append = (value, kind) => setTokens([...tokens, { value, kind }]);
   return <div className="mh-kcf__metric"><div>
     <Field errorText={t.required} name="metricDomain" label={t.metricDomain} value={values.metricDomain || ""} onChange={onChange} select={[{ value: "", label: content.placeholders.metricDomain }, ...content.options.metricDomains]} />
-    <div className="mh-kcf__grid"><Field errorText={t.required} name="metricName" label={t.metricName} value={values.metricName || ""} onChange={onChange} required invalid={invalid.includes("metricName")} placeholder={content.placeholders.metricName} /><Field errorText={t.required} name="unit" label={t.unit} value={values.unit || ""} onChange={onChange} placeholder={content.placeholders.unit} /></div>
-    <div className="mh-kcf__field"><span>{t.formula} <b className="mh-kcf__required" aria-hidden="true">*</b></span><div className="mh-kcf__formula" role="textbox" aria-label={t.formula} aria-readonly="true" aria-required="true" aria-invalid={formulaInvalid || undefined} aria-describedby={formulaInvalid ? formulaErrorId : undefined} tabIndex={-1}>{tokens.length ? tokens.map((token, index) => <span className={token.kind === "metric" ? "mh-kcf__formula-token" : "mh-kcf__formula-operator"} key={`${index}:${token.value}`}>{token.value}{token.kind === "metric" && <button type="button" aria-label={`${t.removeMetric} ${token.value}`} onClick={() => setTokens(tokens.filter((_, i) => i !== index))}>×</button>}</span>) : <em>{content.placeholders.formula}</em>}</div>{formulaInvalid && <small className="mh-kcf__error" id={formulaErrorId}>{t.formulaRequired}</small>}</div>
+    <div className="mh-kcf__grid"><Field errorText={t.required} name="metricName" label={t.metricName} value={values.metricName || ""} onChange={onChange} invalid={invalid.includes("metricName")} placeholder={content.placeholders.metricName} /><Field errorText={t.required} name="unit" label={t.unit} value={values.unit || ""} onChange={onChange} placeholder={content.placeholders.unit} /></div>
+    <div className="mh-kcf__field"><span>{t.formula}{formulaRequired && <b className="mh-kcf__required" aria-hidden="true"> *</b>}</span><div className="mh-kcf__formula" role="textbox" aria-label={t.formula} aria-readonly="true" aria-required={formulaRequired || undefined} aria-invalid={formulaInvalid || undefined} aria-describedby={formulaInvalid ? formulaErrorId : undefined} tabIndex={-1}>{tokens.length ? tokens.map((token, index) => <span className={token.kind === "metric" ? "mh-kcf__formula-token" : "mh-kcf__formula-operator"} key={`${index}:${token.value}`}>{token.value}{token.kind === "metric" && <button type="button" aria-label={`${t.removeMetric} ${token.value}`} onClick={() => setTokens(tokens.filter((_, i) => i !== index))}>×</button>}</span>) : <em>{content.placeholders.formula}</em>}</div>{formulaInvalid && <small className="mh-kcf__error" id={formulaErrorId}>{t.formulaRequired}</small>}</div>
     <div className="mh-kcf__formula-tools">{content.metricOperators.map((op) => <button type="button" key={op} onClick={() => append(op, "operator")}>{op}</button>)}<button type="button" aria-label="Clear formula" onClick={() => setTokens([])}>⌫</button><button type="button" aria-label="Delete last token" onClick={() => setTokens(tokens.slice(0, -1))}>←</button></div>
     <small>{t.formulaHint}</small>
     <div className="mh-kcf__test"><b>{t.testRun}</b><p>{t.testHint}</p><button type="button" onClick={() => onDialog?.({ kind: "test" })}>{t.test}</button></div>
@@ -171,7 +179,7 @@ function ModelFields({ content, values, invalid, onChange, onDialog }) {
   const changeTable = ({ name, value }) => onChange?.({ name: `table:${active.id}:${name}`, value });
   const filtered = tables.filter((table) => `${table.title} ${table.id}`.toLowerCase().includes((values.tableSearch || "").toLowerCase()));
   return <div className="mh-kcf__model">
-    <div className="mh-kcf__model-intro"><Field errorText={t.required} name="modelName" label={t.modelName} required invalid={invalid.includes("modelName")} value={values.modelName || ""} onChange={onChange} placeholder={content.placeholders.modelName} /><Field errorText={t.required} name="modelDescription" label={t.modelDescription} value={values.modelDescription || ""} onChange={onChange} textarea placeholder={content.placeholders.modelDescription} /><Toggle name="enabled" label={t.modelEnabled} checked={values.enabled} onChange={onChange} /></div>
+    <div className="mh-kcf__model-intro"><Field errorText={t.required} name="modelName" label={t.modelName} invalid={invalid.includes("modelName")} value={values.modelName || ""} onChange={onChange} placeholder={content.placeholders.modelName} /><Field errorText={t.required} name="modelDescription" label={t.modelDescription} value={values.modelDescription || ""} onChange={onChange} textarea placeholder={content.placeholders.modelDescription} /><Toggle name="enabled" label={t.modelEnabled} checked={values.enabled} onChange={onChange} /></div>
     <div className="mh-kcf__model-ai"><span>◇</span><div><b>{t.aiModeling} <small>{t.beta}</small></b><p>{t.aiModelingHint}</p></div><button type="button" onClick={() => onDialog?.({ kind: "smart" })}>◇ {t.smartModeling}</button></div>
     <div className="mh-kcf__model-work"><aside><input aria-label={t.tableSearch} placeholder={content.placeholders.modelSearch} value={values.tableSearch || ""} onChange={(e) => onChange?.({ name: "tableSearch", value: e.target.value })} /><div className="mh-kcf__model-switch">{Object.entries(model.groups).map(([key,label]) => <button type="button" className={(values.modelGroup || "entity") === key ? "is-active" : ""} key={key} onClick={() => { onChange?.({ name: "modelGroup", value: key }); onChange?.({ name: "modelTable", value: content.shared.modelTables[key][0].id }); }}>{label}</button>)}</div><div className="mh-kcf__model-list">{filtered.map((table) => <button type="button" className={active.id === table.id ? "is-active" : ""} key={table.id} onClick={() => onChange?.({ name: "modelTable", value: table.id })}><b>{table.title}</b><small>{table.id} · {table.meta}</small></button>)}</div><footer><b>{t.dataSourceHeading}</b><p>{model.dataSource} <span>{t.enabled}</span></p></footer></aside>
       <section><header><div>{[["basic",model.basicTabs.basic],["fields",`${model.basicTabs.fields} · ${fields.length}`]].map(([key,label]) => <button type="button" className={(values.modelTab || "fields") === key ? "is-active" : ""} key={key} onClick={() => onChange?.({ name: "modelTab", value: key })}>{label}</button>)}</div><button type="button" onClick={() => onDialog?.({ kind: "preview" })}>◉ {t.preview}</button></header>
@@ -191,6 +199,7 @@ function SynonymFields({ content, values, invalid, onChange }) {
   const { existing, kinds, headers, choices } = content.synonyms;
   const t = content.copy;
   const baseId = React.useId();
+  const required = useRequired("synonymRows");
   /* Once a submit failed, the empty required cells are the invalid ones; each carries its own message. */
   const missing = (value) => (invalid.includes("synonymRows") && !value?.trim() ? true : undefined);
   const cell = (index, key, control) => {
@@ -204,9 +213,9 @@ function SynonymFields({ content, values, invalid, onChange }) {
     <header><div><h2>{t.synonymManagement}</h2><p>{t.synonymIntro}</p></div><button type="button" onClick={addRow}>+ {t.addSynonym}</button></header>
     <div className="mh-kcf__table-scroll"><table><thead><tr>{headers.map((head) => <th key={head}>{head}</th>)}</tr></thead><tbody>
       {rows.map((row, index) => <tr key={index}>
-        {cell(index, "term", (state) => <input aria-label={t.standardTerm} required {...state} placeholder={t.standardTerm} value={row.term} onChange={(e) => changeRow(index, "term", e.target.value)} />)}
-        {cell(index, "synonym", (state) => <input aria-label={t.synonyms} required {...state} placeholder={t.synonyms} value={row.synonym} onChange={(e) => changeRow(index, "synonym", e.target.value)} />)}
-        {cell(index, "kind", (state) => <select aria-label={t.termType} required {...state} value={row.kind} onChange={(e) => changeRow(index, "kind", e.target.value)}><option value="">{t.select}</option>{kinds.map((kind) => <option key={kind}>{kind}</option>)}</select>)}
+        {cell(index, "term", (state) => <input aria-label={t.standardTerm} required={required || undefined} {...state} placeholder={t.standardTerm} value={row.term} onChange={(e) => changeRow(index, "term", e.target.value)} />)}
+        {cell(index, "synonym", (state) => <input aria-label={t.synonyms} required={required || undefined} {...state} placeholder={t.synonyms} value={row.synonym} onChange={(e) => changeRow(index, "synonym", e.target.value)} />)}
+        {cell(index, "kind", (state) => <select aria-label={t.termType} required={required || undefined} {...state} value={row.kind} onChange={(e) => changeRow(index, "kind", e.target.value)}><option value="">{t.select}</option>{kinds.map((kind) => <option key={kind}>{kind}</option>)}</select>)}
         <td><SynonymScope label={t.applicableDomain} options={choices.domain} value={row.domain} onChange={(value) => changeRow(index, "domain", value)} placeholder={t.selectMany} /></td>
         <td><SynonymScope label={t.scopeReports} options={choices.reports} value={row.reports} onChange={(value) => changeRow(index, "reports", value)} placeholder={t.selectMany} /></td>
         <td><SynonymScope label={t.relatedDatasets} options={choices.dataset} value={row.dataset} onChange={(value) => changeRow(index, "dataset", value)} placeholder={t.selectMany} /></td>
@@ -218,20 +227,7 @@ function SynonymFields({ content, values, invalid, onChange }) {
   </section>;
 }
 
-/**
- * P08 type-specific fields. State and all record/options data are injected.
- * @param {object} props
- * @param {string} props.type One of knowledgeCreateTypes.
- * @param {string} [props.mode="create"] One of knowledgeCreateModes.
- * @param {object} props.content Field copy, options, and deterministic rows.
- * @param {object} props.values Controlled field values.
- * @param {string[]} props.invalid Required field names in error state.
- * @param {string|null} props.menu Open picker name.
- * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
- * @param {(event:{name:string}) => void} [props.onMenu]
- * @param {(event:{kind:string}) => void} [props.onDialog]
- */
-export function KnowledgeCreateFields({ type, mode = "create", content, values = {}, invalid = [], menu, onChange, onMenu, onDialog }) {
+function KnowledgeCreateFieldsBody({ type, mode = "create", content, values = {}, invalid = [], menu, onChange, onMenu, onDialog }) {
   const change = onChange;
   const t = content.copy;
   if (type === "Data Model") return <ModelFields content={content} values={values} invalid={invalid} onChange={change} onDialog={onDialog} />;
@@ -257,9 +253,27 @@ export function KnowledgeCreateFields({ type, mode = "create", content, values =
     </div>;
   }
   if (type === "Analytical Model") return <AnalysisFields content={content} values={values} invalid={invalid} menu={menu} onChange={change} onMenu={onMenu} />;
-  if (type === "Scenario Reporting") return <div className="mh-kcf__scenario"><div className="mh-kcf__grid"><Field errorText={t.required} name="scenario_report_title" label={t.scenarioName} value={values.scenario_report_title || ""} onChange={change} required invalid={invalid.includes("scenario_report_title")} placeholder={content.placeholders.scenarioName} /><Field errorText={t.required} name="scenario_report_linked" label={t.relatedReport} value={values.scenario_report_linked || ""} onChange={change} required invalid={invalid.includes("scenario_report_linked")} select={[{ value: "", label: content.placeholders.relatedReport }, ...content.shared.reportLinks]} /><Field errorText={t.required} name="scenario_report_description" label={t.description} value={values.scenario_report_description || ""} onChange={change} textarea wide required invalid={invalid.includes("scenario_report_description")} placeholder={content.placeholders.scenarioDescription} /><Field errorText={t.required} name="scenario_report_blueprint" label={t.structureGuidance} value={values.scenario_report_blueprint || ""} onChange={change} textarea wide rows={8} required invalid={invalid.includes("scenario_report_blueprint")} placeholder={content.scenario.guidance} help={<HelpTip label={t.showGuidance}>{content.scenario.guidance}</HelpTip>} /><div className="mh-kcf__upload"><label>{t.upload}<input type="file" multiple accept=".doc,.docx,.pdf,.ppt,.pptx,.png,.jpg,.jpeg,.webp" onChange={(e) => change?.({ name: "attachments", value: [...(values.attachments || []), ...[...e.target.files].map((x) => x.name)] })} /></label><small>{t.uploadHint}</small><div>{(values.attachments || []).map((file) => <span className="mh-kcf__chip" key={file}>{file}<button type="button" aria-label={`Remove ${file}`} onClick={() => change?.({ name: "attachments", value: values.attachments.filter((x) => x !== file) })}>×</button></span>)}</div></div><div className="mh-kcf__status"><b>{t.aiStatus}</b><small>{t.statusHint}</small><strong>{t.disabled}</strong></div></div></div>;
+  if (type === "Scenario Reporting") return <div className="mh-kcf__scenario"><div className="mh-kcf__grid"><Field errorText={t.required} name="scenario_report_title" label={t.scenarioName} value={values.scenario_report_title || ""} onChange={change} invalid={invalid.includes("scenario_report_title")} placeholder={content.placeholders.scenarioName} /><Field errorText={t.required} name="scenario_report_linked" label={t.relatedReport} value={values.scenario_report_linked || ""} onChange={change} invalid={invalid.includes("scenario_report_linked")} select={[{ value: "", label: content.placeholders.relatedReport }, ...content.shared.reportLinks]} /><Field errorText={t.required} name="scenario_report_description" label={t.description} value={values.scenario_report_description || ""} onChange={change} textarea wide invalid={invalid.includes("scenario_report_description")} placeholder={content.placeholders.scenarioDescription} /><Field errorText={t.required} name="scenario_report_blueprint" label={t.structureGuidance} value={values.scenario_report_blueprint || ""} onChange={change} textarea wide rows={8} invalid={invalid.includes("scenario_report_blueprint")} placeholder={content.scenario.guidance} help={<HelpTip label={t.showGuidance}>{content.scenario.guidance}</HelpTip>} /><div className="mh-kcf__upload"><label>{t.upload}<input type="file" multiple accept=".doc,.docx,.pdf,.ppt,.pptx,.png,.jpg,.jpeg,.webp" onChange={(e) => change?.({ name: "attachments", value: [...(values.attachments || []), ...[...e.target.files].map((x) => x.name)] })} /></label><small>{t.uploadHint}</small><div>{(values.attachments || []).map((file) => <span className="mh-kcf__chip" key={file}>{file}<button type="button" aria-label={`Remove ${file}`} onClick={() => change?.({ name: "attachments", value: values.attachments.filter((x) => x !== file) })}>×</button></span>)}</div></div><div className="mh-kcf__status"><b>{t.aiStatus}</b><small>{t.statusHint}</small><strong>{t.disabled}</strong></div></div></div>;
   return <div className="mh-kcf__generic"><div className="mh-kcf__grid">
-    {type === "Principles" && <><Field errorText={t.required} name="title" label={t.knowledgeTitle} value={values.title || ""} onChange={change} required invalid={invalid.includes("title")} wide placeholder={content.placeholders.principlesTitle} /><Field errorText={t.required} name="description" label={t.coreDescription} value={values.description || ""} onChange={change} textarea wide required invalid={invalid.includes("description")} placeholder={content.placeholders.principlesDescription} /></>}
-    {type === "Report Context" && <><Field errorText={t.required} name="description" label={t.dashboardDescription} value={values.description || ""} onChange={change} textarea wide required invalid={invalid.includes("description")} /><Toggle name="aiOverview" label={values.aiOverview ? t.aiOverview : t.aiOverviewOff} checked={values.aiOverview} onChange={change} />{values.aiOverview && <><Field errorText={t.required} name="aiDescription" label={t.aiDescription} value={values.aiDescription || ""} onChange={change} textarea wide /><MultiPicker name="aiSources" label={t.aiSources} options={content.options.aiSources} value={values.aiSources} onChange={change} open={menu === "aiSources"} onMenu={onMenu} placeholder={t.selectMany} /></>}</>}
+    {type === "Principles" && <><Field errorText={t.required} name="title" label={t.knowledgeTitle} value={values.title || ""} onChange={change} invalid={invalid.includes("title")} wide placeholder={content.placeholders.principlesTitle} /><Field errorText={t.required} name="description" label={t.coreDescription} value={values.description || ""} onChange={change} textarea wide invalid={invalid.includes("description")} placeholder={content.placeholders.principlesDescription} /></>}
+    {type === "Report Context" && <><Field errorText={t.required} name="description" label={t.dashboardDescription} value={values.description || ""} onChange={change} textarea wide invalid={invalid.includes("description")} /><Toggle name="aiOverview" label={values.aiOverview ? t.aiOverview : t.aiOverviewOff} checked={values.aiOverview} onChange={change} />{values.aiOverview && <><Field errorText={t.required} name="aiDescription" label={t.aiDescription} value={values.aiDescription || ""} onChange={change} textarea wide /><MultiPicker name="aiSources" label={t.aiSources} options={content.options.aiSources} value={values.aiSources} onChange={change} open={menu === "aiSources"} onMenu={onMenu} placeholder={t.selectMany} /></>}</>}
   </div><SharedFields type={type} content={content} values={values} onChange={change} menu={menu} onMenu={onMenu} placeholder={t.selectMany} /></div>;
+}
+
+/**
+ * P08 type-specific fields. State and all record/options data are injected.
+ * @param {object} props
+ * @param {string} props.type One of knowledgeCreateTypes.
+ * @param {string} [props.mode="create"] One of knowledgeCreateModes.
+ * @param {object} props.content Field copy, options, and deterministic rows.
+ * @param {object} props.values Controlled field values.
+ * @param {string[]} [props.required=[]] Field names the host requires: each gets the required marker and is announced as required. The host validates against the same list.
+ * @param {string[]} props.invalid Required field names in error state.
+ * @param {string|null} props.menu Open picker name.
+ * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
+ * @param {(event:{name:string}) => void} [props.onMenu]
+ * @param {(event:{kind:string}) => void} [props.onDialog]
+ */
+export function KnowledgeCreateFields({ required = NO_REQUIRED, ...props }) {
+  return <RequiredContext.Provider value={required}><KnowledgeCreateFieldsBody {...props} /></RequiredContext.Provider>;
 }

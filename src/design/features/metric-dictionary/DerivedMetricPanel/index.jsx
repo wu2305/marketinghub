@@ -11,6 +11,7 @@ export const formulaOperators = ["+", "-", "*", "/", "(", ")", "const", "clear",
 const symbol = { "*": "×", "/": "÷", const: "123", clear: <Icon name="trash" />, backspace: <Icon name="backspace" /> };
 
 const NO_INVALID = [];
+const defaultRequired = ["name"];
 
 /**
  * P10's derived metric drawer and formula builder.
@@ -22,19 +23,20 @@ const NO_INVALID = [];
  * @param {Array<{type:string,value:string|number,label:string}>} props.tokens
  * @param {boolean} props.constantOpen
  * @param {string} props.notice
+ * @param {string[]} [props.required=["name"]] Fields the host requires (`"name"`): the name input is announced as required. The host validates against the same list.
  * @param {string[]} [props.invalid=[]] Required fields the last Save refused (`"name"`); each shows `copy.nameError` under it and the first is focused. Send a new list for each failed save and drop a field when it changes.
  * @param {(event:{reason:string})=>void} props.onCancel
  * @param {(event:{field:string,value:string|boolean})=>void} props.onChange
  * @param {(event:{operator:string})=>void} props.onOperator
  * @param {(event:{metric:object})=>void} props.onReference
  * @param {(event:{index:number})=>void} props.onRemoveToken
- * @param {(event:{value:string})=>void} props.onConstantAdd
+ * @param {(event:{value:string})=>boolean|void} props.onConstantAdd The host decides whether the value is a usable constant: return `false` to keep the dialog open with `copy.constantError` and the cursor in the field.
  * @param {()=>void} props.onConstantCancel
  * @param {()=>void} props.onTest
  * @param {()=>void} props.onSave
  */
 export function DerivedMetricPanel({
-  open = false, copy, references = [], draft = {}, tokens = [], constantOpen = false, notice = "", invalid = NO_INVALID,
+  open = false, copy, references = [], draft = {}, tokens = [], constantOpen = false, notice = "", required = defaultRequired, invalid = NO_INVALID,
   onCancel, onChange, onOperator, onReference, onRemoveToken, onConstantAdd, onConstantCancel, onTest, onSave,
 }) {
   const panelRef = React.useRef(null);
@@ -69,7 +71,7 @@ export function DerivedMetricPanel({
                 </select>
               </label>
               <div className="mh-derived-panel__field-row">
-                <label>{copy.name}<input aria-label={copy.name} required aria-invalid={invalid.includes("name") ? true : undefined} aria-describedby={invalid.includes("name") ? nameErrorId : undefined} value={draft.name || ""} placeholder={copy.namePlaceholder} onChange={(event) => change("name", event.target.value)} />{invalid.includes("name") && <small id={nameErrorId} className="mh-derived-panel__error">{copy.nameError}</small>}</label>
+                <label>{copy.name}<input aria-label={copy.name} required={required.includes("name") || undefined} aria-invalid={invalid.includes("name") ? true : undefined} aria-describedby={invalid.includes("name") ? nameErrorId : undefined} value={draft.name || ""} placeholder={copy.namePlaceholder} onChange={(event) => change("name", event.target.value)} />{invalid.includes("name") && <small id={nameErrorId} className="mh-derived-panel__error">{copy.nameError}</small>}</label>
                 <label>{copy.unit}<input value={draft.unit || ""} placeholder={copy.unitPlaceholder} onChange={(event) => change("unit", event.target.value)} /></label>
               </div>
               <div className="mh-derived-panel__builder">
@@ -104,9 +106,9 @@ export function DerivedMetricPanel({
       <Modal open={constantOpen} title={copy.constantTitle} titleId={constantId} onClose={onConstantCancel}>
         <form className="mh-derived-panel__constant" noValidate onSubmit={(event) => {
           event.preventDefault();
-          /* A constant is a number; anything else stays in the dialog with a message instead of being dropped. */
-          if (!constantValue.trim() || !Number.isFinite(Number(constantValue))) { setConstantInvalid(true); constantInputRef.current?.focus(); return; }
-          onConstantAdd?.({ value: constantValue }); setConstantValue("");
+          /* Whether the value is usable is the host's call: a refusal keeps the dialog open with a message instead of dropping the value. */
+          if (onConstantAdd?.({ value: constantValue }) === false) { setConstantInvalid(true); constantInputRef.current?.focus(); return; }
+          setConstantValue("");
         }}>
           <label htmlFor={`${constantId}-value`}>{copy.constantPrompt}</label>
           <input id={`${constantId}-value`} ref={constantInputRef} autoFocus required inputMode="decimal" value={constantValue} aria-invalid={constantInvalid ? true : undefined} aria-describedby={constantInvalid ? `${constantId}-error` : undefined} onChange={(event) => { setConstantValue(event.target.value); setConstantInvalid(false); }} />

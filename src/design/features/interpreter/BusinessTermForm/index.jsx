@@ -10,6 +10,8 @@ import "./BusinessTermForm.css";
 /** @type {readonly ["Business Term", "Global Synonym"]} */
 export const businessTermKinds = ["Business Term", "Global Synonym"];
 
+/** Fields the Demo requires of a term; a host passes its own list through `required`. */
+const defaultRequired = ["title", "kind", "description"];
 const parseSynonyms = (text) => text.split(",").map((item) => item.trim()).filter(Boolean);
 const sameList = (a, b) => a.length === b.length && a.every((item, index) => item === b[index]);
 
@@ -27,6 +29,7 @@ const sameList = (a, b) => a.length === b.length && a.every((item, index) => ite
  * @param {string} props.reminder
  * @param {object} props.labels Visible field and action labels.
  * @param {object} props.placeholders Input hints.
+ * @param {string[]} [props.required=["title","kind","description"]] Field names the host requires: each gets the required marker and is announced as required. The host validates against the same list.
  * @param {string[]} props.invalid Required field names in error state. The form moves focus to the first invalid field when a failed submit changes this list, so a host only has to set it; drop a name from it when the field changes.
  * @param {(event:{name:string,value:unknown}) => void} [props.onChange]
  * @param {(event:{values:object}) => void} [props.onCancel]
@@ -38,7 +41,7 @@ export function BusinessTermForm({
   scopeOptions = [], guidanceTitle = "Build a common language", guidance = "", reminder = "",
   labels = { title: "Title", kind: "Term Type", description: "Description", synonyms: "Synonyms", scope: "Data Model", select: "Select one or more", cancel: "Cancel", save: "Save", submit: "Submit", required: "This field is required." },
   placeholders = { title: "Enter the business term title.", description: "Explain the meaning, usage, and boundary of this term.", synonyms: "Add aliases, abbreviations, or equivalent terms, separated by commas." },
-  invalid = [], onChange, onCancel, onSave, onSubmit,
+  required = defaultRequired, invalid = [], onChange, onCancel, onSave, onSubmit,
 }) {
   const formRef = React.useRef(null);
   const [scopeOpen, setScopeOpen] = React.useState(false);
@@ -61,10 +64,10 @@ export function BusinessTermForm({
   return <form ref={formRef} className="mh-btform" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values }); }}>
     <aside className="mh-btform__guidance"><span aria-hidden="true"><Icon name="bulb-rays" /></span><div><strong>{guidanceTitle}</strong><p>{guidance}</p></div></aside>
     <div className="mh-btform__fields">
-      <FormField label={labels.title} name="title" value={title} required invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
-      <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds} required onChange={onChange} />
-      <FormField label={labels.description} name="description" control="textarea" rows={3} value={description} required invalid={errors.includes("description")} hint={errors.includes("description") ? labels.required : undefined} placeholder={placeholders.description} onChange={onChange} />
-      <FormField label={labels.synonyms} name="synonyms" value={synonymField} placeholder={placeholders.synonyms} onChange={({ value }) => { setSynonymText(value); set("synonyms", parseSynonyms(value)); }} />
+      <FormField label={labels.title} name="title" value={title} required={required.includes("title")} invalid={errors.includes("title")} hint={errors.includes("title") ? labels.required : undefined} placeholder={placeholders.title} onChange={onChange} />
+      <FormField label={labels.kind} name="kind" control="select" value={kind} options={businessTermKinds} required={required.includes("kind")} onChange={onChange} />
+      <FormField label={labels.description} name="description" control="textarea" rows={3} value={description} required={required.includes("description")} invalid={errors.includes("description")} hint={errors.includes("description") ? labels.required : undefined} placeholder={placeholders.description} onChange={onChange} />
+      <FormField label={labels.synonyms} name="synonyms" value={synonymField} required={required.includes("synonyms")} placeholder={placeholders.synonyms} onChange={({ value }) => { setSynonymText(value); set("synonyms", parseSynonyms(value)); }} />
       {kind === "Business Term" && <div className="mh-btform__scope" ref={scopeRef}><span>{labels.scope}</span><button type="button" aria-expanded={scopeOpen} onClick={() => setScopeOpen((x) => !x)}>{scope.length ? scope.map((item) => <i key={item}>{item}</i>) : <em>{labels.select}</em>}</button>{scopeOpen && <div className="mh-btform__scope-menu">{scopeOptions.map((item) => <label key={item}><input type="checkbox" checked={scope.includes(item)} onChange={() => set("scope", scope.includes(item) ? scope.filter((x) => x !== item) : [...scope, item])} />{item}</label>)}</div>}</div>}
     </div>
     <footer className="mh-btform__footer"><div><Button variant="secondary" onClick={() => onCancel?.({ values })}>{labels.cancel}</Button><Button variant="secondary" onClick={() => onSave?.({ values })}>{labels.save}</Button><Button variant="gold" type="submit">{labels.submit}</Button></div><OperationReminder>{reminder}</OperationReminder></footer>

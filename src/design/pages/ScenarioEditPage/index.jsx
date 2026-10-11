@@ -15,7 +15,7 @@ import "./ScenarioEditPage.css";
  * @param {object} props.content Header image area, sidebar, form labels and options, and default values. // 头图区、侧栏、表单标签和选项，以及默认值。
  * @param {object} props.logo Header logo. // 页头 Logo。
  * @param {object[]} [props.navigation=[]] Header links. // 页头链接。
- * @param {object} [props.form={}] Form values, validation, preview, and named callbacks. // 表单的值、校验、预览和具名回调。
+ * @param {object} [props.form={}] Form values, required fields, validation, preview, and named callbacks. // 表单的值、必填字段、校验、预览和具名回调。
  * @param {string} [props.toast=""] Message after Save Draft. Hidden when empty. // Save Draft 之后的消息。为空时隐藏。
  * @param {import("../../components/AssistantDock/index.jsx").AssistantDockState} [props.assistant={}] Lite assistant copy, state, and callbacks. // 轻量助手的文案、状态和回调。
  * @param {import("../../components/AssistantDock/index.jsx").AssistantSkillFlow} [props.skillFlow] Model dialog copy, state, and callbacks. // 建模对话框的文案、状态和回调。
