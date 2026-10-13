@@ -18,7 +18,8 @@ export function knowledgeCreateHrefFor(id, params = {}) {
 
 export { knowledgeCreateTypes };
 
-function requiredKnowledgeCreateFields(type) {
+/** The fields each type requires: the form shows them as required and `validateKnowledgeCreate` checks the same list. */
+export function requiredKnowledgeCreateFields(type) {
   if (type === "Business Term") return ["title", "kind", "description"];
   if (type === "Analytical Model") return ["analysis_name", "businessDomain", "trigger_when", "output_requirements"];
   if (type === "Scenario Reporting") return ["scenario_report_title", "scenario_report_linked", "scenario_report_description", "scenario_report_blueprint"];
@@ -121,7 +122,7 @@ export function useKnowledgeCreateDemo({
   return {
     content, logo: { src: demoImage("assets/images/tapestry-logo.png"), alt: "Tapestry", href: hrefFor("home") },
     navigation: content.navigation.map((item) => ({ ...item, href: hrefFor(item.id) })),
-    type, mode, id, values, invalid, result, dialog, menu, unavailable, reportEditAvailable, hrefFor,
+    type, mode, id, values, required: requiredKnowledgeCreateFields(type), invalid, result, dialog, menu, unavailable, reportEditAvailable, hrefFor,
     onNavigate: navigate, onTypeChange: selectType, onChange: update,
     onSave: () => persist("save"), onSubmit: () => persist("submit"),
     onCancel: () => {

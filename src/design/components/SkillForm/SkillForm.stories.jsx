@@ -19,6 +19,7 @@ export const Default = {
     labels: prop("object", { description: bi("Form copy. Keys include formTitle, saved, field labels, and footer labels.", "表单文案。键包括 formTitle、saved、字段标签和页脚标签。"), control: "object" }),
     values: prop("object", { description: bi("Controlled name, purpose, scope, owner, and example question.", "受控的名称、用途、范围、负责人和示例问题。"), control: "object" }),
     scopes: prop("Array<string|{value,label}>", { defaultValue: [], description: bi("Choices for the scope list.", "范围列表的选项。"), control: "object" }),
+    required: prop("string[]", { defaultValue: ["name", "purpose", "scope", "owner"], description: bi("Basics the host requires. The default is name, purpose, scope and owner; each shows the `*` marker and is announced as required. `[]` marks none. The host validates against the same list.", "主机要求必填的基本信息。默认是 name、purpose、scope 和 owner；各自显示 `*` 标记并被读作必填。`[]` 表示都不必填。主机用同一份清单校验。") }),
     errors: prop("Record<string,boolean>", { defaultValue: {}, description: bi("Invalid basics show the required message. Focus moves to the first invalid field.", "基本信息无效时显示必填提示。焦点移到第一个无效字段。"), control: "object" }),
     preview: prop("string|null", { defaultValue: null, description: bi("Set a string to show the example question and output. If `preview` is null, those parts stay hidden.", "传入字符串可显示示例问题和输出。`preview` 为 null 时，这些部分保持隐藏。"), control: "text" }),
     cancelHref: prop("string", { description: bi("Set this if Cancel opens a different page. Cancel then becomes a link.", "如果 Cancel 会打开另一个页面，就设置这个值。Cancel 会变成链接。"), control: "text" }),

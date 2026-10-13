@@ -6,6 +6,9 @@ import { ExamplePreview } from "../ExamplePreview/index.jsx";
 import { useFocusFirstInvalid } from "../../lib/focus-first-invalid.js";
 import "./SkillForm.css";
 
+/** The basics the Demo requires; a host passes its own list through `required`. */
+const defaultRequired = ["name", "purpose", "scope", "owner"];
+
 function plainPrimary(event) { return !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.currentTarget.target; }
 
 /**
@@ -17,6 +20,7 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {object} props.labels Form copy: formTitle, saved, name, namePlaceholder, purpose, purposePlaceholder, scope, selectScope, owner, ownerPlaceholder, structure, required, preview, runPreview, question, questionPlaceholder, cancel, saveDraft, submit.
  * @param {{name?:string,purpose?:string,scope?:string,owner?:string,question?:string}} [props.values={}] A scope outside `scopes` is kept as an extra option.
  * @param {Array<string|{value:string,label:string}>} [props.scopes=[]]
+ * @param {string[]} [props.required=["name","purpose","scope","owner"]] Basics the host requires: each shows the `*` marker and is announced as required. The host validates against the same list.
  * @param {Record<string,boolean>} [props.errors={}] Invalid basics (name, purpose, scope, owner) show the required message.
  * @param {string|null} [props.preview=null] Null hides the example question and output; a string shows them.
  * @param {string} [props.cancelHref] Renders Cancel as a link (navigation); without it Cancel is a button.
@@ -27,7 +31,7 @@ function plainPrimary(event) { return !event.defaultPrevented && event.button ==
  * @param {(event:{reason:"cancel",href?:string})=>void} [props.onCancel]
  * @param {React.ReactNode} [props.children] Structure cards (`SkillFormCard`, `SkillFormFillCard`).
  */
-export function SkillForm({ labels, values = {}, scopes = [], errors = {}, preview = null, cancelHref, onChange, onRunPreview, onSaveDraft, onSubmit, onCancel, children }) {
+export function SkillForm({ labels, values = {}, scopes = [], required = defaultRequired, errors = {}, preview = null, cancelHref, onChange, onRunPreview, onSaveDraft, onSubmit, onCancel, children }) {
   const rootId = React.useId();
   const formRef = React.useRef(null);
   const invalid = React.useMemo(() => Object.keys(errors).filter((key) => errors[key]), [errors]);
@@ -35,8 +39,8 @@ export function SkillForm({ labels, values = {}, scopes = [], errors = {}, previ
   const update = (field) => (event) => onChange?.({ field, value: event.target.value });
   const options = normalizeOptions(scopes);
   const extraScope = values.scope && !options.some((option) => option.value === values.scope) ? [{ value: values.scope, label: values.scope }] : [];
-  const field = (key, control) => <div className="mh-skill-form__field"><label htmlFor={`${rootId}-${key}`}><span aria-hidden="true">*</span>{labels[key]}</label>{control}{errors[key] && <small id={`${rootId}-${key}-error`} role="alert">{labels.required}</small>}</div>;
-  const common = (key) => ({ id: `${rootId}-${key}`, required: true, value: values[key] || "", "aria-invalid": errors[key] ? true : undefined, "aria-describedby": errors[key] ? `${rootId}-${key}-error` : undefined, onChange: update(key) });
+  const field = (key, control) => <div className="mh-skill-form__field"><label htmlFor={`${rootId}-${key}`}>{required.includes(key) && <span aria-hidden="true">*</span>}{labels[key]}</label>{control}{errors[key] && <small id={`${rootId}-${key}-error`} role="alert">{labels.required}</small>}</div>;
+  const common = (key) => ({ id: `${rootId}-${key}`, required: required.includes(key), value: values[key] || "", "aria-invalid": errors[key] ? true : undefined, "aria-describedby": errors[key] ? `${rootId}-${key}-error` : undefined, onChange: update(key) });
   return <form ref={formRef} className="mh-skill-form" noValidate onSubmit={(event) => { event.preventDefault(); onSubmit?.({ values: { ...values } }); }}>
     <header className="mh-skill-form__head"><h2>{labels.formTitle}</h2><span><Icon name="clock" />{labels.saved}</span></header>
     <div className="mh-skill-form__body">

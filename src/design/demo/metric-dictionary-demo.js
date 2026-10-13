@@ -3,6 +3,8 @@ import { useWorkspaceAssistantDemo } from "./workspace-assistant-demo.js";
 
 const EMPTY_ANSWERS = [];
 const NO_INVALID = [];
+/* The derived-metric drawer requires a name: the drawer announces it and Save checks it. */
+const DERIVED_REQUIRED = ["name"];
 
 const paths = {
   home: "/index.html",
@@ -144,7 +146,7 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
     onCategoryChange: ({ category: next }) => setCategory(next),
     onTabChange: ({ tab: next }) => setTab(next),
     derivedEditor: {
-      open: panelOpen, draft, tokens, constantOpen, notice, invalid,
+      open: panelOpen, draft, tokens, constantOpen, notice, required: DERIVED_REQUIRED, invalid,
       onOpen: () => { setPanelOpen(true); showNotice(""); },
       onCancel: closePanel,
       onDraftChange: ({ field, value }) => { setDraft((current) => ({ ...current, [field]: value })); setInvalid((current) => (current.includes(field) ? current.filter((item) => item !== field) : current)); },
@@ -152,10 +154,13 @@ export function useMetricDictionaryDemo({ content, initial = {}, hrefFor = metri
       onReference,
       onRemoveToken: ({ index }) => setTokens((current) => current.filter((_, i) => i !== index)),
       onConstantCancel: () => setConstantOpen(false),
+      /* A constant is a number; anything else is refused (false) so the dialog stays open with its message instead of dropping the value. */
       onConstantAdd: ({ value }) => {
-        const number = Number.parseFloat(value);
-        if (Number.isFinite(number)) addToken({ type: "constant", value: number, label: String(number) });
+        const text = String(value ?? "").trim();
+        if (!text || !Number.isFinite(Number(text))) return false;
+        addToken({ type: "constant", value: Number(text), label: String(Number(text)) });
         setConstantOpen(false);
+        return true;
       },
       onTest,
       onSave,

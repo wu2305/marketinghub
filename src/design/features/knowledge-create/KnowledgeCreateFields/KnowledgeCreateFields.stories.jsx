@@ -12,6 +12,7 @@ export default { title: "Features/Knowledge Create/Knowledge Create Fields", com
     mode: enumProp(knowledgeCreateModes, "create", bi("Editing context.", "编辑上下文。")),
     content: prop("object", { description: bi("Injected copy, options, and rows.", "注入的文案、选项与行数据。") }),
     values: prop("object", { description: bi("Controlled field values.", "受控的字段值。") }),
+    required: prop("string[]", { description: bi("Field names the host requires, for example `[\"title\", \"description\"]`. Each gets the required marker and is announced as required. The host validates against the same list.", "主机要求必填的字段名，例如 `[\"title\", \"description\"]`。各自显示必填标记并被读作必填。主机用同一份清单校验。") }),
     invalid: prop("string[]", { description: bi("Invalid field names.", "无效的字段名。") }),
     menu: prop("string | null", { description: bi("Open multi-select name.", "已展开的多选字段名。") }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "Example" }, bi("The function runs at each change.", "每次变化都会调用这个函数。")),

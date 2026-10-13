@@ -42,7 +42,7 @@ export default {
     onOperator: { action: "onOperator", description: bi("The function runs when the user picks a formula operator. The result has `operator`.", "用户选择公式运算符时，会调用这个函数。结果里有 `operator`。") },
     onReference: { action: "onReference", description: bi("The function runs when the user inserts a basic metric. The result has `metric`.", "用户插入一项基础指标时，会调用这个函数。结果里有 `metric`。") },
     onRemoveToken: { action: "onRemoveToken", description: bi("The function runs when the user removes a formula token. The result has `index`.", "用户删除一个公式标记时，会调用这个函数。结果里有 `index`。") },
-    onConstantAdd: { action: "onConstantAdd", description: bi("The function runs when the user inserts a constant. The result has `value`.", "用户插入常数时，会调用这个函数。结果里有 `value`。") },
+    onConstantAdd: { action: "onConstantAdd", description: bi("The function runs when the user inserts a constant. The result has `value`. Return `false` to refuse the value: the dialog stays open with its message.", "用户插入常数时，会调用这个函数。结果里有 `value`。返回 `false` 表示拒绝该值：对话框保持打开并显示提示。") },
     onTest: { action: "onTest", description: bi("The function runs when the user tests the formula.", "用户测试公式时，会调用这个函数。") },
     onSave: { action: "onSave", description: bi("The function runs when the user saves a derived metric.", "用户保存派生指标时，会调用这个函数。") },
   },
@@ -67,7 +67,7 @@ export default {
       onOperator: (event) => { demo.derivedEditor.onOperator(event); args.onOperator?.(event); },
       onReference: (event) => { demo.derivedEditor.onReference(event); args.onReference?.(event); },
       onRemoveToken: (event) => { demo.derivedEditor.onRemoveToken(event); args.onRemoveToken?.(event); },
-      onConstantAdd: (event) => { demo.derivedEditor.onConstantAdd(event); args.onConstantAdd?.(event); },
+      onConstantAdd: (event) => { const accepted = demo.derivedEditor.onConstantAdd(event); if (accepted !== false) args.onConstantAdd?.(event); return accepted; },
       onTest: () => { demo.derivedEditor.onTest(); args.onTest?.(); },
       onSave: () => { if (demo.derivedEditor.onSave() !== false) args.onSave?.(); },
     };

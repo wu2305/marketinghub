@@ -11,6 +11,7 @@ export const Configuration = {
   args: { content: SCENARIO_EDIT, values: SCENARIO_EDIT.defaults, errors: {}, preview: null },
   argTypes: {
     values: { control: "object", description: bi("All editable field values.", "全部可编辑的字段值。") },
+    required: { control: "object", description: bi("Fields the host requires. The default is name, purpose, scope, owner and report; each shows the required marker and is announced as required. The host validates against the same list.", "主机要求必填的字段。默认是 name、purpose、scope、owner 和 report；各自显示必填标记并被读作必填。主机用同一份清单校验。") },
     errors: { control: "object", description: bi("Invalid flags for name, purpose, scope, owner, and report. The host checks these fields.", "name、purpose、scope、owner 和 report 的无效标记。这些字段由宿主校验。") },
     preview: { control: "text", description: bi("Set a string to show the example output and the question field. Set `null` to hide them.", "设为字符串会显示示例输出和问题字段。设为 `null` 则隐藏它们。") },
     onChange: callbackProp("onChange", "({field:string,value:string}) => void", { field: "name", value: "City Comparison Analysis" }, bi("The function runs at each field change. The result has `field` and `value`.", "每个字段变化时都会调用这个函数。结果里带有 `field` 和 `value`。")),

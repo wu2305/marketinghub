@@ -38,7 +38,7 @@ export function MetricDictionaryPage({
   derivedEditor = {}, assistant = {}, skillFlow, hrefFor, onNavigate, onCategoryChange, onSelect, onTabChange,
 }) {
   const {
-    open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "", invalid,
+    open: panelOpen = false, draft = {}, tokens = [], constantOpen = false, notice = "", required, invalid,
     onOpen, onCancel, onDraftChange, onOperator, onReference, onRemoveToken,
     onConstantAdd, onConstantCancel, onTest, onSave,
   } = derivedEditor;
@@ -133,7 +133,7 @@ export function MetricDictionaryPage({
           </section>
         </div>
       </main>
-      <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} invalid={invalid} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
+      <DerivedMetricPanel open={panelOpen} copy={derivedPanel} references={basic} draft={draft} tokens={tokens} constantOpen={constantOpen} notice={panelOpen ? notice : ""} required={required} invalid={invalid} onCancel={onCancel} onChange={onDraftChange} onOperator={onOperator} onReference={onReference} onRemoveToken={onRemoveToken} onConstantAdd={onConstantAdd} onConstantCancel={onConstantCancel} onTest={onTest} onSave={onSave} />
       {!panelOpen && notice ? <div className="mh-metric-page__toast" role="status">{notice}</div> : null}
       <AssistantDock assistant={assistant} skillFlow={skillFlow} variant="lite" />
     </Shell>

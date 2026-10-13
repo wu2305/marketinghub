@@ -13,6 +13,7 @@ export default {
     synonyms: prop("string[]", { description: bi("Aliases. The field shows them as a comma-separated list. A change sends the parsed list.", "别名。字段用逗号分隔显示。变化时会发出解析后的列表。") }),
     scope: prop("string[]", { description: bi("Selected Data Model links.", "已选的 Data Model 关联。") }),
     scopeOptions: prop("string[]", { description: bi("Available Data Model links.", "可选的 Data Model 关联。") }),
+    required: prop("string[]", { defaultValue: ["title", "kind", "description"], description: bi("Field names the host requires. The default is title, kind and description; each gets the required marker and is announced as required. The host validates against the same list.", "主机要求必填的字段名。默认是 title、kind 和 description；各自显示必填标记并被读作必填。主机用同一份清单校验。") }),
     invalid: prop("string[]", { description: bi("Required field names in error state.", "处于错误状态的必填字段名。") }),
     onChange: callbackProp("onChange", "({name, value}) => void", { name: "title", value: "GMV" }, bi("The function runs at each change.", "每次变化都会调用这个函数。")),
     onCancel: callbackProp("onCancel", "({values}) => void", { values: { title: "GMV" } }, bi("The function runs on Cancel. Cancel does not save.", "点击 Cancel 时会调用这个函数。Cancel 不保存。")),

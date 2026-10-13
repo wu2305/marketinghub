@@ -9,6 +9,7 @@ export const Default = {
   args: { labels: SKILL_LIBRARY.labels, values: { name: "", purpose: "", scope: "", owner: "", triggerWhen: "", input: "", logic: "", output: "", boundary: "", question: "" }, preview: null },
   argTypes: {
     values: { control: "object", description: bi("Controlled form values. Scope choices come from `labels.scopeOptions`.", "受控的表单值。范围选项来自 `labels.scopeOptions`。") },
+    required: { control: "object", description: bi("Basics the host requires. Omitted keeps the form default (name, purpose, scope and owner show `*`); `[]` marks none. The inline form never blocks a submit on them.", "主机要求必填的基本信息。不传则沿用表单默认（name、purpose、scope 和 owner 显示 `*`）；`[]` 表示都不标。内联表单不会因此阻止提交。") },
     preview: { control: "text", description: bi("Set a string to show the example question and output. Set `null` to hide them.", "设为字符串会显示示例问题和输出。设为 `null` 则隐藏它们。") },
     onChange: callbackProp("onChange", "({field:string,value:string}) => void", { field: "scope", value: "Global" }, bi("The function runs at each field change. The result has `field` and `value`.", "每个字段变化时都会调用这个函数。结果里带有 `field` 和 `value`。")),
     onSubmit: callbackProp("onSubmit", "({values:object}) => void", { values: { name: "" } }, bi("The function runs when the user clicks Submit for Review. The result has `values`. The form does not check empty fields.", "用户点击 Submit for Review 时会调用这个函数。结果里带有 `values`。表单不检查空字段。")),
